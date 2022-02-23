@@ -49,6 +49,8 @@ public class PrintTransferCertificateBean implements Serializable {
 	boolean sharewoodmarksheet = false, showSSChildrenGirlTc = false, showMapleBearTc = false, northwoodTc = false,
 			showSSChildrenTc = false, showCbseDraftTc = false, checkPromtionRender = false, showimmortal = false,
 			showPNFTc = false;
+	String fromMonth;
+	String toMonth;
 
 	public PrintTransferCertificateBean() {
 		Connection conn = DataBaseConnection.javaConnection();
@@ -182,6 +184,7 @@ public class PrintTransferCertificateBean implements Serializable {
 			showpdfbtn = true;
 		}
 
+		
 		String savePath = "";
 		if (info.getProjecttype().equals("online")) {
 			savePath = info.getDownloadpath();
@@ -198,7 +201,15 @@ public class PrintTransferCertificateBean implements Serializable {
 		studentImage = savePath + selectedTC.getStudentImage();
 		subjectStudiedWithSpace = selectedTC.getSubjectStudied();
 		rollNo = selectedTC.getRollNo();
-
+		if (info.getSchid().equals("298")) {
+			if (selectedTC.getstudentStudyMonths() != null) {
+				
+				String fromMonth = selectedTC.getstudentStudyMonths().split("-")[0];
+				String toMonth = selectedTC.getstudentStudyMonths().split("-")[1];
+			
+			}
+			
+		}
 		if (!subjectStudiedWithSpace.equalsIgnoreCase("")) {
 			String[] spliter = subjectStudiedWithSpace.split(",");
 
@@ -2554,6 +2565,18 @@ public class PrintTransferCertificateBean implements Serializable {
 	}
 	public void setRollNo(String rollNo) {
 		this.rollNo = rollNo;
+	}
+	public String getFromMonth() {
+		return fromMonth;
+	}
+	public void setFromMonth(String fromMonth) {
+		this.fromMonth = fromMonth;
+	}
+	public String getToMonth() {
+		return toMonth;
+	}
+	public void setToMonth(String toMonth) {
+		this.toMonth = toMonth;
 	}
 
 }

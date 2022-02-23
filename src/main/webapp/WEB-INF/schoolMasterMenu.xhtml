@@ -1,22 +1,15 @@
-<ui:composition
-    xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:f="http://java.sun.com/jsf/core"
-    xmlns:h="http://java.sun.com/jsf/html"
-    xmlns:ui="http://java.sun.com/jsf/facelets"
-    xmlns:p="http://primefaces.org/ui"
-    xmlns:pu="http://primefaces.org/avalon">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:po="http://primefaces.org/pandora">
+	<h:form id="menuform">
+	<div>
 
-    <h:form id="menuform">
-        <div class="layout-menu-container #{guestPreferences.menuClass}">
-            <div class="nano">
-                <div class="nano-content menu-scroll-content">
-                    <ui:fragment rendered="#{guestPreferences.profileMode == 'inline' and guestPreferences.menuLayout != 'menu-layout-static menu-layout-horizontal'}">
-                       
-                    </ui:fragment>
+		<po:menu widgetVar="PandoraMenuWidget">
 
-                    <pu:menu widgetVar="me">
-                        
-                        <p:menuitem id="om_reg" value="Student Admission" icon="fa fa-fw fa-life-saver" outcome="masterRegistration.xhtml"/>
+			 <p:menuitem id="om_reg" value="Student Admission" icon="fa fa-fw fa-life-saver" outcome="masterRegistration.xhtml"/>
                         <p:menuitem id="om_enq" value="Add Enquiry" icon="fa fa-fw fa-life-saver" outcome="blmMasterAddEnquiry.xhtml"/>
                         <p:menuitem id="om_venq" value="View Enquiry" icon="fa fa-fw fa-life-saver" outcome="blmMasterViewEnquiry.xhtml"/>
                         
@@ -49,13 +42,10 @@
                         
                        
                         <p:menuitem id="om_EST3" rendered="false" value="Paid Fee Report" icon="fa fa-fw fa-sign-in" outcome="paidFeeReportForBLM.xhtml"/>
-                        
-                        
-                        
-                       </p:submenu> 
-                    </pu:menu>
-                </div>
-            </div>
-        </div>
-    </h:form>
+                      
+		
+		</po:menu>
+		</div>
+	</h:form>
+	
 </ui:composition>

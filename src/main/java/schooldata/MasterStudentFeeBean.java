@@ -2231,7 +2231,7 @@ public class MasterStudentFeeBean implements Serializable
 
 							ii = DBM.submitFeeSchidForBlm(schoolid,sList, ff.getPayAmount(), ff.getFeeId(), paymentMode, bankName,
 									chequeNumber, num, ff.getPayDiscount(), preSession, recipietDate, challanNo, neftNo,
-									challanDate, neftDate, conn, remark, dueDate, ff.getDueamount(), "current",ff.getFeeInstallMonth(),"0","0",userId,"active");
+									challanDate, neftDate, conn, remark, dueDate, ff.getDueamount(), "current",ff.getFeeInstallMonth(),"0","0",userId,"active", "");
 							/*if (ii >= 1 && ff.getFeeName().equals("Previous Fee")) {
 								DBM.updatePaidAmountOfPreviousFee(schoolid,sList.getAddNumber(),
 										(ff.getPayAmount() + ff.getPayDiscount()), conn);

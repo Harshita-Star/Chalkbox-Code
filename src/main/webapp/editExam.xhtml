@@ -297,30 +297,6 @@
 							</p:dialog>
 						</h:form>
 
-						<h:form id="eForm">
-							<p:dialog widgetVar="eDlg" header="Edit Exam Name"
-								showEffect="fade" hideEffect="explode" modal="true">
-								<p:panelGrid columns="3">
-									<p:outputLabel value="Exam Name" />
-									<p:inputText value="#{editExam.examName}"
-										validatorMessage="Please Enter Correct value">
-										<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
-									</p:inputText>
-
-								</p:panelGrid>
-
-								<br />
-								<p:separator />
-								<center>
-									<p:commandButton value="Update" styleClass="butwid"
-										icon="fa fa-upload" action="#{editExam.updateExamName}"
-										update=":form,:eForm"></p:commandButton>
-								</center>
-								<p:separator />
-								<br />
-
-							</p:dialog>
-						</h:form>
 					</div>
 				</div>
 			</div>

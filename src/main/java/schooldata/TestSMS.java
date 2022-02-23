@@ -9,17 +9,13 @@ import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Date;
+import java.util.List;
 import java.util.TreeMap;
 
-import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
@@ -30,6 +26,9 @@ import org.primefaces.shaded.json.JSONArray;
 import org.primefaces.shaded.json.JSONException;
 import org.primefaces.shaded.json.JSONObject;
 
+import com.razorpay.Payment;
+import com.razorpay.RazorpayClient;
+
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
@@ -37,6 +36,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
+import student_module.PaytmConstants;
 
 public class TestSMS {
 
@@ -108,9 +108,34 @@ public class TestSMS {
 //		String print = test.split("\\n")[0];
 //		System.out.println(print);
 		
-		String exec = StringEscapeUtils.unescapeXml("test &#x2F; test");
-		System.out.println(exec);
-
+//		String exec = StringEscapeUtils.unescapeXml("test &#x2F; test");
+//		System.out.println(exec);
+		
+		try {
+			RazorpayClient razorpay = new RazorpayClient(PaytmConstants.MERCHANT_KEY, PaytmConstants.KEY_SECRET);
+        	org.json.JSONObject captureRequest = new org.json.JSONObject();
+        	captureRequest.put("amount", "100");
+        	captureRequest.put("currency", "INR");
+        	Payment txnDet = razorpay.Payments.fetch("pay_IqjyfXj3xqBJfM");
+        	
+        	System.out.println("Txn Status : "+txnDet.get("status"));
+        	
+        	Payment payment = razorpay.Payments.capture("pay_IqjyfXj3xqBJfM", captureRequest);
+        	
+        	System.out.println("Capture status : "+payment.get("status"));
+        	
+        	Payment newTxnDet = razorpay.Payments.fetch("pay_IqjyfXj3xqBJfM");
+        	
+        	System.out.println("New Txn Status : "+newTxnDet.get("status"));
+        	
+//        	List<Payment> payments = razorpay.Orders.fetchPayments("order_IlyERcbahtJp8f");
+//        	System.out.println("New Txn Status : "+payments.get(0).get("status"));
+		} catch (Exception e) {
+			System.out.println("Error occured");
+			System.out.println(e.getMessage().split(":")[0]);
+			System.out.println(e.getMessage().split(":")[1]);
+		}
+		
 	}
 
 	public void calcDateTimeDiff()

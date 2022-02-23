@@ -43,7 +43,7 @@ public class EnqPaymentDetailJsonBean implements Serializable
 			String orderid = params.get("orderId");
 			String amt = params.get("amount");
 			String session = "";
-			String paymentMode = "PAYTM";
+			String paymentMode = "Payment Gateway";
 			String remark = "Paid online by student via website.";
 			String bankName="",submittedBankName="",chequeNumber=orderid;
 			Date chequeDate = new Date();
@@ -146,7 +146,7 @@ public class EnqPaymentDetailJsonBean implements Serializable
 			arr.add(obj);
 			json=arr.toJSONString();
 		} catch (Exception e) {
-			// TODO: handle exception
+			e.printStackTrace();
 		}
 		finally {
 

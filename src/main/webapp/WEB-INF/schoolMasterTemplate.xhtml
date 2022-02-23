@@ -38,14 +38,19 @@
             <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
             <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
             <meta name="apple-mobile-web-app-capable" content="yes" />
-            <meta name="theme-color" content="#{guestPreferences.themeColors[guestPreferences.theme]}" />
-        </f:facet>
-        <title><ui:insert name="title">PrimeFaces Avalon</ui:insert></title>
-        <h:outputScript name="js/nanoscroller.js" library="avalon-layout" />
-        <h:outputScript name="js/layout.js" library="avalon-layout" />
-        <h:outputStylesheet name="css/layout-#{guestPreferences.layout}.css" library="avalon-layout" />
-        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-        <ui:insert name="head"/>
+           <link rel="shortcut icon" type="image/x-icon"
+			href="#{request.contextPath}/pandora-layout/images/favicon.ico" />
+	  </f:facet>
+        <title><ui:insert name="title">Welcome to Chalkbox</ui:insert></title>
+        <h:outputScript name="js/sections.js" library="demo" />
+	<h:outputScript name="js/prism.js" library="pandora-layout" />
+	<h:outputScript name="js/layout.js" library="pandora-layout" />
+	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+	<script type="text/javascript"
+		src="https://maps.google.com/maps/api/js?key=AIzaSyAuPUXqTBXELNaxd9MH-lilZ3cw76ch0uo&amp;sensor=false"></script>
+	<script src='https://kit.fontawesome.com/a076d05399.js'
+		crossorigin='anonymous'></script>
+ <ui:insert name="head"/>
        <!--  <link rel="stylesheet" type="text/css" href="tempcss/style.css"/>
         -->
         <script>
@@ -312,29 +317,22 @@ background-color: white !important;
 		</script>
     </h:head>
 
-    <h:body>
+    <h:body styleClass="#{guestPreferences.inputStyleClass}">
         
-        <div class="layout-wrapper menu-layout-static menu-layout-horizontal">
-            <ui:include src="./schoolMasterTopbar.xhtml" />
-            <ui:include src="./schoolMasterMenu.xhtml" />
-            
+        <div class="layout-wrapper #{guestPreferences.layoutConfig}">
+           <ui:include src="./rightpanel.xhtml"></ui:include> 
+            <ui:include src="./schoolMasterSideMenu.xhtml"></ui:include> 
             <div class="layout-main">
-                <ui:insert name="content"/>
+             <ui:include src="./schoolMasterTopbar.xhtml" />
+             <ui:include src="./breadcrumb.xhtml" />
+               <div class="layout-content">
+                    <ui:insert name="content"></ui:insert>
+               </div>
+                <ui:include src="./config.xhtml" />
+                <ui:include src="./footer.xhtml" />
+                 <div class="layout-mask"></div>
             </div>
-            
-            <ui:include src="./footer.xhtml" />
-        </div>
-        
-        <!-- <p:ajaxStatus style="width:32px;height:32px;position:fixed;right:7px;bottom:7px">
-           <f:facet name="start">
-               <i class="fa fa-circle-o-notch fa-spin ajax-loader"></i>
-           </f:facet>
-
-           <f:facet name="complete">
-               <h:outputText value="" />
-           </f:facet>
-       </p:ajaxStatus> -->
-        <p:ajaxStatus onstart="PF('statusDialog').show()"
+             <p:ajaxStatus onstart="PF('statusDialog').show()"
 			onsuccess="PF('statusDialog').hide()" />
 		<p:dialog modal="true" widgetVar="statusDialog" resizable="false"
 			showHeader="false">
@@ -346,10 +344,14 @@ background-color: white !important;
 			<h3>Please Wait...</h3>
 		</center> -->
 		</p:dialog>
+     </div>
+ 	
 
-        <h:outputStylesheet name="css/nanoscroller.css" library="avalon-layout" />
-        <h:outputStylesheet name="css/animate.css" library="avalon-layout" />
-        <h:outputStylesheet name="css/layout-#{guestPreferences.layout}.css" library="avalon-layout" />
-    </h:body>
+		<h:outputStylesheet name="css/primeicons.css" library="pandora-layout"/>
+        <h:outputStylesheet name="css/primeflex.min.css" library="pandora-layout"/>
+        <h:outputStylesheet name="css/demo.css" library="demo"/>
+        <h:outputStylesheet name="css/#{guestPreferences.layout}.css" library="pandora-layout" />
+ 
+  </h:body>
 
 </html>

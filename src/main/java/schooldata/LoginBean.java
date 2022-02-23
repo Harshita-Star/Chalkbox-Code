@@ -448,7 +448,6 @@ public class LoginBean implements Serializable {
 																				else if(info.getType().equalsIgnoreCase("foster"))
 																				{
 																					ec.redirect("dashboardFoster.xhtml");
-//																					ec.redirect("chlktest.xhtml");
 																				}
 																			}
 																		}

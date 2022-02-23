@@ -54,7 +54,7 @@ public class AllStudentBdyJsonBean implements Serializable
 				Date date = new Date();
 				
 				ArrayList<String> tempList=new DataBaseMethodStudent().birthdayFieldList();
-				ArrayList<StudentInfo> list=new DataBaseMethodStudent().studentDetail("","","",QueryConstants.IN_SCHOOL,QueryConstants.BIRTHDAY,date,date, "","","","", session, schid, tempList, conn);
+				ArrayList<StudentInfo> list=new DataBaseMethodStudent().studentDetail("","","",QueryConstants.IN_SCHOOL,QueryConstants.BIRTHDAY,date,date, QueryConstants.IMAGE_WITH_PATH,"","","", session, schid, tempList, conn);
 				
 				for(StudentInfo ss : list)
 				{

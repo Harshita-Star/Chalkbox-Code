@@ -154,7 +154,7 @@ public class MasterAdminPendingFeeTranctionBean implements Serializable
 				status=list.get(0).getSTATUS();
 			}
 
-			int check=new DataBaseMeathodJson().updateFeeStatus(addmissionNumber,schoolid,orderid,num,status,conn);
+			int check=new DataBaseMeathodJson().updateFeeStatus(addmissionNumber,schoolid,orderid,num,status,"",conn);
 			
 			if(check>0)
 		   	{
@@ -311,7 +311,7 @@ public class MasterAdminPendingFeeTranctionBean implements Serializable
 						status=list.get(0).getSTATUS();
 					}
 
-					int check=new DataBaseMeathodJson().updateFeeStatus(addmissionNumber,schoolid,orderid,num,status,conn);
+					int check=new DataBaseMeathodJson().updateFeeStatus(addmissionNumber,schoolid,orderid,num,status,"",conn);
 					
 				    
 			   	}

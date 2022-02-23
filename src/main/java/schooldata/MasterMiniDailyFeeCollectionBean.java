@@ -499,7 +499,7 @@ public class MasterMiniDailyFeeCollectionBean implements Serializable
 				{
 					cashAmount+=Integer.parseInt(info.getAmount());
 				}
-				else if(info.getPaymentmode().equalsIgnoreCase("PAYTM"))
+				else if(info.getPaymentmode().equalsIgnoreCase("Payment Gateway"))
 				{
 					chequeAmount+=Integer.parseInt(info.getAmount());
 				}

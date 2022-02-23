@@ -52,6 +52,7 @@ public class EditTransferCertificateBean implements Serializable {
 	private static final long serialVersionUID = 1L;
 	String regex = RegexPattern.REGEX;
 	ArrayList<TCInfo> allStudentTCList;
+	ArrayList<String> months = new ArrayList<>();
 	transient StreamedContent file;
 	TCInfo selectedTC;
 	boolean sortAscending = true;
@@ -73,10 +74,14 @@ public class EditTransferCertificateBean implements Serializable {
 	DatabaseMethodWorkLog workLg = new DatabaseMethodWorkLog();
 	ArrayList<String> reasons = new ArrayList<>();
 	String schoolId, sessionValue, proofDob, bookNo = null;
+	String fromMonth = "";
+	String toMonth = "" ;
+	String std_study_months = "";
 
 	public EditTransferCertificateBean() {
 		Connection conn = DataBaseConnection.javaConnection();
 		schoolId = DBM.schoolId();
+		months = getMonth();
 		sessionValue = DBM.selectedSessionDetails(schoolId, conn);
 		categoryList = DBM.studentCategoryList(conn);
 		allStudentTCList = objTc.allStudentTcList(conn);
@@ -152,7 +157,17 @@ public class EditTransferCertificateBean implements Serializable {
 		ncc = selectedTC.getNcc();
 		result = selectedTC.getResult();
 		proofDob = selectedTC.getProofDob();
-
+		
+		if(schoolId.equalsIgnoreCase("298")) {
+			if (selectedTC.getstudentStudyMonths() != null) {
+				fromMonth = selectedTC.getstudentStudyMonths().split("-")[0];
+				toMonth = selectedTC.getstudentStudyMonths().split("-")[1];
+			}else {
+				fromMonth = "";
+				toMonth = "";
+			}
+		}
+		
 		if (selectedTC.getSchoolCode().equals("315") || selectedTC.getSchoolCode().equals("313")) {
 			bookNo = selectedTC.getBookNo();
 			showBookNo = true;
@@ -242,7 +257,8 @@ public class EditTransferCertificateBean implements Serializable {
 
 	public void updateTCDetails() {
 		Connection conn = DataBaseConnection.javaConnection();
-
+		
+		
 		subjectStudied = "";
 		for (String ssc : selectedSubjects) {
 			subjectStudied += ssc + " , ";
@@ -254,11 +270,14 @@ public class EditTransferCertificateBean implements Serializable {
 //		if (reason.equalsIgnoreCase("others")) {
 //			reason = otherReason;
 //		}
+		if(schoolId.equalsIgnoreCase("298")) {
+			std_study_months = fromMonth + "-" + toMonth;
+		}
 		int i = objTc.updateTCInformation1(reason, lastDate, applicationDate, issueDate, tcNumber,
 				selectedTC.getStatus(), selectedTC.getAddNumber(), perform, otherReason, schoolExam, failedOrNot,
 				subjectStudied, qualifiedPromotion, monthOfFeePaid, workingDays, workingDayPresent, feeConcession,
 				gamesPlayed, extraActivity, otherRemark, lastDate, ncc, transferCertificatedFrom,
-				qualifiedPromotionCheck, result, proofDob, bookNo, conn);
+				qualifiedPromotionCheck, result, proofDob, bookNo, conn , std_study_months);
 		if (i == 1) {
 			String refNo4;
 			try {
@@ -286,6 +305,25 @@ public class EditTransferCertificateBean implements Serializable {
 
 			e.printStackTrace();
 		}
+	}
+	
+	public ArrayList<String> getMonth() {
+		ArrayList<String> m = new ArrayList<>();
+		
+		m.add("January");
+		m.add("Febuary");
+		m.add("March");
+		m.add("April");
+		m.add("May");
+		m.add("June");
+		m.add("July");
+		m.add("August");
+		m.add("September");
+		m.add("October");
+		m.add("November");
+		m.add("December");
+		
+		return m;
 	}
 
 	public String addWorkLog5(Connection conn) {
@@ -981,6 +1019,30 @@ public class EditTransferCertificateBean implements Serializable {
 
 	public void setFile(StreamedContent file) {
 		this.file = file;
+	}
+
+	public ArrayList<String> getMonths() {
+		return months;
+	}
+
+	public void setMonths(ArrayList<String> months) {
+		this.months = months;
+	}
+
+	public String getFromMonth() {
+		return fromMonth;
+	}
+
+	public void setFromMonth(String fromMonth) {
+		this.fromMonth = fromMonth;
+	}
+
+	public String getToMonth() {
+		return toMonth;
+	}
+
+	public void setToMonth(String toMonth) {
+		this.toMonth = toMonth;
 	}
 
 }

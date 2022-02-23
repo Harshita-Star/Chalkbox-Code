@@ -1,78 +1,69 @@
-<ui:composition 
-    xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:f="http://java.sun.com/jsf/core"
-    xmlns:h="http://java.sun.com/jsf/html"
-    xmlns:ui="http://java.sun.com/jsf/facelets"
-    xmlns:p="http://primefaces.org/ui"
-    xmlns:pu="http://primefaces.org/avalon">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui" >
 
-    <div class="topbar clearfix">
-    <h:form>
-        <div class="topbar-left"> 
-        		<h:commandLink action="homePage.xhtml?faces-redirect=true">           
-            <p:graphicImage name="images/logo.png" library="avalon-layout" styleClass="topbar-logo"/>
-            </h:commandLink>
-        </div>
-        
-        <div class="topbar-right">
-            <a id="menu-button" href="#">
-                <i class="fa fa-angle-left"></i>
+    <div class="layout-topbar">
+        <div class="layout-topbar-wrapper">
+            <div class="layout-topbar-left">
+                <div class="menu-button">
+                    <i class="pi pi-bars"/>
+                </div>
+                <h:link id="logolink" outcome="/dashboard" class="layout-topbar-logo">
+                   <!--  <p:graphicImage name="images/#{guestPreferences.darkLogo ? 'logo-footer.svg' : 'logo-pandora.svg'}"
+                                    library="pandora-layout"/> -->
+                        <p:graphicImage name="imagess/logo.png" style="width: 180px;"
+                                    library="pandora-layout"/>
+                </h:link>
+            </div>
+            <div class="layout-topbar-right">
+                <ul class="layout-topbar-actions">
+                 
+                    <li class="topbar-item notifications">
+                        <a href="#">
+                            <i class="topbar-icon pi pi-bell"><span class="dot"></span></i>
+                        </a>
+                        <ul>
+                            <li class="layout-submenu-header">
+                                <h4 class="header-text">Notifications </h4>
+                                <span class="header-helper-text"> all items</span>
+                            </li>
+                            <li class="layout-submenu-item">
+                                <div class="menu-text">
+                                    <i class="pi pi-twitter"/>
+                                    <div>
+                                        <span>comment</span>
+                                        <p>Aliquam sem fringilla ut morbi tincidunt augue interdum.</p>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="layout-submenu-item">
+                                <div class="menu-text">
+                                    <i class="pi pi-github"/>
+                                    <div>
+                                        <span>issue</span>
+                                        <p>Nisl vel pretium lectus quam.</p>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="layout-submenu-item">
+                                <div class="menu-text">
+                                    <i class="pi pi-heart"/>
+                                    <div>
+                                        <span>comment</span>
+                                        <p>Felis imperdiet proin fermentum leo vel orci porta non pulvinar.</p>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="topbar-item-v-separator"/>
+                </ul>
+            </div>
+            <a href="#" class="layout-rightpanel-button">
+                <i class="pi pi-ellipsis-v"/>
             </a>
-            
-            <a id="topbar-menu-button" href="#">
-                <i class="fa fa-bars"></i>
-            </a>
-            <ul class="topbar-items fadeInDown animated">
-                
-                <li>
-                    <a href="#">
-                        <i class="topbar-icon fa fa-fw fa-cog"></i>
-                        <span class="topbar-item-name">Settings</span>
-                    </a>
-                    <ul class="layout-menu animated">
-                        		
-	                        <li role="menuitem">
-	                            <a href="studentChangePassword.xhtml">
-	                                <i class="fa fa-fw fa-lock"></i>
-	                                <span>Change Password</span>
-	                            </a>
-	                        </li>
-	                        
-	                        <li role="menuitem">
-	                            <a href="ChalkboxLogin.xhtml">
-	                                <i class="fa fa-fw fa-sign-out"></i>
-	                                <span>Logout</span>
-	                            </a>
-	                        </li>
-                    </ul>
-                </li>
-                
-                <li class="search-item">
-                    <div class="topbar-search">
-                        <p:outputLabel style="color: #ffffff;font-size: 20px;margin-right: 5px;font-weight: bold;" value="#{studentMenuBean.name}"></p:outputLabel>
-                    </div>
-                </li>
-                <li class="search-item">
-                    <div class="topbar-search">
-                      <p:graphicImage value="#{studentMenuBean.imagepath}" width="35px" height="35px" style="border: 0 none;margin-right: -5px;margin-top: -5px;background: white;"/>
-                 </div>
-                </li>
-                
-            </ul>
         </div>
-        </h:form>
-           
-        <h:form>
-       <p:idleMonitor timeout="600000">
-         <p:ajax event="active" listener="#{sideMenuBean.showDia()}"  />
-     </p:idleMonitor> 
- 
- <p:dialog header="Clear" widgetVar="d1r" closable="false" draggable="false" modal="true" resizable="false">
- <p:outputLabel value="your session is expired .click on the button to go to login page">       </p:outputLabel>
-    <p:commandButton value="clickme" action="#{sideMenuBean.tim()}"></p:commandButton>
- </p:dialog>  
-        
-        </h:form>
     </div>
-
 </ui:composition>

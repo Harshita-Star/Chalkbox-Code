@@ -459,7 +459,7 @@ public class InstallmentWiseFeeCollection implements Serializable
 				else
 				{
 					chequeAmount+=Integer.parseInt(info.getAmount());
-					if(info.getPaymentmode().equalsIgnoreCase("Paytm"))
+					if(info.getPaymentmode().equalsIgnoreCase("Payment Gateway"))
 					{
 						info.setBankname("");
 					}
@@ -2121,7 +2121,7 @@ public class InstallmentWiseFeeCollection implements Serializable
                                  //// // System.out.println(ff.getFeeName()+"....."+ff.getFeeId());
 							ii = DBM.submitFeeSchidForBlm(schoolid,sList, ff.getPayAmount(), ff.getFeeId(), paymentMode, bankName,
 									chequeNumber, num, ff.getPayDiscount(), preSession, recipietDate, challanNo, neftNo,
-									challanDate, neftDate, conn, remark, dueDate, ff.getDueamount(), "current",ff.getFeeInstallMonth(),ff.getMainAmount(),ff.getTaxAmount(),userId,"active");
+									challanDate, neftDate, conn, remark, dueDate, ff.getDueamount(), "current",ff.getFeeInstallMonth(),ff.getMainAmount(),ff.getTaxAmount(),userId,"active", "");
 							/*if (ii >= 1 && ff.getFeeName().equals("Previous Fee")) {
 								DBM.updatePaidAmountOfPreviousFee(schoolid,sList.getAddNumber(),
 										(ff.getPayAmount() + ff.getPayDiscount()), conn);
@@ -2406,7 +2406,7 @@ public class InstallmentWiseFeeCollection implements Serializable
                                  //// // System.out.println(ff.getFeeName()+"....."+ff.getFeeId());
 							ii = DBM.submitFeeSchidForBlm(schoolid,sList, ff.getPayAmount(), ff.getFeeId(), paymentMode, bankName,
 									chequeNumber, recepietNo, ff.getPayDiscount(), preSession, recipietDate, challanNo, neftNo,
-									challanDate, neftDate, conn, remark, dueDate, ff.getDueamount(), "current",ff.getFeeInstallMonth(),ff.getMainAmount(),ff.getTaxAmount(),userId,"active");
+									challanDate, neftDate, conn, remark, dueDate, ff.getDueamount(), "current",ff.getFeeInstallMonth(),ff.getMainAmount(),ff.getTaxAmount(),userId,"active", "");
 							/*if (ii >= 1 && ff.getFeeName().equals("Previous Fee")) {
 								DBM.updatePaidAmountOfPreviousFee(schoolid,sList.getAddNumber(),
 										(ff.getPayAmount() + ff.getPayDiscount()), conn);

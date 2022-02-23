@@ -39,7 +39,7 @@ public class SubmitFeeAmountJsonBean implements Serializable{
 	StudentInfo sList;
 	String month="";
 	DataBaseMeathodJson DBJ=new DataBaseMeathodJson();
-    String paymentStatus="";
+    String paymentStatus="",paymentId="";
 	public SubmitFeeAmountJsonBean()
 	{
 
@@ -49,9 +49,14 @@ public class SubmitFeeAmountJsonBean implements Serializable{
 		addmissionNumber=params.get("studentId");
 		schoolid=params.get("schid");
 		neftNo=params.get("orderid");
+		paymentId=params.get("paymentId");
 		String mm=params.get("month");
 		paymentStatus=params.get("status");
 		
+		if(paymentId==null||paymentId.equals(""))
+		{
+	    	paymentId="";
+		}
 		
 		JSONArray arr=new JSONArray();
 
@@ -693,9 +698,9 @@ public class SubmitFeeAmountJsonBean implements Serializable{
 							if (ff.getFeeName().equalsIgnoreCase("Late Fee") || ff.getFeeName().equals("Any Other Charges")) {
 								ff.setDueamount(String.valueOf(ff.getPayAmount() + ff.getPayDiscount()));
 							}
-							ii = DBM.submitFeeSchidForBlm(schoolid,sList, ff.getPayAmount(), ff.getFeeId(), "PAYTM", "",
+							ii = DBM.submitFeeSchidForBlm(schoolid,sList, ff.getPayAmount(), ff.getFeeId(), "Payment Gateway", "",
 									"", num, ff.getPayDiscount(), preSession, new Date(), "", neftNo,
-									new Date(), new Date(), conn, remark, new Date(), ff.getDueamount(), "current",ff.getFeeInstallMonth(),"0","0","N/A",paymentStatus);
+									new Date(), new Date(), conn, remark, new Date(), ff.getDueamount(), "current",ff.getFeeInstallMonth(),"0","0","N/A",paymentStatus, paymentId);
 							/*if (ii >= 1 && ff.getFeeName().equals("Previous Fee")) {
 									DBM.updatePaidAmountOfPreviousFee(schoolid,sList.getAddNumber(),
 											(ff.getPayAmount() + ff.getPayDiscount()), conn);
@@ -706,7 +711,7 @@ public class SubmitFeeAmountJsonBean implements Serializable{
 						if (ii >= 1) {
 
 							String typeMessage = "Dear Parent, \n\nReceived payment of Rs." + amoutnt
-									+ " in favour of fee by Paytm via Receipt No. " + num
+									+ " in favour of fee by Payment Gateway via Receipt No. " + num
 									+ "\n\nRegards, \n"
 									+ info.getSmsSchoolName();
 

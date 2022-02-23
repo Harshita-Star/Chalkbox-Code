@@ -1,78 +1,72 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui"
-	xmlns:pu="http://primefaces.org/avalon">
-
+	xmlns:po="http://primefaces.org/pandora">
 	<h:form id="menuform">
-		<div class="layout-menu-container #{guestPreferences.menuClass}">
-			<div class="nano">
-				<div class="nano-content menu-scroll-content">
-					<ui:fragment
-						rendered="#{guestPreferences.profileMode == 'inline' and guestPreferences.menuLayout != 'menu-layout-static menu-layout-horizontal'}">
-					</ui:fragment>
+	<div class="keep-scrolling">
 
-					<pu:menu widgetVar="me">
-						<p:menuitem rendered="false" id="am_version_1" value="Help"
+		<po:menu widgetVar="PandoraMenuWidget"  >
+				<p:menuitem rendered="false" id="am_version_1" value="Help"
 							icon="fa fa-fw fa-tag" outcome="help.xhtml" />
 
 						<p:submenu rendered="#{sideMenuBean.manageFeeMaster}"
-							label="Fee Master" icon="fa fa-fw fa-certificate">
-							<p:menuitem value="Fee Headers" icon="fa fa-fw fa-sign-in"
+							label="Fee" icon="fa fa-inr">
+							<p:menuitem value="Fee Headers" icon="pi pi-fw pi-align-left"
 								outcome="addFees.xhtml" />
 							<p:menuitem value="Class Fee Allocation"
-								icon="fa fa-fw fa-sign-in" outcome="editClass.xhtml" />
+								icon="pi pi-fw pi-align-left" outcome="editClass.xhtml" />
 							<p:menuitem value="Student Fee Allocation"
-								icon="fa fa-fw fa-sign-in"
+								icon="pi pi-fw pi-align-left"
 								outcome="studentWiseFeeAllocation.xhtml" />
 						</p:submenu>
 
 						<p:submenu rendered="#{sideMenuBean.masterSetting}"
-							id="am_customization" label="Master Settings"
+							id="am_customization" label="Master"
 							icon="fa fa-fw fa-cogs">
 							<p:submenu rendered="#{sideMenuBean.manageSubjectMaster}"
 								label="Subject Master" icon="fa fa-fw fa-certificate">
-								<p:menuitem value="Edit Subject" icon="fa fa-fw fa-sign-in"
+								<p:menuitem value="Edit Subject" icon="pi pi-fw pi-align-left"
 									outcome="editSubjects.xhtml" />
 								<p:menuitem value="Assign/Edit/Delete Optional Subject"
-									icon="fa fa-fw fa-sign-in"
+									icon="pi pi-fw pi-align-left"
 									outcome="editOptionalSubjectStudents.xhtml" />
 								<p:menuitem value="Edit Optional Subject" rendered="false"
-									icon="fa fa-fw fa-sign-in" outcome="editOptionalSubjects.xhtml" />
-								<p:menuitem value="Subject Ordering" icon="fa fa-fw fa-sign-in"
+									icon="pi pi-fw pi-align-left" outcome="editOptionalSubjects.xhtml" />
+								<p:menuitem value="Subject Ordering" icon="pi pi-fw pi-align-left"
 									outcome="subjectRank.xhtml" />
 								<p:menuitem value="Subject Allocation"
-									icon="fa fa-fw fa-sign-in" outcome="subjectAllocation.xhtml" />
+									icon="pi pi-fw pi-align-left" outcome="subjectAllocation.xhtml" />
 
 							</p:submenu>
 
 							<p:submenu rendered="#{sideMenuBean.manageSemesterMaster}"
 								label="Semester/Term Master" icon="fa fa-fw fa-certificate">
-								<p:menuitem value="Add Semseter/Term" icon="fa fa-fw fa-sign-in"
+								<p:menuitem value="Add Semseter/Term" icon="pi pi-fw pi-align-left"
 									outcome="addSemester.xhtml" />
 								<p:menuitem value="Edit Semester/Term"
-									icon="fa fa-fw fa-sign-in" outcome="editSemester.xhtml" />
+									icon="pi pi-fw pi-align-left" outcome="editSemester.xhtml" />
 							</p:submenu>
 
 							<p:submenu rendered="#{sideMenuBean.manageExamMaster}"
 								label="Exam Master" icon="fa fa-fw fa-certificate">
 								<p:menuitem value="Delete Exam Performance"
 									rendered="#{sideMenuBean.deletePerformance}"
-									icon="fa fa-fw fa-sign-in" outcome="deletePerformance.xhtml" />
-								<p:menuitem value="Exam Setting" icon="fa fa-fw fa-sign-in"
+									icon="pi pi-fw pi-align-left" outcome="deletePerformance.xhtml" />
+								<p:menuitem value="Exam Setting" icon="pi pi-fw pi-align-left"
 									outcome="examSetting.xhtml" />
-								<p:menuitem value="Add Exam" icon="fa fa-fw fa-sign-in"
+								<p:menuitem value="Add Exam" icon="pi pi-fw pi-align-left"
 									outcome="addExam.xhtml" />
-								<p:menuitem value="Edit Exam" icon="fa fa-fw fa-sign-in"
+								<p:menuitem value="Edit Exam" icon="pi pi-fw pi-align-left"
 									outcome="editExam.xhtml" />
-								<p:menuitem value="Exam Ordering" icon="fa fa-fw fa-sign-in"
+								<p:menuitem value="Exam Ordering" icon="pi pi-fw pi-align-left"
 									outcome="examOrdering.xhtml" />
 							</p:submenu>
 						</p:submenu>
 
 						<p:submenu rendered="#{sideMenuBean.manageStudent}"
-							label="Manage Student" icon="fa fa-fw fa-life-saver">
+							label="Student" icon="fa fa-graduation-cap">
 							<p:menuitem rendered="#{sideMenuBean.manageAllStudentList}"
 								value="Search Student" icon="fa fa-fw fa-certificate"
 								action="#{sideMenuBean.goToAllStudent}" />
@@ -91,24 +85,24 @@
 						</p:submenu>
 
 						<p:submenu rendered="#{sideMenuBean.manageClassTest}"
-							id="am_theme" label="Manage Class Test"
-							icon="fa fa-fw fa-life-saver">
+							id="am_theme" label="Class Test"
+							icon="fa fa-pencil-square-o">
 							<p:menuitem rendered="#{sideMenuBean.manageClassTestReport}"
 								id="theme4" value="Student Wise Tests"
-								icon="fa fa-fw fa-sign-in"
+								icon="pi pi-fw pi-align-left"
 								outcome="studentWiseClassTestReport.xhtml" />
 							<p:menuitem rendered="#{sideMenuBean.manageClassTestReport}"
 								id="theme5" value="Student Wise Complete Report"
-								icon="fa fa-fw fa-sign-in"
+								icon="pi pi-fw pi-align-left"
 								outcome="studentWiseCompleteClassTestReport.xhtml" />
 							<p:menuitem rendered="#{sideMenuBean.manageClassWiseTestReport}"
 								id="theme6" value="Class Wise Performance"
-								icon="fa fa-fw fa-sign-in"
+								icon="pi pi-fw pi-align-left"
 								outcome="printTestPerformanceClassWise.xhtml" />
 						</p:submenu>
 
 						<p:menuitem rendered="#{sideMenuBean.manageFeeCollection}"
-							id="om_doc" value="Fee collection" icon="fa fa-fw fa-life-saver"
+							id="om_doc" value="Fee" icon="fa fa-inr"
 							outcome="feeCollection.xhtml" />
 						<p:menuitem
 							rendered="#{sideMenuBean.manageInstallmentFeeCollection}"
@@ -120,284 +114,284 @@
 							outcome="installmentWiseFeeCollection.xhtml" />
 
 						<p:submenu rendered="#{sideMenuBean.manageCommunication}"
-							label="Manage Communication" icon="fa fa-fw fa-life-saver">
+							label="SMS" icon="fa fa-sms">
 							<p:menuitem rendered="#{sideMenuBean.manageMesssagePack}"
-								value="Message Packs" icon="fa fa-fw fa-sign-in"
+								value="Message Packs" icon="pi pi-fw pi-align-left"
 								outcome="purchaseMsgPack.xhtml" />
 							<p:menuitem rendered="#{sideMenuBean.manageGroupMessgae}"
-								value="Group Message" icon="fa fa-fw fa-sign-in"
+								value="Group Message" icon="pi pi-fw pi-align-left"
 								outcome="groupMesssage.xhtml" />
 							<p:menuitem rendered="#{sideMenuBean.manageRandomMessage}"
-								value="Random Message" icon="fa fa-fw fa-sign-in"
+								value="Random Message" icon="pi pi-fw pi-align-left"
 								outcome="newCommunicationModule.xhtml" />
 							<p:menuitem rendered="#{sideMenuBean.manageSentMessage}"
-								value="Class Wise Message" icon="fa fa-fw fa-sign-in"
+								value="Class Wise Message" icon="pi pi-fw pi-align-left"
 								outcome="sendMessageStep1.xhtml" />
 							<p:menuitem rendered="#{sideMenuBean.manageStudentMessage}"
-								value="Student Wise Message" icon="fa fa-fw fa-sign-in"
+								value="Student Wise Message" icon="pi pi-fw pi-align-left"
 								outcome="studentWiseSMS.xhtml" />
 							<p:menuitem rendered="#{sideMenuBean.manageStaffCommunication}"
-								value="Staff Communication" icon="fa fa-fw fa-sign-in"
+								value="Staff Communication" icon="pi pi-fw pi-align-left"
 								outcome="staffCommunication.xhtml" />
 							<p:menuitem rendered="#{sideMenuBean.manageRouteMessage}"
-								value="Route Wise Message" icon="fa fa-fw fa-sign-in"
+								value="Route Wise Message" icon="pi pi-fw pi-align-left"
 								outcome="sendMessageRouteWise.xhtml" />
 						</p:submenu>
 
 						<p:submenu rendered="#{sideMenuBean.manageLibCertificate}"
-							label="Manage Library" icon="fa fa-fw fa-life-saver">
+							label="Library" icon="fa fa-book">
 							<p:menuitem rendered="#{sideMenuBean.manageViewBook}"
-								value="All Books" icon="fa fa-fw fa-sign-in"
+								value="All Books" icon="pi pi-fw pi-align-left"
 								outcome="allBookReport.xhtml" />
 							<p:menuitem rendered="#{sideMenuBean.manageAssignBook}"
-								value="Assign Book" icon="fa fa-fw fa-sign-in"
+								value="Assign Book" icon="pi pi-fw pi-align-left"
 								outcome="assignBook.xhtml" />
 							<p:menuitem rendered="#{sideMenuBean.manageReceiveBook}"
-								value="Receive Book" icon="fa fa-fw fa-sign-in"
+								value="Receive Book" icon="pi pi-fw pi-align-left"
 								outcome="receiveBook.xhtml" />
 						</p:submenu>
 
 						<p:submenu rendered="#{sideMenuBean.manageInfirmary}"
-							label="Manage Infirmary" icon="fa fa-fw fa-life-saver">
+							label="Infirmary" icon="fa fa-medkit">
 							<p:menuitem value="Student Wise Report"
-								icon="fa fa-fw fa-sign-in" outcome="studentWiseCheckUp.xhtml" />
+								icon="pi pi-fw pi-align-left" outcome="studentWiseCheckUp.xhtml" />
 						</p:submenu>
 
 
 						<p:submenu rendered="#{sideMenuBean.manageLevCertificate}"
-							label="Manage TC" icon="fa fa-fw fa-life-saver">
+							label="TC" icon="fa fa-file">
 							<p:menuitem rendered="#{sideMenuBean.manageStruckOff}"
-								value="Stu. Struck Off" icon="fa fa-fw fa-sign-in"
+								value="Stu. Struck Off" icon="pi pi-fw pi-align-left"
 								outcome="struckOffStudent.xhtml" />
 							<p:menuitem rendered="#{sideMenuBean.manageTcGenerate}"
-								value="TC Generate" icon="fa fa-fw fa-sign-in"
+								value="TC Generate" icon="pi pi-fw pi-align-left"
 								outcome="searchStudentForTC.xhtml" />
 							<p:menuitem rendered="#{sideMenuBean.manageEditViewStruckOff}"
-								value="Edit/View TC" icon="fa fa-fw fa-sign-in"
+								value="Edit/View TC" icon="pi pi-fw pi-align-left"
 								outcome="editTransferCertificate.xhtml" />
 							<p:menuitem rendered="#{sideMenuBean.manageTcGenerate}"
-								value="Cancel TC Report" icon="fa fa-fw fa-sign-in"
+								value="Cancel TC Report" icon="pi pi-fw pi-align-left"
 								outcome="cancelTransferCertificateReport.xhtml" />
-							<p:menuitem value="Previous TC " icon="fa fa-fw fa-sign-in"
+							<p:menuitem value="Previous TC " icon="pi pi-fw pi-align-left"
 								outcome="printTcForAll.xhtml" />
 						</p:submenu>
 
 
 						<p:submenu rendered="#{sideMenuBean.managePrint}"
-							label="Print Document" icon="fa fa-fw fa-life-saver">
+							label="Print Document" icon="fa fa-print">
 							<p:menuitem rendered="#{sideMenuBean.manageExamMarksGrade}"
-								value="Exam Marks + Grade" icon="fa fa-fw fa-sign-in"
+								value="Exam Marks + Grade" icon="pi pi-fw pi-align-left"
 								outcome="studentMarksList.xhtml" />
 							<p:menuitem rendered="true" value="Final Marksheet"
-								icon="fa fa-fw fa-sign-in" outcome="finalBLMMarksheet.xhtml" />
+								icon="pi pi-fw pi-align-left" outcome="finalBLMMarksheet.xhtml" />
 							<p:menuitem rendered="#{sideMenuBean.manageGenerateRank}"
-								value="Generate Rank" icon="fa fa-fw fa-sign-in"
+								value="Generate Rank" icon="pi pi-fw pi-align-left"
 								outcome="generateClassRank.xhtml" />
 							<p:menuitem value="Marks Not Entered Report"
-								icon="fa fa-fw fa-sign-in"
+								icon="pi pi-fw pi-align-left"
 								outcome="subjectMarksNotEnteredReport.xhtml" />
 							<p:menuitem rendered="#{sideMenuBean.manageoasismarksheetupto3}"
-								value="Half-Yealy" icon="fa fa-fw fa-sign-in"
+								value="Half-Yealy" icon="pi pi-fw pi-align-left"
 								outcome="finalOasisMarksheetUpTo3.xhtml" />
 							<p:menuitem rendered="#{sideMenuBean.manageFinalMarksheet}"
-								value="Unit Marksheet" icon="fa fa-fw fa-sign-in"
+								value="Unit Marksheet" icon="pi pi-fw pi-align-left"
 								outcome="oasisMarksheet.xhtml" />
 							<p:menuitem rendered="#{sideMenuBean.manageFinalMarksheet}"
-								value="Marks Average" icon="fa fa-fw fa-sign-in"
+								value="Marks Average" icon="pi pi-fw pi-align-left"
 								outcome="makeAverageOfMarks.xhtml" />
 							<p:menuitem rendered="#{sideMenuBean.manageFinalMarksheet}"
-								value="Detailed Marks" icon="fa fa-fw fa-sign-in"
+								value="Detailed Marks" icon="pi pi-fw pi-align-left"
 								outcome="studentFullMarksheetReport.xhtml" />
 							<p:menuitem rendered="#{sideMenuBean.manageFinalMarksheet}"
-								value="Overall Performance Report" icon="fa fa-fw fa-sign-in"
+								value="Overall Performance Report" icon="pi pi-fw pi-align-left"
 								outcome="studentOverallPerformanceReport.xhtml" />
 							<p:menuitem rendered="#{sideMenuBean.manageBonafiedCertificate}"
-								value="Bonafide Certificate" icon="fa fa-fw fa-sign-in"
+								value="Bonafide Certificate" icon="pi pi-fw pi-align-left"
 								outcome="bonafideCertificate.xhtml" />
 							<p:menuitem
 								rendered="#{sideMenuBean.manageCharaceterCertificate}"
-								value="Character Certificate" icon="fa fa-fw fa-sign-in"
+								value="Character Certificate" icon="pi pi-fw pi-align-left"
 								outcome="generateCC.xhtml" />
 							<p:menuitem rendered="#{sideMenuBean.manageMultipleCertificate}"
-								value="Birth/Bank/Bonafide Cert." icon="fa fa-fw fa-sign-in"
+								value="Birth/Bank/Bonafide Cert." icon="pi pi-fw pi-align-left"
 								outcome="severalCertificatePrinting.xhtml" />
 							<p:menuitem
 								rendered="#{sideMenuBean.manageExperienceCertificate}"
-								value="Experience Certificate" icon="fa fa-fw fa-sign-in"
+								value="Experience Certificate" icon="pi pi-fw pi-align-left"
 								outcome="rbscExperienceCertificate.xhtml" />
 							<p:menuitem
 								rendered="#{sideMenuBean.manageAttendanceCertificate}"
-								value="Attendance Certificate" icon="fa fa-fw fa-sign-in"
+								value="Attendance Certificate" icon="pi pi-fw pi-align-left"
 								outcome="rbscAttendenceCertificate.xhtml" />
 
 							<p:menuitem rendered="false" value="Result List Of Class"
-								icon="fa fa-fw fa-sign-in" outcome="resultListOfStudent.xhtml" />
+								icon="pi pi-fw pi-align-left" outcome="resultListOfStudent.xhtml" />
 							<p:menuitem rendered="false" value="Subject Wise Marks Report"
-								icon="fa fa-fw fa-sign-in"
+								icon="pi pi-fw pi-align-left"
 								outcome="studentFinalMarksheetReport.xhtml" />
 						</p:submenu>
 
 						<p:submenu rendered="#{sideMenuBean.manageRbseTCModule}"
 							label="RBSE CC/TC Module" icon="fa fa-fw fa-life-saver">
 							<p:menuitem rendered="#{sideMenuBean.manageOldStudentSMS}"
-								value="Old Student Data" icon="fa fa-fw fa-sign-in"
+								value="Old Student Data" icon="pi pi-fw pi-align-left"
 								outcome="smsOldStudentData.xhtml" />
 							<p:menuitem rendered="#{sideMenuBean.manageRbscStruckOff}"
-								value="Struck Off" icon="fa fa-fw fa-sign-in"
+								value="Struck Off" icon="pi pi-fw pi-align-left"
 								outcome="rbscStudentSearchStruckOff.xhtml" />
 							<p:menuitem rendered="#{sideMenuBean.manageRbscTCGeneration}"
-								value="TC Generation" icon="fa fa-fw fa-sign-in"
+								value="TC Generation" icon="pi pi-fw pi-align-left"
 								outcome="generateRbscTC.xhtml" />
 							<p:menuitem rendered="#{sideMenuBean.manageRbscCCGeneration}"
-								value="CC Generation" icon="fa fa-fw fa-sign-in"
+								value="CC Generation" icon="pi pi-fw pi-align-left"
 								outcome="generateRbscCC.xhtml" />
 							<p:menuitem rendered="#{sideMenuBean.manageRbscTCList}"
-								value="Duplicate TC" icon="fa fa-fw fa-sign-in"
+								value="Duplicate TC" icon="pi pi-fw pi-align-left"
 								outcome="viewRbscTcStudent.xhtml" />
 							<p:menuitem rendered="#{sideMenuBean.manageOldRbscTCGeneration}"
-								value="Old Student TC" icon="fa fa-fw fa-sign-in"
+								value="Old Student TC" icon="pi pi-fw pi-align-left"
 								outcome="rbscOldStudentStruckOff.xhtml" />
 							<p:menuitem rendered="#{sideMenuBean.manageOldRbscTCList}"
-								value="Old Duplicate TC" icon="fa fa-fw fa-sign-in"
+								value="Old Duplicate TC" icon="pi pi-fw pi-align-left"
 								outcome="viewOldStudentRbscTc.xhtml" />
 						</p:submenu>
 
 						<p:submenu rendered="#{sideMenuBean.manageReports}"
-							label="Reports" icon="fa fa-fw fa-life-saver">
+							label="Reports" icon="fa fa-bar-chart">
 
 							<p:submenu rendered="true" label="Graphical Report"
 								icon="fa fa-fw fa-certificate">
-								<p:menuitem value="SMS Graph" icon="fa fa-fw fa-sign-in"
+								<p:menuitem value="SMS Graph" icon="pi pi-fw pi-align-left"
 									outcome="deliveryReportBarModel.xhtml" />
 								<p:menuitem value="Class Strength Graph"
-									icon="fa fa-fw fa-sign-in" outcome="classBarModel.xhtml" />
-								<p:menuitem value="Fees Graph" icon="fa fa-fw fa-sign-in"
+									icon="pi pi-fw pi-align-left" outcome="classBarModel.xhtml" />
+								<p:menuitem value="Fees Graph" icon="pi pi-fw pi-align-left"
 									outcome="studentFeesBar.xhtml" />
 								<p:menuitem value="Income/Expense Graph"
-									icon="fa fa-fw fa-sign-in"
+									icon="pi pi-fw pi-align-left"
 									outcome="combineIncExpBarReport.xhtml" />
 								<p:menuitem value="Transport Fees Graph"
-									icon="fa fa-fw fa-sign-in" outcome="routeFeesBarReport.xhtml" />
+									icon="pi pi-fw pi-align-left" outcome="routeFeesBarReport.xhtml" />
 								<p:menuitem value="Route Wise Fees Graph"
-									icon="fa fa-fw fa-sign-in" outcome="routeWiseFeeGraph.xhtml" />
+									icon="pi pi-fw pi-align-left" outcome="routeWiseFeeGraph.xhtml" />
 								<p:menuitem value="Performance Line Graph"
-									icon="fa fa-fw fa-sign-in"
+									icon="pi pi-fw pi-align-left"
 									outcome="classWisePerformanceLineChart.xhtml" />
 								<p:menuitem value="Student Performance Graph"
-									icon="fa fa-fw fa-sign-in"
+									icon="pi pi-fw pi-align-left"
 									outcome="studentSubjPerformanceBarGraph.xhtml" />
 								<p:menuitem value="Class Performance Comparison"
-									icon="fa fa-fw fa-sign-in"
+									icon="pi pi-fw pi-align-left"
 									outcome="classPerformanceComparision.xhtml" />
 								<p:menuitem value="Subject Performance Comparison"
-									icon="fa fa-fw fa-sign-in"
+									icon="pi pi-fw pi-align-left"
 									outcome="subjectPerformanceComparision.xhtml" />
 								<p:menuitem value="Exam Performance Comparison (Class)"
-									icon="fa fa-fw fa-sign-in"
+									icon="pi pi-fw pi-align-left"
 									outcome="classExamPerformComparision.xhtml" />
 								<p:menuitem value="Exam Performance Comparison (Student)"
-									icon="fa fa-fw fa-sign-in"
+									icon="pi pi-fw pi-align-left"
 									outcome="examPerformanceComparision.xhtml" />
 								<p:menuitem value="Term Performance Comparison"
-									icon="fa fa-fw fa-sign-in"
+									icon="pi pi-fw pi-align-left"
 									outcome="termExamPerformComparision.xhtml" />
 								<p:menuitem value="Percentage Level Graph"
-									icon="fa fa-fw fa-sign-in" outcome="percentageLevelGraph.xhtml" />
+									icon="pi pi-fw pi-align-left" outcome="percentageLevelGraph.xhtml" />
 							</p:submenu>
 
 							<p:submenu rendered="#{sideMenuBean.manageGeneralReport}"
 								label="General Report" icon="fa fa-fw fa-certificate">
 								<p:menuitem value="#{headerBean.type} SMS Ledger"
-									icon="fa fa-fw fa-sign-in" outcome="messageSchoolHistory.xhtml" />
+									icon="pi pi-fw pi-align-left" outcome="messageSchoolHistory.xhtml" />
 								<p:menuitem value="App Download Status"
-									icon="fa fa-fw fa-sign-in"
+									icon="pi pi-fw pi-align-left"
 									outcome="studentAppDownloadReport.xhtml" />
 								<p:menuitem value="Category Wise Emp."
-									icon="fa fa-fw fa-sign-in"
+									icon="pi pi-fw pi-align-left"
 									outcome="showCategoryWiseEmployeeReport.xhtml" />
 								<p:menuitem value="Enquiry Source Report"
-									icon="fa fa-fw fa-sign-in" outcome="enquirySourceReport.xhtml" />
-								<p:menuitem value="SMS Delivery" icon="fa fa-fw fa-sign-in"
+									icon="pi pi-fw pi-align-left" outcome="enquirySourceReport.xhtml" />
+								<p:menuitem value="SMS Delivery" icon="pi pi-fw pi-align-left"
 									outcome="messageDeliveryReport.xhtml" />
 								<p:menuitem value="SMS Purchase History"
-									icon="fa fa-fw fa-sign-in" outcome="msgPurchaseHistry.xhtml" />
-								<p:menuitem value="My Bills" icon="fa fa-fw fa-sign-in"
+									icon="pi pi-fw pi-align-left" outcome="msgPurchaseHistry.xhtml" />
+								<p:menuitem value="My Bills" icon="pi pi-fw pi-align-left"
 									outcome="mySchoolBills.xhtml" />
 							</p:submenu>
 
 							<p:submenu rendered="#{sideMenuBean.manageStudentReport}"
 								label="Student Report" icon="fa fa-fw fa-certificate">
 
-								<p:menuitem value="Sibling Report" icon="fa fa-fw fa-sign-in"
+								<p:menuitem value="Sibling Report" icon="pi pi-fw pi-align-left"
 									outcome="siblingReport.xhtml" />
 								<p:menuitem value="Wrong Contact No Report"
-									icon="fa fa-fw fa-sign-in" outcome="wrongContactNoReport.xhtml" />
+									icon="pi pi-fw pi-align-left" outcome="wrongContactNoReport.xhtml" />
 								<p:menuitem value="Category Wise Strength"
-									icon="fa fa-fw fa-sign-in" outcome="newCategoryReport.xhtml" />
+									icon="pi pi-fw pi-align-left" outcome="newCategoryReport.xhtml" />
 								<p:menuitem value="Category Wise Students"
-									icon="fa fa-fw fa-sign-in" outcome="categoryWiseReport.xhtml" />
+									icon="pi pi-fw pi-align-left" outcome="categoryWiseReport.xhtml" />
 								<p:menuitem value="House Wise Students"
-									icon="fa fa-fw fa-sign-in" outcome="houseWiseListReport.xhtml" />
-								<p:menuitem value="Class Strength I" icon="fa fa-fw fa-sign-in"
+									icon="pi pi-fw pi-align-left" outcome="houseWiseListReport.xhtml" />
+								<p:menuitem value="Class Strength I" icon="pi pi-fw pi-align-left"
 									outcome="showClassWiseReport.xhtml" />
 
-								<p:menuitem value="Class Strength II" icon="fa fa-fw fa-sign-in"
+								<p:menuitem value="Class Strength II" icon="pi pi-fw pi-align-left"
 									outcome="classStrengthLessDetails.xhtml" />
 								<p:menuitem value="Student Photo Drive"
-									icon="fa fa-fw fa-sign-in" outcome="allSectionList.xhtml" />
+									icon="pi pi-fw pi-align-left" outcome="allSectionList.xhtml" />
 								<p:menuitem rendered="#{sideMenuBean.list.schid eq '287'}"
-									value="Student Type Report" icon="fa fa-fw fa-sign-in"
+									value="Student Type Report" icon="pi pi-fw pi-align-left"
 									outcome="studentTypeReport.xhtml" />
 								<p:menuitem value="All Class Strength"
-									icon="fa fa-fw fa-sign-in" outcome="smallClassStrength.xhtml" />
-								<p:menuitem value="Age Wise Strength" icon="fa fa-fw fa-sign-in"
+									icon="pi pi-fw pi-align-left" outcome="smallClassStrength.xhtml" />
+								<p:menuitem value="Age Wise Strength" icon="pi pi-fw pi-align-left"
 									outcome="ageWiseStrengthReport.xhtml" />
 								<p:menuitem value="Community Wise Strength"
-									icon="fa fa-fw fa-sign-in"
+									icon="pi pi-fw pi-align-left"
 									outcome="communityWiseStrengthReport.xhtml" />
 								<p:menuitem value="Gender Wise Strength"
-									icon="fa fa-fw fa-sign-in"
+									icon="pi pi-fw pi-align-left"
 									outcome="genderWiseStrengthReport.xhtml" />
-								<p:menuitem value="Estimated Fee" icon="fa fa-fw fa-sign-in"
+								<p:menuitem value="Estimated Fee" icon="pi pi-fw pi-align-left"
 									outcome="feeEstimateReport.xhtml" />
 								<p:menuitem value="Handicapped Report"
-									icon="fa fa-fw fa-sign-in" outcome="handicappedReport.xhtml" />
-								<p:menuitem value="Inactive Students" icon="fa fa-fw fa-sign-in"
+									icon="pi pi-fw pi-align-left" outcome="handicappedReport.xhtml" />
+								<p:menuitem value="Inactive Students" icon="pi pi-fw pi-align-left"
 									outcome="inactiveStudentReport.xhtml" />
-								<p:menuitem value="New Admissions" icon="fa fa-fw fa-sign-in"
+								<p:menuitem value="New Admissions" icon="pi pi-fw pi-align-left"
 									outcome="newRegistrationReport.xhtml" />
 								<p:menuitem value="Promoted Student Report"
-									icon="fa fa-fw fa-sign-in"
+									icon="pi pi-fw pi-align-left"
 									outcome="promotedStudentReport.xhtml" />
 								<p:menuitem value="Pending Leaves Student"
-									icon="fa fa-fw fa-sign-in"
+									icon="pi pi-fw pi-align-left"
 									outcome="pendingLeaveOfStudent.xhtml" />
 								<p:menuitem value="Student Age Report"
-									icon="fa fa-fw fa-sign-in" outcome="ageWiseReport.xhtml" />
+									icon="pi pi-fw pi-align-left" outcome="ageWiseReport.xhtml" />
 								<p:menuitem value="Student Wise Subject"
-									icon="fa fa-fw fa-sign-in"
+									icon="pi pi-fw pi-align-left"
 									outcome="viewStudentWiseSubject.xhtml" />
 								<p:menuitem value="Subject Wise Student"
-									icon="fa fa-fw fa-sign-in"
+									icon="pi pi-fw pi-align-left"
 									outcome="viewSubjectWiseStudentReport.xhtml" />
-								<p:menuitem value="Student Birthday" icon="fa fa-fw fa-sign-in"
+								<p:menuitem value="Student Birthday" icon="pi pi-fw pi-align-left"
 									outcome="studentBirthdayList.xhtml" />
 								<p:menuitem value="Student Contact details"
-									icon="fa fa-fw fa-sign-in"
+									icon="pi pi-fw pi-align-left"
 									outcome="studentCompleteDetail.xhtml" />
 								<p:menuitem value="Religion Wise Report"
-									icon="fa fa-fw fa-sign-in" outcome="religionWiseReport.xhtml" />
+									icon="pi pi-fw pi-align-left" outcome="religionWiseReport.xhtml" />
 								<p:menuitem value="Concession Wise Student"
-									icon="fa fa-fw fa-sign-in"
+									icon="pi pi-fw pi-align-left"
 									outcome="concessionCategoryWiseStudentReport.xhtml" />
 								<p:menuitem value="Home Work Not Assigned Subjects"
-									icon="fa fa-fw fa-sign-in"
+									icon="pi pi-fw pi-align-left"
 									outcome="homeworkNotAssignedSubjectsReport.xhtml" />
 								<p:menuitem value="Admission Withdrawal" rendered="false"
-									icon="fa fa-fw fa-sign-in"
+									icon="pi pi-fw pi-align-left"
 									outcome="admissionWithdrawalReport.xhtml" />
 								<p:menuitem value="Student Promotion Status Report"
-									icon="fa fa-fw fa-sign-in"
+									icon="pi pi-fw pi-align-left"
 									outcome="studentPromotionStatusReport.xhtml"></p:menuitem>
 
 
@@ -406,20 +400,20 @@
 							<p:submenu rendered="#{sideMenuBean.manageTransportReport}"
 								label="Transport Report" icon="fa fa-fw fa-certificate">
 								<p:menuitem value="Route Wise Students"
-									icon="fa fa-fw fa-sign-in" outcome="routeWiseReport.xhtml" />
+									icon="pi pi-fw pi-align-left" outcome="routeWiseReport.xhtml" />
 								<p:menuitem value="Stop Wise Students"
-									icon="fa fa-fw fa-sign-in" outcome="stopWiseReport.xhtml" />
+									icon="pi pi-fw pi-align-left" outcome="stopWiseReport.xhtml" />
 								<p:menuitem value="Stop Class Wise Students"
-									icon="fa fa-fw fa-sign-in" outcome="stopClassWiseReport.xhtml" />
-								<p:menuitem value="All Routes" icon="fa fa-fw fa-sign-in"
+									icon="pi pi-fw pi-align-left" outcome="stopClassWiseReport.xhtml" />
+								<p:menuitem value="All Routes" icon="pi pi-fw pi-align-left"
 									outcome="allRoute.xhtml" />
-								<p:menuitem value="All Stops" icon="fa fa-fw fa-sign-in"
+								<p:menuitem value="All Stops" icon="pi pi-fw pi-align-left"
 									outcome="allStop.xhtml" />
 								<p:menuitem value="Transport Fee Report"
-									icon="fa fa-fw fa-sign-in"
+									icon="pi pi-fw pi-align-left"
 									outcome="transportFee_RouteReport.xhtml" />
 								<p:menuitem value="Route-MonthWise Students"
-									icon="fa fa-fw fa-sign-in"
+									icon="pi pi-fw pi-align-left"
 									outcome="transportRouteMonthWiseReport.xhtml" />
 							</p:submenu>
 
@@ -428,20 +422,20 @@
 								rendered="#{sideMenuBean.manageFeeReport}"
 								icon="fa fa-fw fa-certificate">
 								<p:menuitem value="School Fee Estimate"
-									icon="fa fa-fw fa-sign-in"
+									icon="pi pi-fw pi-align-left"
 									outcome="feeEstimateReportForSession.xhtml" />
 								<p:menuitem value="Cancelled Receipts"
-									icon="fa fa-fw fa-sign-in"
+									icon="pi pi-fw pi-align-left"
 									outcome="cancelFeeReceiptReport.xhtml" />
-								<p:menuitem value="Concession Report" icon="fa fa-fw fa-sign-in"
+								<p:menuitem value="Concession Report" icon="pi pi-fw pi-align-left"
 									outcome="feeConcessionDetailReport.xhtml" />
 								<p:menuitem value="Daily Fee Collection"
-									icon="fa fa-fw fa-sign-in"
+									icon="pi pi-fw pi-align-left"
 									outcome="dailyFeecolletionReport.xhtml" />
 								<p:menuitem rendered="false" value="Daily Collection Record"
-									icon="fa fa-fw fa-sign-in"
+									icon="pi pi-fw pi-align-left"
 									outcome="dailyCollectionReport.xhtml" />
-								<p:menuitem value="Due Fees" icon="fa fa-fw fa-sign-in"
+								<p:menuitem value="Due Fees" icon="pi pi-fw pi-align-left"
 									outcome="dueFeeReport.xhtml" />
 								<p:menuitem
 									rendered="#{sideMenuBean.manageInstallmentFeeCollection}"
@@ -450,35 +444,35 @@
 									outcome="installmentDueFeeReport.xhtml" />
 
 								<p:menuitem rendered="false" value="Fee Record Register"
-									icon="fa fa-fw fa-sign-in" outcome="feeRecordRegister.xhtml" />
-								<p:menuitem value="Paid Fee Report" icon="fa fa-fw fa-sign-in"
+									icon="pi pi-fw pi-align-left" outcome="feeRecordRegister.xhtml" />
+								<p:menuitem value="Paid Fee Report" icon="pi pi-fw pi-align-left"
 									outcome="paidFeeReport.xhtml" />
-								<p:menuitem value="Previous Fees" icon="fa fa-fw fa-sign-in"
+								<p:menuitem value="Previous Fees" icon="pi pi-fw pi-align-left"
 									outcome="previousFeeReport.xhtml" />
 								<p:menuitem rendered="false" value="Fee Structure Report"
-									icon="fa fa-fw fa-sign-in" outcome="feeStructureReport.xhtml" />
+									icon="pi pi-fw pi-align-left" outcome="feeStructureReport.xhtml" />
 								<p:menuitem value="Class Wise Collection"
-									icon="fa fa-fw fa-sign-in"
+									icon="pi pi-fw pi-align-left"
 									outcome="classWiseFeeCollectionReport.xhtml" />
 								<p:menuitem value="Monthly Fee Collection"
-									icon="fa fa-fw fa-sign-in"
+									icon="pi pi-fw pi-align-left"
 									outcome="monthWiseFeeCollectionReport.xhtml" />
 								<p:menuitem value="Mini Daily Fee Collection"
-									icon="fa fa-fw fa-sign-in"
+									icon="pi pi-fw pi-align-left"
 									outcome="miniDailyFeeCollection.xhtml" />
 								<p:menuitem value="Mini Due Fee Report"
-									icon="fa fa-fw fa-sign-in" outcome="miniDueFeeReport.xhtml" />
+									icon="pi pi-fw pi-align-left" outcome="miniDueFeeReport.xhtml" />
 								<p:menuitem rendered="false" value="Previous Session Fee Report"
-									icon="fa fa-fw fa-sign-in"
+									icon="pi pi-fw pi-align-left"
 									outcome="previousStudentFeeCollectionReport.xhtml" />
 								<p:menuitem rendered="false" value="Session Collection"
-									icon="fa fa-fw fa-sign-in"
+									icon="pi pi-fw pi-align-left"
 									outcome="sessionTotalCollection.xhtml" />
 								<p:menuitem value="Date Wise Collection"
-									icon="fa fa-fw fa-sign-in"
+									icon="pi pi-fw pi-align-left"
 									outcome="dateWiseFeeCollectionReport.xhtml" />
 								<p:menuitem value="Installment Wise Fee Report"
-									icon="fa fa-fw fa-sign-in"
+									icon="pi pi-fw pi-align-left"
 									outcome="installmentWiseFeeCollectionReport.xhtml" />
 
 							</p:submenu>
@@ -486,26 +480,26 @@
 
 							<p:submenu rendered="#{sideMenuBean.manageAttendanceReport}"
 								label="Attendance Report" icon="fa fa-fw fa-certificate">
-								<p:menuitem value="Absent Students" icon="fa fa-fw fa-sign-in"
+								<p:menuitem value="Absent Students" icon="pi pi-fw pi-align-left"
 									outcome="absentStudentReport.xhtml" />
 								<p:menuitem value="Monthly Attendance"
-									icon="fa fa-fw fa-sign-in" outcome="showAttendanceRecord.xhtml" />
-								<p:menuitem value="Show Leaves" icon="fa fa-fw fa-sign-in"
+									icon="pi pi-fw pi-align-left" outcome="showAttendanceRecord.xhtml" />
+								<p:menuitem value="Show Leaves" icon="pi pi-fw pi-align-left"
 									outcome="leaveReport.xhtml" />
 								<p:menuitem value="UnMarked Attendance"
-									icon="fa fa-fw fa-sign-in"
+									icon="pi pi-fw pi-align-left"
 									outcome="attendenceNotMarkedReport.xhtml" />
-								<p:menuitem value="View Attendence" icon="fa fa-fw fa-sign-in"
+								<p:menuitem value="View Attendence" icon="pi pi-fw pi-align-left"
 									outcome="viewAttendenceInCalenderFormat.xhtml" />
-								<p:menuitem value="Attendance Report" icon="fa fa-fw fa-sign-in"
+								<p:menuitem value="Attendance Report" icon="pi pi-fw pi-align-left"
 									outcome="classAttendaceReport.xhtml" />
 								<p:menuitem value="Previous Session Attendance"
-									icon="fa fa-fw fa-sign-in"
+									icon="pi pi-fw pi-align-left"
 									outcome="previousSessionStudentAttendanceRecord.xhtml" />
-								<p:menuitem value="Summary Report" icon="fa fa-fw fa-sign-in"
+								<p:menuitem value="Summary Report" icon="pi pi-fw pi-align-left"
 									outcome="attendanceSummaryReport.xhtml" />
 								<p:menuitem value="Online Attendance Report"
-									icon="fa fa-fw fa-sign-in" outcome="showOnlineAttendance.xhtml" />
+									icon="pi pi-fw pi-align-left" outcome="showOnlineAttendance.xhtml" />
 
 
 							</p:submenu>
@@ -513,26 +507,25 @@
 							<p:submenu label="Library Report"
 								rendered="#{sideMenuBean.manageLibReport}"
 								icon="fa fa-fw fa-certificate">
-								<p:menuitem value="All Books" icon="fa fa-fw fa-sign-in"
+								<p:menuitem value="All Books" icon="pi pi-fw pi-align-left"
 									outcome="allBookReport.xhtml" />
-								<p:menuitem value="Assigned Books" icon="fa fa-fw fa-sign-in"
+								<p:menuitem value="Assigned Books" icon="pi pi-fw pi-align-left"
 									outcome="assignBookReport.xhtml" />
 								<p:menuitem value="Damaged/Lost Books"
-									icon="fa fa-fw fa-sign-in"
+									icon="pi pi-fw pi-align-left"
 									outcome="damage_lostBookReport.xhtml" />
 								<p:menuitem value="Not Returned Books"
-									icon="fa fa-fw fa-sign-in"
+									icon="pi pi-fw pi-align-left"
 									outcome="notReturnedBookReport.xhtml" />
 								<p:menuitem value="Library Collection"
-									icon="fa fa-fw fa-sign-in"
+									icon="pi pi-fw pi-align-left"
 									outcome="libraryFeeCollectionReport.xhtml" />
 							</p:submenu>
 
 						</p:submenu>
-
-					</pu:menu>
-				</div>
-			</div>
+			
+		</po:menu>
 		</div>
 	</h:form>
+	<h:outputStylesheet name="stylenew.css" library="tempcss" />
 </ui:composition>

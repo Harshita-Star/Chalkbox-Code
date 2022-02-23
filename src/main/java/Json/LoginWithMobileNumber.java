@@ -181,6 +181,10 @@ public class LoginWithMobileNumber implements Serializable {
 										obj.put("country", info.getCountry());
 										obj.put("paytm_marchent_key", info.getPaytm_marchent_key());
 										obj.put("paytm_mid", info.getPaytm_mid());
+										obj.put("pg_type", info.getPg_type());
+										obj.put("rzp_mid", info.getRzp_mid());
+										obj.put("rzp_key", info.getRzp_key());
+										obj.put("rzp_key_secret", info.getRzp_key_secret());
 										obj.put("email", "");
 										obj.put("session", session);
 										obj.put("appVersion", info.getAppVersion());
@@ -345,6 +349,10 @@ public class LoginWithMobileNumber implements Serializable {
 										obj.put("country", info.getCountry());
 										obj.put("paytm_marchent_key", info.getPaytm_marchent_key());
 										obj.put("paytm_mid", info.getPaytm_mid());
+										obj.put("pg_type", info.getPg_type());
+										obj.put("rzp_mid", info.getRzp_mid());
+										obj.put("rzp_key", info.getRzp_key());
+										obj.put("rzp_key_secret", info.getRzp_key_secret());
 										obj.put("appVersion", info.getAppVersion());
 										obj.put("session", session);
 										arr.add(obj);

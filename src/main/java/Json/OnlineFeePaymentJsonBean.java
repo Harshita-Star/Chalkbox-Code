@@ -38,7 +38,7 @@ public class OnlineFeePaymentJsonBean implements Serializable
 	String addmissionNumber,schoolid,neftNo;
 	
 	StudentInfo ss;
-	String status="";
+	String status="",paymentId="";
 	String selectedMonths;
 	ArrayList<FeeInfo> classFeeList, selectedFees = new ArrayList<>(),newclassFeelist=new ArrayList<>();
 	DataBaseMeathodJson DBJ=new DataBaseMeathodJson();
@@ -55,6 +55,7 @@ public class OnlineFeePaymentJsonBean implements Serializable
 			addmissionNumber=params.get("studentId");
 			schoolid=params.get("schid");
 			neftNo=params.get("orderid");
+			paymentId=params.get("paymentId");
 			String mm=params.get("month");
 			 status=params.get("status");
 			 String type=params.get("type");
@@ -64,6 +65,11 @@ public class OnlineFeePaymentJsonBean implements Serializable
 			    if(type==null||type.equals(""))
 				{
 					type="old";
+				}
+			    
+			    if(paymentId==null||paymentId.equals(""))
+				{
+			    	paymentId="";
 				}
 
 			Map<String, String> sysParams =FacesContext.getCurrentInstance().
@@ -213,7 +219,7 @@ public class OnlineFeePaymentJsonBean implements Serializable
 				json=arr.toString();
 			}
 		} catch (Exception e) {
-			// TODO: handle exception
+			e.printStackTrace();
 		}
 		finally {
 			try {
@@ -374,9 +380,9 @@ public class OnlineFeePaymentJsonBean implements Serializable
 								if (ff.getFeeName().equalsIgnoreCase("Late Fee") || ff.getFeeName().equals("Any Other Charges")) {
 									ff.setDueamount(String.valueOf(ff.getPayAmount() + ff.getPayDiscount()));
 								}
-								ii = DBM.submitFeeSchidForBlm(schoolid,ss, ff.getPayAmount(), ff.getFeeId(), "PAYTM", "",
+								ii = DBM.submitFeeSchidForBlm(schoolid,ss, ff.getPayAmount(), ff.getFeeId(), "Payment Gateway", "",
 										"", num, ff.getPayDiscount(),DBM.selectedSessionDetails(schoolid,conn), new Date(), "", neftNo,
-										new Date(), new Date(), conn, "", new Date(), ff.getDueamount(), "current","","0","0","N/A",status);
+										new Date(), new Date(), conn, "", new Date(), ff.getDueamount(), "current","","0","0","N/A",status, paymentId);
 								/*if (ii >= 1 && ff.getFeeName().equals("Previous Fee")) {
 									DBM.updatePaidAmountOfPreviousFee(schoolid,sList.getAddNumber(),
 											(ff.getPayAmount() + ff.getPayDiscount()), conn);
@@ -388,7 +394,7 @@ public class OnlineFeePaymentJsonBean implements Serializable
 								if(status==null||status.equals("")||status.equalsIgnoreCase("active"))
 								{
 									String typeMessage = "Dear Parent, \n\nReceived payment of Rs." + amoutnt
-											+ " in favour of fee by Paytm via Receipt No. " + num
+											+ " in favour of fee by Payment Gateway via Receipt No. " + num
 											+ "\n\nRegards, \n"
 											+ info.getSmsSchoolName();
 									DBJ.messageurl1(String.valueOf(ss.getFathersPhone()), typeMessage,
@@ -830,9 +836,9 @@ public class OnlineFeePaymentJsonBean implements Serializable
 			
 
                  //// // System.out.println(ff.getFeeName()+"....."+ff.getFeeId());
-			int ii = DBM.submitFeeSchidForBlm(schoolid,sList, ff.getPayAmount(), ff.getFeeId(), "PAYTM", "",
+			int ii = DBM.submitFeeSchidForBlm(schoolid,sList, ff.getPayAmount(), ff.getFeeId(), "Payment Gateway", "",
 					"", num, ff.getPayDiscount(), preSession, new Date(), "", neftNo,
-					new Date(), new Date(), conn, feeRemark, new Date(), ff.getDueamount(), "current",ff.getFeeInstallMonth(),ff.getMainAmount(),ff.getTaxAmount(),"",status);
+					new Date(), new Date(), conn, feeRemark, new Date(), ff.getDueamount(), "current",ff.getFeeInstallMonth(),ff.getMainAmount(),ff.getTaxAmount(),"",status, paymentId);
 			/*if (ii >= 1 && ff.getFeeName().equals("Previous Fee")) {
 				DBM.updatePaidAmountOfPreviousFee(schoolid,sList.getAddNumber(),
 						(ff.getPayAmount() + ff.getPayDiscount()), conn);
