@@ -42,102 +42,119 @@ public class test implements Serializable{
 	String neftNo="",schid;
 	DatabaseMethods1 obj=new DatabaseMethods1();
 	DataBaseMeathodJson DBJ=new DataBaseMeathodJson();
-	String session;
-	public void values(String a,String b,ArrayList<FeeInfo>list,String addnumb,String schid,String session1) {
-		{
+	String session, rzpPaymentId, txnStatus;
+	SchoolInfoList schinfo = new SchoolInfoList();
+	public void values(String paymentId,String paytmOrderid,ArrayList<FeeInfo>list,String addnumb,String schid,String session1,String payStatus) {
+			Connection con = DataBaseConnection.javaConnection();
 			String checksum;
 			HttpURLConnection connection = null;
 			TreeMap<String, String> tmap= new TreeMap<>();
 			session=session1;
-
+			schinfo = DBJ.fullSchoolInfo(schid, con);
+			txnStatus = payStatus;
+			System.out.println("receipt status : "+payStatus+" ....."+txnStatus);
+			rzpPaymentId = paymentId;
+			neftNo=paytmOrderid;
+			if(paymentId == null || paymentId.equals(""))
+			{
+				rzpPaymentId = "";
+			}
+			
 			try{
-				String urlParameters="";
-				if(schid.equals("251"))
+				
+				if(schinfo.getPg_type().equalsIgnoreCase("paytm"))
 				{
-					tmap.put("MID", "BLMSrS53643455483506");
-					String orderid[]=b.split("=");
-					tmap.put("ORDERID", orderid[1]);
-					neftNo=orderid[1];
+					String urlParameters="";
+					if(schid.equals("251"))
+					{
+						tmap.put("MID", "BLMSrS53643455483506");
+						String orderid[]=paytmOrderid.split("=");
+						tmap.put("ORDERID", orderid[1]);
+						neftNo=orderid[1];
 
-					checksum = CheckSumServiceHelper.getCheckSumServiceHelper().genrateCheckSum("YaaAReat0ymrB2O4",tmap);
-					tmap.put("CHECKSUMHASH", checksum);
-					JSONObject obj = new JSONObject(tmap);
-					urlParameters=obj.toString();
+						checksum = CheckSumServiceHelper.getCheckSumServiceHelper().genrateCheckSum("YaaAReat0ymrB2O4",tmap);
+						tmap.put("CHECKSUMHASH", checksum);
+						JSONObject obj = new JSONObject(tmap);
+						urlParameters=obj.toString();
 
-					JSONObject obj1 = new JSONObject();
-					obj1.put("MID", "BLMSrS53643455483506");
-					obj1.put("ORDERID", orderid[1]);
-					obj1.put("CHECKSUMHASH", checksum);
-					//("https://securegw.paytm.in/merchant-status/getTxnStatus?JsonData="+obj1.toString());
+						JSONObject obj1 = new JSONObject();
+						obj1.put("MID", "BLMSrS53643455483506");
+						obj1.put("ORDERID", orderid[1]);
+						obj1.put("CHECKSUMHASH", checksum);
+						//("https://securegw.paytm.in/merchant-status/getTxnStatus?JsonData="+obj1.toString());
 
 
-					urlParameters=URLEncoder.encode(urlParameters);
+						urlParameters=URLEncoder.encode(urlParameters);
 
+					}
+					else if(schid.equals("252"))
+					{
+						tmap.put("MID", "BLMBlo43887663064832");
+						String orderid[]=paytmOrderid.split("=");
+						tmap.put("ORDERID", orderid[1]);
+						neftNo=orderid[1];
+						checksum = CheckSumServiceHelper.getCheckSumServiceHelper().genrateCheckSum("3_@O9w5vWSb!I%jg",tmap);
+						tmap.put("CHECKSUMHASH", checksum);
+						JSONObject obj = new JSONObject(tmap);
+						urlParameters=obj.toString();
+
+						JSONObject obj1 = new JSONObject();
+						obj1.put("MID", "BLMBlo43887663064832");
+						obj1.put("ORDERID", orderid[1]);
+						obj1.put("CHECKSUMHASH", checksum);
+						//("https://securegw.paytm.in/merchant-status/getTxnStatus?JsonData="+obj1.toString());
+
+
+						urlParameters=URLEncoder.encode(urlParameters);
+					}
+					else
+					{
+//						Connection con=DataBaseConnection.javaConnection();
+//						SchoolInfoList list1=DBJ.fullSchoolInfo(schid, con);
+						
+						tmap.put("MID", schinfo.getPaytm_mid());
+						String orderid[]=paytmOrderid.split("=");
+						tmap.put("ORDERID", orderid[1]);
+						neftNo=orderid[1];
+						checksum = CheckSumServiceHelper.getCheckSumServiceHelper().genrateCheckSum(schinfo.getPaytm_marchent_key(),tmap);
+						tmap.put("CHECKSUMHASH", checksum);
+						JSONObject obj = new JSONObject(tmap);
+						urlParameters=obj.toString();
+	                    JSONObject obj1 = new JSONObject();
+						obj1.put("MID", "BLMBlo43887663064832");
+						obj1.put("ORDERID", orderid[1]);
+						obj1.put("CHECKSUMHASH", checksum);
+	                    urlParameters=URLEncoder.encode(urlParameters);
+					}
+
+
+					URL url = new URL("https://securegw-stage.paytm.in/merchant-status/getTxnStatus");
+
+					connection = (HttpURLConnection)url.openConnection();
+					connection.setRequestMethod("POST");
+					connection.setRequestProperty("contentType","application/json");
+					connection.setUseCaches(false);
+					connection.setDoOutput(true);
+					DataOutputStream wr = new DataOutputStream (connection.getOutputStream());
+					wr.writeBytes("JsonData=");
+					wr.writeBytes(urlParameters);
+					wr.close();
+					InputStream is = connection.getInputStream();
+					BufferedReader rd = new BufferedReader(new InputStreamReader(is));
+					//("test");
+					/*while((line = rd.readLine()) != null) {
+			
+
+							          }*/
+					rd.close();
 				}
-				else if(schid.equals("252"))
-				{
-					tmap.put("MID", "BLMBlo43887663064832");
-					String orderid[]=b.split("=");
-					tmap.put("ORDERID", orderid[1]);
-					neftNo=orderid[1];
-					checksum = CheckSumServiceHelper.getCheckSumServiceHelper().genrateCheckSum("3_@O9w5vWSb!I%jg",tmap);
-					tmap.put("CHECKSUMHASH", checksum);
-					JSONObject obj = new JSONObject(tmap);
-					urlParameters=obj.toString();
-
-					JSONObject obj1 = new JSONObject();
-					obj1.put("MID", "BLMBlo43887663064832");
-					obj1.put("ORDERID", orderid[1]);
-					obj1.put("CHECKSUMHASH", checksum);
-					//("https://securegw.paytm.in/merchant-status/getTxnStatus?JsonData="+obj1.toString());
-
-
-					urlParameters=URLEncoder.encode(urlParameters);
-				}
-				else
-				{
-					Connection con=DataBaseConnection.javaConnection();
-					SchoolInfoList list1=DBJ.fullSchoolInfo(schid, con);
-					
-					tmap.put("MID", list1.getPaytm_mid());
-					String orderid[]=b.split("=");
-					tmap.put("ORDERID", orderid[1]);
-					neftNo=orderid[1];
-					checksum = CheckSumServiceHelper.getCheckSumServiceHelper().genrateCheckSum(list1.getPaytm_marchent_key(),tmap);
-					tmap.put("CHECKSUMHASH", checksum);
-					JSONObject obj = new JSONObject(tmap);
-					urlParameters=obj.toString();
-                    JSONObject obj1 = new JSONObject();
-					obj1.put("MID", "BLMBlo43887663064832");
-					obj1.put("ORDERID", orderid[1]);
-					obj1.put("CHECKSUMHASH", checksum);
-                    urlParameters=URLEncoder.encode(urlParameters);
-                    try {
-            			con.close();
-            		} catch (Exception e) {
-            			e.printStackTrace();
-            		}
-				}
-
-
-				URL url = new URL("https://securegw-stage.paytm.in/merchant-status/getTxnStatus");
-
-				connection = (HttpURLConnection)url.openConnection();
-				connection.setRequestMethod("POST");
-				connection.setRequestProperty("contentType","application/json");
-				connection.setUseCaches(false);
-				connection.setDoOutput(true);
-				DataOutputStream wr = new DataOutputStream (connection.getOutputStream());
-				wr.writeBytes("JsonData=");
-				wr.writeBytes(urlParameters);
-				wr.close();
-				InputStream is = connection.getInputStream();
-				BufferedReader rd = new BufferedReader(new InputStreamReader(is));
-				//("test");
-				/*while((line = rd.readLine()) != null) {
-
-
-						          }*/
+				
+				try {
+        			con.close();
+        		} catch (Exception e) {
+        			e.printStackTrace();
+        		}
+				
 				selectedList = list;
 				addmissionNumber=addnumb;
 				schoolid = schid;
@@ -154,22 +171,17 @@ public class test implements Serializable{
                 	newGenerateFee1();
                 }
 				
-				rd.close();}
-
+				
+			}
 			catch (Exception e) {
 				e.printStackTrace();
-			}}
+			}
 	}
 	
 	
 	
 	public void newGenerateFee1()
 	{
-	
-		
-		
-
-		
   
 		String feeRemark="";
 
@@ -495,9 +507,12 @@ public class test implements Serializable{
 		}
 		
 		String num = "";
+		System.out.println("receipt status 1 : "+txnStatus);
+		String status=txnStatus;
 		
-		String status="active";
-		if(status.equals("active"))
+		System.out.println("receipt status 2 : "+status);
+		
+		if(status.equalsIgnoreCase("active"))
 		{
 			int number = obj.feeserailno(schoolid,conn);
 			if (String.valueOf(number).length() == 1) {
@@ -549,9 +564,9 @@ public class test implements Serializable{
 			
 
                  //// // System.out.println(ff.getFeeName()+"....."+ff.getFeeId());
-			int ii = obj.submitFeeSchidForBlm(schoolid,sList, ff.getPayAmount(), ff.getFeeId(), "PAYTM", "",
+			int ii = obj.submitFeeSchidForBlm(schoolid,sList, ff.getPayAmount(), ff.getFeeId(), "Payment Gateway", "",
 					"", num, ff.getPayDiscount(), preSession, new Date(), "", neftNo,
-					new Date(), new Date(), conn, feeRemark, new Date(), ff.getDueamount(), "current",ff.getFeeInstallMonth(),"0","0","",status);
+					new Date(), new Date(), conn, feeRemark, new Date(), ff.getDueamount(), "current",ff.getFeeInstallMonth(),"0","0","",status,rzpPaymentId);
 			/*if (ii >= 1 && ff.getFeeName().equals("Previous Fee")) {
 				DBM.updatePaidAmountOfPreviousFee(schoolid,sList.getAddNumber(),
 						(ff.getPayAmount() + ff.getPayDiscount()), conn);
@@ -1154,9 +1169,9 @@ public class test implements Serializable{
 							if (ff.getFeeName().equalsIgnoreCase("Late Fee") || ff.getFeeName().equals("Any Other Charges")) {
 								ff.setDueamount(String.valueOf(ff.getPayAmount() + ff.getPayDiscount()));
 							}
-							ii = obj.submitFeeSchidForBlm(schoolid,sList, ff.getPayAmount(), ff.getFeeId(), "PAYTM", "",
+							ii = obj.submitFeeSchidForBlm(schoolid,sList, ff.getPayAmount(), ff.getFeeId(), "Payment Gateway", "",
 									"", num, ff.getPayDiscount(), preSession, new Date(), "", neftNo,
-									new Date(), new Date(), conn, remark, new Date(), ff.getDueamount(), "current",ff.getFeeInstallMonth(),"0","0","N/A","active");
+									new Date(), new Date(), conn, remark, new Date(), ff.getDueamount(), "current",ff.getFeeInstallMonth(),"0","0","N/A",txnStatus,rzpPaymentId);
 							/*if (ii >= 1 && ff.getFeeName().equals("Previous Fee")) {
 								DBM.updatePaidAmountOfPreviousFee(schoolid,sList.getAddNumber(),
 										(ff.getPayAmount() + ff.getPayDiscount()), conn);
@@ -1167,7 +1182,7 @@ public class test implements Serializable{
 						if (ii >= 1) {
 
 							String typeMessage = "Dear Parent, \n\nReceived payment of Rs." + amoutnt
-									+ " in favour of fee by Paytm via Receipt No. " + num
+									+ " in favour of fee by "+"Payment Gateway"+" via Receipt No. " + num
 									+ "\n\nRegards, \n"
 									+ info.getSmsSchoolName();
 

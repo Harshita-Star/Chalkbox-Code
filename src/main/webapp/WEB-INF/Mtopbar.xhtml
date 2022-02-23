@@ -1,0 +1,23 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui" >
+
+    <div class="layout-topbar">
+        <div class="layout-topbar-wrapper">
+            <div class="layout-topbar-left">
+                <div class="menu-button">
+                    <i class="pi pi-bars"/>
+                </div>
+                <h:link id="logolink" outcome="/dashboard" class="layout-topbar-logo">
+                   <!--  <p:graphicImage name="images/#{guestPreferences.darkLogo ? 'logo-footer.svg' : 'logo-pandora.svg'}"
+                                    library="pandora-layout"/> -->
+                        <p:graphicImage name="imagess/cblogo.png" style="width: 180px;"
+                                    library="pandora-layout"/>
+                </h:link>
+            </div>
+        </div>
+    </div>
+
+</ui:composition>

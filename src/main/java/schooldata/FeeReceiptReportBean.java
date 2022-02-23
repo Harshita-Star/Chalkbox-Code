@@ -132,7 +132,7 @@ public class FeeReceiptReportBean implements Serializable
 		date=new SimpleDateFormat("dd-MM-yyyy").format(receiptDate);
 		selectedFees=(ArrayList<FeeInfo>) rr.getAttribute("selectedFee");
 
-		if(paymentmode.equals("Cash") || paymentmode.equalsIgnoreCase("Paytm"))
+		if(paymentmode.equals("Cash") || paymentmode.equalsIgnoreCase("Payment Gateway"))
 		{
 			show=true;
 		}

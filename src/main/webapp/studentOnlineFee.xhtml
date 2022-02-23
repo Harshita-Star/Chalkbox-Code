@@ -15,12 +15,13 @@
 					<div class="card card-w-title"
 						style="background-color: rgb(254, 180, 2, 0.3);">
 						<h:form id="form" enctype="multipart/form-data">
-							<p:growl showDetail="true"  autoUpdate="true"></p:growl>
-							
-								<p:panelGrid columns="2" styleClass="ui-panelgrid-blank form-group"
-									style="border:2px none; background-color:transparent;border-color: red;">
-									
-									<p:panel header="Fee Details">
+							<p:growl showDetail="true" autoUpdate="true"></p:growl>
+
+							<p:panelGrid columns="2"
+								styleClass="ui-panelgrid-blank form-group"
+								style="border:2px none; background-color:transparent;border-color: red;">
+
+								<p:panel header="Fee Details">
 									<p:dataTable id="dt" var="var" value="#{studentOnlineFee.list}">
 
 										<p:column>
@@ -55,9 +56,9 @@
 										</p:column>
 
 									</p:dataTable>
-									</p:panel>
-									
-									<p:panel header="Selected Fee Details">
+								</p:panel>
+
+								<p:panel header="Selected Fee Details">
 									<p:dataTable id="sdt" var="var"
 										value="#{studentOnlineFee.selectedList}">
 
@@ -95,131 +96,260 @@
 										</p:column>
 
 										<f:facet name="footer">
-										<center>
-										<p:commandButton value="Pay Fees" styleClass="butwid" icon="fa fa-inr"
-												action="#{studentOnlineFee.pay}" update=":form"></p:commandButton>
-										</center>
+											<center>
+												<p:commandButton value="Pay Fees" styleClass="butwid"
+													icon="fa fa-inr" action="#{studentOnlineFee.pay}"
+													rendered="#{studentOnlineFee.schinfo.pg_type.toLowerCase() eq 'paytm'}"
+													update=":form"></p:commandButton>
+													
+												<p:commandButton value="Pay Fees" styleClass="butwid"
+													icon="fa fa-inr" action="#{studentOnlineFee.pay}"
+													rendered="#{studentOnlineFee.schinfo.pg_type.toLowerCase() eq 'razorpay'}"
+													update=":form, :rzpForm" oncomplete="PF('payfee').show()"></p:commandButton>	
+											</center>
 										</f:facet>
 
 									</p:dataTable>
-									</p:panel>
-								</p:panelGrid>
-								
-								<p:panelGrid columns="1" styleClass="ui-panelgrid-blank form-group" style="border:2px none;width:100%; background-color:transparent;border-color: red;">
-									<p:panel header="Selected Fee Details" style="width:100%">
+								</p:panel>
+							</p:panelGrid>
+
+							<p:panelGrid columns="1"
+								styleClass="ui-panelgrid-blank form-group"
+								style="border:2px none;width:100%; background-color:transparent;border-color: red;">
+								<p:panel header="Paid Fee Details" style="width:100%">
 									<p:panelGrid columns="1" style="width:100%">
-										<p:dataTable id="up" tableStyle="table-layout:auto;"  style="width: 100%;" var="fee" value="#{studentOnlineFee.dailyfee}">
-			                                <p:column style="font-size:12px !important" headerText="Receipt no">
+										<p:dataTable id="up" tableStyle="table-layout:auto;"
+											style="width: 100%;" var="fee"
+											value="#{studentOnlineFee.dailyfee}">
+											<p:column style="font-size:12px !important"
+												headerText="Receipt no">
 												<f:facet name="header">
 													Receipt No.
 												</f:facet>
-												<h:outputText style="font-size:15px !important" value="#{fee.reciptno}" />
+												<h:outputText style="font-size:15px !important"
+													value="#{fee.reciptno}" />
 											</p:column>
-			
-											<p:column style="font-size:12px !important" headerText="Total amount">
+
+											<p:column style="font-size:12px !important"
+												headerText="Total amount">
 												<f:facet name="header">
 										 			Total Amount
 												</f:facet>
-												<h:outputText style="font-size:15px !important" value="#{fee.amount}" />
+												<h:outputText style="font-size:15px !important"
+													value="#{fee.amount}" />
 											</p:column>
-			
-											<p:column style="font-size:12px !important" headerText="Total Discount">
+
+											<p:column style="font-size:12px !important"
+												headerText="Total Discount">
 												<f:facet name="header">
 											 		Total  Discount
 												</f:facet>
-												<h:outputText style="font-size:15px !important" value="#{fee.discount}" />
+												<h:outputText style="font-size:15px !important"
+													value="#{fee.discount}" />
 											</p:column>
-			
-											<p:column style="font-size:12px !important" headerText="Payment Mode">
+
+											<p:column style="font-size:12px !important"
+												headerText="Payment Mode">
 												<f:facet name="header">
 													Payment Mode 
 												</f:facet>
-												<h:outputText style="font-size:15px !important" value="#{fee.paymentmode} #{fee.bankname} #{fee.chequenumber}" />
+												<h:outputText style="font-size:15px !important"
+													value="#{fee.paymentmode} #{fee.bankname} #{fee.chequenumber}" />
 											</p:column>
-			
-											<p:column style="font-size:12px !important" headerText="Installment">
+
+											<p:column style="font-size:12px !important"
+												headerText="Installment">
 												<f:facet name="header">
 													Installment 
 												</f:facet>
-												<h:outputText style="font-size:15px !important" value="#{fee.feeRemark}" />
+												<h:outputText style="font-size:15px !important"
+													value="#{fee.feeRemark}" />
 											</p:column>
-			
-											<p:column style="font-size:12px !important;width:80px !important;" headerText="Date">
+
+											<p:column
+												style="font-size:12px !important;width:80px !important;"
+												headerText="Date">
 												<f:facet name="header">
 													Date
 												</f:facet>
-												<h:outputText style="font-size:15px !important" value="#{fee.feeDateStr}" />
+												<h:outputText style="font-size:15px !important"
+													value="#{fee.feeDateStr}" />
 											</p:column>
-			
-											<p:column style="font-size:12px !important;width:80px !important;" headerText="Date">
+
+											<p:column
+												style="font-size:12px !important;width:80px !important;"
+												headerText="Date">
 												<f:facet name="header">
 													User
 												</f:facet>
-												<h:outputText style="font-size:15px !important" value="#{fee.user}" />
+												<h:outputText style="font-size:15px !important"
+													value="#{fee.user}" />
 											</p:column>
-			
-			                               	<p:column  exportable="false" style="font-size:9px !important;width:50px !important;" headerText="View">
+
+											<p:column exportable="false"
+												style="font-size:9px !important;width:50px !important;"
+												headerText="View">
 												<f:facet name="View">
-													<p:outputLabel style="font-size:9px !important" value="Edit"></p:outputLabel>
+													<p:outputLabel style="font-size:9px !important"
+														value="Edit"></p:outputLabel>
 												</f:facet>
-												<p:commandButton value="View" icon="fa fa-eye" action="#{studentOnlineFee.editFee}" oncomplete="PF('viewfee').show();" update=":form6">
-													<f:setPropertyActionListener target="#{studentOnlineFee.selectedstudent}" value="#{fee}"></f:setPropertyActionListener>
+												<p:commandButton value="View" icon="fa fa-eye"
+													action="#{studentOnlineFee.editFee}"
+													oncomplete="PF('viewfee').show();" update=":form6">
+													<f:setPropertyActionListener
+														target="#{studentOnlineFee.selectedstudent}"
+														value="#{fee}"></f:setPropertyActionListener>
 												</p:commandButton>
-										   	</p:column>
-										   	
-										   	<p:column exportable="false"
-														style="font-size:9px !important;width:50px !important;"
-														headerText="Print">
-													<f:facet name="header">
-														<p:outputLabel style="font-size:9px !important"
-															value="Duplicate"></p:outputLabel>
-													</f:facet>
-													<p:commandButton icon="ui-icon-print"
-														action="#{studentOnlineFee.duplicateFee}">
-														<f:setPropertyActionListener
-															target="#{studentOnlineFee.selectedstudent}" value="#{fee}"></f:setPropertyActionListener>
-													</p:commandButton>
-												</p:column>
+											</p:column>
+
+											<p:column exportable="false"
+												style="font-size:9px !important;width:50px !important;"
+												headerText="Print">
+												<f:facet name="header">
+													<p:outputLabel style="font-size:9px !important"
+														value="Duplicate"></p:outputLabel>
+												</f:facet>
+												<p:commandButton icon="ui-icon-print"
+													action="#{studentOnlineFee.duplicateFee}">
+													<f:setPropertyActionListener
+														target="#{studentOnlineFee.selectedstudent}"
+														value="#{fee}"></f:setPropertyActionListener>
+												</p:commandButton>
+											</p:column>
 										</p:dataTable>
-										</p:panelGrid>
-									</p:panel>
-								</p:panelGrid>
+									</p:panelGrid>
+								</p:panel>
+							</p:panelGrid>
 						</h:form>
-						
+
 						<h:form id="form6">
-						<p:dialog header="View Fee"  height="500" widgetVar="viewfee" modal="true" >
-							<p:outputPanel id="up">
-								<div class="ui-g form-group">
-									<p:dataTable value="#{studentOnlineFee.feesSelected}" var="var" scrollable="true" scrollHeight="400">
-										<p:column headerText="FeeName">
-											<p:outputLabel style="font-size:15px !important" value="#{var.feeName}"></p:outputLabel>
-										</p:column>
-										
-										<p:column headerText="Installment">
-											<p:outputLabel style="font-size:15px !important" value="#{var.intallment}"></p:outputLabel>
-										</p:column>
-
-										<p:column headerText="Pay Amount">
-											<p:outputLabel style="font-size:15px !important" value="#{var.feeamunt}"> </p:outputLabel>
-											<f:facet name="footer">
-												<p:outputLabel style="font-size:15px !important" value="#{studentOnlineFee.totalPayAmunt}"></p:outputLabel>
-											</f:facet>
-										</p:column>
-
-										<p:column headerText="Pay Discount">
-											<p:outputLabel style="font-size:15px !important" value="#{var.discount}"> </p:outputLabel>
-
-											<f:facet name="footer">
+							<p:dialog header="View Fee" height="500" widgetVar="viewfee"
+								modal="true">
+								<p:outputPanel id="up">
+									<div class="ui-g form-group">
+										<p:dataTable value="#{studentOnlineFee.feesSelected}"
+											var="var" scrollable="true" scrollHeight="400">
+											<p:column headerText="FeeName">
 												<p:outputLabel style="font-size:15px !important"
-													value="#{studentOnlineFee.totalDiscountAmount}"></p:outputLabel>
-											</f:facet>
-										</p:column>
+													value="#{var.feeName}"></p:outputLabel>
+											</p:column>
 
-									</p:dataTable>
+											<p:column headerText="Installment">
+												<p:outputLabel style="font-size:15px !important"
+													value="#{var.intallment}"></p:outputLabel>
+											</p:column>
+
+											<p:column headerText="Pay Amount">
+												<p:outputLabel style="font-size:15px !important"
+													value="#{var.feeamunt}">
+												</p:outputLabel>
+												<f:facet name="footer">
+													<p:outputLabel style="font-size:15px !important"
+														value="#{studentOnlineFee.totalPayAmunt}"></p:outputLabel>
+												</f:facet>
+											</p:column>
+
+											<p:column headerText="Pay Discount">
+												<p:outputLabel style="font-size:15px !important"
+													value="#{var.discount}">
+												</p:outputLabel>
+
+												<f:facet name="footer">
+													<p:outputLabel style="font-size:15px !important"
+														value="#{studentOnlineFee.totalDiscountAmount}"></p:outputLabel>
+												</f:facet>
+											</p:column>
+
+										</p:dataTable>
+									</div>
+								</p:outputPanel>
+							</p:dialog>
+						</h:form>
+
+						<h:form id="rzpForm">
+							<p:remoteCommand style="display: none;" name="remote" actionListener="#{studentOnlineFee.paymentListener}"/>
+							<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+							<script>
+								var options = {
+									"key" : "#{studentOnlineFee.schinfo.rzp_key}", // Enter the Key ID generated from the Dashboard
+									"amount" : "#{studentOnlineFee.rzpAmount}", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+									"currency" : "INR",
+									"name" : "#{studentOnlineFee.schinfo.schoolName}",
+									"order_id" : "#{studentOnlineFee.rzpOrderId}", //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+									/* "callback_url" : "http://localhost:8081/CBX-Code/rzpResponse.jsp", */
+									"prefill" : {
+										"name" : "#{studentOnlineFee.sList.fullName}",
+										"email" : "#{studentOnlineFee.sList.fatherEmail}",
+										"contact" : "#{studentOnlineFee.fathersPhoneStr}"
+									},
+									"notes" : {
+										"address" : "Powered by ChalkBox"
+									},
+									"handler": function (response){
+										var ord = response.razorpay_order_id;
+										var pmt = response.razorpay_payment_id;
+										var sig = response.razorpay_signature;
+										
+										document.getElementById("rzpForm:ordId").value = ord;
+									    document.getElementById("rzpForm:payId").value = pmt;
+									    document.getElementById("rzpForm:sig").value = sig;
+								        /* alert(response.razorpay_payment_id);
+								        alert(response.razorpay_order_id);
+								        alert(response.razorpay_signature) */
+								        swal({
+											  title: "Payment Successful!",
+											  text: "Please do not close the page or press back button or refresh the page, we are recording your payment...",
+											  icon: "success",
+											  buttons: false,
+											  closeOnClickOutside: false,
+											  allowOutsideClick: false,
+											  closeOnEsc: false
+											});
+								        
+								        remote();
+								    }
+								};
+								var rzp1 = new Razorpay(options);
+								document.getElementById('rzp-button1').onclick = function(
+										e) {
+									rzp1.open();
+									e.preventDefault();
+								}
+								/* document.getElementById('rzp-button1').onComplete = function(
+										e) {
+									swal({
+										  title: "Payment Successful!",
+										  text: "Please do not close the page or press back button or refresh the page, we are recording your payment...",
+										  icon: "success",
+										  buttons: false,
+										});
+								} */
+							</script>
+							<p:dialog header="Are you sure to proceed for payment?"
+								widgetVar="payfee" modal="true">
+								<div class="ui-g form-group">
+
+									<center style="width: 100%;">
+										Notes : 
+										<br /> 
+										-> AFTER SUCCESSFUL PAYMENT, until the page is
+										AUTO UPDATED, Please DO NOT close this page or press back
+										button or refresh the page ! 
+										<br /> <br /> 
+										-> Please check your payment in 'Paid Fee Details' section below, AFTER
+										SUCCESSFUL PAYMENT ! 
+										<br /> <br />
+										<button id="rzp-button1"
+											style="height: 45px; width: 200px; color: white; background-color: #002a3f;">Yes,
+											I Understood, Pay Now</button>
+										<h:inputHidden id="ordId" value="#{studentOnlineFee.rzpOrder}" />
+    									<h:inputHidden id="payId" value="#{studentOnlineFee.rzpPayment}" />
+    									<h:inputHidden id="sig" value="#{studentOnlineFee.rzpSignature}" />	
+									</center>
+
 								</div>
-							</p:outputPanel>
-						</p:dialog>
-					</h:form>
+							</p:dialog>
+						</h:form>
 					</div>
 				</div>
 			</div>

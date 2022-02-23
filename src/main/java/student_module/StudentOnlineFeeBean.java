@@ -17,7 +17,12 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
+import org.json.JSONObject;
 import org.primefaces.PrimeFaces;
+
+import com.razorpay.Order;
+import com.razorpay.RazorpayClient;
+import com.razorpay.RazorpayException;
 
 import Json.DataBaseMeathodJson;
 import schooldata.DailyFeeCollectionBean;
@@ -26,6 +31,7 @@ import schooldata.DatabaseMethods1;
 import schooldata.FeeDynamicList;
 import schooldata.FeeInfo;
 import schooldata.Feecollectionc;
+import schooldata.SchoolInfoList;
 import schooldata.StudentInfo;
 
 @ManagedBean(name="studentOnlineFee")
@@ -36,8 +42,8 @@ public class StudentOnlineFeeBean implements Serializable
 	ArrayList<FeeInfo> list = new ArrayList<>();
 	ArrayList<FeeInfo> selectedList = new ArrayList<>();
 	double totalFee,totalLateFee,totalAmount;
-	boolean waveOffLateFee=true;
-	String addmissionNumber="",schoolid,totalPayAmunt,totalDiscountAmount;
+	boolean waveOffLateFee=true, showPay = false;
+	String addmissionNumber="",schoolid,totalPayAmunt,totalDiscountAmount, rzpAmount, rzpOrderId, fathersPhoneStr;
 
 	ArrayList<DailyFeeCollectionBean> dailyfee=new ArrayList<>();
 	StudentInfo sList;
@@ -46,6 +52,10 @@ public class StudentOnlineFeeBean implements Serializable
 	Date changeDate;
 	DataBaseMeathodJson DBJ=new DataBaseMeathodJson();
 	DatabaseMethods1 DBM=new DatabaseMethods1();
+	SchoolInfoList schinfo = new SchoolInfoList();
+	
+	String rzpOrder,rzpPayment,rzpSignature;
+	
 	public StudentOnlineFeeBean()
 	{
 
@@ -58,6 +68,14 @@ public class StudentOnlineFeeBean implements Serializable
 		Connection conn= DataBaseConnection.javaConnection();
 		
 		sList=DBJ.studentDetailslistByAddNo(addmissionNumber, schoolid, conn);
+		schinfo = DBM.fullSchoolInfo(schoolid, conn);
+		showPay = false;
+		if(schinfo.getPg_type().equalsIgnoreCase("paytm") || schinfo.getPg_type().equalsIgnoreCase("razorpay"))
+		{
+			showPay = true;
+		}
+		
+		fathersPhoneStr = String.valueOf(sList.getFathersPhone());
 		
 		if(schoolid.equals("251")||schoolid.equals("252"))
 		{
@@ -887,11 +905,19 @@ public class StudentOnlineFeeBean implements Serializable
 			 // System.out.println("inside pay....."+ss.getAttribute("selectedSession"));
 			String ord="ORDS"+new SimpleDateFormat("ydMhms").format(new Date());
 			try {
-				
-				//String amt = new DecimalFormat("##").format(totalFee*100);
-				//FacesContext.getCurrentInstance().getExternalContext().redirect("http://localhost:8081/CBX-Code/rzpRedirect.jsp?receipt="+ord+"&currency=INR"+"&amount="+amt);
-					FacesContext.getCurrentInstance().getExternalContext().redirect("http://www.chalkboxerp.in/DM/pgRedirect.jsp?ORDER_ID="+ord+"&CUST_ID="+addmissionNumber+"&INDUSTRY_TYPE_ID=PrivateEducation&CHANNEL_ID=WEB&TXN_AMOUNT="+totalFee);
-				//	FacesContext.getCurrentInstance().getExternalContext().redirect("http://localhost:8080/Chalkbox/pgRedirect.jsp?ORDER_ID="+ord+"&CUST_ID="+addmissionNumber+"&INDUSTRY_TYPE_ID=PrivateEducation&CHANNEL_ID=WEB&TXN_AMOUNT="+totalFee);
+					if(schinfo.getPg_type().equalsIgnoreCase("paytm"))
+					{
+						FacesContext.getCurrentInstance().getExternalContext().redirect("http://www.chalkboxerp.in/DM/pgRedirect.jsp?ORDER_ID="+ord+"&CUST_ID="+addmissionNumber+"&INDUSTRY_TYPE_ID=PrivateEducation&CHANNEL_ID=WEB&TXN_AMOUNT="+totalFee);
+//						FacesContext.getCurrentInstance().getExternalContext().redirect("http://localhost:8080/Chalkbox/pgRedirect.jsp?ORDER_ID="+ord+"&CUST_ID="+addmissionNumber+"&INDUSTRY_TYPE_ID=PrivateEducation&CHANNEL_ID=WEB&TXN_AMOUNT="+totalFee);
+					}
+					else if(schinfo.getPg_type().equalsIgnoreCase("razorpay"))
+					{
+						String amt = new DecimalFormat("##").format(totalFee*100);
+						ss.setAttribute("rzpAmount", amt);
+						rzpPay(amt,ord);
+						//FacesContext.getCurrentInstance().getExternalContext().redirect("http://localhost:8081/CBX-Code/rzpRedirect.jsp?receipt="+ord+"&amount="+amt+"&studentId="+addmissionNumber);
+						//  FacesContext.getCurrentInstance().getExternalContext().redirect("http://www.chalkboxerp.in/DM/rzpRedirect.jsp?receipt="+ord+"&amount="+amt+"&studentId="+addmissionNumber);
+					}
 				
 			} catch (IOException e) {
 				
@@ -905,7 +931,37 @@ public class StudentOnlineFeeBean implements Serializable
 		}
 
 	}
+	
+	public void rzpPay(String amt, String ord)
+	{
+		Order order = null;
+		RazorpayClient razorpayClient = null;
+		try {
+				razorpayClient = new RazorpayClient(schinfo.getRzp_key(), schinfo.getRzp_key_secret());
+			
+				JSONObject orderRequest = new JSONObject();
+				orderRequest.put("amount", Integer.valueOf(amt)); // amount in the smallest currency unit
+			  	orderRequest.put("currency", "INR");
+			  	orderRequest.put("receipt", ord);
 
+			  	order = razorpayClient.Orders.create(orderRequest);
+			  	rzpOrderId = order.get("id");
+			  	rzpAmount = amt;
+		} catch (RazorpayException e) {
+		  System.out.println(e.getMessage());
+		}
+	}
+
+	public void paymentListener() throws IOException
+	{
+		HttpSession ss= (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
+		ss.setAttribute("rzpPaymentId", rzpPayment);
+		ss.setAttribute("rzpOrderId", rzpOrder);
+		ss.setAttribute("rzpSignature", rzpSignature);
+		
+		FacesContext.getCurrentInstance().getExternalContext().redirect("http://www.chalkboxerp.in/DM/rzpResponse.jsp");
+		
+	}
 
 	public ArrayList<FeeInfo> getList() {
 		return list;
@@ -994,4 +1050,85 @@ public class StudentOnlineFeeBean implements Serializable
 	public void setFeesSelected(ArrayList<Feecollectionc> feesSelected) {
 		this.feesSelected = feesSelected;
 	}
+
+
+	public boolean isShowPay() {
+		return showPay;
+	}
+
+
+	public void setShowPay(boolean showPay) {
+		this.showPay = showPay;
+	}
+
+
+	public SchoolInfoList getSchinfo() {
+		return schinfo;
+	}
+
+
+	public void setSchinfo(SchoolInfoList schinfo) {
+		this.schinfo = schinfo;
+	}
+
+
+	public String getRzpAmount() {
+		return rzpAmount;
+	}
+
+
+	public void setRzpAmount(String rzpAmount) {
+		this.rzpAmount = rzpAmount;
+	}
+
+
+	public String getRzpOrderId() {
+		return rzpOrderId;
+	}
+
+
+	public void setRzpOrderId(String rzpOrderId) {
+		this.rzpOrderId = rzpOrderId;
+	}
+
+
+	public String getFathersPhoneStr() {
+		return fathersPhoneStr;
+	}
+
+
+	public void setFathersPhoneStr(String fathersPhoneStr) {
+		this.fathersPhoneStr = fathersPhoneStr;
+	}
+
+
+	public String getRzpOrder() {
+		return rzpOrder;
+	}
+
+
+	public void setRzpOrder(String rzpOrder) {
+		this.rzpOrder = rzpOrder;
+	}
+
+
+	public String getRzpPayment() {
+		return rzpPayment;
+	}
+
+
+	public void setRzpPayment(String rzpPayment) {
+		this.rzpPayment = rzpPayment;
+	}
+
+
+	public String getRzpSignature() {
+		return rzpSignature;
+	}
+
+
+	public void setRzpSignature(String rzpSignature) {
+		this.rzpSignature = rzpSignature;
+	}
+
 }

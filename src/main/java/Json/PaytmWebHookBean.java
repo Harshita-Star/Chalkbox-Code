@@ -60,7 +60,7 @@ public class PaytmWebHookBean implements Serializable{
 				txnstatus=status;
 			}
 
-		  int check=new DataBaseMeathodJson().updateFeeStatus(custmerId,schId,orderID,num,status,conn);
+		  int check=new DataBaseMeathodJson().updateFeeStatus(custmerId,schId,orderID,num,status,"",conn);
 			  
 	  }
 			

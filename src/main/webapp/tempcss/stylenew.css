@@ -5,3 +5,44 @@
 .card h1 {
     font-size: 20px !important;
 }
+
+.layout-root-menuitem, .layout-center-text {
+	text-align: center !important;
+}
+
+.keep-scrolling {
+  height: 620px;
+  overflow-y: scroll; /* Add the ability to scroll y axis*/
+}
+
+
+
+/* width */
+.keep-scrolling::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+.keep-scrolling::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+}
+ 
+/* Handle */
+.keep-scrolling::-webkit-scrollbar-thumb {
+  background: #d0cece; 
+}
+
+/* Handle on hover */
+.keep-scrolling::-webkit-scrollbar-thumb:hover {
+  background: #555; 
+}
+
+
+.layout-slim-plus .menu-wrapper .layout-menu-container .layout-menu > li > ul {
+    position: fixed;
+     top: 200px !important; 
+    /* left: 60px; */
+}
+.layout-menu-light.layout-slim-plus .menu-wrapper .layout-menu-container .layout-menu .layout-menu-tooltip {
+	display : none;
+}

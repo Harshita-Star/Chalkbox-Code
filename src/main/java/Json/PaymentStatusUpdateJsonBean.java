@@ -35,7 +35,13 @@ public class PaymentStatusUpdateJsonBean implements Serializable
 			String addmissionNumber=params.get("studentId");
 			String schoolid=params.get("schid");
 			String orderid=params.get("orderid");
+			String paymentId = params.get("paymentId");
 			String num="";
+			
+			if(paymentId==null || paymentId.equals(""))
+			{
+				paymentId = "";
+			}
 			
 			int number = DBM.feeserailno(schoolid,conn);
 			if (String.valueOf(number).length() == 1) {
@@ -53,7 +59,7 @@ public class PaymentStatusUpdateJsonBean implements Serializable
 			
 			
 			
-			int check=DBJ.updateFeeStatus(addmissionNumber,schoolid,orderid,num,"ACTIVE",conn);
+			int check=DBJ.updateFeeStatus(addmissionNumber,schoolid,orderid,num,"ACTIVE",paymentId,conn);
 			//SELECT SUM(amount+discount) FROM `student_fee_table` WHERE `paymentMode` LIKE 'paytm' AND `schid` LIKE '302' and neftNo='ORDS2021197115027' and status='active'
 			String modArr[]=new String[0];
 			int totalAmt = DBJ.feeAmountByOrderid(schoolid,orderid,"ACTIVE",conn);

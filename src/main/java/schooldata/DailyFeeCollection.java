@@ -151,7 +151,7 @@ public class DailyFeeCollection implements Serializable
 	{
 		Connection conn=DataBaseConnection.javaConnection();
 		//int registfee = 0,annualfee=0,tutionfee=0,transportfee=0,eaxmfee =0,artFee=0,termfee=0;
-		count=1;cashAmount=0.0;chequeAmount=0;tamount=tdiscount=0;
+		count=1;cashAmount=0.0;chequeAmount=0;tamount=tdiscount=0;paymentGateway=0;
 		cashAmountString=checkAmountString=totalamountString="0";
 		dailyfee=new ArrayList<>();
 
@@ -321,7 +321,7 @@ public class DailyFeeCollection implements Serializable
 				{
 					cashAmount+=Integer.parseInt(info.getAmount());
 				}
-				else if(info.getPaymentmode().equalsIgnoreCase("PAYTM"))
+				else if(info.getPaymentmode().equalsIgnoreCase("Payment Gateway"))
 				{
 					paymentGateway+=Integer.parseInt(info.getAmount());
 				}

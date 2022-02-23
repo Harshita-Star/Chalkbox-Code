@@ -54,6 +54,7 @@ public class TCIssueBean implements Serializable
 	private static final long serialVersionUID = 1L;
 	String regex=RegexPattern.REGEX;
 	transient StreamedContent file;
+	ArrayList<String> months = new ArrayList<>();
 	ArrayList<String> reasons = new ArrayList<>();
 	String ncc,reason,lastClass,tcNumber,proofOfBirth,text,srNo,previousClass,schoolExamWord,previosClassWord,website,headerImage,perfom,classname2,dob1,startingdate1,dobinword,fullName,classname1,addmissionnumber;
 	Date date2,applicationDate,issueDate, dob,startingDate;
@@ -73,6 +74,9 @@ public class TCIssueBean implements Serializable
 	DatabaseMethods1 DBM=new DatabaseMethods1();
 	DataBaseMethodsTcModule objTc=new DataBaseMethodsTcModule();
 	DatabaseMethodWorkLog workLg = new DatabaseMethodWorkLog();
+	String fromMonth , toMonth;
+	String std_study_months = "";
+	
 
 	public void getOtherReason()
 	{
@@ -351,9 +355,13 @@ public class TCIssueBean implements Serializable
 		lastDateStr=sdf.format(date2);
 		applicationDateString = sdf.format(applicationDate);
 		
+		if(schid.equalsIgnoreCase("298")) {
+			std_study_months = fromMonth + "-" + toMonth;
+		}
+		
 		int i=objTc.updateTCInformation1(reason, date2, applicationDate, issueDate, tcNumber, "issue",addmissionnumber
 				,perfom,text,schoolExam,failedOrNot,subjectStudied,qualifiedPromotion,monthOfFeePaid,workingDays
-				,workingDayPresent,feeConcession,gamesPlayed,extraActivity,otherRemark,applicationDate,ncc,transferCertificatedFrom,qualifiedPromotionCheck,result,proofDob,startYear,conn);
+				,workingDayPresent,feeConcession,gamesPlayed,extraActivity,otherRemark,applicationDate,ncc,transferCertificatedFrom,qualifiedPromotionCheck,result,proofDob,startYear,conn,std_study_months);
 		if(i==1)
 		{
 			String refNo2;
@@ -579,7 +587,7 @@ public class TCIssueBean implements Serializable
 		
 		HttpSession ss=(HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
 		tcList=(StudentInfo) ss.getAttribute("TCDetail");
-		
+		months = getMonth();
 		schid = (String) ss.getAttribute("schoolid");
 		session=DBM.selectedSessionDetails(DBM.schoolId(),conn);
 		String studentId=tcList.getAddNumber();
@@ -667,6 +675,25 @@ public class TCIssueBean implements Serializable
  
 	
 	
+	public ArrayList<String> getMonth() {
+		ArrayList<String> m = new ArrayList<>();
+		
+		m.add("January");
+		m.add("Febuary");
+		m.add("March");
+		m.add("April");
+		m.add("May");
+		m.add("June");
+		m.add("July");
+		m.add("August");
+		m.add("September");
+		m.add("October");
+		m.add("November");
+		m.add("December");
+		
+		return m;
+	}
+
 	public void promotedClassInWord(String promotedCls)
 	{
 		if(promotedCls.equalsIgnoreCase("I") || promotedCls.equalsIgnoreCase("1") || promotedCls.equalsIgnoreCase("1st"))
@@ -2171,5 +2198,30 @@ public class TCIssueBean implements Serializable
 	public void setReasons(ArrayList<String> reasons) {
 		this.reasons = reasons;
 	}
+
+	public ArrayList<String> getMonths() {
+		return months;
+	}
+
+	public void setMonths(ArrayList<String> months) {
+		this.months = months;
+	}
+
+	public String getFromMonth() {
+		return fromMonth;
+	}
+
+	public void setFromMonth(String fromMonth) {
+		this.fromMonth = fromMonth;
+	}
+
+	public String getToMonth() {
+		return toMonth;
+	}
+
+	public void setToMonth(String toMonth) {
+		this.toMonth = toMonth;
+	}
+	
 	
 }

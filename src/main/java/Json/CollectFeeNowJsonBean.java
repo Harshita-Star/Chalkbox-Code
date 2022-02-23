@@ -512,8 +512,12 @@ public class CollectFeeNowJsonBean implements Serializable
 					fs.setMonth(t.getMonth());
 					fs.setStatus(t.getStatus());
 
-					ArrayList<ClassInfo> transportFeeList = DBJ.transportRouteDetailsWithFee(t.getRouteId(),preSession,conn,schid);
-
+					ArrayList<ClassInfo> transportFeeList = new ArrayList<ClassInfo>();
+					if(t.getStatus().equalsIgnoreCase("Yes") && t.getRouteId()!=0)
+					{
+						transportFeeList = DBJ.transportRouteDetailsWithFee(
+								t.getRouteId(), preSession, conn, schid);
+					}
 					for(int j=0;j<transportFeeList.size();j++)
 					{
 						ClassInfo info1=transportFeeList.get(j);

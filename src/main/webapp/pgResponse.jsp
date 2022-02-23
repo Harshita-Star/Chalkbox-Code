@@ -66,7 +66,7 @@ try{
 			String a[]=parameters.toString().split(",");
 		 
 			
-			new test().values(a[4], a[5],selectedList,addmissionNumber,schoolid,session1);
+			new test().values(a[4], a[5],selectedList,addmissionNumber,schoolid,session1,"active");
 		 
 		   response.sendRedirect("studentOnlineFee.xhtml");
 		 

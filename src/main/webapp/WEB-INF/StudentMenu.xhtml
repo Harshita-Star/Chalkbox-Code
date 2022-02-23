@@ -1,0 +1,125 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:po="http://primefaces.org/pandora">
+	<h:form id="menuform">
+	<div>
+
+		<po:menu widgetVar="PandoraMenuWidget">
+
+			<p:menuitem rendered="false" id="am_version_1" value="Help"
+				icon="pi pi-mobile" outcome="help.xhtml" />
+					<p:menuitem value="Notifications"
+							outcome="studentNotification.xhtml" icon="pi pi-bell" />
+
+						<p:menuitem rendered="#{studentMenuBean.managePhoneBook}"
+							value="Directory" outcome="schoolDirectory.xhtml"
+							icon="fas fa-address-book" />
+
+						<p:submenu rendered="#{studentMenuBean.manageAcademics}"
+							label="Academic" icon="fa fa-leanpub">
+							
+							<p:menuitem rendered="#{studentMenuBean.manageOnlineExam}" value="Online Exam"
+							action="#{studentMenuBean.onlineExam}" icon="fa fa-fw fa-life-saver" />
+							
+							<p:menuitem rendered="#{studentMenuBean.manageAddCalendar}"
+								value="Activity Calendar"
+								outcome="studentActivityCalendar.xhtml"
+								icon="fa fa-fw fa-sign-in" />
+							<p:menuitem value="View E-learning"
+								outcome="viewElerningStudentWise.xhtml"
+								icon="fa fa-fw fa-sign-in" />
+							<p:menuitem value="Live Classes" outcome="liveMeeting.xhtml"
+								icon="fa fa-fw fa-life-saver" />
+							<p:menuitem value="Circulars" outcome="studentCirculars.xhtml"
+								icon="fa fa-fw fa-sign-in" />
+							<p:menuitem rendered="#{studentMenuBean.manageSyllabus}"
+								value="Syllabus" outcome="studentSyllabus.xhtml"
+								icon="fa fa-fw fa-sign-in" />
+							<p:menuitem value="Thoughts" outcome="studentThought.xhtml"
+								icon="fa fa-fw fa-sign-in" />
+							<p:menuitem rendered="#{studentMenuBean.ls.schid eq '302'}"
+								value="Daily Lecture Plan"
+								outcome="studentViewDailyLecturePlan.xhtml"
+								icon="fa fa-fw fa-sign-in" />
+							<p:menuitem rendered="#{studentMenuBean.manageHomeWorkNotes}"
+								value="Assignment/H.W." outcome="studentHomework.xhtml"
+								icon="fa fa-fw fa-sign-in" />
+							<p:menuitem rendered="#{studentMenuBean.manageHomeWorkNotes}"
+								value="Manual/Notes" outcome="studentNotes.xhtml"
+								icon="fa fa-fw fa-sign-in" />
+							<p:menuitem rendered="#{studentMenuBean.manageTestPerformance}"
+								value="Class Test Performance"
+								outcome="studentClassTestReport.xhtml"
+								icon="fa fa-fw fa-sign-in" />
+							<p:menuitem rendered="#{studentMenuBean.ls.country ne 'UAE'}"
+								value="Student Exam Performance"
+								outcome="studentSelectExam.xhtml" icon="fa fa-fw fa-sign-in" />
+							<p:menuitem value="Progress Report"
+								outcome="progressReport.xhtml" icon="fa fa-fw fa-sign-in" />
+							<p:menuitem rendered="#{studentMenuBean.manageMarkAttendence}"
+								value="Attendance" outcome="studentAttendanceCalendar.xhtml"
+								icon="fa fa-fw fa-sign-in" />
+							<p:menuitem
+								rendered="#{studentMenuBean.manageAppointmentSetting}"
+								value="Take Appointment" outcome="parentAppointment.xhtml"
+								icon="fa fa-fw fa-sign-in" />
+							<p:menuitem
+								rendered="#{studentMenuBean.manageAppointmentSetting}"
+								value="Meeting Requests"
+								outcome="meetingConsentForStudent.xhtml"
+								icon="fa fa-fw fa-sign-in" />
+							<p:menuitem rendered="#{studentMenuBean.managePhotoRequest}"
+								value="Upload Your Photo" outcome="studentPhotoUpload.xhtml"
+								icon="fa fa-fw fa-sign-in" />
+						</p:submenu>
+
+						<p:menuitem value="Transport"
+							outcome="studentTransportDetails.xhtml"
+							icon="fa fa-subway" />
+
+						<p:menuitem value="Apply Leave" outcome="studentLeave.xhtml"
+							icon="fa fa-fw fa-sign-out" />
+
+
+						<p:menuitem value="Feedback"
+							outcome="studentAddConcern.xhtml" icon="fa fa-comments-o" />
+
+						<p:submenu label="Gallery" icon="fa fa-file-image-o">
+							<p:menuitem value="Photos" outcome="schoolGallery.xhtml"
+								icon="fa fa-fw fa-sign-in" />
+							<p:menuitem value="videos" outcome="schoolVideoGallery.xhtml"
+								icon="fa fa-fw fa-sign-in" />
+						</p:submenu>
+
+						<p:menuitem value="Wellness"
+							outcome="studentInfirmaryReport.xhtml"
+							icon="fa fa-plus-square" />
+
+
+						<p:menuitem rendered="false" value="Time Table"
+							outcome="studentTimeTable.xhtml" icon="fa fa-fw fa-life-saver" />
+
+						<p:menuitem rendered="#{studentMenuBean.ls.country ne 'UAE'}"
+							value="Online Fee" outcome="studentOnlineFee.xhtml"
+							icon="fa fa-inr" />
+
+						<p:menuitem rendered="false" value="e-Library"
+							outcome="homePage.xhtml" icon="fa fa-fw fa-life-saver" />
+
+						<p:submenu rendered="false" label="e-Books"
+							icon="fa fa-fw fa-life-saver">
+
+							<p:menuitem value="Mega e-Books Collection"
+								outcome="homePage.xhtml" icon="fa fa-fw fa-sign-in" />
+							<p:menuitem value="Kid's e-Book Collection"
+								outcome="homePage.xhtml" icon="fa fa-fw fa-sign-in" />
+						</p:submenu>
+		
+		</po:menu>
+		</div>
+	</h:form>
+	
+</ui:composition>

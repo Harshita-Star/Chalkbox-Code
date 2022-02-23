@@ -89,6 +89,10 @@ public class SchoolActivationJsonBean implements Serializable
 							obj.put("startSession", String.valueOf(start));
 							obj.put("paytm_marchent_key", info.getPaytm_marchent_key());
 							obj.put("paytm_mid", info.getPaytm_mid());
+							obj.put("pg_type", info.getPg_type());
+							obj.put("rzp_mid", info.getRzp_mid());
+							obj.put("rzp_key", info.getRzp_key());
+							obj.put("rzp_key_secret", info.getRzp_key_secret());
 							obj.put("gpsProvider", info.getGpsProvider());
 							obj.put("session", session);
 

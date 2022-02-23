@@ -122,6 +122,20 @@
 									<p:inputText value="#{tcIssue.result}" validatorMessage="Please Enter Correct value">
 									  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
 									</p:inputText>
+									
+									<p:outputLabel rendered="#{sideMenuBean.schid eq '298'}"
+										value="Student Studied Month From "></p:outputLabel>
+									<p:selectOneMenu rendered="#{sideMenuBean.schid eq '298'}" value="#{tcIssue.fromMonth}">
+									 	<f:selectItem itemValue="" itemLabel="Select Month"></f:selectItem>
+									 	<f:selectItems value="#{tcIssue.months}"></f:selectItems>
+									</p:selectOneMenu>
+
+									<p:outputLabel rendered="#{sideMenuBean.schid eq '298'}"
+										value="Student Studied Month To "></p:outputLabel>
+									<p:selectOneMenu rendered="#{sideMenuBean.schid eq '298'}" value="#{tcIssue.toMonth}">
+									 	<f:selectItem itemValue="" itemLabel="Select Month"></f:selectItem>
+									 	<f:selectItems value="#{tcIssue.months}"></f:selectItems>
+									</p:selectOneMenu>
 
 									<p:outputLabel
 										value="#{sideMenuBean.list.branch_id eq '93' ? 'Students present status' : 'Whether failed, if so once/twice in the same class'}"></p:outputLabel>
@@ -314,7 +328,7 @@
 										
 										
 										<p style="font-size:23px;margin-left: 25px;margin-right: 25px;line-height: 50px;text-align: justify;">
-								This is to certify that <u>#{tcIssue.fullName}</u> Son/ Daughter of <u>#{tcIssue.fatherName}</u> was admitted to this school on the date <u>#{tcIssue.startingdate1}</u>  in Class <u>#{tcIssue.classname1}</u> on a transfer certificate from <u>#{tcIssue.transferCertificatedFrom}</u>. He / She was studying in class <u>#{tcIssue.previousClass}</u> (#{tcIssue.previosClassWord}) during the academic session <u>#{tcIssue.session}</u> (school year being April to March), and was promoted to class <u>#{tcIssue.qualifiedPromotion}</u>. His / Her date of birth as entered in the school record is <u>#{tcIssue.dob1}</u> (in figures) <u>#{tcIssue.dobinword}</u> (in words). He / She is of <u>#{tcIssue.perfom}</u> moral conduct. All school dues pertaining to his / her, have been paid for.<br/> Remarks : <u>#{tcIssue.otherRemark}</u>.
+								This is to certify that <u>#{tcIssue.fullName}</u> Son/ Daughter of <u>#{tcIssue.fatherName}</u> was admitted to this school on the date <u>#{tcIssue.startingdate1}</u>  in Class <u>#{tcIssue.classname1}</u> on a transfer certificate from <u>#{tcIssue.transferCertificatedFrom}</u>. He / She was studying in class <u>#{tcIssue.previousClass}</u> (#{tcIssue.previosClassWord}) during Months From<u>#{tcIssue.fromMonth}</u> to <u>#{tcIssue.toMonth}</u> ,  the academic session <u>#{tcIssue.session}</u> (school year being April to March), and was promoted to class <u>#{tcIssue.qualifiedPromotion}</u>. His / Her date of birth as entered in the school record is <u>#{tcIssue.dob1}</u> (in figures) <u>#{tcIssue.dobinword}</u> (in words). He / She is of <u>#{tcIssue.perfom}</u> moral conduct. All school dues pertaining to his / her, have been paid for.<br/> Remarks : <u>#{tcIssue.otherRemark}</u>.
 
 										</p>
 										

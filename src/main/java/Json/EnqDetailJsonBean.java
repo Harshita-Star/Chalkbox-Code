@@ -97,6 +97,10 @@ public class EnqDetailJsonBean implements Serializable
 				obj.put("enqType", info.getEnqType());//both,registration,prospectus
 				obj.put("paytm_marchent_key", info.getPaytm_marchent_key());
 				obj.put("paytm_mid", info.getPaytm_mid());
+				obj.put("pg_type", info.getPg_type());
+				obj.put("rzp_mid", info.getRzp_mid());
+				obj.put("rzp_key", info.getRzp_key());
+				obj.put("rzp_key_secret", info.getRzp_key_secret());
 				obj.put("class", enqinfo.getAdmissionclass());
 				
 			}
@@ -104,7 +108,7 @@ public class EnqDetailJsonBean implements Serializable
 			arr.add(obj);
 			json=arr.toJSONString();
 		} catch (Exception e) {
-			// TODO: handle exception
+			e.printStackTrace();
 		}
 		finally {
 			try {

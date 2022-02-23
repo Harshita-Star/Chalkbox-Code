@@ -519,8 +519,12 @@ public class PendingFeesPaymentJsonBean implements Serializable {
 						fs.setFeeMonth(t.getFeeMonth());
 						fs.setStatus(t.getStatus());
 
-						ArrayList<ClassInfo> transportFeeList = DBJ.transportRouteDetailsWithFee(t.getRouteId(),
-								DBM.selectedSessionDetails(schoolid,conn),schoolid,conn);
+						ArrayList<ClassInfo> transportFeeList = new ArrayList<ClassInfo>();
+						if(t.getStatus().equalsIgnoreCase("Yes") && t.getRouteId()!=0)
+						{
+							transportFeeList = DBJ.transportRouteDetailsWithFee(
+									t.getRouteId(), DBM.selectedSessionDetails(schoolid, conn),schoolid, conn);
+						}
 						//int transportConcession=DBM.transportConcession(ss.getAddNumber(), ss.getClassId());
 						for(ClassInfo ll:transportFeeList)
 						{
@@ -855,7 +859,7 @@ public class PendingFeesPaymentJsonBean implements Serializable {
 
 			json=arr.toJSONString();	
 		} catch (Exception e) {
-			// TODO: handle exception
+			e.printStackTrace();
 		}
 		finally {
 			try {
@@ -1072,13 +1076,13 @@ public class PendingFeesPaymentJsonBean implements Serializable {
 
 			}
 		} catch (Exception e) {
-			// TODO: handle exception
+			e.printStackTrace();
 		}
 		finally {
 			try {
 				conn.close();
 			} catch (Exception e2) {
-				// TODO: handle exception
+				e2.printStackTrace();
 			}
 		}
 		return totalLateFee;

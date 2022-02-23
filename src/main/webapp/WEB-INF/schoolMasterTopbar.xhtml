@@ -1,199 +1,175 @@
-<ui:composition 
-    xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:f="http://java.sun.com/jsf/core"
-    xmlns:h="http://java.sun.com/jsf/html"
-    xmlns:ui="http://java.sun.com/jsf/facelets"
-    xmlns:p="http://primefaces.org/ui"
-    xmlns:pu="http://primefaces.org/avalon">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui" >
 
-    <div class="topbar clearfix">
-    <h:form>
-        <div class="topbar-left">            
-           <h:commandLink action="schoolMasterDashboard.xhtml?faces-redirect=true">
-            <p:graphicImage name="images/logo.png" library="avalon-layout" styleClass="topbar-logo"/>
-            </h:commandLink>
-        </div>
-        
-        <div class="topbar-right">
-            <a id="menu-button" href="#">
-                <i class="fa fa-angle-left"></i>
-            </a>
-            
-            <a id="topbar-menu-button" href="#">
-                <i class="fa fa-bars"></i>
-            </a>
-           
-            <ul class="topbar-items fadeInDown animated">
-                <ui:fragment rendered="#{guestPreferences.profileMode == 'overlay'||guestPreferences.menuLayout == 'menu-layout-static menu-layout-horizontal'}">
-                    <li class="profile-item">
-                        <a href="#">                            
-                            <p:graphicImage name="images/avatar.png" library="avalon-layout" styleClass="profile-image" style="border: 0 none"/>
-                            <span class="topbar-item-name">Demo Public School</span>
-                            <span class="topbar-item-role">Admin</span>
+    <div class="layout-topbar">
+        <div class="layout-topbar-wrapper">
+            <div class="layout-topbar-left">
+                <div class="menu-button">
+                    <i class="pi pi-bars"/>
+                </div>
+                <h:link id="logolink" outcome="/dashboard" class="layout-topbar-logo">
+                   <!--  <p:graphicImage name="images/#{guestPreferences.darkLogo ? 'logo-footer.svg' : 'logo-pandora.svg'}"
+                                    library="pandora-layout"/> -->
+                        <p:graphicImage name="imagess/logo.png"
+                                    library="pandora-layout"/>
+                </h:link>
+            </div>
+            <div class="layout-topbar-right">
+                <ul class="layout-topbar-actions">
+                    <li class="search-item topbar-item">
+                        <a href="#" class="topbar-search-mobile-button">
+                            <i class="topbar-icon pi pi-search"/>
                         </a>
-                        
-                        <ul class="layout-menu animated">
-                            <li role="menuitem">
-                                <a href="#">
-                                    <i class="fa fa-fw fa-user"></i>
-                                    <span>Profile</span>
-                                </a>
-                            </li>
-                            <li role="menuitem">
-                                <a href="#">
-                                    <i class="fa fa-fw fa-user-secret"></i>
-                                    <span>Privacy</span>
-                                </a>
-                            </li>
-                            <li role="menuitem">
-                                <a href="#">
-                                    <i class="fa fa-fw fa-cog"></i>
-                                    <span>Settings</span>
-                                </a>
-                            </li>
-                            <li role="menuitem">
-                                <a href="#">
-                                    <i class="fa fa-fw fa-sign-out"></i>
-                                    <span>Logout</span>
-                                </a>
+                        <ul class="search-item-submenu">
+                            <li>
+                                <h:form onsubmit="return false;">
+                                    <h:panelGroup styleClass="ui-input-icon-right search-input-wrapper">
+                                        <p:inputText placeholder="Search..."/>
+                                        <i class="pi pi-search"/>
+                                    </h:panelGroup>
+                                </h:form>
                             </li>
                         </ul>
                     </li>
-                </ui:fragment>
-                
-                <li>
-                    <a href="#">
-                        <i class="topbar-icon fa fa-fw fa-cog"></i>
-                        <span class="topbar-item-name">Settings</span>
-                    </a>
-                    <ul class="layout-menu animated">
-                    		<p:outputPanel>
-	                        <li role="menuitem">
-	                            <h:commandLink action="schoolMasterDashboard.xhtml?faces-redirect=true">
-	                                <i class="fa fa-fw fa-home"></i>
-	                                <span>Home</span>
-	                            </h:commandLink>
-	                        </li>
-                        </p:outputPanel>
-                        
-                    		<li role="menuitem">
-                            <a href="masterSelectSession.xhtml">
-                                <i class="fa fa-fw fa-star-o"></i>
-                                <span>Session : #{schoolMasterSideMenu.session}</span>
-                            </a>
-                        </li>
-                        
-                        <p:outputPanel>
-	                        <li role="menuitem">
-	                            <a href="madminPage.xhtml">
-	                                <i class="fa fa-fw fa-sign-out"></i>
-	                                <span>Back To Master</span>
-	                            </a>
-	                        </li>
-                        </p:outputPanel>
-                        
-                         <p:outputPanel>
-	                        <li role="menuitem">
-	                            <a href="ChalkboxLogin.xhtml">
-	                                <i class="fa fa-fw fa-sign-out"></i>
-	                                <span>Logout</span>
-	                            </a>
-	                        </li>
-                        </p:outputPanel>
-                        
-                    </ul>
-                </li>
-                <!-- <li>
-                    <a href="#">
-                        <i class="topbar-icon animated swing fa fa-fw fa-envelope-o"></i>
-                        <span class="topbar-badge animated rubberBand">5</span>
-                        <span class="topbar-item-name">Messages</span>
-                    </a>
-                    <ul class="layout-menu animated">
-                        <li role="menuitem">
-                            <a href="#" class="topbar-message">
-                                <p:graphicImage name="images/avatar1.png" library="avalon-layout" width="35"/>
-                                <span>Give me a call</span>
-                            </a>
-                        </li>
-                        <li role="menuitem">
-                            <a href="#" class="topbar-message">
-                                <p:graphicImage name="images/avatar2.png" library="avalon-layout" width="35"/>
-                                <span>Sales reports attached</span>
-                            </a>
-                        </li>
-                        <li role="menuitem">
-                            <a href="#" class="topbar-message">
-                                <p:graphicImage name="images/avatar3.png" library="avalon-layout" width="35"/>
-                                <span>About your invoice</span>
-                            </a>
-                        </li>
-                        <li role="menuitem">
-                            <a href="#" class="topbar-message">
-                                <p:graphicImage name="images/avatar2.png" library="avalon-layout" width="35"/>
-                                <span>Meeting today at 10pm</span>
-                            </a>
-                        </li>
-                        <li role="menuitem">
-                            <a href="#" class="topbar-message">
-                                <p:graphicImage name="images/avatar4.png" library="avalon-layout" width="35"/>
-                                <span>Out of office</span>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="#">
-                        <i class="topbar-icon fa fa-fw fa-bell-o"></i>
-                        <span class="topbar-badge animated rubberBand">4</span>
-                        <span class="topbar-item-name">Notifications</span>
-                    </a>
-                    <ul class="layout-menu animated">
-                        <li role="menuitem">
-                            <a href="#">
-                                <i class="fa fa-fw fa-tasks"></i>
-                                <span>Pending tasks</span>
-                            </a>
-                        </li>
-                        <li role="menuitem">
-                            <a href="#">
-                                <i class="fa fa-fw fa-calendar-check-o"></i>
-                                <span>Meeting today at 3pm</span>
-                            </a>
-                        </li>
-                        <li role="menuitem">
-                            <a href="#">
-                                <i class="fa fa-fw fa-download"></i>
-                                <span>Download documents</span>
-                            </a>
-                        </li>
-                        <li role="menuitem">
-                            <a href="#">
-                                <i class="fa fa-fw fa-plane"></i>
-                                <span>Book flight</span>
-                            </a>
-                        </li>
-                    </ul>
-                </li> -->
-                    <li class="search-item">
-                    <div class="topbar-search">
-                        <p:outputLabel style="color: #ffffff;font-size: 20px;margin-right: 5px;font-weight: bold;" value="B.L.M. Academy, Haldwani "></p:outputLabel>
-                    </div>
-                </li>
-                <li class="search-item">
-                    <div class="topbar-search">
-                      <p:graphicImage name="images/blmsr.png" library="avalon-layout" width="35px" height="35px" style="border: 0 none;margin-right: -5px;margin-top: -5px;background: white;"/>
-                 </div>
-                </li>
-                   
-                   <li class="search-item">
-                    <div class="topbar-search">
-                        <p:outputLabel style="color: #ffffff;font-size: 20px;font-weight: bold;" value="#{schoolMasterSideMenu.session}"></p:outputLabel>
-                    </div>
-                </li>
-            </ul>
+                    <li class="topbar-item-v-separator"></li>
+                    <li class="topbar-item help">
+                        <a href="#">
+                            <i class="topbar-icon pi pi-ticket"/>
+                        </a>
+                        <ul>
+                            <li class="layout-submenu-header">
+                                <h4 class="header-text">Help </h4>
+                            </li>
+                            <li class="layout-submenu-item">
+                                <div class="menu-text">
+                                    <span>🎩</span>
+                                    <p>How to change things</p>
+                                    <i class="pi pi-angle-right angle-icon"/>
+                                </div>
+                            </li>
+                            <li class="layout-submenu-item">
+                                <div class="menu-text">
+                                    <span>🍕</span>
+                                    <p>How to eat pizza</p>
+                                    <i class="pi pi-angle-right angle-icon"/>
+                                </div>
+                            </li>
+                            <li class="layout-submenu-item">
+                                <div class="menu-text">
+                                    <span>🌍</span>
+                                    <p>How to dominate world</p>
+                                    <i class="pi pi-angle-right angle-icon"/>
+                                </div>
+                            </li>
+                            <li class="layout-submenu-item">
+                                <div class="menu-text">
+                                    <span>🧠</span>
+                                    <p>How to control mind</p>
+                                    <i class="pi pi-angle-right angle-icon"/>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="topbar-item tags">
+                        <a href="#">
+                            <i class="topbar-icon pi pi-tag"/>
+                        </a>
+                        <ul>
+                            <li class="layout-submenu-header">
+                                <h4 class="header-text">Watched Tags</h4>
+                                <span class="header-helper-text">Edit</span>
+                            </li>
+                            <li class="layout-submenu-item">
+                                <span class="tag">PrimeFaces</span>
+                                <span class="tag">PrimeNG</span>
+                                <span class="tag">PrimeVue</span>
+                                <span class="tag">PrimeReact</span>
+                                <span class="tag">CSS</span>
+                                <span class="tag">HTML</span>
+                                <span class="tag">SASS</span>
+                                <span class="tag">Algorithm</span>
+                                <span class="tag">User Interface</span>
+                                <span class="tag">Twitter</span>
+                                <span class="tag">Grid</span>
+                                <span class="tag">Firefox</span>
+                                <span class="tag">JavaScript</span>
+
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="topbar-item notifications">
+                        <a href="#">
+                            <i class="topbar-icon pi pi-bell"><span class="dot"></span></i>
+                        </a>
+                        <ul>
+                            <li class="layout-submenu-header">
+                                <h4 class="header-text">Notifications </h4>
+                                <span class="header-helper-text"> all items</span>
+                            </li>
+                            <li class="layout-submenu-item">
+                                <div class="menu-text">
+                                    <i class="pi pi-twitter"/>
+                                    <div>
+                                        <span>comment</span>
+                                        <p>Aliquam sem fringilla ut morbi tincidunt augue interdum.</p>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="layout-submenu-item">
+                                <div class="menu-text">
+                                    <i class="pi pi-github"/>
+                                    <div>
+                                        <span>issue</span>
+                                        <p>Nisl vel pretium lectus quam.</p>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="layout-submenu-item">
+                                <div class="menu-text">
+                                    <i class="pi pi-heart"/>
+                                    <div>
+                                        <span>comment</span>
+                                        <p>Felis imperdiet proin fermentum leo vel orci porta non pulvinar.</p>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="topbar-item-v-separator"/>
+                    <li class="topbar-item language">
+                        <a href="#">
+                            <p:graphicImage name="images/topbar/asset-english.png" library="pandora-layout"/>
+                            <h6>English</h6>
+                            <i class="pi pi-sort"/>
+                        </a>
+                        <ul>
+                            <li class="layout-submenu-header">
+                                <h4 class="header-text">Languages </h4>
+                            </li>
+                            <li class="layout-submenu-item">
+                                <div class="menu-text">
+                                    <p:graphicImage name="images/topbar/asset-german.png" library="pandora-layout"/>
+                                    <p>German</p>
+                                </div>
+                            </li>
+                            <li class="layout-submenu-item">
+                                <div class="menu-text">
+                                    <p:graphicImage name="images/topbar/asset-french.png" library="pandora-layout"/>
+                                    <p>French</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="topbar-item-v-separator"/>
+                </ul>
+            </div>
+            <a href="#" class="layout-rightpanel-button">
+                <i class="pi pi-ellipsis-v"/>
+            </a>
         </div>
-        </h:form>
     </div>
 
 </ui:composition>

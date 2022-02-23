@@ -133,7 +133,7 @@ public class StudentFeeCollectionJsonBean implements Serializable
 			json=arr.toJSONString();
 
 		} catch (Exception e) {
-			// TODO: handle exception
+			e.printStackTrace();
 		}
 		finally {
 			try {

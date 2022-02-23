@@ -712,32 +712,6 @@ public class EditExamBean implements Serializable{
 			}
 		}
 	}
-	public void updateExamName()
-	{
-		Connection conn = DataBaseConnection.javaConnection();
-
-		int i=obj.updateExamName(selectedExam, examName,conn);
-		if(i==1)
-		{
-			FacesContext fc=FacesContext.getCurrentInstance();
-			fc.addMessage(null, new FacesMessage("Exam details updated successfully"));
-
-			examList=obj.examList(subjectType,conn);
-			editDetailsShow=false;
-			showExam=false;
-			exam=new ExamInfo();
-		}
-		else
-		{
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,"An error occurred,try again", "Validation error"));
-
-		}
-		try {
-			conn.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
 	
 	
 	//ForChanging Exam Name
