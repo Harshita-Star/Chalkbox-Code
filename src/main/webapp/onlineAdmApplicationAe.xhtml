@@ -1,0 +1,230 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Admission Applications</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title"
+						style="background-color: rgb(0, 86, 128, 0.8);">
+						<h:form id="form" enctype="multipart/form-data">
+							<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+							<p:panel header="Admission Applications">
+								<p:dataTable id="dt" var="var"
+									value="#{onlineAdmApplicationAe.list}" reflow="true">
+
+									<p:column headerText="S.No.">
+										<p:outputLabel value="#{var.sno}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Student Name" filterBy="#{var.st_name}"
+										filterMatchMode="contains">
+										<p:outputLabel value="#{var.st_name}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Academic Year">
+										<p:outputLabel value="#{var.year}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Class Name">
+										<p:outputLabel value="#{var.classname}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Apply Date">
+										<p:outputLabel value="#{var.applydateStr}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Applicant Name"
+										filterBy="#{var.applicant_name}" filterMatchMode="contains">
+										<p:outputLabel value="#{var.applicant_name}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Relation">
+										<p:outputLabel
+											value="#{var.applicant_relation eq 'Other' ? var.other_rel : var.applicant_relation}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Status" filterBy="#{var.sch_status}"
+										filterMatchMode="contains">
+										<p:outputLabel value="#{var.sch_status}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Remark">
+										<p:outputLabel value="#{var.remark}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="View">
+										<p:commandButton icon="fa fa-fw fa-search"
+											action="#{onlineAdmApplicationAe.viewDetail}">
+											<f:setPropertyActionListener
+												target="#{onlineAdmApplicationAe.selected}" value="#{var}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+
+									<p:column headerText="Revert For Review">
+										<p:commandButton disabled="#{var.disableReview}"
+											icon="fa fa-fw fa-refresh" update=":form4"
+											oncomplete="PF('remRevDlg').show()">
+											<f:setPropertyActionListener
+												target="#{onlineAdmApplicationAe.selected}" value="#{var}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+
+									<p:column headerText="Accept">
+										<p:commandButton disabled="#{var.disableAccept}"
+											icon="fa fa-fw fa-check" update=":form"
+											action="#{onlineAdmApplicationAe.detail}">
+											<f:setPropertyActionListener
+												target="#{onlineAdmApplicationAe.selected}" value="#{var}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+
+									<p:column headerText="Reject">
+										<p:commandButton disabled="#{var.disableReject}"
+											icon="fa fa-fw fa-close" update=":form3"
+											oncomplete="PF('remRejDlg').show()">
+											<f:setPropertyActionListener
+												target="#{onlineAdmApplicationAe.selected}" value="#{var}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+
+								</p:dataTable>
+
+							</p:panel>
+
+						</h:form>
+
+						<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+							<p:commandButton value="Yes" type="button"
+								styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+							<p:commandButton value="No" type="button"
+								styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+						</p:confirmDialog>
+
+						<h:form id="form3" style="overflow:hidden">
+							<p:dialog header="Reject Application" widgetVar="remRejDlg"
+								resizable="false" closable="true" closeOnEscape="true"
+								modal="true" showEffect="fade" hideEffect="fade">
+								<h3>Note: This will also be send as e-mail to applicant.</h3>
+								<br />
+								<div class="ui-g form-group">
+									<p:panelGrid columns="1"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent; width:100%">
+										<p:outputLabel  for="@next" style="color:red;font-weight:bold; font-size: 15px;"
+											value="Remark"></p:outputLabel>
+										<p:inputTextarea value="#{onlineAdmApplicationAe.remark}"
+											required="true" requiredMessage="Please Enter Remark"
+											cols="40" rows="15"></p:inputTextarea>
+										<p:commandButton value="Reject"
+											action="#{onlineAdmApplicationAe.reject}"
+											update=":form,:form3">
+
+										</p:commandButton>
+									</p:panelGrid>
+								</div>
+							</p:dialog>
+
+						</h:form>
+
+						<h:form id="form4" style="overflow:hidden">
+							<p:dialog header="Revert Admission Form to Applicant for Review"
+								widgetVar="remRevDlg" resizable="false" closable="true"
+								closeOnEscape="true" modal="true" showEffect="fade"
+								hideEffect="fade">
+								<h3>Note: This will also be send as e-mail to applicant.</h3>
+								<br />
+								<div class="ui-g form-group">
+									<p:panelGrid columns="1"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent; width:100%">
+										<p:outputLabel  for="@next" style="color:red;font-weight:bold; font-size: 15px;"
+											value="Remark"></p:outputLabel>
+										<p:inputTextarea value="#{onlineAdmApplicationAe.remark}"
+											required="true" requiredMessage="Please Enter Remark"
+											cols="40" rows="15"></p:inputTextarea>
+										<p:commandButton value="Revert For Review"
+											action="#{onlineAdmApplicationAe.review}"
+											update=":form,:form4">
+
+										</p:commandButton>
+									</p:panelGrid>
+								</div>
+							</p:dialog>
+
+						</h:form>
+
+						<h:form id="addForm">
+							<p:dialog header="Admission Details" widgetVar="addDialog"
+								modal="true" showEffect="explode" hideEffect="explode"
+								resizable="false" closable="true">
+								<h3>Note: This will also be send as e-mail to applicant.</h3>
+								<br />
+								<div class="ui-g form-group">
+									<p:panelGrid columns="4"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent; widht:100%">
+
+										<p:outputLabel for="@next" style="color:red"  value="Admission No"></p:outputLabel>
+										<p:inputText disabled="#{onlineAdmApplicationAe.disableSrNo}"
+											style="width: 280px !important;height:30px !important;margin-bottom: 12px !important;"
+											required="true"
+											requiredMessage="Please Enter Admission Number"
+											value="#{onlineAdmApplicationAe.addmissionNumber}"></p:inputText>
+
+										<p:outputLabel  for="@next" style="color:red" value="Addmission Date"></p:outputLabel>
+										<p:calendar
+											style="width: 280px !important;height:30px !important;margin-bottom: 12px !important;"
+											value="#{onlineAdmApplicationAe.addmissionDate}"
+											navigator="true" required="true"
+											requiredMessage="Please Select Addmission Date"
+											pattern="dd/MM/yyyy"></p:calendar>
+
+										<p:outputLabel  for="@next" style="color:red" value="Select Class"></p:outputLabel>
+										<p:selectOneMenu disabled="true"
+											value="#{onlineAdmApplicationAe.className1}" required="true"
+											requiredMessage="Please Select a Class"
+											style="height:30px !important;margin-bottom: 12px !important;">
+											<f:selectItem itemLabel="Select"></f:selectItem>
+											<f:selectItems value="#{onlineAdmApplicationAe.classList}"></f:selectItems>
+										</p:selectOneMenu>
+
+										<p:outputLabel value="Select Section " for="@next" style="color:red" ></p:outputLabel>
+										<p:selectOneMenu id="sectionid"
+											value="#{onlineAdmApplicationAe.selectedSection}"
+											required="true" requiredMessage="Please Select A Section"
+											style="height:30px !important;margin-bottom: 12px !important;">
+											<f:selectItems value="#{onlineAdmApplicationAe.sectionList}"></f:selectItems>
+										</p:selectOneMenu>
+
+										<p:outputLabel value="Remark " for="@next" style="color:red" ></p:outputLabel>
+										<p:inputTextarea value="#{onlineAdmApplicationAe.remark}"
+											required="true" requiredMessage="Please Enter Remark"></p:inputTextarea>
+
+										<p:commandButton value="Complete Admission"
+											update=":addForm,:form"
+											action="#{onlineAdmApplicationAe.accept}">
+											<p:confirm header="Confirmation"
+												message="Are You Sure To Admit This Student?"
+												icon="ui-icon-alert" />
+										</p:commandButton>
+
+									</p:panelGrid>
+								</div>
+							</p:dialog>
+						</h:form>
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

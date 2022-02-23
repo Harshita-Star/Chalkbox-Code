@@ -1,0 +1,128 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Declare Result</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+					<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+						
+
+
+							<p:panel>
+								<f:facet name="header">
+									<span>Result Declaration</span>
+								
+								</f:facet>
+								<p:messages closable="true" autoUpdate="true"></p:messages>
+
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									
+									
+									<p:outputLabel  for="@next" style="color:red" value="Select Class"></p:outputLabel>
+									<p:selectOneMenu value="#{declareClassTestResult.selectedCLassSection}" filter="true"
+										required="true" requiredMessage="Please Select Class">
+										<f:selectItem itemLabel="Select Class" itemValue=""></f:selectItem>
+										<f:selectItems value="#{declareClassTestResult.classSection}"></f:selectItems>
+
+										<p:ajax update="sectionid" listener="#{declareClassTestResult.allSections}"></p:ajax>
+										
+
+									</p:selectOneMenu>
+
+									<p:outputLabel for="@next" style="color:red" value="Select Section"
+										></p:outputLabel>
+									<p:selectOneMenu   filter="true"
+										id="sectionid" value="#{declareClassTestResult.selectedSection}"
+										required="true" requiredMessage="Please Select Section">
+										<f:selectItem itemLabel="Select Section" itemValue=""></f:selectItem>
+										<f:selectItems value="#{declareClassTestResult.sectionList}"></f:selectItems>
+									</p:selectOneMenu>
+									
+								</p:panelGrid>
+								
+								<br />
+								<p:separator />
+								<center>
+								<p:commandButton value="Search" styleClass="butwid" icon="fa fa-search"
+										action="#{declareClassTestResult.search}"
+										update=":form" />
+
+								</center>
+								<p:separator />
+								<br />
+
+							</p:panel>
+							
+							<br/>
+
+							<p:panel header="Class Test" rendered="#{declareClassTestResult.showTable}">
+								<h2>Choose Test To Declare Result</h2>
+									<p:dataTable reflow="true"
+										value="#{declareClassTestResult.testList}" var="var"
+										selection="#{declareClassTestResult.selectedTestList}"
+										rowKey="#{var.sno}" style="text-align:center;">
+
+										<p:column selectionMode="multiple" style="width:60px;"></p:column>
+										
+										<p:column headerText="S. No.">
+										<p:outputLabel value="#{var.sno}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Date">
+										<p:outputLabel value="#{var.dt}"></p:outputLabel>
+									</p:column>
+
+
+									<p:column headerText="Class Name" filterBy="#{var.className}" filterMatchMode="contains">
+										<p:outputLabel value="#{var.className}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Section" filterBy="#{var.section}" filterMatchMode="contains">
+										<p:outputLabel value="#{var.section}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Subject Name" filterBy="#{var.subject}" filterMatchMode="contains">
+										<p:outputLabel value="#{var.subject}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Test Name" filterBy="#{var.testName}" filterMatchMode="contains">
+										<p:outputLabel value="#{var.testName}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Test Marks">
+										<p:outputLabel value="#{var.testMarks}"></p:outputLabel>
+									</p:column>
+
+										<f:facet name="footer">
+										<center>
+										<p:commandButton
+												update=":form"
+												value="Declare Result" styleClass="butwid" icon="fa fa-bullhorn"
+												actionListener="#{declareClassTestResult.declare}"></p:commandButton>
+										</center>
+											
+											
+										</f:facet>
+									</p:dataTable>
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

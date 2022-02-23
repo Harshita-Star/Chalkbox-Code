@@ -1,0 +1,246 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Promoted Student report</ui:define>
+
+	<ui:define name="content">
+		<style>
+td.selectionDisabled .ui-chkbox {
+	display: none;
+}
+
+.ui-datatable .ui-datatable-scrollable-body,
+	.ui-datatable-scrollable-header, .ui-datatable-footer,
+	.ui-datatable-header {
+	width: 100% !important;
+}
+
+body .ui-datatable thead th, body .ui-datatable tbody td {
+	width: var(--w) !important;
+}
+
+body .ui-datatable  .ui-datatable-header {
+	position: sticky !important;
+	top: 60px !important;
+	width: 100% !important;
+}
+
+.ui-datatable-scrollable .ui-datatable-scrollable-header,
+	.ui-datatable-scrollable .ui-datatable-scrollable-footer {
+	position: sticky !important;
+	top: 108px !important;
+}
+</style>
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form1">
+
+
+							<p:messages closable="true" autoUpdate="true"></p:messages>
+							<p:panel header="Promoted Student Report">
+
+								<p:panelGrid columns="5"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel for="@next" style="color:red"
+										value="Select Class"></p:outputLabel>
+									<p:selectOneMenu style="width:250px"
+										value="#{promotedStdReport.selectedCLassSection}"
+										required="true" requiredMessage="Please select a class">
+										<f:selectItem itemLabel="Select Class" itemValue=""></f:selectItem>
+										<f:selectItems value="#{promotedStdReport.classSection}"></f:selectItems>
+
+										<p:ajax update="sectionid"
+											listener="#{promotedStdReport.allSections}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel for="@next" style="color:red"
+										value="Select Section"></p:outputLabel>
+									<p:selectOneMenu id="sectionid"
+										value="#{promotedStdReport.selectedSection}" required="true"
+										requiredMessage="Please select a section">
+										<f:selectItem itemLabel="Select Section" itemValue=""></f:selectItem>
+										<f:selectItems value="#{promotedStdReport.sectionList}"></f:selectItems>
+									</p:selectOneMenu>
+								</p:panelGrid>
+
+								<br />
+								<p:separator />
+								<center>
+									<p:panelGrid
+										columns="#{promotedStdReport.studentList.size() gt 0 ? '4' : '1'}"
+										layout="grid" styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+
+										<p:commandButton  value="Search" styleClass="butwid" icon="fa fa-search"
+											action="#{promotedStdReport.searchReport}" update=":form1" />
+
+										<p:commandButton rendered="#{promotedStdReport.studentList.size() gt 0}" value="Print" styleClass="butwid" icon="fa fa-print">
+											<p:printer target="dataTable"></p:printer>
+										</p:commandButton>
+
+										
+										<p:commandButton rendered="#{promotedStdReport.studentList.size() gt 0}" value="PDF" styleClass="butwid" icon="fa fa-file-pdf-o" ajax="false"
+											process="@this"
+											actionListener="#{promotedStdReport.exportPromPdf}" immediate="true">
+
+											<p:fileDownload value="#{promotedStdReport.file}" />
+										</p:commandButton>
+
+										
+										<h:commandLink rendered="#{promotedStdReport.studentList.size() gt 0}" immediate="true">
+											<p:graphicImage name="images/excellogo.png"
+												library="avalon-layout" width="100" height="40"></p:graphicImage>
+											<pe:exporter type="xlsx" target=":form1:dtb"
+												fileName="Promoted_Student_Report"></pe:exporter>
+										</h:commandLink>
+
+									</p:panelGrid>
+								</center>
+								<p:separator />
+								<br />
+							</p:panel>
+							<p:panel id="dataTable">
+								<center>
+									<p
+										style="font-size: 25px !important; font-weight: bold; margin: 0px;">#{headerBean.name}</p>
+									<p
+										style="font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.affiliationNo}</p>
+									<p
+										style="font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.finalAddress}</p>
+									<p
+										style="font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.phoneno}</p>
+
+									<p
+										style="margin: 0px; font-size: 25px !important; font-weight: bold;">Promoted
+										Student Report - #{promotedStdReport.showSession}</p>
+								</center>
+								<br></br>
+								<br></br>
+								
+								<p:dataTable reflow="true" var="var" id="dtb" scrollable="true"
+									scrollWidth="100%" value="#{promotedStdReport.studentList}"
+									selection="#{promotedStdReport.selectedStudentList}"
+									rowKey="#{var.id}">
+
+									<f:facet name="header">
+										<p:panelGrid columns="1"
+											styleClass="ui-panelgrid-blank form-group"
+											style="border:0px none; background-color:transparent;">
+											<p:outputLabel
+												value="Total Student : #{promotedStdReport.totalStudent}"></p:outputLabel>
+
+
+										</p:panelGrid>
+									</f:facet>
+
+
+									<p:column
+										disabledSelection="#{var.session ne promotedStdReport.showSession}"
+										styleClass="#{var.session ne promotedStdReport.showSession ? 'selectionDisabled':''}"
+										exportable="false" selectionMode="multiple"
+										style="--w:50px;text-align:center"></p:column>
+
+
+									<p:column headerText="S.No." style="--w:40px">
+										<f:facet name="header">
+											<p:outputLabel value="S.No."></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.sno}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Admission Number">
+										<f:facet name="header">
+											<p:outputLabel value="Admission Number"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.srNo}"></p:outputLabel>
+									</p:column>
+
+									<p:column sortBy="#{var.fname}" headerText="Name"
+										filterBy="#{var.fname}">
+										<f:facet name="header">
+											<p:outputLabel value="Name"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.fname}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Father's Name"
+										filterBy="#{var.fathersName}">
+										<f:facet name="header">
+											<p:outputLabel value="Father's Name"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.fathersName}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Class From" filterBy="#{var.className}">
+										<f:facet name="header">
+											<p:outputLabel value="Class From"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.classFromName}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Class To" filterBy="#{var.admitClass}">
+										<f:facet name="header">
+											<p:outputLabel value="Class To"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.classToName}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Date of Promotion">
+										<f:facet name="header">
+											<p:outputLabel value="Date of Promotion"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.promotedDateStr}"></p:outputLabel>
+									</p:column>
+
+
+
+									<p:column rendered="false" headerText="Cancel">
+										<p:commandButton icon="ui-icon-close"
+											action="#{promotedStdReport.cancelPromotion}" update="form1">
+											<f:setPropertyActionListener
+												target="#{promotedStdReport.studentInfo}" value="#{var}"></f:setPropertyActionListener>
+											<p:confirm header="Confirmation"
+												message="Are You Sure To Cancel Promotion...?"
+												icon="ui-icon-alert" />
+										</p:commandButton>
+									</p:column>
+
+									<f:facet name="footer">
+										<p:panelGrid columns="1"
+											styleClass="ui-panelgrid-blank form-group"
+											style="border:0px none; background-color:transparent;">
+											<p:commandButton process=":form1:dtb" update=":form1" value="Cancel Promotion" styleClass="redButt" style="width:200px;" icon="fa fa-ban"
+												action="#{promotedStdReport.cancelMultiplePromotion}"></p:commandButton>
+										</p:panelGrid>
+									</f:facet>
+
+								</p:dataTable>
+							</p:panel>
+						</h:form>
+
+						<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+							<p:commandButton style="margin-left:30px" value="Yes"
+								type="button" styleClass="ui-confirmdialog-yes"
+								icon="ui-icon-check" />
+							<p:commandButton style="margin-left:50px" value="No"
+								type="button" styleClass="ui-confirmdialog-no"
+								icon="ui-icon-close" />
+						</p:confirmDialog>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

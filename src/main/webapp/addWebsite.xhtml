@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+		xmlns:pe="http://primefaces.org/ui/extensions">
+<f:view contentType="text/html">
+	<h:head>
+		<title>#{sideMenuBean.companyName} | Add Website</title>
+		<f:facet name="first">
+			<meta content='text/html; charset=UTF-8' http-equiv="Content-Type" />
+			<meta http-equiv="X-UA-Compatible" content="EmulateIE8" />
+		</f:facet>
+			<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css"></link>
+    		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"></link>
+    		<link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css"></link>
+   			<link rel="stylesheet" href="dist/css/AdminLTE.min.css"></link>
+    		<link rel="stylesheet" href="dist/css/skins/all-skins.min.css"></link>
+     		<link rel="stylesheet" type="text/css" href="css/style.css"/>	  			
+	</h:head>
+	<h:body>
+		
+        	
+        		
+        	 <ui:include src="sideMenuMaster.xhtml"></ui:include> 
+   
+      <div class="content-wrapper">
+          
+          <section class="content-header">
+          
+          <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+            <li class="active">Dashboard</li>
+          </ol>
+        </section>
+					
+					
+					<h:form id="form" style="overflow:hidden">
+					<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+	            		<p:panel header="Add Website">
+	            			<p:commandLink immediate="true" style="float:right;color:blue" value="View / Edit Website" action="#{addWebsite.viewEditWebsite}"></p:commandLink>
+						   	<p:panelGrid columns="4">
+			                              		
+			               		<p:outputLabel value="School Name:-" for="@next" style="color:red" ></p:outputLabel> 
+			                  	<p:selectOneMenu style="width:250px" value="#{schoolLedger.schoolName}" required="true" requiredMessage="Please Select School Name" >
+               		 			<f:selectItem itemLabel="select" itemValue=""></f:selectItem>
+               		 			<f:selectItems value="#{addWebsite.schoolList}"></f:selectItems>
+               		 		</p:selectOneMenu>  
+
+
+								<p:outputLabel value="Contact No:-"></p:outputLabel> 
+			                  	<p:inputText value="#{addWebsite.contactNo}" validatorMessage="Please Enter Correct value">
+			                  	 <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+			                  	</p:inputText>
+			                  	
+			                  	<p:outputLabel value="Contact Name:-"></p:outputLabel> 
+			                  	<p:inputText value="#{addWebsitel.contactName}" validatorMessage="Please Enter Correct value">
+			                  	 <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+			                  	</p:inputText>
+			                  	
+			                  	<p:outputLabel value="Start Date:-" for="@next" style="color:red" ></p:outputLabel>
+			                  	<p:calendar value="#{addWebsite.startDate}" pattern="dd/MM/yyyy" navigator="true" required="true" requiredMessage="Please Enter Start Date"></p:calendar>
+			                  	
+			                  	<p:outputLabel value="Expire Date:-" for="@next" style="color:red" ></p:outputLabel>
+			                  	<p:calendar value="#{addWebsite.expireDate}" pattern="dd/MM/yyyy" navigator="true" required="true" requiredMessage="Please Enter Expire Date"></p:calendar>
+			                  	
+			                  	<p:outputLabel value="Renewal Date:-" for="@next" style="color:red" ></p:outputLabel>
+								<p:calendar value="#{addWebsite.renewalDate}" pattern="dd/MM/yyyy" navigator="true" required="true" requiredMessage="Please Enter Renewal Date"></p:calendar>
+								
+								<p:outputLabel value="Chalk Box Amount:-" for="@next" style="color:red" ></p:outputLabel> 
+			                  	<p:inputText value="#{addWebsite.chalkBoxAmount}" onfocus="this.select();" required="true" requiredMessage="Please Enter Chalk Box Amount">
+			                  		<pe:keyFilter mask="num"></pe:keyFilter>
+			                  	</p:inputText>  
+								
+								<p:outputLabel value="IMG Amount:-" for="@next" style="color:red" ></p:outputLabel> 
+			                  	<p:inputText value="#{addWebsite.imgAmount}" onfocus="this.select();" required="true" requiredMessage="Please Enter IMG Amount">
+			                  		<pe:keyFilter mask="num"></pe:keyFilter>
+			                  	</p:inputText>  
+			                  	
+								<p:outputLabel value="Chalk Box Renewal Amount:-" for="@next" style="color:red" ></p:outputLabel> 
+			                  	<p:inputText value="#{addWebsite.chalkBoxRenewal}" onfocus="this.select();" required="true" requiredMessage="Please Enter Chalk Box Renewal Amount">
+			                  		<pe:keyFilter mask="num"></pe:keyFilter>
+			                  	</p:inputText>  
+			                  	
+								<p:outputLabel value="IMG Renewal Amount :-" for="@next" style="color:red" ></p:outputLabel> 
+			                  	<p:inputText value="#{addWebsite.imgRenewalAmount}" onfocus="this.select();" required="true" requiredMessage="Please Enter IMG Renewal Amount">
+			                  		<pe:keyFilter mask="num"></pe:keyFilter>
+			                  	</p:inputText>  
+			                  	
+			       		 		<p:commandButton update="form" actionListener="#{addWebsite.addWebsite}" value="Submit" ></p:commandButton>
+			       		 	</p:panelGrid>
+					   </p:panel>   
+					</h:form>
+	   			</div>
+	</h:body>
+</f:view>
+</html>

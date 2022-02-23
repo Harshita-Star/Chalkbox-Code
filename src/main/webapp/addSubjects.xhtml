@@ -1,0 +1,173 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Subjects</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<h1>Add Subject</h1>
+
+							<p:panel header="Add Subject">
+
+								<p:messages closable="true" autoUpdate="true"></p:messages>
+
+
+								<p:panelGrid columns="2"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel value="#{addSubjectsVar.addSubjectsNameLabel}"></p:outputLabel>
+									<p:inputText value="#{subjectBean.subjectName}" required="true"
+										requiredMessage="#{addSubjectsVar.addSubjectsNameValidation}"
+										id="secnm"
+										onchange="trimFunc(this.value,'Please Section Name',this.id)"
+										validatorMessage="Please Enter Correct value">
+										<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:inputText>
+
+									<p:outputLabel rendered="#{subjectBean.showInstitute}"
+										value="Type of Area"></p:outputLabel>
+									<p:selectOneRadio rendered="#{subjectBean.showInstitute}"
+										value="#{subjectBean.type}" required="true"
+										requiredMessage="Please Select Type Area">
+										<f:selectItems value="#{subjectBean.subjectTypeList}"></f:selectItems>
+									</p:selectOneRadio>
+
+									<p:outputLabel rendered="#{subjectBean.showInstitute}"
+										value="Add Subject In Exam / Marksheet"></p:outputLabel>
+									<p:selectOneRadio rendered="#{subjectBean.showInstitute}"
+										value="#{subjectBean.addInExam}">
+										<f:selectItem itemLabel="Yes" itemValue="yes"></f:selectItem>
+										<f:selectItem itemLabel="No" itemValue="no"></f:selectItem>
+									</p:selectOneRadio>
+
+									<p:outputLabel rendered="#{subjectBean.showInstitute}"
+										value="Subject Type"></p:outputLabel>
+									<p:selectOneRadio rendered="#{subjectBean.showInstitute}"
+										value="#{subjectBean.subType}">
+										<f:selectItem itemLabel="Mandatory" itemValue="Mandatory"></f:selectItem>
+										<f:selectItem itemLabel="Optional" itemValue="Optional"></f:selectItem>
+										<p:ajax
+											update=":form:clsLabel,:form:clsValue :form:classLabel,:form:classValue :form:sectionLabel,:form:sectionValue"
+											listener="#{subjectBean.checkSubjectType}"></p:ajax>
+									</p:selectOneRadio>
+
+									<p:outputPanel id="clsLabel">
+										<p:outputLabel rendered="#{subjectBean.showAllClass}"
+											value="#{addSubjectsVar.addSubjectsSelectClassLAbel}"></p:outputLabel>
+									</p:outputPanel>
+									<p:outputPanel id="clsValue">
+										<p:selectManyCheckbox layout="responsive" columns="3"
+											rendered="#{subjectBean.showAllClass}"
+											value="#{subjectBean.selectedClassList}" required="true"
+											requiredMessage="#{addSubjectsVar.addSubjectsSelectClassValidation}"
+											styleClass="form-group">
+											<f:selectItems value="#{subjectBean.classList}"></f:selectItems>
+										</p:selectManyCheckbox>
+									</p:outputPanel>
+
+									<p:outputPanel id="classLabel">
+										<p:outputLabel rendered="#{subjectBean.showClass}"
+											value="#{addSubjectsVar.addSubjectsSelectClassLAbel}"></p:outputLabel>
+									</p:outputPanel>
+									<p:outputPanel id="classValue">
+										<p:selectOneMenu rendered="#{subjectBean.showClass}"
+											value="#{subjectBean.selectedClass}" required="true"
+											requiredMessage="#{addSubjectsVar.addSubjectsSelectClassValidation}">
+											<f:selectItem itemLabel="#{addSubjectsVar.selectHereLabel}"
+												itemValue=""></f:selectItem>
+											<f:selectItems value="#{subjectBean.classList}"></f:selectItems>
+											<p:ajax update=":form:sectionLabel,:form:sectionValue"
+												listener="#{subjectBean.checkSectionList}"></p:ajax>
+										</p:selectOneMenu>
+									</p:outputPanel>
+									<p:outputPanel id="sectionLabel">
+										<p:outputLabel rendered="#{subjectBean.showSection}"
+											value="Select Section"></p:outputLabel>
+									</p:outputPanel>
+
+									<p:outputPanel id="sectionValue">
+										<p:selectManyCheckbox rendered="#{subjectBean.showSection}"
+											value="#{subjectBean.selectedSection}" required="true"
+											requiredMessage="Please Select Section">
+											<f:selectItem itemLabel="All" itemValue="All"></f:selectItem>
+											<f:selectItems value="#{subjectBean.sectionList}"></f:selectItems>
+											<p:ajax update=":form:studentList"
+												listener="#{subjectBean.checkSection}"></p:ajax>
+										</p:selectManyCheckbox>
+									</p:outputPanel>
+								</p:panelGrid>
+
+								<br />
+
+								<p:outputPanel id="studentList">
+									<p:dataTable rendered="#{subjectBean.showStudent}"
+										rowKey="#{var.addNumber}"
+										selection="#{subjectBean.selectedStudentList}" var="var"
+										value="#{subjectBean.studentList}">
+
+										<p:column style="width:30px" selectionMode="multiple"></p:column>
+
+										<p:column headerText="S.No." style="width:30px">
+											<p:outputLabel value="#{var.sno}"></p:outputLabel>
+										</p:column>
+
+										<p:column style="width:110px" headerText="Name">
+											<p:outputLabel value="#{var.fname}"></p:outputLabel>
+										</p:column>
+
+										<p:column style="width:110px" headerText="Father's Name">
+											<p:outputLabel value="#{var.fathersName}"></p:outputLabel>
+										</p:column>
+
+										<p:column style="width:110px" headerText="Class">
+											<p:outputLabel value="#{var.className}"></p:outputLabel>
+										</p:column>
+
+										<p:column style="width:110px" headerText="Section">
+											<p:outputLabel value="#{var.sectionName}"></p:outputLabel>
+										</p:column>
+									</p:dataTable>
+								</p:outputPanel>
+								<br />
+								
+								<br />
+								<p:separator />
+								<center>
+									<p:commandButton update="form" styleClass="butwid" icon="fa fa-upload"
+										action="#{subjectBean.addSubjects}"
+										value="#{addSubjectsVar.addSubjectsButtonLabel}"></p:commandButton>
+								</center>
+								<p:separator />
+								<br />
+								
+
+							</p:panel>
+
+							<p:confirmDialog
+								header="#{addSubjectsVar.addSubjectsConfirmationHeaderLabel}"
+								message="#{addSubjectsVar.addSubjectsAddMoreTermsLabel}"
+								showEffect="fade" hideEffect="explode" widgetVar="dialog">
+								<p:commandButton onclick="dialog.hide();" value="Yes"
+									type="button"></p:commandButton>
+								<p:commandButton value="No" action="#{subjectBean.no}"></p:commandButton>
+							</p:confirmDialog>
+
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

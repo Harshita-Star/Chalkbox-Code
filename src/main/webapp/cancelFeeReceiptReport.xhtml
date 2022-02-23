@@ -1,0 +1,190 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Cancel Fee Report</ui:define>
+
+	<ui:define name="content">
+
+		<style>
+.ui-datatable .ui-datatable-scrollable-body,
+	.ui-datatable-scrollable-header, .ui-datatable-footer,
+	.ui-datatable-header {
+	width: 100% !important;
+}
+
+.ui-datatable-scrollable .ui-datatable-scrollable-header,
+	.ui-datatable-scrollable .ui-datatable-scrollable-footer {
+	position: sticky !important;
+	top: 60px !important;
+}
+</style>
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+
+
+							<p:panel id="dailyfeereport">
+
+
+								<p:commandButton value="pdf" styleClass="butwid"
+									icon="fa fa-file-pdf-o"
+									style="top: -16px;margin-right: 16px;" ajax="false"
+									process="@this"
+									actionListener="#{cancelFee.exportCancelFeePdf}">
+
+									<p:fileDownload value="#{cancelFee.file}" />
+								</p:commandButton>
+
+								<h:commandLink>
+									<p:graphicImage name="images/excellogo.png"
+										library="avalon-layout" width="100" height="40"></p:graphicImage>
+									<pe:exporter type="xlsx" target="fee"
+										fileName="Cancel_Fee_Detail.xlsx"
+										></pe:exporter>
+								</h:commandLink>
+								<center>
+									<p
+										style="font-size: 25px !important; font-weight: bold; margin: 0px;">#{headerBean.name}</p>
+									<p
+										style="font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.affiliationNo}</p>
+									<p
+										style="font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.finalAddress}</p>
+									<p
+										style="font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.phoneno}</p>
+
+									<p
+										style="margin: 0px; font-size: 25px !important; font-weight: bold;">Cancel
+										Fee Report</p>
+								</center>
+								<p:panelGrid styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;"
+									columns="2">
+									<p:panelGrid columns="2">
+										<p:outputLabel value="Total Amount(Cash) : "></p:outputLabel>
+										<h:outputText
+											value="#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'} #{cancelFee.cashAmount}"></h:outputText>
+									</p:panelGrid>
+
+									<p:panelGrid columns="2">
+										<p:outputLabel value="Total Amount(Cheque) : "></p:outputLabel>
+										<h:outputText
+											value="#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'} #{cancelFee.chequeAmount}"></h:outputText>
+									</p:panelGrid>
+
+								</p:panelGrid>
+
+								<p:dataTable id="fee" var="fee" scrollable="true"
+									scrollWidth="100%" value="#{cancelFee.dailyfee}" reflow="true">
+
+									<f:facet name="header">
+										<p:outputLabel value="Cancel Fee Receipt Report"></p:outputLabel>
+									</f:facet>
+
+									<p:column headerText="S.No." style="width:50px">
+										<f:facet name="header">
+											<p:outputLabel value="S.No."></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{fee.srno}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="student name" style="width:100px">
+										<f:facet name="header">
+											<p:outputLabel value="student name"></p:outputLabel>
+										</f:facet>
+										<h:outputText value="#{fee.studentname}" />
+									</p:column>
+									<p:column headerText="Father name" style="width:100px">
+										<f:facet name="header">
+											<p:outputLabel value="Father name"></p:outputLabel>
+										</f:facet>
+										<h:outputText value="#{fee.fathername}" />
+									</p:column>
+
+									<p:column headerText="Class" style="width:50px">
+										<f:facet name="header">
+											<p:outputLabel value="Class"></p:outputLabel>
+										</f:facet>
+										<h:outputText value="#{fee.classname}" />
+									</p:column>
+									<p:column headerText="section" style="width:55px">
+										<f:facet name="header">
+											<p:outputLabel value="section"></p:outputLabel>
+										</f:facet>
+										<h:outputText value="#{fee.section}" />
+									</p:column>
+
+
+
+									<p:columns style="width:100px" value="#{cancelFee.feelist}"
+										var="column" columnIndexVar="colIndex">
+
+										<f:facet name="header">
+											<p:outputLabel
+												value="#{column.feeName} (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})"></p:outputLabel>
+										</f:facet>
+
+										<p:outputLabel value="#{fee.allFess[column.feeId]}"></p:outputLabel>
+
+									</p:columns>
+
+									<p:column headerText="Recipt no" style="width:70px">
+
+										<f:facet name="header">
+								Receipt No.
+							</f:facet>
+										<h:outputText value="#{fee.reciptno}" />
+									</p:column>
+									<p:column headerText="amount" style="width:70px">
+
+										<f:facet name="header">
+								Amount (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})
+							</f:facet>
+										<h:outputText value="#{fee.amount}" />
+									</p:column>
+
+									<p:column headerText="Payment Mode (cash/cheque)"
+										style="width:70px">
+
+										<f:facet name="header">
+								Payment Mode (cash/cheque)
+							</f:facet>
+										<h:outputText value="#{fee.paymentmode}" />
+									</p:column>
+
+									<p:column headerText="Remark" style="width:70px">
+
+										<f:facet name="header">
+                                Remark
+                            </f:facet>
+										<h:outputText value="#{fee.remark}" />
+									</p:column>
+
+
+									<p:column headerText="Date" style="width:70px">
+
+										<f:facet name="header">
+								Date
+							</f:facet>
+										<h:outputText value="#{fee.feeDateStr}" />
+									</p:column>
+
+								</p:dataTable>
+							</p:panel>
+
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

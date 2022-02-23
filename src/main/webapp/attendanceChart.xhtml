@@ -1,0 +1,54 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Attendance Chart</ui:define>
+
+    <ui:define name="content">
+       
+            <div class="ui-fluid">
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <div class="card card-w-title">
+                          <h:form id="form1">
+				<h1>Attendance Chart</h1>
+            		 <p:messages closable="true" autoUpdate="true"></p:messages>
+               		 	<p:panel header="Search Data">
+               		 		
+               		 	<p:panelGrid columns="7">
+               		 		
+						<p:outputLabel value="Select Date" for="@next" style="color:red" ></p:outputLabel>
+						<p:calendar yearRange="c-50:c+0" navigator="true" value="#{attendanceChart.currentDate}" required="true" requiredMessage="Please Select Date" pattern="dd/MM/yyyy" style="width: 280px !important;height:30px !important;margin-bottom: 12px !important;"></p:calendar>
+                   		
+                   		
+                   		<p:outputLabel value="Select Class"></p:outputLabel>
+						<p:selectOneMenu value="#{attendanceChart.selectedClass}">
+							<f:selectItem itemLabel="All" itemValue="all"></f:selectItem>
+							<f:selectItems value="#{attendanceChart.classList}"></f:selectItems>
+							<p:ajax update=":form1" listener="#{attendanceChart.allSections}"></p:ajax>
+						</p:selectOneMenu>
+
+						<p:outputLabel value="Select Section"></p:outputLabel>
+						<p:selectOneMenu id="sectionid" value="#{attendanceChart.selectedSection}" disabled="true">
+							<f:selectItem itemLabel="All" itemValue="all" ></f:selectItem>
+						</p:selectOneMenu>
+                   		
+                   		
+                   		<p:commandButton update="form1" actionListener="#{attendanceChart.search}" value="Search"></p:commandButton>
+						
+                   	</p:panelGrid>
+                   	</p:panel>
+						<p:chart type="bar"  model="#{attendanceChart.barModel}" style="height:500px">
+						</p:chart>
+					</h:form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+       
+    </ui:define>
+
+</ui:composition>

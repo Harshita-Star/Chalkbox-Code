@@ -1,0 +1,103 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Feedback Request</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+				<h:form id="form">
+					<p:growl showDetail="true"   autoUpdate="true" ></p:growl>
+					<p:panel header="Search">
+						<p:panelGrid columns="3" columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-2" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+							<p:commandButton update="dt" value="Pending" styleClass="butwid" icon="fa fa-clock-o" actionListener="#{stdFeedbackRequest.pendingLeave}"></p:commandButton>
+							<p:commandButton update="dt" value="Approved" styleClass="butwid greenButt" icon="fa fa-check-circle" actionListener="#{stdFeedbackRequest.approveLeave}"></p:commandButton>
+							<p:commandButton update="dt" value="Rejected" styleClass="butwid redButt" icon="fa fa-ban" actionListener="#{stdFeedbackRequest.denyLeave}"></p:commandButton>
+						
+						</p:panelGrid>
+					</p:panel>
+					<p:panel style="width:100%" header="Feedback Requests">
+					
+					<h:commandLink rendered="#{showClassAppDownloadBean.b}">
+										<p:graphicImage name="images/excellogo.png"
+											library="avalon-layout" width="100" height="40"></p:graphicImage>
+										<pe:exporter type="xlsx" target=":form:dt"
+											fileName="Feedback Report"></pe:exporter>
+									</h:commandLink>
+					
+						<p:dataTable id="dt" value="#{stdFeedbackRequest.leaveInfo}" reflow="true" var="var"> 
+							<p:column headerText="S.No." style="width:50px">
+							<f:facet name="header"> 
+           			  			     <p:outputLabel value="S.No."></p:outputLabel>
+         					    </f:facet>
+								<p:outputLabel value="#{var.sno}"></p:outputLabel>
+							</p:column>
+							
+							<p:column headerText="Student Name">
+							<f:facet name="header"> 
+           			  			     <p:outputLabel value="Student Name"></p:outputLabel>
+         					    </f:facet>
+								<p:outputLabel value="#{var.studentName}"></p:outputLabel>
+							</p:column>
+							
+							<p:column headerText="Class" style="width:50px">
+							<f:facet name="header"> 
+           			  			     <p:outputLabel value="Class"></p:outputLabel>
+         					    </f:facet>
+								<p:outputLabel value="#{var.className}"></p:outputLabel>
+							</p:column>
+						
+							<p:column headerText="Date">
+							<f:facet name="header"> 
+           			  			     <p:outputLabel value="Date"></p:outputLabel>
+         					    </f:facet>
+								<p:outputLabel value="#{var.strAdmitDate}"></p:outputLabel>
+							</p:column>
+							
+							<p:column exportable="false" style="width:350px !important" headerText="Feedback">
+								<p:outputLabel  value="#{var.description}"></p:outputLabel>
+							</p:column>
+												
+							<p:column exportable="false" rendered="#{stdFeedbackRequest.show}" headerText="Remark">
+								<p:inputTextarea style="width:100px !important" autoResize="false" value="#{var.remark}"/>
+							</p:column>
+							
+							<p:column exportable="false" rendered="#{stdFeedbackRequest.show1}" headerText="Remark">
+								<p:outputLabel value="#{var.remark}"/>
+							</p:column>
+							
+							<p:column exportable="false" rendered="#{stdFeedbackRequest.show}" headerText="Approve" style="width:80px">
+								<p:commandButton icon="ui-icon-check" styleClass="greenButt" update=":form" action="#{stdFeedbackRequest.approveRequest}">
+									<p:confirm header="Confirmation" message="Are You Sure To Approve Feedback...???" icon="ui-icon-alert" />
+									<f:setPropertyActionListener target="#{stdFeedbackRequest.selectedItem}" value="#{var}"></f:setPropertyActionListener>
+								</p:commandButton>
+							</p:column>
+							
+							<p:column rendered="#{stdFeedbackRequest.show}" headerText="Reject" style="width:80px">
+								<p:commandButton icon="ui-icon-close" styleClass="redButt"  update=":form" action="#{stdFeedbackRequest.denyRequest}">
+									<p:confirm header="Confirmation" message="Are You Sure To Reject Feedback...???" icon="ui-icon-alert" />
+									<f:setPropertyActionListener target="#{stdFeedbackRequest.selectedItem}" value="#{var}"></f:setPropertyActionListener>
+								</p:commandButton>
+							</p:column>
+						</p:dataTable>
+					</p:panel>
+				</h:form>
+		<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+			<p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes greenButt" icon="ui-icon-check" />
+			<p:commandButton value="No" style="margin-left:50px" type="button" styleClass="ui-confirmdialog-no redButt" icon="ui-icon-close" />
+		</p:confirmDialog>
+</div>
+	</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

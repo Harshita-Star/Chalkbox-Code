@@ -1,0 +1,204 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/schoolMasterTemplate.xhtml">
+
+	<ui:define name="title">Dashboard</ui:define>
+ 
+     <ui:define name="head">
+        <script type="text/javascript">
+     
+        function skinPie() {
+            this.cfg.shadow = false;
+            this.cfg.title = '';
+            this.cfg.seriesColors = ['#337ab7', '#2ea59f', '#2d34a4', '#2ea563'];
+            this.cfg.grid = {
+                background: '#ffffff',
+                borderColor: '#ffffff',
+                gridLineColor: '#F5F5F5',
+                shadow: false
+            };
+            this.cfg.axesDefaults = {
+                rendererOptions: {
+                    textColor: '#292B2C',
+                }
+            };
+            this.cfg.seriesDefaults = {
+                renderer: $.jqplot.PieRenderer,
+                shadow: false,
+                lineWidth: 1,
+                markerOptions: {
+                    shadow: false,
+                    size: 7,
+                    style: 'circle'
+                }
+            }
+        
+
+        
+        }
+        </script>
+        <style type="text/css">
+            .jqplot-xaxis-label, .jqplot-yaxis-label, .jqplot-y2axis-label, .jqplot-x2axis-label {
+                color: #757575; 
+            }
+            
+            table.jqplot-table-legend {
+                background-color: #ffffff;
+                color: #757575;
+                border-color: #F5F5F5;
+            }
+        </style>
+    </ui:define>
+
+	<ui:define name="content">
+		<div class="dashboard">
+			<h:form>
+				<div class="ui-g overview-boxes">
+
+					<div class="ui-g-12 ui-md-6 ui-lg-3">
+					<h:commandLink action="#{schoolMaster.goToAllStudent}">
+							<div class="ui-g overview-box overview-box-1">
+								<div class="overview-box-title">
+									<i class="fa fa-users" /> <span>Total Students</span>
+								</div>
+								<div class="overview-box-count">#{schoolMaster.cunt}</div>
+								<div class="overview-box-stats"></div>
+							</div>
+					</h:commandLink>	
+					</div>
+
+					<div class="ui-g-12 ui-md-6 ui-lg-3">
+					<a href="masterMiniDailyFeeCollection.xhtml">
+							<div class="ui-g overview-box overview-box-2">
+								<div class="overview-box-title">
+									<i class="fa fa-rupee" /> <span>Today's Collection</span>
+								</div>
+								<div class="overview-box-count">#{schoolMaster.totalCollection}</div>
+								<div class="overview-box-stats"></div>
+							</div>
+					</a>		
+					</div>
+
+					<div class="ui-g-12 ui-md-6 ui-lg-3">
+							<div class="ui-g overview-box overview-box-3">
+								<div class="overview-box-title">
+									<i class="fa fa-user-times" /> <span>Absent | Leave
+										Students Today</span>
+								</div>
+								<div class="overview-box-count">#{schoolMaster.enquirystudent}
+									| #{schoolMaster.leaveStudent}</div>
+								<div class="overview-box-stats"></div>
+							</div>
+					</div>
+
+					<div class="ui-g-12 ui-md-6 ui-lg-3">
+						<div class="ui-g overview-box overview-box-4">
+							<div class="overview-box-title">
+								<i class="fa fa-folder" /> <span>SMS Sent Today</span>
+							</div>
+							<div class="overview-box-count">#{schoolMaster.messageStduent}</div>
+							<div class="overview-box-stats"></div>
+						</div>
+					</div>
+					
+					
+				</div>
+				
+				
+				
+			</h:form>
+			<div class="ui-g ui-fluid">
+		
+				<div class="ui-g-12 ui-lg-6">
+					<p:panel>
+						<f:facet name="header">
+							<span>Attendance Chart</span>
+						</f:facet>	
+	    		             <p:chart type="pie" id="pie" model="#{pieChartSchoolMaster.pieModel1}"
+								responsive="true" style="background-color: white !important;"/> 
+					</p:panel>
+				</div>
+
+				<div class="ui-g-12 ui-lg-6">
+					<h:form id="mainForm" enctype="multipart/form-data">
+					<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+					<p:panel>
+						<f:facet name="header">
+							<span>Send Message</span>
+						</f:facet>
+						
+						<div class="ui-g">
+							<div class="ui-g-12"> 
+                                <p:selectOneRadio value="#{schoolMaster.sendTo}" styleClass="form-group">
+								<f:selectItem itemLabel="All Students" itemValue="student"></f:selectItem>
+								<f:selectItem itemLabel="All Staff Members" itemValue="staff"></f:selectItem>
+							</p:selectOneRadio>
+                            <br/>
+                            </div>
+                            
+                            <div class="ui-g-12"> 
+                                <p:outputLabel value="Dear Parent/Student/Staff Member,"
+								style="font-size:15px !important;" />
+                            </div>
+
+                            <div class="ui-g-12">
+                                <p:inputTextarea rows="5" autoResize="false" required="true" requiredMessage="Please write a message" style="width:100%;"
+								value="#{schoolMaster.typeMessage}" />
+                            </div>
+                            
+                            <div class="ui-g-12">
+                            <br/>
+                            		<p:outputLabel value="Regards, B.L.M. Academy, Haldwani"
+								style="font-size:15px !important;" />
+								
+                            </div>
+
+                            <div class="ui-g-12 btn-padding">
+                            <br/>
+								<p:commandButton value="Send"
+								style="float:right;" 
+								action="#{schoolMaster.sendMessageToAll}"></p:commandButton>
+                            </div>
+                         </div>   
+					</p:panel>
+					</h:form>
+					
+				</div>	
+			</div>
+
+			<h:form id="errorForm" style="overflow:hidden">
+				<p:dialog header="Status : " widgetVar="errorDialog"
+					modal="true" showEffect="fade" hideEffect="fade" resizable="false"
+					height="50" width="400">
+					<br></br>
+					<center>
+						<p:outputLabel value="#{schoolMaster.errorLabel}"
+							style="font-size:12px;font-weight: bold;" />
+					</center>
+				</p:dialog>
+			</h:form>
+
+			<h:form id="prevForm" style="overflow:hidden">
+				<p:dialog header="Message Preview : " width="500"
+					widgetVar="prevDialog" modal="true" showEffect="fade"
+					hideEffect="fade" resizable="false">
+					<p:outputLabel value="#{schoolMaster.preview}"
+						style="font-size:14px;font-weight: bold;" />
+					<br></br>
+					<br></br>
+					<center>
+						<p:commandButton value="Send Now" 
+							actionListener="#{schoolMaster.sendMessageNow}" />
+					</center>
+					<br></br>
+				</p:dialog>
+			</h:form>
+	
+	</div>
+
+
+	</ui:define>
+
+</ui:composition>

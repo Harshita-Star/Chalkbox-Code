@@ -1,0 +1,1311 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pu="http://primefaces.org/avalon">
+
+	<h:form id="menuform">
+		<div class="layout-menu-container #{guestPreferences.menuClass}">
+			<div class="nano">
+				<div class="nano-content menu-scroll-content">
+					<ui:fragment
+						rendered="#{guestPreferences.profileMode == 'inline' and guestPreferences.menuLayout != 'menu-layout-static menu-layout-horizontal'}">
+					</ui:fragment>
+
+					<pu:menu widgetVar="me">
+						<p:menuitem rendered="false" id="am_version_1" value="Help"
+							icon="fa fa-fw fa-tag" outcome="help.xhtml" />
+
+						<p:submenu rendered="#{sideMenuBean.masterSetting}"
+							id="am_customization" label="Master Settings"
+							icon="fa fa-fw fa-cogs">
+							<p:menuitem rendered="#{sideMenuBean.manageSchoolInformation}"
+								id="custom4" value="#{headerBean.type} Information"
+								icon="fa fa-fw fa-certificate" outcome="schoolInformation.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageSchoolInformation}"
+								value="#{headerBean.type} Documents"
+								icon="fa fa-fw fa-certificate"
+								outcome="uploadSchoolDocuments.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.permissionSetting}"
+								id="om_dashboard" value="Permission Settings"
+								icon="fa fa-fw fa-certificate" outcome="userPermission.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageAutoMessageSetting}"
+								id="custom5" value="Auto SMS/Notification Setting"
+								icon="fa fa-fw fa-certificate" outcome="messageSetting.xhtml" />
+							<p:menuitem rendered="false" value="Delete Tables Data"
+								icon="fa fa-fw fa-certificate" outcome="deleteTablesData.xhtml" />
+
+							<p:submenu rendered="#{sideMenuBean.manageClassMaster}"
+								label="Class Master" icon="fa fa-fw fa-certificate">
+								<p:menuitem value="Add Class" icon="fa fa-fw fa-sign-in"
+									outcome="addClass.xhtml" />
+								<p:menuitem value="Edit Class" icon="fa fa-fw fa-sign-in"
+									outcome="editDeleteClass.xhtml" />
+								<p:menuitem value="Add Section" icon="fa fa-fw fa-sign-in"
+									outcome="addSection.xhtml" />
+								<p:menuitem value="Edit Section" icon="fa fa-fw fa-sign-in"
+									outcome="editSection.xhtml" />
+								<p:menuitem value="Class Ordering" icon="fa fa-fw fa-sign-in"
+									outcome="classRank.xhtml" />
+								<p:menuitem value="Class-Section Id Report"
+									icon="fa fa-fw fa-sign-in" outcome="classSectionIdReport.xhtml" />
+							</p:submenu>
+							
+							<p:submenu rendered="#{sideMenuBean.manageClassMaster}"
+								label="Document Master" icon="fa fa-fw fa-certificate">
+								<p:menuitem value="Generate Document Request" icon="fa fa-fw fa-sign-in"
+									outcome="generateDocumentRequest.xhtml" />
+								<p:menuitem value="Modify Document Request" icon="fa fa-fw fa-sign-in"
+									outcome="modifyDocumentRequest.xhtml" />
+							</p:submenu>
+
+							<p:submenu rendered="#{sideMenuBean.manageFeeMaster}"
+								label="Fee Master" icon="fa fa-fw fa-certificate">
+								<p:menuitem value="Concession Category"
+									icon="fa fa-fw fa-sign-in"
+									outcome="addConnsessionCategory.xhtml" />
+								<p:menuitem value="Fee Headers" icon="fa fa-fw fa-sign-in"
+									outcome="addFees.xhtml" />
+								<p:menuitem value="Class Fee Allocation"
+									icon="fa fa-fw fa-sign-in" outcome="editClass.xhtml" />
+								<p:menuitem value="Student Fee Allocation"
+									icon="fa fa-fw fa-sign-in"
+									outcome="studentWiseFeeAllocation.xhtml" />
+								<p:menuitem value="Fee Lock" icon="fa fa-fw fa-sign-in"
+									outcome="feeLock.xhtml" />
+							</p:submenu>
+
+							<p:submenu rendered="#{sideMenuBean.manageSubjectMaster}"
+								label="Subject Master" icon="fa fa-fw fa-certificate">
+								<p:menuitem value="Add Subject" icon="fa fa-fw fa-sign-in"
+									outcome="addSubjects.xhtml" />
+								<p:menuitem value="Edit Subject" icon="fa fa-fw fa-sign-in"
+									outcome="editSubjects.xhtml" />
+								<p:menuitem value="Add Subject Group" icon="fa fa-fw fa-sign-in"
+									outcome="addSubjectGroup.xhtml" />
+								<p:menuitem value="Edit Subject Group"
+									icon="fa fa-fw fa-sign-in" outcome="editSubjectGroup.xhtml" />
+								<p:menuitem value="Assign/Edit/Delete Optional Subject"
+									icon="fa fa-fw fa-sign-in"
+									outcome="editOptionalSubjectStudents.xhtml" />
+								<p:menuitem value="Edit Optional Subject" rendered="false"
+									icon="fa fa-fw fa-sign-in" outcome="editOptionalSubjects.xhtml" />
+								<p:menuitem value="Subject Allocation"
+									icon="fa fa-fw fa-sign-in" outcome="subjectAllocation.xhtml" />
+								<p:menuitem value="Subject Ordering" icon="fa fa-fw fa-sign-in"
+									outcome="subjectRank.xhtml" />
+
+							</p:submenu>
+
+							<p:submenu rendered="#{sideMenuBean.manageSemesterMaster}"
+								label="Semester/Term Master" icon="fa fa-fw fa-certificate">
+								<p:menuitem value="Add Semseter/Term" icon="fa fa-fw fa-sign-in"
+									outcome="addSemester.xhtml" />
+								<p:menuitem value="Edit Semester/Term"
+									icon="fa fa-fw fa-sign-in" outcome="editSemester.xhtml" />
+							</p:submenu>
+
+							<p:submenu rendered="#{sideMenuBean.manageExamMaster}"
+								label="Exam Master" icon="fa fa-fw fa-certificate">
+								<p:menuitem value="Delete Exam Performance"
+									rendered="#{sideMenuBean.deletePerformance}"
+									icon="fa fa-fw fa-sign-in" outcome="deletePerformance.xhtml" />
+								<p:menuitem value="Exam Setting" icon="fa fa-fw fa-sign-in"
+									outcome="examSetting.xhtml" />
+								<p:menuitem value="Add Exam" icon="fa fa-fw fa-sign-in"
+									outcome="addExam.xhtml" />
+								<p:menuitem value="Edit Exam" icon="fa fa-fw fa-sign-in"
+									outcome="editExam.xhtml" />
+								<p:menuitem value="Exam Ordering" icon="fa fa-fw fa-sign-in"
+									outcome="examOrdering.xhtml" />
+								<p:menuitem value="Declare Result (Class)"
+									icon="fa fa-fw fa-sign-in" outcome="declareResult.xhtml" />
+								<p:menuitem value="Declare Result (Student Wise)"
+									icon="fa fa-fw fa-sign-in"
+									outcome="declareResultStudentWise.xhtml" />
+								<p:menuitem value="Hold Student Result"
+									icon="fa fa-fw fa-sign-in"
+									outcome="undeclareResultOfStudent.xhtml" />
+								<p:menuitem value="Exam Lock" icon="fa fa-fw fa-sign-in"
+									outcome="adminLockExam.xhtml" />
+								<p:menuitem value="Exam Full Name"
+									
+									icon="fa fa-fw fa-sign-in" outcome="FullExamName.xhtml" />
+							</p:submenu>
+
+							<p:menuitem rendered="#{sideMenuBean.manageLibrarySetting}"
+								value="Library Setting" icon="fa fa-fw fa-certificate"
+								outcome="bookSettings.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageAppointmentSetting}"
+								value="Appointment Setting" icon="fa fa-fw fa-certificate"
+								outcome="appointmentSetting.xhtml" />
+							<p:submenu rendered="#{sideMenuBean.manageTransportmaster}"
+								label="Transport Master" icon="fa fa-fw fa-certificate">
+								<p:menuitem value="Transport Fee Settings"
+									icon="fa fa-fw fa-sign-in" outcome="waiveTransport.xhtml" />
+								<p:menuitem value="Add Bus" icon="fa fa-fw fa-sign-in"
+									outcome="addBus.xhtml" />
+								<p:menuitem value="Add route" icon="fa fa-fw fa-sign-in"
+									outcome="addNewRoute.xhtml" />
+								<p:menuitem value="Edit Route" icon="fa fa-fw fa-sign-in"
+									outcome="editRouteDetails.xhtml" />
+								<p:menuitem value="Add Stop Category" rendered="false"
+									icon="fa fa-fw fa-sign-in" outcome="addStopCategory.xhtml" />
+								<p:menuitem value="Add Stop" icon="fa fa-fw fa-sign-in"
+									outcome="addNewStop.xhtml" />
+								<p:menuitem value="Edit Stop" icon="fa fa-fw fa-sign-in"
+									outcome="editRouteStop.xhtml" />
+							</p:submenu>
+
+							<p:submenu rendered="#{sideMenuBean.manageLoginDetails}"
+								label="Login Master" icon="fa fa-fw fa-certificate">
+								<p:menuitem id="custom10" value="Staff Logins"
+									icon="fa fa-fw fa-certificate"
+									outcome="teacherLoginReport.xhtml" />
+								<p:menuitem id="custom11" value="Student Logins"
+									icon="fa fa-fw fa-certificate"
+									outcome="parentLoginReport.xhtml" />
+								<p:menuitem value="Block/Unblock App Activities"
+									icon="fa fa-fw fa-certificate" outcome="studentModBlock.xhtml" />
+								<p:menuitem id="custom12"
+									value="Generate Student Pending Login Credentials"
+									icon="fa fa-fw fa-certificate"
+									outcome="generateLoginCredentials.xhtml" />
+							</p:submenu>
+
+						</p:submenu>
+
+						<p:submenu rendered="#{sideMenuBean.manageEnquiryModule}"
+							label="Manage Enquiry" icon="fa fa-fw fa-life-saver">
+							<p:menuitem rendered="#{sideMenuBean.manageAddEnquiry}"
+								value="Add Enquiry" icon="fa fa-fw fa-sign-in"
+								outcome="enquiryForm.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageShowEnquiry}"
+								value="Show Enquiry" icon="fa fa-fw fa-sign-in"
+								outcome="viewEnquiry.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageShowEnquiryblm}"
+								value="Show Enquiry" icon="fa fa-fw fa-sign-in"
+								outcome="viewEnquiryForBlm.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.list.branch_id eq '54'}"
+								value="Enquiry Payment Report" icon="fa fa-fw fa-sign-in"
+								outcome="enquiryPaymentReport.xhtml" />
+
+							<p:menuitem rendered="#{sideMenuBean.manageAddInstituteEnquiry}"
+								value="Add Enquiry" icon="fa fa-fw fa-sign-in"
+								outcome="instituteEnquiryForm" />
+							<p:menuitem rendered="#{sideMenuBean.manageShowInstituteEnquiry}"
+								value="Show Enquiry" icon="fa fa-fw fa-sign-in"
+								outcome="viewInstitueEnquiry.xhtml" />
+						</p:submenu>
+
+						<p:submenu rendered="#{sideMenuBean.manageOnlineAdmReq}"
+							label="Online Admission Requests" icon="fa fa-fw fa-life-saver">
+							<p:menuitem rendered="#{sideMenuBean.manageRegApplication}"
+								value="Registration Applications" icon="fa fa-fw fa-sign-in"
+								outcome="onlineRegApplicationAe.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageAdmApplication}"
+								value="Admission Applications" icon="fa fa-fw fa-sign-in"
+								outcome="onlineAdmApplicationAe.xhtml" />
+						</p:submenu>
+
+						<p:submenu rendered="#{sideMenuBean.manageStudent}"
+							label="Manage Student" icon="fa fa-fw fa-life-saver">
+							<p:menuitem rendered="#{sideMenuBean.manageStudentRegistration}"
+								value="Add Student" icon="fa fa-fw fa-certificate"
+								action="#{sideMenuBean.goToAddStudent}" />
+							<p:menuitem
+								rendered="#{sideMenuBean.manageStudentRegistration &amp;&amp; sideMenuBean.list.country ne 'UAE'}"
+								value="Upload Student Documents" icon="fa fa-fw fa-certificate"
+								outcome="uploadStudentDocuments.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageStudentRegistration}"
+								value="Add Student (Excel Plugin)"
+								icon="fa fa-fw fa-certificate"
+								outcome="registrationExcelPlugin.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageAllStudentList}"
+								value="Search Student" icon="fa fa-fw fa-certificate"
+								action="#{sideMenuBean.goToAllStudent}" />
+							<p:menuitem rendered="#{sideMenuBean.list.schid eq '251'}"
+								value="Registration Form" icon="fa fa-fw fa-certificate"
+								action="blmStdRegPrintFormat.xhtml" />
+							<p:menuitem rendered="false" value="Update Roll No"
+								icon="fa fa-fw fa-certificate" outcome="updateRollNo.xhtml" />
+
+							<p:menuitem rendered="#{sideMenuBean.allotRfid}"
+								value="Allot RFID No." icon="fa fa-fw fa-certificate"
+								outcome="allotRfidToStudent.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageClassTransfer}"
+								value="Class Transfer" icon="fa fa-fw fa-certificate"
+								outcome="classTransfer.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageConcessionRequest}"
+								value="Concession Request" icon="fa fa-fw fa-certificate"
+								outcome="verifyConcessionStatus.xhtml" />
+
+							<p:menuitem rendered="false" value="Search Student"
+								icon="fa fa-fw fa-certificate" outcome="searchStudent.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageStudentPerformance}"
+								value="Student Performance" icon="fa fa-fw fa-certificate"
+								outcome="studentPerformance.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageStudentPromotion}"
+								value="Student Promotion" icon="fa fa-fw fa-certificate"
+								outcome="promoteStudentOfClass.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageBulkConcession}"
+								value="Bulk Concession Allotment" icon="fa fa-fw fa-certificate"
+								outcome="addMultipleConcessionDetail.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.managePreviuosFee}"
+								value="Manage Previous Fees" icon="fa fa-fw fa-certificate"
+								outcome="addPreviousFees.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageStudentExtraValue}"
+								value="Student Extra Values" icon="fa fa-fw fa-certificate"
+								outcome="fillStudentExtraFieldDetails.xhtml" />
+
+							<p:submenu rendered="#{sideMenuBean.manageTransportDetail}"
+								label="Transport Allotment" icon="fa fa-fw fa-certificate">
+								<p:menuitem value="Route Wise" icon="fa fa-fw fa-sign-in"
+									outcome="studentBulkAllotment.xhtml" />
+								<p:menuitem value="Class wise" icon="fa fa-fw fa-sign-in"
+									outcome="bulkTransport.xhtml" />
+								<p:menuitem value="Student Wise" icon="fa fa-fw fa-sign-in"
+									outcome="editTransportDetails.xhtml" />
+							</p:submenu>
+
+							<p:menuitem rendered="#{sideMenuBean.manageRollNo}"
+								value="Update Roll No" icon="fa fa-fw fa-certificate"
+								outcome="addRollNo.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageComplaintDiary}"
+								value="Student Behaviour" icon="fa fa-fw fa-certificate"
+								outcome="addComplaintDiary.xhtml" />
+						</p:submenu>
+
+						<p:submenu rendered="#{sideMenuBean.manageClassTest}"
+							id="am_theme" label="Manage Class Test"
+							icon="fa fa-fw fa-life-saver">
+							<p:menuitem rendered="#{sideMenuBean.manageAddClassTest}"
+								id="theme1" value="Add Class Test" icon="fa fa-fw fa-sign-in"
+								outcome="addTest.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageTestPerformance}"
+								id="theme2" value="Add Class Test Performance"
+								icon="fa fa-fw fa-sign-in" outcome="testPerformance.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.managePrintPerformance}"
+								id="theme3" value="Print Performance" icon="fa fa-fw fa-sign-in"
+								outcome="printTestPerformance.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageClassTestReport}"
+								id="theme4" value="Student Wise Tests"
+								icon="fa fa-fw fa-sign-in"
+								outcome="studentWiseClassTestReport.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageClassTestReport}"
+								id="theme5" value="Student Wise Complete Report"
+								icon="fa fa-fw fa-sign-in"
+								outcome="studentWiseCompleteClassTestReport.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageClassWiseTestReport}"
+								id="theme6" value="Class Wise Performance"
+								icon="fa fa-fw fa-sign-in"
+								outcome="printTestPerformanceClassWise.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageAddClassTest}"
+								id="theme7" value="Declare Test Result"
+								icon="fa fa-fw fa-sign-in"
+								outcome="declareClassTestResult.xhtml" />
+						</p:submenu>
+						<p:submenu rendered="#{sideMenuBean.manageEYFS}"
+							label="EYFS Module" icon="fa fa-fw fa-life-saver">
+							<p:submenu rendered="#{sideMenuBean.manageEYFSParameter}"
+								label="Settings" icon="fa fa-fw fa-certificate">
+								<p:menuitem value="Define Age Groups" icon="fa fa-fw fa-sign-in"
+									outcome="defineAgeGroup.xhtml" />
+								<p:menuitem value="Class-AgeGroup Mapping"
+									icon="fa fa-fw fa-sign-in" outcome="ageGroupClassMapping.xhtml" />
+								<p:menuitem value="Age Groups Alloment"
+									icon="fa fa-fw fa-sign-in"
+									outcome="assignAgeGroupToStudent.xhtml" />
+								<p:menuitem rendered="false" value="Grading Parameter"
+									icon="fa fa-fw fa-sign-in" outcome="addGradingParameter.xhtml" />
+								<p:menuitem value="Area of Development"
+									icon="fa fa-fw fa-sign-in" outcome="addMainParameter.xhtml" />
+								<p:menuitem value="Sub Areas" icon="fa fa-fw fa-sign-in"
+									outcome="addSubParameter.xhtml" />
+								<p:menuitem value="Allocate Area of Developement"
+									icon="fa fa-fw fa-sign-in" outcome="addParameterInClass.xhtml" />
+								<p:menuitem value="Allocate Sub Area" icon="fa fa-fw fa-sign-in"
+									outcome="addSubParameterInTerm.xhtml" />
+							</p:submenu>
+
+							<p:menuitem rendered="#{sideMenuBean.manageEYFSPerformance}"
+								value="Student Performance" icon="fa fa-fw fa-sign-in"
+								outcome="eyfsStudentPerformanceEntry.xhtml" />
+
+							<p:submenu rendered="#{sideMenuBean.manageEYFSReport}"
+								label="Reports" icon="fa fa-fw fa-certificate">
+								<p:menuitem value="Student Marksheet" icon="fa fa-fw fa-sign-in"
+									outcome="eyfsMarksheet.xhtml" />
+								<p:menuitem value="Performance Report"
+									icon="fa fa-fw fa-sign-in"
+									outcome="eyfsClassStudentMarksReport.xhtml" />
+								<p:menuitem value="Development Area Report"
+									icon="fa fa-fw fa-sign-in"
+									outcome="eyfsClassStudentSubMarksReport.xhtml" />
+								<p:menuitem value="Average Performance Report"
+									icon="fa fa-fw fa-sign-in"
+									outcome="eyfsClassStudentMarks_AverageReport.xhtml" />
+							</p:submenu>
+						</p:submenu>
+
+						<p:submenu rendered="false" label="Lesson Plan"
+							icon="fa fa-fw fa-life-saver">
+							<p:menuitem rendered="true" value="Initial Lesson Plan"
+								icon="fa fa-fw fa-sign-in" outcome="initialLecturePlan.xhtml" />
+							<p:menuitem rendered="true" value="View Initial Plan"
+								icon="fa fa-fw fa-sign-in"
+								outcome="viewInitialLecturePlan.xhtml" />
+							<p:menuitem rendered="true" value="Initial Plan Report"
+								icon="fa fa-fw fa-sign-in"
+								outcome="submittedLecturePlanReport.xhtml" />
+							<p:menuitem rendered="true" value="Daily Lesson Plan"
+								icon="fa fa-fw fa-sign-in" outcome="fillLecturePlan.xhtml" />
+							<p:menuitem rendered="true" value="View Daily Plan"
+								icon="fa fa-fw fa-sign-in" outcome="viewDailyLecturePlan.xhtml" />
+						</p:submenu>
+						<p:submenu rendered="#{sideMenuBean.manageApp}" label="Manage App"
+							icon="fa fa-fw fa-life-saver">
+
+							<p:menuitem rendered="#{sideMenuBean.manageELearing}"
+								value="Add E-Learning" icon="fa fa-fw fa-sign-in"
+								outcome="addElerningn.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageViewELearning}"
+								value="View E-Learning" icon="fa fa-fw fa-sign-in"
+								outcome="ViewEditDeleteElearning.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageGallery}"
+								value="Gallery" icon="fa fa-fw fa-sign-in"
+								outcome="addGallary.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageVideoGallery}"
+								value="Video Gallery" icon="fa fa-fw fa-sign-in"
+								outcome="videoGallery.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageHomeWorkNotes}"
+								value="Home Work" icon="fa fa-fw fa-sign-in"
+								outcome="uploadAssignment.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageAddMeeting}"
+								value="Add Meeting" icon="fa fa-fw fa-sign-in"
+								outcome="addMeeting.xhtml" />
+
+							<p:menuitem
+								rendered="#{sideMenuBean.manageViewEditDeleteMeeting}"
+								value="View/Edit/Delete Meeting" icon="fa fa-fw fa-sign-in"
+								outcome="viewEditDeleteMeeting.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageMeeting}"
+								value="Approved Meeting" icon="fa fa-fw fa-sign-in"
+								outcome="manageMeeting.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageFlyer}"
+								value="Add Flyer" icon="fa fa-fw fa-life-saver"
+								outcome="addFlyer.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageFlyer}"
+								value="Manage Flyer" icon="fa fa-fw fa-life-saver"
+								outcome="manageFlyer.xhtml" />
+
+							<p:menuitem rendered="#{sideMenuBean.manageOnlineExam}"
+								value="Online Exam" icon="fa fa-fw fa-sign-in"
+								action="#{sideMenuBean.onlineExam}" />
+							<p:menuitem rendered="false" value="Manual/Notes"
+								icon="fa fa-fw fa-sign-in" outcome="uploadNotes.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageNews}" value="News"
+								icon="fa fa-fw fa-sign-in" outcome="addNews.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageNews}" value="Student Wise News"
+								icon="fa fa-fw fa-sign-in" outcome="addStudentWiseNews.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageConcernFeedback}"
+								value="Concern/Feedback" icon="fa fa-fw fa-sign-in"
+								outcome="studentFeedbackRequest.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageLeaveRequest}"
+								value="Student Leave Request" icon="fa fa-fw fa-sign-in"
+								outcome="studentLeaveRequest.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageSyllabus}"
+								value="Syllabus" icon="fa fa-fw fa-sign-in"
+								outcome="addSyllabus.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageViewSyllabus}"
+								value="View/Delete Syllabus" icon="fa fa-fw fa-sign-in"
+								outcome="viewEditSyllabus.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageViewGallery}"
+								value="View/Edit Gallery" icon="fa fa-fw fa-sign-in"
+								outcome="viewEditDeleteImages.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageViewAssignment}"
+								value="View/Delete Homework" icon="fa fa-fw fa-sign-in"
+								outcome="viewEditDeleteAssignment.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.managePhoneBook}"
+								value="Directory" icon="fa fa-fw fa-sign-in"
+								outcome="phonebook.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageAddCalendar}"
+								value="#{headerBean.type} Calendar" icon="fa fa-fw fa-sign-in"
+								outcome="schoolCalender.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageInstituteTimetable}"
+								value="Upload Timetable" icon="fa fa-fw fa-sign-in"
+								outcome="addTimeTableImage.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageConsent}"
+								value="Post Consent" icon="fa fa-fw fa-sign-in"
+								outcome="postConsent.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageAppointmentSetting}"
+								value="Appointment Requests" icon="fa fa-fw fa-sign-in"
+								outcome="allAppointmentRequest.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageAppointmentSetting}"
+								value="Book Meeting" icon="fa fa-fw fa-sign-in"
+								outcome="teacherAppointmentRequest.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.managePhotoRequest}"
+								value="Student Photo Requests" icon="fa fa-fw fa-sign-in"
+								outcome="viewAllStudentPhotos.xhtml" />
+							<p:menuitem
+								rendered="#{sideMenuBean.manageuploadstudentmarksheet}"
+								value="Upload Student Marksheet" icon="fa fa-fw fa-sign-in"
+								outcome="uploadExamPdf.xhtml" />
+
+						</p:submenu>
+
+
+						<p:menuitem rendered="#{sideMenuBean.manageFeeCollection}"
+							id="om_doc" value="Fee collection" icon="fa fa-fw fa-life-saver"
+							outcome="feeCollection.xhtml" />
+						<p:menuitem
+							rendered="#{sideMenuBean.manageInstallmentFeeCollection}"
+							id="om_doc1" value="Fee collection" icon="fa fa-fw fa-life-saver"
+							outcome="installmentWiseFeeCollection.xhtml" />
+
+						<p:menuitem rendered="#{sideMenuBean.list.schid eq '287'}"
+							id="om_doc11" value="Fee Book Challan"
+							icon="fa fa-fw fa-life-saver"
+							outcome="installmentWiseFeeCollection.xhtml" />
+
+
+						<p:menuitem rendered="#{sideMenuBean.manageMarkAttendence}"
+							value="Mark Attendance" icon="fa fa-fw fa-life-saver"
+							outcome="attendance.xhtml" />
+
+
+
+						<p:submenu rendered="false" label="Exam Module"
+							icon="fa fa-fw fa-life-saver">
+							<p:menuitem value="Add Exam" icon="fa fa-fw fa-sign-in"
+								outcome="addExamForSubject.xhtml" />
+							<p:menuitem value="Add Question" icon="fa fa-fw fa-sign-in"
+								outcome="addQuestion.xhtml" />
+							<p:menuitem value="View/Edit/Delete Questions"
+								icon="fa fa-fw fa-sign-in" outcome="viewQuestions.xhtml" />
+							<p:menuitem value="Copy Questions" icon="fa fa-fw fa-sign-in"
+								outcome="copyQuestions.xhtml" />
+						</p:submenu>
+
+
+
+
+
+						<p:submenu rendered="#{sideMenuBean.manageCommunication}"
+							label="Manage Communication" icon="fa fa-fw fa-life-saver">
+							<p:menuitem rendered="#{sideMenuBean.manageMesssagePack}"
+								value="Message Packs" icon="fa fa-fw fa-sign-in"
+								outcome="purchaseMsgPack.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageTemplate}"
+								value="Message Template" icon="fa fa-fw fa-sign-in"
+								outcome="addTemplate.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageGroupMessgae}"
+								value="Group Message" icon="fa fa-fw fa-sign-in"
+								outcome="groupMesssage.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageRandomMessage}"
+								value="Random Message" icon="fa fa-fw fa-sign-in"
+								outcome="newCommunicationModule.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageSentMessage}"
+								value="Class Wise Message" icon="fa fa-fw fa-sign-in"
+								outcome="sendMessageStep1.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageStudentMessage}"
+								value="Student Wise Message" icon="fa fa-fw fa-sign-in"
+								outcome="studentWiseSMS.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageStaffCommunication}"
+								value="Staff Communication" icon="fa fa-fw fa-sign-in"
+								outcome="staffCommunication.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageEnqComm}"
+								value="Enquiry Communication" icon="fa fa-fw fa-sign-in"
+								outcome="enquiryCommunication.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageRouteMessage}"
+								value="Route Wise Message" icon="fa fa-fw fa-sign-in"
+								outcome="sendMessageRouteWise.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageTCComm}"
+								value="TC Wise Message" icon="fa fa-fw fa-sign-in"
+								outcome="struckOffCommunication.xhtml" />
+						</p:submenu>
+						<p:submenu rendered="#{sideMenuBean.manageStaff}"
+							label="Manage Staff" icon="fa fa-fw fa-life-saver">
+							<p:menuitem rendered="false" value="Add Employee Category"
+								icon="fa fa-fw fa-sign-in" outcome="editEmployeeCategory.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageAddEmployee}"
+								value="Add Employee" icon="fa fa-fw fa-sign-in"
+								outcome="employeeAddmission.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageEditEmployee}"
+								value="Edit Employee" icon="fa fa-fw fa-sign-in"
+								outcome="searchEmployee.xhtml" />
+							<p:menuitem
+								rendered="#{sideMenuBean.manageAdministrativeOfficer}"
+								value="Manage Administrative Officer" icon="fa fa-fw fa-sign-in"
+								outcome="assignAcademicCordinator.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.allotBioCode}"
+								value="Allot Biometric Code" icon="fa fa-fw fa-sign-in"
+								outcome="allotBioCodeToStaff.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageAddClassTeacher}"
+								value="Add Class Teacher" icon="fa fa-fw fa-sign-in"
+								outcome="addClassTeacher.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageEditClassTeacher}"
+								value="Edit Class Teacher" icon="fa fa-fw fa-sign-in"
+								outcome="editClassTeacher.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageStaffBirthday}"
+								value="Staff Birthday" icon="fa fa-fw fa-sign-in"
+								outcome="staffBirthdayList.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageStaffBirthday}"
+								value="Staff Anniversary" icon="fa fa-fw fa-sign-in"
+								outcome="staffAnniversaryList.xhtml" />
+							<p:menuitem
+								rendered="#{sideMenuBean.manageStaffAtt &amp;&amp; sideMenuBean.list.country.toLowerCase() ne 'india'}"
+								value="Staff Attendance" icon="fa fa-fw fa-sign-in"
+								outcome="teacherAttendanceUAE.xhtml" />
+							<p:menuitem
+								rendered="#{sideMenuBean.manageStaffAttRep &amp;&amp; sideMenuBean.list.country.toLowerCase() ne 'india'}"
+								value="Date Wise Attendance" icon="fa fa-fw fa-sign-in"
+								outcome="teacherAttendanceUAEReport.xhtml" />
+							<p:menuitem
+								rendered="#{sideMenuBean.manageStaffAttRep &amp;&amp; sideMenuBean.list.country.toLowerCase() ne 'india'}"
+								value="Staff Wise Attendance" icon="fa fa-fw fa-sign-in"
+								outcome="teacherAttendanceIdWiseReport.xhtml" />
+							<p:menuitem
+								rendered="#{sideMenuBean.manageStaffAtt &amp;&amp; sideMenuBean.list.country.toLowerCase() eq 'india'}"
+								value="Staff Attendance" icon="fa fa-fw fa-sign-in"
+								outcome="teacherAttendance.xhtml" />
+							<p:menuitem
+								rendered="#{sideMenuBean.manageStaffAttRep &amp;&amp; sideMenuBean.list.country.toLowerCase() eq 'india'}"
+								value="Staff Attendance Report" icon="fa fa-fw fa-sign-in"
+								outcome="teacherAttendanceReport.xhtml" />
+							<p:menuitem
+								rendered="#{sideMenuBean.manageAbsentStaff &amp;&amp; sideMenuBean.list.country.toLowerCase() eq 'india'}"
+								value="Absent Staff Report" icon="fa fa-fw fa-sign-in"
+								outcome="absentTeacherReport.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageStaffLeave}"
+								value="Apply Leave" icon="fa fa-fw fa-sign-in"
+								outcome="leaveApply.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageStaffLeaveRequest}"
+								value="All Leave Requests" icon="fa fa-fw fa-sign-in"
+								outcome="leaveRequest.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageStaffLeaveRep}"
+								value="Staff Leave Report" icon="fa fa-fw fa-sign-in"
+								outcome="viewTeacherLeavesReport.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageAddEmployee}"
+								value="Inactive Employee Report" icon="fa fa-fw fa-sign-in"
+								outcome="inactiveEmployeeReport.xhtml" />
+							<p:menuitem
+								rendered="#{sideMenuBean.manageUniqueTeacherAttendece}"
+								value="View Attendence" icon="fa fa-fw fa-sign-in"
+								outcome="showAttendenceTeacherReport.xhtml" />
+							<p:menuitem
+								rendered="#{sideMenuBean.manageMultipleTeacherAttendece}"
+								value="View Attendence(Multiple Employees)"
+								icon="fa fa-fw fa-sign-in"
+								outcome="showAttendenceMultipleTeacherReport.xhtml" />
+						</p:submenu>
+						<p:submenu rendered="#{sideMenuBean.manageImprest}"
+							label="Imprest A/C" icon="fa fa-fw fa-life-saver">
+							<p:menuitem value="Imprest Category" icon="fa fa-fw fa-sign-in"
+								outcome="imprestCategoryBean.xhtml" />
+							<p:menuitem value="Imprest A/C" icon="fa fa-fw fa-sign-in"
+								outcome="imprestAcount.xhtml" />
+							<p:menuitem value="Add Student Expense"
+								icon="fa fa-fw fa-sign-in"
+								outcome="addStudentImprestExpense.xhtml" />
+							<p:menuitem value="Student Ledger" icon="fa fa-fw fa-sign-in"
+								outcome="studentImprestLadger.xhtml" />
+						</p:submenu>
+						<p:submenu rendered="#{sideMenuBean.manageTimeTable}"
+							label="Manage Timetable" icon="fa fa-fw fa-life-saver">
+							<p:menuitem rendered="#{sideMenuBean.manageTimeTableSetting}"
+								value="Timetable Setting" icon="fa fa-fw fa-sign-in"
+								outcome="changeTimeTableDetails.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageGenerateTimeTable}"
+								value="Generate Timetable" icon="fa fa-fw fa-sign-in"
+								outcome="timeTableNew.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageGenerateTimeTable}"
+								value="Edit Current Timetable" icon="fa fa-fw fa-sign-in"
+								outcome="editTimeTable.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageGenerateTimeTable}"
+								value="Edit New Timetable" icon="fa fa-fw fa-sign-in"
+								outcome="editTimeTableNew.xhtml" />
+
+							<p:menuitem rendered="#{sideMenuBean.managePrintTimeTable}"
+								value="Print Timetable" icon="fa fa-fw fa-sign-in"
+								outcome="printAnyTimeTable.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.managePrintTimeTable}"
+								value="Day Wise Timetable (Class)" icon="fa fa-fw fa-sign-in"
+								outcome="dayWiseTimeTable.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.managePrintTimeTable}"
+								value="Day Wise Timetable (Teacher)" icon="fa fa-fw fa-sign-in"
+								outcome="dayTeacherWiseTimeTable.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageMyTimeTable}"
+								value="My Timetable" icon="fa fa-fw fa-sign-in"
+								outcome="timeTableTeacherwise.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageIndividualTimeTable}"
+								value="Individual Timetable" icon="fa fa-fw fa-sign-in"
+								outcome="individualTimeTable.xhtml" />
+						</p:submenu>
+						<p:submenu rendered="#{sideMenuBean.manageLibCertificate}"
+							label="Manage Library" icon="fa fa-fw fa-life-saver">
+							<p:menuitem rendered="#{sideMenuBean.manageAddBook}"
+								value="Add Book" icon="fa fa-fw fa-sign-in"
+								outcome="addBook.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageViewBook}"
+								value="All Books" icon="fa fa-fw fa-sign-in"
+								outcome="allBookReport.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageBookQuantity}"
+								value="Add Book Quantity" icon="fa fa-fw fa-sign-in"
+								outcome="addBookQuantity.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageAssignBook}"
+								value="Assign Book" icon="fa fa-fw fa-sign-in"
+								outcome="assignBook.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageReceiveBook}"
+								value="Receive Book" icon="fa fa-fw fa-sign-in"
+								outcome="receiveBook.xhtml" />
+						</p:submenu>
+						<p:submenu rendered="false" label="Manage Leaves"
+							icon="fa fa-fw fa-life-saver">
+							<p:menuitem rendered="#{sideMenuBean.manageApplyLeave}"
+								value="Apply Leave" icon="fa fa-fw fa-sign-in"
+								outcome="applyLeave.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageCheckLeave}"
+								value="Check Leaves" icon="fa fa-fw fa-sign-in"
+								outcome="checkAllLeaves.xhtml" />
+						</p:submenu>
+
+						<p:submenu rendered="#{sideMenuBean.manageInfirmary}"
+							label="Manage Infirmary" icon="fa fa-fw fa-life-saver">
+							<p:menuitem value="Health Check Up" icon="fa fa-fw fa-sign-in"
+								outcome="healthCheckUp.xhtml" />
+							<p:menuitem value="View/Edit Check Up" icon="fa fa-fw fa-sign-in"
+								outcome="viewEditDeleteHealthCheckUp.xhtml" />
+							<p:menuitem value="Check Up Report" icon="fa fa-fw fa-sign-in"
+								outcome="healthCheckUpReport.xhtml" />
+							<p:menuitem value="Student Wise Report"
+								icon="fa fa-fw fa-sign-in" outcome="studentWiseCheckUp.xhtml" />
+						</p:submenu>
+
+						<p:submenu rendered="#{sideMenuBean.manageVisitorModule}"
+							label="Manage Visitor" icon="fa fa-fw fa-life-saver">
+							<p:menuitem rendered="#{sideMenuBean.manageAddVisitor}"
+								value="Add Visitor" icon="fa fa-fw fa-sign-in"
+								outcome="addVisitor.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageShowVisitor}"
+								value="All Visitors" icon="fa fa-fw fa-sign-in"
+								outcome="visitorReport.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.managePickup}"
+								value="Student Pick Up" icon="fa fa-fw fa-sign-in"
+								outcome="pickUpStudent.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.managePickup}"
+								value="Pick Up Report" icon="fa fa-fw fa-sign-in"
+								outcome="pickUpStudentReport.xhtml" />
+						</p:submenu>
+
+
+
+
+						<p:submenu rendered="#{sideMenuBean.manageAdmitCard}"
+							label="Admit Card/DateSheet" icon="fa fa-fw fa-life-saver">
+							<p:menuitem rendered="#{sideMenuBean.manageAddAdminCard}"
+								value="Add Admit card/DateSheet" icon="fa fa-fw fa-sign-in"
+								outcome="addAdmitCard.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageAddAdminCard}"
+								value="View/Edit Admit card/DateSheet"
+								icon="fa fa-fw fa-sign-in" outcome="viewEditAdmitCard.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.managePrintAdmitCard}"
+								value="Print Admit Card/DateSheet" icon="fa fa-fw fa-sign-in"
+								outcome="printAdmitCard.xhtml" />
+						</p:submenu>
+
+						<p:submenu rendered="#{sideMenuBean.manageLevCertificate}"
+							label="Manage TC" icon="fa fa-fw fa-life-saver">
+							<p:menuitem rendered="#{sideMenuBean.manageStruckOff}"
+								value="No Dues Check" icon="fa fa-fw fa-sign-in"
+								outcome="noDuesReport.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageStruckOff}"
+								value="Stu. Struck Off" icon="fa fa-fw fa-sign-in"
+								outcome="struckOffStudent.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageTcGenerate}"
+								value="TC Generate" icon="fa fa-fw fa-sign-in"
+								outcome="searchStudentForTC.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageEditViewStruckOff}"
+								value="Edit/View TC" icon="fa fa-fw fa-sign-in"
+								outcome="editTransferCertificate.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageTcGenerate}"
+								value="Old Student TC" icon="fa fa-fw fa-sign-in"
+								outcome="cbscOldStudentTC.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageTcGenerate}"
+								value="Old Student CC" icon="fa fa-fw fa-sign-in"
+								outcome="oldStudentCC.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageTcGenerate}"
+								value="Cancel TC Report" icon="fa fa-fw fa-sign-in"
+								outcome="cancelTransferCertificateReport.xhtml" />
+							<p:menuitem value="Previous TC " icon="fa fa-fw fa-sign-in"
+								outcome="printTcForAll.xhtml" />
+						</p:submenu>
+						<p:submenu rendered="#{sideMenuBean.managehostel}"
+							label="Manage Hostel" icon="fa fa-fw fa-life-saver">
+							<p:menuitem value="Add Hostel" icon="fa fa-fw fa-sign-in"
+								outcome="addHostel.xhtml" />
+							<p:menuitem value="Add Room" icon="fa fa-fw fa-sign-in"
+								outcome="addRoom.xhtml" />
+							<p:menuitem value="Room Allot To Student"
+								icon="fa fa-fw fa-sign-in" outcome="allocateRoomToStudent.xhtml" />
+						</p:submenu>
+						<p:submenu rendered="#{sideMenuBean.manageAccounting}"
+							label="Accounting" icon="fa fa-fw fa-life-saver">
+
+							<p:submenu rendered="#{sideMenuBean.manageCheque}"
+								label="Manage Cheque" icon="fa fa-fw fa-certificate">
+								<p:menuitem value="Due Cheque" icon="fa fa-fw fa-sign-in"
+									outcome="dueChequeDebit.xhtml" />
+								<p:menuitem value="Pending Transactions"
+									icon="fa fa-fw fa-sign-in" outcome="pendingTransaction.xhtml" />
+							</p:submenu>
+
+							<p:submenu rendered="#{sideMenuBean.manageIncome}"
+								label="Manage Income" icon="fa fa-fw fa-certificate">
+								<p:menuitem value="Tax Settings" icon="fa fa-fw fa-sign-in"
+									outcome="incExpSetting.xhtml" />
+								<p:menuitem value="Inc./Exp. Category"
+									icon="fa fa-fw fa-sign-in"
+									outcome="allIncomeExpenseCategory.xhtml" />
+								<p:menuitem value="Add Income" icon="fa fa-fw fa-sign-in"
+									outcome="addIncome.xhtml" />
+								<p:menuitem value="View/Delete Income"
+									icon="fa fa-fw fa-sign-in" outcome="viewEditDeleteIncome.xhtml" />
+								<p:menuitem value="Income Report" icon="fa fa-fw fa-sign-in"
+									outcome="showIncome.xhtml" />
+								<p:menuitem value="Combine Report" icon="fa fa-fw fa-sign-in"
+									outcome="showReport.xhtml" />
+								<p:menuitem value="Tax Report" icon="fa fa-fw fa-sign-in"
+									outcome="incomeTaxReport.xhtml" />
+								<p:menuitem value="Combined Tax Report"
+									icon="fa fa-fw fa-sign-in" outcome="combinedTaxReport.xhtml" />
+								<p:menuitem value="Income/Expense Ledger"
+									icon="fa fa-fw fa-sign-in"
+									outcome="checkIncomeExpenseLedger.xhtml" />
+
+							</p:submenu>
+
+							<p:submenu rendered="#{sideMenuBean.manageExpense}"
+								label="Manage Expense" icon="fa fa-fw fa-certificate">
+								<p:menuitem rendered="false" value="Book Expense"
+									icon="fa fa-fw fa-sign-in" outcome="bookExpense.xhtml" />
+								<p:menuitem value="Add Expense" icon="fa fa-fw fa-sign-in"
+									outcome="addExpense.xhtml" />
+								<p:menuitem value="View/Delete Expense"
+									icon="fa fa-fw fa-sign-in"
+									outcome="viewEditDeleteExpense.xhtml" />
+								<p:menuitem value="Expense Report" icon="fa fa-fw fa-sign-in"
+									outcome="showExpense.xhtml" />
+								<p:menuitem value="Tax Report" icon="fa fa-fw fa-sign-in"
+									outcome="expenseTaxReport.xhtml" />
+
+							</p:submenu>
+							<p:submenu rendered="#{sideMenuBean.manageBank}"
+								label="Manage Bank" icon="fa fa-fw fa-certificate">
+								<p:menuitem value="Add Bank" icon="fa fa-fw fa-sign-in"
+									outcome="addBank.xhtml" />
+								<p:menuitem value="Edit/View/Delete Bank"
+									icon="fa fa-fw fa-sign-in" outcome="editViewDeleteBank.xhtml" />
+							</p:submenu>
+
+						</p:submenu>
+
+						<p:submenu rendered="#{sideMenuBean.manageAccount}"
+							label="Accounts Module" icon="fa fa-fw fa-life-saver">
+							<p:menuitem rendered="#{sideMenuBean.manageAddHead}"
+								value="Add New Head" icon="fa fa-fw fa-sign-in"
+								outcome="addGroup.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageAddAccount}"
+								value="Add Account" icon="fa fa-fw fa-sign-in"
+								outcome="addAccount.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageTransaction}"
+								value="Transaction" icon="fa fa-fw fa-sign-in"
+								outcome="addTransactionDetail.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageAccountLedger}"
+								value="Account Transaction Report" icon="fa fa-fw fa-sign-in"
+								outcome="showAccountLedger.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageAccountLedger}"
+								value="Account Ledger" icon="fa fa-fw fa-sign-in"
+								outcome="viewTransactionDetails.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.managePendingCheque}"
+								value="Pending Transactions" icon="fa fa-fw fa-sign-in"
+								outcome="pendingAccountTransaction.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageAccountLedger}"
+								value="Trial Balance" icon="fa fa-fw fa-sign-in"
+								outcome="trialBalanceHead.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageAccountLedger}"
+								value="Balance Sheet" icon="fa fa-fw fa-sign-in"
+								outcome="balanceSheetHead.xhtml" />
+						</p:submenu>
+
+
+
+
+						<p:submenu rendered="#{sideMenuBean.managePrint}"
+							label="Print Document" icon="fa fa-fw fa-life-saver">
+							<p:menuitem rendered="#{sideMenuBean.onlineExamReport}"
+								value="Copy Online Exam Result" icon="fa fa-fw fa-sign-in"
+								outcome="onlineExamReport.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageExamMarksGrade}"
+								value="Exam Marks + Grade" icon="fa fa-fw fa-sign-in"
+								outcome="studentMarksList.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageFinalMarksheet}"
+								value="Final Marksheet" icon="fa fa-fw fa-sign-in"
+								outcome="finalBLMMarksheet.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageGenerateRank}"
+								value="Generate Rank" icon="fa fa-fw fa-sign-in"
+								outcome="generateClassRank.xhtml" />
+							<p:menuitem value="Marks Not Entered Report"
+								icon="fa fa-fw fa-sign-in"
+								outcome="subjectMarksNotEnteredReport.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageoasismarksheetupto3}"
+								value="Half-Yealy" icon="fa fa-fw fa-sign-in"
+								outcome="finalOasisMarksheetUpTo3.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageUnitMarksheet}"
+								value="Unit Marksheet" icon="fa fa-fw fa-sign-in"
+								outcome="oasisMarksheet.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageMarksAverage}"
+								value="Marks Average" icon="fa fa-fw fa-sign-in"
+								outcome="makeAverageOfMarks.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageDetailedMarks}"
+								value="Detailed Marks" icon="fa fa-fw fa-sign-in"
+								outcome="studentFullMarksheetReport.xhtml" />
+							<p:menuitem
+								rendered="#{sideMenuBean.manageStudentOverallPerformance}"
+								value="Overall Performance Report" icon="fa fa-fw fa-sign-in"
+								outcome="studentOverallPerformanceReport.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageIcard}" value="I-Card"
+								icon="fa fa-fw fa-sign-in" outcome="icardPrinting.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageBonafiedCertificate}"
+								value="Bonafide Certificate" icon="fa fa-fw fa-sign-in"
+								outcome="bonafideCertificate.xhtml" />
+							<p:menuitem
+								rendered="#{sideMenuBean.manageCharaceterCertificate}"
+								value="Character Certificate" icon="fa fa-fw fa-sign-in"
+								outcome="generateCC.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageMultipleCertificate}"
+								value="Birth/Bank/Bonafide Cert." icon="fa fa-fw fa-sign-in"
+								outcome="severalCertificatePrinting.xhtml" />
+							<p:menuitem
+								rendered="#{sideMenuBean.manageExperienceCertificate}"
+								value="Experience Certificate" icon="fa fa-fw fa-sign-in"
+								outcome="rbscExperienceCertificate.xhtml" />
+							<p:menuitem
+								rendered="#{sideMenuBean.manageAttendanceCertificate}"
+								value="Attendance Certificate" icon="fa fa-fw fa-sign-in"
+								outcome="rbscAttendenceCertificate.xhtml" />
+							<p:menuitem rendered="false" value="Result List Of Class"
+								icon="fa fa-fw fa-sign-in" outcome="resultListOfStudent.xhtml" />
+							<p:menuitem rendered="false" value="Subject Wise Marks Report"
+								icon="fa fa-fw fa-sign-in"
+								outcome="studentFinalMarksheetReport.xhtml" />
+						</p:submenu>
+						<p:submenu rendered="#{sideMenuBean.manageRbseModule}"
+							label="RBSE Module" icon="fa fa-fw fa-life-saver">
+							<p:menuitem rendered="#{sideMenuBean.manageAddRbseExam}"
+								value="Add RBSE Exam" icon="fa fa-fw fa-sign-in"
+								outcome="addExamRBSE.xhtml" />
+							<p:menuitem
+								rendered="#{sideMenuBean.manageAddStudentPerformance}"
+								value="Add Student Performance" icon="fa fa-fw fa-sign-in"
+								outcome="addStudentPerformance.xhtml" />
+							<p:menuitem
+								rendered="#{sideMenuBean.manageStudentFinalMarksheet}"
+								value="Student Final Marksheet" icon="fa fa-fw fa-sign-in"
+								outcome="studentFinalMarksheet.xhtml" />
+							<p:menuitem
+								rendered="#{sideMenuBean.manageStudentHandWrittenMarkList}"
+								value="Student Marks Print" icon="fa fa-fw fa-sign-in"
+								outcome="studentHandWrittenMarksList.xhtml" />
+						</p:submenu>
+						<p:submenu rendered="#{sideMenuBean.manageRbseTCModule}"
+							label="RBSE CC/TC Module" icon="fa fa-fw fa-life-saver">
+							<p:menuitem rendered="#{sideMenuBean.manageOldStudentSMS}"
+								value="Old Student Data" icon="fa fa-fw fa-sign-in"
+								outcome="smsOldStudentData.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageRbscStruckOff}"
+								value="Struck Off" icon="fa fa-fw fa-sign-in"
+								outcome="rbscStudentSearchStruckOff.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageRbscTCGeneration}"
+								value="TC Generation" icon="fa fa-fw fa-sign-in"
+								outcome="generateRbscTC.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageRbscCCGeneration}"
+								value="CC Generation" icon="fa fa-fw fa-sign-in"
+								outcome="generateRbscCC.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageRbscTCList}"
+								value="Duplicate TC" icon="fa fa-fw fa-sign-in"
+								outcome="viewRbscTcStudent.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageOldRbscTCGeneration}"
+								value="Old Student TC" icon="fa fa-fw fa-sign-in"
+								outcome="rbscOldStudentStruckOff.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.manageOldRbscTCList}"
+								value="Old Duplicate TC" icon="fa fa-fw fa-sign-in"
+								outcome="viewOldStudentRbscTc.xhtml" />
+						</p:submenu>
+
+						<p:submenu rendered="false" label="Previous Session"
+							icon="fa fa-fw fa-life-saver">
+							<p:menuitem rendered="#{sideMenuBean.managePreviousAttendance}"
+								value="Previous Attendance Record" icon="fa fa-fw fa-sign-in"
+								outcome="previousSessionStudentAttendanceRecord.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.managePreviousFee}"
+								value="Student Collection Report" icon="fa fa-fw fa-sign-in"
+								outcome="previousStudentFeeCollectionReport.xhtml" />
+							<p:menuitem rendered="#{sideMenuBean.managePreviousMarksheet}"
+								value="Previous Marksheet" icon="fa fa-fw fa-sign-in"
+								outcome="previousFinalMarksheet.xhtml" />
+							<p:menuitem value="Enter Previous Marks"
+								icon="fa fa-fw fa-sign-in"
+								outcome="previousSessionFillMarks.xhtml" />
+
+						</p:submenu>
+
+						<p:submenu rendered="#{sideMenuBean.manageReports}"
+							label="Reports" icon="fa fa-fw fa-life-saver">
+
+							<p:submenu rendered="true" label="Graphical Report"
+								icon="fa fa-fw fa-certificate">
+								<p:menuitem value="SMS Graph" icon="fa fa-fw fa-sign-in"
+									outcome="deliveryReportBarModel.xhtml" />
+								<p:menuitem value="Class Strength Graph"
+									icon="fa fa-fw fa-sign-in" outcome="classBarModel.xhtml" />
+								<p:menuitem value="Fees Graph" icon="fa fa-fw fa-sign-in"
+									outcome="studentFeesBar.xhtml" />
+								<p:menuitem value="Income/Expense Graph"
+									icon="fa fa-fw fa-sign-in"
+									outcome="combineIncExpBarReport.xhtml" />
+								<p:menuitem value="Transport Fees Graph"
+									icon="fa fa-fw fa-sign-in" outcome="routeFeesBarReport.xhtml" />
+								<p:menuitem value="Route Wise Fees Graph"
+									icon="fa fa-fw fa-sign-in" outcome="routeWiseFeeGraph.xhtml" />
+								<p:menuitem value="Performance Line Graph"
+									icon="fa fa-fw fa-sign-in"
+									outcome="classWisePerformanceLineChart.xhtml" />
+								<p:menuitem value="Student Performance Graph"
+									icon="fa fa-fw fa-sign-in"
+									outcome="studentSubjPerformanceBarGraph.xhtml" />
+								<p:menuitem value="Class Performance Comparison"
+									icon="fa fa-fw fa-sign-in"
+									outcome="classPerformanceComparision.xhtml" />
+								<p:menuitem value="Subject Performance Comparison"
+									icon="fa fa-fw fa-sign-in"
+									outcome="subjectPerformanceComparision.xhtml" />
+								<p:menuitem value="Exam Performance Comparison (Class)"
+									icon="fa fa-fw fa-sign-in"
+									outcome="classExamPerformComparision.xhtml" />
+								<p:menuitem value="Exam Performance Comparison (Student)"
+									icon="fa fa-fw fa-sign-in"
+									outcome="examPerformanceComparision.xhtml" />
+								<p:menuitem value="Term Performance Comparison"
+									icon="fa fa-fw fa-sign-in"
+									outcome="termExamPerformComparision.xhtml" />
+								<p:menuitem value="Percentage Level Graph"
+									icon="fa fa-fw fa-sign-in" outcome="percentageLevelGraph.xhtml" />
+							</p:submenu>
+
+							<p:submenu rendered="#{sideMenuBean.manageGeneralReport}"
+								label="General Report" icon="fa fa-fw fa-certificate">
+								<p:menuitem value="#{headerBean.type} SMS Ledger"
+									icon="fa fa-fw fa-sign-in" outcome="messageSchoolHistory.xhtml" />
+								<p:menuitem value="App Download Status"
+									icon="fa fa-fw fa-sign-in"
+									outcome="studentAppDownloadReport.xhtml" />
+								<p:menuitem value="Category Wise Emp."
+									icon="fa fa-fw fa-sign-in"
+									outcome="showCategoryWiseEmployeeReport.xhtml" />
+								<p:menuitem value="Enquiry Source Report"
+									icon="fa fa-fw fa-sign-in" outcome="enquirySourceReport.xhtml" />
+								<p:menuitem value="SMS Delivery" icon="fa fa-fw fa-sign-in"
+									outcome="messageDeliveryReport.xhtml" />
+								<p:menuitem value="SMS Purchase History"
+									icon="fa fa-fw fa-sign-in" outcome="msgPurchaseHistry.xhtml" />
+								<p:menuitem value="My Bills" icon="fa fa-fw fa-sign-in"
+									outcome="mySchoolBills.xhtml" />
+							</p:submenu>
+
+							<p:submenu rendered="#{sideMenuBean.allotBioCode}"
+								label="Biometric Report" icon="fa fa-fw fa-certificate">
+								<p:menuitem value="Date Wise Record" icon="fa fa-fw fa-sign-in"
+									outcome="dateWiseBiometricReport.xhtml" />
+								<p:menuitem value="Employee Wise Record"
+									icon="fa fa-fw fa-sign-in"
+									outcome="empWiseBiometricReport.xhtml" />
+								<p:menuitem value="Monthly Record" icon="fa fa-fw fa-sign-in"
+									action="#{sideMenuBean.monthlyBiometricReport}" />
+								<p:menuitem value="Yearly Record" icon="fa fa-fw fa-sign-in"
+									action="#{sideMenuBean.yearlyBiometricReport}" />
+							</p:submenu>
+
+							<p:submenu rendered="#{sideMenuBean.allotRfid}"
+								label="RFID Report" icon="fa fa-fw fa-certificate">
+								<p:menuitem value="Student Record" icon="fa fa-fw fa-sign-in"
+									outcome="studentWiseRFIDRecord.xhtml" />
+								<p:menuitem value="Class Record (Daily)"
+									icon="fa fa-fw fa-sign-in" outcome="classWiseRFIDRecord.xhtml" />
+								<p:menuitem value="Bus Wise Record (Daily)"
+									icon="fa fa-fw fa-sign-in" outcome="busWiseRFIDRecord.xhtml" />
+								<p:menuitem value="School RFID Record (Daily)"
+									icon="fa fa-fw fa-sign-in" outcome="schoolRFIDReport.xhtml" />
+								<p:menuitem value="Transport RFID Record (Daily)"
+									icon="fa fa-fw fa-sign-in" outcome="transportRFIDReport.xhtml" />
+								<p:menuitem value="Different Bus Record (Daily)"
+									icon="fa fa-fw fa-sign-in"
+									outcome="differentBusStudentReport.xhtml" />
+							</p:submenu>
+
+							<p:submenu rendered="#{sideMenuBean.manageStudentReport}"
+								label="Student Report" icon="fa fa-fw fa-certificate">
+
+								<p:menuitem value="Blocked App Modules"
+									icon="fa fa-fw fa-sign-in"
+									outcome="studentModBlockReport.xhtml" />
+								<p:menuitem value="Sibling Report" icon="fa fa-fw fa-sign-in"
+									outcome="siblingReport.xhtml" />
+								<p:menuitem value="Wrong Contact No Report"
+									icon="fa fa-fw fa-sign-in" outcome="wrongContactNoReport.xhtml" />
+								<p:menuitem value="Category Wise Strength"
+									icon="fa fa-fw fa-sign-in" outcome="newCategoryReport.xhtml" />
+								<p:menuitem value="Category Wise Students"
+									icon="fa fa-fw fa-sign-in" outcome="categoryWiseReport.xhtml" />
+								<p:menuitem value="House Wise Students"
+									icon="fa fa-fw fa-sign-in" outcome="houseWiseListReport.xhtml" />
+								<p:menuitem value="Class Strength I" icon="fa fa-fw fa-sign-in"
+									outcome="showClassWiseReport.xhtml" />
+
+								<p:menuitem value="Class Strength II" icon="fa fa-fw fa-sign-in"
+									outcome="classStrengthLessDetails.xhtml" />
+								<p:menuitem value="Student Photo Drive"
+									icon="fa fa-fw fa-sign-in" outcome="allSectionList.xhtml" />
+								<p:menuitem rendered="#{sideMenuBean.list.schid eq '287'}"
+									value="Student Type Report" icon="fa fa-fw fa-sign-in"
+									outcome="studentTypeReport.xhtml" />
+								<p:menuitem value="All Class Strength"
+									icon="fa fa-fw fa-sign-in" outcome="smallClassStrength.xhtml" />
+								<p:menuitem value="Age Wise Strength" icon="fa fa-fw fa-sign-in"
+									outcome="ageWiseStrengthReport.xhtml" />
+								<p:menuitem value="Community Wise Strength"
+									icon="fa fa-fw fa-sign-in"
+									outcome="communityWiseStrengthReport.xhtml" />
+								<p:menuitem value="Gender Wise Strength"
+									icon="fa fa-fw fa-sign-in"
+									outcome="genderWiseStrengthReport.xhtml" />
+								<p:menuitem value="Estimated Fee" icon="fa fa-fw fa-sign-in"
+									outcome="feeEstimateReport.xhtml" />
+								<p:menuitem value="Handicapped Report"
+									icon="fa fa-fw fa-sign-in" outcome="handicappedReport.xhtml" />
+								<p:menuitem value="Inactive Students" icon="fa fa-fw fa-sign-in"
+									outcome="inactiveStudentReport.xhtml" />
+								<p:menuitem value="New Admissions" icon="fa fa-fw fa-sign-in"
+									outcome="newRegistrationReport.xhtml" />
+								<p:menuitem value="Promoted Student Report"
+									icon="fa fa-fw fa-sign-in"
+									outcome="promotedStudentReport.xhtml" />
+								<p:menuitem rendered="false" value="Pending Leaves Student"
+									icon="fa fa-fw fa-sign-in"
+									outcome="pendingLeaveOfStudent.xhtml" />
+								<p:menuitem value="Student Age Report"
+									icon="fa fa-fw fa-sign-in" outcome="ageWiseReport.xhtml" />
+								<p:menuitem value="Student Status Report"
+									icon="fa fa-fw fa-sign-in" outcome="studentStatusReport.xhtml" />
+								<p:menuitem value="Student Wise Subject"
+									icon="fa fa-fw fa-sign-in"
+									outcome="viewStudentWiseSubject.xhtml" />
+								<p:menuitem value="Subject Wise Student"
+									icon="fa fa-fw fa-sign-in"
+									outcome="viewSubjectWiseStudentReport.xhtml" />
+								<p:menuitem value="Student Birthday" icon="fa fa-fw fa-sign-in"
+									outcome="studentBirthdayList.xhtml" />
+								<p:menuitem value="Student Contact details"
+									icon="fa fa-fw fa-sign-in"
+									outcome="studentCompleteDetail.xhtml" />
+								<p:menuitem value="Religion Wise Report"
+									icon="fa fa-fw fa-sign-in" outcome="religionWiseReport.xhtml" />
+								<p:menuitem value="Concession Wise Student"
+									icon="fa fa-fw fa-sign-in"
+									outcome="concessionCategoryWiseStudentReport.xhtml" />
+								<p:menuitem value="Home Work Not Assigned Subjects"
+									icon="fa fa-fw fa-sign-in"
+									outcome="homeworkNotAssignedSubjectsReport.xhtml" />
+								<p:menuitem value="Admission Withdrawal"
+									icon="fa fa-fw fa-sign-in"
+									outcome="admissionWithdrawalReport.xhtml" />
+								<p:menuitem value="Student Promotion Status Report"
+									icon="fa fa-fw fa-sign-in"
+									outcome="studentPromotionStatusReport.xhtml"></p:menuitem>
+								<p:menuitem value="Village Wise Student Report" rendered="#{sideMenuBean.schid eq '339'}"
+									icon="fa fa-fw fa-sign-in"
+									outcome="StudentVillageWise.xhtml"></p:menuitem>
+
+							</p:submenu>
+
+							<p:submenu rendered="#{sideMenuBean.manageTransportReport}"
+								label="Transport Report" icon="fa fa-fw fa-certificate">
+								<p:menuitem value="Route Wise Students"
+									icon="fa fa-fw fa-sign-in" outcome="routeWiseReport.xhtml" />
+								<p:menuitem value="Stop Wise Students"
+									icon="fa fa-fw fa-sign-in" outcome="stopWiseReport.xhtml" />
+								<p:menuitem value="Stop Class Wise Students"
+									icon="fa fa-fw fa-sign-in" outcome="stopClassWiseReport.xhtml" />
+								<p:menuitem value="All Routes" icon="fa fa-fw fa-sign-in"
+									outcome="allRoute.xhtml" />
+								<p:menuitem value="All Stops" icon="fa fa-fw fa-sign-in"
+									outcome="allStop.xhtml" />
+								<p:menuitem value="Transport Fee Report"
+									icon="fa fa-fw fa-sign-in"
+									outcome="transportFee_RouteReport.xhtml" />
+								<p:menuitem value="Route-MonthWise Students"
+									icon="fa fa-fw fa-sign-in"
+									outcome="transportRouteMonthWiseReport.xhtml" />
+							</p:submenu>
+
+							<p:submenu rendered="false" label="Attendant App Report"
+								icon="fa fa-fw fa-certificate">
+								<p:menuitem value="Route Wise Record" icon="fa fa-fw fa-sign-in"
+									outcome="routeWiseAttendantRecord.xhtml" />
+								<p:menuitem value="Student Wise Record"
+									icon="fa fa-fw fa-sign-in"
+									outcome="studentWiseAttendantRecord.xhtml" />
+							</p:submenu>
+
+							<p:submenu label="Fee Report"
+								rendered="#{sideMenuBean.manageFeeReport}"
+								icon="fa fa-fw fa-certificate">
+								<p:menuitem value="School Fee Estimate"
+									icon="fa fa-fw fa-sign-in"
+									outcome="feeEstimateReportForSession.xhtml" />
+								<p:menuitem value="Cancelled Receipts"
+									icon="fa fa-fw fa-sign-in"
+									outcome="cancelFeeReceiptReport.xhtml" />
+								<p:menuitem value="Concession Report"
+									icon="fa fa-fw fa-sign-in"
+									outcome="feeConcessionDetailReport.xhtml" />
+								<p:menuitem value="Daily Fee Collection"
+									icon="fa fa-fw fa-sign-in"
+									outcome="dailyFeecolletionReport.xhtml" />
+								<p:menuitem value=" Installment Wise Daily Fee Collection"
+									icon="fa fa-fw fa-sign-in"
+									outcome="installmentWiseFeeReport.xhtml" />
+
+								<p:menuitem rendered="false" value="Daily Collection Record"
+									icon="fa fa-fw fa-sign-in"
+									outcome="dailyCollectionReport.xhtml" />
+								<p:menuitem value="Due Fees" icon="fa fa-fw fa-sign-in"
+									outcome="dueFeeReport.xhtml" />
+								<p:menuitem
+									rendered="#{sideMenuBean.manageInstallmentFeeCollection}"
+									value="Due Fee report Installment"
+									icon="fa fa-fw fa-life-saver"
+									outcome="installmentDueFeeReport.xhtml" />
+
+								<p:menuitem rendered="false" value="Fee Record Register"
+									icon="fa fa-fw fa-sign-in" outcome="feeRecordRegister.xhtml" />
+								<p:menuitem value="Paid Fee Report" icon="fa fa-fw fa-sign-in"
+									outcome="paidFeeReport.xhtml" />
+								<p:menuitem value="Previous Fees" icon="fa fa-fw fa-sign-in"
+									outcome="previousFeeReport.xhtml" />
+								<p:menuitem rendered="false" value="Fee Structure Report"
+									icon="fa fa-fw fa-sign-in" outcome="feeStructureReport.xhtml" />
+								<p:menuitem value="Class Wise Collection"
+									icon="fa fa-fw fa-sign-in"
+									outcome="classWiseFeeCollectionReport.xhtml" />
+								<p:menuitem value="Monthly Fee Collection"
+									icon="fa fa-fw fa-sign-in"
+									outcome="monthWiseFeeCollectionReport.xhtml" />
+								<p:menuitem value="Mini Daily Fee Collection"
+									icon="fa fa-fw fa-sign-in"
+									outcome="miniDailyFeeCollection.xhtml" />
+								<p:menuitem value="Mini Due Fee Report"
+									icon="fa fa-fw fa-sign-in" outcome="miniDueFeeReport.xhtml" />
+								<p:menuitem rendered="false" value="Previous Session Fee Report"
+									icon="fa fa-fw fa-sign-in"
+									outcome="previousStudentFeeCollectionReport.xhtml" />
+								<p:menuitem rendered="false" value="Session Collection"
+									icon="fa fa-fw fa-sign-in"
+									outcome="sessionTotalCollection.xhtml" />
+								<p:menuitem value="Date Wise Collection"
+									icon="fa fa-fw fa-sign-in"
+									outcome="dateWiseFeeCollectionReport.xhtml" />
+								<p:menuitem value="Installment Wise Fee Report"
+									icon="fa fa-fw fa-sign-in"
+									outcome="installmentWiseFeeCollectionReport.xhtml" />
+								<p:menuitem value="Transport Fee Report"
+									icon="fa fa-fw fa-sign-in"
+									outcome="transportFeeReport.xhtml" />
+
+							</p:submenu>
+
+
+							<p:submenu rendered="#{sideMenuBean.manageAttendanceReport}"
+								label="Attendance Report" icon="fa fa-fw fa-certificate">
+								<p:menuitem value="Absent Students" icon="fa fa-fw fa-sign-in"
+									outcome="absentStudentReport.xhtml" />
+								<p:menuitem value="Monthly Attendance"
+									icon="fa fa-fw fa-sign-in" outcome="showAttendanceRecord.xhtml" />
+								<p:menuitem value="Show Leaves" icon="fa fa-fw fa-sign-in"
+									outcome="leaveReport.xhtml" />
+								<p:menuitem value="UnMarked Attendance"
+									icon="fa fa-fw fa-sign-in"
+									outcome="attendenceNotMarkedReport.xhtml" />
+								<p:menuitem value="View Attendence" icon="fa fa-fw fa-sign-in"
+									outcome="viewAttendenceInCalenderFormat.xhtml" />
+								<p:menuitem value="Attendance Report" icon="fa fa-fw fa-sign-in"
+									outcome="classAttendaceReport.xhtml" />
+								<p:menuitem rendered="false" value="Previous Session Attendance"
+									icon="fa fa-fw fa-sign-in"
+									outcome="previousSessionStudentAttendanceRecord.xhtml" />
+								<p:menuitem value="Summary Report" icon="fa fa-fw fa-sign-in"
+									outcome="attendanceSummaryReport.xhtml" />
+								<p:menuitem value="Online Attendance Report"
+									icon="fa fa-fw fa-sign-in" outcome="showOnlineAttendance.xhtml" />
+								<p:menuitem value="Meeting Attendance Report"
+									icon="fa fa-fw fa-sign-in"
+									outcome="meetingAttendanceReport.xhtml" />
+
+
+							</p:submenu>
+
+							<p:submenu label="Library Report"
+								rendered="#{sideMenuBean.manageLibReport}"
+								icon="fa fa-fw fa-certificate">
+								<p:menuitem value="All Books" icon="fa fa-fw fa-sign-in"
+									outcome="allBookReport.xhtml" />
+								<p:menuitem value="Assigned Books" icon="fa fa-fw fa-sign-in"
+									outcome="assignBookReport.xhtml" />
+								<p:menuitem value="Damaged/Lost Books"
+									icon="fa fa-fw fa-sign-in"
+									outcome="damage_lostBookReport.xhtml" />
+								<p:menuitem value="Not Returned Books"
+									icon="fa fa-fw fa-sign-in"
+									outcome="notReturnedBookReport.xhtml" />
+								<p:menuitem value="Library Collection"
+									icon="fa fa-fw fa-sign-in"
+									outcome="libraryFeeCollectionReport.xhtml" />
+							</p:submenu>
+
+						</p:submenu>
+
+					</pu:menu>
+					<!-- do not remove or uncomment this line - done by piyush <p:menuitem rendered="#{sideMenuBean.manageStudentAttendance}" value="Student Attendance" icon="fa fa-fw fa-sign-in" outcome="studentWiseAttendanceReport.xhtml"/>
+                     <p:menuitem rendered="#{sideMenuBean.manageReceiveBook}" value="Library Penalty Collection" icon="fa fa-fw fa-exclamation-circle" outcome="libFeeCollection.xhtml"/>
+                     <p:menuitem value="Library Paid Penalty" icon="fa fa-fw fa-sign-in" outcome="libPaidFeeReport.xhtml"/> 
+                     <p:menuitem rendered="#{sideMenuBean.manageAccountLedger}" value="Account Ledger" icon="fa fa-fw fa-code" outcome="viewTransactionDetails.xhtml"/>
+	                            -->
+					<!-- <p:menuitem value="Religion Report" icon="fa fa-fw fa-exclamation-circle" outcome="religionWiseReport.xhtml"/> -->
+
+					<!-- <p:submenu label="Library Report" rendered="#{sideMenuBean.manageLibReport}" icon="fa fa-fw fa-life-saver" >
+                            <p:menuitem value="All Book Report" icon="fa fa-fw fa-certificate" outcome="allBookReport.xhtml"/>
+                            <p:menuitem value="Assigned Book Report" icon="fa fa-fw fa-sign-in" outcome="assignBookReport.xhtml"/>
+                        	   <p:menuitem value="Received Book Report" icon="fa fa-fw fa-times" outcome="monthWiseFeeCollectionReport.xhtml"/>
+                            <p:menuitem value="Student Book History" icon="fa fa-fw fa-exclamation-triangle" outcome="studentBookHistory.xhtml"/>
+                            <p:menuitem value="Library Overdue Report" icon="fa fa-fw fa-certificate" outcome="allBookReport.xhtml"/>
+                            
+                        	</p:submenu> 
+                        	
+                       
+                            -->
+				</div>
+			</div>
+		</div>
+	</h:form>
+</ui:composition>

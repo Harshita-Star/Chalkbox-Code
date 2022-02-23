@@ -1,0 +1,244 @@
+/* Add your customizations of layout here */
+.layout-wrapper {
+    .layout-topbar {
+        .layout-topbar-wrapper {
+            .layout-topbar-right {
+                .layout-topbar-actions {
+                    .topbar-item {
+                        &.help {
+                            > ul {
+                                > li {
+                                    .angle-icon {
+                                        margin-left: auto;
+                                    }
+
+                                    .menu-text {
+                                        width: 100%;
+
+                                        p {
+                                            margin: 0;
+                                            padding: 0;
+        
+                                            strong {
+                                                font-weight: 500;
+                                            }
+                                        }
+
+                                        span {
+                                            font-size: 12px;
+                                            width: 20px;
+                                            height: 20px;
+                                            @include flex();
+                                            @include flex-align-center();
+                                            @include flex-justify-center();
+                                            @include border-radius(50%);
+                                            margin-right: 7px;
+
+                                            background-color: #bfdffe;
+                                        }
+                                    }
+                                    &:nth-child(2) {
+                                        > .menu-text {
+                                            span {
+                                                background-color: #bfdffe;
+                                            }
+                                        } 
+                                    }
+                                    &:nth-child(3) {
+                                        > .menu-text {
+                                            span {
+                                                background-color: #ffe5ce;
+                                            }
+                                        } 
+                                    }
+                                    &:nth-child(4) {
+                                        > .menu-text {
+                                            span {
+                                                background-color: #cefbfc;
+                                            }
+                                        } 
+                                    }
+                                    &:last-child {
+                                        > .menu-text {
+                                            border: none;
+                                            span {
+                                                background-color: #fed8f2;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        &.tags {
+                            > ul {
+                                > li {
+                                    @include flex();
+                                    flex-wrap: wrap;
+
+                                    &.layout-submenu-item {
+                                        padding: 0 8px 20px;
+                                    }
+
+                                    .tag {
+                                        font-size: 12px;
+                                        color: #326495;
+                                        display: block;
+                                        padding: 2px 4px;
+                                        border-radius: 2px;
+                                        background-color: #bfdffe;
+                                        margin: 4px;
+                                        @include transition(background-color $transitionDuration);
+
+                                        &:hover {
+                                            background-color: #99ccff;
+                                        }
+                                    }
+
+                                    &:hover {
+                                        background-color: transparent;
+                                    }
+                                }
+                            }
+                        }
+
+                        &.notifications {
+                            > a {
+                                i {
+                                    position: relative;
+
+                                    > span {
+                                        position: absolute;
+                                        width: 10px;
+                                        height: 10px;
+                                        @include border-radius(50%);
+                                        top: 8px;
+                                        right: 8px;
+                                    }   
+                                }
+                            }
+                            > ul {
+                                min-width: 259px;
+                                > li {
+                                    >.menu-text {
+                                        @include flex();
+                                        @include flex-align-start();
+                                        
+                                        p {
+                                            margin: 0;
+                                            padding: 0;
+        
+                                            strong {
+                                                font-weight: 500;
+                                            }
+                                        }
+        
+                                        span {
+                                            font-size: 12px;
+                                        }
+                                        > span {
+                                            > span {
+                                                font-size: 11px;
+                                            }
+
+                                            p {
+                                                font-size: 13px;
+                                            }
+                                        }
+
+                                        i {
+                                            font-size: 14px;
+                                            margin-top: 2px;
+                                            margin-right: 8px;
+                                        }
+                                    }
+
+                                    &:nth-child(2) {
+                                        i {
+                                            font-size: 14px;
+                                            color: #00acad;
+                                        }
+                                    }
+                                    &:nth-child(3) {
+                                        i {
+                                            font-size: 15px;
+                                        }
+                                    }
+                                    &:nth-child(4) {
+                                        i {
+                                            font-size: 12px;
+                                            margin-top: 4px;
+                                            color: #c03995;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        &.language {
+                            padding: 0 7px;
+
+                            a {
+                                @include flex();
+                                @include flex-align-center();
+                                @include flex-justify-between();
+                                border-radius: 2px;
+                                padding: 0 .5em;
+                                height: 36px;
+
+                                h6 {
+                                    font-size: 13px;
+                                    margin: 0;
+                                    margin-left: 8px;
+                                    margin-right: 12px;
+                                }
+
+                                img {
+                                    height: 20px;
+                                    width: auto;
+                                    margin-right: 8px;
+                                }
+
+                                i {
+                                    font-size: 14px;
+                                    
+                                }
+                            }
+
+                            ul {
+                                > li {
+                                    .menu-text {
+                                        p {
+                                            margin: 0;
+                                            padding: 0;
+        
+                                            strong {
+                                                font-weight: 500;
+                                            }
+                                        }
+        
+                                        span {
+                                            font-size: 12px;
+                                        }
+
+                                        img {
+                                            width: 20px;
+                                            height: 20px;
+                                            margin-right: 8px;
+                                        }
+                                    }
+                                }
+                            }
+
+                            @media (max-width: 992px) {
+                                & + .topbar-item-v-separator {
+                                    display: none;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

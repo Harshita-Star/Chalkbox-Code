@@ -1,0 +1,211 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Pre Marksheet</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form1">
+						<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+							<p:panel header="Search Student by Name/Sr. No">
+								<p:panelGrid columns="5"
+									columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel value="Student Name/Sr. No/Father Name"
+										for="@next" style="color:red"></p:outputLabel>
+									<p:autoComplete value="#{finalOasisMarks.name}"
+										completeMethod="#{finalOasisMarks.autoCompleteStudentInfo}"
+										required="true" minQueryLength="3"
+										requiredMessage="#{finalOasisMarksVar.finalOasisMarksEnterStudentNameValidation}">
+										<p:ajax event="query" global="false"></p:ajax>
+									</p:autoComplete>
+
+									<p:commandButton value="Search"
+										update=":form2:up,fillForm:termid,printForm:termid"
+										action="#{finalOasisMarks.searchStudentByName}"></p:commandButton>
+								</p:panelGrid>
+
+							</p:panel>
+						</h:form>
+					</div>
+
+					<div class="card card-w-title">
+						<h:form>
+							<p:panel header="Search Student by Class-Section">
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel value="Select Class" for="@next"
+										style="color:red"></p:outputLabel>
+									<p:selectOneMenu
+										value="#{finalOasisMarks.selectedClassSection}"
+										required="true" filter="true"
+										requiredMessage="#{finalOasisMarksVar.finalOasisMarksSelectClassValidation}">
+										<f:selectItem itemLabel="Select Class" itemValue=""></f:selectItem>
+										<f:selectItems value="#{finalOasisMarks.classSection}"></f:selectItems>
+
+										<p:ajax update="sectionid,fillForm:termid,printForm:termid"
+											listener="#{finalOasisMarks.allSections}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Select Section" for="@next"
+										style="color:red"></p:outputLabel>
+									<p:selectOneMenu id="sectionid"
+										value="#{finalOasisMarks.selectedSection}" filter="true"
+										required="true" requiredMessage="Please select a section">
+										<f:selectItem itemLabel="Select Section" itemValue=""></f:selectItem>
+										<f:selectItems value="#{finalOasisMarks.sectionList}"></f:selectItems>
+										<p:ajax></p:ajax>
+									</p:selectOneMenu>
+
+									<p:commandButton value="Search" update=":form2:up"
+										action="#{finalOasisMarks.searchStudentByClassSection}"></p:commandButton>
+
+								</p:panelGrid>
+
+							</p:panel>
+
+						</h:form>
+					</div>
+					<div class="card card-w-title">
+						<h:form id="form2">
+							<p:panel header="Student Record">
+								<p:outputPanel id="up">
+									<p:dataTable reflow="true" rendered="#{finalOasisMarks.show}"
+										var="var" value="#{finalOasisMarks.studentList}">
+										<p:column headerText="Add. No.">
+											<p:outputLabel value="#{var.srNo}"></p:outputLabel>
+										</p:column>
+
+										<p:column sortBy="#{var.fname}" filterBy="#{var.fname}"
+											headerText="Student Name">
+											<p:outputLabel value="#{var.fname}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Father's Name">
+											<p:outputLabel value="#{var.fathersName}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Class">
+											<p:outputLabel value="#{var.className}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Section" rendered="false">
+											<p:outputLabel value="#{var.sectionName}"></p:outputLabel>
+										</p:column>
+
+
+										<p:column headerText="Print">
+											<p:commandButton value="Print" update=":printForm"
+												oncomplete="PF('printDialog').show()">
+												<f:setPropertyActionListener value="#{var}"
+													target="#{finalOasisMarks.seletedStudent}"></f:setPropertyActionListener>
+											</p:commandButton>
+										</p:column>
+
+										<p:column headerText="Fill Marks">
+											<p:commandButton value="Fill Marks" update=":fillForm"
+												oncomplete="PF('fillDialog').show()">
+												<f:setPropertyActionListener value="#{var}"
+													target="#{finalOasisMarks.seletedStudent}"></f:setPropertyActionListener>
+											</p:commandButton>
+										</p:column>
+
+										<f:facet name="footer">
+											<p:commandButton value="Print" update=":printFormMultiple"
+												oncomplete="PF('printDialogMultiple').show()"></p:commandButton>
+										</f:facet>
+
+									</p:dataTable>
+
+								</p:outputPanel>
+
+							</p:panel>
+
+						</h:form>
+
+						<h:form id="fillForm">
+							<p:dialog resizable="false" modal="true" widgetVar="fillDialog"
+								header="Confirmation" closeOnEscape="true">
+								<p:panelGrid columns="4"
+									styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel value="Select Term" for="@next"
+										style="color:red"></p:outputLabel>
+									<p:selectOneRadio id="termid" value="#{finalOasisMarks.termId}"
+										filter="true" required="true"
+										requiredMessage="Please Select Term">
+										<f:selectItems value="#{finalOasisMarks.termList}"></f:selectItems>
+									</p:selectOneRadio>
+
+									<p:commandButton value="Proceed" update=":fillForm,:form2"
+										action="#{finalOasisMarks.fillMarks}"></p:commandButton>
+
+								</p:panelGrid>
+							</p:dialog>
+						</h:form>
+
+						<h:form id="printForm">
+							<p:dialog resizable="false" modal="true" widgetVar="printDialog"
+								header="Confirmation" closeOnEscape="true">
+								<p:panelGrid columns="4"
+									styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel value="Select Term" for="@next"
+										style="color:red"></p:outputLabel>
+									<p:selectManyCheckbox id="termid"
+										value="#{finalOasisMarks.selectedTerm}" required="true"
+										requiredMessage="Please Select Term">
+										<f:selectItems value="#{finalOasisMarks.termList}"></f:selectItems>
+									</p:selectManyCheckbox>
+
+									<p:commandButton value="Proceed" update=":printForm,:form2"
+										action="#{finalOasisMarks.print}"></p:commandButton>
+								</p:panelGrid>
+							</p:dialog>
+						</h:form>
+
+						<h:form id="printFormMultiple">
+							<p:dialog resizable="false" modal="true"
+								widgetVar="printDialogMultiple" header="Confirmation"
+								closeOnEscape="true">
+								<p:panelGrid columns="4"
+									styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel value="Select Term" for="@next"
+										style="color:red"></p:outputLabel>
+									<p:selectManyCheckbox id="termid"
+										value="#{finalOasisMarks.selectedTerm}" required="true"
+										requiredMessage="Please Select Term">
+										<f:selectItems value="#{finalOasisMarks.termList}"></f:selectItems>
+									</p:selectManyCheckbox>
+
+									<p:commandButton value="Proceed"
+										update=":printFormMultiple,:form2"
+										action="#{finalOasisMarks.printMultiple}"></p:commandButton>
+								</p:panelGrid>
+							</p:dialog>
+						</h:form>
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

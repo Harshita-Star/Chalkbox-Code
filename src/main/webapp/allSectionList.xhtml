@@ -1,0 +1,54 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">All Class</ui:define>
+
+    <ui:define name="content">
+        
+            <div class="ui-fluid">
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <div class="card card-w-title">
+                        <h:form id="form" >
+							<p:panel header="All Class" id="panel">
+							<p:messages closable="true" autoUpdate="true"></p:messages>
+								<p:dataTable reflow="true" paginator="true" rowsPerPageTemplate="20,50,100" rows="20" value="#{allSectionList.categoryList}" var="var" >
+									<p:column headerText="S.No.">
+										<p:outputLabel value="#{var.serialNumber}"></p:outputLabel>
+									</p:column>
+									
+									<p:column sortBy="#{var.className}" filterBy="#{var.className}" headerText="Class Name">
+										<p:outputLabel value="#{var.className}"></p:outputLabel>
+									</p:column>
+									
+									<p:column sortBy="#{var.category}" filterBy="#{var.category}" headerText="Section Name">
+										<p:outputLabel value="#{var.category}"></p:outputLabel>
+									</p:column>
+									
+									<p:column headerText="View Student's Images">
+										<p:commandButton icon="ui-icon-search" ajax="false" onclick="target='_blank'" action="#{allSectionList.viewDetails}">
+											<f:setPropertyActionListener target="#{allSectionList.selectedSection}" value="#{var}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+									 
+									<p:column headerText="View Student's Documents">
+										<p:commandButton icon="ui-icon-search" ajax="false" onclick="target='_blank'" action="#{allSectionList.viewDocDetails}">
+											<f:setPropertyActionListener target="#{allSectionList.selectedSection}" value="#{var}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+									
+								</p:dataTable>
+								</p:panel>
+								</h:form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+    </ui:define>
+
+</ui:composition>

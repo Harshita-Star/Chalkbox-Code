@@ -1,0 +1,85 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Add E-Book</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form" enctype="multipart/form-data">
+							<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+							<p:panel header="Add E-Book">
+								<h4>Select Class</h4>
+								<p:selectManyCheckbox rendered="true" layout="grid" columns="9"
+									value="#{e_book.selectedClass}" required="true"
+									requiredMessage="Please Select Class">
+									<f:selectItems value="#{e_book.classList}"></f:selectItems>
+								</p:selectManyCheckbox>
+
+								<p:selectCheckboxMenu rendered="false" id="multiple"
+									value="#{e_book.selectedClass}" label="Classes"
+									multiple="true" filter="true" filterMatchMode="startsWith"
+									panelStyle="width:250px;">
+									<f:selectItems value="#{e_book.classList}" />
+								</p:selectCheckboxMenu>
+
+								<p:panelGrid columns="2" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+										
+									<p:outputLabel  for="@next" style="color:red"  value="Enter Book Name"></p:outputLabel>
+									<p:inputText value="#{e_book.bookName}" required="true" requiredMessage="Please Enter No Of Periodic Test"></p:inputText>
+									
+									
+									<p:outputLabel value="Upload (Allowed file type are :- pdf)"></p:outputLabel>
+			  						<p:fileUpload value="#{e_book.bookImage}" mode="simple" allowTypes="/(\.|\/)(pdf)$/"/>
+			  				
+			  						<p:commandButton ajax="false" update=":form,:listForm" action="#{e_book.addNow}" value="Add Now"></p:commandButton>
+								</p:panelGrid>
+							</p:panel>
+						</h:form>
+						
+						<h:form id="listForm">
+							<p:dataTable value="#{e_book.bookList}" var="var">
+								<p:column headerText="S.No.">
+									<p:outputLabel value="#{var.sNo}"></p:outputLabel>
+								</p:column>
+								
+								<p:column headerText="Book Name">
+									<p:outputLabel value="#{var.bookName}"></p:outputLabel>
+								</p:column>
+								
+								<p:column headerText="Class">
+									<p:outputLabel value="#{var.bookFor}"></p:outputLabel>
+								</p:column>
+								
+								<p:column headerText="Add Date">
+									<p:outputLabel value="#{var.assignDateStr}"></p:outputLabel>
+								</p:column>
+
+								<p:column headerText="Delete">
+									<p:commandButton icon="ui-icon-trash" update=":listForm" action="#{e_book.deleteBook}">
+										<f:setPropertyActionListener value="#{var}" target="#{e_book.selectedBook}"></f:setPropertyActionListener>
+									     <p:confirm header="Confirmation" message="Are You Sure To Delete...?" icon="ui-icon-alert" />
+									</p:commandButton>
+								</p:column>
+							</p:dataTable>
+						</h:form>
+						
+						<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+			           <p:commandButton style="margin-left:30px" value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+			           <p:commandButton style="margin-left:50px" value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+			         </p:confirmDialog>
+		
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

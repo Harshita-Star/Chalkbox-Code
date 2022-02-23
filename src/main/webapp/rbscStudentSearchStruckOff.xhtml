@@ -1,0 +1,104 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Struck Off</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form1">
+							<h1>#{searchStudentVar.searchStudentTitle}</h1>
+
+							<p:messages closable="true" autoUpdate="true"></p:messages>
+
+							<p:panel header="Search Student by Name/Sr. No">
+								<p:commandLink
+									style="float: right;margin-left: 15px;;color: blue;"
+									immediate="true" value="View Struck Off List"
+									action="rbscStruckOffList.xhtml?faces-redirect=true"></p:commandLink>
+
+								<p:panelGrid columns="3"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel value="Student Name/Sr. No"></p:outputLabel>
+									<p:autoComplete id="acSimple"
+										value="#{rbscStudentStruckOff.name}"
+										completeMethod="#{rbscStudentStruckOff.autoCompleteStudentInfo}"
+										minQueryLength="3"  validatorMessage="Please Enter Correct value">
+										<p:ajax event="query" global="false" />
+										<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:autoComplete>
+
+									<p:commandButton value="Search Now" update=":form3:up"
+										actionListener="#{rbscStudentStruckOff.searchStudentByName}"></p:commandButton>
+								</p:panelGrid>
+
+							</p:panel>
+						</h:form>
+					</div>
+					<div class="card card-w-title">
+						<h:form id="form3">
+
+							<p:panel header="Student Details">
+
+								<p:outputPanel id="up">
+
+									<p:dataTable reflow="true"
+										selection="#{rbscStudentStruckOff.selectedStudent}"
+										rowKey="#{var.id}" rendered="#{rbscStudentStruckOff.show}"
+										var="var" value="#{rbscStudentStruckOff.studentList}" rows="5"
+										paginator="true" rowsPerPageTemplate="5,10,15">
+
+										<p:column headerText="Select Here"
+											selectionMode="single"></p:column>
+
+										<p:column headerText="Adm. No.">
+											<p:outputLabel value="#{var.srNo}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Student Name">
+											<p:outputLabel value="#{var.fname}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Father's Name">
+											<p:outputLabel value="#{var.fathersName}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Class">
+											<p:outputLabel value="#{var.className}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Section">
+											<p:outputLabel value="#{var.sectionName}"></p:outputLabel>
+										</p:column>
+										<f:facet name="footer">
+											<p:commandButton update=":form3"
+												rendered="#{rbscStudentStruckOff.show}"
+												action="#{rbscStudentStruckOff.editNow}"
+												value="Student Struck Off"></p:commandButton>
+										</f:facet>
+
+									</p:dataTable>
+
+
+								</p:outputPanel>
+
+							</p:panel>
+
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

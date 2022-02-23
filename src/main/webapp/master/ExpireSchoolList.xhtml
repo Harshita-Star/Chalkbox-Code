@@ -1,0 +1,90 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/masterTemplate.xhtml">
+
+	<ui:define name="title">All Schools</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<p:messages autoUpdate="true" closable="true"></p:messages>
+						<h:form id="form" style="overflow:hidden">
+
+							<p:panel header="All Expire School In this Month">
+								<br></br>
+								<br />
+								<p:dataTable reflow="true" value="#{ExpireSchoolListBean.dataList}"
+									var="var" rows="25" paginator="true"
+									paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+									rowsPerPageTemplate="25,50,100">
+
+									<p:column headerText="S.No.">
+										<p:outputLabel value="#{var.sNo}"></p:outputLabel>
+									</p:column>
+									
+									<p:column  headerText="School Id">
+										<p:outputLabel value="#{var.id}"
+											style=" word-break: break-all;"></p:outputLabel>
+									</p:column>
+
+									<p:column filterBy="#{var.schoolName}" filterMatchMode="contains" headerText="School Name">
+										<p:outputLabel value="#{var.schoolName}"
+											style=" word-break: break-all;"></p:outputLabel>
+									</p:column>
+
+									<p:column filterBy="#{var.contactName}" rendered="false"
+										headerText="Contact Person">
+										<p:outputLabel value="#{var.contactName}"></p:outputLabel>
+									</p:column>
+
+									<p:column filterBy="#{var.contactNo}" filterMatchMode="contains" headerText="Contact No.">
+										<p:outputLabel value="#{var.contactNo}"
+											style=" word-break: break-all;"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Exp. Date">
+										<p:outputLabel value="#{var.expireDateStr}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Last Login">
+										<p:outputLabel value="#{var.lastLogin}"></p:outputLabel>
+									</p:column>
+
+
+									<p:column headerText="U.Name / Password">
+										<p:outputLabel value="U- #{var.username}"></p:outputLabel>
+										<br></br>
+										<p:outputLabel value="P- #{var.password}"></p:outputLabel>
+									</p:column>
+
+									<p:column  headerText="Renewal Date">
+										<p:outputLabel value="#{var.renewalDateStr}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Amount">
+										<p:outputLabel value="#{var.chalkBoxAmount}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Renewal Amount">
+										<p:outputLabel value="#{var.imgRenewalAmount}"></p:outputLabel>
+									</p:column>
+
+									
+								</p:dataTable>
+							</p:panel>
+						</h:form>
+
+                 	</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

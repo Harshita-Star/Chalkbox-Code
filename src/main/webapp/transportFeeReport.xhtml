@@ -1,0 +1,198 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Transport Fee Report</ui:define>
+			<style>
+.ui-datatable-scrollable .ui-datatable-scrollable-header,
+	.ui-datatable-scrollable .ui-datatable-scrollable-footer {
+	position: sticky !important;
+	top: 60px !important;
+}
+
+body .ui-datatable thead th, body .ui-datatable tbody td {
+	width: var(--w) !important;
+}
+</style>
+	<ui:define name="content">
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+							<p:panel rendered = "false"  header="Search Student by Name/Sr. No">
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:outputLabel value="Student Name/Sr. No"></p:outputLabel>
+									<p:autoComplete minQueryLength="3"
+										completeMethod="#{transportBeanReport.autoCompleteStudentInfo}"
+										forceSelection="true" id="acSimple"
+										value="#{transportBeanReport.name}">
+									</p:autoComplete>
+
+									<p:commandButton value="Show Due Fee" icon="fa fa-table" update=":form" styleClass="butwid"
+										actionListener="#{transportBeanReport.searchStudentByName}"></p:commandButton>
+										
+									<p:commandButton value="Show Paid Fee" icon="fa fa-table" update=":form" styleClass="butwid"
+										actionListener="#{transportBeanReport.searchStudentByName}"></p:commandButton>
+										
+								</p:panelGrid>
+
+							</p:panel>
+							<p:panel header="Search Student by Class-Section">
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:outputLabel value="Select a Class"></p:outputLabel>
+									<p:selectOneMenu
+										value="#{transportBeanReport.selectedClass}">
+										<f:selectItem itemLabel="All" itemValue="-1"></f:selectItem>
+										<f:selectItems
+											value="#{transportBeanReport.classList}"></f:selectItems>
+										<p:ajax update="sectionid"
+											listener="#{transportBeanReport.allSections}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Select Section"></p:outputLabel>
+									<p:selectOneMenu id="sectionid"
+										value="#{transportBeanReport.selectedSection}">
+										<f:selectItem itemLabel="All" itemValue="-1"></f:selectItem>
+										<f:selectItems
+											value="#{transportBeanReport.sectionList}"></f:selectItems>
+									</p:selectOneMenu>
+
+									<p:outputLabel value=""></p:outputLabel>
+									<p:outputLabel value=""></p:outputLabel>
+								</p:panelGrid>
+
+								<br />
+								<p:separator />
+								<center>
+									<p:panelGrid
+										columns="#{transportBeanReport.studentList.size() gt 0 ? '4' : '2'}"
+										layout="grid" styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+
+										<p:commandButton value="Show Due Fee" icon="fa fa-table" styleClass="butwid"
+											actionListener="#{transportBeanReport.showDueReport}"
+											update="dailyfeereport"></p:commandButton>
+											
+										<p:commandButton value="Show Paid Fee" icon="fa fa-table" styleClass="butwid"
+											actionListener="#{transportBeanReport.showPaidReport}"
+											update=":form,dailyfeereport"></p:commandButton>
+											
+										<p:commandButton value="Print" styleClass="butwid" icon="fa fa-print"
+											rendered="#{transportBeanReport.studentList.size() gt 0}">
+											<p:printer target="dailyfeereport"></p:printer>
+										</p:commandButton>
+
+										<h:commandLink rendered="#{transportBeanReport.studentList.size() gt 0}">
+											<p:graphicImage name="images/excellogo.png"
+												library="avalon-layout" width="100" height="40"></p:graphicImage>
+											<pe:exporter type="xlsx" target="dtb"
+												fileName="TransportFeeReport"
+												></pe:exporter>
+										</h:commandLink>
+										
+									</p:panelGrid>
+								</center>
+								<p:separator />
+								<br />
+
+							</p:panel>
+							<p:panel id="dailyfeereport">
+							<p:outputPanel rendered="#{transportBeanReport.show}">
+								<center>
+									<p
+										style="font-size: 25px !important; font-weight: bold; margin: 0px;">#{headerBean.name}</p>
+									<p
+										style="font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.affiliationNo}</p>
+									<p
+										style="font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.finalAddress}</p>
+									<p
+										style="font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.phoneno}</p>
+									<p
+										style="margin: 0px; font-size: 25px !important; font-weight: bold;">Transport #{transportBeanReport.var} Fee Report</p>
+								</center>
+								<p:dataTable id="dtb"  value="#{transportBeanReport.studentList}" 
+									style="font-size:10px !important;" reflow="true" var="var"
+									 rowIndexVar="index">
+									 <f:facet name="header">
+									 	<p:outputLabel value="Transport #{transportBeanReport.var} Fee Report"></p:outputLabel>
+									 </f:facet>
+											<p:column headerText="S.No." style="--w:50px;">
+											<f:facet name="header">
+												<p:outputLabel value="S.No."></p:outputLabel>
+											</f:facet>
+
+											<p:outputLabel value="#{var.sNo}"></p:outputLabel>
+										</p:column>
+											<p:column style="--w:70px;" sortBy="#{var.fname}"
+											headerText="#{dueFeeReportVar.dueFeeReportFirstNameLabel}">
+											<f:facet name="header">
+												<p:outputLabel
+													value="#{dueFeeReportVar.dueFeeReportFirstNameLabel}"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.fname}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Father's Name" style="--w:70px;">
+											<f:facet name="header">
+												<p:outputLabel value="Father's Name"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.fathersName}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Contact No." style="--w:80px;">
+											<f:facet name="header">
+												<p:outputLabel value="Contact No."></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.contactNo}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Class" style="--w:50px;">
+											<f:facet name="header">
+												<p:outputLabel value="Class"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.className}"></p:outputLabel>
+										</p:column>
+										<p:columns 
+											value="#{transportBeanReport.installmentList}" var="installment" columnIndexVar="colIndex">
+
+											<f:facet name="header">
+												<p:outputLabel value="#{installment.insatllmentName}"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.feesMap[installment.insatllmentValue]}"></p:outputLabel>
+											
+										</p:columns>
+									<p:column headerText="Total #{transportBeanReport.var} Amount" style="--w:70px;">
+											<f:facet name="header">
+												<p:outputLabel value="Total #{transportBeanReport.var} Amount"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.totalFee}"></p:outputLabel>
+										</p:column>
+								</p:dataTable> 
+								
+								</p:outputPanel>
+
+							</p:panel>
+
+						</h:form>
+
+						
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,163 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">TC Details</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form" enctype="multipart/form-data">
+							<h1>Student Tc Details</h1>
+
+
+							<p:messages autoUpdate="true" closable="true"></p:messages>
+
+
+							<p:outputPanel id="allStudentDatatable">
+
+								<p:panel header="Student Details">
+
+									<p:panelGrid columns="4"
+										columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+										layout="grid" styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+										<p:outputLabel value="Register No : "></p:outputLabel>
+										<p:outputLabel value="#{rbscTCDetail.studentList.sno}"></p:outputLabel>
+
+										<p:outputLabel value="Sr.No. : "></p:outputLabel>
+										<p:outputLabel value="#{rbscTCDetail.srNo}"></p:outputLabel>
+
+										<p:outputLabel value="Student Name : "></p:outputLabel>
+										<p:outputLabel value="#{rbscTCDetail.studentName}"></p:outputLabel>
+
+										<p:outputLabel value="Father Name : "></p:outputLabel>
+										<p:outputLabel value="#{rbscTCDetail.fatherName}"></p:outputLabel>
+									</p:panelGrid>
+									<br />
+									<p:dataTable reflow="true" id="table" value="#{rbscTCDetail.tcDetail}"
+										var="var">
+										<p:column headerText="S.No.">
+											<p:outputLabel value="#{var.sNo}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Class">
+											<p:selectOneMenu value="#{var.className}"
+												style="width:80px !important;" filter="true">
+												<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+												<f:selectItems value="#{rbscTCDetail.sectionList}"></f:selectItems>
+												<p:ajax event="itemSelect"></p:ajax>
+											</p:selectOneMenu>
+										</p:column>
+
+										<p:column headerText="Date of Admission">
+											<p:calendar value="#{var.doa}" 
+												navigator="true" pattern="dd/MM/yyyy" yearRange="c-10:c+10">
+												<p:ajax event="dateSelect"></p:ajax>
+											</p:calendar>
+										</p:column>
+
+										<p:column headerText="Date of Passing">
+											<p:calendar value="#{var.dop}" 
+												navigator="true" pattern="dd/MM/yyyy" yearRange="c-10:c+10">
+												<p:ajax event="dateSelect"></p:ajax>
+											</p:calendar>
+										</p:column>
+
+										<p:column headerText="School Meeting">
+											<p:inputText value="#{var.schoolMeeting}">
+												<p:keyFilter mask="pnum" />
+												<p:ajax></p:ajax>
+											</p:inputText>
+										</p:column>
+
+										<p:column headerText="Student Meeting">
+											<p:inputText value="#{var.studentMeeting}">
+												<f:attribute name="sNo" value="#{var.sNo}"></f:attribute>
+												<p:keyFilter mask="pnum" />
+												<p:ajax listener="#{rbscTCDetail.checkMeeting}"
+													update=":form:table"></p:ajax>
+											</p:inputText>
+										</p:column>
+
+										<p:column headerText="Total Student">
+											<p:inputText value="#{var.totalStudent}">
+												<p:keyFilter mask="pnum" />
+												<p:ajax></p:ajax>
+											</p:inputText>
+										</p:column>
+
+										<p:column headerText="Result">
+											<p:selectOneMenu editable="true" value="#{var.result}"
+												style="width:85px !important;">
+												<f:selectItem itemLabel="Select " itemValue=""></f:selectItem>
+												<f:selectItem itemLabel="Pass" itemValue="Pass"></f:selectItem>
+												<f:selectItem itemLabel="Fail" itemValue="Fail"></f:selectItem>
+												<f:selectItem itemLabel="Supplementary"
+													itemValue="Supplementary"></f:selectItem>
+												<f:selectItem itemLabel="Pass By Grace"
+													itemValue="Pass By Grace"></f:selectItem>
+												<f:selectItem itemLabel="Reading In" itemValue="Reading In"></f:selectItem>
+												<p:ajax event="itemSelect"></p:ajax>
+											</p:selectOneMenu>
+										</p:column>
+
+										<p:column headerText="Session">
+											<p:inputText value="#{var.session}" >
+												<p:ajax></p:ajax>	
+											</p:inputText>
+
+										</p:column>
+
+
+										<p:column headerText="Conduct And Work">
+											<p:selectOneMenu editable="true" value="#{var.work}"
+												style="width:85px !important;">
+												<f:selectItem itemLabel="Select " itemValue=""></f:selectItem>
+												<f:selectItem itemLabel="Good-Good" itemValue="Good-Good"></f:selectItem>
+												<f:selectItem itemLabel="Comman-Comman"
+													itemValue="Comman-Comman"></f:selectItem>
+												<f:selectItem itemLabel="Reading In" itemValue="Reading In"></f:selectItem>
+												<p:ajax event="itemSelect"></p:ajax>
+											</p:selectOneMenu>
+										</p:column>
+
+										<f:facet name="header">
+											<p:commandButton rendered="false" immediate="true"
+												value="Add More Files" update=":form:table"
+												actionListener="#{rbscTCDetail.addNewRow}"></p:commandButton>
+										</f:facet>
+
+
+										<f:facet name="footer">
+											<p:commandButton rendered="false" immediate="true"
+												value="Add More Files" update=":form:table"
+												actionListener="#{rbscTCDetail.addNewRow}"></p:commandButton>
+										</f:facet>
+										<f:facet name="header">
+											<p:commandButton ajax="false" value="Submit"
+												action="#{rbscTCDetail.submit}" update=":form"></p:commandButton>
+										</f:facet>
+										<f:facet name="footer">
+											<p:commandButton ajax="false" value="Submit"
+												action="#{rbscTCDetail.submit}" update=":form"></p:commandButton>
+										</f:facet>
+									</p:dataTable>
+
+
+								</p:panel>
+							</p:outputPanel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

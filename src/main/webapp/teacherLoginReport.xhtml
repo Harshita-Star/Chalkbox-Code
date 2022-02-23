@@ -1,0 +1,301 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Staff Login Details</ui:define>
+
+	<ui:define name="content">
+<style>
+	.ui-selectonemenu label.ui-selectonemenu-label {
+		font-size: 10px;
+	}
+</style>
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<p:messages closable="true">
+								<p:autoUpdate />
+							</p:messages>
+							<p:panel id="dataTable" rendered="#{allTeacherReport.b}">
+								<f:facet name="header">
+									<span>Staff Login Details</span>
+									<span> <p:commandLink
+											style="float: right;margin-left: 15px;;color: blue;font-size:15px;"
+											immediate="true" value="Blocked Staff Details"
+											action="blockedEmployeeLogin.xhtml?faces-redirect=true"></p:commandLink>
+									</span>
+								</f:facet>
+
+								<p:commandButton value="Print" rendered="false">
+									<p:printer target=":form:dataTable"></p:printer>
+								</p:commandButton>
+
+								<center>
+									<p
+										style="font-family: initial; font-style: oblique; font-size: 25px !important; font-weight: bold; margin: 0px;">#{headerBean.name}</p>
+									<p
+										style="font-family: initial; font-style: oblique; font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.affiliationNo}</p>
+									<p
+										style="font-family: initial; font-style: oblique; font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.finalAddress}</p>
+									<p
+										style="font-family: initial; font-style: oblique; font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.phoneno}</p>
+
+									<p
+										style="margin: 0px; font-size: 25px !important; font-weight: bold;">Staff
+										Login Report</p>
+								</center>
+								<p:panelGrid columns="2"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:outputLabel value="Total:-"></p:outputLabel>
+									<h:outputText value="#{allTeacherReport.total}"></h:outputText>
+
+									<h:commandLink>
+										<p:graphicImage name="images/excellogo.png"
+											library="avalon-layout" width="100" height="40"></p:graphicImage>
+										<pe:exporter type="xlsx" target=":form:dt"
+											fileName="StaffLoginReport"></pe:exporter>
+									</h:commandLink>
+
+								</p:panelGrid>
+
+
+								<p:outputPanel id="up">
+
+									<p:dataTable id="dt" reflow="true"
+										rendered="#{allTeacherReport.show}"
+										rowKey="#{var.emplyeeuserid}"
+										selection="#{allTeacherReport.selectedEmployeeList}" var="var"
+										value="#{allTeacherReport.teacherList}"
+										style="text-align:center;">
+
+										<f:facet name="header">
+											<center>
+												<p:panelGrid columns="2"
+													styleClass="ui-panelgrid-blank form-group"
+													style="border:0px none; background-color:transparent;">
+													<p:commandButton update=":form" style="width:270px;"
+														icon="fa fa-share-alt"
+														value="Share Login Credentials With Staff"
+														actionListener="#{allTeacherReport.sendMessage}"></p:commandButton>
+
+													<p:commandButton update=":form"
+														value="Change Access Platform"
+														actionListener="#{allTeacherReport.changePlatform}"
+														style="width: 215px;" icon="fa fa-refresh">
+														<p:confirm header="Confirmation"
+															message="Are You Sure To Change Access Platform...???"
+															icon="ui-icon-alert" />
+													</p:commandButton>
+												</p:panelGrid>
+											</center>
+										</f:facet>
+
+										<p:column headerText="Select" selectionMode="multiple"></p:column>
+
+										<p:column headerText="S.No.">
+											<p:outputLabel value="#{var.sno}"></p:outputLabel>
+										</p:column>
+
+										<p:column sortBy="#{var.fname}" headerText="Teacher Name"
+											filterBy="#{var.fname}" filterMatchMode="contains">
+											<p:outputLabel value="#{var.fname}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="User Name"
+											filterBy="#{var.emplyeeuserid}" filterMatchMode="contains">
+											<p:outputLabel value="#{var.emplyeeuserid}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Password">
+											<p:outputLabel value="#{var.password}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Type" sortBy="#{var.category}"
+											filterBy="#{var.category}" filterMatchMode="contains">
+											<p:outputLabel value="#{var.category}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Sub Categ.">
+											<p:outputLabel value="#{var.subCateg}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Access Platform" exportable="false">
+											<p:selectOneMenu value="#{var.platform}">
+												<f:selectItem itemLabel="WEB" itemValue="web"></f:selectItem>
+												<f:selectItem itemLabel="MOBILE APP" itemValue="app"></f:selectItem>
+												<f:selectItem itemLabel="BOTH WEB &amp; APP"
+													itemValue="both"></f:selectItem>
+												<f:selectItem itemLabel="NONE" itemValue="none"></f:selectItem>
+											</p:selectOneMenu>
+										</p:column>
+
+										<p:column exportable="false" headerText="Change Password">
+											<center>
+												<p:commandButton disabled="#{var.category eq 'admin'}"
+													value="Password" update=":form"
+													oncomplete="PF('dlg').show();" icon="ui-icon-key"
+													action="#{allTeacherReport.viewDetails}">
+													<f:setPropertyActionListener
+														target="#{allTeacherReport.selectedEmployee}"
+														value="#{var}"></f:setPropertyActionListener>
+												</p:commandButton>
+											</center>
+										</p:column>
+
+										<p:column exportable="false" headerText="Block Login">
+											<center>
+												<p:commandButton disabled="#{var.category eq 'admin'}"
+													value="Block" update=":form" styleClass="redButt"
+													icon="ui-icon-trash" action="#{allTeacherReport.block}">
+													<f:setPropertyActionListener
+														target="#{allTeacherReport.selectedEmployee}"
+														value="#{var}"></f:setPropertyActionListener>
+													<p:confirm header="Confirmation"
+														message="Are You Sure To Block User...???"
+														icon="ui-icon-alert" />
+												</p:commandButton>
+											</center>
+										</p:column>
+
+										<f:facet name="footer">
+											<center>
+												<p:panelGrid columns="2"
+													styleClass="ui-panelgrid-blank form-group"
+													style="border:0px none; background-color:transparent;">
+													<p:commandButton update=":form" style="width:270px;"
+														icon="fa fa-share-alt"
+														value="Share Login Credentials With Staff"
+														actionListener="#{allTeacherReport.sendMessage}"></p:commandButton>
+
+													<p:commandButton update=":form"
+														value="Change Access Platform"
+														actionListener="#{allTeacherReport.changePlatform}"
+														style="width: 215px;" icon="fa fa-refresh">
+														<p:confirm header="Confirmation"
+															message="Are You Sure To Change Access Platform...???"
+															icon="ui-icon-alert" />
+													</p:commandButton>
+												</p:panelGrid>
+
+											</center>
+										</f:facet>
+									</p:dataTable>
+
+								</p:outputPanel>
+							</p:panel>
+
+
+
+							<p:dialog resizable="false" widgetVar="dlg"
+								header="Change Password" showEffect="fade" hideEffect="explode"
+								modal="true">
+								<div class="ui-g form-group">
+									<p:panelGrid columns="2"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+										<p:outputLabel value="Password"></p:outputLabel>
+										<p:inputText value="#{allTeacherReport.password}"
+											validatorMessage="Please Enter Correct value">
+											<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+										</p:inputText>
+										<p:commandButton update=":form"
+											actionListener="#{allTeacherReport.editPassword}"
+											value="Update"></p:commandButton>
+
+									</p:panelGrid>
+								</div>
+							</p:dialog>
+
+						</h:form>
+						<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+							<p:commandButton value="Yes" type="button"
+								styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+							<p:commandButton value="No" style="margin-left:50px"
+								type="button" styleClass="ui-confirmdialog-no"
+								icon="ui-icon-close" />
+						</p:confirmDialog>
+
+						<h:form id="MsgLimitForm" style="overflow:hidden">
+							<p:dialog header="Low SMS Balance" width="500"
+								widgetVar="MsgLmtDlg" modal="true" showEffect="fade"
+								hideEffect="fade" resizable="false">
+								<center>
+									<p:outputLabel value="#{allTeacherReport.balMsg}"
+										style="font-size:14px;font-weight: bold;" />
+								</center>
+								<br></br>
+								<br></br>
+								<center>
+									<p:commandButton value="Skip"
+										action="#{allTeacherReport.sendMsg}" update="MsgLimitForm" />
+									<br /> <br />
+									<p:commandButton value="Message Logs"
+										action="messageSchoolHistory.xhtml?faces-redirect=true"
+										update="MsgLimitForm" />
+									<br /> <br />
+									<p:commandButton value="Recharge Now"
+										action="purchaseMsgPack.xhtml?faces-redirect=true"
+										update="MsgLimitForm" />
+								</center>
+								<br></br>
+							</p:dialog>
+						</h:form>
+
+						<h:form id="MsgOverForm" style="overflow:hidden">
+							<p:dialog header="SMS Limit Over" width="500"
+								widgetVar="MsgOvrDlg" modal="true" showEffect="fade"
+								hideEffect="fade" resizable="false">
+								<center>
+									<p:outputLabel value="#{allTeacherReport.balMsg}"
+										style="font-size:14px;font-weight: bold;" />
+								</center>
+								<br></br>
+								<br></br>
+								<center>
+									<p:commandButton value="Message Logs"
+										action="messageSchoolHistory.xhtml?faces-redirect=true"
+										update="MsgOverForm" />
+									<br /> <br />
+									<p:commandButton value="Recharge Now"
+										action="purchaseMsgPack.xhtml?faces-redirect=true"
+										update="MsgOverForm" />
+								</center>
+								<br></br>
+							</p:dialog>
+						</h:form>
+
+						<h:form id="MsgOtherForm" style="overflow:hidden">
+							<p:dialog header="SMS Limit Over" width="500"
+								widgetVar="MsgOthDlg" modal="true" showEffect="fade"
+								hideEffect="fade" resizable="false">
+								<center>
+									<p:outputLabel value="#{allTeacherReport.balMsg}"
+										style="font-size:14px;font-weight: bold;" />
+								</center>
+								<br></br>
+								<br></br>
+								<center>
+									<p:commandButton value="OK"
+										action="teacherLoginReport.xhtml?faces-redirect=true"
+										update="MsgOtherForm" />
+								</center>
+							</p:dialog>
+						</h:form>
+
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

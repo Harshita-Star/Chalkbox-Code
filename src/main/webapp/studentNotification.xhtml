@@ -1,0 +1,54 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/studentTemplate.xhtml">
+
+	<ui:define name="title">Student Notification</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title" style="background-color: rgb(0, 86, 128, 0.8); ">
+						<h:form id="form" enctype="multipart/form-data">
+							<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+							<p:panel header="Student Notification">
+							
+								<p:dataTable filterDelay="1500" id="dt" var="var"
+									value="#{studentNotification.list}" paginator="true"
+									rows="10" rowsPerPageTemplate="10,30,50">
+
+									<p:column headerText="S.No.">
+										<p:outputLabel value="#{var.sNo}"></p:outputLabel>
+									</p:column>
+				
+				     
+				                   <p:column headerText="Type">
+										<p:outputLabel value="#{var.className}"></p:outputLabel>
+									</p:column>
+									
+									<p:column headerText="Date">
+										<p:outputLabel value="#{var.diet}"></p:outputLabel>
+									</p:column>
+									
+									<p:column headerText="Description">
+										<p:outputLabel value="#{var.dayName}"></p:outputLabel>
+									</p:column>
+									
+									
+								</p:dataTable>
+
+							</p:panel>
+
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

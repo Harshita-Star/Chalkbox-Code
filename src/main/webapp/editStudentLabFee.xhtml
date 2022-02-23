@@ -1,0 +1,136 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Edit Lab Fee</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form1">
+							<h1>#{feeCollectionVar.feeCollectionTitle}</h1>
+
+							<p:panel header="Search Student by Name/Sr. No">
+								<p:messages closable="true" autoUpdate="true"></p:messages>
+
+								<p:panelGrid columns="3"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel value="Student Name/Sr. No/Father Name" for="@next" style="color:red" ></p:outputLabel>
+									<p:autoComplete value="#{editStdLabFee.name}"
+										completeMethod="#{editStdLabFee.autoCompleteStudentInfo}"
+										required="true" minQueryLength="3"
+										requiredMessage="#{feeCollectionVar.feeCollectionEnterStudentNameValidation}" validatorMessage="Please Enter Correct value">
+										<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+										<p:ajax event="query" global="false"></p:ajax>
+									</p:autoComplete>
+
+									<p:commandButton value="Search" update=":form2"
+										action="#{editStdLabFee.searchStudentByName}"></p:commandButton>
+
+
+								</p:panelGrid>
+
+							</p:panel>
+						</h:form>
+					</div>
+
+					<div class="card card-w-title">
+						<h:form id="form3">
+							<p:panel header="Search Student by Class-Section">
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel value="Select Class" for="@next" style="color:red" ></p:outputLabel>
+									<p:selectOneMenu value="#{editStdLabFee.selectedClassSection}"
+										required="true"
+										requiredMessage="#{feeCollectionVar.feeCollectionSelectClassValidation}">
+										<f:selectItem itemLabel="Select Class" itemValue=""></f:selectItem>
+										<f:selectItems value="#{editStdLabFee.classSection}"></f:selectItems>
+
+										<p:ajax update="sectionid"
+											listener="#{editStdLabFee.allSections}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Select Section" for="@next" style="color:red" ></p:outputLabel>
+									<p:selectOneMenu id="sectionid"
+										value="#{editStdLabFee.selectedSection}" required="true"
+										requiredMessage="Please select a section">
+										<f:selectItem itemLabel="Select Section" itemValue=""></f:selectItem>
+										<f:selectItems value="#{editStdLabFee.sectionList}"></f:selectItems>
+
+										<p:ajax update=":form2:up"
+											listener="#{editStdLabFee.searchStudentByClassSection}"></p:ajax>
+									</p:selectOneMenu>
+
+								</p:panelGrid>
+
+							</p:panel>
+
+						</h:form>
+					</div>
+					<div class="card card-w-title">
+						<h:form id="form2">
+
+							<p:panel header="Student Record">
+
+								<p:outputPanel id="up">
+
+									<p:dataTable reflow="true" rendered="#{editStdLabFee.show}"
+										var="var" value="#{editStdLabFee.studentList}" rows="20"
+										paginator="true" rowsPerPageTemplate="20,30,50">
+
+										<p:column
+											headerText="#{feeCollectionVar.feeCollectionHeaderAdmissionNumber}">
+											<p:outputLabel value="#{var.srNo}"></p:outputLabel>
+										</p:column>
+
+										<p:column sortBy="#{var.fname}" filterBy="#{var.fname}"
+											headerText="#{feeCollectionVar.feeCollectionHeaderFirstName}">
+											<p:outputLabel value="#{var.fname}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Father's Name">
+											<p:outputLabel value="#{var.fathersName}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Class">
+											<p:outputLabel value="#{var.className}"></p:outputLabel>
+										</p:column>
+										
+										<p:columns value="#{editStdLabFee.columnList}" var="column"
+											columnIndexVar="colIndex">
+
+											<f:facet name="header">
+												<p:outputLabel value="#{column.label}"></p:outputLabel>
+											</f:facet>
+
+											<p:inputText value="#{var.feesMap[column.value]}">
+											<p:ajax global="false"></p:ajax>
+											</p:inputText>
+										</p:columns>
+										
+										<f:facet name="footer">
+											<p:commandButton actionListener="#{editStdLabFee.payRefundFee}" update=":form1,:form2,:form3" value="Update"></p:commandButton>
+										</f:facet>
+									</p:dataTable>
+								</p:outputPanel>
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

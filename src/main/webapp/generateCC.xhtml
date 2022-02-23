@@ -1,0 +1,127 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Generate CC</ui:define>
+
+    <ui:define name="content">
+       
+            <div class="ui-fluid">
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <div class="card card-w-title">
+                           <h:form id="form">
+					<h1>Search Student For Generate CC</h1>
+            		 <p:messages closable="true" autoUpdate="true"></p:messages>
+               		 	<p:panel header="Search Student by Name/Sr.No">
+               		 		
+               		 		<p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+               		 			<p:outputLabel value="Student Name"></p:outputLabel>      
+               		 			<p:autoComplete value="#{generateCC.name}" completeMethod="#{generateCC.autoCompleteStudentInfo}" queryDelay="1000" validatorMessage="Please Enter Correct value">
+               		 			 <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+       							<p:ajax event="query" global="false"/>
+       							</p:autoComplete>
+               		 	 		<p:commandButton  update=":form" value="Search" actionListener="#{generateCC.searchStudentByName}"></p:commandButton>
+               					</p:panelGrid>
+               				
+               		 			<p:outputLabel></p:outputLabel>
+               		 			<p:outputLabel value="OR"></p:outputLabel>
+               		 			<p:outputLabel></p:outputLabel>
+               		 				<p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+               		 		
+               		 			<p:outputLabel value="Admission No:"></p:outputLabel>      
+               		 				<p:inputText value="#{generateCC.addNumber}" validatorMessage="Please Enter Correct value">
+               		 				  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+               		 				</p:inputText>
+               		 			<p:commandButton value="Search" update=":form" actionListener="#{generateCC.searchStudentByAdmissionNo}" ></p:commandButton>
+               		 		
+               		 		</p:panelGrid>
+               							 		
+               		
+            	 		</p:panel>
+               		
+               		 	
+               		 	<p:panel header="Student Details">
+               		 				
+               		 		 <p:outputPanel id="up">
+               		  
+               		  		<p:dataTable selection="#{generateCC.selectedStudent}"  rowKey="#{var.id}" rendered="#{generateCC.show}" var="var" reflow="true" value="#{generateCC.list}" rows="5" paginator="true" rowsPerPageTemplate="5,10,15"> 
+               		  		
+               		  			<p:column style="width:100px" headerText="Select Here" selectionMode="single"></p:column>
+               		  			
+               		  			<p:column headerText="Addmission Number">
+               		  				<p:outputLabel value="#{var.srNo}"></p:outputLabel>
+               		  			</p:column>
+               		  			
+               		  			<p:column headerText="Student Name">
+               		  				<p:outputLabel value="#{var.fullName}"></p:outputLabel>
+               		  			</p:column>
+               		  			
+               		  			<p:column headerText="Class Name">
+               		  				<p:outputLabel value="#{var.className}"></p:outputLabel>
+               		  			</p:column>
+               		  			
+               		  			<p:column headerText="Section Name">
+               		  				<p:outputLabel value="#{var.sectionName}"></p:outputLabel>
+               		  			</p:column>
+               		  			<f:facet name="footer">
+	               		  			<p:commandButton rendered="#{generateCC.show}" style="width:15%" oncomplete="PF('ccDlg').show();" value="Generate C.C."></p:commandButton>
+               		  			</f:facet>               		  		
+               		  		
+               		  		</p:dataTable>
+               		  	
+               		  </p:outputPanel>
+               		 	
+               		</p:panel>
+               
+			</h:form>
+			
+			
+			<h:form id="form2">
+				<p:dialog modal="true" widgetVar="ccDlg" header="CC Detail">
+					<p:panelGrid columns="2">
+						<p:outputLabel value="CC Issue Date:" for="@next" style="color:red" ></p:outputLabel>
+						<p:calendar value="#{generateCC.ccIssueDate}" navigator="true" pattern="dd/MM/yyyy" required="true" requiredMessage="Please select CC Issue Date"></p:calendar>
+						
+						 <p:outputLabel value="Student Character" for="@next" style="color:red" ></p:outputLabel>
+					   <p:selectOneMenu editable="true" value="#{generateCC.character}" required="true" requiredMessage="Enter detail about Character">
+                       <f:selectItem itemLabel="Select " itemValue=""></f:selectItem>
+                                            <f:selectItem itemLabel="Good" itemValue="Good"></f:selectItem>
+                                            <f:selectItem itemLabel="Comman" itemValue="Comman"></f:selectItem>
+                                            <f:selectItem itemLabel="Reading In" itemValue="Reading In"></f:selectItem>
+                        </p:selectOneMenu>                  
+						<p:outputLabel value="Activity 1"></p:outputLabel>
+						<p:inputText value="#{generateCC.activity1}" validatorMessage="Please Enter Correct value">
+						  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+						</p:inputText>
+						
+						<p:outputLabel value="Activity 2"></p:outputLabel>
+						<p:inputText value="#{generateCC.activity2}" validatorMessage="Please Enter Correct value">
+						  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+						</p:inputText>
+						
+						<p:outputLabel value="Status"></p:outputLabel>
+						
+						<p:selectOneMenu value="#{generateCC.status}" >
+                            <f:selectItem itemLabel="Select Status" itemValue=""></f:selectItem>
+                            <f:selectItem itemLabel="Pass" itemValue="Passed"></f:selectItem>
+                            <f:selectItem itemLabel="Fail" itemValue="Failed"></f:selectItem>
+                         	<f:selectItem itemLabel="In Reading" itemValue="UP TO THIS DATE"></f:selectItem>
+                        
+                        </p:selectOneMenu>
+						
+						<p:commandButton action="#{generateCC.issueCC}" value="Generate CC" update=":form,:form2"></p:commandButton>
+					</p:panelGrid>
+				</p:dialog>
+			</h:form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+       
+    </ui:define>
+
+</ui:composition>

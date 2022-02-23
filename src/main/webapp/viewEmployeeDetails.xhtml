@@ -1,0 +1,296 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">View Employee Details</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+
+							<p:panel header="Employee Details">
+
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:outputLabel value="Employee Name : "
+										style="font-weight: bold;"></p:outputLabel>
+									<p:outputLabel value="#{viewEmployee.fname}"></p:outputLabel>
+
+									<p:outputLabel value="Father's Name : "
+										style="font-weight: bold;"></p:outputLabel>
+									<p:outputLabel value="#{viewEmployee.lname}"></p:outputLabel>
+
+									<p:outputLabel value="Employee Unique Id: "
+										style="font-weight: bold;"></p:outputLabel>
+									<p:outputLabel value="#{viewEmployee.employeeUniqueId}"></p:outputLabel>
+
+									<p:outputLabel value="Access Platform: "
+										style="font-weight: bold;"></p:outputLabel>
+									<p:outputLabel value="#{viewEmployee.platform}"></p:outputLabel>
+
+									<p:outputLabel
+										value="#{editEmployeeVar.editEmployeeDOBLabel} : "
+										style="font-weight: bold;"></p:outputLabel>
+									<p:outputLabel value="#{viewEmployee.dobStr}"></p:outputLabel>
+
+									<p:outputLabel
+										value="#{editEmployeeVar.editEmployeeGenderLabel} : "
+										style="font-weight: bold;"></p:outputLabel>
+									<p:outputLabel value="#{viewEmployee.gender}"></p:outputLabel>
+
+									<p:outputLabel
+										value="#{editEmployeeVar.editEmployeeCategoryLabel} : "
+										style="font-weight: bold;"></p:outputLabel>
+									<p:outputLabel value="#{viewEmployee.category}"></p:outputLabel>
+
+									<p:outputLabel value="Sub Category : "
+										style="font-weight: bold;"></p:outputLabel>
+									<p:outputLabel value="#{viewEmployee.subCateg}"></p:outputLabel>
+
+									<p:outputLabel value="Salary(Per Month) : "
+										style="font-weight: bold;"></p:outputLabel>
+									<p:outputLabel value="#{viewEmployee.salary}"></p:outputLabel>
+
+									<p:outputLabel value="Leave Allowed(Per Month) : "
+										style="font-weight: bold;"></p:outputLabel>
+									<p:outputLabel value="#{viewEmployee.leave}"></p:outputLabel>
+
+									<p:outputLabel value="DA Amount : " style="font-weight: bold;"></p:outputLabel>
+									<p:outputLabel value="#{viewEmployee.daamt}"></p:outputLabel>
+
+									<p:outputLabel value="HRA Amount : " style="font-weight: bold;"></p:outputLabel>
+									<p:outputLabel value="#{viewEmployee.hraamt}"></p:outputLabel>
+
+
+									<p:outputLabel value="D/L No. : " style="font-weight: bold;"></p:outputLabel>
+									<p:outputLabel value="#{viewEmployee.dlNo}"></p:outputLabel>
+
+									<p:outputLabel
+										value="#{editEmployeeVar.editEmployeeQualificationLabel} : "
+										style="font-weight: bold;"></p:outputLabel>
+									<p:outputLabel value="#{viewEmployee.qualification}"></p:outputLabel>
+
+									<p:outputLabel
+										value="#{editEmployeeVar.editEmployeeJoiningDateLabel} : "
+										style="font-weight: bold;"></p:outputLabel>
+									<p:outputLabel value="#{viewEmployee.joiningDateStr}"></p:outputLabel>
+
+									<p:outputLabel value="Leaving Date : "
+										style="font-weight: bold;"></p:outputLabel>
+									<p:outputLabel navigator="true"
+										value="#{viewEmployee.leavingDate}"></p:outputLabel>
+
+									<p:outputLabel value="Mobile Number 1 : "
+										style="font-weight: bold;"></p:outputLabel>
+									<p:outputLabel value="#{viewEmployee.mobile}"></p:outputLabel>
+
+									<p:outputLabel value="Mobile Number 2 : "
+										style="font-weight: bold;"></p:outputLabel>
+									<p:outputLabel value="#{viewEmployee.mobile2}"></p:outputLabel>
+
+									<p:outputLabel value="Email ID / Zoom Email ID : "
+										style="font-weight: bold;"></p:outputLabel>
+									<p:outputLabel value="#{viewEmployee.email}"></p:outputLabel>
+
+									<p:outputLabel value="Marital Status : "
+										style="font-weight: bold;"></p:outputLabel>
+									<p:outputLabel value="#{viewEmployee.marital}"></p:outputLabel>
+
+									<p:outputLabel value="Pan No. : " style="font-weight: bold;"></p:outputLabel>
+									<p:outputLabel value="#{viewEmployee.panNo}"></p:outputLabel>
+
+									<p:outputLabel value="Aadhaar No. : "
+										style="font-weight: bold;"></p:outputLabel>
+									<p:outputLabel value="#{viewEmployee.aadhaarNo}"></p:outputLabel>
+
+
+									<p:outputLabel value="Bank Account No."
+										style="font-weight: bold;"></p:outputLabel>
+									<p:outputLabel value="#{viewEmployee.bankAccountNo}"></p:outputLabel>
+
+									<p:outputLabel value="Bank Name" style="font-weight: bold;"></p:outputLabel>
+									<p:outputLabel value="#{viewEmployee.bankName}"></p:outputLabel>
+
+									<p:outputLabel value="Bank Branch Name"
+										style="font-weight: bold;"></p:outputLabel>
+									<p:outputLabel value="#{viewEmployee.bankBranch}"></p:outputLabel>
+
+									<p:outputLabel value="IFSC CODE" style="font-weight: bold;"></p:outputLabel>
+									<p:outputLabel value="#{viewEmployee.ifscCode}"></p:outputLabel>
+
+									<p:outputLabel value="EPF UAN No." style="font-weight: bold;"></p:outputLabel>
+									<p:outputLabel value="#{viewEmployee.epfUanNo}"></p:outputLabel>
+
+									<p:outputLabel value="ESI No." style="font-weight: bold;"></p:outputLabel>
+									<p:outputLabel value="#{viewEmployee.esiNo}"></p:outputLabel>
+
+									<p:outputPanel>
+										<p:outputLabel value="Spouse Name : "
+											style="font-weight: bold;"></p:outputLabel>
+									</p:outputPanel>
+									<p:outputPanel>
+										<p:outputLabel value="#{viewEmployee.spouseName}"></p:outputLabel>
+									</p:outputPanel>
+
+
+									<p:outputPanel>
+										<p:outputLabel value="Anniversary Date : "
+											style="font-weight: bold;"></p:outputLabel>
+									</p:outputPanel>
+									<p:outputPanel>
+										<p:outputLabel value="#{viewEmployee.list.anniDateStr}"></p:outputLabel>
+									</p:outputPanel>
+
+
+									<p:outputLabel
+										value="#{editEmployeeVar.editEmployeeAddressLabel} : "
+										style="font-weight: bold;"></p:outputLabel>
+									<p:outputLabel value="#{viewEmployee.address}"></p:outputLabel>
+
+									<p:outputLabel
+										value="#{editEmployeeVar.editEmployeeCommentsLabel} : "
+										style="font-weight: bold;"></p:outputLabel>
+									<p:outputLabel value="#{viewEmployee.comment}"></p:outputLabel>
+								</p:panelGrid>
+
+							</p:panel>
+
+							<p:panel header="Documents">
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:outputLabel value="Profile Photo : "
+										style="font-weight: bold;"></p:outputLabel>
+									<p:lightBox>
+										<h:outputLink
+											value="#{sideMenuBean.list.downloadpath}#{viewEmployee.previousImage}">
+											<p:graphicImage height="150px" width="150px"
+												value="#{sideMenuBean.list.downloadpath}#{viewEmployee.previousImage}"></p:graphicImage>
+										</h:outputLink>
+									</p:lightBox>
+
+									<p:outputLabel
+										value="#{sideMenuBean.list.country.toLowerCase() eq 'uae' ? 'Emirates ID' : 'Aadhar Card'} : "
+										style="font-weight: bold;"></p:outputLabel>
+									<p:lightBox>
+										<h:outputLink
+											value="#{sideMenuBean.list.downloadpath}#{viewEmployee.aadharImage}">
+											<p:graphicImage height="150px" width="150px"
+												value="#{sideMenuBean.list.downloadpath}#{viewEmployee.aadharImage}"></p:graphicImage>
+										</h:outputLink>
+									</p:lightBox>
+
+									<p:outputLabel value="PAN Card : " style="font-weight: bold;"></p:outputLabel>
+									<p:lightBox>
+										<h:outputLink
+											value="#{sideMenuBean.list.downloadpath}#{viewEmployee.panImage}">
+											<p:graphicImage height="150px" width="150px"
+												value="#{sideMenuBean.list.downloadpath}#{viewEmployee.panImage}"></p:graphicImage>
+										</h:outputLink>
+									</p:lightBox>
+
+									<p:outputLabel
+										rendered="#{sideMenuBean.list.country.toLowerCase() ne 'uae'}"
+										value="VoterID : " style="font-weight: bold;"></p:outputLabel>
+									<p:lightBox
+										rendered="#{sideMenuBean.list.country.toLowerCase() ne 'uae'}">
+										<h:outputLink
+											value="#{sideMenuBean.list.downloadpath}#{viewEmployee.voteridImage}">
+											<p:graphicImage height="150px" width="150px"
+												value="#{sideMenuBean.list.downloadpath}#{viewEmployee.voteridImage}"></p:graphicImage>
+										</h:outputLink>
+									</p:lightBox>
+
+									<p:outputLabel value="D/L : " style="font-weight: bold;"></p:outputLabel>
+									<p:lightBox>
+										<h:outputLink
+											value="#{sideMenuBean.list.downloadpath}#{viewEmployee.dlImage}">
+											<p:graphicImage height="150px" width="150px"
+												value="#{sideMenuBean.list.downloadpath}#{viewEmployee.dlImage}"></p:graphicImage>
+										</h:outputLink>
+									</p:lightBox>
+
+									<p:outputLabel value="UG Cert./Marksheet : "
+										style="font-weight: bold;"></p:outputLabel>
+									<p:lightBox>
+										<h:outputLink
+											value="#{sideMenuBean.list.downloadpath}#{viewEmployee.ugImage}">
+											<p:graphicImage height="150px" width="150px"
+												value="#{sideMenuBean.list.downloadpath}#{viewEmployee.ugImage}"></p:graphicImage>
+										</h:outputLink>
+									</p:lightBox>
+
+									<p:outputLabel value="PG Cert./Marksheet : "
+										style="font-weight: bold;"></p:outputLabel>
+									<p:lightBox>
+										<h:outputLink
+											value="#{sideMenuBean.list.downloadpath}#{viewEmployee.pgImage}">
+											<p:graphicImage height="150px" width="150px"
+												value="#{sideMenuBean.list.downloadpath}#{viewEmployee.pgImage}"></p:graphicImage>
+										</h:outputLink>
+									</p:lightBox>
+
+									<p:outputLabel
+										value="#{sideMenuBean.list.country.toLowerCase() eq 'uae' ? 'PGCE/B.Ed.' : 'B.Ed.'} Cert./Marksheet : "
+										style="font-weight: bold;"></p:outputLabel>
+									<p:lightBox>
+										<h:outputLink
+											value="#{sideMenuBean.list.downloadpath}#{viewEmployee.bedImage}">
+											<p:graphicImage height="150px" width="150px"
+												value="#{sideMenuBean.list.downloadpath}#{viewEmployee.bedImage}"></p:graphicImage>
+										</h:outputLink>
+									</p:lightBox>
+
+									<p:outputLabel value="Police Verification : "
+										style="font-weight: bold;"></p:outputLabel>
+									<p:lightBox>
+										<h:outputLink
+											value="#{sideMenuBean.list.downloadpath}#{viewEmployee.policeImage}">
+											<p:graphicImage height="150px" width="150px"
+												value="#{sideMenuBean.list.downloadpath}#{viewEmployee.policeImage}"></p:graphicImage>
+										</h:outputLink>
+									</p:lightBox>
+
+									<p:outputLabel value="Experience Cert. : "
+										style="font-weight: bold;"></p:outputLabel>
+									<p:lightBox>
+										<h:outputLink
+											value="#{sideMenuBean.list.downloadpath}#{viewEmployee.expImage}">
+											<p:graphicImage height="150px" width="150px"
+												value="#{sideMenuBean.list.downloadpath}#{viewEmployee.expImage}"></p:graphicImage>
+										</h:outputLink>
+									</p:lightBox>
+
+									<p:outputLabel value="Other Doc. : " style="font-weight: bold;"></p:outputLabel>
+									<p:lightBox>
+										<h:outputLink
+											value="#{sideMenuBean.list.downloadpath}#{viewEmployee.otherImage}">
+											<p:graphicImage height="150px" width="150px"
+												value="#{sideMenuBean.list.downloadpath}#{viewEmployee.otherImage}"></p:graphicImage>
+										</h:outputLink>
+									</p:lightBox>
+
+								</p:panelGrid>
+							</p:panel>
+
+
+
+						</h:form>
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

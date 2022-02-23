@@ -1,0 +1,94 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">RBSE TC</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form3">
+
+
+							<p:panel header="Struck Off">
+								<p:messages autoUpdate="true" closable="true"></p:messages>
+								<p:panelGrid columns="2"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel  for="@next" style="color:red" value=" Reason"></p:outputLabel>
+									<p:selectOneMenu required="true" editable="true"
+										requiredMessage="Please select the reason"
+										value="#{rbscTC.reason}">
+										<f:selectItem itemLabel="Select Reason" itemValue=""></f:selectItem>
+										<f:selectItem itemLabel="Due to long absent"
+											itemValue="Due to Long Absent"></f:selectItem>
+										<f:selectItem itemLabel="To study else where"
+											itemValue="To Study Else Where"></f:selectItem>
+										<f:selectItem itemLabel="To study for higher classes"
+											itemValue="To Study For Higher Classes"></f:selectItem>
+										<f:selectItem itemLabel="Parents transfer to other city"
+											itemValue="Parents Transfer to Other City"></f:selectItem>
+										<f:selectItem itemLabel="Others" itemValue="Other"></f:selectItem>
+										<p:ajax update="form3:text1"
+											listener="#{rbscTC.getOtherReason}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:panelGrid columns="2" id="text1" layout="grid"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+										<p:outputLabel for="@next" style="color:red"  rendered="#{rbscTC.showTextBox}"
+											value="Other Reason"></p:outputLabel>
+										<p:inputText rendered="#{rbscTC.showTextBox}" required="true"
+											requiredMessage="Please enter the other reason"
+											value="#{rbscTC.text}" validatorMessage="Please Enter Correct value">
+										  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+										</p:inputText>
+									</p:panelGrid>
+									<p:outputLabel />
+
+									<p:outputLabel  for="@next" style="color:red" value="Date of Struck Off"></p:outputLabel>
+									<p:calendar required="true" pattern="dd/MM/yyyy"
+										requiredMessage="Please enter the date of name struck off"
+										value="#{rbscTC.date2}"></p:calendar>
+
+									<p:outputLabel value="Last Class From School"></p:outputLabel>
+									<p:inputText value="#{rbscTC.lastClass}" disabled="true" validatorMessage="Please Enter Correct value">
+									  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:inputText>
+
+									<p:outputLabel  for="@next" style="color:red" value="Performance Grade"></p:outputLabel>
+									<p:inputText value="#{rbscTC.perfom}" required="true"
+										requiredMessage="Please enter the performance grade" validatorMessage="Please Enter Correct value">
+									  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+									</p:inputText>
+
+
+									<p:outputLabel  for="@next" style="color:red" value="Register No."></p:outputLabel>
+									<p:inputText value="#{rbscTC.number}" required="true"
+										requiredMessage="Please enter register no">
+										<p:keyFilter mask="pnum" />
+									</p:inputText>
+
+
+									<p:commandButton update=":form3" value="Struck Off"
+										action="#{rbscTC.struckOff}"></p:commandButton>
+
+								</p:panelGrid>
+
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

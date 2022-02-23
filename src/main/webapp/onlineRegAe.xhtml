@@ -1,0 +1,483 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/onlineAdmTemplate.xhtml">
+
+	<ui:define name="title">Registration Form</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form" enctype="multipart/form-data">
+							<p:messages closable="true" autoUpdate="true"></p:messages>
+							<p:panel header="Registration Form">
+
+								<p:tabView id="tabview">
+
+									<p:tab title="Student Details">
+										<!-- <p:tabView>
+											<p:tab title="General Details"> -->
+										<p:panelGrid columns="4"
+											columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+											layout="grid" styleClass="ui-panelgrid-blank form-group"
+											style="border:0px none; background-color:transparent;">
+
+											<p:outputLabel value="Admission For Academic Year"  for="@next" style="color:red" />
+											<p:selectOneMenu value="#{onlineRegae.info.year}"
+												required="true"
+												requiredMessage="Please select Academic Year">
+												<f:selectItem itemLabel="--Select--"></f:selectItem>
+												<f:selectItems value="#{onlineRegae.sessionList}"></f:selectItems>
+											</p:selectOneMenu>
+
+											<p:outputLabel value="Class"  for="@next" style="color:red" />
+											<p:selectOneMenu filter="true"
+												value="#{onlineRegae.info.classid}" required="true"
+												requiredMessage="Please Select a Class">
+												<f:selectItem itemLabel="--Select--"></f:selectItem>
+												<f:selectItems value="#{onlineRegae.classList}"></f:selectItems>
+											</p:selectOneMenu>
+
+											<p:outputLabel value="Date of Application" />
+											<p:calendar disabled="true" yearRange="c-50:c+0"
+												navigator="true" value="#{onlineRegae.info.apply_date}"
+												pattern="dd/MM/yyyy"
+												style="width: 280px !important;height:30px !important;margin-bottom: 12px !important;"></p:calendar>
+
+											<p:outputLabel value="Student Name as in Passport"  for="@next" style="color:red" />
+											<p:inputText id="stnm" value="#{onlineRegae.info.st_name}"
+												required="true" requiredMessage="Please enter Student Name"
+												onchange="this.value=toTitleCase(this.value)"
+												onkeyup="this.value=toTitleCase(this.value)"></p:inputText>
+
+											<p:outputLabel value="Gender"  for="@next" style="color:red" />
+											<p:selectOneRadio value="#{onlineRegae.info.gender}"
+												required="true" requiredMessage="Please Select Gender">
+												<f:selectItem itemLabel="Male" itemValue="Male"></f:selectItem>
+												<f:selectItem itemLabel="Female" itemValue="Female"></f:selectItem>
+											</p:selectOneRadio>
+
+											<p:outputLabel value="Date of Birth"  for="@next" style="color:red" />
+											<p:calendar yearRange="c-50:c+0" navigator="true"
+												value="#{onlineRegae.info.dob}" required="true"
+												requiredMessage="Please Select Date of Birth"
+												pattern="dd/MM/yyyy"
+												style="width: 280px !important;height:30px !important;margin-bottom: 12px !important;"></p:calendar>
+
+
+											<p:outputLabel value="Place of Birth" />
+											<p:inputText value="#{onlineRegae.info.birth_place}"></p:inputText>
+
+											<p:outputLabel value="Last School Attended" />
+											<p:inputText value="#{onlineRegae.info.last_school}"
+												placeholder="If No, Write 'NA'"></p:inputText>
+
+											<p:outputLabel value="Nationality"  for="@next" style="color:red" />
+											<p:selectOneMenu filter="true"
+												value="#{onlineRegae.info.nationality}" required="true"
+												requiredMessage="Please Select Nationality">
+												<f:selectItem itemLabel="--Select--" itemValue=""></f:selectItem>
+												<f:selectItems value="#{onlineRegae.nationalityList}"></f:selectItems>
+											</p:selectOneMenu>
+
+											<p:outputLabel value="Religion"  for="@next" style="color:red" />
+											<p:selectOneMenu filter="true"
+												value="#{onlineRegae.info.religion}"
+												requiredMessage="Please Select Religion" required="true"
+												editable="true"
+												placeholder="Select Religion / Specify for 'Others'">
+												<f:selectItem itemLabel="--Select--" itemValue=""></f:selectItem>
+												<f:selectItems value="#{onlineRegae.religionList}"></f:selectItems>
+											</p:selectOneMenu>
+
+											<p:outputLabel value="Home Language" />
+											<p:inputText value="#{onlineRegae.info.lang}"></p:inputText>
+
+											<p:outputLabel rendered="false" value="Veg or Non Veg?" />
+											<p:selectOneRadio rendered="false"
+												value="#{onlineRegae.info.food_type}">
+												<f:selectItem itemLabel="Veg" itemValue="Veg"></f:selectItem>
+												<f:selectItem itemLabel="Non Veg" itemValue="Non Veg"></f:selectItem>
+											</p:selectOneRadio>
+
+											<p:outputLabel value="Passport No." />
+											<p:inputText value="#{onlineRegae.info.ppt_no}"></p:inputText>
+
+											<p:outputLabel value="Passport Issue Date" />
+											<p:calendar yearRange="c-50:c+50" navigator="true"
+												value="#{onlineRegae.info.ppt_issue_date}"
+												pattern="dd/MM/yyyy"
+												style="width: 280px !important;height:30px !important;margin-bottom: 12px !important;"></p:calendar>
+
+
+											<p:outputLabel value="Passport Expiry Date" />
+											<p:calendar yearRange="c-50:c+50" navigator="true"
+												value="#{onlineRegae.info.ppt_exp_date}"
+												pattern="dd/MM/yyyy"
+												style="width: 280px !important;height:30px !important;margin-bottom: 12px !important;"></p:calendar>
+
+
+											<p:outputLabel value="Place of Issue Passport" />
+											<p:inputText value="#{onlineRegae.info.ppt_place}"></p:inputText>
+
+											<p:outputLabel value="VISA No." />
+											<p:inputText value="#{onlineRegae.info.visa_no}"></p:inputText>
+
+											<p:outputLabel value="VISA Valid upto Date" />
+											<p:calendar yearRange="c-50:c+50" navigator="true"
+												value="#{onlineRegae.info.visa_exp_date}"
+												pattern="dd/MM/yyyy"
+												style="width: 280px !important;height:30px !important;margin-bottom: 12px !important;"></p:calendar>
+
+
+											<p:outputLabel value="VISA Issue Date" />
+											<p:calendar yearRange="c-50:c+50" navigator="true"
+												value="#{onlineRegae.info.visa_issue_date}"
+												pattern="dd/MM/yyyy"
+												style="width: 280px !important;height:30px !important;margin-bottom: 12px !important;"></p:calendar>
+
+
+											<p:outputLabel value="Other Languages Spoken" />
+											<p:inputText value="#{onlineRegae.info.other_lang}"></p:inputText>
+
+											<p:outputLabel value="Address in UAE (Including PO Box)"  for="@next" style="color:red" />
+											<p:inputTextarea value="#{onlineRegae.info.address}"
+												requiredMessage="Please Enter Address" required="true"
+												rows="5" cols="26">
+											</p:inputTextarea>
+											
+											<p:outputLabel rendered="false" value="Ethnicity" />
+											<p:selectOneMenu rendered="false" filter="true"
+												value="#{onlineRegae.info.ethnicity}">
+												<f:selectItem itemLabel="--Select--" itemValue=""></f:selectItem>
+												<f:selectItem itemLabel="Arab-UAE" itemValue="Arab-UAE"></f:selectItem>
+												<f:selectItem itemLabel="Other Arab" itemValue="Other Arab"></f:selectItem>
+												<f:selectItem itemLabel="Other Ethnic Group"
+													itemValue="Other Ethnic Group"></f:selectItem>
+											</p:selectOneMenu>
+
+											<p:outputLabel value="Student Emirates ID"  for="@next" style="color:red" />
+											<p:inputMask value="#{onlineRegae.info.emid}" required="true"
+												requiredMessage="Please Enter Student Emirates ID"
+												mask="999-9999-9999999-9" />
+												
+												<p:outputLabel/><p:outputLabel/>
+
+											<p:outputLabel for="@next" style="color:red" 
+												value="Upload Child's Photo (File Type - JPG,JPEG,PNG)"></p:outputLabel>
+											<p:outputPanel id="stpicFl">
+											<p:fileUpload value="#{onlineRegae.studentImage}"
+												required="#{onlineRegae.info.st_image eq ''}" mode="advanced" uploadLabel=""
+												cancelLabel="" style="width:-moz-min-content"
+												sizeLimit="1000000" fileLimit="1"
+												allowTypes="/(\.|\/)(gif|jpe?g|png)$/"
+												requiredMessage="Please Upload Child's Photo"
+												update="stpicDoc,stpicFl" auto="true"
+												listener="#{onlineRegae.studentUpload}">
+											</p:fileUpload>
+											</p:outputPanel>
+											<p:outputLabel />
+											<p:outputPanel id="stpicDoc">
+												<p:graphicImage height="100px" width="100px"
+													value="#{onlineRegae.info.st_image eq '' ? 'noimage.png' : onlineRegae.info.st_image}" />
+											</p:outputPanel>
+										</p:panelGrid>
+
+									</p:tab>
+
+									<p:tab title="Sibling Details">
+										<p:dataTable value="#{onlineRegae.completeList}" reflow="true"
+											var="var">
+
+											<p:column headerText="S.No.">
+												<p:outputLabel value="#{var.sno}"></p:outputLabel>
+											</p:column>
+
+											<p:column headerText="Name">
+												<p:inputText value="#{var.name}"></p:inputText>
+											</p:column>
+
+											<p:column headerText="Class">
+												<p:selectOneMenu filter="true" value="#{var.class_id}">
+													<f:selectItem itemLabel="--Select--"></f:selectItem>
+													<f:selectItems value="#{onlineRegae.classList}"></f:selectItems>
+												</p:selectOneMenu>
+											</p:column>
+
+										</p:dataTable>
+										<!-- <p:commandButton global="false" value="Back"
+										icon="ui-icon-arrow-1-w" iconPos="left"
+										onclick="PF('myWizard').back()" />
+										
+									<p:commandButton global="false" value="Next"
+										icon="ui-icon-arrow-1-e" iconPos="Right"
+										onclick="PF('myWizard').next();" /> -->
+									</p:tab>
+
+									<p:tab id="tab2" title="Details of Legal Guardian">
+										<p:panelGrid columns="2"
+											columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+											layout="grid" styleClass="ui-panelgrid-blank form-group"
+											style="border:0px none; background-color:transparent;">
+											<p:outputLabel value="Parent Type" style="font-weight:bold;" />
+											<p:selectOneRadio value="#{onlineRegae.info.parent_type}">
+												<f:selectItem itemLabel="Existing Parents"
+													itemValue="Existing Parents"></f:selectItem>
+												<f:selectItem itemLabel="New Parents"
+													itemValue="New Parents"></f:selectItem>
+												<p:ajax update="prt" global="false" event="change"
+													listener="#{onlineRegae.checkParent}"></p:ajax>
+											</p:selectOneRadio>
+										</p:panelGrid>
+
+										<p:outputPanel id="prt">
+											<p:outputPanel id="pid"
+												rendered="#{onlineRegae.showParentEx}">
+												<p:panelGrid columns="2"
+													columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+													layout="grid" styleClass="ui-panelgrid-blank form-group"
+													style="border:0px none; background-color:transparent;">
+
+													<p:outputLabel value="Parent ID"  for="@next" style="color:red" />
+													<p:inputText value="#{onlineRegae.info.parent_id}"
+														required="true" requiredMessage="Please Enter Parent ID"></p:inputText>
+
+												</p:panelGrid>
+												<br></br>
+
+												<p:panelGrid columns="2"
+													columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+													layout="grid" styleClass="ui-panelgrid-blank form-group"
+													style="border:0px none; background-color:transparent;">
+													<p:commandButton update="form" ajax="false" value="Submit"
+														action="#{onlineRegae.submit}"></p:commandButton>
+												</p:panelGrid>
+											</p:outputPanel>
+
+											<p:outputPanel id="pdtl"
+												rendered="#{onlineRegae.showParentNew}">
+												<p:panelGrid columns="4"
+													columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+													layout="grid" styleClass="ui-panelgrid-blank form-group"
+													style="border:0px none; background-color:transparent;">
+
+													<p:outputLabel for="@next" style="color:red" 
+														value="Name of person filling this application" />
+													<p:inputText value="#{onlineRegae.info.applicant_name}"
+														required="true"
+														requiredMessage="Please Enter Applicant Name"
+														onchange="this.value=toTitleCase(this.value)"
+														onkeyup="this.value=toTitleCase(this.value)" />
+
+													<p:outputLabel
+														value="Relation to child: If other,Please State Relationship" />
+													<p:selectOneRadio
+														value="#{onlineRegae.info.applicant_relation}">
+														<f:selectItem itemLabel="Father" itemValue="Father"></f:selectItem>
+														<f:selectItem itemLabel="Mother" itemValue="Mother"></f:selectItem>
+														<f:selectItem itemLabel="Legal Guardian"
+															itemValue="Legal Guardian"></f:selectItem>
+														<f:selectItem itemLabel="Other" itemValue="Other"></f:selectItem>
+														<p:ajax update="otherrel" global="false" event="change"
+															listener="#{onlineRegae.checkRel}"></p:ajax>
+													</p:selectOneRadio>
+
+													<p:outputLabel />
+													<p:outputLabel />
+													<p:outputLabel />
+													<p:inputText id="otherrel"
+														disabled="#{onlineRegae.disableRel}"
+														value="#{onlineRegae.info.other_rel}"
+														placeholder="Relationship" required="true"
+														requiredMessage="Please State Relationship" />
+												</p:panelGrid>
+												<p:separator />
+												<p:outputLabel value="Father Details"
+													style="font-weight:bold;font-size:14px;" />
+												<p:separator />
+
+												<p:panelGrid columns="4"
+													columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+													layout="grid" styleClass="ui-panelgrid-blank form-group"
+													style="border:0px none; background-color:transparent;">
+
+													<p:outputLabel value="Name*" />
+													<p:inputText value="#{onlineRegae.info.f_name}"
+														required="true" requiredMessage="Please Enter Father Name"
+														onchange="this.value=toTitleCase(this.value)"
+														onkeyup="this.value=toTitleCase(this.value)" />
+
+													<p:outputLabel value="Mobile*" />
+													<p:outputPanel>
+														<div class="ui-inputgroup">
+															<span class="ui-inputgroup-addon">+971</span>
+															<p:inputText placeholder="Eg.545615783"
+																value="#{onlineRegae.info.f_mob}" required="true"
+																requiredMessage="Please Enter Father Mobile"
+																maxlength="9"
+																validatorMessage="Please Enter 9 Digit Father's Mobile No.">
+																<p:keyFilter mask="num" />
+																<f:validateLength minimum="9"></f:validateLength>
+															</p:inputText>
+														</div>
+													</p:outputPanel>
+
+													<p:outputLabel value="Email address*" />
+													<p:inputText value="#{onlineRegae.info.f_email}"
+														required="true"
+														requiredMessage="Please Enter Father Email"
+														placeholder="Primary Email for Correspondence" />
+
+													<p:outputLabel  for="@next" style="color:red" value="Emirates ID" />
+													<p:inputMask value="#{onlineRegae.info.f_emid}"
+														required="true"
+														requiredMessage="Please Enter Father Emirates ID"
+														mask="999-9999-9999999-9" />
+														
+													<p:outputLabel value="Occupation"  for="@next" style="color:red" />
+													<p:inputText value="#{onlineRegae.info.f_occupation}" required="true" requiredMessage="Please Enter Father's Occupation"/>
+
+													<p:outputLabel value="Employer"  for="@next" style="color:red" />
+													<p:inputText value="#{onlineRegae.info.f_employer}" required="true" requiredMessage="Please Enter Father's Employer"/>
+
+													<p:outputLabel value="Work No."  for="@next" style="color:red" />
+													<p:inputText value="#{onlineRegae.info.f_work}" required="true" requiredMessage="Please Enter Father's Work No."/>
+
+													<p:outputLabel value="Address"  for="@next" style="color:red" />
+													<p:inputTextarea value="#{onlineRegae.info.f_address}"
+														requiredMessage="Please Enter Father's Address"
+														required="true" rows="5" cols="26">
+													</p:inputTextarea>	
+
+													<p:outputLabel
+														value="Upload Father's Photo (File Type - JPG,JPEG,PNG)"></p:outputLabel>
+													<p:outputPanel id="fpicDocFL">
+													<p:fileUpload value="#{onlineRegae.fatherImage}"
+														mode="advanced" uploadLabel="" cancelLabel=""
+														style="width:-moz-min-content" sizeLimit="1000000"
+														fileLimit="1" allowTypes="/(\.|\/)(gif|jpe?g|png)$/"
+														update="fpicDoc,fpicDocFL" auto="true"
+														listener="#{onlineRegae.fatherUpload}">
+													</p:fileUpload>
+													</p:outputPanel>
+													<p:outputLabel />
+													<p:outputPanel id="fpicDoc">
+														<p:graphicImage height="100px" width="100px"
+															value="#{onlineRegae.info.f_image eq '' ? 'noimage.png' : onlineRegae.info.f_image}" />
+													</p:outputPanel>
+												</p:panelGrid>
+												<p:separator />
+												<p:outputLabel value="Mother Details"
+													style="font-weight:bold;font-size:14px;" />
+												<p:separator />
+
+												<p:panelGrid columns="4"
+													columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+													layout="grid" styleClass="ui-panelgrid-blank form-group"
+													style="border:0px none; background-color:transparent;">
+
+													<p:outputLabel value="Name"  for="@next" style="color:red" />
+													<p:inputText value="#{onlineRegae.info.m_name}"
+														required="true" requiredMessage="Please Enter Mother Name"
+														onchange="this.value=toTitleCase(this.value)"
+														onkeyup="this.value=toTitleCase(this.value)" />
+
+													<p:outputLabel value="Mobile"  for="@next" style="color:red" />
+													<p:outputPanel>
+														<div class="ui-inputgroup">
+															<span class="ui-inputgroup-addon">+971</span>
+															<p:inputText placeholder="Eg.545615783"
+																value="#{onlineRegae.info.m_mob}" required="true"
+																requiredMessage="Please Enter Mother Mobile"
+																maxlength="9"
+																validatorMessage="Please Enter 9 Digit Mother's Mobile No.">
+																<p:keyFilter mask="num" />
+																<f:validateLength minimum="9"></f:validateLength>
+															</p:inputText>
+														</div>
+													</p:outputPanel>
+
+
+													<p:outputLabel value="Email address"  for="@next" style="color:red" />
+													<p:inputText value="#{onlineRegae.info.m_email}"
+														required="true"
+														requiredMessage="Please Enter Mother Email"
+														placeholder="Primary Email for Correspondence" />
+
+													<p:outputLabel value="Emirates ID"  for="@next" style="color:red" />
+													<p:inputMask value="#{onlineRegae.info.m_emid}"
+														required="true"
+														requiredMessage="Please Enter Mother Emirates ID"
+														mask="999-9999-9999999-9" />
+														
+													<p:outputLabel value="Occupation"  for="@next" style="color:red" />
+													<p:inputText value="#{onlineRegae.info.m_occupation}" required="true" requiredMessage="Please Enter Mother's Occupation"/>
+
+													<p:outputLabel value="Employer"  for="@next" style="color:red" />
+													<p:inputText value="#{onlineRegae.info.m_employer}" required="true" requiredMessage="Please Enter Mother's Employer"/>
+
+													<p:outputLabel value="Work No."  for="@next" style="color:red" />
+													<p:inputText value="#{onlineRegae.info.m_work}" required="true" requiredMessage="Please Enter Mother's Work No."/>
+
+													<p:outputLabel value="Address"  for="@next" style="color:red" />
+													<p:inputTextarea value="#{onlineRegae.info.m_address}"
+														requiredMessage="Please Enter Mother's Address"
+														required="true" rows="5" cols="26">
+													</p:inputTextarea>	
+
+													<p:outputLabel
+														value="Upload Mother's Photo (File Type - JPG,JPEG,PNG)"></p:outputLabel>
+													<p:outputPanel id="mpicDocFL">
+													<p:fileUpload value="#{onlineRegae.motherImage}"
+														mode="advanced" uploadLabel="" cancelLabel=""
+														style="width:-moz-min-content" sizeLimit="1000000"
+														fileLimit="1" allowTypes="/(\.|\/)(gif|jpe?g|png)$/"
+														update="mpicDoc,mpicDocFL" auto="true"
+														listener="#{onlineRegae.motherUpload}">
+													</p:fileUpload>
+													</p:outputPanel>
+													<p:outputLabel />
+													<p:outputPanel id="mpicDoc">
+														<p:graphicImage height="100px" width="100px"
+															value="#{onlineRegae.info.m_image eq '' ? 'noimage.png' : onlineRegae.info.m_image}" />
+													</p:outputPanel>
+												</p:panelGrid>
+												<br></br>
+
+
+												<p:panelGrid columns="2"
+													styleClass="ui-panelgrid-blank form-group"
+													style="border:0px none; background-color:transparent;">
+
+													<p:commandButton update="form" ajax="false"
+														icon="ui-icon-check" value="Submit"
+														action="#{onlineRegae.submit}"></p:commandButton>
+												</p:panelGrid>
+											</p:outputPanel>
+										</p:outputPanel>
+									</p:tab>
+
+								</p:tabView>
+
+
+							</p:panel>
+							<br></br>
+							<p:panel>
+								<p:outputLabel value="Note:- * fields are mandatory"></p:outputLabel>
+							</p:panel>
+						</h:form>
+
+						<!-- </div> -->
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

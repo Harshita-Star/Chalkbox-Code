@@ -1,0 +1,380 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/masterTemplate.xhtml">
+
+	<ui:define name="title">Add School</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form" style="overflow:hidden">
+							<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+							<p:messages autoUpdate="true"></p:messages>
+
+							<p:panel header="Add School">
+								<p:commandLink immediate="true"
+									style="float:right;color:blue;font-size: 15px !important;"
+									value="View / Edit School"
+									action="viewEditDeleteSchool.xhtml?faces-redirect=true"></p:commandLink>
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel value="School Name:-" for="@next" style="color:red" ></p:outputLabel>
+									<p:inputText value="#{addSchool.schoolName}" required="true"
+										requiredMessage="Please Enter School Name" validatorMessage="Please Enter Correct value">
+									 <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:inputText>
+
+									<p:outputLabel value="Alias Name:-"  for="@next" style="color:red" ></p:outputLabel>
+									<p:inputText value="#{addSchool.aliasName}" required="true"
+										requiredMessage="Please Enter Alias Name" validatorMessage="Please Enter Correct value">
+									 <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:inputText>
+
+									<p:outputLabel value="Admin User Name:-"  for="@next" style="color:red" ></p:outputLabel>
+									<p:inputText value="#{addSchool.empusername}" required="true"
+										requiredMessage="Please Enter User Name">
+										<p:keyFilter regEx="/[a-z0-9_]/i"></p:keyFilter>
+									</p:inputText>
+
+									<p:outputLabel value="Password:-"  for="@next" style="color:red" ></p:outputLabel>
+									<p:inputText value="#{addSchool.password}" required="true"
+										requiredMessage="Please Enter Password" validatorMessage="Please Enter Correct value">
+									 <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:inputText>
+
+									<p:outputLabel value="Select Main Branch "  for="@next" style="color:red" ></p:outputLabel>
+									<p:selectOneMenu value="#{addSchool.branchid}" required="true"
+										requiredMessage="Please Select Main Branch">
+										<f:selectItem itemLabel="Select Main Branch" itemValue=""></f:selectItem>
+										<f:selectItem itemLabel="NEW SCHOOL" itemValue="new"></f:selectItem>
+										<f:selectItems value="#{addSchool.branchList}"></f:selectItems>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Contact No:-"  for="@next" style="color:red" ></p:outputLabel>
+									<p:inputText maxlength="10" value="#{addSchool.contactNo}"
+										validatorMessage="Contact No. Should be of 10 Didgits."
+										required="true" requiredMessage="Please Enter Contact No.">
+										<f:validateLength minimum="10"></f:validateLength>
+										<p:keyFilter mask="num" />
+									</p:inputText>
+
+									<p:outputLabel value="Contact Name:-"></p:outputLabel>
+									<p:inputText value="#{addSchool.contactName}" validatorMessage="Please Enter Correct value">
+									 <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:inputText>
+
+									<p:outputLabel value="Country "  for="@next" style="color:red" ></p:outputLabel>
+									<p:selectOneMenu value="#{addSchool.country}" required="true"
+										requiredMessage="Please Select Country">
+										<f:selectItem itemLabel="Select Country" itemValue=""></f:selectItem>
+										<f:selectItem itemLabel="India" itemValue="India"></f:selectItem>
+										<f:selectItem itemLabel="UAE" itemValue="UAE"></f:selectItem>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="State "  for="@next" style="color:red" ></p:outputLabel>
+									<p:inputText value="#{addSchool.state}" required="true"
+										requiredMessage="Please Enter State" validatorMessage="Please Enter Correct value">
+									 <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:inputText>
+
+									<p:outputLabel value="District "  for="@next" style="color:red" ></p:outputLabel>
+									<p:inputText value="#{addSchool.district}" required="true"
+										requiredMessage="Please Enter District" validatorMessage="Please Enter Correct value">
+									  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									 </p:inputText>
+
+									<p:outputLabel value="Zone "  for="@next" style="color:red" ></p:outputLabel>
+									<p:selectOneMenu value="#{addSchool.zone}" required="true"
+										requiredMessage="Please Enter Zone" editable="true">
+										<f:selectItem itemLabel="Select Zone" itemValue=""></f:selectItem>
+										<f:selectItem itemLabel="East Zone" itemValue="East"></f:selectItem>
+										<f:selectItem itemLabel="West Zone" itemValue="West"></f:selectItem>
+										<f:selectItem itemLabel="North Zone" itemValue="North"></f:selectItem>
+										<f:selectItem itemLabel="South Zone" itemValue="South"></f:selectItem>
+									</p:selectOneMenu>
+									
+									
+									<p:outputLabel value="Starting Session"></p:outputLabel>
+									<p:selectOneMenu value="#{addSchool.session}">
+										<f:selectItems value="#{addSchool.sessionList}"></f:selectItems>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Start Date:-"  for="@next" style="color:red" ></p:outputLabel>
+									<p:calendar value="#{addSchool.startDate}" pattern="dd/MM/yyyy"
+										navigator="true" required="true"
+										requiredMessage="Please Enter Start Date"></p:calendar>
+
+									<p:outputLabel value="Expire Date:-"  for="@next" style="color:red" ></p:outputLabel>
+									<p:calendar value="#{addSchool.expireDate}"
+										pattern="dd/MM/yyyy" navigator="true" required="true"
+										requiredMessage="Please Enter Expire Date"></p:calendar>
+
+									<p:outputLabel value="Renewal Date:-"  for="@next" style="color:red" ></p:outputLabel>
+									<p:calendar value="#{addSchool.renewalDate}"
+										pattern="dd/MM/yyyy" navigator="true" required="true"
+										requiredMessage="Please Enter Renewal Date"></p:calendar>
+
+									<p:outputLabel value="Amount:-"  for="@next" style="color:red" ></p:outputLabel>
+									<p:inputText value="#{addSchool.chalkBoxAmount}"
+										onfocus="this.select();" required="true"
+										requiredMessage="Please Enter Chalk Box Amount">
+										<p:keyFilter mask="num" />
+									</p:inputText>
+
+									<p:outputLabel rendered="false" value="IMG Amount:-"  for="@next" style="color:red" ></p:outputLabel>
+									<p:inputText rendered="false" value="#{addSchool.imgAmount}"
+										onfocus="this.select();" required="true"
+										requiredMessage="Please Enter IMG Amount">
+										<p:keyFilter mask="num" />
+									</p:inputText>
+
+									<p:outputLabel rendered="false"
+										value="Chalk Box Renewal Amount:-"  for="@next" style="color:red" ></p:outputLabel>
+									<p:inputText rendered="false"
+										value="#{addSchool.chalkBoxRenewal}" onfocus="this.select();"
+										required="true"
+										requiredMessage="Please Enter Chalk Box Renewal Amount">
+										<p:keyFilter mask="num" />
+									</p:inputText>
+
+									<p:outputLabel value="Renewal Amount:-"  for="@next" style="color:red" ></p:outputLabel>
+									<p:inputText value="#{addSchool.imgRenewalAmount}"
+										onfocus="this.select();" required="true"
+										requiredMessage="Please Enter IMG Renewal Amount">
+										<p:keyFilter mask="num" />
+									</p:inputText>
+
+									<p:outputLabel rendered="false" value="No.of Students:-"  for="@next" style="color:red" ></p:outputLabel>
+									<p:inputText rendered="false" value="#{addSchool.noOfStudents}"
+										onfocus="this.select();" required="true"
+										requiredMessage="Please Enter Number of Students">
+										<p:keyFilter mask="num" />
+									</p:inputText>
+
+
+									<p:outputLabel value="Message Sender Id:-"  for="@next" style="color:red" > </p:outputLabel>
+									<p:inputText required="true"
+										requiredMessage="Please enter Sender ID"
+										placeholder="Use 'SCHOOL' If You Don't Know"
+										value="#{addSchool.senderid}" onfocus="this.select();" validatorMessage="Please Enter Correct value">
+									 <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	 
+									</p:inputText>
+
+
+									<p:outputLabel value="Message Given:-"  for="@next" style="color:red" ></p:outputLabel>
+									<p:inputText value="#{addSchool.msz}" onfocus="this.select();"
+										required="true" requiredMessage="Please Enter Message Given">
+										<p:keyFilter mask="num" />
+									</p:inputText>
+
+									<p:outputLabel value="Type of Project*:-"></p:outputLabel>
+									<p:selectOneRadio value="#{addSchool.type}">
+										<f:selectItem itemLabel="Basic" itemValue="basic" />
+										<f:selectItem itemLabel="Novice" itemValue="novice" />
+										<f:selectItem itemLabel="Foster" itemValue="foster" />
+									</p:selectOneRadio>
+
+									<p:outputLabel value="Client Type *:-"></p:outputLabel>
+									<p:selectOneRadio value="#{addSchool.clientType}">
+										<f:selectItem itemLabel="School" itemValue="school" />
+										<f:selectItem itemLabel="Institute" itemValue="institute" />
+									</p:selectOneRadio>
+
+
+									<p:outputLabel value="GPS *:-"></p:outputLabel>
+									<p:selectOneRadio value="#{addSchool.gps}">
+										<f:selectItem itemLabel="Yes" itemValue="yes" />
+										<f:selectItem itemLabel="No" itemValue="no" />
+									</p:selectOneRadio>
+
+									<p:outputLabel value="Time Table *:-"></p:outputLabel>
+									<p:selectOneRadio value="#{addSchool.timetable}">
+										<f:selectItem itemLabel="Manual" itemValue="Manual" />
+										<f:selectItem itemLabel="Image" itemValue="Image" />
+									</p:selectOneRadio>
+
+									<p:outputLabel value="School Session * " />
+									<p:selectOneRadio value="#{addSchool.schoolSession}"
+										layout="grid" columns="1">
+										<f:selectItem itemLabel="April to March" itemValue="4-3"></f:selectItem>
+										<f:selectItem itemLabel="May to April" itemValue="5-4"></f:selectItem>
+									</p:selectOneRadio>
+
+									<p:outputLabel value="Fees Start From * " />
+									<p:selectOneRadio value="#{addSchool.feeStart}" layout="grid"
+										columns="1">
+										<f:selectItem itemLabel="From Session Starting Date"
+											itemValue="session_date"></f:selectItem>
+										<f:selectItem itemLabel="From Admission Date"
+											itemValue="admission_date"></f:selectItem>
+									</p:selectOneRadio>
+
+									<p:outputLabel value="Agreement For (No. of Student):-"  for="@next" style="color:red" ></p:outputLabel>
+									<p:inputText value="#{addSchool.noOfStudent}" required="true"
+										requiredMessage="Please Enter Agreement For">
+										<p:keyFilter mask="pnum"></p:keyFilter>
+									</p:inputText>
+
+									<p:outputLabel for="@next" style="color:red;font-weight:bold;"
+										value="Admin App (For School Admin):-"  ></p:outputLabel>
+									<p:selectBooleanButton required="true"
+										requiredMessage="Please Go Through Admin App"
+										value="#{addSchool.adminLogin}" onLabel="Yes" offLabel="No"
+										onIcon="ui-icon-check" offIcon="ui-icon-close">
+									</p:selectBooleanButton>
+
+									<p:outputLabel for="@next" style="color:red;font-weight:bold;"
+										value="Authority App (For School Director/Chairman/Authority):-" ></p:outputLabel>
+									<p:selectBooleanButton required="true"
+										requiredMessage="Please Go Through Authority App"
+										value="#{addSchool.authorityLogin}" onLabel="Yes"
+										offLabel="No" onIcon="ui-icon-check" offIcon="ui-icon-close">
+									</p:selectBooleanButton>
+
+									<p:outputLabel for="@next" style="color:red;font-weight:bold;"
+										value="Principal App (For School Principal/Vice Principal):-"></p:outputLabel>
+									<p:selectBooleanButton required="true"
+										requiredMessage="Please Go Through Principal App"
+										value="#{addSchool.principalLogin}" onLabel="Yes"
+										offLabel="No" onIcon="ui-icon-check" offIcon="ui-icon-close">
+									</p:selectBooleanButton>
+
+									<p:outputLabel for="@next" style="color:red;font-weight:bold;"
+										value="Teacher App (For School Teachers)*:-"></p:outputLabel>
+									<p:selectBooleanButton required="true"
+										requiredMessage="Please Go Through Teacher App"
+										value="#{addSchool.teacherLogin}" onLabel="Yes" offLabel="No"
+										onIcon="ui-icon-check" offIcon="ui-icon-close">
+									</p:selectBooleanButton>
+
+									<p:outputLabel for="@next" style="color:red;font-weight:bold;"
+										value="Academic Co-ordinator App (For School Academic co-ordinator)*:-"></p:outputLabel>
+									<p:selectBooleanButton required="true"
+										requiredMessage="Please Go Through Academic Co-ordinator App"
+										value="#{addSchool.academicLogin}" onLabel="Yes" offLabel="No"
+										onIcon="ui-icon-check" offIcon="ui-icon-close">
+									</p:selectBooleanButton>
+
+									<p:outputLabel for="@next" style="color:red;font-weight:bold;"
+										value="Front Office App (For Front Office/Enquiry)*:-"></p:outputLabel>
+									<p:selectBooleanButton required="true"
+										requiredMessage="Please Go Through Front Office App"
+										value="#{addSchool.frontLogin}" onLabel="Yes" offLabel="No"
+										onIcon="ui-icon-check" offIcon="ui-icon-close">
+									</p:selectBooleanButton>
+
+									<p:outputLabel for="@next" style="color:red;font-weight:bold;"
+										value="Library App (For Librarian)*:-"></p:outputLabel>
+									<p:selectBooleanButton required="true"
+										requiredMessage="Please Go Through Library App"
+										value="#{addSchool.libraryLogin}" onLabel="Yes" offLabel="No"
+										onIcon="ui-icon-check" offIcon="ui-icon-close">
+									</p:selectBooleanButton>
+
+									<p:outputLabel for="@next" style="color:red;font-weight:bold;"
+										value="Attendant App (For School Bus Attendant/Driver/Conductor)*:-"></p:outputLabel>
+									<p:selectBooleanButton required="true"
+										requiredMessage="Please Go Through Attendant App"
+										value="#{addSchool.attendantLogin}" onLabel="Yes"
+										offLabel="No" onIcon="ui-icon-check" offIcon="ui-icon-close">
+									</p:selectBooleanButton>
+
+									<p:outputLabel for="@next" style="color:red;font-weight:bold;"
+										value="Transporter App (For School Transport Manager)*:-"></p:outputLabel>
+									<p:selectBooleanButton required="true"
+										requiredMessage="Please Go Through Transport App"
+										value="#{addSchool.transportLogin}" onLabel="Yes"
+										offLabel="No" onIcon="ui-icon-check" offIcon="ui-icon-close">
+									</p:selectBooleanButton>
+
+									<p:outputLabel for="@next" style="color:red;font-weight:bold;"
+										value="Security App (For School Main Gate Security)*:-"></p:outputLabel>
+									<p:selectBooleanButton required="true"
+										requiredMessage="Please Go Through Security App"
+										value="#{addSchool.securityLogin}" onLabel="Yes" offLabel="No"
+										onIcon="ui-icon-check" offIcon="ui-icon-close">
+									</p:selectBooleanButton>
+
+									<p:outputLabel rendered="false" for="@next" style="color:red;font-weight:bold;"
+										value="Other Logins (For Office Staff/Accounts/Sports Department/Others)*:-"></p:outputLabel>
+									<p:selectBooleanButton rendered="false" required="true"
+										requiredMessage="Please Go Through Security App"
+										value="#{addSchool.otherLogin}" onLabel="Yes" offLabel="No"
+										onIcon="ui-icon-check" offIcon="ui-icon-close">
+									</p:selectBooleanButton>
+
+									<p:outputLabel rendered="false" />
+									<p:outputLabel rendered="false" />
+
+									<p:outputLabel for="@next" style="color:red;font-weight:bold;" value="Student App *:-"></p:outputLabel>
+									<p:selectBooleanButton required="true"
+										requiredMessage="Please Go Through Student App"
+										value="#{addSchool.studentApp}" onLabel="Yes" offLabel="No"
+										onIcon="ui-icon-check" offIcon="ui-icon-close">
+									</p:selectBooleanButton>
+
+									<p:outputLabel style="font-weight:bold;" value="App Type*:-"></p:outputLabel>
+									<p:selectOneButton value="#{addSchool.appType}">
+										<f:selectItem itemLabel="Branded" itemValue="branded" />
+										<f:selectItem itemLabel="Common" itemValue="common" />
+									</p:selectOneButton>
+
+									<p:outputLabel for="@next" style="color:red" 
+										value="Directory Name On Server (Must be unique) :-"></p:outputLabel>
+									<p:inputText value="#{addSchool.folder}" required="true"
+										requiredMessage="Please Enter Directory Name" validatorMessage="Please Enter Correct value">
+									 <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:inputText>
+										
+									<p:outputLabel for="@next" style="color:red" 
+										value="Check Admission No. Duplicasy:-"></p:outputLabel>	
+									<p:selectOneRadio value="#{addSchool.admNoDupl}" required="true" requiredMessage="Please Enter Check Admission No. Duplicasy">
+										<f:selectItem itemLabel="Yes" itemValue="Yes" />
+										<f:selectItem itemLabel="No" itemValue="No" />
+									</p:selectOneRadio>	
+
+									<p:commandButton update="form"
+										actionListener="#{addSchool.sendOTP}" value="Submit"></p:commandButton>
+								</p:panelGrid>
+							</p:panel>
+						</h:form>
+
+						<h:form id="form2">
+							<p:dialog header="Add New School" widgetVar="addSchool"
+								modal="true" height="100">
+								<div class="ui-g form-group">
+
+									<p:panelGrid columns="3"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+										<p:outputLabel for="@next" style="color:red" value="Enter OTP"></p:outputLabel>
+										<p:inputText required="true"
+											requiredMessage="Please Enter OTP"
+											value="#{addSchool.otpInput}" validatorMessage="Please Enter Correct value">
+										 <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+										</p:inputText>
+
+										<p:commandButton value="Add School"
+											actionListener="#{addSchool.addSchool}" update=":form :form2"></p:commandButton>
+
+									</p:panelGrid>
+								</div>
+							</p:dialog>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,604 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">View Exam Settings</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form" enctype="multipart/form-data">
+							<h1>View Exam Setting</h1>
+							<h:commandLink style="float:right" immediate="true" value="Back To View / Edit Exam Setting" action="#{editExamSetting.editExamSetting}"></h:commandLink>
+								<!-- <p:panelGrid columns="2" > -->
+		                     
+		                         <br/>
+							<p:panel  header="Class : #{editExamSetting.className}">
+
+								<p:messages closable="true" autoUpdate="true"></p:messages>
+								
+								<!-- </p:panelGrid> -->
+
+								<p:outputPanel >
+								  		<p:tabView id="tabview">
+										<p:tab title="Periodic Test">
+											<p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+											layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+												<p:outputLabel for="@next" style="color:red"  rendered="true" value="Enter Test Name"></p:outputLabel>
+												<p:inputText rendered="true" value="#{editExamSetting.testName}" disabled="true"
+													required="true"
+													requiredMessage="Please Enter  Test Name" id="secnm"
+													onchange="trimFunc(this.value,'Please Section Name',this.id)"></p:inputText>
+			
+												<p:outputLabel for="@next" style="color:red"  rendered="true" value="Enter No. Of Test"></p:outputLabel>
+												<p:inputText rendered="true" disabled="true"
+													value="#{editExamSetting.periodicTest}" required="true"
+													requiredMessage="Please Enter No Of Test">
+													<p:keyFilter mask="num" />
+													<p:ajax listener="#{editExamSetting.createPTList}"
+														update=":form:tabview:finalPT"></p:ajax>
+												</p:inputText>
+			
+												<p:outputLabel for="@next" style="color:red"  rendered="false"
+													value="Actual Marks (Can Be Same As Reflective Mark)"></p:outputLabel>
+												<p:inputText rendered="false" disabled="true"
+													value="#{editExamSetting.actualMark}" required="true"
+													requiredMessage="Please Enter Actual Mark">
+													<p:keyFilter mask="num" />
+												</p:inputText>
+			
+												<p:outputLabel  for="@next" style="color:red" rendered="true" value="Reflective Marks"></p:outputLabel>
+												<p:inputText rendered="true" disabled="true"
+													value="#{editExamSetting.reflectMark}" required="true"
+													requiredMessage="Please Enter Reflective Mark">
+													<p:keyFilter mask="num" />
+												</p:inputText>
+			
+												<p:outputLabel  for="@next" style="color:red" rendered="true"
+													value="How Many Test You Want To Include For Final Evaluation"></p:outputLabel>
+												<p:outputPanel rendered="true" id="finalPT">
+													<p:selectOneMenu value="#{editExamSetting.finalPT}" disabled="true"
+														required="true"
+														requiredMessage="Please Select PT For Final Evaluation">
+														<f:selectItem itemLabel="Select Here" itemValue="0"></f:selectItem>
+														<f:selectItems value="#{editExamSetting.ptList}"></f:selectItems>
+													</p:selectOneMenu>
+												</p:outputPanel>
+											</p:panelGrid>
+											
+										</p:tab>
+										<p:tab id="tab2" title="Header Details">
+											<p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+											layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+												<p:outputLabel value="Marksheet Header Line 1" for="@next" style="color:red"></p:outputLabel>
+												<p:inputText value="#{editExamSetting.header1}" disabled="true" required="true" requiredMessage="Please Enter Marksheet Header Line 1"></p:inputText>
+												
+												<p:outputLabel value="Marksheet Header Line 2"></p:outputLabel>
+												<p:inputText value="#{editExamSetting.header2}" disabled="true"></p:inputText>
+												
+												<p:outputLabel value="Marksheet Header Line 3"></p:outputLabel>
+												<p:inputText value="#{editExamSetting.header3}" disabled="true"></p:inputText>
+												
+												<p:outputLabel for="@next" style="color:red"  value="Apply School Header In Marksheet"></p:outputLabel>
+												<p:selectOneRadio value="#{editExamSetting.showHeader}" disabled="true" requiredMessage="Please Select School Header Show Or Not"  required="true">
+													<f:selectItem itemLabel="Yes" itemValue="true"></f:selectItem>
+													<f:selectItem itemLabel="No" itemValue="false"></f:selectItem>
+												</p:selectOneRadio>
+												
+												<p:outputLabel for="@next" style="color:red"  value="Show Student Image"></p:outputLabel>
+												<p:selectOneRadio value="#{editExamSetting.std_image}" disabled="true" requiredMessage="Please Select Student Image Show Or Not"  required="true">
+													<f:selectItem itemLabel="Yes" itemValue="true"></f:selectItem>
+													<f:selectItem itemLabel="No" itemValue="false"></f:selectItem>
+												</p:selectOneRadio>
+												
+												
+													<p:outputLabel for="@next"  value="Allow Exam full Name In Marksheet"></p:outputLabel>
+													<p:selectOneRadio disabled="true" value="#{editExamSetting.fullExamNameAllow}">
+														<f:selectItem itemLabel="Yes" itemValue="yes"></f:selectItem>
+														<f:selectItem itemLabel="No" itemValue="no"></f:selectItem>
+													</p:selectOneRadio>
+												
+												
+										</p:panelGrid>
+										</p:tab>
+										<p:tab id="tab3" title="Marks Details">
+											<p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+											layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+												
+													<p:outputLabel for="@next" style="color:red"  value="Marks will be entered in form of"></p:outputLabel>
+												<p:selectOneRadio value="#{editExamSetting.marks_grade}" disabled="true" requiredMessage="Please Select Final Marks Setting"  required="true">
+													<f:selectItem itemLabel="Marks" itemValue="marks"></f:selectItem>
+													<f:selectItem itemLabel="Grade" itemValue="grade"></f:selectItem>
+												</p:selectOneRadio>
+												
+												<p:outputLabel for="@next" style="color:red"  value="In Case Of medical leave(ML),include max marks in marksheet"></p:outputLabel>
+												<p:selectOneRadio value="#{editExamSetting.mlCase}" disabled="true" requiredMessage="Please Select Final Marks Setting"  required="true">
+													<f:selectItem itemLabel="Yes" itemValue="yes"></f:selectItem>
+													<f:selectItem itemLabel="No" itemValue="no"></f:selectItem>
+												</p:selectOneRadio>
+												
+		
+												<p:outputLabel for="@next" style="color:red"  value="In case of absent(AB), include max marks in marksheet"></p:outputLabel>
+												<p:selectOneRadio value="#{editExamSetting.abCase}" disabled="true" requiredMessage="Please Select Final Marks Setting"  required="true">
+													<f:selectItem itemLabel="Yes" itemValue="yes"></f:selectItem>
+													<f:selectItem itemLabel="No" itemValue="no"></f:selectItem>
+												</p:selectOneRadio>
+		
+												<p:outputLabel  for="@next" style="color:red" value="Final Marks Should Be"></p:outputLabel>
+												<p:selectOneRadio required="true" disabled="true"
+													requiredMessage="Please Select Final Marks Setting"
+													value="#{editExamSetting.finalMarks}">
+													<f:selectItem itemLabel="Total Of Term's Marks"
+														itemValue="total"></f:selectItem>
+													<f:selectItem itemLabel="Average Of Term's Marks"
+														itemValue="average"></f:selectItem>
+													<f:selectItem itemLabel="Percentage Of Term's Marks"
+														itemValue="percentage"></f:selectItem>
+												</p:selectOneRadio>
+							
+												<p:outputLabel for="@next" style="color:red"  value="Rank Must Be Generated On Basis Of "></p:outputLabel>
+												<p:selectOneRadio value="#{editExamSetting.rank}" disabled="true" requiredMessage="Please Select Rank Generation Basis"  required="true">
+													<f:selectItem itemLabel="Total Marks" itemValue="total"></f:selectItem>
+													<f:selectItem itemLabel="Percentage" itemValue="percent"></f:selectItem>
+												</p:selectOneRadio>
+												
+												<p:outputLabel for="@next" style="color:red"  value="Show Scholastic Grade Scale in Marksheet"></p:outputLabel>
+												<p:selectOneRadio value="#{editExamSetting.gradeScaleList}" disabled="true" requiredMessage="Please Select Grade Scale Show Or Not"  required="true">
+													<f:selectItem itemLabel="Yes" itemValue="true"></f:selectItem>
+													<f:selectItem itemLabel="No" itemValue="false"></f:selectItem>
+												</p:selectOneRadio>
+												
+												<p:outputLabel for="@next" style="color:red"  value="Show Co-Scholastic Grade Scale in Marksheet"></p:outputLabel>
+												<p:selectOneRadio value="#{editExamSetting.gradeScaleListCoschol}" disabled="true" requiredMessage="Please Select Grade Scale Show Or Not"  required="true">
+													<f:selectItem itemLabel="Yes" itemValue="true"></f:selectItem>
+													<f:selectItem itemLabel="No" itemValue="false"></f:selectItem>
+												</p:selectOneRadio>
+												
+												<p:outputLabel for="@next" style="color:red"  value="Grade Scale Format Should Be"></p:outputLabel>
+												<p:selectOneRadio value="#{editExamSetting.gradeScaleFormat}" requiredMessage="Please Select Grade Scale Format"  required="true">
+													<f:selectItem itemLabel="Horizontly" itemValue="horizontal"></f:selectItem>
+													<f:selectItem itemLabel="Verticaly" itemValue="vertical"></f:selectItem>
+												</p:selectOneRadio>
+												
+												
+												<p:outputLabel for="@next" style="color:red"  value="Want To Show Exam Marks With Exam Name"></p:outputLabel>
+												<p:selectOneRadio value="#{editExamSetting.marks}" disabled="true" requiredMessage="Please Select Show Exam Marks With Exam Name Yes Or No"  required="true">
+													<f:selectItem itemLabel="Yes" itemValue="yes"></f:selectItem>
+													<f:selectItem itemLabel="No" itemValue="no"></f:selectItem>
+												</p:selectOneRadio>
+												
+													
+												<p:outputLabel for="@next" style="color:red"  value="Round Off Percentage"></p:outputLabel>
+												<p:selectOneRadio value="#{editExamSetting.roundOffPercent}" disabled="true"
+													required="true" requiredMessage="Please Select Round Off">
+													<f:selectItem itemLabel="Yes" itemValue="yes"></f:selectItem>
+													<f:selectItem itemLabel="No" itemValue="no"></f:selectItem>
+												</p:selectOneRadio>
+		
+												<p:outputLabel for="@next" style="color:red"  value="Round Off Marks"></p:outputLabel>
+												<p:selectOneRadio value="#{editExamSetting.roundOff}" disabled="true"
+													required="true" requiredMessage="Please Select Round Off">
+													<f:selectItem itemLabel="Yes" itemValue="yes"></f:selectItem>
+													<f:selectItem itemLabel="No" itemValue="no"></f:selectItem>
+													<p:ajax listener="#{editExamSetting.checkRoundOff}" update=":form:tabview:id1,:form:tabview:id2"></p:ajax>
+												</p:selectOneRadio>
+											</p:panelGrid>
+											<p:panelGrid id="id1" columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+												layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+												<p:outputLabel for="@next" style="color:red"  rendered="#{editExamSetting.showType}" value="Type Of Round Off"></p:outputLabel>
+												<p:selectOneRadio rendered="#{editExamSetting.showType}" disabled="true" value="#{editExamSetting.roundOffType}" required="true" requiredMessage="Please Select Round Off Type">
+													<f:selectItem itemLabel="Upper (0.01=1,0.99=1)" itemValue="upper"></f:selectItem>
+													<f:selectItem itemLabel="Mid (0.01=0,0.99=1)" itemValue="mid"></f:selectItem>
+													<f:selectItem itemLabel="Lower (0.99=0,0.01=0)" itemValue="lower"></f:selectItem>
+												</p:selectOneRadio>
+											
+												<p:outputLabel for="@next" style="color:red"  rendered="#{editExamSetting.showType1}" value="Select Marks Format"></p:outputLabel>
+												<p:selectOneRadio rendered="#{editExamSetting.showType1}" disabled="true" value="#{editExamSetting.marksFormat}" required="true" requiredMessage="Please Select Round Off Type">
+													<f:selectItem itemLabel="2" itemValue="1"></f:selectItem>
+													<f:selectItem itemLabel="2.0" itemValue="2"></f:selectItem>
+													<f:selectItem itemLabel="2.0 / 10.0" itemValue="3"></f:selectItem>
+													<f:selectItem itemLabel="2.0 / 10" itemValue="4"></f:selectItem>
+													<f:selectItem itemLabel="2 / 10" itemValue="5"></f:selectItem>
+													<f:selectItem itemLabel="2 / 10.0" itemValue="6"></f:selectItem>
+												</p:selectOneRadio>
+											</p:panelGrid>
+											<p:panelGrid id="id2" columns="2" columnClasses="ui-grid-col-2,ui-grid-col-4"
+												layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+												<p:outputLabel for="@next" style="color:red"  rendered="#{editExamSetting.showType2}" value="Select Marks Format"></p:outputLabel>
+												<p:selectOneRadio rendered="#{editExamSetting.showType2}" disabled="true" value="#{editExamSetting.marksFormat}" required="true" requiredMessage="Please Select Round Off Type">
+													<f:selectItem itemLabel="2.04 / 10.0" itemValue="1"></f:selectItem>
+													<f:selectItem itemLabel="2.04" itemValue="2"></f:selectItem>
+												</p:selectOneRadio>
+											</p:panelGrid>
+										</p:tab>
+										<p:tab title="Subject Details">
+											<p:tabView>
+												<p:tab title="Co-scholastic Subject">
+													<p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+													layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+														<p:outputLabel for="@next" style="color:red"  value="Show Co-scholastic Area"></p:outputLabel>
+														<p:selectOneRadio value="#{editExamSetting.coschol_sub}" disabled="true" requiredMessage="Please Select Co-scholastic Subject Show Or Not"  required="true">
+															<f:selectItem itemLabel="Yes" itemValue="true"></f:selectItem>
+															<f:selectItem itemLabel="No" itemValue="false"></f:selectItem>
+														</p:selectOneRadio>
+														
+														<p:outputLabel value="Header for Co-scholastic Area"></p:outputLabel>
+														<p:inputText value="#{editExamSetting.coscholHeader}" disabled="true"></p:inputText>
+														
+														<p:outputLabel for="@next" style="color:red"  value="Co-scholastic Header Contain Term Name At"></p:outputLabel>
+														<p:selectOneRadio value="#{editExamSetting.termNameCoschol}" disabled="true" requiredMessage="Please Select Co-scholastic Header Contain Term Name Setting"  required="true">
+															<f:selectItem itemLabel="Beginning of Header" itemValue="begin"></f:selectItem>
+															<f:selectItem itemLabel="End Of Header" itemValue="end"></f:selectItem>
+															<f:selectItem itemLabel="Don't Add Term Name" itemValue="dont"></f:selectItem>
+														</p:selectOneRadio>
+														
+														<p:outputLabel for="@next" style="color:red"  value="Co-scholastic Area Contain"></p:outputLabel>
+														<p:selectOneRadio value="#{editExamSetting.coscholTerm}" disabled="true" requiredMessage="Please Select Co-scholastic Area Contain Setting"  required="true">
+															<f:selectItem itemLabel="Each Term" itemValue="each"></f:selectItem>
+															<f:selectItem itemLabel="Last Term" itemValue="last"></f:selectItem>
+														</p:selectOneRadio>
+													</p:panelGrid>
+												</p:tab>
+												<p:tab title="DISCIPLINE">
+													<p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+													layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+														
+														<p:outputLabel for="@next" style="color:red"  value="Want Discipline Subject Area Seperate From Co-scholastic Area"></p:outputLabel>
+														<p:selectOneRadio value="#{editExamSetting.seperate_disci}" disabled="true" requiredMessage="Please Select Discipline Subject Should Be Shown Seperate Or Not"  required="true">
+															<f:selectItem itemLabel="Yes" itemValue="yes"></f:selectItem>
+															<f:selectItem itemLabel="No" itemValue="no"></f:selectItem>
+														</p:selectOneRadio>
+														
+														<p:outputLabel for="@next" style="color:red"  value="Show Discipline Subject Area"></p:outputLabel>
+														<p:selectOneRadio value="#{editExamSetting.disci_sub}" disabled="true" requiredMessage="Please Select Discipline Subject Show Or Not"  required="true">
+															<f:selectItem itemLabel="Yes" itemValue="true"></f:selectItem>
+															<f:selectItem itemLabel="No" itemValue="false"></f:selectItem>
+														</p:selectOneRadio>
+														
+														<p:outputLabel  value="Header for Discipline Area"></p:outputLabel>
+														<p:inputText value="#{editExamSetting.disci_header}" disabled="true"></p:inputText>
+														
+														<p:outputLabel for="@next" style="color:red"  value="Discipline Header Contain Term Name At"></p:outputLabel>
+														<p:selectOneRadio value="#{editExamSetting.termNameDisci}" disabled="true" requiredMessage="Please Select Discipline Header Contain Term Name Setting"  required="true">
+															<f:selectItem itemLabel="Beginning of Header" itemValue="begin"></f:selectItem>
+															<f:selectItem itemLabel="End Of Header" itemValue="end"></f:selectItem>
+															<f:selectItem itemLabel="Don't Add Term Name" itemValue="dont"></f:selectItem>
+														</p:selectOneRadio>
+														
+														<p:outputLabel for="@next" style="color:red"  value="Discipline Area Contain"></p:outputLabel>
+														<p:selectOneRadio value="#{editExamSetting.disci_term}" disabled="true" requiredMessage="Please Select Discipline Subject Contain Setting"  required="true">
+															<f:selectItem itemLabel="Each Term" itemValue="each"></f:selectItem>
+															<f:selectItem itemLabel="Last Term" itemValue="last"></f:selectItem>
+														</p:selectOneRadio>
+													</p:panelGrid>
+												</p:tab>
+												<p:tab title="Other Subject">
+													<p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+													layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+														
+														<p:outputLabel for="@next" style="color:red"  value="Show Other Subject Area"></p:outputLabel>
+														<p:selectOneRadio value="#{editExamSetting.other_sub}" disabled="true" requiredMessage="Please Select Other Subject Show Or Not"  required="true">
+															<f:selectItem itemLabel="Yes" itemValue="true"></f:selectItem>
+															<f:selectItem itemLabel="No" itemValue="false"></f:selectItem>
+														</p:selectOneRadio>
+														
+														<p:outputLabel value="Header for Other Subject Area"></p:outputLabel>
+														<p:inputText value="#{editExamSetting.otherHeader}" disabled="true" ></p:inputText>
+														
+														<p:outputLabel for="@next" style="color:red"  value="Other Subject Contain Term Name At"></p:outputLabel>
+														<p:selectOneRadio value="#{editExamSetting.termNameOther}" disabled="true" requiredMessage="Please Select Other SUbject Header Contain Term Name Setting"  required="true">
+															<f:selectItem itemLabel="Beginning of Header" itemValue="begin"></f:selectItem>
+															<f:selectItem itemLabel="End Of Header" itemValue="end"></f:selectItem>
+															<f:selectItem itemLabel="Don't Add Term Name" itemValue="dont"></f:selectItem>
+														</p:selectOneRadio>
+														
+														
+														<p:outputLabel for="@next" style="color:red"  value="Other Subject Area Contain"></p:outputLabel>
+														<p:selectOneRadio value="#{editExamSetting.otherTerm}" disabled="true" requiredMessage="Please Select Co-scholastic Area Contain Setting"  required="true">
+															<f:selectItem itemLabel="Each Term" itemValue="each"></f:selectItem>
+															<f:selectItem itemLabel="Last Term" itemValue="last"></f:selectItem>
+														</p:selectOneRadio>
+													
+													</p:panelGrid>
+												</p:tab>
+												<p:tab title="Additional Subject">
+													<p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+													layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+														<p:outputLabel for="@next" style="color:red"  value="Show Additional Subject Area"></p:outputLabel>
+														<p:selectOneRadio value="#{editExamSetting.additional_sub}" disabled="true" requiredMessage="Please Select Additional Subject Show Or Not"  required="true">
+															<f:selectItem itemLabel="Yes" itemValue="true"></f:selectItem>
+															<f:selectItem itemLabel="No" itemValue="false"></f:selectItem>
+														</p:selectOneRadio>
+														
+														<p:outputLabel value="Header for Additional Subject Area"></p:outputLabel>
+														<p:inputText value="#{editExamSetting.addHeader}" disabled="true"></p:inputText>
+														
+													</p:panelGrid>
+												</p:tab>
+												<p:tab title="Subject Group Position Setting">
+													<p:panelGrid columns="2" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+													layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+														<p:outputLabel for="@next"  value="Subject Group Position"></p:outputLabel>
+														<p:selectOneRadio disabled="true" value="#{editExamSetting.position}">
+															<f:selectItem itemLabel="Top" itemValue="top"></f:selectItem>
+															<f:selectItem itemLabel="Down" itemValue="down"></f:selectItem>
+														</p:selectOneRadio>
+													</p:panelGrid>
+												</p:tab>
+												
+											</p:tabView>
+										</p:tab>
+											
+										<p:tab id="tab4" title="Extra Field Details">
+											<p:outputPanel>
+												<p:panelGrid  columns="2" columnClasses="ui-grid-col-4,ui-grid-col-4"
+													layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;width:50%;float:left">	
+													
+													<p:outputLabel for="@next" style="color:red" value="Want To Show Extra Field Table(i.e. Height,Weight)"></p:outputLabel>
+													<p:selectOneRadio value="#{editExamSetting.extraField}" disabled="true" requiredMessage="Please Select Extra Field Setting"  required="true">
+														<f:selectItem itemLabel="Yes" itemValue="yes"></f:selectItem>
+														<f:selectItem itemLabel="No" itemValue="no"></f:selectItem>
+														<p:ajax listener="#{editExamSetting.checkExtraField}" update=":form:tabview:pnlGrid1"></p:ajax>
+													</p:selectOneRadio>
+												</p:panelGrid>
+												<p:panelGrid  columns="2" columnClasses="ui-grid-col-4,ui-grid-col-4"
+													layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;width:50%;float:right">	
+													
+													<p:outputLabel for="@next" style="color:red" value="Want To Show Other Value (i.e. Rank,Result)"></p:outputLabel>
+													<p:selectOneRadio value="#{editExamSetting.otherField}" disabled="true" requiredMessage="Please Select Extra Field Setting"  required="true">
+														<f:selectItem itemLabel="Yes" itemValue="yes"></f:selectItem>
+														<f:selectItem itemLabel="No" itemValue="no"></f:selectItem>
+														<p:ajax listener="#{editExamSetting.checkOtherField}" update=":form:tabview:pnlGrid1"></p:ajax>
+													</p:selectOneRadio>
+												</p:panelGrid>
+											</p:outputPanel>
+											<p:panelGrid id="pnlGrid1" columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6"
+												layout="grid"  style="border:0px none;width:100%;">	
+												
+												<p:dataTable rendered="#{editExamSetting.showExtraTable}" var="var" disabledSelection="true" value="#{editExamSetting.extraFieldList}" selection="#{editExamSetting.selExtraFieldList}" rowKey="#{var.sNo}">
+													<f:facet name="header">
+														<p:panelGrid columns="1" styleClass="ui-panelgrid-blank form-group">
+														
+														<p:outputLabel value="Place Of Extra Field Table"></p:outputLabel>
+														<p:selectOneRadio value="#{editExamSetting.extraFieldPlace}" disabled="true" requiredMessage="Please Select Place Of Extra Field Table"  required="true">
+															<f:selectItem itemLabel="Top" itemValue="top"></f:selectItem>
+															<f:selectItem itemLabel="Bottom" itemValue="bottom"></f:selectItem>
+														<p:ajax listener="#{editExamSetting.checkExtraField}"></p:ajax>
+														</p:selectOneRadio>
+														
+														<p:outputLabel value="Select Design"></p:outputLabel>
+														<p:selectOneRadio value="#{editExamSetting.extraFormat}" disabled="true" requiredMessage="Please Select Design"  required="true">
+															<f:selectItem itemLabel="Format 1" itemValue="column"></f:selectItem>
+															<f:selectItem itemLabel="Format2" itemValue="row"></f:selectItem>
+														</p:selectOneRadio>
+														
+														<table style="width:40%;float:left">
+															<tr>
+																<td>Height</td>
+																<td>Weight</td>
+																<td>etc.</td>
+															</tr>
+															<tr>
+																<td>...</td>
+																<td>...</td>
+																<td>...</td>
+															</tr>
+														</table>
+														<table style="width:20%"></table>
+														<table style="width:40%;float:right">
+															<tr>
+																<td>Height</td>
+																<td>...</td>
+															</tr>
+															<tr>
+																<td>Weight</td>
+																<td>...</td>
+															</tr>
+															<tr>
+																
+																<td>etc.</td>
+																<td>...</td>
+															</tr>
+														</table>
+														</p:panelGrid>
+														
+													</f:facet>
+													
+													<p:column style="width:60px" headerText="Select" selectionMode="multiple"></p:column>
+													
+													<p:column headerText="Name">
+														<p:outputLabel value="#{var.extraValue}"></p:outputLabel>
+													</p:column>
+													
+													<p:column headerText="Rank">
+														<p:inputText value="#{var.rollNo}" disabled="true"></p:inputText>
+													</p:column>
+													
+													<p:column headerText="Extra Setting" style="width:250px" >
+														<p:selectOneRadio rendered="#{var.extraValue eq 'Attendance'}" value="#{var.attendance}" disabled="true">
+															<f:selectItem itemLabel="All Term" itemValue="all"></f:selectItem>
+															<f:selectItem itemLabel="Last Term" itemValue="last"></f:selectItem>
+														</p:selectOneRadio>
+													</p:column>
+												</p:dataTable>
+												
+												
+												<p:dataTable rendered="#{editExamSetting.showOtherTable}" var="var" disabledSelection="true" value="#{editExamSetting.otherValueList}" selection="#{editExamSetting.selOtherValueList}" rowKey="#{var.extraValue}">
+													
+													<p:column style="width:60px" headerText="Select" selectionMode="multiple"></p:column>
+													
+													<p:column headerText="Name">
+														<p:outputLabel value="#{var.extraValue}"></p:outputLabel>
+													</p:column>
+													
+													<p:column headerText="Rank">
+														<p:inputText value="#{var.rollNo}" disabled="true"></p:inputText>
+													</p:column>
+													
+													<p:column headerText="Label For Marksheet">
+														<p:inputText value="#{var.label}" disabled="true"></p:inputText>
+													</p:column>
+													
+																<p:column headerText="Shown On Basis Of">
+														<p:selectOneRadio value="#{var.signType}" disabled="true">
+															<f:selectItem itemLabel="ERP" itemValue="erp"></f:selectItem>
+															<f:selectItem itemLabel="Manual" itemValue="manual"></f:selectItem>
+														</p:selectOneRadio>
+													</p:column>
+													
+													<p:column headerText="Value (Only if manually entered)">
+														<p:inputText value="#{var.remark}" disabled="true"></p:inputText>
+													</p:column>
+												</p:dataTable>
+											</p:panelGrid>
+										</p:tab>
+	
+										<p:tab title="Signature Details">
+											<p:panelGrid columns="1" columnClasses="ui-grid-col-12"
+											layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+											
+												<p:dataTable id="tbl" value="#{editExamSetting.teacherSignList}" var="var" rowIndexVar="index">
+													<f:facet name="header">
+														<p:outputLabel value="Class Teacher Signature Details"></p:outputLabel>
+													</f:facet>
+												
+													<p:column  headerText="Rank" style="width:60px">
+														<p:outputLabel disabled="true" value="#{var.rollNo}"></p:outputLabel>
+													</p:column>
+												
+													<p:column headerText="Sign. Name" style="width:250px">
+														<p:inputText disabled="true" value="#{var.extraValue}"></p:inputText>
+													</p:column>
+													
+													
+													<p:column headerText="Class Name">
+														<p:inputText disabled="true" value="#{var.className}"></p:inputText>
+													</p:column>
+													
+													<p:column headerText="Type" style="width:140px">
+														<p:selectOneRadio value="#{var.label}" disabled="true">
+															<f:selectItem itemLabel="Manual" itemValue="manual"></f:selectItem>
+															<f:selectItem itemLabel="Image" itemValue="image"></f:selectItem>
+														</p:selectOneRadio>
+													</p:column>
+													
+													<p:column headerText="Image" style="width:80px">
+														<p:graphicImage  style="height:70px;width:70px;" value="#{var.imagePath}" rendered="#{var.showImage}"/>
+													</p:column>
+													
+													<p:column headerText="Alignment" style="width:180px">
+														<p:selectOneRadio value="#{var.alignment}" disabled="true"> 
+															<f:selectItem itemLabel="Left" itemValue="left"></f:selectItem>
+															<f:selectItem itemLabel="Center" itemValue="center"></f:selectItem>
+															<f:selectItem itemLabel="Right" itemValue="right"></f:selectItem>
+														</p:selectOneRadio>
+													</p:column>
+												</p:dataTable>
+											
+												<p:dataTable id="dtbSign" value="#{editExamSetting.signList}" var="var"  rowIndexVar="index">
+													<f:facet name="header">
+														<p:outputLabel value="Other Signature Details"></p:outputLabel>
+													</f:facet>
+												
+													<p:column headerText="Rank" style="width:50px">
+														<p:outputLabel value="#{var.rollNo}"></p:outputLabel>
+													</p:column>
+												
+													<p:column headerText="Sign. Name" style="width:300px">
+														<p:inputText value="#{var.extraValue}" disabled="true"></p:inputText>
+													</p:column>
+													
+													<p:column headerText="Type">
+														<p:selectOneRadio value="#{var.label}" disabled="true">
+															<f:selectItem itemLabel="Manual" itemValue="manual"></f:selectItem>
+															<f:selectItem itemLabel="Image" itemValue="image"></f:selectItem>
+														</p:selectOneRadio>
+													</p:column>
+													
+													<p:column headerText="Image" >
+											<p:graphicImage  style="height:70px;width:70px;"
+										value="#{var.imagePath}" rendered="#{var.showImage}"/>
+											</p:column>
+											
+											<p:column headerText="Alignment">
+														<p:selectOneRadio value="#{var.alignment}" disabled="true"> 
+															<f:selectItem itemLabel="Left" itemValue="Left"></f:selectItem>
+															<f:selectItem itemLabel="Center" itemValue="Center"></f:selectItem>
+															<f:selectItem itemLabel="Right" itemValue="Right"></f:selectItem>
+														</p:selectOneRadio>
+													</p:column>
+												</p:dataTable>
+											
+											</p:panelGrid>
+										</p:tab>
+										<p:tab title="Other Details">
+											<p:panelGrid columns="1" columnClasses="ui-grid-col-12" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+												<p:dataTable value="#{editExamSetting.marksheetDetails}" var="var" rowIndexVar="index">
+												<f:facet name="header">
+													<p:outputLabel value="Fill Other Details"></p:outputLabel>
+												</f:facet>
+											
+												<p:column headerText="S.No." style="width:50px">
+													<p:outputLabel value="#{index+1}"></p:outputLabel>
+												</p:column>
+											
+												<p:column headerText="Detail" style="width:300px">
+													<p:outputLabel value="#{var.extraValue}"></p:outputLabel>
+												</p:column>
+												
+												<p:column headerText="Yes / No">
+													<p:selectOneRadio value="#{var.label}" disabled="true">
+														<f:selectItem itemLabel="Yes" itemValue="yes"></f:selectItem>
+														<f:selectItem itemLabel="No" itemValue="no"></f:selectItem>
+													</p:selectOneRadio>
+												</p:column>
+												
+												<p:column headerText="If Yes, Then Name" >
+												  <p:inputText value="#{var.className}" disabled="true"></p:inputText>
+												</p:column>
+												
+												<p:column headerText="Extra Setting" >
+													<p:outputLabel rendered="#{var.id eq 'show'}" value="Percentage will be shown in"></p:outputLabel>
+												    <p:selectOneRadio rendered="#{var.id eq 'show'}" value="#{var.rollNo}" disabled="true">
+														<f:selectItem itemLabel="Each Exam" itemValue="eachExam"></f:selectItem>
+													    <f:selectItem itemLabel="Each Term &amp; Final Total" itemValue="each"></f:selectItem>
+														<f:selectItem itemLabel="Last Term" itemValue="term"></f:selectItem>
+														<f:selectItem itemLabel="In Final Total" itemValue="finaltotal"></f:selectItem>
+													</p:selectOneRadio>
+													
+													<p:outputLabel rendered="#{var.id eq 'showtotal'}" value="Total will be shown in"></p:outputLabel>
+												    <p:selectOneRadio rendered="#{var.id eq 'showtotal'}" value="#{var.rollNo}" disabled="true">
+														<f:selectItem itemLabel="Each Exam" itemValue="eachExam"></f:selectItem>
+													    <f:selectItem itemLabel="Each Term &amp; Final Total" itemValue="each"></f:selectItem>
+														<f:selectItem itemLabel="Last Term" itemValue="term"></f:selectItem>
+														<f:selectItem itemLabel="In Final Total" itemValue="finaltotal"></f:selectItem>
+													</p:selectOneRadio>
+													
+													<p:outputLabel rendered="#{var.id eq 'showgrade'}" value="Grade will be shown in"></p:outputLabel>
+													<p:selectOneRadio rendered="#{var.id eq 'showgrade'}" value="#{var.rollNo}">
+														<f:selectItem itemLabel="Final Total" itemValue="finaltotal"></f:selectItem>
+														<f:selectItem itemLabel="Final Grade" itemValue="finalgrade"></f:selectItem>
+													</p:selectOneRadio>
+												</p:column>
+											</p:dataTable>
+											
+											</p:panelGrid>
+										</p:tab>
+									</p:tabView>
+									
+								</p:outputPanel>
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

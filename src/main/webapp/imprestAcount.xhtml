@@ -1,0 +1,78 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Imprest Account</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+
+
+
+						<h:form id="registrationfeeform">
+							<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+							<p:panelGrid columns="2" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+								<p:outputLabel value="Student Name/Sr. No"></p:outputLabel>
+								<p:autoComplete id="acSimple"
+									value="#{imprestAccountBean.studentName}" minQueryLength="3"
+									completeMethod="#{imprestAccountBean.autoCompleteStudentInfo}" validatorMessage="Please Enter Correct value">
+									<p:ajax event="query" global="false" />
+									<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+								</p:autoComplete>
+
+                                   <p:outputLabel value="Date"></p:outputLabel>
+									<p:calendar  value="#{imprestAccountBean.addexpdate}" pattern="dd/MM/yyyy" yearRange="c-10:c+10"  navigator="true"  maxdate="#{imprestAccountBean.maxDate}" >
+									</p:calendar>
+
+								<p:outputLabel value="Payment Mode " for="@next" style="color:red" ></p:outputLabel>
+								<p:selectOneRadio value="#{imprestAccountBean.paymentMode}"
+									required="true" requiredMessage="Please Enter Payment Mode">
+									<f:selectItem itemLabel="Cash" itemValue="cash"></f:selectItem>
+									<f:selectItem itemLabel="Cheque" itemValue="cheque"></f:selectItem>
+								</p:selectOneRadio>
+
+								<p:outputLabel  value="Payment Type" for="@next" style="color:red" ></p:outputLabel>
+								<p:selectOneRadio  value="#{imprestAccountBean.paymentType}"
+									required="true" requiredMessage="Please Enter Payment Type">
+									<f:selectItem itemLabel="Credit(Receiving)" itemValue="Credit"></f:selectItem>
+									<f:selectItem itemLabel="Debit(Refund)" itemValue="Debit"></f:selectItem>
+								</p:selectOneRadio>
+
+
+
+								<p:outputLabel value="Amount " for="@next" style="color:red" ></p:outputLabel>
+								<p:inputText value="#{imprestAccountBean.amount}"
+									required="true" requiredMessage="Please Enter Fee Amount"
+									onfocus="this.select();">
+									<p:keyFilter mask="money"></p:keyFilter>
+								</p:inputText>
+
+								<p:outputLabel value="Remark " for="@next" style="color:red" ></p:outputLabel>
+								<p:inputTextarea value="#{imprestAccountBean.description}"
+									required="true" requiredMessage="Please Enetr Remark" validatorMessage="Please Enter Correct value">
+								  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+								</p:inputTextarea>
+								<p:commandButton value="Submit"
+									action="#{imprestAccountBean.addStudentExpense}"
+									update=":registrationfeeform"></p:commandButton>
+							</p:panelGrid>
+						</h:form>
+
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

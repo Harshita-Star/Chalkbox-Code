@@ -1,0 +1,81 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/masterTemplate.xhtml"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	<f:loadBundle var="addClassVar" basename="myProperties" />
+
+	<ui:define name="title">School Enquiry Report</ui:define>
+
+	<ui:define name="content">
+		<h:form id="form">
+			<div class="ui-fluid">
+				<div class="ui-g">
+					<div class="ui-g-12">
+						<div class="card card-w-title">
+                          <h:form id="form">
+							<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+  
+							<h1>School Activity Report</h1>
+
+							<p:panel header="School Report">
+								<p:dataTable id="table" reflow="true"
+									style="width:100%;border-collapse:collapse;text-align:center;"
+									border="1" value="#{schoolEnquiryReport.list}"
+									var="var">
+
+									<p:column headerText="S.No">
+										<p:outputLabel value="#{var.sno}"></p:outputLabel>
+									</p:column>
+
+									
+
+									<p:column headerText="School Name" filterBy="#{var.schoolname}"
+										filterMatchMode="contains">
+										<p:outputLabel value="#{var.schoolname}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Contact Person Name ">
+										<p:outputLabel value="#{var.contactperson}" height='15'
+											width='15'></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Degination">
+										<p:outputLabel value="#{var.degination}" height='15' width='15'></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Address">
+										<p:outputLabel value="#{var.address}" height='15'
+											width='15'></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Mobile">
+										<p:outputLabel value="#{var.mobile}" height='15' width='15'></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Date">
+										<p:outputLabel value="#{var.createDate}" height='15' width='15'></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Delete">
+								     <p:commandButton value="Delete" action="#{schoolEnquiryReport.deletEnquiry}" update=":form">
+								        <f:setPropertyActionListener value="#{var}" target="#{schoolEnquiryReport.selectedList}"></f:setPropertyActionListener>
+								     </p:commandButton>
+									</p:column>
+									
+
+									
+								</p:dataTable>
+							</p:panel>
+							</h:form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</h:form>
+
+	</ui:define>
+
+</ui:composition>

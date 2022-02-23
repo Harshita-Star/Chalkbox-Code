@@ -1,0 +1,92 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Add Route</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+
+							<h1>#{addNewRouteVar.addTransportRouteTitle}</h1>
+
+							<p:panel header="Add New Route">
+								
+                 
+            			<p:messages closable="true" autoUpdate="true"></p:messages>
+								<p:panelGrid columns="3" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel  for="@next" style="color:red" value="#{addNewRouteVar.addRouteCreatingDate}"></p:outputLabel>
+									<p:calendar disabled="true" pattern="dd/MM/yyyy"
+										value="#{transportBean.creatingDate}" navigator="true"
+										required="true"
+										requiredMessage="#{addNewRouteVar.addRouteCreatingDateValidation}"></p:calendar>
+									<p:outputLabel></p:outputLabel>
+
+									<p:outputLabel value="#{addNewRouteVar.addRouteName}"></p:outputLabel>
+									<p:inputText disabled="true" value="#{transportBean.route}" validatorMessage="Please Enter Correct value">
+									 <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:inputText>
+									<p:outputLabel></p:outputLabel>
+
+									<p:outputLabel  for="@next" style="color:red" value="Name"></p:outputLabel>
+									<p:inputText required="true"
+										requiredMessage="Please Enter Name"
+										value="#{transportBean.name}" id="rnm" onchange="trimFunc(this.value,'Please Section Name',this.id)" validatorMessage="Please Enter Correct value">
+									  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+									</p:inputText>
+									<p:outputLabel></p:outputLabel>
+
+									<p:outputLabel  for="@next" style="color:red" value="#{addNewRouteVar.addRouteSource}"></p:outputLabel>
+									<p:inputText value="#{transportBean.source}" required="true"
+										requiredMessage="#{addNewRouteVar.addRouteSourceDestination}" id="snm" onchange="trimFunc(this.value,'Please Section Name',this.id)" validatorMessage="Please Enter Correct value">
+										<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:inputText>
+									<p:outputLabel></p:outputLabel>
+
+									<p:outputLabel  for="@next" style="color:red" value="#{addNewRouteVar.addRouteDestination}"></p:outputLabel>
+									<p:inputText disabled="true"
+										value="#{transportBean.destination}" required="true"
+										requiredMessage="#{addNewRouteVar.addRouteDestinationValidation}" validatorMessage="Please Enter Correct value">
+									 <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+									</p:inputText>
+									<p:outputLabel></p:outputLabel>
+									
+									<p:outputLabel  for="@next" style="color:red" value="Select Bus"></p:outputLabel>
+									<p:selectOneMenu filter="true" value="#{transportBean.selectedBus}" required="true" requiredMessage="Please Select Bus">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{transportBean.busList}"></f:selectItems>
+									</p:selectOneMenu>
+									<p:outputLabel></p:outputLabel>
+									
+									 <p:outputLabel value="Bus Attendant"></p:outputLabel>
+									<p:selectOneMenu filter="true"  filterMatchMode="contains" value="#{transportBean.attendant}">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{transportBean.attendantList}"></f:selectItems>
+									</p:selectOneMenu>
+									
+								</p:panelGrid>
+								<br />
+								<p:separator />
+								<center>
+									<p:commandButton update="form" value="#{addNewRouteVar.addRouteButtonName}" styleClass="butwid" icon="fa fa-plus-circle" action="#{transportBean.addRoute}"></p:commandButton>
+
+								</center>
+								<p:separator />
+								<br />
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

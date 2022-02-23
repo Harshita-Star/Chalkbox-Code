@@ -1,0 +1,131 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Directory</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form" enctype="multipart/form-data">
+							<h1>Directory</h1>
+
+
+							<p:messages autoUpdate="true" closable="true"></p:messages>
+							<p:panel header="Directory">
+								<p:commandLink immediate="true" style="float:left;color:blue"
+									value="Add Directory"
+									action="#{viewPhonebook.navigatePhonebook}"></p:commandLink>
+								<br></br>
+								<br></br>
+								<p:dataTable id="table" value="#{viewPhonebook.contactList}"
+									var="var" reflow="true">
+									<p:column headerText="S.No.">
+										<p:outputLabel value="#{var.sno}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Contact Person Name">
+										<p:outputLabel value="#{var.contactName}" />
+									</p:column>
+
+									<p:column headerText="Designation">
+										<p:outputLabel value="#{var.designation}" />
+									</p:column>
+
+									<p:column headerText="Contact No.">
+										<p:outputLabel value="#{var.contactNo}" />
+									</p:column>
+
+									<p:column headerText="Edit">
+									<center>
+									<p:commandButton update=":editForm" styleClass="butwid"
+											oncomplete="PF('editDialog').show();" icon="ui-icon-pencil"
+											action="#{viewPhonebook.editDetail}">
+											<f:setPropertyActionListener
+												target="#{viewPhonebook.selectedContact}" value="#{var}" />
+										</p:commandButton>
+									</center>
+									</p:column>
+
+									<p:column headerText="Delete">
+									<center>
+									<p:commandButton update=":form" icon="ui-icon-trash" styleClass="butwid redButt" 
+											action="#{viewPhonebook.delete}">
+											<f:setPropertyActionListener
+												target="#{viewPhonebook.selectedContact}" value="#{var}" />
+											<p:confirm header="Confirmation"
+												message="Surely want to remove this contact ?"
+												icon="ui-icon-alert" />
+										</p:commandButton>
+									</center>
+									</p:column>
+
+								</p:dataTable>
+							</p:panel>
+
+							<p:confirmDialog global="true" showEffect="fade"
+								hideEffect="fade">
+								<p:commandButton value="Yes" type="button"
+									styleClass="ui-confirmdialog-yes greenButt" icon="ui-icon-check" />
+								<p:commandButton value="No" type="button"
+									styleClass="ui-confirmdialog-no redButt" icon="ui-icon-close" />
+							</p:confirmDialog>
+						</h:form>
+
+						<h:form id="editForm">
+							<p:dialog resizable="false" widgetVar="editDialog"
+								header="Update Book" showEffect="fade" hideEffect="explode"
+								modal="true">
+								<div class="ui-g form-group">
+									<p:panelGrid columns="2"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+										<p:outputLabel  for="@next" style="color:red"  value="Contact Name : " />
+										<p:inputText value="#{viewPhonebook.contactName}"
+											required="true" requiredMessage="Please Enter Contact Name" validatorMessage="Please Enter Correct value">
+										  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+										</p:inputText>
+
+										<p:outputLabel  for="@next" style="color:red"  value="Designation : " />
+										<p:inputText value="#{viewPhonebook.designation}"
+											required="true" requiredMessage="Please Enter Designation" validatorMessage="Please Enter Correct value">
+										  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+										</p:inputText>
+
+										<p:outputLabel for="@next" style="color:red"  value="Contact No. : " />
+										<p:inputText value="#{viewPhonebook.contactNo}" maxlength="10"
+											validatorMessage="Please Enter 10 Digit Number"
+											required="true" requiredMessage="Please Enter Contact No.">
+											<p:keyFilter mask="num" />
+											<f:validateLength minimum="10"></f:validateLength>
+										</p:inputText>
+
+
+									</p:panelGrid>
+								</div>
+								
+								<br />
+								<p:separator />
+								<center>
+										<p:commandButton value="Update Now" styleClass="butwid" icon="fa fa-upload"
+											action="#{viewPhonebook.update}"
+											update=":form:table,:editForm"></p:commandButton>
+								</center>
+								<p:separator />
+								<br />
+								
+							</p:dialog>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

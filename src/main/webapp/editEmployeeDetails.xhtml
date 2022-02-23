@@ -1,0 +1,414 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Edit Employee</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form" enctype="multipart/form-data">
+
+							<p:messages closable="true" autoUpdate="true"></p:messages>
+
+							<p:panel header="Edit Employee Details">
+
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+
+									<p:outputLabel value="Employee Name" for="@next"
+										style="color:red"></p:outputLabel>
+									<p:inputText value="#{editEmp.fname}" required="true"
+										requiredMessage="#{editEmployeeVar.editEmployeeFirstNameValidation}"></p:inputText>
+
+									<p:outputLabel value="Father's Name"></p:outputLabel>
+									<p:inputText value="#{editEmp.lname}"></p:inputText>
+
+									<p:outputLabel value="Employee Unique Id"></p:outputLabel>
+									<p:inputText value="#{editEmp.employeeUniqueId}">
+									</p:inputText>
+
+									<p:outputLabel value="Access Platform" for="@next"
+										style="color:red"></p:outputLabel>
+									<p:selectOneMenu value="#{editEmp.platform}"
+										filter="true" required="true"
+										requiredMessage="Please select Access Platform">
+										<f:selectItem itemLabel="Select Platform" itemValue=""></f:selectItem>
+										<f:selectItem itemLabel="WEB" itemValue="web"></f:selectItem>
+										<f:selectItem itemLabel="MOBILE APP" itemValue="app"></f:selectItem>
+										<f:selectItem itemLabel="BOTH WEB &amp; APP" itemValue="both"></f:selectItem>
+										<f:selectItem itemLabel="NONE" itemValue="none"></f:selectItem>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="DOB" for="@next" style="color:red"></p:outputLabel>
+									<p:calendar value="#{editEmp.dob}" navigator="true"
+										pattern="dd/MM/yyyy" yearRange="c-100:c+0" required="true"
+										requiredMessage="Please enter DOB"></p:calendar>
+
+									<p:outputLabel
+										value="#{editEmployeeVar.editEmployeeGenderLabel}"></p:outputLabel>
+									<p:selectOneRadio value="#{editEmp.gender}">
+										<f:selectItem
+											itemLabel="#{editEmployeeVar.editEmployeeGenderMaleLabel}"
+											itemValue="#{editEmployeeVar.editEmployeeGenderMaleLabel}"></f:selectItem>
+										<f:selectItem
+											itemLabel="#{editEmployeeVar.editEmployeeGenderFemaleLabel}"
+											itemValue="#{editEmployeeVar.editEmployeeGenderFemaleLabel}"></f:selectItem>
+										<f:selectItem itemLabel="Transgender" itemValue="Transgender"></f:selectItem>
+									</p:selectOneRadio>
+
+									<p:outputLabel
+										value="#{editEmployeeVar.editEmployeeCategoryLabel}"
+										for="@next" style="color:red"></p:outputLabel>
+									<p:selectOneMenu value="#{editEmp.category}" required="true"
+										requiredMessage="#{editEmployeeVar.editEmployeeEmployeeCategoryValidation}">
+										<f:selectItem itemLabel="#{editEmployeeVar.selectHereLabel}"
+											itemValue=""></f:selectItem>
+										<f:selectItems value="#{editEmp.categoryList}"></f:selectItems>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Sub Category" for="@next"
+										style="color:red"></p:outputLabel>
+									<p:inputText value="#{editEmp.subCateg}" required="true"
+										requiredMessage="Please enter sub category"></p:inputText>
+
+									<p:outputLabel value="Salary(Per Month)"></p:outputLabel>
+									<p:inputText value="#{editEmp.salary}">
+										<p:keyFilter mask="money"></p:keyFilter>
+									</p:inputText>
+
+									<p:outputLabel value="Leave Allowed(Per Month)"></p:outputLabel>
+									<p:inputText onfocus="this.select()" value="#{editEmp.leave}">
+										<p:keyFilter mask="money"></p:keyFilter>
+									</p:inputText>
+
+									<p:outputLabel value="DA Amount"></p:outputLabel>
+									<p:inputText onfocus="this.select()" value="#{editEmp.daamt}">
+										<p:keyFilter mask="money"></p:keyFilter>
+									</p:inputText>
+
+									<p:outputLabel value="HRA Amount"></p:outputLabel>
+									<p:inputText onfocus="this.select()" value="#{editEmp.hraamt}">
+										<p:keyFilter mask="money"></p:keyFilter>
+									</p:inputText>
+
+									<p:outputLabel value="D/L No.(* for driver)"></p:outputLabel>
+									<p:inputText value="#{editEmp.dlNo}"></p:inputText>
+
+									<p:outputLabel
+										value="#{editEmployeeVar.editEmployeeQualificationLabel}"></p:outputLabel>
+									<p:inputText value="#{editEmp.qualification}"></p:inputText>
+
+									<p:outputLabel
+										value="#{editEmployeeVar.editEmployeeJoiningDateLabel}"
+										for="@next" style="color:red"></p:outputLabel>
+									<p:calendar value="#{editEmp.joiningDate}" pattern="dd/MM/yyyy"
+										navigator="true" required="true" yearRange="c-100:c+0"
+										requiredMessage="Please enter joining date"></p:calendar>
+
+									<p:outputLabel value="Leaving Date"></p:outputLabel>
+									<p:calendar navigator="true" value="#{editEmp.leavingDate}"
+										pattern="dd/MM/yyyy"></p:calendar>
+
+									<p:outputLabel value="Mobile Number 1" for="@next"
+										style="color:red"></p:outputLabel>
+									<p:inputText id="mobil1" value="#{editEmp.mobile}"
+										required="true" requiredMessage="Please Enter Mobile No."
+										validatorMessage="Mobile no. must be of #{sideMenuBean.list.country eq 'UAE' ? '9' : '10'} digits."
+										maxlength="#{sideMenuBean.list.country eq 'UAE' ? '9' : '10'}"
+										onkeypress="return AvoidSpace(event)"
+										onkeyup="checkNumberValid2('form:mobil1')">
+										<f:validateLength
+											minimum="#{sideMenuBean.list.country eq 'UAE' ? '9' : '10'}"></f:validateLength>
+									</p:inputText>
+
+
+									<p:outputLabel value="Mobile Number 2"></p:outputLabel>
+									<p:inputText id="mobil2" value="#{editEmp.mobile2}"
+										onkeypress="return AvoidSpace(event)"
+										onkeyup="checkNumberValid2('form:mobil2')"
+										validatorMessage="Mobile no. must be of #{sideMenuBean.list.country eq 'UAE' ? '9' : '10'} digits."
+										maxlength="#{sideMenuBean.list.country eq 'UAE' ? '9' : '10'}">
+										<f:validateLength
+											minimum="#{sideMenuBean.list.country eq 'UAE' ? '9' : '10'}"></f:validateLength>
+									</p:inputText>
+
+									<p:outputLabel value="Email ID / Zoom Email ID"></p:outputLabel>
+									<p:inputText value="#{editEmp.email}" id="email"
+										validatorMessage="Invalid email format">
+										<f:validateRegex
+											pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+									</p:inputText>
+
+									<p:outputLabel value="Marital Status"></p:outputLabel>
+									<p:selectOneRadio value="#{editEmp.marital}">
+										<f:selectItem itemLabel="Married" itemValue="Married"></f:selectItem>
+										<f:selectItem itemLabel="Unmarried" itemValue="Unmarried"></f:selectItem>
+
+										<p:ajax
+											update=":form:name :form:value,:form:name1 :form:value1"
+											listener="#{editEmp.showSpouseMethod}"></p:ajax>
+									</p:selectOneRadio>
+
+
+									<p:outputLabel value="PAN No."></p:outputLabel>
+									<p:inputText value="#{editEmp.panNo}"></p:inputText>
+
+									<p:outputLabel value="Aadhar No."></p:outputLabel>
+									<p:inputText value="#{editEmp.aadhaarNo}"></p:inputText>
+
+									<p:outputLabel value="Bank Account No."></p:outputLabel>
+									<p:inputText value="#{editEmp.bankAccountNo}"></p:inputText>
+
+									<p:outputLabel value="Bank Name"></p:outputLabel>
+									<p:inputText value="#{editEmp.bankName}"></p:inputText>
+
+									<p:outputLabel value="Bank Branch Name"></p:outputLabel>
+									<p:inputText value="#{editEmp.bankBranch}"></p:inputText>
+
+									<p:outputLabel value="IFSC CODE"></p:outputLabel>
+									<p:inputText value="#{editEmp.ifscCode}"></p:inputText>
+
+									<p:outputLabel value="EPF UAN No."></p:outputLabel>
+									<p:inputText value="#{editEmp.epfUanNo}"></p:inputText>
+
+									<p:outputLabel value="ESI No."></p:outputLabel>
+									<p:inputText value="#{editEmp.esiNo}"></p:inputText>
+
+									<p:outputPanel id="name">
+										<p:outputLabel rendered="#{editEmp.showSpouse}"
+											value="Spouse Name"></p:outputLabel>
+									</p:outputPanel>
+									<p:outputPanel id="value">
+										<p:inputText rendered="#{editEmp.showSpouse}"
+											value="#{editEmp.spouseName}"></p:inputText>
+									</p:outputPanel>
+									<p:outputPanel id="name1">
+										<p:outputLabel rendered="#{editEmp.showSpouse}"
+											value="Anniversary Date"></p:outputLabel>
+									</p:outputPanel>
+									<p:outputPanel id="value1">
+										<p:calendar value="#{editEmp.anniDate}" pattern="dd/MM/yyyy"
+											navigator="true" rendered="#{editEmp.showSpouse}"></p:calendar>
+									</p:outputPanel>
+
+									<p:outputLabel
+										value="#{editEmployeeVar.editEmployeeAddressLabel}"></p:outputLabel>
+									<p:inputTextarea rows="5" cols="26" value="#{editEmp.address}"></p:inputTextarea>
+
+									<p:outputLabel
+										value="#{editEmployeeVar.editEmployeeCommentsLabel}"></p:outputLabel>
+									<p:inputTextarea rows="5" cols="26" value="#{editEmp.comment}"></p:inputTextarea>
+
+								</p:panelGrid>
+
+							</p:panel>
+
+							<p:panel
+								header="Uploaded Documents (Allowed file type : png, jpg, jpeg only)">
+								<p:panelGrid columns="4"
+									styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:outputLabel value="Profile Photo "></p:outputLabel>
+									<p:lightBox>
+										<h:outputLink value="#{editEmp.previousImage}">
+											<p:graphicImage id="imageIdProfile" height="75px"
+												width="120px" cache="false" value="#{editEmp.previousImage}"></p:graphicImage>
+										</h:outputLink>
+									</p:lightBox>
+									<p:fileUpload value="#{editEmp.employeeImage}" mode="simple"
+										allowTypes="/(\.|\/)(gif|jpeg|png)$/" />
+
+									<p:commandButton icon="ui-icon-trash" immediate="true"
+										action="#{editEmp.removeProfilePhoto}"
+										update=":form:imageIdProfile" style="width:150px;"></p:commandButton>
+
+
+
+									<p:outputLabel
+										value="#{sideMenuBean.list.country.toLowerCase() eq 'uae' ? 'Emirates ID' : 'Aadhar Card'} "></p:outputLabel>
+									<p:lightBox>
+										<h:outputLink value="#{editEmp.aadharImage}">
+											<p:graphicImage id="imageIdAadhar" height="75px"
+												width="120px" cache="false" value="#{editEmp.aadharImage}"></p:graphicImage>
+										</h:outputLink>
+									</p:lightBox>
+									<p:fileUpload value="#{editEmp.uAadharImage}" mode="simple"
+										allowTypes="/(\.|\/)(gif|jpeg|png)$/" />
+
+									<p:commandButton icon="ui-icon-trash" immediate="true"
+										action="#{editEmp.removeAadharPhoto}"
+										update=":form:imageIdAadhar" style="width:150px;"></p:commandButton>
+
+
+
+									<p:outputLabel value="PAN Card "></p:outputLabel>
+									<p:lightBox>
+										<h:outputLink value="#{editEmp.panImage}">
+											<p:graphicImage id="imageIdPan" height="75px" width="120px"
+												cache="false" value="#{editEmp.panImage}"></p:graphicImage>
+										</h:outputLink>
+									</p:lightBox>
+									<p:fileUpload value="#{editEmp.uPanImage}" mode="simple"
+										allowTypes="/(\.|\/)(gif|jpeg|png)$/" />
+
+									<p:commandButton icon="ui-icon-trash" immediate="true"
+										action="#{editEmp.removePanPhoto}" update=":form:imageIdPan"
+										style="width:150px;"></p:commandButton>
+
+
+
+									<p:outputLabel value="VoterID "
+										rendered="#{sideMenuBean.list.country.toLowerCase() ne 'uae'}"></p:outputLabel>
+									<p:lightBox
+										rendered="#{sideMenuBean.list.country.toLowerCase() ne 'uae'}">
+										<h:outputLink value="#{editEmp.voteridImage}">
+											<p:graphicImage id="imageIdVoter" height="75px" width="120px"
+												cache="false" value="#{editEmp.voteridImage}"></p:graphicImage>
+										</h:outputLink>
+									</p:lightBox>
+									<p:fileUpload
+										rendered="#{sideMenuBean.list.country.toLowerCase() ne 'uae'}"
+										value="#{editEmp.uVoteridImage}" mode="simple"
+										allowTypes="/(\.|\/)(gif|jpeg|png)$/" />
+
+									<p:commandButton icon="ui-icon-trash" immediate="true"
+										action="#{editEmp.removeVoterPhoto}"
+										update=":form:imageIdVoter" style="width:150px;"></p:commandButton>
+
+
+
+									<p:outputLabel value="D/L "></p:outputLabel>
+									<p:lightBox>
+										<h:outputLink value="#{editEmp.dlImage}">
+											<p:graphicImage id="imageIdDL" height="75px" width="120px"
+												cache="false" value="#{editEmp.dlImage}"></p:graphicImage>
+										</h:outputLink>
+									</p:lightBox>
+									<p:fileUpload value="#{editEmp.uDlImage}" mode="simple"
+										allowTypes="/(\.|\/)(gif|jpeg|png)$/" />
+
+									<p:commandButton icon="ui-icon-trash" immediate="true"
+										action="#{editEmp.removeDlPhoto}" update=":form:imageIdDL"
+										style="width:150px;"></p:commandButton>
+
+
+									<p:outputLabel value="UG Cert./Marksheet : "></p:outputLabel>
+									<p:lightBox>
+										<h:outputLink value="#{editEmp.ugImage}">
+											<p:graphicImage id="imageIdUnderGrad" height="75px"
+												width="120px" cache="false" value="#{editEmp.ugImage}"></p:graphicImage>
+										</h:outputLink>
+									</p:lightBox>
+									<p:fileUpload value="#{editEmp.uUgImage}" mode="simple"
+										allowTypes="/(\.|\/)(gif|jpeg|png)$/" />
+
+									<p:commandButton icon="ui-icon-trash" immediate="true"
+										action="#{editEmp.removeUgPhoto}"
+										update=":form:imageIdUnderGrad" style="width:150px;"></p:commandButton>
+
+
+
+									<p:outputLabel value="PG Cert./Marksheet : "></p:outputLabel>
+									<p:lightBox>
+										<h:outputLink value="#{editEmp.pgImage}">
+											<p:graphicImage id="imageIdPg" height="75px" width="120px"
+												cache="false" value="#{editEmp.pgImage}"></p:graphicImage>
+										</h:outputLink>
+									</p:lightBox>
+									<p:fileUpload value="#{editEmp.uPgImage}" mode="simple"
+										allowTypes="/(\.|\/)(gif|jpeg|png)$/" />
+
+									<p:commandButton icon="ui-icon-trash" immediate="true"
+										action="#{editEmp.removePgPhoto}" update=":form:imageIdPg"
+										style="width:150px;"></p:commandButton>
+
+
+									<p:outputLabel
+										value="#{sideMenuBean.list.country.toLowerCase() eq 'uae' ? 'PGCE/B.Ed.' : 'B.Ed.'} Cert./Marksheet : "></p:outputLabel>
+									<p:lightBox>
+										<h:outputLink value="#{editEmp.bedImage}">
+											<p:graphicImage id="imageIdBed" height="75px" width="120px"
+												cache="false" value="#{editEmp.bedImage}"></p:graphicImage>
+										</h:outputLink>
+									</p:lightBox>
+									<p:fileUpload value="#{editEmp.uBedImage}" mode="simple"
+										allowTypes="/(\.|\/)(gif|jpeg|png)$/" />
+
+									<p:commandButton icon="ui-icon-trash" immediate="true"
+										action="#{editEmp.removeBedPhoto}" update=":form:imageIdBed"
+										style="width:150px;"></p:commandButton>
+
+
+									<p:outputLabel value="Police Verification : "></p:outputLabel>
+									<p:lightBox>
+										<h:outputLink value="#{editEmp.policeImage}">
+											<p:graphicImage id="imageIdPolice" height="75px"
+												width="120px" cache="false" value="#{editEmp.policeImage}"></p:graphicImage>
+										</h:outputLink>
+									</p:lightBox>
+									<p:fileUpload value="#{editEmp.uPoliceImage}" mode="simple"
+										allowTypes="/(\.|\/)(gif|jpeg|png)$/" />
+
+									<p:commandButton icon="ui-icon-trash" immediate="true"
+										action="#{editEmp.removePolicePhoto}"
+										update=":form:imageIdPolice" style="width:150px;"></p:commandButton>
+
+
+
+									<p:outputLabel value="Experience Cert. : "></p:outputLabel>
+									<p:lightBox>
+										<h:outputLink value="#{editEmp.expImage}">
+											<p:graphicImage id="imageIdExp" height="75px" width="120px"
+												cache="false" value="#{editEmp.expImage}"></p:graphicImage>
+										</h:outputLink>
+									</p:lightBox>
+									<p:fileUpload value="#{editEmp.uExpImage}" mode="simple"
+										allowTypes="/(\.|\/)(gif|jpeg|png)$/" />
+
+									<p:commandButton icon="ui-icon-trash" immediate="true"
+										action="#{editEmp.removeExpPhoto}" update=":form:imageIdExp"
+										style="width:150px;"></p:commandButton>
+
+
+
+
+									<p:outputLabel value="Other Doc. : "></p:outputLabel>
+									<p:lightBox>
+										<h:outputLink value="#{editEmp.otherImage}">
+											<p:graphicImage id="imageIdOther" height="75px" width="120px"
+												cache="false" value="#{editEmp.otherImage}"></p:graphicImage>
+										</h:outputLink>
+									</p:lightBox>
+									<p:fileUpload value="#{editEmp.uOtherImage}" mode="simple"
+										allowTypes="/(\.|\/)(gif|jpeg|png)$/" />
+
+									<p:commandButton icon="ui-icon-trash" immediate="true"
+										action="#{editEmp.removeOtherPhoto}"
+										update=":form:imageIdOther" style="width:150px;"></p:commandButton>
+
+
+									<p:commandButton ajax="false" action="#{editEmp.updateNow}"
+										value="Update Here"></p:commandButton>
+
+								</p:panelGrid>
+							</p:panel>
+
+
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

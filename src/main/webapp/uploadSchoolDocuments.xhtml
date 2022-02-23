@@ -1,0 +1,109 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">School Documents</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form" enctype="multipart/form-data">
+							<h1>Upload School Documents (Allowed file type are :- Image,Document)</h1>
+
+
+							<p:messages autoUpdate="true" closable="true"></p:messages>
+
+
+							<p:outputPanel id="allSchoolDocuments">
+
+								<p:panel>
+								<p:dataTable reflow="true" id="table" value="#{uploadSchoolDocuments.docList}" 
+										var="var">
+										<p:column headerText="S.No." >
+											<p:outputLabel value="#{var.sno}"></p:outputLabel>
+										</p:column>
+										
+										<p:column headerText="Document Name" >
+											<p:inputText value="#{var.documentName}"></p:inputText>
+										</p:column>
+
+										<p:column headerText="Upload file" >
+											  <p:fileUpload mode="simple" value="#{var.file}"></p:fileUpload>
+										</p:column>
+										
+										
+										
+									
+
+
+										
+
+									</p:dataTable>
+									
+									<br></br>
+									
+									<p:commandButton value="Add Row" styleClass="butwid" icon="fa fa-plus-circle"
+										action="#{uploadSchoolDocuments.addRow}" update=":form"></p:commandButton>
+										<br></br>
+                                    <center>
+									<p:commandButton ajax="false" value="Submit" styleClass="butwid" icon="fa fa-floppy-o"
+										action="#{uploadSchoolDocuments.uploadDocs}" update=":form"></p:commandButton></center>
+									
+								</p:panel>
+								
+								<p:panel header="View Documents">
+								
+										<p:dataTable reflow="true" id="tableTwo" value="#{uploadSchoolDocuments.viewList}" 
+										var="vartwo">
+										<p:column headerText="S.No." >
+											<p:outputLabel value="#{vartwo.sno}"></p:outputLabel>
+										</p:column>
+										
+										<p:column headerText="Document Name" >
+											<p:outputLabel value="#{vartwo.documentName}"></p:outputLabel>
+										</p:column>
+
+											<p:column headerText="View" >
+											<center>
+											<p:commandButton icon="ui-icon-search" action="#{uploadSchoolDocuments.viewDocss}" styleClass="butwid">
+											  <f:setPropertyActionListener  value="#{vartwo}" target="#{uploadSchoolDocuments.selected}"></f:setPropertyActionListener>
+											 </p:commandButton>
+											</center>
+											
+										</p:column>
+										
+										<p:column headerText="Remove" >
+										<center>
+										<p:commandButton icon="ui-icon-trash" styleClass="butwid redButt"  action="#{uploadSchoolDocuments.deleteDoc}" update=":form:tableTwo">
+											  <f:setPropertyActionListener  value="#{vartwo}" target="#{uploadSchoolDocuments.selected}"></f:setPropertyActionListener>
+											  <p:confirm header="Confirmation" message="Surely Want To Remove This Document???" icon="ui-icon-alert" />
+											 </p:commandButton>
+										</center>
+											
+										</p:column>
+										
+							
+									</p:dataTable>
+								
+								</p:panel>
+							</p:outputPanel>
+							
+							<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+						<p:commandButton style="margin-left:50px" value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+						<p:commandButton style="margin-left:50px" value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+					</p:confirmDialog>
+							
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

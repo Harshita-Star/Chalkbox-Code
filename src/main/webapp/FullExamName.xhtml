@@ -1,0 +1,86 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+	<ui:define name="title">Set Exam Name</ui:define>
+
+		<ui:define name="content">
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form1">
+						
+							<p:messages closable="true" autoUpdate="true"></p:messages>
+
+							<p:panel header="Add Exam Full Name">
+							<f:facet name="header">
+									
+									<span> <p:commandLink style="float: right;margin-left: 15px;;color: blue;font-size:15px;"
+											immediate="true" value="Edit/View/Delete Full Name" action="EditViewDeleteFullNames.xhtml?faces-redirect=true"></p:commandLink>
+									</span>
+								</f:facet>
+
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+										
+										<p:outputLabel value="Select Class : "></p:outputLabel>
+										<p:selectCheckboxMenu value="#{fullexamName.selectedclasses}" label="Classes"
+                                                   filter="true" filterMatchMode="startsWith" panelStyle="width:250px">
+										<f:selectItems value="#{fullexamName.allClass}"></f:selectItems>
+									</p:selectCheckboxMenu>
+										<p:commandButton value="Search Exams" update=":form" action="#{fullexamName.showExams}" styleClass="butwid" icon="fa fa-search"></p:commandButton>
+									</p:panelGrid>
+							</p:panel>
+						</h:form>
+					</div>
+					
+					<div class="card card-w-title">
+						<h:form id="form">
+							<p:panel id="dataTable" rendered="#{fullexamName.showTable}">
+								<p:dataTable id="up" style="width:100%;border-collapse:collapse"
+										rowKey="#{var.sno}"
+									border="1" value="#{fullexamName.allExamNames}" var="var">
+									<p:column headerText="S.No."
+										style="width:40px;text-align:center">
+
+										<p:outputLabel value="#{var.sno}"></p:outputLabel>
+									</p:column>
+									<p:column headerText="Exam Name"
+										style="width:40px;text-align:center">
+
+										<p:outputLabel value="#{var.examNameUpperCase}"></p:outputLabel>
+									</p:column>
+									
+									<p:column headerText="Full Name" style="width:40px;text-align:center">
+
+										<p:inputText value="#{var.fullName}" required="true" requiredMessage="Please Enter Full Names Properly." disabled="#{var.disableEdit}"></p:inputText>
+										
+									</p:column>
+									
+									<f:facet name="footer">
+										<br />
+								<p:separator />
+								<center>
+									<p:commandButton value="Save"  action="#{fullexamName.saveNames}"  update=":form,:form1" styleClass="butwid" icon="fa fa-floppy-o"
+												></p:commandButton>
+								</center>
+								<p:separator />
+								<br />
+									</f:facet>
+									
+
+									
+								</p:dataTable>
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</ui:define>
+	
+</ui:composition>

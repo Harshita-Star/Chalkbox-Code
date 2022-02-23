@@ -1,0 +1,195 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	<f:loadBundle var="addClassVar" basename="myProperties" />
+
+	<ui:define name="title">Old Daily Fee Collection</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+				
+                    <h:form id="form">
+				<h1>#{collectFeeVar.collectFeeTitle}</h1>
+
+				<p:panel header="Student Fee Collection" id="data">
+					<p:messages closable="true" autoUpdate="true"></p:messages>
+					<p:panelGrid columns="6" style="width:100%" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group">
+						<p:outputLabel for="@next" style="color:red"  value="#{collectFeeVar.collectFeeAdmissionNumberLabel}"></p:outputLabel>
+						<p:inputText value="#{oldStudentFeeCollection.srNo}" required="true" requiredMessage="Please Enter SR.NO." validatorMessage="Please Enter Correct value">
+						  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+						</p:inputText>
+
+						<p:outputLabel value="Fee Date"></p:outputLabel>
+						<p:calendar disabled="true" value="#{oldStudentFeeCollection.recipietDate}"
+							pattern="dd/MM/yyyy" navigator="true" yearRange="c-10:c+10" />
+
+						<p:outputLabel value="#{collectFeeVar.collectFeeStudentNameLabel}" for="@next" style="color:red" ></p:outputLabel>
+						<p:inputText value="#{oldStudentFeeCollection.name}" required="true" requiredMessage="Please Enter Student Name" validatorMessage="Please Enter Correct value">
+						  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+						</p:inputText>
+
+						<p:outputLabel value="#{collectFeeVar.collectFeeFathersNameLabel}" for="@next" style="color:red" ></p:outputLabel>
+						<p:inputText value="#{oldStudentFeeCollection.fathersName}" required="true" requiredMessage="Please Enter Father's Name" validatorMessage="Please Enter Correct value"> 
+						  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+						</p:inputText>
+						
+						<p:outputLabel value="Contact No" for="@next" style="color:red" ></p:outputLabel>
+                  		<p:inputText maxlength="10" validatorMessage="Please Enter 10 Digit Number" required="true" requiredMessage="Please Enter Contact No" value="#{oldStudentFeeCollection.cntctNo}"  >
+                  			<p:keyFilter mask="pnum"></p:keyFilter>
+                  			<f:validateLength minimum="10"></f:validateLength>
+                		</p:inputText>
+                		
+                		<p:outputLabel value="Class" for="@next" style="color:red" ></p:outputLabel>
+						<p:inputText value="#{oldStudentFeeCollection.className}" required="true" requiredMessage="Please Enter Class" validatorMessage="Please Enter Correct value"> 
+						  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+						</p:inputText>
+						
+                		
+						<p:outputLabel value="Payment Mode" for="@next" style="color:red" ></p:outputLabel>
+						<p:selectOneRadio required="true"
+							requiredMessage="Please Select Paymentmode"
+							value="#{oldStudentFeeCollection.paymentMode}">
+							<f:selectItem itemLabel="Cash" itemValue="Cash"></f:selectItem>
+							<f:selectItem itemLabel="Cheque" itemValue="Cheque"></f:selectItem>
+							<f:selectItem itemLabel="Net Banking" itemValue="Net Banking"></f:selectItem>
+							<f:selectItem itemLabel="Challan" itemValue="Challan"></f:selectItem>
+							<p:ajax update=":form" listener="#{oldStudentFeeCollection.paymentModeListener}"></p:ajax>
+						</p:selectOneRadio>
+						
+						
+
+						<p:outputLabel rendered="#{oldStudentFeeCollection.showPaymentMode}" value="Bank Name" for="@next" style="color:red" ></p:outputLabel>
+						<p:inputText required="true" requiredMessage="Please Enter Bank name" rendered="#{oldStudentFeeCollection.showPaymentMode}"
+							value="#{oldStudentFeeCollection.bankName}" validatorMessage="Please Enter Correct value">
+						  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+						</p:inputText>
+
+						<p:outputLabel rendered="#{oldStudentFeeCollection.showCheque}"
+							value="cheque number" for="@next" style="color:red" ></p:outputLabel>
+						<p:inputText required="true"
+							requiredMessage="Please Enter Cheque Number"
+							rendered="#{oldStudentFeeCollection.showCheque}"
+							value="#{oldStudentFeeCollection.chequeNumber}" validatorMessage="Please Enter Correct value">
+						  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+						</p:inputText>
+
+						<p:outputLabel rendered="#{oldStudentFeeCollection.showCheque}"
+							value="Cheque Date" for="@next" style="color:red" ></p:outputLabel>
+						<p:calendar required="true"
+							requiredMessage="Please Enter Cheque Date"
+							rendered="#{oldStudentFeeCollection.showCheque}"
+							value="#{oldStudentFeeCollection.challanDate}" pattern="dd/MM/yyyy"
+							navigator="true" yearRange="c-10:c+10" />
+
+
+						<p:outputLabel rendered="#{oldStudentFeeCollection.showChallan}"
+							value="Challan Number" for="@next" style="color:red" ></p:outputLabel>
+						<p:inputText rendered="#{oldStudentFeeCollection.showChallan}" required="true"
+							requiredMessage="Please Enter Challan Number"
+							value="#{oldStudentFeeCollection.chequeNumber}" validatorMessage="Please Enter Correct value">
+						  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+						</p:inputText>
+
+						<p:outputLabel rendered="#{oldStudentFeeCollection.showChallan}"
+							value="Challan Date" for="@next" style="color:red" ></p:outputLabel>
+						<p:calendar required="true"
+							requiredMessage="Please Enter Challan Date"
+							rendered="#{oldStudentFeeCollection.showChallan}"
+							value="#{oldStudentFeeCollection.challanDate}" pattern="dd/MM/yyyy"
+							navigator="true" yearRange="c-10:c+10" />
+
+						<p:outputLabel rendered="#{oldStudentFeeCollection.showNeft}"
+							value="NEFT / IMPS Number" for="@next" style="color:red" ></p:outputLabel>
+						<p:inputText rendered="#{oldStudentFeeCollection.showNeft}" required="true"
+							requiredMessage="Please Enter NEFT / IMPS Number"
+							value="#{oldStudentFeeCollection.chequeNumber}" validatorMessage="Please Enter Correct value">
+						  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+						</p:inputText>
+
+						<p:outputLabel rendered="#{oldStudentFeeCollection.showNeft}" value="NEFT Date" for="@next" style="color:red" ></p:outputLabel>
+						<p:calendar required="true"
+							requiredMessage="Please Enter NEFT Date"
+							rendered="#{oldStudentFeeCollection.showNeft}"
+							value="#{oldStudentFeeCollection.challanDate}" pattern="dd/MM/yyyy"
+							navigator="true" yearRange="c-10:c+10" />
+
+					</p:panelGrid>
+
+					
+
+					<p:dataTable id="dt" value="#{oldStudentFeeCollection.feeList}" var="var" reflow="true"
+						selection="#{oldStudentFeeCollection.selectedFees}" rowKey="#{var.feeId}">
+						
+						<p:column headerText="S.No." style="width:50px;">
+							<p:outputLabel value="#{var.sno}"></p:outputLabel>
+						</p:column>
+						
+						<p:ajax global="false" event="rowSelectCheckbox"
+							listener="#{oldStudentFeeCollection.calculatePayAmount}"
+							update=":form:dt :form:dt">
+						</p:ajax>
+						<p:ajax global="false" event="rowUnselectCheckbox"
+							listener="#{oldStudentFeeCollection.calculatePayAmount}"
+							update=":form:dt :form:dt">
+						</p:ajax>
+						
+						
+						<p:column selectionMode="multiple" headerText="Select">
+						</p:column>
+
+						<p:column headerText="Fee Name">
+							<p:outputLabel value="#{var.feeName}"></p:outputLabel>
+						</p:column>
+							
+						<p:column headerText="Submit Amount (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})">
+							<p:inputText onfocus="this.select();" value="#{var.payAmount}">
+								<p:keyFilter mask="pnum"></p:keyFilter>
+								<p:ajax global="false" event="blur"
+									listener="#{oldStudentFeeCollection.calculatePayAmount}" process="@this"
+									update=":form:dt :form:dt"></p:ajax>
+
+							</p:inputText>
+							<f:facet name="footer">
+								<p:outputLabel id="submit"
+									value="Submit Amount : #{oldStudentFeeCollection.submitAmount}"></p:outputLabel>
+								<p:outputLabel value="#{sideMenuBean.list.country eq 'UAE' ? ' AED' : ' Rs.'}"></p:outputLabel>	
+
+							</f:facet>
+						</p:column>
+					</p:dataTable>
+
+					<p:panelGrid columns="3">
+						<p:outputLabel value="Remark : " />
+						<p:inputTextarea value="#{oldStudentFeeCollection.remark}" validatorMessage="Please Enter Correct value">
+						  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+						</p:inputTextarea>
+						<p:commandButton
+							value="#{collectFeeVar.collectFeeSubmitNowButtonLabel}"
+							action="#{oldStudentFeeCollection.submit}" update=":form"></p:commandButton>
+						<p:commandButton ajax="false" onclick="target='_blank'" immediate="true" rendered="false"
+							action="#{navigation.feeReceipt}" value="Print"></p:commandButton>
+					</p:panelGrid>
+
+				</p:panel>
+
+			</h:form>
+                    
+
+
+							   					
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

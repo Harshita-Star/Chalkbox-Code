@@ -1,0 +1,100 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	<f:loadBundle var="addClassVar" basename="myProperties" />
+
+	<ui:define name="title">Video Gallery</ui:define>
+
+	<ui:define name="content">
+		<h:form id="form" enctype="multipart/form-data">
+			<div class="ui-fluid">
+				<div class="ui-g">
+					<div class="ui-g-12">
+						<div class="card card-w-title">
+
+							<p:messages closable="true" autoUpdate="true"></p:messages>
+							<p:panel>
+								<f:facet name="header">
+									<span>Add Video Gallery (YouTube Only)</span>
+									<span> <p:commandLink
+											style="float: right;margin-left: 15px;;color: blue;font-size:15px;"
+											immediate="true" value="View/Delete Video Gallery"
+											action="editViewDeleteVideoGallery.xhtml?faces-redirect=true"></p:commandLink>
+									</span>
+								</f:facet>
+								<p:panelGrid columns="2"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:outputLabel value="Select"></p:outputLabel>
+									<p:selectOneRadio value="#{videoGallery.select}">
+										<f:selectItem itemLabel="Random Video"
+											itemValue="Random Video"></f:selectItem>
+										<f:selectItem itemLabel="New Album" itemValue="New Album"></f:selectItem>
+										<p:ajax update=":form" listener="#{videoGallery.check}"></p:ajax>
+									</p:selectOneRadio>
+
+									<p:outputLabel for="@next" style="color:red"
+										value="Video Gallery Name"></p:outputLabel>
+									<p:inputText value="#{videoGallery.videoTag}" required="true"
+										requiredMessage="Please enter the video link!"
+										disabled="#{videoGallery.show}">
+									</p:inputText>
+
+									<p:outputLabel for="@next" style="color:red"
+										value="Select Class"></p:outputLabel>
+									<p:selectOneMenu style="width:250px"
+										value="#{videoGallery.selectedCLassSection}" required="true"
+										requiredMessage="Please select a class">
+
+										<f:selectItem itemLabel="Select Class" itemValue=""></f:selectItem>
+										<f:selectItems value="#{videoGallery.classList}"></f:selectItems>
+									</p:selectOneMenu>
+
+								</p:panelGrid>
+								<br></br>
+								<p:dataTable value="#{videoGallery.galleryList}" var="info">
+
+									<p:column headerText="S No." style="width:10%;">
+										<p:outputLabel value="#{info.sno}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Video Link (YouTube Only)"
+										style="width:90%;">
+										<p:inputText value="#{info.videoLink}"></p:inputText>
+									</p:column>
+								</p:dataTable>
+								
+								
+								
+								<br />
+								<p:separator />
+								<center>
+									<p:panelGrid
+										columns="2"
+										layout="grid" styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+									<p:commandButton update=":form" styleClass="butwid" icon="fa fa-plus"
+										action="#{videoGallery.addmore}" value="Add More"></p:commandButton>
+									<p:commandButton ajax="false" value="Submit" styleClass="butwid" icon="fa fa-upload"
+										action="#{videoGallery.sendMessage}" update=":form"></p:commandButton>
+										
+									</p:panelGrid>
+								</center>
+								<p:separator />
+								<br />
+							</p:panel>
+
+
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</h:form>
+	</ui:define>
+
+</ui:composition>

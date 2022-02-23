@@ -1,0 +1,96 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Apply Leave</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+				<h:form id="form">
+					<p:growl showDetail="true"   autoUpdate="true" ></p:growl>
+					<center>
+					<p:commandButton style="width:150px;" icon="ui-icon-refresh" value="Refresh" action="leaveRequest.xhtml" update=":form"></p:commandButton>
+					</center>
+					<br/>
+					<p:panel style="width:100%" header="Leave Requests">
+						<p:dataTable value="#{leaveRequest.leaveInfo}" reflow="true" var="var"> 
+							<p:column headerText="S.No.">
+								<p:outputLabel value="#{var.sNo}"></p:outputLabel>
+							</p:column>
+							
+							<p:column headerText="Emp Name">
+								<p:outputLabel value="#{var.name}"></p:outputLabel>
+							</p:column>
+							
+						<!-- 	<p:column headerText="Department">
+								<p:outputLabel value="#{var.dept}"></p:outputLabel>
+							</p:column>
+							
+							<p:column headerText="Designation">
+								<p:outputLabel value="#{var.designation}"></p:outputLabel>
+							</p:column>  -->
+							
+							<p:column headerText="Apply Date">
+								<p:outputLabel value="#{var.aDate}"></p:outputLabel>
+							</p:column>
+							
+							<p:column headerText="From">
+								<p:outputLabel value="#{var.sDate}"></p:outputLabel>
+							</p:column>
+							
+							<p:column headerText="To">
+								<p:outputLabel value="#{var.eDate}"></p:outputLabel>
+							</p:column>
+							
+							<p:column headerText="Days">
+								<p:outputLabel value="#{var.days}"></p:outputLabel>
+							</p:column>
+							
+							<p:column headerText="Description">
+								<p:outputLabel value="#{var.description}"></p:outputLabel>
+							</p:column>
+							
+							<p:column headerText="Leave Type">
+								<p:outputLabel value="#{var.leaveType} ( #{var.subLeaveType} )"/>
+							</p:column>		
+												
+							<p:column headerText="Comment">
+								<p:inputTextarea style="width:100px !important" autoResize="false" value="#{var.approveComment}" validatorMessage="Please Enter Correct value">
+								  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+								</p:inputTextarea>
+							</p:column>
+							
+							<p:column headerText="Allow" >
+								<p:commandButton styleClass="greenButt" rendered="#{var.allowButton}" icon="ui-icon-check" update=":form" action="#{leaveRequest.approveRequest}">
+									<p:confirm header="Confirmation" message="Are You Sure To Approve Leave...???" icon="ui-icon-alert" />
+									<f:setPropertyActionListener target="#{leaveRequest.selectedItem}" value="#{var}"></f:setPropertyActionListener>
+								</p:commandButton>
+							</p:column>
+							
+							<p:column headerText="Deny" >
+								<p:commandButton rendered="#{var.disableDeny}" styleClass="redButt" icon="ui-icon-close" update=":form" action="#{leaveRequest.denyRequest}">
+									<p:confirm header="Confirmation" message="Are You Sure To Deny Leave...???" icon="ui-icon-alert" />
+									<f:setPropertyActionListener target="#{leaveRequest.selectedItem}" value="#{var}"></f:setPropertyActionListener>
+								</p:commandButton>
+							</p:column>
+						</p:dataTable>
+					</p:panel>
+				</h:form>
+		<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+			<p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+			<p:commandButton value="No" style="margin-left:50px" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+		</p:confirmDialog>
+</div>
+	</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

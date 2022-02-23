@@ -1,0 +1,89 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/masterTemplate.xhtml"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	<f:loadBundle var="addClassVar" basename="myProperties" />
+
+	<ui:define name="title">Sender Id Report</ui:define>
+
+	<ui:define name="content">
+	<h:form id="form">
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						
+							<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+
+
+							<p:panel header="Sender Id Report">
+								<p:dataTable value="#{senderIdReport.dataList}" var="info">
+								
+								<p:column headerText="S no.">
+								<p:outputLabel value="#{info.sNo}"></p:outputLabel>
+								</p:column>
+								
+								<p:column headerText="School Id" filterBy="#{info.id}" filterMatchMode="contains">
+								<p:outputLabel value="#{info.id}"></p:outputLabel>
+								</p:column>
+								
+								<p:column headerText="School Name" filterBy="#{info.schoolName}" filterMatchMode="contains">
+								<p:outputLabel value="#{info.schoolName}"></p:outputLabel>
+								</p:column>
+								
+								<p:column headerText="Contact No.">
+								<p:outputLabel value="#{info.contactNo}"></p:outputLabel>
+								</p:column>
+								
+								<p:column headerText="Expired Date">
+								<p:outputLabel value="#{info.expireDateStr}"></p:outputLabel>
+								</p:column>
+								
+								<p:column headerText="Last Login">
+								<p:outputLabel value="#{info.lastLogin}"></p:outputLabel>
+								</p:column>
+								
+								<p:column headerText="User Name/Password">
+								<p:outputLabel value="U- #{info.username}"></p:outputLabel>
+										<br></br>
+										<p:outputLabel value="P- #{info.password}"></p:outputLabel>
+								</p:column>
+								
+								<p:column headerText="Sender Id" filterBy="#{info.senderid}" filterMatchMode="contains">
+								<p:outputLabel value="#{info.senderid}"></p:outputLabel>
+								</p:column>
+								
+								<p:column headerText="Edit">
+								<p:commandButton value="Edit" oncomplete="PF('edit').show()" update=":form">
+								<f:setPropertyActionListener value="#{info}" target="#{senderIdReport.selected}"></f:setPropertyActionListener>
+								</p:commandButton>
+								</p:column>
+								</p:dataTable>
+							</p:panel>
+					</div>
+				</div>
+			</div>
+		</div>
+		</h:form>
+		<h:form id="form1">
+		<p:dialog header="Details" widgetVar="edit" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+        <p:outputPanel id="EditTable" style="text-align:center;">
+            <p:panelGrid  columns="2"  columnClasses="label,value">
+
+					<p:outputLabel value="Sender Key"></p:outputLabel>
+                    <p:inputText value="#{senderIdReport.selected.senderid}" maxlength="6" validatorMessage="Sender Id should be of 6 Character!">
+                    <f:validateLength minimum="6"></f:validateLength>
+                    <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+                    </p:inputText>
+                    
+					<p:commandButton update=":form :form1" value="Add" action="#{senderIdReport.edit}"></p:commandButton>
+        </p:panelGrid>
+        </p:outputPanel>
+		</p:dialog>
+		</h:form>
+
+	</ui:define>
+
+</ui:composition>

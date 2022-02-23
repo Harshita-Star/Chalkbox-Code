@@ -1,0 +1,85 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/masterTemplate.xhtml">
+
+	<ui:define name="title">Message Ledger</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+
+							<p:panel header="Message Details">
+
+								<p:messages closable="true" autoUpdate="true"></p:messages>
+
+								<p:panelGrid columns="2" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+									<p:outputLabel  for="@next" style="color:red" value="School Name"></p:outputLabel>
+									<p:selectOneMenu filter="true"
+										value="#{messageDetails.schNm}" required="true"
+										requiredMessage="Please select a School">
+										<f:selectItem itemLabel="select" itemValue=""></f:selectItem>
+										<f:selectItems value="#{messageDetails.schoolList}"></f:selectItems>
+										<p:ajax update=":form:id"
+											listener="#{messageDetails.allHistory}"></p:ajax>
+									</p:selectOneMenu>
+								</p:panelGrid>
+							</p:panel>
+
+
+							<p:panel header="View Message History">
+
+								<p:dataTable reflow="true" value="#{messageDetails.allDetails}" id="id"
+									var="var">
+
+									<p:column headerText="S. No." >
+										<p:outputLabel value="#{var.sno}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Date">
+										<p:outputLabel value="#{var.strDate}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Description">
+										<p:outputLabel value="#{var.description}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Credit">
+										<p:outputLabel value="#{var.credit}"></p:outputLabel>
+										<f:facet name="footer">
+											<p:panelGrid columns="1">
+												<p:outputLabel value="Total Credit : #{messageDetails.credit}"></p:outputLabel>
+												<p:outputLabel value="Balance Left "></p:outputLabel>
+
+											</p:panelGrid>
+										</f:facet>
+									</p:column>
+
+
+									<p:column headerText="Debit">
+										<p:outputLabel value="#{var.debit}"></p:outputLabel>
+										<f:facet name="footer">
+											<p:panelGrid columns="1">
+												<p:outputLabel value="Total Debit : #{messageDetails.debit}"></p:outputLabel>
+												<p:outputLabel value="#{messageDetails.sumaryBalance}"></p:outputLabel>
+
+											</p:panelGrid>
+										</f:facet>
+									</p:column>
+								</p:dataTable>
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

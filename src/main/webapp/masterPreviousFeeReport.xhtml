@@ -1,0 +1,208 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/schoolMasterTemplate.xhtml">
+
+	<ui:define name="title">Previous Fee Report</ui:define>
+
+		<ui:define name="content">
+		   
+			<div class="ui-fluid">
+				<div class="ui-g">
+					<div class="ui-g-12">
+	               		 <div class="card card-w-title">
+			               	<h:form id="form3">	 
+               		 
+               		 			<p:panel header="Previous Fee Report" id="up"  >
+			               		 	<center>
+										<p style="font-family: initial;font-style: oblique;font-size: 25px !important;font-weight:bold;margin:0px;">#{mastePreFeeReportBean.schname}</p>
+										<p style="font-family: initial;font-style: oblique;font-size: 15px !important;font-weight:bold;margin:0px;">#{mastePreFeeReportBean.affiliationNo}</p>
+										<p style="font-family: initial;font-style: oblique;font-size: 15px !important;font-weight:bold;margin:0px;">#{mastePreFeeReportBean.finalAddress}</p>
+										<p style="font-family: initial;font-style: oblique;font-size: 15px !important;font-weight:bold;margin:0px;">#{mastePreFeeReportBean.phoneno}</p>
+										
+										<p style="margin:0px;font-size: 25px !important;font-weight:bold;">Previous Fee Report</p>
+									</center>
+									<br></br>
+									
+									
+				<p:commandButton value="pdf" ajax="false" process="@this" actionListener="#{mastePreFeeReportBean.exportMasterPrPdf}">
+                    
+          <p:fileDownload value="#{mastePreFeeReportBean.file}" />
+         </p:commandButton>
+             <h:commandLink  value="excel">            
+                                      <pe:exporter type="xlsx" target="table" fileName="Previous_Fee.xlsx" />
+              
+                        </h:commandLink>
+						
+						
+									<p:panelGrid rendered="false" columns="5" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+										<p:panelGrid columns="2">
+											<p:outputLabel value="Total Amount:-"></p:outputLabel>
+											<h:outputText value=""></h:outputText>
+										</p:panelGrid>
+									</p:panelGrid>	
+               		  				<p:dataTable reflow="true"  id="table"  var="var" value="#{mastePreFeeReportBean.studentList}"> 
+               		  		        		  			
+										<f:facet name="header">
+		    	  							<p:panelGrid columns="1">
+		    	  								<p:outputLabel value=""></p:outputLabel>
+		    	  							</p:panelGrid>
+		    	  						</f:facet>
+		    	  						
+		    	  			
+                     
+		    	  						
+		    	  						<p:column headerText="S.No." >
+		             		  			<f:facet name="header">
+                                              
+                                                  <p:outputLabel value="S.No."></p:outputLabel>
+                                              
+                                          </f:facet>
+											
+		             		  				<p:outputLabel value="#{var.sno}"></p:outputLabel>
+		             		  			</p:column>
+               		  		       		  			
+		             		  			<p:column headerText="EBLM No" >
+		             		  			
+											<f:facet name="header">
+                                              
+                                                  <p:outputLabel value="EBLM No"></p:outputLabel>
+                                              
+                                          </f:facet>
+		             		  				<p:outputLabel value="#{var.srNo}"></p:outputLabel>
+		             		  			</p:column>
+		             		  			
+		             		  			<p:column  sortBy="#{var.fname}" headerText="#{dueFeeReportVar.dueFeeReportFirstNameLabel}">
+											<f:facet name="header">
+                                              
+                                                  <p:outputLabel value="#{dueFeeReportVar.dueFeeReportFirstNameLabel}"></p:outputLabel>
+                                              
+                                          </f:facet>
+		             		  				<p:outputLabel value="#{var.fname}"></p:outputLabel>
+		             		  			</p:column>
+               		  			
+		               		  			<p:column  headerText="Class" >
+											<f:facet name="header">
+                                              
+                                                  <p:outputLabel value="Class"></p:outputLabel>
+                                              
+                                          </f:facet>
+		               		  				<p:outputLabel value="#{var.className}"></p:outputLabel>
+		               		  			</p:column>
+		               		  			
+		               		  			<p:column headerText="School" >
+											<f:facet name="header">
+                                              
+                                                  <p:outputLabel value="School"></p:outputLabel>
+                                              
+                                          </f:facet>
+		               		  				<p:outputLabel value="#{var.schname}"></p:outputLabel>
+		               		  			</p:column>
+		               		  			
+			               		  		<p:column headerText="Total Amount" >
+											<f:facet name="header">
+                                              
+                                                  <p:outputLabel value="Total Amount"></p:outputLabel>
+                                              
+                                          </f:facet>
+			           		  				<p:outputLabel value="#{var.totalFee}"></p:outputLabel>
+			           		  			</p:column>
+			           		  			
+			           		  			<p:column headerText="Paid Amount" >
+											<f:facet name="header">
+                                              
+                                                  <p:outputLabel value="Paid Amount"></p:outputLabel>
+                                              
+                                          </f:facet>
+			           		  				<p:outputLabel value="#{var.paidFee}"></p:outputLabel>
+			           		  			</p:column>
+			           		  			
+			           		  			<p:column headerText="Left Amount" >
+											<f:facet name="header">
+                                              
+                                                  <p:outputLabel value="Left Amount"></p:outputLabel>
+                                              
+                                          </f:facet>
+			           		  				<p:outputLabel value="#{var.discountfee}"></p:outputLabel>
+			           		  			</p:column>
+			           		  			
+			           		  			<p:column headerText="View" exportable="false">
+											
+			           		  				<p:commandButton icon="ui-icon-search" action="#{mastePreFeeReportBean.viewDetails}" update=":viewForm" oncomplete="PF('viewDialog').show()">
+			           		  					<f:setPropertyActionListener target="#{mastePreFeeReportBean.selectedStudent}" value="#{var}"></f:setPropertyActionListener>
+			           		  				</p:commandButton>
+			           		  			</p:column>
+									</p:dataTable>
+								</p:panel>
+               		  	
+							</h:form>
+							
+							<h:form id="viewForm">
+								<p:dialog resizable="false" widgetVar="viewDialog" header="Enter your Message" showEffect="fade" hideEffect="explode" modal="true">
+									<div class="ui-g form-group">
+										<p:dataTable id="up" reflow="true" tableStyle="table-layout:auto;" style="float: right;width: 100%;" var="fee" value="#{mastePreFeeReportBean.dailyfee}">
+
+                                 			<p:column style="font-size:12px !important" headerText="Receipt no">
+												<f:facet name="header">
+													Receipt No.
+												</f:facet>
+												<h:outputText style="font-size:15px !important" value="#{fee.reciptno}" />
+											</p:column>
+			
+											<p:column style="font-size:12px !important" 													headerText="Total amount">
+												<f:facet name="header">
+												 	Total	Amount
+												</f:facet>
+												<h:outputText style="font-size:15px !important" value="#{fee.amount}" />
+											</p:column>
+			
+											<p:column style="font-size:12px !important" headerText="Total Discount">
+												<f:facet name="header">
+									 				Total  Discount
+												</f:facet>
+												<h:outputText style="font-size:15px !important" 	value="#{fee.discount}" />
+											</p:column>
+			
+											<p:column style="font-size:12px !important" headerText="Payment Mode">
+												<f:facet name="header">
+													Payment Mode 
+												</f:facet>
+												<h:outputText style="font-size:15px !important" value="#{fee.paymentmode} #{fee.bankname} #{fee.chequenumber}" />
+											</p:column>
+
+											<p:column style="font-size:12px !important" headerText="Installment">
+												<f:facet name="header">
+													Installment 
+												</f:facet>
+												<h:outputText style="font-size:15px !important" 													value="#{fee.feeRemark}" />
+											</p:column>
+		
+											<p:column style="font-size:12px !important;width:80px !important;" headerText="Date">
+												<f:facet name="header">
+													Date
+												</f:facet>
+												<h:outputText style="font-size:15px !important" value="#{fee.feeDateStr}" />
+											</p:column>
+		
+											<p:column style="font-size:12px !important;width:80px !important;" headerText="Date">
+												<f:facet name="header">
+													User
+												</f:facet>
+												<h:outputText style="font-size:15px !important" value="#{fee.user}" />
+											</p:column>
+										</p:dataTable>
+										
+									</div>
+								</p:dialog>
+							</h:form>
+						</div>
+					</div>
+				</div>
+			</div>
+		   
+	</ui:define>
+
+</ui:composition>

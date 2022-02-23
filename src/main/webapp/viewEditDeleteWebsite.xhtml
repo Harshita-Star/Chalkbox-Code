@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+		xmlns:pe="http://primefaces.org/ui/extensions">
+<f:view contentType="text/html">
+	<h:head>
+		<title>#{sideMenuBean.companyName} | View/Edit Website</title>
+		<f:facet name="first">
+			<meta content='text/html; charset=UTF-8' http-equiv="Content-Type" />
+			<meta http-equiv="X-UA-Compatible" content="EmulateIE8" />
+		</f:facet>
+		<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css"></link>
+    		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"></link>
+    	<link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css"></link>
+   <link rel="stylesheet" href="dist/css/AdminLTE.min.css"></link>
+    <link rel="stylesheet" href="dist/css/skins/all-skins.min.css"></link>
+     <link rel="stylesheet" type="text/css" href="css/style.css"/>	  			
+	</h:head>
+	<h:body>
+		
+        	
+        		
+        	 <ui:include src="sideMenuMaster.xhtml"></ui:include> 
+   
+      <div class="content-wrapper">
+          
+          <section class="content-header">
+          
+          <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+            <li class="active">Dashboard</li>
+          </ol>
+        </section>
+					
+					
+					<h:form id="form" style="overflow:hidden">
+					<p:growl showDetail="true"  autoUpdate="true" ></p:growl>
+						<p:panel header="All Website">
+							<p:dataTable value="#{evdWebsite.dataList}" var="var" paginator="true" rows="10" rowsPerPageTemplate="10,20,30">
+								<p:column style="width:20px" headerText="S.No.">
+									<p:outputLabel value="#{var.sNo}"></p:outputLabel>
+								</p:column>
+								
+								<p:column filterBy="#{var.schoolName}" headerText="School Name">
+									<p:outputLabel value="#{var.schoolName}"></p:outputLabel>
+								</p:column>
+								
+								<p:column filterBy="#{var.contactName}" headerText="Contact Name">
+									<p:outputLabel value="#{var.contactName}"></p:outputLabel>
+								</p:column>
+								
+								<p:column filterBy="#{var.contactNo}" headerText="Contact NO">
+									<p:outputLabel value="#{var.contactNo}"></p:outputLabel>
+								</p:column>
+								
+								<p:column headerText="Start Date">
+									<p:outputLabel value="#{var.startDateStr}"></p:outputLabel>
+								</p:column>
+								
+								<p:column headerText="Expire Date">
+									<p:outputLabel value="#{var.expireDateStr}"></p:outputLabel>
+								</p:column>
+								
+								<p:column headerText="Renewal Date">
+									<p:outputLabel value="#{var.renewalDateStr}"></p:outputLabel>
+								</p:column>
+								
+								<p:column headerText="Chalk Box Amount">
+									<p:outputLabel value="#{var.chalkBoxAmount}"></p:outputLabel>
+								</p:column>
+								
+								<p:column headerText="IMG Amount">
+									<p:outputLabel value="#{var.imgAmount}"></p:outputLabel>
+								</p:column>
+								
+								<p:column headerText="Chalk Box Renewal Amount">
+									<p:outputLabel value="#{var.chalkBoxRenewal}"></p:outputLabel>
+								</p:column>
+								
+								<p:column headerText="IMG Renewal Amount">
+									<p:outputLabel value="#{var.imgRenewalAmount}"></p:outputLabel>
+								</p:column>
+								
+								<p:column style="width:30px" headerText="Edit">
+									<p:commandButton action="#{evdWebsite.editSelectedRow}" icon="ui-icon-pencil" oncomplete="PF('editDialog').show()" update=":editForm">
+										<f:setPropertyActionListener value="#{var}" target="#{evdWebsite.selectedRow}"></f:setPropertyActionListener>
+									</p:commandButton>
+								</p:column>
+								
+								<p:column style="width:30px" headerText="Delete">
+									<p:commandButton update=":form" icon="ui-icon-trash" action="#{evdWebsite.deleteWebsite}">
+										<p:confirm header="Confirmation" message="Are You Sure To Delete this Entry ??" icon="ui-icon-alert" />
+										<f:setPropertyActionListener value="#{var}" target="#{evdWebsite.selectedRow}"></f:setPropertyActionListener>
+									</p:commandButton>
+								</p:column>
+							</p:dataTable>
+						</p:panel>
+					</h:form>
+				
+					<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+  						<p:commandButton value="Yes" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+  						<p:commandButton value="No" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+					</p:confirmDialog>
+				
+					<h:form id="editForm" >
+						<p:dialog resizable="false" modal="true" widgetVar="editDialog" header="School Details" closeOnEscape="true">
+							<p:panelGrid style="margin:auto" columns="4">
+								<p:outputLabel value="School Name:-" for="@next" style="color:red" ></p:outputLabel> 
+			                  	<p:inputText value="#{evdWebsite.schoolName}" required="true" requiredMessage="Please Enter School Name"  validatorMessage="Please Enter Correct value">
+			                  	  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+			                  	</p:inputText>  
+								
+								<p:outputLabel value="Contact No:-"></p:outputLabel> 
+			                  	<p:inputText value="#{evdWebsite.contactNo}"  validatorMessage="Please Enter Correct value">
+			                  	  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+			                  	</p:inputText>
+			                  	
+			                  	<p:outputLabel value="Contact Name:-"></p:outputLabel> 
+			                  	<p:inputText value="#{evdWebsite.contactName}"  validatorMessage="Please Enter Correct value">
+			                  	  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+			                  	</p:inputText>
+								
+			                  	<p:outputLabel value="Start Date:-" for="@next" style="color:red" ></p:outputLabel>
+			                  	<p:calendar value="#{evdWebsite.startDate}" pattern="dd/MM/yyyy" navigator="true" required="true" requiredMessage="Please Enter Start Date"></p:calendar>
+			                  	
+			                  	<p:outputLabel value="Expire Date:-" for="@next" style="color:red" ></p:outputLabel>
+			                  	<p:calendar value="#{evdWebsite.expireDate}" pattern="dd/MM/yyyy" navigator="true" required="true" requiredMessage="Please Enter Expire Date"></p:calendar>
+			                  	
+			                  	<p:outputLabel value="Renewal Date:-" for="@next" style="color:red" ></p:outputLabel>
+								<p:calendar value="#{evdWebsite.renewalDate}" pattern="dd/MM/yyyy" navigator="true" required="true" requiredMessage="Please Enter Renewal Date"></p:calendar>
+								
+								<p:outputLabel value="Chalk Box Amount:-" for="@next" style="color:red" ></p:outputLabel> 
+			                  	<p:inputText value="#{evdWebsite.chalkBoxAmount}" onfocus="this.select();" required="true" requiredMessage="Please Enter Chalk Box Amount">
+			                  		<pe:keyFilter mask="num"></pe:keyFilter>
+			                  	</p:inputText>  
+								
+								<p:outputLabel value="IMG Amount:-" for="@next" style="color:red" ></p:outputLabel> 
+			                  	<p:inputText value="#{evdWebsite.imgAmount}" onfocus="this.select();" required="true" requiredMessage="Please Enter IMG Amount">
+			                  		<pe:keyFilter mask="num"></pe:keyFilter>
+			                  	</p:inputText>  
+			                  	
+								<p:outputLabel value="Chalk Box Renewal Amount:-" for="@next" style="color:red" ></p:outputLabel> 
+			                  	<p:inputText value="#{evdWebsite.chalkBoxRenewal}" onfocus="this.select();" required="true" requiredMessage="Please Enter Chalk Box Renewal Amount">
+			                  		<pe:keyFilter mask="num"></pe:keyFilter>
+			                  	</p:inputText>  
+			                  	
+								<p:outputLabel value="IMG Renewal Amount :-" for="@next" style="color:red" ></p:outputLabel> 
+			                  	<p:inputText value="#{evdWebsite.imgRenewalAmount}" onfocus="this.select();" required="true" requiredMessage="Please Enter IMG Renewal Amount">
+			                  		<pe:keyFilter mask="num"></pe:keyFilter>
+			                  	</p:inputText>  
+			                  	
+			                  	<p:commandButton update=":form,:editForm" actionListener="#{evdWebsite.updateDetails}" value="Update" ></p:commandButton>
+							</p:panelGrid>	
+						</p:dialog>
+					</h:form>
+	   		</div>
+	</h:body>
+</f:view>
+</html>

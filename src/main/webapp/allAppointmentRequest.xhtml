@@ -1,0 +1,150 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">All Appointment Request</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+						<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+						<p:panel header="All Appointment Request">
+						<p:panelGrid columns="3" style="width: 100%;">
+						
+						
+						<p:commandButton update=":form" action="#{allAppointmentRequest.allPendingList}"  icon="fa fa-clock"
+						value="Pending (#{allAppointmentRequest.pending})"></p:commandButton>
+						
+						 <p:commandButton update=":form" action="#{allAppointmentRequest.allApprovedList}" styleClass="greenButt" icon="fa fa-check-circle"
+						value="Approved (#{allAppointmentRequest.approved})"></p:commandButton>
+						
+						<p:commandButton update=":form" action="#{allAppointmentRequest.allRejectedList}" styleClass="redButt" icon="fa fa-ban"
+						value="Rejected (#{allAppointmentRequest.rejected})"></p:commandButton>
+						
+					  
+					
+						</p:panelGrid>
+						<br/>
+							<p:dataTable value="#{allAppointmentRequest.appointmentList}" id="d1" var="info">
+							
+							<p:column headerText="S No">
+							<p:outputLabel value="#{info.sno}"></p:outputLabel>
+							</p:column>
+							
+							<p:column headerText="Student Name">
+							<p:outputLabel value="#{info.studentName}"></p:outputLabel>
+							</p:column>
+							
+							<p:column headerText="Class">
+							<p:outputLabel value="#{info.className}"></p:outputLabel>
+							</p:column>
+							
+							<p:column headerText="Appointment Date">
+							<p:outputLabel value="#{info.strAppointmentdate}"></p:outputLabel>
+							</p:column>
+							
+							<p:column headerText="Appointment Time">
+							<p:outputLabel value="#{info.appointment_time}"></p:outputLabel>
+							</p:column>
+							
+							<p:column headerText="Add Time">
+							<p:outputLabel value="#{info.strAdddate}"></p:outputLabel>
+							</p:column>
+							
+							<p:column headerText="To Meet">
+							<p:outputLabel value="#{info.toMeet}"></p:outputLabel>
+							</p:column>
+							
+							<p:column headerText="Description">
+							<p:outputLabel value="#{info.description}"></p:outputLabel>
+							</p:column>
+							
+							
+							<p:column headerText="Status">
+							<p:outputLabel value="#{info.status}"></p:outputLabel>
+							</p:column>
+							
+							<p:column headerText="Remark From School">
+							<p:outputLabel value="#{info.remark}"></p:outputLabel>
+							</p:column>
+							
+							
+							
+							
+							<p:column headerText="Approve" rendered="#{allAppointmentRequest.showApproved}">
+							<p:commandButton icon="ui-icon-check" styleClass="greenButt" update=":form1 :form" action="#{allAppointmentRequest.details}" oncomplete="PF('dialog').show()" disabled="#{info.showApproved}" >
+							<f:setPropertyActionListener value="#{info}" target="#{allAppointmentRequest.selected}"></f:setPropertyActionListener>
+							</p:commandButton>
+							</p:column>
+							
+							<p:column headerText="Reject" rendered="#{allAppointmentRequest.showRejected}">
+							<p:commandButton icon="ui-icon-close" styleClass="redButt" update=":form1 :form" action="#{allAppointmentRequest.details1}" oncomplete="PF('dialog').show()" disabled="#{info.showRejected}" >
+							<f:setPropertyActionListener value="#{info}" target="#{allAppointmentRequest.selected}"></f:setPropertyActionListener>
+							</p:commandButton>
+							</p:column>
+							
+							<p:column headerText="Edit Remark"  rendered="#{allAppointmentRequest.showRemark}">
+							<p:commandButton icon="ui-icon-pencil" update="form2 :form" oncomplete="PF('dialog1').show()" disabled="#{info.showRemark}">
+							<f:setPropertyActionListener value="#{info}" target="#{allAppointmentRequest.selected}"></f:setPropertyActionListener>
+							</p:commandButton>
+							</p:column>
+							
+							
+							
+							 </p:dataTable>
+						</p:panel>
+							</h:form>
+							<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+			           <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes greenButt" icon="ui-icon-check" />
+			           <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no redButt" icon="ui-icon-close" />
+			         </p:confirmDialog>
+							 <h:form id="form1" enctype="multipart/form-data" >
+			      <p:dialog resizable="false" modal="true" widgetVar="dialog" header="Remark" closeOnEscape="true">
+					<p:panelGrid style="margin:auto" columns="2">	 	
+					<p:outputLabel  for="@next" style="color:red" value="Remark"></p:outputLabel>
+					<p:inputText value="#{allAppointmentRequest.selected.remark}" required="true" requiredMessage="Please Enter Remark"></p:inputText>
+							
+					</p:panelGrid>	
+					<br />
+								<p:separator />
+								<center>
+								<p:commandButton update=":form1 :form" action="#{allAppointmentRequest.submit}" styleClass="butwid" icon="fa fa-upload" value="Submit">
+					</p:commandButton>
+								</center>
+								<p:separator />
+								<br />	
+			</p:dialog>
+		</h:form>
+		 <h:form id="form2" enctype="multipart/form-data" >
+			      <p:dialog resizable="false" modal="true" widgetVar="dialog1" header="Edit Remark :" closeOnEscape="true">
+					<p:panelGrid style="margin:auto" columns="2">	 	
+					<p:outputLabel  for="@next" style="color:red" value="Remark"></p:outputLabel>
+					<p:inputText value="#{allAppointmentRequest.selected.remark}" required="true" requiredMessage="Please Enter Remark"></p:inputText>
+							
+					</p:panelGrid>
+					
+					<br />
+								<p:separator />
+								<center>
+											
+					<p:commandButton update=":form2 :form" action="#{allAppointmentRequest.update}" styleClass="butwid" icon="fa fa-upload" value="Update Remark">
+					</p:commandButton>
+								</center>
+								<p:separator />
+								<br />
+			</p:dialog>
+		</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

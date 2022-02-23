@@ -1,0 +1,116 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Time Table</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form enctype="multipart/form-data" id="form">
+							<h1>Upload Time Table</h1>
+							<p:messages autoUpdate="true" closable="true"></p:messages>
+							<p:panel
+								header="Allowed file type are :- jpg,jpeg,png">
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel value="Select Class" for="@next" style="color:red" ></p:outputLabel>
+									<p:selectOneMenu value="#{addTimeTableImage.selectedClass}"  filter="true" 
+										required="true" requiredMessage="Please select a class">
+										<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+										<f:selectItems value="#{addTimeTableImage.classSection}"></f:selectItems>
+										<p:ajax update="sectionid"
+											listener="#{addTimeTableImage.allSections}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Select Section" for="@next" style="color:red" ></p:outputLabel>
+									<p:selectOneMenu id="sectionid" filter="true"
+										value="#{addTimeTableImage.selectedSection}" required="true"
+										requiredMessage="Please select a section">
+										<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+										<f:selectItems value="#{addTimeTableImage.sectionList}"></f:selectItems>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Choose Time Table File :" for="@next" style="color:red" ></p:outputLabel>
+									<p:fileUpload required="true"
+										requiredMessage="Please Choose Time Table File"
+										allowTypes="/(\.|\/)(gif|jpe?g|png)$/" mode="simple"
+										skinSimple="true" value="#{addTimeTableImage.timeTable}"></p:fileUpload>
+                                  
+								</p:panelGrid>
+								<br />
+								<p:separator />
+								<center>
+								<p:commandButton value="Upload" styleClass="butwid" icon="fa fa-upload"
+										title="Click On to Upload Time Table" ajax="false"
+										update=":form" action="#{addTimeTableImage.upload}"></p:commandButton>
+								</center>
+								<p:separator />
+								<br />
+							</p:panel>
+						</h:form>
+					</div>
+					
+					<div class="card card-w-title">
+						<h:form enctype="multipart/form-data" id="form1">
+							<p:panel
+								header="Time Table">
+								<p:dataTable reflow="true" value="#{addTimeTableImage.timeTableList}" var="var" rowIndexVar="index">
+
+									<p:column headerText="S.No." style="width:60px;">
+										<p:outputLabel value="#{index+1}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Class &amp; Section">
+										<p:outputLabel value="#{var.label}"></p:outputLabel>
+									</p:column>
+									
+									<p:column headerText="View">
+									<center>
+									<p:commandButton icon="ui-icon-search" styleClass="butwid"
+											action="#{addTimeTableImage.view}">
+											<f:setPropertyActionListener target="#{addTimeTableImage.selectedItem}"
+												value="#{var}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</center>
+									</p:column>
+
+									<p:column headerText="Delete">
+									<center>
+									<p:commandButton icon="ui-icon-trash" styleClass="butwid redButt"
+											action="#{addTimeTableImage.delete}">
+											<f:setPropertyActionListener target="#{addTimeTableImage.selectedItem}"
+												value="#{var}"></f:setPropertyActionListener>
+												<p:confirm header="Confirmation"
+												message="Surely want to remove this time table ?"
+												icon="ui-icon-alert" />
+										</p:commandButton>
+									</center>
+									</p:column>
+
+
+								</p:dataTable>
+							</p:panel>
+						</h:form>
+						<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+							<p:commandButton value="Yes" type="button"
+								styleClass="ui-confirmdialog-yes greenButt" icon="ui-icon-check" />
+							<p:commandButton value="No" type="button"
+								styleClass="ui-confirmdialog-no redButt" icon="ui-icon-close" />
+						</p:confirmDialog>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

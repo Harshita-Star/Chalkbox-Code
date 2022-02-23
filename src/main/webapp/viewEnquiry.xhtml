@@ -1,0 +1,566 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pe="http://primefaces.org/ui/extensions"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">View Enquiry</ui:define>
+
+    <ui:define name="content">
+       
+            <div class="ui-fluid">
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <div class="card card-w-title">
+							<h:form id="form">
+					<p:growl showDetail="true"   autoUpdate="true" ></p:growl>
+						<p:panel header="Today's Plan">
+							<p:commandLink immediate="true" style="float:right;color:blue" value="Add Lead" action="#{viewStudentInfo.addLead}"></p:commandLink>
+							<p:panelGrid columns="5">
+								<p:outputLabel for="@next" style="color:red"  value="Select Date"></p:outputLabel>
+								<p:calendar value="#{viewStudentInfo.searchDate}" pattern="dd/MM/yyyy" required="true" requiredMessage="Please Enter Date"></p:calendar>
+								
+								
+								<p:outputLabel for="@next" style="color:red"  rendered="#{viewStudentInfo.showEmp}" value="Select Employee"></p:outputLabel>
+								<p:selectOneMenu rendered="#{viewStudentInfo.showEmp}" filter="true" required="true" requiredMessage="Please Select A Employee" value="#{viewStudentInfo.selectedEmp}">
+							      	<f:selectItem itemLabel="All" itemValue="all"></f:selectItem>
+							 		<f:selectItems value="#{viewStudentInfo.empList}"></f:selectItems>
+								</p:selectOneMenu>
+							
+								<p:commandButton value="Search" update=":form" actionListener="#{viewStudentInfo.searchData}"></p:commandButton>
+							</p:panelGrid>
+		
+							<p:outputPanel>
+								<p:dataTable id="up" value="#{viewStudentInfo.leadList}" var="var" rowKey="#{var.id}" selection="#{viewStudentInfo.selectedList}" emptyMessage="No Record Found ">
+		   							
+		   							<f:facet name="header">
+		   								<h:commandLink immediate="true">
+										<p:graphicImage name="images/excellogo.png"
+											library="avalon-layout" width="100" height="40"></p:graphicImage>
+										<pe:exporter type="xlsx" target=":form:up"
+											fileName="Enquiries"></pe:exporter>
+										</h:commandLink>
+		   							</f:facet>
+		   							
+		   							<p:column rendered="false" exportable="false" headerText="Send SMS" selectionMode="multiple"
+										style="width:40px;text-align:center"></p:column>
+		   							
+									<p:column headerText="S.No" style="width:40px">
+										<f:facet name="header">
+												<p:outputLabel value="S.No"></p:outputLabel>
+											</f:facet>
+										<h:outputText value="#{var.sno}"></h:outputText>
+									</p:column>
+		
+								   <p:column headerText="Student Name" filterBy="#{var.studentName}">
+								   <f:facet name="header">
+												<p:outputLabel value="Student Name"></p:outputLabel>
+											</f:facet>
+										<h:outputText value="#{var.studentName}"></h:outputText>
+									</p:column>
+									
+									<p:column headerText="Father Name">
+									<f:facet name="header">
+												<p:outputLabel value="Father Name"></p:outputLabel>
+											</f:facet>
+										<h:outputText value="#{var.fatherName}"></h:outputText>
+									</p:column>
+									
+									<p:column headerText="Mother Name">
+									<f:facet name="header">
+												<p:outputLabel value="Mother Name"></p:outputLabel>
+											</f:facet>
+										<h:outputText value="#{var.motherName}"></h:outputText>
+									</p:column>
+		
+									<p:column headerText="Contact No" filterBy="#{var.mobno}">
+									<f:facet name="header">
+												<p:outputLabel value="Contact No"></p:outputLabel>
+											</f:facet>
+										<h:outputText value="#{var.mobno}"></h:outputText>
+									</p:column>
+		
+		
+					               <p:column headerText="Class">
+					               <f:facet name="header">
+												<p:outputLabel value="Class"></p:outputLabel>
+											</f:facet>
+										<h:outputText value="#{var.admissionclass}"></h:outputText>
+									</p:column>
+						
+									<p:column headerText="Add Date">
+									<f:facet name="header">
+												<p:outputLabel value="Add Date"></p:outputLabel>
+											</f:facet>
+										<h:outputText value="#{var.stringadmissionDate}"></h:outputText>
+									</p:column>
+									
+									<p:column headerText="Added By" rendered="#{viewStudentInfo.showEmp}">
+									<f:facet name="header">
+												<p:outputLabel value="Added By"></p:outputLabel>
+											</f:facet>
+										<h:outputText value="#{var.addedByName}"></h:outputText>
+									</p:column>
+
+
+	                              <p:column headerText="Fees" style="width:50px" rendered="false">
+										<p:commandButton disabled="#{var.disableSnooze}" icon="ui-icon-check" update=":form,:followForm" oncomplete="PF('followDialog').show()">
+											<f:setPropertyActionListener target="#{viewStudentInfo.selectedEnquiry}" value="#{var}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+
+									<p:column headerText="Snooze" exportable="false" style="width:50px" rendered="#{viewStudentInfo.showcheck}">
+										<p:commandButton disabled="#{var.disableSnooze}" icon="ui-icon-clock" update=":form,:followForm" oncomplete="PF('followDialog').show()">
+											<f:setPropertyActionListener target="#{viewStudentInfo.selectedEnquiry}" value="#{var}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+									
+									
+									<p:column headerText="Admit" exportable="false" style="width:50px" >
+										<p:commandButton disabled="#{var.disableAccept}" icon="ui-icon-check" update=":addForm,:form" oncomplete="PF('addDialog').show()">
+											<f:setPropertyActionListener target="#{viewStudentInfo.selectedEnquiry}" value="#{var}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+									
+									<p:column headerText="Deny" exportable="false" style="width:50px" rendered="#{viewStudentInfo.showcheck}">
+										<p:commandButton disabled="#{var.disableDeny}" icon="ui-icon-close" update=":form,:denyForm" oncomplete="PF('denyDialog').show()">
+											<f:setPropertyActionListener target="#{viewStudentInfo.selectedEnquiry}" value="#{var}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+									
+									<p:column headerText="History" exportable="false" style="width:50px" rendered="#{viewStudentInfo.showcheck}" >
+										<p:commandButton icon="ui-icon-search" update=":form,:historyForm" oncomplete="PF('historyDialog').show()" action="#{viewStudentInfo.checkHistory}">
+											<f:setPropertyActionListener target="#{viewStudentInfo.selectedEnquiry}" value="#{var}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+				
+								</p:dataTable>
+							</p:outputPanel>
+							<hr style="border-top: dotted 1px;" />
+								
+								<p:outputPanel rendered="false" id="msg">
+						<p:panelGrid columns="3" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+							
+							<p:selectOneButton value="#{viewStudentInfo.lang}"> 
+								<f:selectItem itemLabel="English" itemValue="english" />
+								<f:selectItem itemLabel="हिन्दी" itemValue="hindi" />
+								<p:ajax listener="#{viewStudentInfo.checkLanguage}" update=":form:msg"></p:ajax>
+							</p:selectOneButton>
+							<p:outputLabel/>
+							<p:outputLabel/>
+							
+							<p:outputLabel value="Custom Message : "
+								style="font-size:15px !important;" />
+							<p:outputLabel rendered="#{viewStudentInfo.showEnglish}" value="Dear Parent,"
+								style="font-size:15px !important;" />
+							<p:outputLabel rendered="#{viewStudentInfo.showHindi}" value="प्रिय अभिभावक,"
+								style="font-size:15px !important;" />
+							<p:outputPanel>
+								<p:panelGrid columns="4" style="float:right;">
+									<p:outputLabel style="font-size:12px !important;"
+										value="Message Count-:"></p:outputLabel>
+									<p:outputLabel style="font-size:12px !important;" id="table1"
+										value="0"></p:outputLabel>
+	
+									<p:outputLabel style="font-size:12px !important;"
+										value="Message Char.-:"></p:outputLabel>
+									<p:outputLabel style="font-size:12px !important;" id="table2"
+										value="0"></p:outputLabel>
+	
+								</p:panelGrid>
+							</p:outputPanel>
+	
+							<p:outputLabel />
+							<p:inputTextarea rendered="#{viewStudentInfo.showEnglish}" value="#{viewStudentInfo.typemessage}" rows="7" cols="30"
+								counter="display" maxlength="765"
+								counterTemplate="{0} characters remaining." autoResize="false"
+								style="width:400px !important;" required="true"
+								requiredMessage="Please Write a Message to Send"
+								onkeyup="changeColor(this.value)" />
+								
+							<p:inputTextarea rendered="#{viewStudentInfo.showHindi}" value="#{viewStudentInfo.typemessage}" rows="7" cols="30"
+								counter="display" maxlength="765"
+								counterTemplate="{0} characters remaining." autoResize="false"
+								style="width:400px !important;" required="true"
+								requiredMessage="Please Write a Message to Send"
+								onkeyup="changeColor1(this.value)" id="transliterateDiv" onkeypress="onLoad1();"/>	
+							<p:outputLabel id="display" style="font-size:15px !important;" />
+	
+							<p:outputLabel />
+							<p:outputLabel rendered="#{viewStudentInfo.showEnglish}" value="Regards, #{sideMenuBean.smsName}"
+								style="font-size:15px !important;" />
+							<p:outputLabel rendered="#{viewStudentInfo.showHindi}" value="सादर, #{sideMenuBean.hindiName}"
+								style="font-size:15px !important;" />
+							<p:outputLabel />
+	
+							<p:outputLabel />
+							<p:commandButton  value="Send" action="#{viewStudentInfo.sendMessage}"
+								style="font-size:15px !important; width:150px;" update="form"/>
+							<p:outputLabel />
+
+						</p:panelGrid>
+					</p:outputPanel>
+							<br/>
+							<p:panel header="Overdue Enquiries" rendered="#{viewStudentInfo.showcheck}">
+								<center><h:commandLink immediate="true">
+										<p:graphicImage name="images/excellogo.png"
+											library="avalon-layout" width="100" height="40"></p:graphicImage>
+										<pe:exporter type="xlsx" target=":form:upp"
+											fileName="OverdueEnquiries"></pe:exporter>
+										</h:commandLink></center>
+										<br/>
+								<p:dataTable id="upp" value="#{viewStudentInfo.overdueLeadList}" var="var"  emptyMessage="No Record Found ">
+		   
+		   							<f:facet name="header">
+		   								<p:outputLabel value="Total Enquiry:- #{viewStudentInfo.totalOverdue}"></p:outputLabel>	
+		   							</f:facet>
+		   							
+		   							<p:column exportable="false" rendered="false" headerText="Send SMS" selectionMode="multiple"
+										style="width:40px;text-align:center"></p:column>
+		   							
+									<p:column headerText="S.No" style="width:40px">
+									<f:facet name="header">
+												<p:outputLabel value="S.No"></p:outputLabel>
+											</f:facet>
+										<h:outputText value="#{var.sno}"></h:outputText>
+									</p:column>
+									<p:column headerText="Student Name" filterBy="#{var.studentName}">
+									<f:facet name="header">
+												<p:outputLabel value="Student Name"></p:outputLabel>
+											</f:facet>
+										<h:outputText value="#{var.studentName}"></h:outputText>
+									</p:column>
+									
+									<p:column headerText="Father Name">
+									<f:facet name="header">
+												<p:outputLabel value="Father Name"></p:outputLabel>
+											</f:facet>
+										<h:outputText value="#{var.fatherName}"></h:outputText>
+									</p:column>
+									
+									<p:column headerText="Mother Name">
+									<f:facet name="header">
+												<p:outputLabel value="Mother Name"></p:outputLabel>
+											</f:facet>
+										<h:outputText value="#{var.motherName}"></h:outputText>
+									</p:column>
+		
+									<p:column headerText="Contact No" filterBy="#{var.mobno}">
+									<f:facet name="header">
+												<p:outputLabel value="Contact No"></p:outputLabel>
+											</f:facet>
+										<h:outputText value="#{var.mobno}"></h:outputText>
+									</p:column>
+									
+									  <p:column headerText="Class">
+									  <f:facet name="header">
+												<p:outputLabel value="Class"></p:outputLabel>
+											</f:facet>
+										<h:outputText value="#{var.admissionclass}"></h:outputText>
+									</p:column>
+						
+		
+									<p:column headerText="Add Date">
+									<f:facet name="header">
+												<p:outputLabel value="Add Date"></p:outputLabel>
+											</f:facet>
+										<h:outputText value="#{var.stringadmissionDate}"></h:outputText>
+									</p:column>
+									
+									<p:column headerText="Added By" rendered="#{viewStudentInfo.showEmp}">
+									<f:facet name="header">
+												<p:outputLabel value="Added By"></p:outputLabel>
+											</f:facet>
+										<h:outputText value="#{var.addedByName}"></h:outputText>
+									</p:column>
+									
+									<p:column headerText="Snooze" exportable="false" style="width:50px" rendered="#{viewStudentInfo.check}">
+										<p:commandButton disabled="#{var.disableSnooze}" icon="ui-icon-clock" update=":form,:followForm" oncomplete="PF('followDialog').show()">
+											<f:setPropertyActionListener target="#{viewStudentInfo.selectedEnquiry}" value="#{var}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+									
+									<p:column headerText="Accept" exportable="false" style="width:50px" rendered="#{viewStudentInfo.check}">
+										<p:commandButton disabled="#{var.disableAccept}" icon="ui-icon-check" update=":addForm,:form" oncomplete="PF('addDialog').show()">
+											<f:setPropertyActionListener target="#{viewStudentInfo.selectedEnquiry}" value="#{var}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+									
+									<p:column headerText="Deny" exportable="false" style="width:50px" rendered="#{viewStudentInfo.check}">
+										<p:commandButton disabled="#{var.disableDeny}" icon="ui-icon-close" update=":form,:denyForm" oncomplete="PF('denyDialog').show()">
+											<f:setPropertyActionListener target="#{viewStudentInfo.selectedEnquiry}" value="#{var}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+									
+									<p:column headerText="History" exportable="false" style="width:50px">
+										<p:commandButton icon="ui-icon-search" update=":form,:historyForm" oncomplete="PF('historyDialog').show()" action="#{viewStudentInfo.checkHistory}">
+											<f:setPropertyActionListener target="#{viewStudentInfo.selectedEnquiry}" value="#{var}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+				
+								</p:dataTable>
+								
+								<hr style="border-top: dotted 1px;" />
+								
+								<p:outputPanel rendered="false" id="msg1">
+						<p:panelGrid columns="3" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+							
+							<p:selectOneButton value="#{viewStudentInfo.lang}"> 
+								<f:selectItem itemLabel="English" itemValue="english" />
+								<f:selectItem itemLabel="हिन्दी" itemValue="hindi" />
+								<p:ajax listener="#{viewStudentInfo.checkLanguage}" update=":form:msg1"></p:ajax>
+							</p:selectOneButton>
+							<p:outputLabel/>
+							<p:outputLabel/>
+							
+							<p:outputLabel value="Custom Message : "
+								style="font-size:15px !important;" />
+							<p:outputLabel rendered="#{viewStudentInfo.showEnglish}" value="Dear Parent,"
+								style="font-size:15px !important;" />
+							<p:outputLabel rendered="#{viewStudentInfo.showHindi}" value="प्रिय अभिभावक,"
+								style="font-size:15px !important;" />
+							<p:outputPanel>
+								<p:panelGrid columns="4" style="float:right;">
+									<p:outputLabel style="font-size:12px !important;"
+										value="Message Count-:"></p:outputLabel>
+									<p:outputLabel style="font-size:12px !important;" id="table3"
+										value="0"></p:outputLabel>
+	
+									<p:outputLabel style="font-size:12px !important;"
+										value="Message Char.-:"></p:outputLabel>
+									<p:outputLabel style="font-size:12px !important;" id="table4"
+										value="0"></p:outputLabel>
+	
+								</p:panelGrid>
+							</p:outputPanel>
+	
+							<p:outputLabel />
+							<p:inputTextarea rendered="#{viewStudentInfo.showEnglish}" value="#{viewStudentInfo.typemessage}" rows="7" cols="30"
+								counter="display1" maxlength="765"
+								counterTemplate="{0} characters remaining." autoResize="false"
+								style="width:400px !important;" required="true"
+								requiredMessage="Please Write a Message to Send"
+								onkeyup="changeColor2(this.value)" />
+								
+							<p:inputTextarea rendered="#{viewStudentInfo.showHindi}" value="#{viewStudentInfo.typemessage}" rows="7" cols="30"
+								counter="display1" maxlength="765"
+								counterTemplate="{0} characters remaining." autoResize="false"
+								style="width:400px !important;" required="true"
+								requiredMessage="Please Write a Message to Send"
+								onkeyup="changeColor3(this.value)" id="transliterateDivv" onkeypress="onLoad2();"/>	
+							<p:outputLabel id="display1" style="font-size:15px !important;" />
+	
+							<p:outputLabel />
+							<p:outputLabel rendered="#{viewStudentInfo.showEnglish}" value="Regards, #{sideMenuBean.smsName}"
+								style="font-size:15px !important;" />
+							<p:outputLabel rendered="#{viewStudentInfo.showHindi}" value="सादर, #{sideMenuBean.hindiName}"
+								style="font-size:15px !important;" />
+							<p:outputLabel />
+	
+							<p:outputLabel />
+							<p:commandButton  value="Send" action="#{viewStudentInfo.sendMessage}"
+								style="font-size:15px !important; width:150px;" update="form"/>
+							<p:outputLabel />
+
+						</p:panelGrid>
+					</p:outputPanel>
+								
+							</p:panel>
+						</p:panel>
+					</h:form>
+		
+				
+					<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+			        	<p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+			        	<p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+			    	</p:confirmDialog>
+			    	
+			    	<h:form id="followForm">
+						<p:dialog header="Follow Up" widgetVar="followDialog" modal="true" showEffect="explode" hideEffect="explode" resizable="false" closable="true">
+							<p:panelGrid columns="2">
+								<p:outputLabel for="@next" style="color:red"  value="Follow Up Date"></p:outputLabel>
+								<p:calendar value="#{viewStudentInfo.followDate}" mindate="#{viewStudentInfo.todayDate}" navigator="true" effect="fold" pattern="dd/MM/yyyy" yearRange="c-30:c+30" required="true" requiredMessage="Please Enter Follow Up Date"></p:calendar>
+								
+								<p:outputLabel for="@next" style="color:red"  value="Select Status"></p:outputLabel>
+								<p:selectOneMenu value="#{viewStudentInfo.status}" required="true" requiredMessage="Please Select Status">
+									<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+									<f:selectItem itemLabel="Super Hot" itemValue="superhot"></f:selectItem>
+									<f:selectItem itemLabel="Hot" itemValue="hot"></f:selectItem>
+									<f:selectItem itemLabel="Warm" itemValue="warm"></f:selectItem>
+									<f:selectItem itemLabel="Cold" itemValue="cold"></f:selectItem>
+								</p:selectOneMenu>
+								
+								<p:commandButton value="Submit" actionListener="#{viewStudentInfo.addFollowUp}" update=":form,:followForm"></p:commandButton>
+							</p:panelGrid>
+						</p:dialog>
+					</h:form>
+
+					<h:form id="denyForm">
+						<p:dialog header="Follow Up" widgetVar="denyDialog" modal="true" showEffect="explode" hideEffect="explode" resizable="false" closable="true">
+							<p:panelGrid columns="2">
+								
+								<p:outputLabel for="@next" style="color:red"  value="Description"></p:outputLabel>
+								<p:inputText value="#{viewStudentInfo.description}" required="true" requiredMessage="Please Enter Description"></p:inputText>
+								
+								<p:commandButton value="Submit" actionListener="#{viewStudentInfo.denyEnquiry}" update=":form,:denyForm">
+								
+									<p:confirm header="Confirmation" message="Are You Sure To Deny This Enquiry?" icon="ui-icon-alert" />
+								</p:commandButton>
+							</p:panelGrid>
+						</p:dialog>
+					</h:form>
+					<h:form id="historyForm">
+						<p:dialog header="History Of Lead" widgetVar="historyDialog" modal="true" showEffect="explode" hideEffect="explode" resizable="false" closable="true">
+							<p:panelGrid columns="2">
+						     	<p:dataTable style="width:600px" value="#{viewStudentInfo.historyInfo}" var="var">
+						     		<p:column headerText="S.No" style="width:40px">
+						     			<p:outputLabel value="#{var.sno}"></p:outputLabel>
+						     		</p:column>
+						     		
+						     		<p:column headerText="Follow Date">
+										<p:outputLabel value="#{var.followDateStr}"></p:outputLabel>
+									</p:column>
+		
+									<p:column headerText="Enquiry Type">
+										<h:outputText value="#{var.enquiryStatus}"></h:outputText>
+									</p:column>
+		
+									<p:column headerText="Description">
+										<p:outputLabel value="#{var.description}"></p:outputLabel>
+									</p:column>
+						     	</p:dataTable>
+							</p:panelGrid>
+						</p:dialog>
+					</h:form>
+					
+					
+					<h:form id="addForm">
+						<p:dialog header="Registration Details" widgetVar="addDialog" modal="true" showEffect="explode" hideEffect="explode" resizable="false" closable="true">
+							<div class="ui-g form-group">
+							<p:panelGrid columns="4"  styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+							
+								<p:outputLabel  for="@next" style="color:red"  value="Addmission No"></p:outputLabel>
+				                <p:inputText disabled="#{viewStudentInfo.disableSrNo}" style="width: 280px !important;height:30px !important;margin-bottom: 12px !important;" required="true" requiredMessage="Please Enter Admission Number" value="#{viewStudentInfo.addmissionNumber}" ></p:inputText>
+									
+								<p:outputLabel value="Addmission Date "  for="@next" style="color:red" ></p:outputLabel>
+				                <p:calendar  style="width: 280px !important;height:30px !important;margin-bottom: 12px !important;" value="#{viewStudentInfo.addmissionDate}" navigator="true" required="true" requiredMessage="Please Select Addmission Date" pattern="dd/MM/yyyy"></p:calendar>
+				                
+				                 <p:outputLabel for="@next" style="color:red"  value="Select Class"></p:outputLabel>    
+				                 <p:selectOneMenu value="#{viewStudentInfo.className1}" required="true" requiredMessage="Please Select a Class" style="height:30px !important;margin-bottom: 12px !important;">
+									<f:selectItem itemLabel="Select"></f:selectItem>
+				                 	<f:selectItems value="#{viewStudentInfo.classList}"></f:selectItems>
+				                 
+				                 	<p:ajax listener="#{viewStudentInfo.allSections}" update="sectionid"></p:ajax>
+				                 </p:selectOneMenu>
+				                 
+				                 <p:outputLabel value="Select Section"  for="@next" style="color:red" ></p:outputLabel>    
+				                 <p:selectOneMenu id="sectionid" value="#{viewStudentInfo.selectedSection}" required="true" requiredMessage="Please Select A Section" style="height:30px !important;margin-bottom: 12px !important;">
+				                   	<f:selectItems value="#{viewStudentInfo.sectionList}"></f:selectItems>
+				                 </p:selectOneMenu>
+				                
+				                <p:commandButton value="Add" update=":addForm,:form" action="#{viewStudentInfo.acceptEnquiry}">
+				                	<p:confirm header="Confirmation" message="Are You Sure To Accpect This Enquiry?" icon="ui-icon-alert" />
+				                </p:commandButton>
+				                  
+							</p:panelGrid>
+						  </div>
+						</p:dialog>
+				</h:form>
+				
+				<h:form id="MsgLimitForm" style="overflow:hidden">
+				<p:dialog header="Low SMS Balance" width="500"
+					widgetVar="MsgLmtDlg" modal="true" showEffect="fade"
+					hideEffect="fade" resizable="false">
+					<center>
+					<p:outputLabel value="#{viewStudentInfo.balMsg}"
+						style="font-size:14px;font-weight: bold;" />
+					</center>
+					<br></br>
+					<br></br> 
+					<center>
+						<p:commandButton value="Skip" action="#{viewStudentInfo.sendMsg}" update="MsgLimitForm,form"/>
+						<br/>
+						<br/>
+						<p:commandButton value="Message Logs" action="messageSchoolHistory.xhtml?faces-redirect=true" update="MsgLimitForm"/>
+						<br/>
+						<br/>
+						<p:commandButton value="Recharge Now" action="purchaseMsgPack.xhtml?faces-redirect=true" update="MsgLimitForm"/>
+					</center>
+					<br></br>
+				</p:dialog>
+			</h:form>
+			
+			<h:form id="MsgLimitForm1" style="overflow:hidden">
+				<p:dialog header="Low SMS Balance" width="500"
+					widgetVar="MsgLmtDlg1" modal="true" showEffect="fade"
+					hideEffect="fade" resizable="false">
+					<center>
+					<p:outputLabel value="#{viewStudentInfo.balMsg}"
+						style="font-size:14px;font-weight: bold;" />
+					</center>
+					<br></br>
+					<br></br> 
+					<center>
+						<p:commandButton value="Skip" action="#{viewStudentInfo.sendEnqSms}" update="MsgLimitForm1,form"/>
+						<br/>
+						<br/>
+						<p:commandButton value="Message Logs" action="messageSchoolHistory.xhtml?faces-redirect=true" update="MsgLimitForm1"/>
+						<br/>
+						<br/>
+						<p:commandButton value="Recharge Now" action="purchaseMsgPack.xhtml?faces-redirect=true" update="MsgLimitForm1"/>
+					</center>
+					<br></br>
+				</p:dialog>
+			</h:form>
+			
+			<h:form id="MsgOverForm" style="overflow:hidden">
+				<p:dialog header="SMS Limit Over" width="500"
+					widgetVar="MsgOvrDlg" modal="true" showEffect="fade"
+					hideEffect="fade" resizable="false">
+					<center>
+					<p:outputLabel value="#{viewStudentInfo.balMsg}"
+						style="font-size:14px;font-weight: bold;" />
+					</center>
+					<br></br>
+					<br></br> 
+					<center>
+						<p:commandButton value="Message Logs" action="messageSchoolHistory.xhtml?faces-redirect=true" update="MsgOverForm"/>
+						<br/>
+						<br/>
+						<p:commandButton value="Recharge Now" action="purchaseMsgPack.xhtml?faces-redirect=true" update="MsgOverForm"/>
+					</center>
+					<br></br>
+				</p:dialog>
+			</h:form>
+			
+			<h:form id="MsgOtherForm" style="overflow:hidden">
+				<p:dialog header="SMS Limit Over" width="500"
+					widgetVar="MsgOthDlg" modal="true" showEffect="fade"
+					hideEffect="fade" resizable="false">
+					<center>
+					<p:outputLabel value="#{viewStudentInfo.balMsg}"
+						style="font-size:14px;font-weight: bold;" />
+					</center>
+					<br></br>
+								<br></br>
+								<center>
+									<p:commandButton value="OK"
+										action="viewEnquiry.xhtml?faces-redirect=true"
+										update="MsgOtherForm" />
+								</center>
+				</p:dialog>
+			</h:form>
+			
+			
+			
+					
+                        </div>
+                    </div>
+                </div>
+            </div>
+       
+    </ui:define>
+
+</ui:composition>

@@ -1,0 +1,564 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Fee Collection</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<h1>#{collectFeeVar.collectFeeTitle}</h1>
+
+							<p:panel header="Student Fee Collection" id="data">
+								<p:growl showDetail="true"  closable="true" autoUpdate="true"></p:growl>
+								<p:panelGrid columns="6" 
+									style="border:0px none; background-color:transparent; width: 100%">
+									<f:facet name="header">
+										Details
+									</f:facet>
+									<p:outputLabel
+										value="#{collectFeeVar.collectFeeAdmissionNumberLabel}"></p:outputLabel>
+									<p:outputLabel style="font-weight: bold;"
+										value="#{studentFee.srNo}"></p:outputLabel>
+
+									<p:outputLabel value="Fee Date"></p:outputLabel>
+									<p:calendar disabled="#{sideMenuBean.list.schid eq '213'}" readonlyInput="true" maxdate="#{studentFee.maxDate}" value="#{studentFee.recipietDate}"
+										pattern="dd/MM/yyyy" navigator="true" yearRange="c-10:c+10" >
+										<p:ajax event="dateSelect"></p:ajax>
+										</p:calendar>
+
+									<p:outputLabel
+										value="#{collectFeeVar.collectFeeStudentNameLabel}"></p:outputLabel>
+									<p:outputLabel style="font-weight: bold;"
+										value="#{studentFee.name}"></p:outputLabel>
+
+									<p:outputLabel
+										value="#{collectFeeVar.collectFeeFathersNameLabel}"></p:outputLabel>
+									<p:outputLabel style="font-weight: bold;"
+										value="#{studentFee.fathersName}"></p:outputLabel>
+
+									<p:outputLabel value="#{collectFeeVar.collectFeeGenderLabel}"></p:outputLabel>
+									<p:outputLabel style="font-weight: bold;"
+										value="#{studentFee.gender}"></p:outputLabel>
+
+									<p:outputLabel value="#{collectFeeVar.collectFeeDOBLabel}"></p:outputLabel>
+									<p:outputLabel style="font-weight: bold;"
+										value="#{studentFee.dobString}"></p:outputLabel>
+
+									<p:outputLabel style="font-weight: bold;"
+										value="Class : "></p:outputLabel>
+									<p:outputLabel style="font-weight: bold;"
+										value="#{studentFee.sList.className}"></p:outputLabel>
+										
+										
+										
+									<p:outputLabel style="font-weight: bold;"
+										value="Ledger No : "></p:outputLabel>
+									<p:outputLabel style="font-weight: bold;"
+										value="#{studentFee.sList.ledgerNo}"></p:outputLabel>
+										
+										
+									<p:outputLabel style="font-weight: bold;"
+										value="Admission Remark : "></p:outputLabel>
+									<p:outputLabel style="font-weight: bold;"
+										value="#{studentFee.sList.admRemark}"></p:outputLabel>
+
+									<p:outputLabel for="@next" style="color:red"  value="Payment mode"></p:outputLabel>
+									<p:selectOneRadio required="true"
+										requiredMessage="Please select a payment mode"
+										value="#{studentFee.paymentMode}" columns="2"
+										layout="responsive" styleClass="form-group">
+										<f:selectItem itemLabel="Cash" itemValue="Cash"></f:selectItem>
+										<f:selectItem itemLabel="Cheque" itemValue="Cheque"></f:selectItem>
+										<f:selectItem itemLabel="Net Banking" itemValue="Net Banking"></f:selectItem>
+										<f:selectItem itemLabel="Challan" itemValue="Challan"></f:selectItem>
+
+										<p:ajax update=":form"
+											listener="#{studentFee.paymentModeListener}"></p:ajax>
+									</p:selectOneRadio>
+
+									<p:outputLabel for="@next" style="color:red"  rendered="#{studentFee.showPaymentMode}"
+										value="Bank Name"></p:outputLabel>
+									<p:inputText required="true"
+										requiredMessage="Please Enter Bank name"
+										rendered="#{studentFee.showPaymentMode}"
+										value="#{studentFee.bankName}"></p:inputText>
+
+									<p:outputLabel value="Submitted To Bank"
+										rendered="#{studentFee.showTransfer}"></p:outputLabel>
+									<p:selectOneMenu filter="true"
+										value="#{studentFee.submittedBankName}"
+										rendered="#{studentFee.showTransfer}">
+										<f:selectItem itemLabel="Select Here" itemValue="N/A" />
+										<f:selectItems value="#{studentFee.bankList}"></f:selectItems>
+										<p:ajax global="false"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel  for="@next" style="color:red" rendered="#{studentFee.showCheque}"
+										value="cheque number"></p:outputLabel>
+									<p:inputText required="true"
+										requiredMessage="Please Enter cheque number"
+										rendered="#{studentFee.showCheque}"
+										value="#{studentFee.chequeNumber}"></p:inputText>
+
+									<p:outputLabel for="@next" style="color:red"  rendered="#{studentFee.showCheque}"
+										value="Cheque Date"></p:outputLabel>
+									<p:calendar required="true"
+										requiredMessage="Please Enter Cheque Date"
+										rendered="#{studentFee.showCheque}"
+										value="#{studentFee.challanDate}" pattern="dd/MM/yyyy"
+										navigator="true" yearRange="c-10:c+10" />
+
+
+									<p:outputLabel  for="@next" style="color:red" rendered="#{studentFee.showChallan}"
+										value="Challan Number"></p:outputLabel>
+									<p:inputText rendered="#{studentFee.showChallan}"
+										required="true" requiredMessage="Please Enter Challan Number"
+										value="#{studentFee.chequeNumber}"></p:inputText>
+
+									<p:outputLabel for="@next" style="color:red"  rendered="#{studentFee.showChallan}"
+										value="Challan Date"></p:outputLabel>
+									<p:calendar required="true"
+										requiredMessage="Please Enter Challan Date"
+										rendered="#{studentFee.showChallan}"
+										value="#{studentFee.challanDate}" pattern="dd/MM/yyyy"
+										navigator="true" yearRange="c-10:c+10" />
+
+									<p:outputLabel for="@next" style="color:red"  rendered="#{studentFee.showNeft}"
+										value="NEFT / IMPS Number"></p:outputLabel>
+									<p:inputText rendered="#{studentFee.showNeft}" required="true"
+										requiredMessage="Please Enter NEFT / IMPS Number"
+										value="#{studentFee.chequeNumber}"></p:inputText>
+
+									<p:outputLabel for="@next" style="color:red"  rendered="#{studentFee.showNeft}"
+										value="NEFT Date"></p:outputLabel>
+									<p:calendar required="true"
+										requiredMessage="Please Enter NEFT Date"
+										rendered="#{studentFee.showNeft}"
+										value="#{studentFee.challanDate}" pattern="dd/MM/yyyy"
+										navigator="true" yearRange="c-10:c+10" />
+
+
+								</p:panelGrid>
+
+								<br />
+
+								<p:panel rendered="#{studentFee.showtwsb}"
+									header="Generate Bill">
+
+									<p:panelGrid columns="2"
+										columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+										layout="grid" styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+										<p:selectOneRadio value="#{studentFee.billtype}">
+											<f:selectItem itemLabel="Ist Bill" itemValue="Ist Bill"></f:selectItem>
+											<f:selectItem itemLabel="Final Bill" itemValue="Final Bill"></f:selectItem>
+										</p:selectOneRadio>
+										<p:commandButton value="Generate Bill"
+											action="#{studentFee.searchStudentByNameByExpense}"></p:commandButton>
+									</p:panelGrid>
+								</p:panel>
+
+
+								<p:dataTable reflow="true" id="dt"
+									value="#{studentFee.classFeeList}" var="var">
+									<f:facet name="header">
+										<p:panelGrid columns="4">
+											<p:outputLabel  for="@next" style="color:red"  value="Show Fees Dues Upto" />
+											<p:calendar rendered="false" value="#{studentFee.dueDate}"
+												pattern="dd/MM/yyyy" navigator="true" yearRange="c-10:c+10" />
+
+											<p:selectOneMenu id="showMonth"
+												value="#{studentFee.selectedMonth}" required="true"
+												requiredMessage="Please Select Month">
+												<f:selectItem itemLabel="Select Month" itemValue=""></f:selectItem>
+												<f:selectItems value="#{studentFee.monthList}"></f:selectItems>
+											</p:selectOneMenu>
+
+											<p:selectOneMenu id="year" value="#{studentFee.selectedYear}"
+												required="true" requiredMessage="Please select Year">
+												<f:selectItem itemLabel="Select Year" itemValue=""></f:selectItem>
+												<f:selectItems value="#{studentFee.yearList}"></f:selectItems>
+											</p:selectOneMenu>
+
+											<p:commandButton value="Show Dues"
+												action="#{studentFee.findDueFees}" update=":form"></p:commandButton>
+										</p:panelGrid>
+									</f:facet>
+									<p:column headerText="S.No." style="width:60px;">
+										<p:outputLabel value="#{var.sno}"></p:outputLabel>
+									</p:column>
+
+									<p:column style="width:50px;">
+										<h:selectBooleanCheckbox style="width:30px;height:30px"
+											onclick="changeDiscount(#{var.sno},'checkbox');"
+											styleClass="check#{var.sno}" id="checkbox#{var.sno}"
+											value="#{var.selectCheckBox}" />
+									</p:column>
+
+									<p:column headerText="Fee Name">
+										<p:outputLabel id="feeName#{var.sno}" value="#{var.feeName}"></p:outputLabel>
+									</p:column>
+
+									<p:column
+										headerText="Due Amount (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})">
+										<p:outputLabel id="dueamt#{var.sno}" onfocus="this.select();"
+											value="#{var.dueamount}">
+										</p:outputLabel>
+										<f:facet name="footer">
+											<p:outputLabel value="Due Amount :- #{studentFee.dueAmount}"></p:outputLabel>
+											<p:outputLabel
+												value="#{sideMenuBean.list.country eq 'UAE' ? ' AED' : ' Rs.'}"></p:outputLabel>
+										</f:facet>
+									</p:column>
+									<p:column
+										headerText="Discount (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})">
+										<p:inputText id="pdiscount#{var.sno}"
+											styleClass="discountClass"
+											onkeyup="changeDiscount(#{var.sno},'discount');"
+											onfocus="this.select();" value="#{var.payDiscount}">
+											<p:keyFilter mask="pnum" />
+											<f:attribute name="auto" value="#{var.sno}"></f:attribute>
+										</p:inputText>
+
+										<f:facet name="footer">
+											<p:outputLabel id="discount"
+												value="Discount Amount : #{studentFee.discountAmount}"></p:outputLabel>
+											<p:outputLabel
+												value="#{sideMenuBean.list.country eq 'UAE' ? ' AED' : ' Rs.'}"></p:outputLabel>
+										</f:facet>
+									</p:column>
+
+									<p:column headerText="Submit Amount (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})">
+										<p:inputText id="pamt#{var.sno}" styleClass="payamtClass"
+											onkeyup="totalAmount();" onfocus="this.select();"
+											value="#{var.payAmount}">
+											<p:keyFilter mask="pnum" />
+
+										</p:inputText>
+										<f:facet name="footer">
+											<p:outputLabel id="submit"
+												value="Submit Amount : #{studentFee.submitAmount}"></p:outputLabel>
+											<p:outputLabel
+												value="#{sideMenuBean.list.country eq 'UAE' ? ' AED' : ' Rs.'}"></p:outputLabel>
+
+										</f:facet>
+									</p:column>
+								</p:dataTable>
+								<br />
+								<p:panelGrid columns="3">
+									<p:outputLabel value="Remark : " />
+									<p:inputTextarea value="#{studentFee.remark}" />
+									<p:commandButton
+										value="#{collectFeeVar.collectFeeSubmitNowButtonLabel}"
+										action="#{studentFee.submit}" update=":form"></p:commandButton>
+									<p:commandButton ajax="false" onclick="target='_blank'"
+										immediate="true" rendered="false"
+										action="#{navigation.feeReceipt}" value="Print"></p:commandButton>
+								</p:panelGrid>
+
+							</p:panel>
+							<br />
+
+							<p:panel id="receipts" header="Paid Receipts">
+								<p:dataTable id="up" reflow="true"
+									tableStyle="table-layout:auto;" var="fee"
+									value="#{studentFee.dailyfee}">
+
+
+									<p:column headerText="Sno" style="font-size:8px !important">
+										<p:outputLabel style="font-size:8px !important"
+											value="#{fee.srno}"></p:outputLabel>
+									</p:column>
+
+
+
+									<p:column style="font-size:10px !important"
+										headerText="Receipt no">
+
+										<f:facet name="header">
+								Receipt No.
+							</f:facet>
+										<h:outputText style="font-size:10px !important"
+											value="#{fee.reciptno}" />
+									</p:column>
+
+									<p:column
+										style="font-size:10px !important;width:80px !important;"
+										headerText="Date">
+
+										<f:facet name="header">
+								Date
+							</f:facet>
+										<h:outputText style="font-size:9px !important"
+											value="#{fee.feeDateStr}" />
+									</p:column>
+
+									<p:column style="font-size:10px !important"
+										headerText="Payment Mode">
+
+										<f:facet name="header">
+								Payment Mode 
+							</f:facet>
+										<h:outputText style="font-size:10px !important"
+											value="#{fee.paymentmode} #{fee.bankname} #{fee.chequenumber}" />
+									</p:column>
+
+
+									<p:columns style="font-size:10px !important;"
+										value="#{studentFee.feelist}" var="column"
+										columnIndexVar="colIndex">
+
+										<f:facet name="header">
+											<p:outputLabel style="font-size:9px !important;"
+												value="#{column.feeName} (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})"></p:outputLabel>
+										</f:facet>
+
+										<p:outputLabel style="font-size:9px !important"
+											value="#{fee.allFess[column.feeId]}"></p:outputLabel>
+
+									</p:columns>
+
+									<p:column style="font-size:10px !important"
+										headerText="Total amount">
+
+										<f:facet name="header">
+							 Total Amount (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})
+							</f:facet>
+										<h:outputText style="font-size:10px !important"
+											value="#{fee.amount}" />
+									</p:column>
+
+									<p:column style="font-size:10px !important"
+										headerText="Total Discount">
+
+										<f:facet name="header">
+							 Total Discount (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})
+							</f:facet>
+										<h:outputText style="font-size:10px !important"
+											value="#{fee.discount}" />
+									</p:column>
+
+									<p:column
+										style="font-size:10px !important;width:80px !important;"
+										headerText="Date">
+
+										<f:facet name="header">
+								User
+							</f:facet>
+										<h:outputText style="font-size:9px !important"
+											value="#{fee.user}" />
+									</p:column>
+
+									<p:column exportable="false"
+										style="font-size:9px !important;width:50px !important;"
+										headerText="Print">
+										<f:facet name="header">
+											<p:outputLabel style="font-size:9px !important"
+												value="Duplicate"></p:outputLabel>
+										</f:facet>
+										<p:commandButton icon="ui-icon-print"
+											action="#{studentFee.duplicateFee}">
+											<f:setPropertyActionListener
+												target="#{studentFee.selectedstudent}" value="#{fee}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+
+								</p:dataTable>
+
+							</p:panel>
+
+							<br />
+
+							<p:panel id="DiscountReport" header="Discount Details">
+								<p:dataTable reflow="true" id="dtt"
+									value="#{studentFee.discountFeeList}" var="var">
+
+									<p:column headerText="S.No">
+										<p:outputLabel value="#{var.sno}"></p:outputLabel>
+									</p:column>
+									<p:column headerText="Recipiet No" filterBy="#{var.recipietNo}">
+										<p:outputLabel value="#{var.recipietNo}"></p:outputLabel>
+									</p:column>
+									<p:column headerText="Fee Name">
+										<p:outputLabel value="#{var.feeName}"></p:outputLabel>
+									</p:column>
+									<p:column
+										headerText="Fee Paid (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})">
+										<p:outputLabel value="#{var.payAmount}"></p:outputLabel>
+									</p:column>
+									<p:column
+										headerText="Fee Discount (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})">
+										<p:outputLabel value="#{var.payDiscount}"></p:outputLabel>
+									</p:column>
+									<p:column headerText="Date">
+										<p:outputLabel value="#{var.postdate}"></p:outputLabel>
+									</p:column>
+								</p:dataTable>
+							</p:panel>
+							<br />
+							<p:panel id="Fee_Structure" header="Due Fees Details">
+
+
+								<p:dataTable rendered="#{sideMenuBean.list.schid ne '287'}"
+									reflow="true" id="dataTable0"
+									value="#{studentFee.feeStructureList}" var="var">
+
+									<p:column headerText="Fee Type">
+										<p:outputLabel value="#{var.feeName}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Fee Period">
+										<p:outputLabel value="#{var.feePeriod}"></p:outputLabel>
+									</p:column>
+
+
+									<p:column
+										headerText="Fee Amount (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})">
+										<p:outputLabel value="#{var.totalFeeAmount}"></p:outputLabel>
+									</p:column>
+
+									<p:column
+										headerText="Fee Paid (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})">
+										<p:outputLabel value="#{var.totalFeePaidAmount}"></p:outputLabel>
+									</p:column>
+
+									<p:column
+										headerText="Balance Left (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})">
+										<p:outputLabel value="#{var.totalFeeLeftAmount}"></p:outputLabel>
+									</p:column>
+
+								</p:dataTable>
+
+								<br />
+								<p:dataTable reflow="true"
+									rendered="#{sideMenuBean.list.schid ne '287'}" id="dataTable4"
+									value="#{studentFee.transportfeeStatus}" var="var">
+
+									<f:facet name="header">
+               					 Due Transport Fees
+               				</f:facet>
+
+									<p:column headerText="Months">
+										<p:outputLabel value="#{var.month}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Transport Route">
+										<p:outputLabel value="#{var.transportRouteName}"></p:outputLabel>
+									</p:column>
+
+									<p:column
+										headerText="Transport Fee (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})">
+										<p:outputLabel value="#{var.transportFee}"></p:outputLabel>
+									</p:column>
+
+									<p:column
+										headerText="Fee paid (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})">
+										<p:outputLabel value="#{var.status}"></p:outputLabel>
+									</p:column>
+
+									<p:column
+										headerText="Balance Left (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})">
+										<p:outputLabel value="#{var.balanceLeft}"></p:outputLabel>
+									</p:column>
+								</p:dataTable>
+
+
+							</p:panel>
+
+						</h:form>
+						<h:form id="otpdialog">
+							<p:dialog header="Discount OTP" widgetVar="otp"
+								showEffect="explode" hideEffect="bounce"
+								style="text-align:center">
+								<p:outputLabel value="OTP SEND TO #{studentFee.discoutnNo}"></p:outputLabel>
+								<br />
+								<p:panelGrid columns="2">
+									<p:outputLabel value="OTP"></p:outputLabel>
+									<p:inputText value="#{studentFee.otpInput}"></p:inputText>
+									<p:commandButton value="submit"
+										action="#{studentFee.discountSave}"></p:commandButton>
+								</p:panelGrid>
+							</p:dialog>
+						</h:form>
+
+						<h:form id="MsgLimitForm" style="overflow:hidden">
+							<p:dialog header="Low SMS Balance" width="500"
+								widgetVar="MsgLmtDlg" modal="true" showEffect="fade"
+								hideEffect="fade" resizable="false">
+								<center>
+									<p:outputLabel value="#{studentFee.balMsg}"
+										style="font-size:14px;font-weight: bold;" />
+								</center>
+								<br></br>
+								<br></br>
+								<center>
+									<p:commandButton value="Skip" action="#{studentFee.sendMsg}"
+										update="MsgLimitForm" />
+									<br /> <br />
+									<p:commandButton value="Message Logs"
+										action="messageSchoolHistory.xhtml?faces-redirect=true"
+										update="MsgLimitForm" />
+									<br /> <br />
+									<p:commandButton value="Recharge Now"
+										action="purchaseMsgPack.xhtml?faces-redirect=true"
+										update="MsgLimitForm" />
+								</center>
+								<br></br>
+							</p:dialog>
+						</h:form>
+
+						<h:form id="MsgOverForm" style="overflow:hidden">
+							<p:dialog header="SMS Limit Over" width="500"
+								widgetVar="MsgOvrDlg" modal="true" showEffect="fade"
+								hideEffect="fade" resizable="false">
+								<center>
+									<p:outputLabel value="#{studentFee.balMsg}"
+										style="font-size:14px;font-weight: bold;" />
+								</center>
+								<br></br>
+								<br></br>
+								<center>
+									<p:commandButton value="Message Logs"
+										action="messageSchoolHistory.xhtml?faces-redirect=true"
+										update="MsgOverForm" />
+									<br /> <br />
+									<p:commandButton value="Recharge Now"
+										action="purchaseMsgPack.xhtml?faces-redirect=true"
+										update="MsgOverForm" />
+								</center>
+								<br></br>
+							</p:dialog>
+						</h:form>
+
+						<h:form id="MsgOtherForm" style="overflow:hidden">
+							<p:dialog header="SMS Limit Over" width="500"
+								widgetVar="MsgOthDlg" modal="true" showEffect="fade"
+								hideEffect="fade" resizable="false">
+								<center>
+									<p:outputLabel value="#{studentFee.balMsg}"
+										style="font-size:14px;font-weight: bold;" />
+								</center>
+								<br></br>
+								<br></br>
+								<center>
+									<p:commandButton value="OK"
+										action="studentFeeCollection.xhtml?faces-redirect=true"
+										update="MsgOtherForm" />
+								</center>
+							</p:dialog>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

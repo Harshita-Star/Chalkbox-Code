@@ -1,0 +1,105 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">All Requests</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					
+					<div class="card card-w-title">
+					<h:form id="form">
+						<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+						<p:panel header="Meeting Requests">
+						<p:panelGrid columns="3">
+						
+						
+						<p:commandButton update=":form" action="#{viewAllAppointmentRequest.allPendingList}" icon="fa fa-clock-o" 
+						value="Pending (#{viewAllAppointmentRequest.pending})"></p:commandButton>
+						
+						 <p:commandButton update=":form" action="#{viewAllAppointmentRequest.allApprovedList}" styleClass="greenButt" icon="fa fa-check-circle"
+						value="Approved (#{viewAllAppointmentRequest.approved})"></p:commandButton>
+						
+						<p:commandButton update=":form" action="#{viewAllAppointmentRequest.allRejectedList}" styleClass="redButt" icon="fa fa-ban"
+						value="Rejected (#{viewAllAppointmentRequest.rejected})"></p:commandButton>
+						
+					  
+					
+						</p:panelGrid>
+						</p:panel>
+						<p:panel header="Details :">
+							<p:dataTable value="#{viewAllAppointmentRequest.appointmentList}" id="d1" var="info">
+							
+							<p:column headerText="S No">
+							<p:outputLabel value="#{info.sno}"></p:outputLabel>
+							</p:column>
+							
+							<p:column headerText="Student Name">
+							<p:outputLabel value="#{info.studentName}"></p:outputLabel>
+							</p:column>
+							
+							<p:column headerText="Class">
+							<p:outputLabel value="#{info.className}"></p:outputLabel>
+							</p:column>
+							
+							<p:column headerText="Date">
+							<p:outputLabel value="#{info.strAppointmentdate}"></p:outputLabel>
+							</p:column>
+							
+							<p:column headerText="Time">
+							<p:outputLabel value="#{info.appointment_time}"></p:outputLabel>
+							</p:column>
+							
+							<p:column headerText="Add Time">
+							<p:outputLabel value="#{info.strAdddate}"></p:outputLabel>
+							</p:column>
+							
+							<p:column headerText="Added By">
+							<p:outputLabel value="#{info.addedBy}"></p:outputLabel>
+							</p:column>
+							
+							<p:column rendered="false" headerText="Type">
+							<p:outputLabel value="#{info.type}"></p:outputLabel>
+							</p:column>
+							
+							<p:column headerText="Description">
+							<p:outputLabel value="#{info.description}"></p:outputLabel>
+							</p:column>
+							
+							
+							<p:column headerText="Status">
+							<p:outputLabel value="#{info.status}"></p:outputLabel>
+							</p:column>
+							
+							<p:column headerText="Remark From Parent" rendered="#{viewAllAppointmentRequest.showRemark}">
+							<p:outputLabel value="#{info.remark}" rendered="#{viewAllAppointmentRequest.showRemark}"></p:outputLabel>
+							</p:column>
+							
+							
+							<p:column headerText="Delete" rendered="#{viewAllAppointmentRequest.showDelete}">
+							<p:commandButton icon="ui-icon-trash" update=":form" action="#{viewAllAppointmentRequest.delete}" styleClass="redButt">
+							<f:setPropertyActionListener value="#{info}" target="#{viewAllAppointmentRequest.selected}"></f:setPropertyActionListener>
+							<p:confirm header="Confirmation" message="Are You Sure To Delete...?" icon="ui-icon-alert" />
+							</p:commandButton>
+							</p:column>
+							
+							 </p:dataTable>
+						</p:panel>
+						<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+			           <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes greenButt" icon="ui-icon-check" />
+			           <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no redButt" icon="ui-icon-close" />
+			         </p:confirmDialog>
+							</h:form>	
+					</div>
+					</div>
+				</div>
+			</div>
+
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,165 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Add Fees</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<h1>Fees Management</h1>
+
+							<p:panel header="Add Fees">
+
+								<p:messages closable="true" autoUpdate="true"></p:messages>
+
+								<p:panelGrid columns="2"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel for="@next" style="color:red" value="Fees Name"></p:outputLabel>
+									<p:inputText value="#{addFees.feeName}" required="true"
+										requiredMessage="Please Enter Fees Name" id="secnm" onchange="trimFunc(this.value,'Please Section Name',this.id)" validatorMessage="Please Enter Correct value">
+									 <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:inputText>
+
+
+									<p:outputLabel for="@next" style="color:red" value="Fee Type"></p:outputLabel>
+									<p:selectOneRadio value="#{addFees.feeCheckType}" required="true" 
+										requiredMessage="Please Select Fees Type">
+										<f:selectItem itemLabel="Class wise" itemValue="classWise"></f:selectItem>
+										<f:selectItem itemLabel="Student Wise" itemValue="studentWise"></f:selectItem>
+									</p:selectOneRadio>
+									
+									<p:outputLabel for="@next" style="color:red" value="Fee Payment  Type"></p:outputLabel>
+									<p:selectOneMenu value="#{addFees.feeType}" required="true" filter="true"
+										requiredMessage="Please Select Fees Payment Type">
+										<f:selectItem itemLabel="Monthly" itemValue="month"></f:selectItem>
+										<f:selectItem itemLabel="Quarterly" itemValue="quarter"></f:selectItem>
+										<f:selectItem itemLabel="Yearly" itemValue="year"></f:selectItem>
+										<p:ajax update="excrem,excrem1"  ></p:ajax>
+									</p:selectOneMenu>
+									
+
+                               <p:outputPanel id="excrem">
+									<p:outputLabel  style="color:red" rendered="#{addFees.feeType eq 'year'}" value="Fee Month *"></p:outputLabel>
+								</p:outputPanel>
+								<p:outputPanel id="excrem1">
+									<p:selectOneMenu rendered="#{addFees.feeType eq 'year'}" value="#{addFees.feeMonth}" required="true" filter="true"
+										requiredMessage="Please Select Fees Month">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItem itemLabel="APRIL" itemValue="4"></f:selectItem>
+										<f:selectItem itemLabel="MAY" itemValue="5"></f:selectItem>
+										<f:selectItem itemLabel="JUNE" itemValue="6"></f:selectItem>
+										<f:selectItem itemLabel="JULY" itemValue="7"></f:selectItem>
+										<f:selectItem itemLabel="AUGUST" itemValue="8"></f:selectItem>
+										<f:selectItem itemLabel="SEPT" itemValue="9"></f:selectItem>
+										<f:selectItem itemLabel="OCT" itemValue="10"></f:selectItem>
+										<f:selectItem itemLabel="NOV" itemValue="11"></f:selectItem>
+										<f:selectItem itemLabel="DEC" itemValue="12"></f:selectItem>
+										<f:selectItem itemLabel="JAN" itemValue="13"></f:selectItem>
+										<f:selectItem itemLabel="FEB" itemValue="14"></f:selectItem>
+										<f:selectItem itemLabel="MAR" itemValue="15"></f:selectItem>
+									</p:selectOneMenu>
+                                  </p:outputPanel>
+
+                                    <p:outputLabel for="@next" style="color:red" rendered="#{sideMenuBean.list.country eq 'UAE'}" value="TAX PERCENTAGE"></p:outputLabel>
+									<p:inputText rendered="#{sideMenuBean.list.country eq 'UAE'}" value="#{addFees.tax_percentage}" required="true"
+										requiredMessage="Please Enter Tax Percentage" id="tax" onchange="trimFunc(this.value,'Please Section Name',this.id)">
+										<p:keyFilter regEx="/[\d]/" />
+										</p:inputText>
+								</p:panelGrid>
+								<br />
+								<p:separator />
+								<center>
+									<p:commandButton value="Add Fees" styleClass="butwid" icon="fa fa-inr"
+										actionListener="#{addFees.addNewFees}" update=":form :form2  excrem,excrem1"></p:commandButton>
+
+								</center>
+								<p:separator />
+								<br />
+
+							</p:panel>
+						</h:form>
+						<br></br>
+						<h:form id="form2">
+							<p:panel header="View/Edit Fees">
+
+								<p:dataTable reflow="true" value="#{addFees.list}" var="var">
+
+									<p:column headerText="S.No." style="width:60px;">
+										<p:outputLabel value="#{var.sno}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Fee Name">
+										<p:outputLabel value="#{var.feeName}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Fee Payment Type">
+										<p:outputLabel value="#{var.tempFeeType}"></p:outputLabel>
+									</p:column>
+									<p:column headerText="Fee Month">
+										<p:outputLabel value="#{var.feeMonth}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Fee Type">
+										<p:outputLabel value="#{var.feeCheckType}"></p:outputLabel>
+									</p:column>
+
+									<p:column  headerText="Edit">
+									<center>
+									<p:commandButton  disabled="#{var.feeCheckTypeShow}" styleClass="butwid" update=":editForm" icon="ui-icon-pencil"
+											action="#{addFees.editDetails}">
+											<f:setPropertyActionListener target="#{addFees.selectedFees}"
+												value="#{var}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</center>
+									</p:column>
+
+
+								</p:dataTable>
+
+
+
+							</p:panel>
+
+
+						</h:form>
+						<h:form id="editForm">
+							<p:dialog restyle="height:500px;" resizable="false"
+								widgetVar="editDialog" header="Edit Details" showEffect="fade"
+								hideEffect="explode" modal="true">
+								<p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel for="@next" style="color:red" value="Fees Name"></p:outputLabel>
+									<p:inputText value="#{addFees.feeName}" required="true"
+										requiredMessage="Please Enter Fees Name" validatorMessage="Please Enter Correct value">
+									  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:inputText>
+								</p:panelGrid>
+								<br />
+								<p:separator />
+								<center>
+									 
+									<p:commandButton update=":editForm,:form,:form2" styleClass="butwid" icon="fa fa-upload"
+										actionListener="#{addFees.editNow}" value="Update"></p:commandButton>
+								</center>
+								<p:separator />
+								<br />
+							</p:dialog>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

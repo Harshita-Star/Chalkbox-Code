@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+		xmlns:pe="http://primefaces.org/ui/extensions">
+<f:view contentType="text/html">
+	<h:head>
+		<title>#{sideMenuBean.companyName} | Print #{printVoucher.voucherName} Voucher</title>
+		<f:facet name="first">
+			<meta content='text/html; charset=UTF-8' http-equiv="Content-Type" />
+			<meta http-equiv="X-UA-Compatible" content="EmulateIE8" />
+		</f:facet>
+		<script>
+			function printMyPage()
+			{
+				document.getElementById('test').style.display ="none";
+				window.print();
+				document.getElementById('test').style.display ="block";
+			}
+		</script>
+	</h:head>
+	
+	<h:body style="font-size:11px">
+		<p:commandButton onclick="printMyPage()" id="test" value="Print" icon="ui-icon-print"></p:commandButton>				
+			<h:form  id="myDiv" >
+						
+				<style>
+			          .ui-widget .ui-widget {
+					    font-size: 12px;
+						}
+					.test .ui-panelgrid-cell{
+						width:10%;
+						border:none;
+					}
+					.test .ui-panelgrid .ui-panelgrid-cell .ui-widget-content
+					{
+						border-style:hidden;
+						border: 0px !important;
+					}
+					.rightSide .ui-panelgrid-cell
+					{
+						text-align: right;
+					}
+										
+					.aa .ui-widget-content 
+					{
+						border:0px !important;
+						text-align:left;
+						
+					}
+					
+					.firstcol{
+						border-right: 1px solid black;
+					
+					}
+					
+					.lastcol{
+						border-left: 1px solid black;
+					
+					}
+					
+
+				</style>
+						
+				<p:outputPanel styleClass="aa" style="height: auto;float: left;font-size: 7px;border: 1px solid black;margin-right: 0%; width:100%" >
+					
+					<p:outputPanel style="border-bottom: 1px solid black;"> 
+						<p:outputPanel style="width:100%; border-bottom: 1px solid black;">
+							<center> <p:outputLabel style="font-size:20px;font-weight:bold" value="#{printVoucher.voucherName} Voucher"></p:outputLabel> </center>
+						</p:outputPanel>
+						<table width="100%;">
+	                       	<tr>
+								<td style="width:85%"><h1 style="margin:0px;text-align:center;margin-left:10px;">#{headerBean.name}</h1></td>
+							</tr>
+							
+							<tr>
+								<td style="width:85%"><p style="text-align:center;margin:0px;margin-left:10px;">#{headerBean.address1}</p></td>
+							</tr>
+							
+						</table>
+					</p:outputPanel>
+					<p:outputPanel style="width:100%;height:60px">
+						<table style="width:48%;margin-left:5px;height:60px;float:left;font-size:12px" >
+							<tr>
+								<td style="width:50%">Voucher No.- #{printVoucher.voucherNo}</td>
+							</tr>
+							<tr>
+								<td style="width:50%">Being:- #{printVoucher.vCategory}</td>
+							</tr>
+							<tr>
+								<td style="width:50%">#{printVoucher.maintype}:- #{printVoucher.payTo}</td>
+							</tr>
+						</table>
+						<div style="border-left:1px solid black;position:absolute;left:50%;height:60px"></div>
+						<table style="width:48%;margin-left:5px;height:60px;float:right;font-size:12px" >
+							<tr>
+								<td>Date:- #{printVoucher.vDateStr}</td>
+							</tr>
+							<tr>
+								<td>Voucher Type:- #{printVoucher.type}</td>
+							</tr>
+						</table>
+					</p:outputPanel>		
+							
+					<p:outputPanel style="border-bottom: 1px solid black;border-top: 1px solid black;margin-top:1px; border-right: none; border-left: none;">
+							
+							<table style="margin:auto;width:99%">
+								<tr>
+									<td style="width:50%">Amount:- #{sideMenuBean.list.country eq 'UAE' ? 'AED ' : ''}#{printVoucher.amount} #{sideMenuBean.list.country eq 'UAE' ? '' : ' /- INR'} </td>
+									<td>Amount In Words : #{sideMenuBean.list.country eq 'UAE' ? 'AED ' : 'Rupees'} #{printVoucher.amountInwords}</td>
+								</tr>
+							</table>	
+								
+						<hr style="margin:0px"></hr>
+							
+						<p:outputPanel styleClass="test" style="width:100%;height:60px">
+							<table style="width:24%;margin-left:5px;height:60px;float:left;">
+								<tr><td>Payment Mode</td> </tr>
+								<tr><td>#{printVoucher.paymentMode}</td> </tr>
+							</table>
+							<div style="border-left:1px solid black;position:absolute;left:25%;height:60px"></div>
+							<table style="width:24%;margin-left:5px;height:60px;float:left;">
+								<tr><td>Cheque No</td> </tr>
+								<tr><td>#{printVoucher.chNo}</td> </tr>
+							</table>
+							<div style="border-left:1px solid black;position:absolute;left:49%;height:60px"></div>
+							<table style="width:24%;margin-left:5px;height:60px;float:left;">
+								<tr><td>Bank Name</td> </tr>
+								<tr><td>#{printVoucher.bnknm}</td> </tr>
+							</table>
+							<div style="border-left:1px solid black;position:absolute;left:73%;height:60px"></div>
+							<table style="width:24%;margin-left:5px;height:60px;float:left;">
+								<tr><td>Cheque Date</td> </tr>
+								<tr><td>#{printVoucher.chkdt}</td> </tr>
+							</table>
+						
+						</p:outputPanel>
+						
+						<table width="68%" style="float:left;margin-left:5px;text-align:justify">
+							<tr><td><p:outputLabel style="font-size:11px" value="Description:- #{printVoucher.description} "></p:outputLabel></td></tr> 
+						</table>
+								
+						<table width="30%" style="float:right;margin-right:1%;text-align:right">
+							<tr><td><p:outputLabel style="font-weight:bold;font-size:11px" value=" #{headerBean.name} "></p:outputLabel></td></tr> 
+							<tr><td><p:outputPanel style="height:30px"></p:outputPanel></td></tr>
+							<tr><td><p:outputLabel value="Authorised Signatory"></p:outputLabel></td></tr>
+						</table>
+					</p:outputPanel>
+				</p:outputPanel>
+			</h:form>	
+	</h:body>
+	
+</f:view>
+</html>
+

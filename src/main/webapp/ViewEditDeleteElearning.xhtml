@@ -1,0 +1,350 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">E-Learning</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form" enctype="multipart/form-data">
+							<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+							<p:messages autoUpdate="true"></p:messages>
+							<p:panel header="View Online Lecture">
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel for="@next" style="color:red"
+										value="Select Class"></p:outputLabel>
+									<p:selectOneMenu
+										value="#{viewEditDeleteELearing.selectedCLassSection}"
+										required="true" requiredMessage="Please select a class">
+										<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+										<f:selectItems value="#{viewEditDeleteELearing.classSection}"></f:selectItems>
+										<p:ajax update="sectionid,subjectid"
+											listener="#{viewEditDeleteELearing.allSections}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel for="@next" style="color:red"
+										value="Select Section"></p:outputLabel>
+									<p:selectOneMenu id="sectionid"
+										value="#{viewEditDeleteELearing.selectedSection}"
+										required="true" requiredMessage="Please select a section">
+										<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+										<f:selectItems value="#{viewEditDeleteELearing.sectionList}"></f:selectItems>
+												<p:ajax update="subjectid"
+											listener="#{viewEditDeleteELearing.allSubjects}"></p:ajax>
+								
+										
+									</p:selectOneMenu>
+
+									<p:outputLabel for="@next" style="color:red"
+										value="Select Subject"></p:outputLabel>
+									<p:selectOneMenu id="subjectid"
+										value="#{viewEditDeleteELearing.subject}" required="true"
+										requiredMessage="Please select a Subject">
+										<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+										<f:selectItem itemLabel="All" itemValue="all"></f:selectItem>
+										<f:selectItems value="#{viewEditDeleteELearing.subjectList}"></f:selectItems>
+									</p:selectOneMenu>
+									
+									<p:outputLabel value="Start Date" for="@next" style="color:red"></p:outputLabel>
+									<p:calendar value="#{viewEditDeleteELearing.startDt}" pattern="dd/MM/yyyy"  navigator="true" required="Please Enter Start Date"></p:calendar>
+									
+									<p:outputLabel value="End Date" for="@next" style="color:red"></p:outputLabel>
+									<p:calendar value="#{viewEditDeleteELearing.endDt}" pattern="dd/MM/yyyy" navigator="true" required="Please Enter End Date"></p:calendar>
+
+								</p:panelGrid>
+								
+								<br />
+								<p:separator />
+								<center>
+										<p:commandButton value="Search" update=":form2" styleClass="butwid" icon="fa fa-search"
+										action="#{viewEditDeleteELearing.search}"></p:commandButton>
+								</center>
+								<p:separator />
+								<br />
+								
+							</p:panel>
+						</h:form>
+					</div>
+					<div class="card card-w-title">
+						<h:form id="form2" enctype="multipart/form-data">
+						<h:commandLink rendered="#{viewEditDeleteELearing.show}">
+											<p:graphicImage name="images/excellogo.png"
+												library="avalon-layout" width="100" height="40"></p:graphicImage>
+											<pe:exporter type="xlsx" target=":form2:dttb" 
+												fileName="Elearning_Report"></pe:exporter>
+									</h:commandLink>
+							<p:panel header="Lecture List"
+								rendered="#{viewEditDeleteELearing.show}">
+								<center>
+								<p:commandButton style="margin-bottom:7px" styleClass="butwid-1 redButt" icon="fa fa-trash"  value="Delete Multiple Lectures" action="#{viewEditDeleteELearing.deleteMultiple}" update=":form2" ></p:commandButton>
+								
+								</center>
+								
+								<p:dataTable id="dttb" value="#{viewEditDeleteELearing.list}" selection="#{viewEditDeleteELearing.selectedList}" var="var"
+									reflow="true" rowKey="#{var.sno}">
+									
+								
+									
+                                   <p:column selectionMode="multiple" exportable="false" style="width:50px;">
+                                    
+                                   </p:column>
+
+									<p:column headerText="Subject Name">
+									 <f:facet name="header">
+									   <p:outputLabel value="Subject Name"></p:outputLabel>
+									 </f:facet>
+										<p:outputLabel value="#{var.ass3}"></p:outputLabel>
+									</p:column>
+									
+									<p:column headerText="Class">
+									 <f:facet name="header">
+									   <p:outputLabel value="Class"></p:outputLabel>
+									 </f:facet>
+										<p:outputLabel value="#{var.classFromId}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Section" filterBy="#{var.sectionName}"
+										filterMatchMode="contains">
+										 <f:facet name="header">
+									       <p:outputLabel value="Section"></p:outputLabel>
+									     </f:facet>
+										<p:outputLabel value="#{var.sectionName}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Topic">
+									 <f:facet name="header">
+									   <p:outputLabel value="Topic"></p:outputLabel>
+									 </f:facet>
+										<p:outputLabel value="#{var.title}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Description">
+									 <f:facet name="header">
+									   <p:outputLabel value="Description"></p:outputLabel>
+									 </f:facet>
+										<p:outputLabel value="#{var.description}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Date">
+									  <f:facet name="header">
+									   <p:outputLabel value="Date"></p:outputLabel>
+									 </f:facet>
+										<p:outputLabel value="#{var.date}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Files" exportable="false">
+									  <f:facet name="header">
+									   <p:outputLabel value="Files"></p:outputLabel>
+									  </f:facet>
+										<p:panelGrid columns="1">
+											<a href="#{var.link}" target="_blank">You tube</a>
+											<br></br>
+											<a href="#{var.file1}" target="_blank">Document</a>
+											<br></br>
+											<a href="#{var.file2}" target="_blank">Audio</a>
+										</p:panelGrid>
+
+									</p:column>
+
+									<p:column headerText="Edit" exportable="false">
+										<p:commandButton update=":editForm"
+											oncomplete="PF('editDialog').show();"
+											action="#{viewEditDeleteELearing.edit}" icon="ui-icon-pencil">
+											<f:setPropertyActionListener
+												target="#{viewEditDeleteELearing.selectedActivity}"
+												value="#{var}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+
+									<p:column headerText="Delete" exportable="false" >
+										<p:commandButton update=":form2" styleClass="redButt"
+											oncomplete="PF('dlg').show();" icon="ui-icon-trash">
+											<f:setPropertyActionListener
+												target="#{viewEditDeleteELearing.selectedActivity}"
+												value="#{var}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+									<p:column headerText="View Assignment" exportable="false">
+										<p:commandButton update=":form2"
+											 icon="fa fa-eye" action="#{viewEditDeleteELearing.viewAssignment}">
+											<f:setPropertyActionListener
+												target="#{viewEditDeleteELearing.selectedActivity}"
+												value="#{var}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+									<f:facet name="footer">
+									<center>
+								<p:commandButton style="margin-bottom:7px" styleClass="butwid-1 redButt" icon="fa fa-trash"  value="Delete Multiple Lectures" action="#{viewEditDeleteELearing.deleteMultiple}" update=":form2" ></p:commandButton>
+								
+								</center>
+									</f:facet>
+								</p:dataTable>
+
+								<p:dialog resizable="false" widgetVar="dlg"
+									header="Do you really want to delete this assignment"
+									showEffect="fade" hideEffect="explode" modal="true">
+									<div class="ui-g form-group">
+										<p:panelGrid columns="2"
+											styleClass="ui-panelgrid-blank form-group"
+											style="border:0px none; background-color:transparent;">
+											<p:commandButton update=":form2" styleClass="greenButt"
+												actionListener="#{viewEditDeleteELearing.deleteNow}"
+												value="Yes"></p:commandButton>
+											<p:commandButton value="No" update=":form2" styleClass="redButt"
+												oncomplete="PF('dlg').hide();"></p:commandButton>
+										</p:panelGrid>
+									</div>
+								</p:dialog>
+							</p:panel>
+						</h:form>
+
+						<h:form id="editForm" enctype="multipart/form-data">
+							<p:dialog resizable="false" widgetVar="editDialog"
+								header="Edit Details (Allowed file types are :- jpg,jpeg,png,pdf,doc,docx .  (For audio file:-mp3,ogg,aac,m4a,mp4,mpeg))" showEffect="fade" hideEffect="explode"
+								modal="true">
+								<div class="ui-g form-group">
+									<p:panelGrid columns="4"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+										
+										<p:outputLabel for="@next" style="color:red" value="Date:"></p:outputLabel>
+										<p:calendar required="true"
+											requiredMessage="Please enter date" pattern="dd/MM/yyyy" value="#{viewEditDeleteELearing.assShowDate}"></p:calendar>
+										
+										
+										<p:outputLabel for="@next" style="color:red"
+											value="Title/Topic:"></p:outputLabel>
+										<p:inputText required="true"
+											requiredMessage="Please enter Title/Topic"
+											value="#{viewEditDeleteELearing.title}" maxlength="50"></p:inputText>
+
+										<p:outputLabel value="Description:"></p:outputLabel>
+										<p:inputTextarea value="#{viewEditDeleteELearing.description}"
+											rows="3" maxlength="500" cols="20"></p:inputTextarea>
+
+										<p:outputLabel value="Youtube Link:"></p:outputLabel>
+										<p:inputText value="#{viewEditDeleteELearing.link}"></p:inputText>
+
+										<p:outputLabel value="File1(If Exists):"></p:outputLabel>
+										<p:commandLink
+											action="#{viewEditDeleteELearing.viewFile(viewEditDeleteELearing.file1)}"
+											value="View File1"
+											rendered="#{viewEditDeleteELearing.assignmentPhotoPath1 ne ''}"
+											immediate="true" />
+										<p:outputLabel value="No File Exists"
+											rendered="#{viewEditDeleteELearing.assignmentPhotoPath1 eq ''}"></p:outputLabel>
+											
+											<p:outputLabel value="File2(If Exists):"></p:outputLabel>
+										<p:commandLink
+											action="#{viewEditDeleteELearing.viewFile(viewEditDeleteELearing.file3)}"
+											value="View File2"
+											rendered="#{viewEditDeleteELearing.assignmentPhotoPath3 ne ''}"
+											immediate="true" />
+										<p:outputLabel value="No File Exists"
+											rendered="#{viewEditDeleteELearing.assignmentPhotoPath3 eq ''}"></p:outputLabel>
+											
+											
+											
+											<p:outputLabel value="File3(If Exists):"></p:outputLabel>
+										<p:commandLink
+											action="#{viewEditDeleteELearing.viewFile(viewEditDeleteELearing.file4)}"
+											value="View File3"
+											rendered="#{viewEditDeleteELearing.assignmentPhotoPath4 ne ''}"
+											immediate="true" />
+										<p:outputLabel value="No File Exists"
+											rendered="#{viewEditDeleteELearing.assignmentPhotoPath4 eq ''}"></p:outputLabel>
+											
+											
+											
+											<p:outputLabel value="File4(If Exists):"></p:outputLabel>
+										<p:commandLink
+											action="#{viewEditDeleteELearing.viewFile(viewEditDeleteELearing.file5)}"
+											value="View File4"
+											rendered="#{viewEditDeleteELearing.assignmentPhotoPath5 ne ''}"
+											immediate="true" />
+										<p:outputLabel value="No File Exists"
+											rendered="#{viewEditDeleteELearing.assignmentPhotoPath5 eq ''}"></p:outputLabel>
+											
+											
+											<p:outputLabel value="File5(If Exists):"></p:outputLabel>
+										<p:commandLink
+											action="#{viewEditDeleteELearing.viewFile(viewEditDeleteELearing.file6)}"
+											value="View File5"
+											rendered="#{viewEditDeleteELearing.assignmentPhotoPath6 ne ''}"
+											immediate="true" />
+										<p:outputLabel value="No File Exists"
+											rendered="#{viewEditDeleteELearing.assignmentPhotoPath6 eq ''}"></p:outputLabel>
+											
+											
+											
+
+										<p:outputLabel value="AUDIO(If Exists):"></p:outputLabel>
+										<p:commandLink
+											action="#{viewEditDeleteELearing.viewFile(viewEditDeleteELearing.file2)}"
+											value="Audio"
+											rendered="#{viewEditDeleteELearing.assignmentPhotoPath2 ne ''}"
+											immediate="true" />
+										<p:outputLabel value="No File Exists"
+											rendered="#{viewEditDeleteELearing.assignmentPhotoPath2 eq ''}"></p:outputLabel>
+
+										<p:outputLabel value="Choose File1(File) :"></p:outputLabel>
+										<p:fileUpload mode="simple" skinSimple="true"
+											value="#{viewEditDeleteELearing.assignmentPhoto1}"></p:fileUpload>
+
+											<p:outputLabel value="Choose File2(File) :"></p:outputLabel>
+										<p:fileUpload mode="simple" skinSimple="true"
+											value="#{viewEditDeleteELearing.assignmentPhoto3}"></p:fileUpload>
+										
+											<p:outputLabel value="Choose File3(File) :"></p:outputLabel>
+										<p:fileUpload mode="simple" skinSimple="true"
+											value="#{viewEditDeleteELearing.assignmentPhoto4}"></p:fileUpload>
+										
+											<p:outputLabel value="Choose File4(File) :"></p:outputLabel>
+										<p:fileUpload mode="simple" skinSimple="true"
+											value="#{viewEditDeleteELearing.assignmentPhoto5}"></p:fileUpload>
+										
+											<p:outputLabel value="Choose File5(File) :"></p:outputLabel>
+										<p:fileUpload mode="simple" skinSimple="true"
+											value="#{viewEditDeleteELearing.assignmentPhoto6}"></p:fileUpload>
+											
+
+										<p:outputLabel value="Choose File(Audio) :"></p:outputLabel>
+										<p:fileUpload mode="simple" skinSimple="true"
+											value="#{viewEditDeleteELearing.assignmentPhoto2}"></p:fileUpload>
+
+									</p:panelGrid>
+								</div>
+								
+								<br />
+								<p:separator />
+								<center>
+									<p:commandButton value="Update" ajax="false" styleClass="butwid" icon="fa fa-upload"
+											update=":form2 :editForm"
+											action="#{viewEditDeleteELearing.update}"></p:commandButton>
+								</center>
+								<p:separator />
+								<br />
+								
+							</p:dialog>
+						</h:form>
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

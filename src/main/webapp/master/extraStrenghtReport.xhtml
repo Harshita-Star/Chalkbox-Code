@@ -1,0 +1,87 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/masterTemplate.xhtml">
+	<f:loadBundle var="addClassVar" basename="myProperties" />
+	<ui:define name="title">School Strength Report</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<h1></h1>
+
+							<p:panel header="School Strength Report">
+								<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+								<p:dataTable value="#{extrastrenghtReport.schoolList}"
+									var="info" reflow="true" rowStyleClass="#{info.status eq 'deadline' ? 'redColored':''}">
+
+									<p:column headerText="S No.">
+										<p:outputLabel value="#{info.sNo}"></p:outputLabel>
+									</p:column>
+
+
+									<p:column headerText="School Name"
+										filterBy="#{info.schoolName}">
+										<p:outputLabel value="#{info.schoolName}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="School Id" filterBy="#{info.id}"
+										sortBy="#{info.intId}">
+										<p:outputLabel value="#{info.id}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Agreement For"
+										sortBy="#{info.agreementFor}">
+										<p:outputLabel value="#{info.agreementFor}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Current Strength"
+										sortBy="#{info.strenght}">
+										<p:outputLabel value="#{info.strenght}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Update Agreement">
+										<p:commandButton icon="fa fa-fw fa-pencil" update=":form3"
+											oncomplete="PF('edit').show()" action="#{extrastrenghtReport.details}" value="Update">
+											<f:setPropertyActionListener
+												target="#{extrastrenghtReport.selected}" value="#{info}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+
+								</p:dataTable>
+							</p:panel>
+						</h:form>
+						
+						<h:form id="form3">
+							<p:dialog header="Update Agreement" widgetVar="edit" modal="true"
+								showEffect="fade" hideEffect="fade" resizable="false">
+								<div class="ui-g form-group">
+								<p:outputPanel id="EditTable" style="text-align:center;">
+									<p:panelGrid columns="2" columnClasses="label,value">
+
+										<p:outputLabel value="Agreement For (No. Of students)" for="@next" style="color:red" ></p:outputLabel>
+										<p:inputText value="#{extrastrenghtReport.agreement}" required="true" requiredMessage="Please enter agreement for">
+											<p:keyFilter mask="pnum"></p:keyFilter>
+										</p:inputText>
+
+										<p:commandButton update=":form :form3" value="Update"
+											action="#{extrastrenghtReport.edit}"></p:commandButton>
+									</p:panelGrid>
+								</p:outputPanel>
+								</div>
+							</p:dialog>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

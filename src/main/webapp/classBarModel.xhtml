@@ -1,0 +1,46 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	<f:loadBundle var="addClassVar" basename="myProperties" />
+
+	<ui:define name="title">Class Strength Graph</ui:define>
+
+	<ui:define name="content">
+	<h:form id="form">
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						 <h:form id="form" >
+						 <p:growl showDetail="true"  autoUpdate="true"></p:growl>
+
+							<p:panel header="Class Strength">
+							<p:panelGrid columns="2">
+							<p:selectOneMenu value="#{classBarModel.className}" filter="true">
+							<f:selectItem itemLabel="All" itemValue=""></f:selectItem>
+							<f:selectItems value="#{classBarModel.classList}"></f:selectItems>
+							</p:selectOneMenu>
+							<f:facet name="footer">
+							<p:commandButton value="Show" style="margin-left:4px;"  styleClass="butwid" icon="fa fa-eye" update=":form" action="#{classBarModel.show}"></p:commandButton>
+							</f:facet>
+							</p:panelGrid>
+							<p:chart type="bar" model="#{classBarModel.barmodel}" style="height:300px;" rendered="#{classBarModel.showbar}"></p:chart>
+							
+								
+                         </p:panel>
+                         
+	                  </h:form>
+							
+							
+					</div>
+				</div>
+			</div>
+		</div>
+		</h:form>
+
+	</ui:define>
+
+</ui:composition>

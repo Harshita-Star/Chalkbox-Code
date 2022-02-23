@@ -1,0 +1,132 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/studentTemplate.xhtml"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+	<ui:define name="title">Video Gallery</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title"
+						style="background-color: rgb(254, 180, 2, 0.3);">
+						<h:form id="form" enctype="multipart/form-data">
+							<p:messages closable="true" autoUpdate="true"></p:messages>
+							<p:dataGrid var="info1"
+								value="#{editViewDeleteVideoGallery.galleryData}" columns="3"
+								layout="grid" rows="12" paginator="true" id="cars"
+								paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+								rowsPerPageTemplate="6,12,16">
+
+								<f:facet name="header">
+						            School Video Gallery
+						        </f:facet>
+
+								<p:panel style="text-align:center">
+									<h:panelGrid columns="1" style="width:100%">
+										<p:panel header="#{info1.tagName}"
+											style="text-align:center font-size:20px; font-weight:bold;">
+
+											<p:commandLink value="#{info1.videoLinkNo}"
+												style="text-align:center font-size:40px; font-weight:bold;"
+												update=":form"
+												action="#{editViewDeleteVideoGallery.datatable}"
+												title="View Detail">
+												<h:outputText styleClass="pi pi-search"
+													style="margin:0 auto;" />
+												<f:setPropertyActionListener value="#{info1}"
+													target="#{editViewDeleteVideoGallery.selected}" />
+											</p:commandLink>
+											<br />
+											<p:commandLink value="#{info1.tagName}"
+												style="text-align:center font-size:40px; font-weight:bold;"
+												update=":form"
+												action="#{editViewDeleteVideoGallery.datatable}"
+												title="View Detail">
+												<h:outputText styleClass="pi pi-search"
+													style="margin:0 auto;" />
+												<f:setPropertyActionListener value="#{info1}"
+													target="#{editViewDeleteVideoGallery.selected}" />
+											</p:commandLink>
+										</p:panel>
+									</h:panelGrid>
+								</p:panel>
+
+							</p:dataGrid>
+							<br />
+							<p:panel header="Selected Video Gallery Links">
+								
+								<p:dataGrid var="info"
+								value="#{editViewDeleteVideoGallery.videoLinkList}" columns="3"
+								layout="grid">
+								
+								<center>
+									<iframe
+									src="https://www.youtube.com/embed/#{info.vid}"
+									 allowfullscreen="1"/>
+									 </center>
+								
+								</p:dataGrid>
+							
+								<p:dataTable rendered="false" value="#{editViewDeleteVideoGallery.videoLinkList}"
+									var="info">
+
+									<p:column headerText="S No." style="width: 80px;">
+										<p:outputLabel value="#{info.sno}"></p:outputLabel>
+									</p:column>
+									
+									<p:column>
+										<iframe
+									src="https://www.youtube.com/embed/#{info.vid}"
+									width="420" height="315" allowfullscreen="1"/>
+									</p:column>
+
+									<p:column headerText="Links" rendered="false">
+										<center>
+											<p:graphicImage value="#{info.thumb}" width="300"
+												height="150"></p:graphicImage>
+										</center>
+									</p:column>
+
+									<p:column headerText="Play" rendered="false">
+										<center>
+											<p:commandButton style="width: 80px;" icon="ui-icon-play"
+												update=":form2" oncomplete="PF('alrtDlg').show();">
+												<f:setPropertyActionListener value="#{info}"
+													target="#{editViewDeleteVideoGallery.selected2}" />
+											</p:commandButton>
+										</center>
+									</p:column>
+
+
+
+								</p:dataTable>
+							</p:panel>
+
+						</h:form>
+
+						<h:form id="form2">
+							<p:dialog widgetVar="alrtDlg" showEffect="fade"
+								hideEffect="explode" resizable="true" closable="true"
+								closeOnEscape="true" header="Play Video" modal="true" width="100%"
+								height="650px">
+								<iframe
+									src="https://www.youtube.com/embed/#{editViewDeleteVideoGallery.selected2.vid}"
+									width="100%" height="650px" />
+
+
+							</p:dialog>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

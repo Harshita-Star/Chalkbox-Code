@@ -1,0 +1,163 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Sample</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+
+							<p:panel header="Select a Class">
+								<p:messages closable="true" autoUpdate="true"></p:messages>
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:outputLabel value="Select a Class" for="@next" style="color:red" ></p:outputLabel>
+									<p:selectOneMenu filter="true"
+										value="#{studentWiseFeeAllocation.selectedClass}"
+										required="true" requiredMessage="Please select a class">
+										<f:selectItem itemLabel="Select Class" itemValue="select"></f:selectItem>
+										<f:selectItem itemLabel="All" itemValue="-1"></f:selectItem>
+										<f:selectItems value="#{studentWiseFeeAllocation.classList}"></f:selectItems>
+										<p:ajax update="sectionid"
+											listener="#{studentWiseFeeAllocation.allSections}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Select Section" for="@next" style="color:red" ></p:outputLabel>
+									<p:selectOneMenu id="sectionid" filter="true"
+										value="#{studentWiseFeeAllocation.selectedSection}"
+										required="true" requiredMessage="Please select a section">
+										<f:selectItem itemLabel="Select Section" itemValue=""></f:selectItem>
+										<f:selectItem itemLabel="All" itemValue="-1"></f:selectItem>
+										<f:selectItems value="#{studentWiseFeeAllocation.sectionList}"></f:selectItems>
+										<p:ajax></p:ajax>
+									</p:selectOneMenu>
+									
+									
+									<p:outputLabel value="Select a Category" style="color:red;" for="@next"></p:outputLabel>
+									<p:selectOneMenu
+										value="#{studentWiseFeeAllocation.conceesionCategory}"
+										required="true" requiredMessage="Please select a class">
+										<f:selectItem itemLabel="Select Category" itemValue="select"></f:selectItem>
+										<f:selectItem itemLabel="All" itemValue="-1"></f:selectItem>
+										<f:selectItems
+											value="#{studentWiseFeeAllocation.concessionCategoryList}"></f:selectItems>
+									</p:selectOneMenu>
+									
+										<p:outputLabel value="Select Fee" for="@next" style="color:red" ></p:outputLabel>
+									<p:selectOneMenu id="feeID" filter="true"
+										value="#{studentWiseFeeAllocation.feeCategory}"
+										required="true" requiredMessage="Please select a Fee">
+										<f:selectItem itemLabel="Select Fee" itemValue=""></f:selectItem>
+										<f:selectItems value="#{studentWiseFeeAllocation.feeList}"></f:selectItems>
+										<p:ajax></p:ajax>
+									</p:selectOneMenu>
+								</p:panelGrid>
+								<br />
+								<p:separator />
+								<center>
+									<p:commandButton value="Search" icon="fa fa-search" styleClass="butwid" actionListener="#{studentWiseFeeAllocation.search}" update="form1"></p:commandButton>
+								</center>
+								<p:separator />
+								<br />
+							</p:panel>
+							</h:form>
+							</div>
+							<div class="card card-w-title">
+							<h:form id="form1">
+						
+						
+						
+						<p:panel header="Bulk Fees Updation" rendered="#{studentWiseFeeAllocation.show}">	
+							<p:dataTable reflow="true"  value="#{studentWiseFeeAllocation.feesLIstCheck}" var="var"
+									id="dt1" >
+
+                                     <p:columns value="#{studentWiseFeeAllocation.monthList}" var="column"
+										columnIndexVar="colIndex">
+
+										<f:facet name="header">
+											<p:outputLabel value="#{column.monthName}  "></p:outputLabel>
+										</f:facet>
+											<p:inputText style="width:70px!important;"
+												value="#{var.feesMap[column.monthId]}">
+												<p:keyFilter regEx="/[\d]/"></p:keyFilter>
+											</p:inputText>
+									</p:columns>
+									
+									<p:column >
+									<center>
+									  <p:commandButton value="update Fees" styleClass="butwid" icon="fa fa-upload" update=":form1" actionListener="#{studentWiseFeeAllocation.updateFees}" ></p:commandButton>
+                                 	
+									</center>
+									</p:column>
+
+                                 
+
+								</p:dataTable>
+							
+							</p:panel>
+							
+							<br>
+							</br>
+							
+							
+							<br>
+							</br>
+							
+							<p:panel rendered="#{studentWiseFeeAllocation.show}">
+							
+							<p:dataTable reflow="true"  value="#{studentWiseFeeAllocation.infoList}" var="var"
+									id="dt" >
+
+									
+
+									<p:column headerText="Student Name">
+										<p:outputLabel value="#{var.fname} "></p:outputLabel>
+									</p:column>
+									
+									<p:column headerText="Student Type">
+										<p:outputLabel value="#{var.studentStatus} "></p:outputLabel>
+									</p:column>
+
+
+									<p:columns value="#{studentWiseFeeAllocation.monthList}" var="column"
+										columnIndexVar="colIndex">
+
+										<f:facet name="header">
+											<p:outputLabel value="#{column.monthName}  "></p:outputLabel>
+										</f:facet>
+											<p:inputText style="width:70px!important;"
+												value="#{var.feesMap[column.monthId]}">
+												<p:keyFilter regEx="/[\d]/"></p:keyFilter>
+											</p:inputText>
+									</p:columns>
+
+                                   <f:facet name="footer">
+                                   <center>
+                                   <p:commandButton value="Add Student Fees" styleClass="butwid-1" icon="fa fa-inr" update=":form :form1" action="#{studentWiseFeeAllocation.addStudentFees}"></p:commandButton>
+                              
+                                   </center>
+                                   
+                                  </f:facet>
+
+								</p:dataTable>
+							
+							</p:panel>
+							
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

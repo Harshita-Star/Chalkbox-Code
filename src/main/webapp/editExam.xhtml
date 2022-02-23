@@ -1,0 +1,331 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Edit Exam</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+							<p:panel header="Edit/Delete Exam">
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel value="Select Class" for="@next"
+										style="color:red"></p:outputLabel>
+									<p:selectOneMenu required="true" filter="true"
+										requiredMessage="Please select a class"
+										value="#{editExam.selectedClass}">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{editExam.classList}"></f:selectItems>
+										<p:ajax update=":form" listener="#{editExam.allTerm}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Select Term" for="@next"
+										style="color:red"></p:outputLabel>
+									<p:selectOneMenu required="true" filter="true"
+										requiredMessage="Please select a term" id="showTerm"
+										value="#{editExam.selectedTerm}">
+										<f:selectItem itemLabel="Select Term" itemValue=""></f:selectItem>
+										<f:selectItems value="#{editExam.termList}"></f:selectItems>
+										<p:ajax></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel for="@next" style="color:red"
+										value="Select Subject Type"></p:outputLabel>
+									<p:selectOneMenu value="#{editExam.subjectType}"
+										required="true" requiredMessage="Please Select Subject Type">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{editExam.subjectTypeList}"></f:selectItems>
+										<p:ajax listener="#{editExam.checkSubjectType}" update=":form"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel rendered="#{editExam.showExam}"
+										value="Select Exam" for="@next" style="color:red"></p:outputLabel>
+									<p:selectOneMenu rendered="#{editExam.showExam}"
+										required="true" requiredMessage="Please select exam"
+										value="#{editExam.selectExam}" filter="true">
+										<f:selectItem itemLabel="Select Exam" itemValue=""></f:selectItem>
+										<f:selectItems value="#{editExam.examTypeList}"></f:selectItems>
+										<p:ajax update=":form" listener="#{editExam.subExamMethod}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel rendered="#{editExam.showSubExam}"
+										value="Select Sub Exam" for="@next" style="color:red"></p:outputLabel>
+									<p:selectOneMenu rendered="#{editExam.showSubExam}"
+										required="true" requiredMessage="Please select sub exam"
+										value="#{editExam.selectSubExam}" filter="true">
+										<f:selectItem itemLabel="Select Sub Exam" itemValue=""></f:selectItem>
+										<f:selectItems value="#{editExam.subExamTypeList}"></f:selectItems>
+									</p:selectOneMenu>
+								</p:panelGrid>
+
+								<br />
+								<p:separator />
+								<center>
+									<p:commandButton value="Search" styleClass="butwid"
+										icon="fa fa-search" actionListener="#{editExam.subjectDetail}"
+										update=":form" />
+								</center>
+								<p:separator />
+								<br />
+
+							</p:panel>
+							<br />
+
+							<p:panel rendered="#{editExam.showExamDetails}"
+								header="Subject Details" id="panel">
+
+								<p:messages closable="true" autoUpdate="true"></p:messages>
+
+								<p:panelGrid columns="5"
+									styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel rendered="#{editExam.showExamNameColumn}"
+										value="Exam Name" for="@next" style="color:red"></p:outputLabel>
+									<p:inputText rendered="#{editExam.showExamNameColumn}"
+										onfocus="this.select();" value="#{editExam.mainExamName}"
+										required="true" requiredMessage="Please Enter Exam Name."
+										id="exmnm"
+										onchange="trimFunc(this.value,'Please Section Name',this.id)"
+										validatorMessage="Please Enter Correct value">
+										<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:inputText>
+									<p:commandButton rendered="#{editExam.showExamNameColumn}"
+										styleClass="butwid-1" icon="fa fa-stack-exchange"
+										value="Change Exam Name"
+										actionListener="#{editExam.editExamName}" update=":form" />
+									<p:outputLabel></p:outputLabel>
+									<p:outputLabel
+										value="Exam Type:- (#{editExam.examType.toUpperCase()})"></p:outputLabel>
+
+
+									<p:outputLabel rendered="#{editExam.showSubExam}"
+										value="Sub Exam Name" for="@next" style="color:red"></p:outputLabel>
+									<p:inputText rendered="#{editExam.showSubExam}"
+										onfocus="this.select();" value="#{editExam.mainSubExamName}"
+										required="true" requiredMessage="Please Enter Sub Exam Name."
+										id="subexnm"
+										onchange="trimFunc(this.value,'Please Section Name',this.id)"
+										validatorMessage="Please Enter Correct value">
+										<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:inputText>
+									<p:commandButton rendered="#{editExam.showSubExam}"
+										value="Change Sub Exam Name" styleClass="butwid-1"
+										icon="fa fa-exchange"
+										actionListener="#{editExam.editSubExamName}" update=":form" />
+
+								</p:panelGrid>
+								
+								<p:panelGrid columns="3"
+									styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									
+									<p:outputLabel for="@next" 
+										value="Include In Final Marksheet"></p:outputLabel>
+									<p:selectOneRadio 
+										value="#{editExam.includeOrNot}">
+										<f:selectItem itemLabel="Yes" itemValue="Yes"></f:selectItem>
+										<f:selectItem itemLabel="No" itemValue="No"></f:selectItem>
+										<p:ajax global="false"></p:ajax>
+									</p:selectOneRadio>
+									
+									<p:commandButton 
+										styleClass="butwid-1" icon="fa fa-stack-exchange"
+										value="Change Include Setting"
+										actionListener="#{editExam.editInclude}" update=":form" />
+										
+								</p:panelGrid>
+
+								<br />
+								<p:commandButton value="Delete Complete Exam"
+									styleClass="butwid-1 redButt" icon="fa fa-minus"
+									actionListener="#{editExam.deleteCompleteExam}"
+									disabled="#{editExam.deleteMainExamRen}" update=":form">
+									<p:confirm header="Confirmation"
+										message="Surely Want To Remove This Exam???"
+										icon="ui-icon-alert" />
+								</p:commandButton>
+								<p:spacer height="0" width="30"></p:spacer>
+								<p:commandButton value="Delete Sub Exam"
+									styleClass="butwid-1 redButt" icon="fa fa-minus"
+									actionListener="#{editExam.deleteSubExam}"
+									disabled="#{editExam.deleteSubExamRen}" update=":form">
+									<p:confirm header="Confirmation"
+										message="Surely Want To Remove This Sub Exam???"
+										icon="ui-icon-alert" />
+								</p:commandButton>
+
+								<br />
+
+								<h4>Note: You can't remove those subjects whose performance
+									has been added.</h4>
+
+								<p:dataTable selection="#{editExam.exam}" rowKey="#{var.id}"
+									value="#{editExam.examList}" var="var">
+
+									<p:column filterBy="#{var.subjectName}"
+										filterMatchMode="contains" headerText="Subject">
+
+										<p:outputLabel value="#{var.subjectName}"></p:outputLabel>
+
+									</p:column>
+
+									<p:column headerText="Exam Name"
+										rendered="#{editExam.subjectType eq 'scholastic' || editExam.subjectType eq 'additional'}">
+										<p:outputLabel value="#{var.examName}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Max. Marks">
+										<p:outputLabel value="#{var.maxMark}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Performance Added">
+										<p:outputLabel value="#{var.performanceAdded}"></p:outputLabel>
+									</p:column>
+									<p:column headerText="Remove Subject">
+										<center>
+											<p:commandButton disabled="#{var.disableEdit}"
+												styleClass="butwid redButt" update=":form"
+												action="#{editExam.checkExamSubjects}"
+												oncomplete="PF('dlg').show();" icon="ui-icon-trash">
+												<f:setPropertyActionListener
+													target="#{editExam.selectedExam}" value="#{var}"></f:setPropertyActionListener>
+											</p:commandButton>
+										</center>
+									</p:column>
+
+									<f:facet name="footer">
+										<p:commandButton update=":editForm" styleClass="butwid"
+											icon="fa fa-exchange" oncomplete="PF('editDlg').show();"
+											value="Modify Subjects"
+											actionListener="#{editExam.checkSubject}"></p:commandButton>
+									</f:facet>
+
+								</p:dataTable>
+
+
+								<p:dialog resizable="false" widgetVar="dlg"
+									header="Do you really want to remove this subject"
+									showEffect="fade" hideEffect="explode" modal="true">
+
+									<b><p:outputLabel
+											value="Deleting this Subject Will Delete the Complete Exam"
+											rendered="#{editExam.renSingleExam}"></p:outputLabel></b>
+									<b><p:outputLabel
+											value="Deleting this Subject Will Delete the Complete Exam if other SubExams are not present"
+											rendered="#{editExam.renSingleSubExam}"></p:outputLabel></b>
+									<br />
+									<br />
+
+									<p:panelGrid columns="2">
+
+
+										<p:commandButton update=":form"
+											actionListener="#{editExam.deleteNow}" styleClass="greenButt"
+											value="Yes"></p:commandButton>
+										<p:commandButton value="No" update=":form"
+											styleClass="redButt" oncomplete="PF('dlg').hide();"></p:commandButton>
+									</p:panelGrid>
+								</p:dialog>
+							</p:panel>
+
+							<p:confirmDialog global="true" showEffect="fade"
+								hideEffect="fade">
+								<p:commandButton style="margin-left:50px" value="Yes"
+									type="button" styleClass="ui-confirmdialog-yes greenButt"
+									icon="ui-icon-check" />
+								<p:commandButton style="margin-left:50px" value="No"
+									type="button" styleClass="ui-confirmdialog-no redButt"
+									icon="ui-icon-close" />
+							</p:confirmDialog>
+
+						</h:form>
+
+						<h:form id="editForm">
+							<p:dialog widgetVar="editDlg"
+								header="Modify Subject(s) in Selected Exam" showEffect="fade"
+								hideEffect="explode" modal="true" width="500" height="500">
+								<h4>Note: You can't update those subjects whose performance
+									has been added.</h4>
+								<p:selectManyCheckbox rendered="false" layout="grid" columns="9"
+									value="#{editExam.selectedSubject}" required="true"
+									requiredMessage="Please Select Atleast One Subject">
+									<f:selectItems value="#{editExam.subjectList}"></f:selectItems>
+								</p:selectManyCheckbox>
+
+								<p:dataTable selection="#{editExam.selectedSubjectList}"
+									rowKey="#{var.id}" value="#{editExam.newSubjectList}" var="var">
+									<p:column selectionMode="multiple"
+										style="width:40px;text-align:center"></p:column>
+									<p:column headerText="Subject">
+										<p:outputLabel value="#{var.subjectName}"></p:outputLabel>
+									</p:column>
+									<p:column headerText="Max. Marks">
+									
+									<p:inputNumber disabled="#{var.disableDld}" style="width:100px !important" 
+									onfocus="this.select();" decimalPlaces="2"
+										 value="#{var.marks}">
+										</p:inputNumber>
+									</p:column>
+
+								</p:dataTable>
+
+
+								<br />
+								<p:separator />
+								<center>
+
+									<p:commandButton value="Update" styleClass="butwid"
+										icon="fa fa-upload" action="#{editExam.updateSubjects}"
+										update=":form,:editForm"></p:commandButton>
+								</center>
+								<p:separator />
+								<br />
+
+								<p:separator />
+							</p:dialog>
+						</h:form>
+
+						<h:form id="eForm">
+							<p:dialog widgetVar="eDlg" header="Edit Exam Name"
+								showEffect="fade" hideEffect="explode" modal="true">
+								<p:panelGrid columns="3">
+									<p:outputLabel value="Exam Name" />
+									<p:inputText value="#{editExam.examName}"
+										validatorMessage="Please Enter Correct value">
+										<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:inputText>
+
+								</p:panelGrid>
+
+								<br />
+								<p:separator />
+								<center>
+									<p:commandButton value="Update" styleClass="butwid"
+										icon="fa fa-upload" action="#{editExam.updateExamName}"
+										update=":form,:eForm"></p:commandButton>
+								</center>
+								<p:separator />
+								<br />
+
+							</p:dialog>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

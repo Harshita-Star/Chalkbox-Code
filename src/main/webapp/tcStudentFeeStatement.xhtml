@@ -1,0 +1,359 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Student Fee Collection</ui:define>
+
+	<ui:define name="content">
+<style>
+.ui-datatable-scrollable .ui-datatable-scrollable-header, .ui-datatable-scrollable .ui-datatable-scrollable-footer{
+	position:sticky !important;
+	top:60px !important;
+}
+body .ui-datatable thead th,
+body .ui-datatable tbody td {
+	width:var(--w) !important;
+}
+</style>
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+							<p:panel id="dailyfeereport" header="Student Paid Fees">
+								<center>
+									<p
+										style="font-size: 25px !important; font-weight: bold; margin: 0px;">#{headerBean.name}</p>
+									<p
+										style="font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.affiliationNo}</p>
+									<p
+										style="font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.finalAddress}</p>
+									<p
+										style="font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.phoneno}</p>
+
+									<p
+										style="margin: 0px; font-size: 25px !important; font-weight: bold;">Daily
+										Fee Collection Report</p>
+								</center>
+								<p:panelGrid columns="5"
+									styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent; width: 100%;">
+
+									<p:panelGrid columns="2">
+										<p:outputLabel value="Date:"></p:outputLabel>
+										<h:outputText value="#{tcStudentFeeStatement.date}"></h:outputText>
+									</p:panelGrid>
+
+									<p:panelGrid columns="2">
+										<p:outputLabel value="Total Amount(Cash):"></p:outputLabel>
+										<h:outputText
+											value="#{sideMenuBean.list.country eq 'UAE' ? 'AED ' : 'Rs.'}#{tcStudentFeeStatement.cashAmount}"></h:outputText>
+									</p:panelGrid>
+
+									<p:panelGrid columns="2">
+										<p:outputLabel value="Total Amount(Cheque):"></p:outputLabel>
+										<h:outputText
+											value="#{sideMenuBean.list.country eq 'UAE' ? 'AED ' : 'Rs.'}#{tcStudentFeeStatement.chequeAmount}"></h:outputText>
+									</p:panelGrid>
+
+
+									<p:panelGrid columns="2">
+										<p:outputLabel value="Total Amount:"></p:outputLabel>
+										<h:outputText
+											value="#{sideMenuBean.list.country eq 'UAE' ? 'AED ' : 'Rs.'}#{tcStudentFeeStatement.tamount}"></h:outputText>
+									</p:panelGrid>
+
+									<p:panelGrid columns="2">
+										<p:outputLabel value="Total Discount:"></p:outputLabel>
+										<h:outputText
+											value="#{sideMenuBean.list.country eq 'UAE' ? 'AED ' : 'Rs.'}#{tcStudentFeeStatement.tdiscount}"></h:outputText>
+									</p:panelGrid>
+								</p:panelGrid>
+
+
+								<p:dataTable id="up" reflow="true"
+									tableStyle="table-layout:auto;" var="fee"
+									value="#{tcStudentFeeStatement.dailyfee}">
+
+
+									<p:column headerText="Sno" style="font-size:8px !important">
+										<f:facet name="header">
+											<p:outputLabel value="S.NO."></p:outputLabel>
+										</f:facet>
+										<p:outputLabel style="font-size:8px !important"
+											value="#{fee.srno}"></p:outputLabel>
+									</p:column>
+
+
+									<p:column style="font-size:9px !important"
+										headerText="Student name">
+										<f:facet name="header">
+											<p:outputLabel value="Student Name"></p:outputLabel>
+										</f:facet>
+										<h:outputText style="font-size:9px !important"
+											value="#{fee.studentname}" />
+									</p:column>
+									<p:column style="font-size:9px !important"
+										headerText="Father name">
+										<f:facet name="header">
+											<p:outputLabel value="Father Name"></p:outputLabel>
+										</f:facet>
+										<h:outputText style="font-size:9px !important"
+											value="#{fee.fathername}" />
+									</p:column>
+
+									<p:column style="font-size:10px !important" headerText="Class">
+										<f:facet name="header">
+											<p:outputLabel value="Class"></p:outputLabel>
+										</f:facet>
+										<h:outputText style="font-size:10px !important"
+											value="#{fee.classname}" />
+									</p:column>
+									<p:column style="font-size:10px !important"
+										headerText="Section">
+
+										<f:facet name="header">
+											<p:outputLabel value="Section"></p:outputLabel>
+										</f:facet>
+										<h:outputText style="font-size:10px !important"
+											value="#{fee.section}" />
+									</p:column>
+
+
+									<p:column style="font-size:10px !important"
+										headerText="Receipt no">
+
+										<f:facet name="header">
+											<p:outputLabel value="Receipt No"></p:outputLabel>
+										</f:facet>
+										<h:outputText style="font-size:10px !important"
+											value="#{fee.reciptno}" />
+									</p:column>
+
+
+									<p:columns style="font-size:10px !important;"
+										value="#{tcStudentFeeStatement.feelist}"
+										var="column" columnIndexVar="colIndex">
+
+										<f:facet name="header">
+											<p:outputLabel style="font-size:9px !important;"
+												value="#{column.feeName} (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})"></p:outputLabel>
+										</f:facet>
+
+										<p:outputLabel style="font-size:9px !important"
+											value="#{fee.allFess[column.feeId]}"></p:outputLabel>
+
+									</p:columns>
+
+									<p:column style="font-size:10px !important"
+										headerText="Total amount">
+
+
+										<f:facet name="header">
+											<p:outputLabel
+												value="Total Amount (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})"></p:outputLabel>
+										</f:facet>
+										<h:outputText style="font-size:10px !important"
+											value="#{fee.amount}" />
+									</p:column>
+
+									<p:column style="font-size:10px !important"
+										headerText="Total Discount">
+
+
+										<f:facet name="header">
+											<p:outputLabel
+												value="Total Discount (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})"></p:outputLabel>
+										</f:facet>
+										<h:outputText style="font-size:10px !important"
+											value="#{fee.discount}" />
+									</p:column>
+
+									<p:column style="font-size:10px !important"
+										headerText="Payment Mode">
+
+
+										<f:facet name="header">
+											<p:outputLabel value="Payment Mode"></p:outputLabel>
+										</f:facet>
+										<h:outputText style="font-size:10px !important"
+											value="#{fee.paymentmode} #{fee.bankname} #{fee.chequenumber}" />
+									</p:column>
+
+									<p:column
+										style="font-size:10px !important;width:80px !important;"
+										headerText="Date">
+
+
+										<f:facet name="header">
+											<p:outputLabel value="Date"></p:outputLabel>
+										</f:facet>
+										<h:outputText style="font-size:9px !important"
+											value="#{fee.feeDateStr}" />
+									</p:column>
+
+									<p:column
+										style="font-size:10px !important;width:80px !important;"
+										headerText="Date">
+
+
+										<f:facet name="header">
+											<p:outputLabel value="User"></p:outputLabel>
+										</f:facet>
+										<h:outputText style="font-size:9px !important"
+											value="#{fee.user}" />
+									</p:column>
+
+								</p:dataTable>
+
+
+
+							</p:panel>
+
+						</h:form>
+
+
+					</div>
+					
+					<div class="card card-w-title">
+						<h:form id="form3">
+
+							<p:panel header="Student Due Fee Report" id="up">
+
+								<p:outputPanel>
+									<center>
+										<p
+											style="font-size: 25px !important; font-weight: bold; margin: 0px;">#{headerBean.name}</p>
+										<p
+											style="font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.affiliationNo}</p>
+										<p
+											style="font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.finalAddress}</p>
+										<p
+											style="font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.phoneno}</p>
+
+										<p
+											style="margin: 0px; font-size: 25px !important; font-weight: bold;">Due
+											Fee Report For Month</p>
+									</center>
+									<br></br>
+
+									<p:panelGrid columns="5"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent; width: 100%;">
+
+										<p:panelGrid columns="2">
+											<p:outputLabel value="Class:"></p:outputLabel>
+											<h:outputText value="#{tcStudentFeeStatement.className}"></h:outputText>
+										</p:panelGrid>
+
+										<p:panelGrid columns="2">
+											<p:outputLabel value="Section:"></p:outputLabel>
+											<h:outputText value="#{tcStudentFeeStatement.sectionName}"></h:outputText>
+										</p:panelGrid>
+
+										<p:panelGrid columns="2">
+											<p:outputLabel value="Total Student:"></p:outputLabel>
+											<h:outputText value="#{tcStudentFeeStatement.totalStudent}"></h:outputText>
+										</p:panelGrid>
+										<p:panelGrid columns="2">
+											<p:outputLabel value="Up to Month:"></p:outputLabel>
+											<h:outputText value="#{tcStudentFeeStatement.month}"></h:outputText>
+										</p:panelGrid>
+										<p:panelGrid columns="2">
+											<p:outputLabel value="Total Amount:"></p:outputLabel>
+											<h:outputText
+												value="#{sideMenuBean.list.country eq 'UAE' ? 'AED ' : 'Rs.'}#{tcStudentFeeStatement.totalDueAmount}"></h:outputText>
+										</p:panelGrid>
+
+									</p:panelGrid>
+									<p:dataTable reflow="true" id="table" rowKey="#{var.addNumber}" var="var"
+										value="#{tcStudentFeeStatement.studentList}" scrollable="true" scrollWidth="100%" style="width:100%" rowSelectMode="add">
+
+										<f:facet name="header">
+											<p:outputLabel value=""></p:outputLabel>
+										</f:facet>
+
+
+										<p:column headerText="SR.No." style="--w:50px;">
+											<f:facet name="header">
+												<p:outputLabel value="SR.No."></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.srNo}"></p:outputLabel>
+										</p:column>
+										<p:column sortBy="#{var.fname}"
+											headerText="#{dueFeeReportVar.dueFeeReportFirstNameLabel}" style="--w:70px;">
+
+											<f:facet name="header">
+												<p:outputLabel
+													value="#{dueFeeReportVar.dueFeeReportFirstNameLabel}"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.fname}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Father's Name" style="--w:70px;">
+
+											<f:facet name="header">
+												<p:outputLabel value="Father's Name"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.fathersName}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Contact No." style="--w:80px;">
+
+											<f:facet name="header">
+												<p:outputLabel value="Contact No."></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.fathersPhone}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Class" style="--w:50px;">
+
+											<f:facet name="header">
+												<p:outputLabel value="Class"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.className}"></p:outputLabel>
+										</p:column>
+
+
+
+										<p:columns value="#{tcStudentFeeStatement.feelist}" var="column"
+											columnIndexVar="colIndex" style="--w:50px;">
+
+											<f:facet name="header">
+												<p:outputLabel
+													value="#{column.feeName} (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})"></p:outputLabel>
+											</f:facet>
+
+											<p:outputLabel value="#{var.feesMap[column.feeName]}"></p:outputLabel>
+
+										</p:columns>
+
+										<p:column style="--w:50px;"
+											headerText="Total Left Amount (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})">
+											<f:facet name="header">
+												<p:outputLabel
+													value="Total Left Amount (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.tutionFeeDueAmount}"></p:outputLabel>
+										</p:column>
+									</p:dataTable>
+
+								</p:outputPanel>
+
+							</p:panel>
+
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

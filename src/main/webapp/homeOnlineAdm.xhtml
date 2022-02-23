@@ -1,0 +1,135 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/onlineAdmTemplate.xhtml">
+
+	<ui:define name="title">Welcome</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<p:messages autoUpdate="true" closable="true"></p:messages>
+							<p:panel>
+								<f:facet name="header">
+									<center>
+										<i class="fa fa-user-circle" /> <span
+											style="font-size: 15px;">Welcome,
+											#{homeOnlineAdm.info.name}</span>
+									</center>
+								</f:facet>
+
+								<center>
+									<h1>----- Welcome to the Online Application Process -----</h1>
+								</center>
+
+								<p:panelGrid columns="4"
+									style="width:100%; background-color:transparent;">
+									<p:outputLabel
+										style="font-weight:bold;color:black;float:right;font-size:15px;"
+										value="Name " />
+									<p:outputLabel style="font-size:15px;"
+										value="#{homeOnlineAdm.info.name}" />
+									<p:outputLabel
+										style="font-weight:bold;color:black;float:right;font-size:15px;"
+										value="Parent Id " />
+									<p:outputLabel style="font-size:15px;"
+										value="#{homeOnlineAdm.info.unm}" />
+
+									<p:outputLabel
+										style="font-weight:bold;color:black;float:right;font-size:15px;"
+										value="Mobile No /Login Id" />
+									<p:outputLabel style="font-size:15px;"
+										value="#{homeOnlineAdm.info.mobile}" />
+
+									<p:outputLabel
+										style="font-weight:bold;color:black;float:right;font-size:15px;"
+										value="Email Id " />
+									<p:outputLabel style="font-size:15px;"
+										value="#{homeOnlineAdm.info.email}" />
+								</p:panelGrid>
+
+								<br />
+								<br />
+
+								<p:panelGrid columns="1" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent; width:100%">
+									
+									<f:facet name="header">
+									<center>
+										<i class="fa fa-user-list" /> <span
+											style="font-size: 18px;">Instructions For Registration &amp; Admission Form</span>
+									</center>
+									
+									<h3 style="text-align: left;">1. To fill registration form of your ward, go to Side Menu -> For Applicant -> Registration Form</h3>
+									<h3 style="text-align: left;">2. To fill admission form of your ward, go to Side Menu -> For Applicant -> My Application -> Admission Form</h3>
+									<h3 style="text-align: left; color:red;">Note : You can fill admission form of your ward if and only if the registration form is accepted by the school</h3>
+									
+									<h3 style="text-align: left;">3. Both registration and admission forms are single forms and will not allow to save in between. So you'll need to fill the complete form in order to submit your application</h3>
+									<h3 style="text-align: left;">4. While filling your 2nd application from this account, in 'Details of Legal Guardian', select 'Existing Parent' and write your 'Parent ID' mentioned above in 'Parent ID' field. (If you want to use your previous details).</h3>
+									<h3 style="text-align: left;">5. All the documents must be of size &lt;= 1MB</h3>
+									<h3 style="text-align: left;">6. Please be ready with all documents mentioned below to fill registration and admission form </h3>
+									<h3 style="text-align: left;">7. On submitting the admission form, if any mandatory field remains unfilled, then you need to upload the all required documents again.</h3>
+								</f:facet>
+									
+								</p:panelGrid>
+								
+								<br />
+								<br />
+
+								<p:panelGrid columns="1" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent; width:100%">
+									
+									<f:facet name="header">
+									<center>
+										<i class="fa fa-user-list" /> <span
+											style="font-size: 18px;">Documents Required</span>
+									</center>
+									
+									<h3 style="text-align: left; color:red;">Registration Form</h3>
+									
+									<h3 style="text-align: left;">1. Child's Photo</h3>
+									<h3 style="text-align: left;">2. Father's Photo (Optional)</h3>
+									<h3 style="text-align: left;">3. Mother's Photo (Optional)</h3>
+									
+									<h3 style="text-align: left; color:red;">Admission Form</h3>
+									
+									<h3 style="text-align: left;">1. Father's Photo</h3>
+									<h3 style="text-align: left;">2. Mother's Photo</h3>
+									<h3 style="text-align: left;">3. Guardian's Photo (If Any)</h3>
+									<h3 style="text-align: left;">4. Special Education Need (SEN) (If Any) </h3>
+									<h3 style="text-align: left;">5. Father's Passport</h3>
+									<h3 style="text-align: left;">6. Father's Emirates ID</h3>
+									<h3 style="text-align: left;">7. Father's UAE Residency VISA (For other than UAE nationals only)</h3>
+									<h3 style="text-align: left;">8. Mother's Passport</h3>
+									<h3 style="text-align: left;">9. Mother's Emirates ID</h3>
+									<h3 style="text-align: left;">10. Mother's UAE Residency VISA (For other than UAE nationals only)</h3>
+									<h3 style="text-align: left;">11. Student's Passport</h3>
+									<h3 style="text-align: left;">12. Student's Emirates ID</h3>
+									<h3 style="text-align: left;">13. Student's UAE Residency VISA (For other than UAE nationals only)</h3>
+									<h3 style="text-align: left;">14. Guardian's Passport (If Any)</h3>
+									<h3 style="text-align: left;">15. Guardian's Emirates ID (If Any)</h3>
+									<h3 style="text-align: left;">16. Guardian's UAE Residency VISA (For other than UAE nationals only) (If Any)</h3>
+									<h3 style="text-align: left;">17. Birth Certificate</h3>
+									<h3 style="text-align: left;">18. Vaccination Report</h3>
+									<h3 style="text-align: left;">19. Family book for UAE nationals only </h3>
+									
+								</f:facet>
+									
+								</p:panelGrid>
+
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

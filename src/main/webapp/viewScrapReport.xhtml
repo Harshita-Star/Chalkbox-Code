@@ -1,0 +1,50 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Hostel</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+
+						<h:form id="form">
+							<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+							<p:panel header="View All Assets">
+								<p:dataTable id="dt" value="#{viewScrapReport.roomDetails}"
+									var="var">
+									<p:column headerText="S.No.">
+										<p:outputLabel value="#{var.sno}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Transfer From">
+										<p:outputLabel value="#{var.roomNo}"></p:outputLabel>
+									</p:column>
+
+
+									<p:columns var="mas"
+										value="#{viewScrapReport.tableHeaderNames}">
+										<f:facet name="header">
+											<p:outputLabel value="#{mas.value}"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.assetDetails[mas.key]}"></p:outputLabel>
+									</p:columns>
+
+								</p:dataTable>
+							</p:panel>
+
+						</h:form>
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,47 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/masterTemplate.xhtml">
+
+	<ui:define name="title">Message Ledger</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+
+							<p:panel header="Last Seven Days Not Login School">
+
+								<p:dataTable reflow="true" value="#{lastLoginbean.allDetails}" id="id"
+									var="var">
+									
+									<p:column headerText="S.No">
+										<p:outputLabel value="#{var.sno}"></p:outputLabel>
+									</p:column>
+									
+									<p:column headerText="School Name" filterBy="#{var.description}" filterMatchMode="contains">
+										<p:outputLabel value="#{var.description}"></p:outputLabel>
+									</p:column>
+									
+									<p:column headerText="Last Login Time" sortBy="#{var.date}">
+										<p:outputLabel value="#{var.mszQty}"></p:outputLabel>
+									</p:column>
+
+
+								
+								</p:dataTable>
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

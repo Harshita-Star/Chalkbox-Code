@@ -1,0 +1,201 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">House Wise Report</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+				
+					<div class="card card-w-title">
+
+						<h:form id="form2">
+
+							<p:panel header="Search Student by Class-section">
+
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel for="@next" style="color:red" 
+										value="#{dueFeeReportVar.dueFeeReportClassLabel}"></p:outputLabel>
+									<p:selectOneMenu style="width:250px"
+										value="#{houseWiseListReportBean.className}" required="true"
+										requiredMessage="Please select a class">
+										<f:selectItem itemLabel="#{dueFeeReportVar.selectHereLabel}"
+											itemValue=""></f:selectItem>
+										<f:selectItems value="#{houseWiseListReportBean.classSection}"></f:selectItems>
+										<p:ajax update="sectionid"
+											listener="#{houseWiseListReportBean.allSections}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Section" for="@next" style="color:red" ></p:outputLabel>
+									<p:selectOneMenu id="sectionid"
+										value="#{houseWiseListReportBean.sectionName}" required="true"
+										requiredMessage="Please select a section">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{houseWiseListReportBean.sectionList}"></f:selectItems>
+									</p:selectOneMenu>
+                                  <p:outputLabel  value="Select House Type"></p:outputLabel>
+               		                  <p:selectOneMenu  value="#{houseWiseListReportBean.houseName}">
+										<f:selectItem itemLabel="All" itemValue="All"></f:selectItem>
+												<f:selectItems value="#{houseWiseListReportBean.houseCategorylist}"></f:selectItems>
+								
+										</p:selectOneMenu>
+								</p:panelGrid>
+								
+								
+								<br />
+								<p:separator />
+								<center>
+									<p:panelGrid
+										columns="#{houseWiseListReportBean.studentList.size() gt 0 ? '2' : '1'}"
+										layout="grid" styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+
+										
+									<p:commandButton update=":form2" icon="fa fa-search" styleClass="butwid"
+										actionListener="#{houseWiseListReportBean.getStudentStrength}"
+										value="Search"></p:commandButton>
+									
+
+								
+								<h:commandLink rendered="#{houseWiseListReportBean.b}">
+										<p:graphicImage name="images/excellogo.png"
+											library="avalon-layout" width="100" height="40"></p:graphicImage>
+										<pe:exporter type="xlsx" target=":form2:up"
+											fileName="House_Wise_Report"></pe:exporter>
+									</h:commandLink>
+
+									</p:panelGrid>
+								</center>
+								<p:separator />
+								<br />
+
+							</p:panel>
+
+                              <p:panel id="dataTable" rendered="#{houseWiseListReportBean.b}">
+
+									<center>
+										<p
+											style="font-size: 25px !important; font-weight: bold; margin: 0px;">#{headerBean.name}</p>
+										<p
+											style="font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.affiliationNo}</p>
+										<p
+											style="font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.finalAddress}</p>
+										<p
+											style="font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.phoneno}</p>
+
+										<p
+											style="margin: 0px; font-size: 25px !important; font-weight: bold;">House
+											Wise Student Report</p>
+									</center>
+									
+									<p:dataTable reflow="true" id="up" stickyHeader="true"
+										style="width:100%;border-collapse:collapse" border="1"
+										value="#{houseWiseListReportBean.studentList}" var="var">
+										<f:facet name="header">
+											<p:outputLabel value="House Wise Student Report"></p:outputLabel>
+										</f:facet>
+
+										<p:column headerText="Sno"
+											style="width:50px;text-align:center">
+
+											<f:facet name="header">
+												<p:outputLabel value="Sno"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.sno}"></p:outputLabel>
+										</p:column>
+
+										
+
+										<p:column headerText="Add. No." sortBy="#{var.addNumber}"
+											style="width:50px;text-align:center">
+
+											<f:facet name="header">
+												<p:outputLabel value="SR. No."></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.srNo}"></p:outputLabel>
+										</p:column>
+
+										<p:column style="width:70px;text-align:center"
+											sortBy="#{var.fullName}" headerText="Student Name">
+
+											<f:facet name="header">
+												<p:outputLabel value="Student Name"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.fullName}"></p:outputLabel>
+										</p:column>
+
+										<p:column style="width:70px;text-align:center"
+											headerText="Father's Name">
+
+											<f:facet name="header">
+												<p:outputLabel value="Father's Name"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.fathersName}"></p:outputLabel>
+										</p:column>
+
+
+										<p:column style="width:70px;text-align:center"
+											headerText="Mother's Name">
+
+											<f:facet name="header">
+												<p:outputLabel value="Mother's Name"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.motherName}"></p:outputLabel>
+										</p:column>
+
+
+										<p:column style="width:70px;text-align:center"
+											headerText="Class"
+											>
+
+											<f:facet name="header">
+												<p:outputLabel value="Class"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.className}"></p:outputLabel>
+										</p:column>
+
+											
+
+
+									
+
+										<p:column style="width:100px;text-align:center"
+											headerText="Phone No">
+
+											<f:facet name="header">
+												<p:outputLabel value="Phone No"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.fathersPhone}"></p:outputLabel>
+										</p:column>
+
+										<p:column style="width:100px;text-align:center"
+											headerText="House Name">
+                                            <f:facet name="header">
+												<p:outputLabel value="House Name"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.houseName}"></p:outputLabel>
+										</p:column>
+                                      </p:dataTable>
+								</p:panel>
+
+
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

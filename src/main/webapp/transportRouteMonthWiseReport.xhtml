@@ -1,0 +1,101 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Transport Report</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+							
+
+							<p:messages closable="true" autoUpdate="true"></p:messages>
+
+							<p:panel header="Route And Month Wise Report">
+
+								<p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel for="@next" style="color:red"  value="Select Route"></p:outputLabel>
+									<p:selectOneMenu value="#{transportRouteAndMonthWiseReport.selectedRoute}"
+										required="true"
+										requiredMessage="Please Select Route">
+										<f:selectItem itemLabel="All"
+											itemValue="-1"></f:selectItem>
+										<f:selectItems value="#{transportRouteAndMonthWiseReport.routeList}"></f:selectItems>
+
+									</p:selectOneMenu>
+									
+									<p:outputLabel for="@next" style="color:red"  value="Select Month"></p:outputLabel>
+									<p:selectOneMenu value="#{transportRouteAndMonthWiseReport.selectedMonth}"
+										required="true"
+										requiredMessage="Please Select Month">
+										
+										<f:selectItems value="#{transportRouteAndMonthWiseReport.monthList}"></f:selectItems>
+
+									</p:selectOneMenu>
+								</p:panelGrid>
+								<br/>
+								<center>
+									<p:separator/>
+									<p:commandButton value="Search" styleClass="butwid" icon="fa fa-search" action="#{transportRouteAndMonthWiseReport.search}" update=":form"></p:commandButton>
+									<p:separator/>
+									</center>
+									<br/>
+								<br></br>
+									<p:dataTable stickyHeader="true" reflow="true"  rendered="#{transportRouteAndMonthWiseReport.view}" 
+										value="#{transportRouteAndMonthWiseReport.list}" var="var"
+										>
+
+										
+
+										<p:column headerText="S.No." >
+											<center><p:outputLabel value="#{var.serialNumber}"></p:outputLabel></center>
+										</p:column>
+
+										<p:column headerText="Stop Name" >
+											<center><p:outputLabel   value="#{var.stopName}"  >
+                                            </p:outputLabel></center>
+										</p:column>
+										
+										<p:column headerText="Students" >
+											<center><p:outputLabel   value="#{var.totalStudents}"  >
+                                            </p:outputLabel></center>
+                                            
+                                            <f:facet name="footer">
+                                             <center><p:outputLabel value="#{transportRouteAndMonthWiseReport.totalStudentTotal}"></p:outputLabel></center>
+                                            </f:facet>
+										</p:column>
+										
+										<p:column rendered="false" headerText="Amount" >
+											<center><p:outputLabel   value="#{var.amount}"  >
+                                            </p:outputLabel></center>
+                                            
+                                            <f:facet name="footer">
+                                             <center><p:outputLabel value="#{transportRouteAndMonthWiseReport.totalStudentAmount}"></p:outputLabel></center>
+                                            </f:facet>
+										</p:column>
+
+
+										
+									</p:dataTable>
+								
+							
+
+							</p:panel>
+
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

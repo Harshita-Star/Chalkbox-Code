@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+<f:view contentType="text/html">
+	<h:head>
+		<title>#{sideMenuBean.companyName} | Certificate</title>
+		<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css"></link>
+		<link rel="stylesheet"
+			href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"></link>
+		<link rel="stylesheet"
+			href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css"></link>
+		<link rel="stylesheet" type="text/css" href="css/style.css" />
+		<link rel="stylesheet" href="dist/css/AdminLTE.min.css"></link>
+		<link rel="stylesheet" href="dist/css/skins/all-skins.min.css"></link>
+	</h:head>
+	<body>
+
+		<div class="content-wrapper">
+			<div class="main_contain">
+				<div class="main">
+
+					<div class="login_div">
+						<h:form id="form">
+
+							<p:commandButton value="Print" icon="ui-icon-print"
+								style="width:10%">
+								<p:printer target=":form:panel"></p:printer>
+							</p:commandButton>
+
+
+
+							<p:outputPanel id="panel"
+								style="widht:100%;border:2px solid #666666;margin-bottom:30px"
+								layout="block">
+
+
+
+								<table width="100%;">
+									<tr>
+										<td style="width: 15%" rowspan="1"></td>
+										<td style="width: 15%"><p
+												style="margin-right: 40px !important; font-weight: bold; text-align: right; font-size: 10px;">School
+												Code:#{headerBean.regno}</p></td>
+									</tr>
+
+									<tr>
+										<td style="width: 15%" rowspan="5"><p:graphicImage
+												style="height:80px;width:100px;float:right"
+												value="#{headerBean.logo}" /></td>
+
+									</tr>
+									<tr>
+										<td style="width: 85%"><center>
+												<p
+													style="margin-left: auto; text-align: inherit; font-size: 20px !important;">#{headerBean.name}</p>
+											</center></td>
+									</tr>
+									<tr>
+
+										<td style="width: 85%"><center>
+												<p
+													style="text-align: inherit; margin: 0px; font-size: 12px !important">#{headerBean.address1},Mobile-#{headerBean.mobileno}</p>
+											</center></td>
+
+									</tr>
+
+									<tr>
+										<td style="width: 85%"><center>
+												<p style="text-align: inherit; margin: 0px">
+													<p:outputLabel
+														style="font-size:18px !important;text-decoration:underline"
+														value="#{printbonafideCertificate.typeofcir}"></p:outputLabel>
+												</p>
+											</center></td>
+									</tr>
+
+
+								</table>
+
+								<p:outputLabel
+									style="font-size:18px !important;text-decoration:underline;float:right;margin-right:10%"
+									value="Date:- #{printbonafideCertificate.issueDate}"></p:outputLabel>
+
+								<br></br>
+								<br></br>
+
+								<p:outputLabel
+									style="margin-left:50px!important;font-size:18px!important;"
+									value=""></p:outputLabel>
+								<br></br>
+								<br></br>
+
+								<p
+									style="font-size: 18px !important; margin: 30px; line-height: 40px;">
+									It is certified that the student <b>#{printbonafideCertificate.studentName}</b>
+									#{printbonafideCertificate.relation} of <b>Shri
+										#{printbonafideCertificate.fatherName}</b> and <b>Smt.
+										#{printbonafideCertificate.motherName}</b> resident of <b>#{printbonafideCertificate.address}</b>.
+									According to our school records, the Date Of Birth of student
+									is <b>#{printbonafideCertificate.dobString}</b>(In World) <b>#{printbonafideCertificate.dobInWord}</b>
+									,Admission Date is <b>#{printbonafideCertificate.admissionDate}</b>
+									and SR.No is <b>#{printbonafideCertificate.admissionNo}</b>.
+									Student in session <b>#{printbonafideCertificate.session}</b>
+									was studied in class <b>#{printbonafideCertificate.className}</b>.
+									I wish for its bright future.
+
+
+								</p>
+
+
+								<br></br>
+								<br></br>
+
+								<p:outputLabel
+									style="float:right;margin-right:50px;font-size:16px!important;"
+									value="Principal Sign."></p:outputLabel>
+
+
+
+								<br></br>
+								<br></br>
+								<br></br>
+								<br></br>
+							</p:outputPanel>
+
+							<p:outputPanel id="panel2" style="text-align:left"
+								rendered="false">
+								<p:outputLabel
+									style="margin-left:50px;font-size:15px!important;"
+									value="क्रमांक  श्री औ जै उ मा वि/ अल /"></p:outputLabel>
+								<p:outputLabel
+									style="float:right;margin-right:50px;font-size:15px!important;"
+									value="Telephone No. :0144-2333232"></p:outputLabel>
+								<br></br>
+								<center>
+
+									<p:outputLabel value="Reg. No. 58/1964-65"
+										style="float:left;margin-top:1cm">
+
+									</p:outputLabel>
+
+									<p:outputLabel value="School Code :-1020180"
+										style="float:right;margin-top:1cm">
+
+									</p:outputLabel>
+
+
+									<p:outputLabel value=""
+										style="float:right;width:100%;margin-top:.5cm">
+
+									</p:outputLabel>
+									<br></br>
+									<p:outputLabel style="font-size:36px !important"
+										value="Shri Oswal Jain Sr. Secondary School"></p:outputLabel>
+									<br></br>
+									<p:outputLabel style="font-size:17px !important" value="">Affiliation No. :-(10) 4000/98/1813 Date:-28/04/1998<br></br>   (12) मा./अ   :- 4/21318/2003-04  Date:-25/06/2003</p:outputLabel>
+									<br></br>
+
+									<p:outputLabel style="font-size:15px !important"
+										value="Agrasen Marg, Alwar (Raj.)"></p:outputLabel>
+									<br></br>
+									<br></br>
+									<p:graphicImage value="/image/oswal_logo.jpg"></p:graphicImage>
+									<br></br>
+									<p:outputLabel
+										style="font-size:22px !important;border:1px solid black"
+										value="Character / Studies Certificate"></p:outputLabel>
+									<br></br>
+								</center>
+								<br></br>
+								<br></br>
+
+								<p:outputLabel
+									style="margin-left:50px!important;font-size:15px!important;"
+									value="S.R. No."></p:outputLabel>
+								<p:outputLabel
+									style="margin:5px!important;font-size:15px!important;font-weight:bold;"
+									value="#{printbonafideCertificate.admissionNo}"></p:outputLabel>
+								<br></br>
+								<br></br>
+								<p:outputLabel
+									style="margin-left:50px!important;font-size:15px!important;"
+									value="This is to certify that the student"></p:outputLabel>
+								<p:outputLabel
+									style="margin:5px!important;font-size:15px!important;font-weight:bold;"
+									value="#{printbonafideCertificate.studentName}"></p:outputLabel>
+								<br></br>
+								<p:outputLabel
+									style="margin-left:50px!important;font-size:15px!important;"
+									value="Son / Daughter Of Mr."></p:outputLabel>
+								<p:outputLabel
+									style="margin:5px!important;font-size:15px!important;font-weight:bold;"
+									value="#{printbonafideCertificate.fatherName}"></p:outputLabel>
+								<br></br>
+								<p:outputLabel
+									style="margin-left:50px!important;font-size:15px!important;"
+									value="In This school Admission date"></p:outputLabel>
+								<p:outputLabel
+									style="margin:5px!important;font-size:15px!important;font-weight:bold;"
+									value="#{printbonafideCertificate.admissionDate}"></p:outputLabel>
+								<p:outputLabel
+									style="margin:5px!important;font-size:15px!important;"
+									value="To"></p:outputLabel>
+								<p:outputLabel
+									style="margin:5px!important;font-size:15px!important;font-weight:bold;"
+									value="#{printbonafideCertificate.struckOffDate}"></p:outputLabel>
+								<p:outputLabel
+									style="margin:5px!important;font-size:15px!important;"
+									value="until the date"></p:outputLabel>
+								<br></br>
+								<p:outputLabel
+									style="margin-left:50px!important;font-size:15px!important;"
+									value="have studied as a regular student."></p:outputLabel>
+								<br></br>
+								<br></br>
+								<p:outputLabel
+									style="margin-left:50px!important;font-size:15px!important;"
+									value="According to school records, the student's date of birth is"></p:outputLabel>
+								<p:outputLabel
+									style="margin:5px!important;font-size:15px!important;font-weight:bold;"
+									value="#{printbonafideCertificate.dobString}"></p:outputLabel>
+								<br></br>
+								<p:outputLabel
+									style="margin-left:50px!important;font-size:15px!important;"
+									value="In Word's"></p:outputLabel>
+								<p:outputLabel
+									style="margin:15px!important;font-size:15px!important;font-weight:bold;"
+									value="#{printbonafideCertificate.dobInWord} ."></p:outputLabel>
+								<br></br>
+								<p:outputLabel
+									style="margin-left:50px!important;font-size:15px!important;"
+									value="In this duration student character was Good. We look forward to receiving their"></p:outputLabel>
+								<br></br>
+								<p:outputLabel
+									style="margin-left:50px!important;font-size:15px!important;"
+									value="bright future."></p:outputLabel>
+								<br></br>
+								<br></br>
+								<br></br>
+								<br></br>
+								<br></br>
+								<br></br>
+								<p:outputLabel
+									style="margin-left:50px;font-size:15px!important;"
+									value="Date : #{printbonafideCertificate.issueDate}"></p:outputLabel>
+								<p:outputLabel
+									style="float:right;margin-right:50px;font-size:16px!important;"
+									value="Principal"></p:outputLabel>
+							</p:outputPanel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</f:view>
+</html>

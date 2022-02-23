@@ -1,0 +1,441 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Edit Tc Details</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+
+						<h:form id="form3">
+							<p:panel rendered="#{editCbseOldStudentTcDetail.showMainForm}">
+								<p:messages autoUpdate="true" closable="true"></p:messages>
+
+
+
+
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel value="Leaving Reason" for="@next" style="color:red" ></p:outputLabel>
+									<p:selectOneMenu required="true"
+										requiredMessage="Enter Leaving Reason"
+										value="#{editCbseOldStudentTcDetail.reason}">
+										<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+										<f:selectItem itemLabel="PARENT’S DESIRE"
+											itemValue="PARENT’S DESIRE"></f:selectItem>
+										<f:selectItem itemLabel="FURTHER STUDIES"
+											itemValue="FURTHER STUDIES"></f:selectItem>
+										<f:selectItem itemLabel="To study for higher classes"
+											itemValue="to study for Higher classes"></f:selectItem>
+										<f:selectItem itemLabel="Parents transfer to other city"
+											itemValue="Parents transfer to other city"></f:selectItem>
+										<f:selectItem itemLabel="Other" itemValue="others"></f:selectItem>
+										<p:ajax update=":form3"
+											listener="#{editCbseOldStudentTcDetail.getOtherReason}"></p:ajax>
+									</p:selectOneMenu>
+									<p:outputLabel
+										rendered="#{editCbseOldStudentTcDetail.showTextBox}"
+										value="Other Reason"></p:outputLabel>
+									<p:inputText
+										rendered="#{editCbseOldStudentTcDetail.showTextBox}"
+										required="true" requiredMessage="Enter Other Leaving Reason"
+										value="#{editCbseOldStudentTcDetail.text}"></p:inputText>
+
+
+									<p:outputLabel value="T.C. No " for="@next" style="color:red" ></p:outputLabel>
+									<p:inputText required="true"
+										value="#{editCbseOldStudentTcDetail.tcNumber}" readonly="true"
+										requiredMessage="Enter TC No"></p:inputText>
+
+									<p:outputLabel value="Admission No " for="@next" style="color:red" ></p:outputLabel>
+									<p:inputText required="true"
+										requiredMessage="Enter Admission No" readonly="true"
+										value="#{editCbseOldStudentTcDetail.addmissionnumber}"></p:inputText>
+
+									<p:outputLabel
+										rendered="#{editCbseOldStudentTcDetail.showTextBox eq 'false'}"/>
+									<p:outputLabel
+										rendered="#{editCbseOldStudentTcDetail.showTextBox eq 'false'}"/>
+
+									<p:outputLabel value="Student Name" for="@next" style="color:red" ></p:outputLabel>
+									<p:inputText required="true"
+										requiredMessage="Enter Student Name"
+										value="#{editCbseOldStudentTcDetail.fullName}"></p:inputText>
+
+									<p:outputLabel value="Aadhaar No"></p:outputLabel>
+									<p:inputText value="#{editCbseOldStudentTcDetail.stadhar}"></p:inputText>
+
+									<p:outputLabel value="Father/Guardian's Name " for="@next" style="color:red" ></p:outputLabel>
+									<p:inputText required="true"
+										requiredMessage="Enter Father/Guardian's Name"
+										value="#{editCbseOldStudentTcDetail.fatherName}"></p:inputText>
+
+									<p:outputLabel value="Aadhaar No"></p:outputLabel>
+									<p:inputText value="#{editCbseOldStudentTcDetail.fadhar}"></p:inputText>
+
+									<p:outputLabel value="Mother's Name " for="@next" style="color:red" ></p:outputLabel>
+									<p:inputText required="true"
+										requiredMessage="Enter Mother's Name"
+										value="#{editCbseOldStudentTcDetail.motherName}"></p:inputText>
+
+									<p:outputLabel value="Aadhaar No"></p:outputLabel>
+									<p:inputText value="#{editCbseOldStudentTcDetail.madhar}"></p:inputText>
+
+									<p:outputLabel value="Nationality"></p:outputLabel>
+									<p:inputText value="#{editCbseOldStudentTcDetail.nationality}"></p:inputText>
+
+									<p:outputLabel value="Category " for="@next" style="color:red" ></p:outputLabel>
+									<p:selectOneMenu value="#{editCbseOldStudentTcDetail.category}"
+										required="true" requiredMessage="Enter Category">
+										<f:selectItem itemLabel="Select Category" itemValue=""></f:selectItem>
+										<f:selectItems
+											value="#{editCbseOldStudentTcDetail.categoryList}"></f:selectItems>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Date Of Admission" for="@next" style="color:red" ></p:outputLabel>
+									<p:calendar required="true"
+										requiredMessage="Enter Date Of Admission"
+										value="#{editCbseOldStudentTcDetail.startingDate}"
+										pattern="dd/MM/yyyy" navigator="true"></p:calendar>
+
+									<p:outputLabel value="Admit Class" for="@next" style="color:red" ></p:outputLabel>
+									<p:inputText required="true"
+										requiredMessage="Enter Starting Admission CLass"
+										value="#{editCbseOldStudentTcDetail.className}"></p:inputText>
+
+									<p:outputLabel value="Date Of Birth " for="@next" style="color:red" ></p:outputLabel>
+									<p:calendar required="true"
+										requiredMessage="Enter Date Of Birth"
+										value="#{editCbseOldStudentTcDetail.dob}" pattern="dd/MM/yyyy"
+										navigator="true"></p:calendar>
+
+									<p:outputLabel value="Date Of Struck off " for="@next" style="color:red" ></p:outputLabel>
+									<p:calendar required="true"
+										requiredMessage="Enter Date of Struck off"
+										value="#{editCbseOldStudentTcDetail.struckOffDate}"
+										pattern="dd/MM/yyyy" navigator="true"></p:calendar>
+
+									<p:outputLabel value="Last Class From School" for="@next" style="color:red" ></p:outputLabel>
+									<p:inputText
+										value="#{editCbseOldStudentTcDetail.previousClass}"
+										required="true" requiredMessage="Enter Last Class"></p:inputText>
+									
+									<p:outputLabel value="Last Session in School " for="@next" style="color:red" ></p:outputLabel>
+									<p:inputText value="#{editCbseOldStudentTcDetail.lastSession}"
+										required="true" requiredMessage="Enter Last Session" validatorMessage="Please Enter Correct value">
+									  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:inputText>	
+
+									<p:outputLabel value="General Conduct" for="@next" style="color:red" ></p:outputLabel>
+									<p:inputText value="#{editCbseOldStudentTcDetail.perfom}"
+										required="true" requiredMessage="Enter Performance Grade"></p:inputText>
+
+									<p:outputLabel value="#{sideMenuBean.list.schid eq '213' ? 'Date of Leaving/ last attended the class' : 'Date of Application for Certificate'}" for="@next" style="color:red" ></p:outputLabel>
+									<p:calendar pattern="dd/MM/yyyy" navigator="true"
+										required="true"
+										requiredMessage="Enter Application Date Of T.C."
+										value="#{editCbseOldStudentTcDetail.applicationDate}"></p:calendar>
+
+									<p:outputLabel value="Date of Issue Certificate " for="@next" style="color:red" ></p:outputLabel>
+									<p:calendar pattern="dd/MM/yyyy" navigator="true"
+										required="true"
+										requiredMessage="Enter Date Of Issue Certificate"
+										value="#{editCbseOldStudentTcDetail.issueDate}"></p:calendar>
+
+									<p:outputLabel
+										value="School/Board Annual examination last taken with result"></p:outputLabel>
+									<p:inputText value="#{editCbseOldStudentTcDetail.schoolExam}"></p:inputText>
+
+									<p:outputLabel
+										value="Whether failed, if so once/twice in the same class"></p:outputLabel>
+									<p:inputText value="#{editCbseOldStudentTcDetail.failedOrNot}"></p:inputText>
+
+									<p:outputLabel value="Subject Studied"></p:outputLabel>
+									<p:inputText
+										value="#{editCbseOldStudentTcDetail.subjectStudied}"></p:inputText>
+
+									<p:outputLabel
+										value="Whether qualified for promotion to the higher class? If Yes, which class"></p:outputLabel>
+									<p:inputText
+										value="#{editCbseOldStudentTcDetail.qualifiedPromotion}"></p:inputText>
+
+									<p:outputLabel
+										value="Month upto which (student has paid ) school dues/paid"></p:outputLabel>
+									<p:inputText
+										value="#{editCbseOldStudentTcDetail.monthOfFeePaid}"></p:inputText>
+
+									<p:outputLabel value="Total No. of Working Days/Meetings"></p:outputLabel>
+									<p:inputText value="#{editCbseOldStudentTcDetail.workingDays}"></p:inputText>
+
+									<p:outputLabel
+										value="Total No. of Working Days/Meetings Present"></p:outputLabel>
+									<p:inputText
+										value="#{editCbseOldStudentTcDetail.workingDayPresent}"></p:inputText>
+
+									<p:outputLabel
+										value="Any fee concession availed of : if so, the nature of such concession"></p:outputLabel>
+									<p:inputText
+										value="#{editCbseOldStudentTcDetail.feeConcession}"></p:inputText>
+
+									<p:outputLabel
+										value="Whether the pupil is NCC Cadet/Boy Scout/ Girl Guide ( give details)"></p:outputLabel>
+									<p:inputText value="#{editCbseOldStudentTcDetail.ncc}"></p:inputText>
+
+									<p:outputLabel value="#{sideMenuBean.list.branch_id ne '30' ? 'Games Played' : 'Games Played or Extra-curricular activities'}"></p:outputLabel>
+									<p:inputText value="#{editCbseOldStudentTcDetail.gamesPlayed}"></p:inputText>
+
+									<p:outputLabel value="Extra-curricular activities" rendered="#{sideMenuBean.list.branch_id ne '30'}"></p:outputLabel>
+									<p:inputText
+										value="#{editCbseOldStudentTcDetail.extraActivity}" rendered="#{sideMenuBean.list.branch_id ne '30'}"></p:inputText>
+
+									<p:outputLabel value="Any other remarks"></p:outputLabel>
+									<p:inputText value="#{editCbseOldStudentTcDetail.otherRemark}"></p:inputText>
+
+									
+								</p:panelGrid>
+								
+								<br />
+								<p:separator />
+								<center>
+								<p:commandButton value="Update"  styleClass="butwid" icon="fa fa-upload"
+										actionListener="#{editCbseOldStudentTcDetail.update}"
+										update=":forms,:form3,:form12"></p:commandButton>
+								</center>
+								<p:separator />
+								<br />
+
+							</p:panel>
+						</h:form>
+
+						<h:form id="form12">
+							<p:commandButton rendered="false" value="Print" type="button"  styleClass="butwid" icon="fa fa-print">
+								<p:printer target=":forms"></p:printer>
+							</p:commandButton>
+						</h:form>
+
+
+						<h:form id="forms" style="width:95%;">
+							<p:outputPanel id="expnsBoucher" rendered="false">
+
+								<div
+									style="border: 2px solid !important; width: 100% !important; background-color: white; margin: 20px; border-radius: 10px; overflow: :hidden; position: relative">
+									<div>
+										<p:graphicImage width="100%" height="100px"
+											url="images/header.jpg"></p:graphicImage>
+									</div>
+
+									<hr width="100%"></hr>
+									<center>
+										<h4 style="margin: 0px">
+											<u>Edit TC Details</u>
+										</h4>
+									</center>
+									<table style="margin-left: 20px; width: 95%;">
+										<tr>
+											<td style="text-align: left"><p:outputLabel
+													value="TC No. 2017-2018-#{editCbseOldStudentTcDetail.tcNumber}"></p:outputLabel>
+											</td>
+											<td style="text-align: right"><p:outputLabel
+													value="Admission No. #{editCbseOldStudentTcDetail.addmissionnumber}"></p:outputLabel></td>
+										</tr>
+									</table>
+
+									<div style="width: 100%; overflow: hidden">
+										<table style="margin-left: 20px; float: left; width: 100%;">
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 1. Name of Student"></p:outputLabel></td>
+												<td style="text-align: left; width: 35%;"><p:outputLabel
+														value="#{editCbseOldStudentTcDetail.fullName}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 5px"></tr>
+											<tr>
+												<td style="text-align: lef; twidth: 65%;"><p:outputLabel
+														value=" 2.Father/Guardian's Name"></p:outputLabel></td>
+												<td style="text-align: left; width: 35%;"><p:outputLabel
+														value="#{editCbseOldStudentTcDetail.fatherName}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 5px"></tr>
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 3.Mother's Name"></p:outputLabel></td>
+												<td style="text-align: left; width: 35%;"><p:outputLabel
+														value="#{editCbseOldStudentTcDetail.motherName}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 5px"></tr>
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 4.Nationality"></p:outputLabel></td>
+												<td style="text-align: left; width: 35%;"><p:outputLabel
+														value="#{editCbseOldStudentTcDetail.nationality}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 5px"></tr>
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 5.Whether the candidate belongs to Schedule Caste or Schedule Tribe"></p:outputLabel></td>
+												<td style="text-align: left; width: 35%;"><p:outputLabel
+														value="#{editCbseOldStudentTcDetail.category}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 5px"></tr>
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 6.Date of First admission in the school with Class"></p:outputLabel></td>
+												<td style="text-align: left; width: 35%;"><p:outputLabel
+														value="#{editCbseOldStudentTcDetail.startingdate} &#160;&#160;&#160;&#160;&#160;Class :-  #{editCbseOldStudentTcDetail.className}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 5px"></tr>
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 7.Date of Birth(in Christian Era) according to admission Register(in Figures) "></p:outputLabel></td>
+												<td style="text-align: left; width: 35%;"><p:outputLabel
+														value="#{editCbseOldStudentTcDetail.dob}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 5px"></tr>
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 8.Class in which the Student last studied(in figures)"></p:outputLabel></td>
+												<td style="text-align: left; width: 35%;"><p:outputLabel
+														value="#{editCbseOldStudentTcDetail.previousClass}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 5px"></tr>
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 9.  School/Board Annual examination last taken with result"></p:outputLabel></td>
+												<td style="text-align: left; width: 35%;"><p:outputLabel
+														value="#{editCbseOldStudentTcDetail.schoolExam}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 5px"></tr>
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 10.  Whether failed, if so once/teice in the same class"></p:outputLabel></td>
+												<td style="text-align: left; width: 35%;"><p:outputLabel
+														value="#{editCbseOldStudentTcDetail.failedOrNot}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 5px"></tr>
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 11.  Subject Studied"></p:outputLabel></td>
+												<td style="text-align: left; width: 35%;"><p:outputLabel
+														value="#{editCbseOldStudentTcDetail.subjectStudied}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 5px"></tr>
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 12.  Whether qualified for promotion to the higher class"></p:outputLabel></td>
+												<td style="text-align: left; width: 35%;"><p:outputLabel
+														value="#{editCbseOldStudentTcDetail.qualifiedPromotion}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 5px"></tr>
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 13.  Month upto which (Student has paid ) school dues/paid"></p:outputLabel></td>
+												<td style="text-align: left; width: 35%;"><p:outputLabel
+														value="#{editCbseOldStudentTcDetail.monthOfFeePaid}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 5px"></tr>
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 14.  Total No. of working Days/Meetings"></p:outputLabel></td>
+												<td style="text-align: left; width: 35%;"><p:outputLabel
+														value="#{editCbseOldStudentTcDetail.workingDays}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 5px"></tr>
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 15.  Total No. of working days/Meetings present"></p:outputLabel></td>
+												<td style="text-align: left; width: 35%;"><p:outputLabel
+														value="#{editCbseOldStudentTcDetail.workingDayPresent}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 5px"></tr>
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 16.  Any fee concession availed of : if so, the nature of such concession"></p:outputLabel></td>
+												<td style="text-align: left; width: 35%;"><p:outputLabel
+														value="#{editCbseOldStudentTcDetail.feeConcession}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 5px"></tr>
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 17.  Games Played"></p:outputLabel></td>
+												<td style="text-align: left; width: 35%;"><p:outputLabel
+														value="#{editCbseOldStudentTcDetail.gamesPlayed}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 5px"></tr>
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 18.  Extra-curricular activities"></p:outputLabel></td>
+												<td style="text-align: left; width: 35%;"><p:outputLabel
+														value="#{editCbseOldStudentTcDetail.extraActivity}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 5px"></tr>
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 19.  General Conduct"></p:outputLabel></td>
+												<td style="text-align: left; width: 35%;"><p:outputLabel
+														value="#{editCbseOldStudentTcDetail.perfom}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 5px"></tr>
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 20.  Date of Leaving/ last attended the class"></p:outputLabel></td>
+												<td style="text-align: left; width: 35%;"><p:outputLabel
+														value="#{editCbseOldStudentTcDetail.lastDateStr}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 5px"></tr>
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 21.  Date of issue of certificate"></p:outputLabel></td>
+												<td style="text-align: left; width: 35%;"><p:outputLabel
+														value="#{editCbseOldStudentTcDetail.issuDateStr}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 5px"></tr>
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 22.  Reason for leaving the school"></p:outputLabel></td>
+												<td style="text-align: left; width: 35%;"><p:outputLabel
+														value="#{editCbseOldStudentTcDetail.reason}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 5px"></tr>
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 23.  Any other remarks"></p:outputLabel></td>
+												<td style="text-align: left; width: 35%;"><p:outputLabel
+														value="#{editCbseOldStudentTcDetail.otherRemark}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 45px"></tr>
+										</table>
+										<table style="margin-left: 20px; float: left; width: 100%;">
+											<tr>
+												<td style="text-align: left; width: 30%;"><p:outputLabel
+														value="Prepared By___________ "></p:outputLabel></td>
+												<td style="text-align: left; width: 30%;"><p:outputLabel
+														value="Checked By "></p:outputLabel></td>
+												<td style="text-align: left; width: 30%;"><p:outputLabel
+														value="Principal "></p:outputLabel></td>
+											</tr>
+											<tr style="height: 15px;"></tr>
+										</table>
+									</div>
+								</div>
+							</p:outputPanel>
+						</h:form>
+
+
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

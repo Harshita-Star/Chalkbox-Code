@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+<f:loadBundle var="addClassVar" basename="myProperties" />
+<f:view contentType="text/html">
+	<h:head>
+		<title>#{sideMenuBean.companyName} | Dashboard</title>
+		<f:facet name="first">
+			<meta content='text/html; charset=UTF-8' http-equiv="Content-Type" />
+			<meta http-equiv="X-UA-Compatible" content="EmulateIE8" />
+		</f:facet>
+
+  <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css"></link>
+    		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"></link>
+   <link rel="stylesheet" href="dist/css/AdminLTE.min.css"></link>
+    <link rel="stylesheet" href="dist/css/skins/all-skins.min.css"></link>
+
+	</h:head>
+	<style>
+
+.ui-panelgrid td, .ui-widget-content {
+        font-size:10px !important;
+        border:none !important;
+    }
+
+
+</style>
+	<h:body>
+      
+      <ui:include src="sideMenu.xhtml"></ui:include> 
+   
+      <div class="content-wrapper">
+          
+          <section class="content-header">
+          <!-- <h1 style="margin-bottom:20px;">
+            Dashboard
+            <small></small>
+          </h1> -->
+          <ol class="breadcrumb" style="margin-bottom: 10px;">
+            <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+            <li class="active">Dashboard</li>
+          </ol>
+        </section>
+          
+                 
+          
+<div class="row" >
+<div class="col-xs-12 col-md-12 col-sm-12">
+<div class="col-xs-8 col-md-9 col-sm-8">
+	<div class="col-xs-12 col-md-12 col-sm-12" style="border:1px solid #ddd;background: #f3f3f3;padding-bottom: 30px;margin-bottom:30px;">
+	           <h5 style="background: #2B3643;color: #fff;padding: 7px;">Send Message To : </h5>
+	           <h:form id="mainForm">
+	           <p:selectOneRadio value="#{adminMain.sendTo}">
+	           		<f:selectItem itemLabel="All Students" itemValue="student"></f:selectItem>
+	           		<f:selectItem itemLabel="All Staff Members" itemValue="staff"></f:selectItem>
+	           </p:selectOneRadio>
+	           <br/>
+	           <p:outputLabel value="Dear Parent/Student/Staff Member," style="font-size:15px !important;" /><br></br><br></br>
+	           <p:inputTextarea rows="5" style="width:100%;" value="#{adminMain.typeMessage}" /><br></br><br></br>
+	           <p:outputLabel value="Regards, #{sideMenuBean.name}" style="font-size:15px !important;" />
+               <p:commandButton value="Send" style="margin-top:10px;float:right;" action="#{adminMain.sendMessageToAll}"></p:commandButton>
+               </h:form>
+                 
+              
+	
+	</div>
+	<div class="col-xs-12 col-md-12 col-sm-12" style="border:1px solid #ddd;background: #f3f3f3;padding-bottom: 20px;">
+		<div class="col-xs-12 col-md-6 col-sm-12">
+			  <p:chart type="pie" model="#{pieChartView.pieModel1}" style="width:100%;height:300px" />    		
+		</div>
+		<div class="col-xs-12 col-md-6 col-sm-12"  style="margin-top: 10px;">
+			<p:scrollPanel mode="native" style="width:100%;height:290px;">
+            <p:dataScroller value="#{adminMain.birthdayStudentList}" var="var" chunkSize="3" >
+             <f:facet name="header">
+              <p:commandButton value="Wish To All" update=":birthdayForm" action="#{adminMain.allStudentMsz}"></p:commandButton>
+           
+        </f:facet>
+       
+ <br></br>
+        <h:panelGrid columns="3" style="width:100%">
+            <p:graphicImage value="image/cake.png" height="60px" width="60px"/>
+ 
+            <p:outputPanel>
+                <h:panelGrid columns="2" cellpadding="5">
+                    <h:outputText value="Id:" style="font-size:12px;font-weight: bold;" />
+                    <h:outputText value="#{var.srNo}" style="font-size:12px"/>
+                     
+                    <h:outputText value="Name:" style="font-size:12px;font-weight: bold;" />
+                    <h:outputText value="#{var.fname}" style="font-size:12px"/>
+ 
+                     <h:outputText value="Father Name:" style="font-size:12px;font-weight: bold;" />
+                    <h:outputText value="#{var.fathersName}" style="font-size:12px"/>
+                    
+                     <h:outputText value="Class:" style="font-size:12px;font-weight: bold;" />
+                    <h:outputText value="#{var.className}" style="font-weight: bold;font-size:12px"/>
+                    
+                 </h:panelGrid>
+            </p:outputPanel>
+            <p:commandButton value="Wish" update=":birthdayForm" oncomplete="PF('birthdayDialog').show()" action="#{adminMain.selectStudentMsz}" style="width:70px;">
+               <f:setPropertyActionListener target="#{adminMain.selectStudent}" value="#{var}"></f:setPropertyActionListener>
+            </p:commandButton>
+        </h:panelGrid>
+    </p:dataScroller>
+    </p:scrollPanel>
+		</div>
+	</div>
+	</div>
+	
+<div class="col-xs-4 col-md-3 col-sm-4">
+            <div class="col-lg-12 col-xs-12">
+            <a href="allStudentList.xhtml">
+              <!-- small box -->
+              <div class="small-box bg-aqua">
+                <div class="inner">
+                  <h3> <p:outputLabel value="#{adminMain.cunt}"> </p:outputLabel></h3>
+                  <p>Total Student</p>
+                 
+                </div>
+                <div class="icon">
+                  <i class="fa fa-users"></i>
+                </div>
+              </div>
+              </a>
+            </div><!-- ./col -->
+							
+            <div class="col-lg-12 col-xs-12"><a href="dailyFeecolletionReport.xhtml">
+              <!-- small box -->
+              <div class="small-box bg-yellow">
+                <div class="inner">
+                  
+                   <h3><p:outputLabel value="#{adminMain.totalCollection}"> </p:outputLabel></h3>
+                 	<p>Today's Collection</p>
+                </div>
+                <div class="icon">
+                  <i class="fa fa-user-plus"></i>
+                </div>
+              </div>
+              </a>
+            </div><!-- ./col -->
+            <div class="col-lg-12 col-xs-12"><a href="absentStudentReport.xhtml">
+              <!-- small box -->
+              <div class="small-box bg-red">
+                <div class="inner">
+                  <h3><p:outputLabel value="#{adminMain.enquirystudent} / #{adminMain.leaveStudent}"> </p:outputLabel></h3>
+                    <p>Absent / Leave Students Today </p>
+                  
+                </div>
+                <div class="icon">
+                  <i class="fa fa-question "></i>
+                </div>
+              </div>
+              </a>
+            </div><!-- ./col -->
+            <div class="col-lg-12 col-xs-12">
+              <!-- small box -->
+              <div class="small-box bg-green">
+                <div class="inner">
+                  <h3><p:outputLabel value="#{adminMain.messageStduent}"> </p:outputLabel></h3>
+                    <p>SMS Sent Today</p>
+                  
+                </div>
+                <div class="icon">
+                  <i class="fa fa-eye-slash"></i>
+                </div>
+              </div>
+              
+            </div><!-- ./col -->
+          
+          
+          
+           
+            </div><!-- ./col -->
+          </div><!-- /.row -->
+          </div><!-- /.row -->
+         
+            </div>
+            
+            <h:form id="msgForm" style="overflow:hidden">
+				<p:dialog header="Please Select Receivers : " height="80" widgetVar="msgDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+					<br></br><br></br>
+					<center><p:panelGrid columns="5">
+					<p:outputLabel value="Parents : " style="font-size:14px;font-weight: bold;"/>
+					<p:selectBooleanCheckbox value="#{adminMain.messageParents}" />
+					
+					<p:outputLabel value="Students : " style="font-size:14px;font-weight: bold;"/>
+					<p:selectBooleanCheckbox value="#{adminMain.messageStudents}" />
+
+						<p:commandButton value="Check Preview" actionListener="#{adminMain.institutePreview}"/>
+					</p:panelGrid></center>
+				</p:dialog>
+			</h:form>
+			
+			<h:form id="errorForm" style="overflow:hidden">
+				<p:dialog header="Message Status : " widgetVar="errorDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" height="50" width="400">
+					<br></br>
+					<center><p:outputLabel value="#{adminMain.errorLabel}" style="font-size:12px;font-weight: bold;"/></center>
+				</p:dialog>
+			</h:form>
+			
+			<h:form id="birthdayForm">
+                <p:dialog style="height:1000px;" resizable="false" styleClass="ui-panelgrid" widgetVar="birthdayDialog" header="Send Message" showEffect="fade" hideEffect="explode" modal="true">
+                
+                     <p:selectOneRadio  value="#{adminMain.template}" columns="1" layout="responsive">
+                      <f:selectItem itemLabel="#{adminMain.temp1}" itemValue="#{adminMain.temp1}" />
+                            <f:selectItem itemLabel="#{adminMain.temp2}" itemValue="#{adminMain.temp2}" />
+                         <f:selectItem itemLabel="#{adminMain.temp3}" itemValue="#{adminMain.temp3}" />
+                         <f:selectItem itemLabel="#{adminMain.temp4}" itemValue="#{adminMain.temp4}" />
+                    </p:selectOneRadio>
+                    
+                    <p:panelGrid columns="2">
+                        <p:outputLabel value="Custom Message : "
+                            style="font-size:15px !important;" />
+                        <p:outputLabel />
+                        <p:outputLabel value="Dear Student,"
+                            style="font-size:15px !important;" />
+                        <p:outputLabel />
+                        <p:inputTextarea value="#{adminMain.birthdayWish}" rows="7" cols="30"
+                            counter="display" maxlength="765"
+                            counterTemplate="{0} characters remaining." autoResize="false"
+                            style="width:400px !important;"
+                            onkeyup="changeColor(this.value)" />
+                        <p:outputLabel id="display" style="font-size:15px !important;" />
+
+                        
+                        <p:outputLabel value="Regards, #{sideMenuBean.name}"
+                            style="font-size:15px !important;" />
+                        <p:outputLabel />
+
+                    
+                        <p:commandButton value="Send" action="#{adminMain.wishPreview}"
+                            style="font-size:15px !important;width:200px;" />
+                        <p:outputLabel />
+                    </p:panelGrid>
+                </p:dialog>
+</h:form>
+   
+   			<h:form id="prevForm" style="overflow:hidden">
+				<p:dialog header="Message Preview : " width="500" widgetVar="prevDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+					<p:outputLabel value="#{adminMain.preview}" style="font-size:14px;font-weight: bold;"/>
+					<br></br>
+					<br></br>
+					<center><p:commandButton value="Send Now" actionListener="#{adminMain.sendMessageNow}"/></center>
+					<br></br>
+				</p:dialog>
+			</h:form>
+			
+			<h:form id="bdyPrevForm" style="overflow:hidden">
+				<p:dialog header="Message Preview : " width="500" widgetVar="bdyPrevDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+					<p:outputLabel value="#{adminMain.bdyPreview}" style="font-size:14px;font-weight: bold;"/>
+					<br></br>
+					<br></br>
+					<center><p:commandButton value="Send Now" actionListener="#{adminMain.sendWish}"/></center>
+					<br></br>
+				</p:dialog>
+			</h:form>
+	
+	
+	</h:body>
+</f:view>
+</html>

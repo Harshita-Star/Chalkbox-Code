@@ -1,0 +1,84 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">TC GENERATE</ui:define>
+
+    <ui:define name="content">
+       
+            <div class="ui-fluid">
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <div class="card card-w-title">
+               		<h:form id="form3">
+               		 	<p:panel header="Student List">
+               		 				
+               		 		 <p:outputPanel id="up">
+               		  
+               		  		<p:dataTable var="var" rendered="#{searchStdForTc.studentList.size() gt '0'}" value="#{searchStdForTc.studentList}" rows="20" paginator="true" rowsPerPageTemplate="20,50,100" reflow="true"> 
+               		  		
+               		  			<p:column headerText="Admission Number">
+               		  				<p:outputLabel value="#{var.srNo}"></p:outputLabel>
+               		  			</p:column>
+               		  			
+               		  			<p:column headerText="Student Name" filterBy="#{var.fname}" filterMatchMode="contains">
+               		  				<p:outputLabel value="#{var.fname}"></p:outputLabel>
+               		  			</p:column>
+               		  			
+               		  			<p:column headerText="Father's Name">
+               		  				<p:outputLabel value="#{var.fathersName}"></p:outputLabel>
+               		  			</p:column>
+               		  			
+               		  			<p:column headerText="Contact No.">
+               		  				<p:outputLabel value="#{var.fathersPhone}"></p:outputLabel>
+               		  			</p:column>
+               		  			
+               		  			<p:column headerText="Reason">
+               		  				<p:outputLabel value="#{var.reason}"></p:outputLabel>
+               		  			</p:column>
+               		  			
+               		  			<p:column headerText="Last Class">
+               		  				<p:outputLabel value="#{var.className} - #{var.sectionName}"></p:outputLabel>
+               		  			</p:column>
+               		  			
+               		  			<p:column headerText="Grade">
+               		  				<p:outputLabel value="#{var.grade}"></p:outputLabel>
+               		  			</p:column>
+               		  			
+               		  			<p:column headerText="Re-Active">
+									<p:commandButton update=":form3" icon="ui-icon-refresh" action="#{searchStdForTc.reactive}">
+										<f:setPropertyActionListener value="#{var}" target="#{searchStdForTc.selectedStudent}"></f:setPropertyActionListener>
+									     <p:confirm header="Confirmation" message="Are You Sure To Re-Active This Student...?" icon="ui-icon-alert" />
+									</p:commandButton>
+								</p:column> 
+								
+								<p:column headerText="Issue TC">
+									<p:commandButton update=":form3" icon="ui-icon-pencil" action="#{searchStdForTc.editNow}">
+										<f:setPropertyActionListener value="#{var}" target="#{searchStdForTc.selectedStudent}"></f:setPropertyActionListener>
+									</p:commandButton>
+								</p:column> 
+               		  		
+               		  		</p:dataTable>
+               		  	
+               		  </p:outputPanel>
+               		 	
+               		 	</p:panel>
+       
+					</h:form>
+			
+					<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+			           <p:commandButton style="margin-left:30px" value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+			           <p:commandButton style="margin-left:50px" value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+			         </p:confirmDialog>
+          
+                        </div>
+                    </div>
+                </div>
+            </div>
+       
+    </ui:define>
+
+</ui:composition>

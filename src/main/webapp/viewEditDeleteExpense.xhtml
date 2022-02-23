@@ -1,0 +1,204 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Edit Expenses</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form" style="overflow:hidden">
+							<p:messages closable="true" autoUpdate="true"></p:messages>
+							<p:panel header="View / Delete Expense">
+								<p:panelGrid columns="8"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:outputLabel value="Start Date"></p:outputLabel>
+									<p:calendar navigator="true" pattern="dd/MM/yyyy"
+										yearRange="c-10:c+10"
+										value="#{viewEditDeleteExpense.startDate}"></p:calendar>
+
+									<p:outputLabel value="End Date"></p:outputLabel>
+									<p:calendar navigator="true" pattern="dd/MM/yyyy"
+										yearRange="c-10:c+10" value="#{viewEditDeleteExpense.endDate}"></p:calendar>
+
+									<p:commandButton icon="ui-icon-search" update=":form" styleClass="butwid"
+										actionListener="#{viewEditDeleteExpense.searchIncome}"
+										value="Search"></p:commandButton>
+									<p:commandButton rendered="false" icon="ui-icon-print"
+										action="#{viewEditDeleteExpense.print}" value="print">
+									</p:commandButton>
+								</p:panelGrid>
+								<br></br>
+
+								<p:dataTable id="dt" var="var"
+									value="#{viewEditDeleteExpense.iList}" reflow="true">
+									<p:column style="width:40px" headerText="S.No">
+										<p:outputLabel value="#{var.sNo}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Expense Date">
+										<p:outputLabel value="#{var.strIncomeDate}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Category">
+										<p:outputLabel value="#{var.category}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Payment Mode">
+										<p:outputLabel value="#{var.paymentMode}"></p:outputLabel>
+									</p:column>
+
+									<p:column
+										headerText="Amount (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})">
+										<p:outputLabel value="#{var.amount}">
+											<f:convertNumber groupingUsed="false" minFractionDigits="2"
+												maxFractionDigits="2"></f:convertNumber>
+										</p:outputLabel>
+									</p:column>
+
+									<p:column headerText="View">
+										<p:commandButton update=":form1" styleClass="butwid"
+											oncomplete="PF('viewDialog').show();" icon="ui-icon-search"
+											action="#{viewEditDeleteExpense.viewDetails}">
+											<f:setPropertyActionListener value="#{var}"
+												target="#{viewEditDeleteExpense.selectedIncome}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+
+									<p:column headerText="Print Voucher">
+										<p:commandButton icon="ui-icon-print" styleClass="butwid"
+											action="#{viewEditDeleteExpense.printVoucherDetail}">
+											<f:setPropertyActionListener value="#{var}"
+												target="#{viewEditDeleteExpense.selectedIncome}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+
+									<p:column headerText="Delete">
+										<p:commandButton update=":form" icon="ui-icon-trash" styleClass="butwid"
+											action="#{viewEditDeleteExpense.deleteSelectedIncome}">
+											<f:setPropertyActionListener value="#{var}"
+												target="#{viewEditDeleteExpense.selectedIncome}"></f:setPropertyActionListener>
+											<p:confirm header="Confirmation"
+												message="Are You Sure To Delete...?" icon="ui-icon-alert" />
+										</p:commandButton>
+									</p:column>
+								</p:dataTable>
+							</p:panel>
+						</h:form>
+
+						<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+							<p:commandButton style="margin-left:30px" value="Yes"
+								type="button" styleClass="ui-confirmdialog-yes"
+								icon="ui-icon-check" />
+							<p:commandButton style="margin-left:50px" value="No"
+								type="button" styleClass="ui-confirmdialog-no"
+								icon="ui-icon-close" />
+						</p:confirmDialog>
+
+						<h:form id="form1">
+							<p:dialog resizable="false" modal="true" widgetVar="viewDialog"
+								header="Details" closeOnEscape="true">
+								<div class="ui-g form-group">
+									<p:panelGrid columns="4"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+										<p:outputLabel
+											value="Expense Date : " />
+										<p:outputLabel
+											value="#{viewEditDeleteExpense.strIncomeDate}"></p:outputLabel>
+										
+										<p:outputLabel
+											value="Expense Category : " />
+										<p:outputLabel
+											value="#{viewEditDeleteExpense.expenseCategory}"></p:outputLabel>
+										
+										<p:outputLabel
+											value="payment Mode : " />
+										<p:outputLabel
+											value="#{viewEditDeleteExpense.paymentMode}"></p:outputLabel>
+										
+										<p:outputLabel
+											value="Total Amount (Inc. Tax) :  #{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'} " />
+										<p:outputLabel
+											value="#{viewEditDeleteExpense.amount}">
+											<f:convertNumber groupingUsed="false" minFractionDigits="2"
+												maxFractionDigits="2"></f:convertNumber>
+										</p:outputLabel>
+										
+										<p:outputLabel
+											value="Cheque Date : "
+											rendered="#{viewEditDeleteExpense.showCheque}"></p:outputLabel>
+										<p:outputLabel
+											value="#{viewEditDeleteExpense.chequeDate}"
+											rendered="#{viewEditDeleteExpense.showCheque}"></p:outputLabel>
+										
+										<p:outputLabel
+											value="Cheque No : "
+											rendered="#{viewEditDeleteExpense.showCheque}"></p:outputLabel>
+										<p:outputLabel
+											value="#{viewEditDeleteExpense.chequeNo}"
+											rendered="#{viewEditDeleteExpense.showCheque}"></p:outputLabel>
+										
+										<p:outputLabel
+											value="Bank Name : "
+											rendered="#{viewEditDeleteExpense.showCheque}"></p:outputLabel>
+										<p:outputLabel
+											value="#{viewEditDeleteExpense.bankName}"
+											rendered="#{viewEditDeleteExpense.showCheque}"></p:outputLabel>
+										
+										<p:outputLabel
+											value="Bank Branch : "
+											rendered="#{viewEditDeleteExpense.showCheque}"></p:outputLabel>
+										<p:outputLabel
+											value="#{viewEditDeleteExpense.bankBranch}"
+											rendered="#{viewEditDeleteExpense.showCheque}"></p:outputLabel>
+										
+										<p:outputLabel
+											value="Tax Month : "></p:outputLabel>
+										<p:outputLabel
+											value="#{viewEditDeleteExpense.taxMonth}"></p:outputLabel>
+											
+										<p:outputLabel
+											value="Tax Year : "></p:outputLabel>	
+										<p:outputLabel
+											value="#{viewEditDeleteExpense.taxYear}"></p:outputLabel>
+										
+										<p:outputLabel
+											value="Tax Amount :  #{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'} "></p:outputLabel>
+										<p:outputLabel
+											value="#{viewEditDeleteExpense.taxAmount}">
+											<f:convertNumber groupingUsed="false" minFractionDigits="2"
+												maxFractionDigits="2"></f:convertNumber>
+											</p:outputLabel>
+											
+										<p:outputLabel
+											value="Pay To : "></p:outputLabel>	
+										<p:outputLabel
+											value="#{viewEditDeleteExpense.payTo}"></p:outputLabel>
+									</p:panelGrid>
+									<p:panelGrid columns="1"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+										<p:outputLabel style="text-align:justify"
+											value="Description :  #{viewEditDeleteExpense.description}"></p:outputLabel>
+									</p:panelGrid>
+								</div>
+							</p:dialog>
+
+						</h:form>
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

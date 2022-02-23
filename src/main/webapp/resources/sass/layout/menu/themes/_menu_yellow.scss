@@ -1,0 +1,22 @@
+.layout-menu-yellow {
+    $menuBgColor:#AC7D3D;
+    $menuBgGradient: linear-gradient(300deg, #F3A841 0%,#AC7D3D 100%);
+    $rootMenuItemTextColor:rgba(255,255,255,0.8);
+    $rootMenuTextColor:rgba(255,255,255,0.6);
+    $rootMenuItemHoverBgColor:rgba(0,0,0,0.25);
+    $activeRootMenuItemTextColor:white;
+
+    $submenuItemTextColor:rgba(255,255,255,0.8);
+    $submenuItemHoverBgColor:rgba(0,0,0,0.25);
+    $activeSubmenuItemTextColor:white;
+
+    $externalSubmenuBgColor:white;
+    $externalSubmenuItemTextColor:#323537;
+    $externalSubmenuItemHoverBgColor:#D8DADC;
+    $externalActiveSubmenuItemTextColor:#AC7D3D;
+
+    $slimActiveRootMenuItemBgColor:white;
+    $slimActiveRootMenuItemTextColor:#AC7D3D;
+ 
+    @import '../_menu_theme';
+}

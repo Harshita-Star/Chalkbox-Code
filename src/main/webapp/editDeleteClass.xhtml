@@ -1,0 +1,113 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Edit Class</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="initializePageDataForm">
+							<p:remoteCommand name="initializePageDataCommand" autoRun="true"
+								action="#{editClass.init()}" update=":form" />
+						</h:form>
+						<h:form id="form">
+
+							<p:panel header="Edit/Delete Class" id="panel">
+								<p:messages closable="true" autoUpdate="true"></p:messages>
+
+
+
+								<p:dataTable reflow="true" rows="15" paginator="true"
+									rowsPerPageTemplate="15,30,50" value="#{editClass.classList}"
+									var="var">
+
+									<p:column headerText="Serial Number">
+										<p:outputLabel value="#{var.serialNumber}"></p:outputLabel>
+									</p:column>
+
+									<p:column sortBy="#{var.className}" filterBy="#{var.className}"
+										headerText="Class">
+
+										<p:outputLabel value="#{var.className}"></p:outputLabel>
+
+									</p:column>
+
+									<p:column headerText="Edit">
+									<center>
+											<p:commandButton update=":editForm" icon="ui-icon-pencil" styleClass="butwid"
+											action="#{editClass.editDetail}" oncomplete="PF('editDialog').show();" value="Edit">
+											<f:setPropertyActionListener
+												target="#{editClass.selectedClass}" value="#{var}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</center>
+									</p:column>
+
+									<p:column headerText="Delete">
+									<center>
+									<p:commandButton update=":form" styleClass="butwid redButt"
+											action="#{editClass.deleteNow}" icon="ui-icon-trash"
+											value="Delete">
+											<f:setPropertyActionListener
+												target="#{editClass.selectedClass}" value="#{var}" />
+											<p:confirm header="Confirmation"
+												message="Surely want to remove this class ?"
+												icon="ui-icon-alert" />
+										</p:commandButton>
+									</center>
+									</p:column>
+								</p:dataTable>
+
+							</p:panel>
+						</h:form>
+
+						<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+							<p:commandButton value="Yes" type="button"
+								styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+							<p:commandButton value="No" type="button"
+								styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+						</p:confirmDialog>
+
+						<h:form id="editForm">
+							<p:dialog resizable="false" widgetVar="editDialog"
+								header="Edit Details" showEffect="fade" hideEffect="explode"
+								modal="true">
+								<div class="ui-g form-group">
+									<p:panelGrid columns="2"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+										<p:outputLabel  for="@next" style="color:red" value="Class Name"></p:outputLabel>
+										<p:inputText value="#{editClass.name}" id="secnm"
+											onchange="trimFunc(this.value,'Please Enter Class Name',this.id)"
+											required="true" requiredMessage="Please enter class name" validatorMessage="Please Enter Correct value">
+										  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+										</p:inputText>
+
+									</p:panelGrid>
+								</div>
+								
+								<br />
+								<p:separator />
+								<center>
+									<p:commandButton update=":editForm,:form" styleClass="butwid" icon="fa fa-upload"
+											actionListener="#{editClass.editClassName}" value="Update"></p:commandButton>
+								</center>
+								<p:separator />
+								<br />
+								
+							</p:dialog>
+						</h:form>
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

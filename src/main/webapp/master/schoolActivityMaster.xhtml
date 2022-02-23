@@ -1,0 +1,103 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/masterTemplate.xhtml"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	<f:loadBundle var="addClassVar" basename="myProperties" />
+
+	<ui:define name="title">School Activity Report</ui:define>
+
+	<ui:define name="content">
+		<h:form id="form">
+			<div class="ui-fluid">
+				<div class="ui-g">
+					<div class="ui-g-12">
+						<div class="card card-w-title">
+
+							<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+
+							<h1>School Activity Report</h1>
+
+							<p:panel header="School Report">
+								<p:panelGrid columns="3"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:outputLabel value="Select Date"></p:outputLabel>
+									<p:calendar value="#{schoolActivityMaster.selectDate}"
+										navigator="true" pattern="dd/MM/yyyy" rendered="true"
+										requiredMessage="Please Select Date"></p:calendar>
+
+									<p:commandButton value="Search" update=":form"
+										action="#{schoolActivityMaster.search}"></p:commandButton>
+								</p:panelGrid>
+
+								<p:dataTable id="table" reflow="true"
+									style="width:100%;border-collapse:collapse;text-align:center;"
+									border="1" value="#{schoolActivityMaster.activityList}"
+									var="var">
+
+									<p:column headerText="S.No">
+										<p:outputLabel value="#{var.sno}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="School Id" filterBy="#{var.schId}"
+										filterMatchMode="contains">
+										<p:outputLabel value="#{var.schId}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="School Name" filterBy="#{var.schoolName}"
+										filterMatchMode="contains">
+										<p:outputLabel value="#{var.schoolName}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Attendance">
+										<p:graphicImage value="#{var.attendance}" height='15'
+											width='15'></p:graphicImage>
+									</p:column>
+
+									<p:column headerText="Fees">
+										<p:graphicImage value="#{var.fees}" height='15' width='15'></p:graphicImage>
+									</p:column>
+
+									<p:column headerText="Communication">
+										<p:graphicImage value="#{var.communication}" height='15'
+											width='15'></p:graphicImage>
+									</p:column>
+
+									<p:column headerText="News">
+										<p:graphicImage value="#{var.news}" height='15' width='15'></p:graphicImage>
+									</p:column>
+
+									<p:column headerText="Gallery">
+										<p:graphicImage value="#{var.gallery}" height='15' width='15'></p:graphicImage>
+									</p:column>
+
+									<p:column headerText="Homework">
+										<p:graphicImage value="#{var.work}" height='15' width='15'></p:graphicImage>
+									</p:column>
+
+									<p:column headerText="Login">
+										<p:graphicImage value="#{var.login}" height='15' width='15'></p:graphicImage>
+									</p:column>
+
+									<p:column headerText="Login">
+										<p:commandButton action="#{schoolActivityMaster.schoolLogin}"
+											icon="ui-icon-power">
+											<f:setPropertyActionListener value="#{var}"
+												target="#{schoolActivityMaster.selected}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+								</p:dataTable>
+							</p:panel>
+						</div>
+					</div>
+				</div>
+			</div>
+		</h:form>
+
+	</ui:define>
+
+</ui:composition>

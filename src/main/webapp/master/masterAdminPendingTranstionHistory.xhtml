@@ -1,0 +1,141 @@
+	<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/masterTemplate.xhtml">
+
+	<ui:define name="title">Pending Transction</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							
+							<p:panel id="dailyfeereport"
+								>
+								
+								
+								
+								<p:messages autoUpdate="true"></p:messages>
+
+
+								<p:dataTable id="up" tableStyle="table-layout:auto;" var="fee"
+									value="#{masterAdminPendingFeeTranctionBean.list}">
+
+                                      
+
+									<p:column headerText="Pay Date" style="font-size:8px !important">
+									 <f:facet name="header">
+									    <p:outputLabel value="Pay Date"></p:outputLabel>
+								    </f:facet>
+										<p:outputLabel style="font-size:8px !important"
+											value="#{fee.date}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="SrNo" style="font-size:8px !important">
+									 <f:facet name="header">
+									    <p:outputLabel value="SrNo"></p:outputLabel>
+								    </f:facet>
+										<p:outputLabel style="font-size:8px !important"
+											value="#{fee.srNo}"></p:outputLabel>
+									</p:column>
+
+
+									<p:column style="font-size:9px !important"
+										headerText="Student name">
+										 <f:facet name="header">
+									    <p:outputLabel value="Student Name"></p:outputLabel>
+								    </f:facet>
+
+										<h:outputText style="font-size:9px !important"
+											value="#{fee.studentName}" />
+									</p:column>
+									
+									<p:column style="font-size:9px !important"
+										headerText="Father name">
+										 <f:facet name="header">
+									    <p:outputLabel value="Father name"></p:outputLabel>
+								    </f:facet>
+
+										<h:outputText style="font-size:9px !important"
+											value="#{fee.fatherName}" />
+									</p:column>
+
+									<p:column style="font-size:10px !important" headerText="Class">
+									 <f:facet name="header">
+									    <p:outputLabel value="School Name"></p:outputLabel>
+								    </f:facet>
+
+										<h:outputText style="font-size:10px !important"
+											value="#{fee.schoolName}" />
+									</p:column>
+									
+									<p:column style="font-size:10px !important"
+										headerText=" Order Id">
+
+										<f:facet name="header">
+						      Order Id
+							</f:facet>
+										<h:outputText style="font-size:10px !important"
+											value="#{fee.orderid}" />
+									</p:column>
+
+									<p:column style="font-size:10px !important"
+										headerText="Total Amount">
+
+										<f:facet name="header">
+							     <p:outputLabel value="Total Amount"></p:outputLabel>
+							</f:facet>
+										<h:outputText style="font-size:10px !important"
+											value="#{fee.totalAmount}" />
+									</p:column>
+
+
+
+								<p:column style="font-size:10px !important"
+										headerText="Check Status">
+
+										<f:facet name="header">
+							     <p:outputLabel value="Check Status"></p:outputLabel>
+							</f:facet>
+										
+										<p:commandButton value="Check Status" action="#{masterAdminPendingFeeTranctionBean.checkStatus}" update=":form">
+										   <f:setPropertyActionListener value="#{fee}" target="#{masterAdminPendingFeeTranctionBean.selectedTranction}"></f:setPropertyActionListener>
+										</p:commandButton>
+										
+										
+									</p:column>
+
+
+                            <f:facet name="header">
+                            
+                            <p:commandButton value="Check Status All" action="#{masterAdminPendingFeeTranctionBean.checkStatusForAll}" update=":form">
+										</p:commandButton>
+                            </f:facet>
+							
+							
+							 <f:facet name="footer">
+							 <p:commandButton value="Check Status All" action="#{masterAdminPendingFeeTranctionBean.checkStatusForAll}" update=":form">
+										</p:commandButton>
+							 </f:facet>		
+
+								</p:dataTable>
+
+							</p:panel>
+
+						</h:form>
+
+						
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

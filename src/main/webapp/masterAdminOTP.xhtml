@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<f:loadBundle var="regexVar" basename="myProperties" />	
+
+<h:head>
+	<f:facet name="first">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<meta name="viewport"
+			content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+	</f:facet>
+	<title>OTP Confirmation</title>
+	<h:outputScript name="js/layout.js" library="avalon-layout" />
+</h:head>
+
+<h:body styleClass="login-body">
+	<!-- <div class="login-image"></div> -->
+	<div class="card login-panel ui-fluid">
+		<div class="login-panel-content">
+			<div class="ui-g">
+				<h:form id="form">
+<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+					<div class="ui-g-12 ui-sm-6 ui-md-6" style="text-align: left;">
+						<p:graphicImage name="images/cblogo.png" library="avalon-layout"
+							height="50px" width="200px" />
+						<!-- <span>Where ERP Meets Simplicity</span> -->
+					</div>
+					<div class="ui-g-12 ui-sm-6 ui-md-6" style="text-align: right;">
+						<h2 class="welcome-text">Welcome Master</h2>
+						<span class="guest-sign-in">Confirm OTP Now</span>
+					</div>
+					<div class="ui-g-12" style="text-align: left;">
+						<h:panelGroup>
+							<label class="login-label">Mobile No.</label>
+							<div class="login-input">
+								<p:inputText id="loginid" value="#{masterAdminOtp.mobile}"
+									required="true" requiredMessage="Please Enter Mobile No." validatorMessage="Please Enter Correct value">
+									<p:ajax></p:ajax>
+									<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+								</p:inputText>
+							</div>
+						</h:panelGroup>
+					</div>
+					<div class="ui-g-12" style="text-align: left;">
+						<h:panelGroup>
+							<label class="login-label">OTP</label>
+							<div class="login-input">
+								<p:inputText id="otpid" value="#{masterAdminOtp.otpp}"
+									required="true" requiredMessage="Please Enter OTP" validatorMessage="Please Enter Correct value">
+								  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+								</p:inputText>
+							</div>
+						</h:panelGroup>
+					</div>
+					<div class="ui-g-12 ui-sm-6 ui-md-6">
+						<p:commandButton aria-hidden="true" value="GET OTP"
+							immediate="true" update=":form" action="#{masterAdminOtp.getOtp}" />
+					</div>
+
+					<div class="ui-g-12 ui-sm-6 ui-md-6">
+						<p:commandButton aria-hidden="true" value="Submit" update=":form"
+							action="#{masterAdminOtp.submit}" />
+					</div>
+
+				</h:form>
+			</div>
+		</div>
+	</div>
+
+	<p:ajaxStatus onstart="PF('statusDialog').show()"
+		onsuccess="PF('statusDialog').hide()" />
+	<p:dialog modal="true" widgetVar="statusDialog" resizable="false"
+		showHeader="false">
+		<center>
+			<i class="fa fa-circle-o-notch fa-5x fa-spin ajax-loader"></i>
+		</center>
+		<center>
+			<h3>Please Wait...</h3>
+		</center>
+	</p:dialog>
+	<h:outputStylesheet name="css/layout-#{guestPreferences.theme}.css"
+		library="avalon-layout" />
+</h:body>
+
+</html>

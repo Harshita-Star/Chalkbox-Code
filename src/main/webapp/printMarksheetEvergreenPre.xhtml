@@ -1,0 +1,430 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Print Marksheet</ui:define>
+
+	<ui:define name="content">
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+					<p:outputPanel id="marksForm">
+						<h:form id="form">
+						
+						<style>
+							.imageStyle
+							{
+								height:1px;
+								width:1px;
+							
+							}
+							
+							.heightClass
+							{
+								height:70px;
+							
+							}
+							
+							.tr1Style
+							{
+								width:33%;border-bottom:none;
+							}
+							
+							.tr2Style
+							{
+								width:33%;border-top:none;
+							}
+						</style>
+						
+							<p:commandButton value="Print" style="width:100px;height:40px;">
+								<p:printer target=":form:datatableid"></p:printer>
+							</p:commandButton>
+							<p:outputPanel id="datatableid">
+							<ui:repeat  var="mainVar" value="#{printOtherStdMarksheet.studentList}">
+								<table style="width:100%;font-size:11px">
+									<tr>
+										<td>
+								    		<p:graphicImage width="100%" height="90px" value="#{printOtherStdMarksheet.headerImage}"></p:graphicImage>
+								  		</td>
+									</tr>
+								</table>
+								<p:outputPanel styleClass="test" style="width:100%;margin-bottom:-20px;marginf-left:40px;">
+								   <br></br>
+									<center>
+									<p
+										style="font-family: initial; font-size: 20px !important; font-weight: bold; margin: 0px;">Progress Report</p>
+									<p
+										style="font-family: initial; font-size: 20px !important; font-weight: bold; margin: 0px;">Session- #{printOtherStdMarksheet.session}</p>
+									</center>
+									<br></br>
+									<br></br>
+									
+									<table style="width:100%;font-size:11px;">
+										<tr>
+										    <td>Student Name</td>
+											<td>#{mainVar.fname}</td>
+											
+											<td>Class &amp; Sec</td>
+											<td>#{mainVar.className}</td>
+											
+											<td rowspan="3">
+												<center><p:graphicImage value="#{mainVar.student_image}" height="100"></p:graphicImage></center>
+											</td>
+				
+										</tr>
+										<tr>
+											<td>Father's Name:-</td>
+					                        <td>#{mainVar.fathersName}</td>
+										
+											<td>Mother's Name:-</td>
+					                       <td>#{mainVar.motherName}</td> 
+										</tr>
+										<tr>
+											<td>Roll No.</td>
+											<td>#{mainVar.rollNo}</td>
+										
+											<td>Date of Birth</td>
+											<td>#{mainVar.dobString}</td>
+										</tr>
+										<tr>
+											<td>Address</td>
+											<td>#{mainVar.currentAddress}</td>
+										</tr>
+									</table>	
+									<br></br>
+									<table style="width:100%;font-size:11px;text-align:center;border-collapse:collapse" border="1">
+										<tr>
+										    <td class="tr1Style">I</td>
+											<td class="tr1Style">O</td>
+											<td class="tr1Style">C</td>
+										</tr>
+										<tr>
+											<td class="tr2Style">Improvement Needed</td>
+											<td class="tr2Style">Often</td>
+											<td class="tr2Style">Consistently</td>
+										</tr>
+									</table>	
+									<br></br>
+								</p:outputPanel>
+								<br></br>
+								
+								<center><h4><b>A. Languages</b></h4></center>
+								<p:dataTable style="width:100%;border-collapse:collapse;font-size:9px" border="1" value="#{mainVar.englistList}" var="var">
+							    	<p:columnGroup type="header">
+										<p:row>
+											 <p:column style="width:50px" rowspan="1" headerText="S.No." />
+							                 <p:column style="width:500px" rowspan="1" headerText="Language I-English" />
+							                 <ui:repeat value="#{printOtherStdMarksheet.termList}" var="term">
+						                    	<p:column colspan="3" headerText="#{term.label}" />
+						               	 	 </ui:repeat>
+							            </p:row>
+							        </p:columnGroup>
+							    	
+							    	<p:column>
+						           		<b><p:outputLabel rendered="#{var.subjectType eq 'main'}"  style="float:left" value="#{var.serialNumber}"/></b>
+						           		<p:outputLabel rendered="#{var.subjectType ne 'main'}"  style="float:right" value="#{var.serialNumber}"/>
+						           	</p:column>
+							    	
+							        <p:column>
+						           		<b><p:outputLabel rendered="#{var.subjectType eq 'main'}" value="#{var.subjectName}"></p:outputLabel></b>
+						           		<p:outputLabel rendered="#{var.subjectType ne 'main'}" value="#{var.subjectName}"/>
+						           	</p:column>
+						           	
+						           	<p:columns value="#{printOtherStdMarksheet.scholasticColumnsList}" var="ll">
+						            	<center><p:graphicImage style="height:15px;width:20px;font-size:10px" rendered="#{var.marksMap.containsKey(ll)  &amp;&amp; var.subjectType ne 'main'}"  value="#{var.marksMap[ll]}" /></center>
+						            	<center><p:graphicImage style="height:15px;width:20px;" rendered="#{!var.marksMap.containsKey(ll) &amp;&amp; var.subjectType ne 'main'}" value="wrongTick.png" /></center>
+						            	<center><b><p:outputLabel rendered="#{var.subjectType eq 'main'}" value="#{ll.substring(ll.length()-1)}" /></b></center>
+						            </p:columns>
+						       	</p:dataTable>
+						       	<br></br>
+						       	<br></br>
+								<p:dataTable style="width:100%;border-collapse:collapse;font-size:9px" border="1" value="#{mainVar.hindiList}" var="var">
+						            <p:columnGroup type="header">
+										<p:row>
+											 <p:column style="width:50px" rowspan="1" headerText="S.No." />
+							                 <p:column style="width:500px" rowspan="1" headerText="Language II-Hindi" />
+							                 <ui:repeat value="#{printOtherStdMarksheet.termList}" var="term">
+						                    	<p:column colspan="3" headerText="#{term.label}" />
+						               	 	 </ui:repeat>
+							            </p:row>
+							        </p:columnGroup>
+							    	
+							    	<p:column>
+						           		<b><p:outputLabel rendered="#{var.subjectType eq 'main'}"  style="float:left" value="#{var.serialNumber}"/></b>
+						           		<p:outputLabel rendered="#{var.subjectType ne 'main'}"  style="float:right" value="#{var.serialNumber}"/>
+						           	</p:column>
+							    	
+							        <p:column>
+						           		<b><p:outputLabel rendered="#{var.subjectType eq 'main'}" value="#{var.subjectName}"></p:outputLabel></b>
+						           		<p:outputLabel rendered="#{var.subjectType ne 'main'}" value="#{var.subjectName}"/>
+						           	</p:column>
+						           	
+						           	<p:columns value="#{printOtherStdMarksheet.scholasticColumnsList}" var="ll">
+						            	<center><p:graphicImage style="height:15px;width:20px;font-size:10px" rendered="#{var.marksMap.containsKey(ll)  &amp;&amp; var.subjectType ne 'main'}"  value="#{var.marksMap[ll]}" /></center>
+						            	<center><p:graphicImage style="height:15px;width:20px;" rendered="#{!var.marksMap.containsKey(ll) &amp;&amp; var.subjectType ne 'main'}" value="wrongTick.png" /></center>
+						            	<center><b><p:outputLabel rendered="#{var.subjectType eq 'main'}" value="#{ll.substring(ll.length()-1)}" /></b></center>
+						            </p:columns>
+						       	</p:dataTable>
+						       	
+						       	<center><h4><b>B. Mathematics</b></h4></center>
+								
+								<p:dataTable style="width:100%;border-collapse:collapse;font-size:9px" border="1" value="#{mainVar.mathList}" var="var">
+							        <p:columnGroup type="header">
+										<p:row>
+											 <p:column style="width:50px" rowspan="1" headerText="S.No." />
+							                 <p:column style="width:500px" rowspan="1" headerText="Maths" />
+							                 <ui:repeat value="#{printOtherStdMarksheet.termList}" var="term">
+						                    	<p:column colspan="3" headerText="#{term.label}" />
+						               	 	 </ui:repeat>
+							            </p:row>
+							        </p:columnGroup>
+							    	
+							    	<p:column>
+						           		<b><p:outputLabel rendered="#{var.subjectType eq 'main'}"  style="float:left" value="#{var.serialNumber}"/></b>
+						           		<p:outputLabel rendered="#{var.subjectType ne 'main'}"  style="float:right" value="#{var.serialNumber}"/>
+						           	</p:column>
+							    	
+							        <p:column>
+						           		<b><p:outputLabel rendered="#{var.subjectType eq 'main'}" value="#{var.subjectName}"></p:outputLabel></b>
+						           		<p:outputLabel rendered="#{var.subjectType ne 'main'}" value="#{var.subjectName}"/>
+						           	</p:column>
+						           	
+						           <p:columns value="#{printOtherStdMarksheet.scholasticColumnsList}" var="ll">
+						            	<center><p:graphicImage style="height:15px;width:20px;font-size:10px" rendered="#{var.marksMap.containsKey(ll)  &amp;&amp; var.subjectType ne 'main'}"  value="#{var.marksMap[ll]}" /></center>
+						            	<center><p:graphicImage style="height:15px;width:20px;" rendered="#{!var.marksMap.containsKey(ll) &amp;&amp; var.subjectType ne 'main'}" value="wrongTick.png" /></center>
+						            	<center><b><p:outputLabel rendered="#{var.subjectType eq 'main'}" value="#{ll.substring(ll.length()-1)}" /></b></center>
+						            </p:columns>
+						       	</p:dataTable>
+						       	
+								<center><h4><b>C. Interest In other activities</b></h4></center>
+								
+								<p:dataTable style="width:100%;border-collapse:collapse;font-size:9px" border="1" value="#{mainVar.drawingList}" var="var">
+							    	<p:columnGroup type="header">
+										<p:row>
+											 <p:column style="width:50px" rowspan="1" headerText="S.No." />
+							                 <p:column style="width:500px" rowspan="1" headerText="Drawing" />
+							                 <ui:repeat value="#{printOtherStdMarksheet.termList}" var="term">
+						                    	<p:column colspan="3" headerText="#{term.label}" />
+						               	 	 </ui:repeat>
+							            </p:row>
+							        </p:columnGroup>
+							    	
+							    	<p:column>
+						           		<b><p:outputLabel rendered="#{var.subjectType eq 'main'}"  style="float:left" value="#{var.serialNumber}"/></b>
+						           		<p:outputLabel rendered="#{var.subjectType ne 'main'}"  style="float:right" value="#{var.serialNumber}"/>
+						           	</p:column>
+							    	
+							        <p:column>
+						           		<b><p:outputLabel rendered="#{var.subjectType eq 'main'}" value="#{var.subjectName}"></p:outputLabel></b>
+						           		<p:outputLabel rendered="#{var.subjectType ne 'main'}" value="#{var.subjectName}"/>
+						           	</p:column>
+						           	
+						           	<p:columns value="#{printOtherStdMarksheet.scholasticColumnsList}" var="ll">
+						            	<center><p:graphicImage style="height:15px;width:20px;font-size:10px" rendered="#{var.marksMap.containsKey(ll)  &amp;&amp; var.subjectType ne 'main'}"  value="#{var.marksMap[ll]}" /></center>
+						            	<center><p:graphicImage style="height:15px;width:20px;" rendered="#{!var.marksMap.containsKey(ll) &amp;&amp; var.subjectType ne 'main'}" value="wrongTick.png" /></center>
+						            	<center><b><p:outputLabel rendered="#{var.subjectType eq 'main'}" value="#{ll.substring(ll.length()-1)}" /></b></center>
+						            </p:columns>
+						       	</p:dataTable>
+						       	
+						       	<br></br>
+						       	<br></br>
+						       	
+						       	<p:dataTable style="width:100%;border-collapse:collapse;font-size:9px" border="1" value="#{mainVar.indianMusicList}" var="var">
+							    	<p:columnGroup type="header">
+										<p:row>
+											 <p:column style="width:50px" rowspan="1" headerText="S.No." />
+							                 <p:column style="width:500px" rowspan="1" headerText="Music / Dance" />
+							                 <ui:repeat value="#{printOtherStdMarksheet.termList}" var="term">
+						                    	<p:column colspan="3" headerText="#{term.label}" />
+						               	 	 </ui:repeat>
+							            </p:row>
+							        </p:columnGroup>
+							    	
+							    	<p:column>
+						           		<b><p:outputLabel rendered="#{var.subjectType eq 'main'}"  style="float:left" value="#{var.serialNumber}"/></b>
+						           		<p:outputLabel rendered="#{var.subjectType ne 'main'}"  style="float:right" value="#{var.serialNumber}"/>
+						           	</p:column>
+							    	
+							        <p:column>
+						           		<b><p:outputLabel rendered="#{var.subjectType eq 'main'}" value="#{var.subjectName}"></p:outputLabel></b>
+						           		<p:outputLabel rendered="#{var.subjectType ne 'main'}" value="#{var.subjectName}"/>
+						           	</p:column>
+						           	
+						           <p:columns value="#{printOtherStdMarksheet.scholasticColumnsList}" var="ll">
+						            	<center><p:graphicImage style="height:15px;width:20px;font-size:10px" rendered="#{var.marksMap.containsKey(ll)  &amp;&amp; var.subjectType ne 'main'}"  value="#{var.marksMap[ll]}" /></center>
+						            	<center><p:graphicImage style="height:15px;width:20px;" rendered="#{!var.marksMap.containsKey(ll) &amp;&amp; var.subjectType ne 'main'}" value="wrongTick.png" /></center>
+						            	<center><b><p:outputLabel rendered="#{var.subjectType eq 'main'}" value="#{ll.substring(ll.length()-1)}" /></b></center>
+						            </p:columns>
+						       	</p:dataTable>
+						       	
+						       	<br></br>
+						       	<br></br>
+						       	
+						       	<p:dataTable style="width:100%;border-collapse:collapse;font-size:9px" border="1" value="#{mainVar.sportsList}" var="var">
+							    	<p:columnGroup type="header">
+										<p:row>
+											 <p:column style="width:50px" rowspan="1" headerText="S.No." />
+							                 <p:column style="width:500px" rowspan="1" headerText="Sports" />
+							                 <ui:repeat value="#{printOtherStdMarksheet.termList}" var="term">
+						                    	<p:column colspan="3" headerText="#{term.label}" />
+						               	 	 </ui:repeat>
+							            </p:row>
+							        </p:columnGroup>
+							    	
+							    	<p:column>
+						           		<b><p:outputLabel rendered="#{var.subjectType eq 'main'}"  style="float:left" value="#{var.serialNumber}"/></b>
+						           		<p:outputLabel rendered="#{var.subjectType ne 'main'}"  style="float:right" value="#{var.serialNumber}"/>
+						           	</p:column>
+							    	
+							        <p:column>
+						           		<b><p:outputLabel rendered="#{var.subjectType eq 'main'}" value="#{var.subjectName}"></p:outputLabel></b>
+						           		<p:outputLabel rendered="#{var.subjectType ne 'main'}" value="#{var.subjectName}"/>
+						           	</p:column>
+						           	
+						           	<p:columns value="#{printOtherStdMarksheet.scholasticColumnsList}" var="ll">
+						            	<center><p:graphicImage style="height:15px;width:20px;font-size:10px" rendered="#{var.marksMap.containsKey(ll)  &amp;&amp; var.subjectType ne 'main'}"  value="#{var.marksMap[ll]}" /></center>
+						            	<center><p:graphicImage style="height:15px;width:20px;" rendered="#{!var.marksMap.containsKey(ll) &amp;&amp; var.subjectType ne 'main'}" value="wrongTick.png" /></center>
+						            	<center><b><p:outputLabel rendered="#{var.subjectType eq 'main'}" value="#{ll.substring(ll.length()-1)}" /></b></center>
+						            </p:columns>
+						       	</p:dataTable>
+						       	
+						       	<center><h4><b>D. More about myself</b></h4></center>
+						       	
+						       	<p:dataTable style="width:100%;border-collapse:collapse;font-size:9px" border="1" value="#{mainVar.otherSubjectlist}" var="var">
+							    	<p:columnGroup type="header">
+										<p:row>
+											 <p:column style="width:50px" rowspan="1" headerText="S.No." />
+							                 <p:column style="width:500px" rowspan="1" headerText="Social Skills" />
+							                 <ui:repeat value="#{printOtherStdMarksheet.termList}" var="term">
+						                    	<p:column colspan="3" headerText="#{term.label}" />
+						               	 	 </ui:repeat>
+							            </p:row>
+							        </p:columnGroup>
+							    	
+							    	<p:column>
+						           		<b><p:outputLabel rendered="#{var.subjectType eq 'main'}"  style="float:left" value="#{var.serialNumber}"/></b>
+						           		<p:outputLabel rendered="#{var.subjectType ne 'main'}"  style="float:right" value="#{var.serialNumber}"/>
+						           	</p:column>
+							    	
+							        <p:column>
+						           		<b><p:outputLabel rendered="#{var.subjectType eq 'main'}" value="#{var.subjectName}"></p:outputLabel></b>
+						           		<p:outputLabel rendered="#{var.subjectType ne 'main'}" value="#{var.subjectName}"/>
+						           	</p:column>
+						           	
+						           	<p:columns value="#{printOtherStdMarksheet.scholasticColumnsList}" var="ll">
+						            	<center><p:graphicImage style="height:15px;width:20px;font-size:10px" rendered="#{var.marksMap.containsKey(ll)  &amp;&amp; var.subjectType ne 'main'}"  value="#{var.marksMap[ll]}" /></center>
+						            	<center><p:graphicImage style="height:15px;width:20px;" rendered="#{!var.marksMap.containsKey(ll) &amp;&amp; var.subjectType ne 'main'}" value="wrongTick.png" /></center>
+						            	<center><b><p:outputLabel rendered="#{var.subjectType eq 'main'}" value="#{ll.substring(ll.length()-1)}" /></b></center>
+						            </p:columns>
+						       	</p:dataTable>
+						       	
+						       	<center><h4><b>E. Personal skills</b></h4></center>
+						       	
+						       	<p:dataTable style="width:100%;border-collapse:collapse;font-size:9px" border="1" value="#{mainVar.personalList}" var="var">
+							    	<p:columnGroup type="header">
+										<p:row>
+											 <p:column style="width:50px" rowspan="1" headerText="S.No." />
+							                 <p:column style="width:500px" rowspan="1" headerText="Personal" />
+							                 <ui:repeat value="#{printOtherStdMarksheet.termList}" var="term">
+						                    	<p:column colspan="3" headerText="#{term.label}" />
+						               	 	 </ui:repeat>
+							            </p:row>
+							        </p:columnGroup>
+							    	
+							    	<p:column>
+						           		<b><p:outputLabel rendered="#{var.subjectType eq 'main'}"  style="float:left" value="#{var.serialNumber}"/></b>
+						           		<p:outputLabel rendered="#{var.subjectType ne 'main'}"  style="float:right" value="#{var.serialNumber}"/>
+						           	</p:column>
+							    	
+							        <p:column>
+						           		<b><p:outputLabel rendered="#{var.subjectType eq 'main'}" value="#{var.subjectName}"></p:outputLabel></b>
+						           		<p:outputLabel rendered="#{var.subjectType ne 'main'}" value="#{var.subjectName}"/>
+						           	</p:column>
+						           	
+						           	<p:columns value="#{printOtherStdMarksheet.scholasticColumnsList}" var="ll">
+						            	<center><p:graphicImage style="height:15px;width:20px;font-size:10px" rendered="#{var.marksMap.containsKey(ll)  &amp;&amp; var.subjectType ne 'main'}"  value="#{var.marksMap[ll]}" /></center>
+						            	<center><p:graphicImage style="height:15px;width:20px;" rendered="#{!var.marksMap.containsKey(ll) &amp;&amp; var.subjectType ne 'main'}" value="wrongTick.png" /></center>
+						            	<center><b><p:outputLabel rendered="#{var.subjectType eq 'main'}" value="#{ll.substring(ll.length()-1)}" /></b></center>
+						            </p:columns>
+						       	</p:dataTable>
+						       	
+						       	<center><h4><b>F. Working skills</b></h4></center>
+						       	
+						       	<p:dataTable style="width:100%;border-collapse:collapse;font-size:9px" border="1" value="#{mainVar.workingList}" var="var">
+							    	<p:columnGroup type="header">
+										<p:row>
+											 <p:column style="width:50px" rowspan="1" headerText="S.No." />
+							                 <p:column style="width:500px" rowspan="1" headerText="Work habits" />
+							                 <ui:repeat value="#{printOtherStdMarksheet.termList}" var="term">
+						                    	<p:column colspan="3" headerText="#{term.label}" />
+						               	 	 </ui:repeat>
+							            </p:row>
+							        </p:columnGroup>
+							    	
+							    	<p:column>
+						           		<b><p:outputLabel rendered="#{var.subjectType eq 'main'}"  style="float:left" value="#{var.serialNumber}"/></b>
+						           		<p:outputLabel rendered="#{var.subjectType ne 'main'}"  style="float:right" value="#{var.serialNumber}"/>
+						           	</p:column>
+							    	
+							        <p:column>
+						           		<b><p:outputLabel rendered="#{var.subjectType eq 'main'}" value="#{var.subjectName}"></p:outputLabel></b>
+						           		<p:outputLabel rendered="#{var.subjectType ne 'main'}" value="#{var.subjectName}"/>
+						           	</p:column>
+						           	
+						           	<p:columns value="#{printOtherStdMarksheet.scholasticColumnsList}" var="ll">
+						            	<center><p:graphicImage style="height:15px;width:20px;font-size:10px" rendered="#{var.marksMap.containsKey(ll)  &amp;&amp; var.subjectType ne 'main'}"  value="#{var.marksMap[ll]}" /></center>
+						            	<center><p:graphicImage style="height:15px;width:20px;" rendered="#{!var.marksMap.containsKey(ll) &amp;&amp; var.subjectType ne 'main'}" value="wrongTick.png" /></center>
+						            	<center><b><p:outputLabel rendered="#{var.subjectType eq 'main'}" value="#{ll.substring(ll.length()-1)}" /></b></center>
+						            </p:columns>
+						       	</p:dataTable>
+						       		
+								<center><h4><b>G. ATTENDANCE</b></h4></center>
+
+						       	<p:dataTable style="width:100%;border-collapse:collapse;font-size:9px" border="1" value="#{mainVar.extraFieldList}" var="var">
+						    	<p:columnGroup type="header">
+									<p:row>
+						                 <p:column style="width:500px" rowspan="1" headerText= "Attendance" />
+						                 <ui:repeat value="#{printOtherStdMarksheet.termList}" var="term">
+					                    	<p:column colspan="1" headerText="#{term.label}" />
+					               	 	 </ui:repeat>
+						            </p:row>
+						        </p:columnGroup>
+						    	
+						        <p:column>
+					           		<p:outputLabel value="#{var.label}"></p:outputLabel>
+					           	</p:column>
+					           	
+					           	<p:columns value="#{printOtherStdMarksheet.extraColumnsList}" var="ll">
+					            	<center><p:outputLabel style="font-size:10px" value="#{var.extraMap[ll]}" /></center>
+					            </p:columns>
+					       	</p:dataTable>
+						       	<br></br><br></br>
+						       	<p:dataTable   style="width:100%;border-collapse:collapse;font-size:9px" border="1" value="#{printOtherStdMarksheet.signatureList}" var="var">
+							        <p:column style="height:70px;" headerText="Signature">
+						           		<p:outputLabel value="#{var}"/>
+						           	</p:column>
+						           	
+						           	<p:columns style="height:70px;" value="#{printOtherStdMarksheet.termList}" var="term">
+						           		<f:facet name="header">
+						           			<p:outputLabel  value="#{term.label}"></p:outputLabel>
+					           			</f:facet>
+						            	<p:outputLabel value=""></p:outputLabel>
+						            </p:columns>
+						       	</p:dataTable>
+					       	
+							</ui:repeat>
+							</p:outputPanel>
+						</h:form>
+						</p:outputPanel>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

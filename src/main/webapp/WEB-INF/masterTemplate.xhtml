@@ -1,0 +1,203 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+<f:loadBundle var="regexVar" basename="myProperties" />
+<f:loadBundle var="addClassVar" basename="myProperties" />
+<f:loadBundle var="addExamVar" basename="myProperties" />
+<f:loadBundle var="addSubjectsVar" basename="myProperties" />
+<f:loadBundle var="employeeAddmissionVar" basename="myProperties" />
+<f:loadBundle var="registrationVar" basename="myProperties" />
+<f:loadBundle var="registrationParentsVar" basename="myProperties" />
+<f:loadBundle var="addNewRouteVar" basename="myProperties" />
+<f:loadBundle var="addNewStopVar" basename="myProperties" />
+<f:loadBundle var="addSectionVar" basename="myProperties" />
+<f:loadBundle var="addSemesterVar" basename="myProperties" />
+<f:loadBundle var="searchStudentVar" basename="myProperties" />
+<f:loadBundle var="adminHomeVar" basename="myProperties" />
+<f:loadBundle var="addTestVar" basename="myProperties" />
+<f:loadBundle var="studentPerformanceVar" basename="myProperties" />
+<f:loadBundle var="printTestPerformanceClassWiseVar" basename="myProperties" />
+<f:loadBundle var="feeCollectionVar" basename="myProperties" />
+<f:loadBundle var="collectFeeVar" basename="myProperties" />
+<f:loadBundle var="dueFeeReportVar" basename="myProperties" />
+    <h:head>
+        <f:facet name="first">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+            <meta name="apple-mobile-web-app-capable" content="yes" />
+            <meta name="theme-color" content="#{guestPreferences.themeColors[guestPreferences.theme]}" />
+        </f:facet>
+        <title><ui:insert name="title">Welcome to Chalkbox</ui:insert></title>
+        <h:outputScript name="js/nanoscroller.js" library="avalon-layout" />
+        <h:outputScript name="js/layout.js" library="avalon-layout" />
+        <h:outputStylesheet name="css/layout-#{guestPreferences.layout}.css" library="avalon-layout" />
+        <ui:insert name="head"/>
+        <style type="text/css">
+.redColored {
+	color: red;
+}
+
+.greenColored {
+	color: #00b100;
+}
+
+.yellowColored {
+	color: yellow;
+}
+
+.blueColored {
+	color: #0000ff;
+}
+
+.blackColored {
+	color: #000000;
+}
+
+.fc-time {
+	display: none !important;
+}
+
+.firstmm {
+	width: 128px !important;
+}
+
+.butwid {
+	width: 150px !important;
+}
+.butwid-1 {
+	width: 200px !important;
+}
+.butwid-2 {
+	width: 250px !important;
+}
+.redButt{
+	background-color: #9c2d38 !important;
+}
+
+.greenButt{
+    background-color: #266936 !important;
+}
+
+.NOT {
+	background-color: #ffffff !important;
+}
+
+.PRESENT {
+	background-color: #93F2A3 !important;
+}
+
+.ABSENT {
+	background-color: #F79B83E6 !important;
+}
+
+.HOLIDAY {
+	background-color: #FF512DA8 !important;
+}
+
+.LEAVE {
+	background-color: #FFBF79 !important;
+}
+
+.MEDICAL {
+	background-color: #FFFF90 !important;
+}
+
+.PREP {
+	background-color: #FF009740 !important;
+}
+
+.PAID {
+	background-color: #93F2A3 !important;
+}
+</style>
+        <link rel="stylesheet" type="text/css" href="tempcss/style.css"/>
+        
+        <script>
+        function barext() {
+      	  this.cfg.seriesDefaults.rendererOptions.varyBarColor = true;
+      	}
+			function handleChange(input) 
+			{
+				var ot = document.getElementById("form1:stopFee");
+				if (input.value > parseInt(ot.textContent))
+					input.value = 0;
+			}
+		</script>
+		
+		  <script>
+  function calculateAmount()
+    {
+	  
+	  var rate=parseFloat(document.getElementById("form:price").value);
+	   
+	      if(isNaN(rate)) 
+	    {
+	        document.getElementById("form:price").value=0;
+	    }  
+	      
+	   var quan=parseFloat(document.getElementById("form:quantity").value);
+	  
+		 
+	    var amount=rate*quan;
+	  amount=amount.toFixed(2);
+	  document.getElementById("form:amount").value=amount;
+	  
+	    
+	   var k = amount*0.18;
+	    var g=k.toFixed(2);
+	  
+	
+	    
+	  document.getElementById("form:taxamount").value=g;
+	  document.getElementById("form:totalamount").value=parseFloat(amount)+parseFloat(g);  
+    }
+</script>
+    </h:head>
+
+    <h:body>
+        
+        <div class="layout-wrapper #{guestPreferences.menuLayout}">
+            <ui:include src="./masterTopbar.xhtml" />
+            <ui:include src="./masterMenu.xhtml" />
+            
+            <div class="layout-main">
+                <ui:insert name="content"/>
+            </div>
+            
+            <ui:include src="./footer.xhtml" />
+        </div>
+        
+        <!-- <p:ajaxStatus style="width:32px;height:32px;position:fixed;right:7px;bottom:7px">
+           <f:facet name="start">
+               <i class="fa fa-circle-o-notch fa-spin ajax-loader" aria-hidden="true"></i>
+           </f:facet>
+
+           <f:facet name="complete">
+               <h:outputText value="" />
+           </f:facet>
+       </p:ajaxStatus> -->
+       
+       <p:ajaxStatus onstart="PF('statusDialog').show()"
+			onsuccess="PF('statusDialog').hide()" />
+		<p:dialog modal="true" widgetVar="statusDialog" resizable="false"
+			showHeader="false">
+			<center>
+			<!-- <i class="fa fa-circle-o-notch fa-5x fa-spin ajax-loader"></i> -->
+			<p:graphicImage value="loader2.gif" height="100" width="100"/> 
+		</center>
+		<!-- <center>
+			<h3>Please Wait...</h3>
+		</center> -->
+		</p:dialog>
+
+        <h:outputStylesheet name="css/nanoscroller.css" library="avalon-layout" />
+        <h:outputStylesheet name="css/animate.css" library="avalon-layout" />
+        <h:outputStylesheet name="css/layout-#{guestPreferences.layout}.css" library="avalon-layout" />
+    </h:body>
+
+</html>

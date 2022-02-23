@@ -1,0 +1,89 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Back Up</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<h1>BackUp and Restore</h1>
+
+							<p:messages closable="true" autoUpdate="true"></p:messages>
+
+							<p:panel id="panel" header="Back Up">
+
+								<p:panelGrid columns="2" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel value="Select"></p:outputLabel>
+									<p:selectOneMenu value="#{backUp.selected}">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItem itemLabel="BackUp" itemValue="backup"></f:selectItem>
+										<f:selectItem itemLabel="Restore" itemValue="restore"></f:selectItem>
+
+										<p:ajax update=":form" listener="#{backUp.backUpRestore}"></p:ajax>
+									</p:selectOneMenu>
+
+								</p:panelGrid>
+								<br/>	
+								<p:panel header="BackUp" rendered="#{backUp.showBackup}">
+
+									<p:panelGrid columns="2" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+
+
+
+										<p:commandButton onclick="PF('dlg2').show();" update=":form"
+											value="BackUp" actionListener="#{backUp.createBackUp}"></p:commandButton>
+
+									</p:panelGrid>
+
+								</p:panel>
+								<br/>
+								<p:panel header="Restore" rendered="#{backUp.show}">
+
+
+										<p:dataTable reflow="true" value="#{backUp.dataList}" var="list"
+											selection="#{backUp.selectedRow}" rowKey="#{list.id}">
+											<p:column headerText="Select" selectionMode="single"></p:column>
+
+											<p:column headerText="File Name">
+												<p:outputLabel value="#{list.fileName}"></p:outputLabel>
+											</p:column>
+
+											<p:column headerText="Date">
+												<p:outputLabel value="#{list.date}"></p:outputLabel>
+											</p:column>
+
+											<f:facet name="footer">
+												<p:commandButton onclick="PF('dlg2').show();" update=":form"
+													value="Restore" action="#{backUp.restore}"></p:commandButton>
+											</f:facet>
+										</p:dataTable>
+								</p:panel>
+							</p:panel>
+
+							<p:dialog draggable="false" closable="false" resizable="false"
+								widgetVar="dlg2" header="Please wait........" modal="true"
+								showEffect="fade" hideEffect="explode">
+
+								<p:graphicImage url="image/loading-bar.gif"></p:graphicImage>
+
+							</p:dialog>
+
+
+
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

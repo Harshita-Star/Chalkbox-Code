@@ -1,0 +1,87 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Hostel</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+
+						<h:form id="form" style="overflow:hidden">
+
+							<p:panel header="View Rooms">
+
+								<p:panelGrid columns="5"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:outputLabel value="Hostel Name"></p:outputLabel>
+									<p:selectOneMenu value="#{viewHostelWiseRoomReport.hostelName}">
+										<f:selectItem itemLabel="All" itemValue="all"></f:selectItem>
+										<f:selectItems
+											value="#{viewHostelWiseRoomReport.hostelNameList}"></f:selectItems>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="No. of Beds"></p:outputLabel>
+									<p:inputText placeholder="All"
+										value="#{viewHostelWiseRoomReport.roomNo}" validatorMessage="Please Enter Correct value">
+									  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+									</p:inputText>
+
+									<p:commandButton value="Search"
+										actionListener="#{viewHostelWiseRoomReport.allRooms}"
+										update=":form"></p:commandButton>
+								</p:panelGrid>
+
+							</p:panel>
+							<br />
+							<p:panel rendered="#{viewHostelWiseRoomReport.showTable}"
+								header="Details">
+								<p:dataTable reflow="true" id="dt"
+									value="#{viewHostelWiseRoomReport.roomList}" var="var">
+
+									<p:column headerText="S. No.">
+										<p:outputLabel value="#{var.sno}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Room No" filterBy="#{var.roomNo}"
+										filterMatchMode="contains" sortBy="#{var.roomNo}">
+										<p:outputLabel value="#{var.roomNo}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Hostel Name" filterBy="#{var.hostelName}"
+										filterMatchMode="contains" sortBy="#{var.hostelName}">
+										<p:outputLabel value="#{var.hostelName}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="No. of Beds" filterBy="#{var.noOfBed}"
+										filterMatchMode="contains" sortBy="#{var.noOfBeds}">
+										<p:outputLabel value="#{var.noOfBed}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Vacant Beds">
+										<p:outputLabel value="#{var.vacantBedss}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Occupied Beds">
+										<p:outputLabel value="#{var.occpiedBeds}"></p:outputLabel>
+
+									</p:column>
+								</p:dataTable>
+							</p:panel>
+						</h:form>
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

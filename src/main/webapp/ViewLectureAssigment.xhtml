@@ -1,0 +1,104 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">E-Learning</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form2" enctype="multipart/form-data">
+							<p:panel header="Assignment List"
+								>
+								<p:dataTable value="#{viewLectureAssigmentBean.list}" var="var"
+									reflow="true">
+
+
+									<p:column headerText="Student Name">
+										<p:outputLabel value="#{var.name}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Class" 
+										>
+										<p:outputLabel value="#{var.className}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Description">
+										<p:outputLabel value="#{var.description}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Date">
+										<p:outputLabel value="#{var.date}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Attachment">
+									<center>
+										<p:commandButton 
+											 icon="fa fa-paperclip" styleClass="butwid" action="#{viewLectureAssigmentBean.viewassignemnt}" oncomplete="PF('dlg1').show();" update=":View">
+											<f:setPropertyActionListener
+												target="#{viewLectureAssigmentBean.selected}"
+												value="#{var}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</center>
+									</p:column>
+
+
+									
+
+								</p:dataTable>
+
+								
+							</p:panel>
+						</h:form>
+
+
+						<h:form id="View">
+							<p:dialog header="Files" id="docm" widgetVar="dlg1" height="500"
+								width="500" modal="true" showEffect="fade" hideEffect="fade"
+								resizable="false">
+
+								<div class="ui-g form-group">
+									<p:panelGrid columns="2"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+										<p:dataTable id="dtb2" value="#{viewLectureAssigmentBean.imageList}" var="info">
+
+													<p:column headerText="Files">
+										<p:panelGrid columns="1">
+											<a href="#{info.fileName1}" target="_blank">#{info.fileName}</a>
+											<br></br>
+										</p:panelGrid>
+
+									</p:column>
+											
+											
+										
+											
+										
+											
+											
+								
+
+										</p:dataTable>
+									</p:panelGrid>
+								</div>
+
+							</p:dialog>
+
+
+						</h:form>
+						
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

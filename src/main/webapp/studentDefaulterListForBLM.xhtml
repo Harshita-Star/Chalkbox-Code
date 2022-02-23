@@ -1,0 +1,66 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/schoolMasterTemplate.xhtml">
+	<f:loadBundle var="addClassVar" basename="myProperties" />
+	<ui:define name="title">Defaulter Student List</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<h1></h1>
+
+							<p:panel header="Defaulter Student List">
+								<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+								<p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+									<p:outputLabel  for="@next" style="color:red" value="Select Branch"></p:outputLabel>
+									<p:selectOneMenu value="#{stdDefaultList.selectedSchool}" required="true" requiredMessage="Please Select Branch">
+										<f:selectItem itemLabel="All" itemValue="All"></f:selectItem>
+										<f:selectItem itemLabel="BLM Blooming Birds" itemValue="252"></f:selectItem>
+										<f:selectItem itemLabel="BLM Sr. Sec." itemValue="251"></f:selectItem>
+									</p:selectOneMenu>
+									
+									<p:outputLabel value="Select Installment" for="@next" style="color:red" ></p:outputLabel>
+               		 		 		<p:selectCheckboxMenu  multiple="true"
+										value="#{stdDefaultList.checkMonthSelected}" required="true"
+										requiredMessage="Please Select Installment">
+										<f:selectItems value="#{stdDefaultList.installmentList}"></f:selectItems>
+									</p:selectCheckboxMenu>
+											
+		              		 		<p:outputLabel value="Till Date" for="@next" style="color:red" ></p:outputLabel>
+		              		 		<p:calendar value="#{stdDefaultList.date}" navigator="true" required="true" requiredMessage="Please enter date" pattern="dd/MM/yyyy"></p:calendar>
+									
+									<p:commandButton value="Submit" actionListener="#{stdDefaultList.searchReport}" update=":form"></p:commandButton>
+								</p:panelGrid>
+							</p:panel>
+							<p:panel>
+								<p:dataTable value="#{stdDefaultList.feeEstimateList}" var="var">
+									<p:column headerText="Installment">
+										<p:outputLabel value="#{var.installmentName}"></p:outputLabel>
+									</p:column>
+									
+									<p:columns value="#{stdDefaultList.feeInfo}" var="column" columnIndexVar="colIndex">
+										<f:facet name="header">
+											<p:outputLabel value="#{column.feeName}"></p:outputLabel>
+										</f:facet>
+
+										<p:outputLabel value="#{var.feeMap[column.feeName]}"></p:outputLabel>
+
+									</p:columns>
+								</p:dataTable>
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

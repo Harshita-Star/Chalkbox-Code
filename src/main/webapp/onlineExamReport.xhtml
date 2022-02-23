@@ -1,0 +1,284 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Online Exam Result</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form" enctype="multipart/form-data">
+							<p:messages closable="true" autoUpdate="true"></p:messages>
+							<p:panel header="Online Exam Report">
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel for="@next" style="color:red"
+										value="Select Class"></p:outputLabel>
+									<p:selectOneMenu value="#{onlineExamReport.selectedClass}"
+										required="true" requiredMessage="Please select a class">
+										<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+										<f:selectItems value="#{onlineExamReport.classList}"></f:selectItems>
+										<p:ajax update="sectionid"
+											listener="#{onlineExamReport.allSections}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel for="@next" style="color:red"
+										value="Select Section"></p:outputLabel>
+									<p:selectOneMenu id="sectionid"
+										value="#{onlineExamReport.selectedSection}" required="true"
+										requiredMessage="Please select a section">
+										<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+										<f:selectItems value="#{onlineExamReport.sectionList}"></f:selectItems>
+										<p:ajax update="subjectid"
+											listener="#{onlineExamReport.allSubject}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel for="@next" style="color:red"
+										value="Select Subject"></p:outputLabel>
+									<p:selectOneMenu id="subjectid"
+										value="#{onlineExamReport.selectedSubject}" required="true"
+										requiredMessage="Please select a Subject">
+										<f:selectItem itemLabel="Select" itemValue="" />
+										<f:selectItems value="#{onlineExamReport.subjectList}" />
+										<p:ajax update="examid"
+											listener="#{onlineExamReport.allExams}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel for="@next" style="color:red"
+										value="Select Exam"></p:outputLabel>
+									<p:selectOneMenu id="examid"
+										value="#{onlineExamReport.selectedExam}" required="true"
+										requiredMessage="Please select a Exam">
+										<f:selectItem itemLabel="Select" itemValue="" />
+										<f:selectItems value="#{onlineExamReport.examList}" />
+									</p:selectOneMenu>
+
+								</p:panelGrid>
+
+								<br />
+								<p:separator />
+								<center>
+									<p:panelGrid
+										columns="#{onlineExamReport.studentList.size() gt 0 ? '3' : '1'}"
+										layout="grid" styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+
+										<p:commandButton value="Search" update=":form2,:form"
+											styleClass="butwid" icon="fa fa-search"
+											action="#{onlineExamReport.search}"></p:commandButton>
+
+										<h:commandLink rendered="#{onlineExamReport.b}">
+											<p:graphicImage name="images/excellogo.png"
+												library="avalon-layout" styleClass="butwid" height="40"></p:graphicImage>
+											<pe:exporter type="xlsx" target=":form2:dataTable"
+												postProcessor="#{onlineExamReport.toNumWithoutPhoto}"
+												fileName="Online exam report"></pe:exporter>
+										</h:commandLink>
+
+										<p:commandButton value="PDF" icon="fa fa-file-pdf-o"
+											styleClass="butwid" ajax="false" process="@this"
+											actionListener="#{onlineExamReport.exportClasWisePdf}"
+											rendered="#{onlineExamReport.b}">
+
+											<p:fileDownload value="#{onlineExamReport.file}" />
+										</p:commandButton>
+
+
+									</p:panelGrid>
+								</center>
+								<p:separator />
+								<br />
+
+
+							</p:panel>
+						</h:form>
+					</div>
+					<div class="card card-w-title">
+						<h:form id="form2" enctype="multipart/form-data">
+							<p:panel header="Student List" rendered="#{onlineExamReport.b}">
+								<center>
+									<p
+										style="margin: 0px; font-size: 25px !important; font-weight: bold;">Online
+										Exam Marks Report</p>
+								</center>
+								<p:panelGrid columns="3" layout="grid"
+									styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;width:100%;">
+
+										<p:outputLabel value="Class:-   #{onlineExamReport.className}"></p:outputLabel>
+										<p:outputLabel value="Section:-     #{onlineExamReport.sectionName}"></p:outputLabel>
+									
+										<p:outputLabel value="Total:-     #{onlineExamReport.total}"></p:outputLabel>
+									
+										<p:outputLabel value="Subject Name:-     #{onlineExamReport.subjectName}"></p:outputLabel>
+									
+										<p:outputLabel value="Exam Name:-      #{onlineExamReport.examName}"></p:outputLabel>
+								
+								</p:panelGrid>
+
+
+								<center>
+									<p:commandButton value="Proceed To Copy" styleClass="butwid-2"
+										icon="fa fa-check" update=":form2,:form"
+										action="#{onlineExamReport.copyDetails}" />
+								</center>
+								<p:dataTable id="dataTable"
+									value="#{onlineExamReport.studentList}" var="var" reflow="true"
+									selection="#{onlineExamReport.selectedList}"
+									rowKey="#{var.addNumber}" rowIndexVar="index"
+									rowSelectMode="add">
+
+
+									<p:column selectionMode="multiple" exportable="false"
+										style="width:50px;">
+
+									</p:column>
+
+									<p:column headerText="S.No.">
+										<f:facet name="header">
+											<p:outputLabel value="S.No."></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{index+1}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Roll No" sortBy="#{var.rollNo}">
+										<f:facet name="header">
+											<p:outputLabel value="Roll No"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.rollNo}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Add. Number">
+										<f:facet name="header">
+											<p:outputLabel value="Add. Number"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.srNo}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Student Name" sortBy="#{var.fullName}">
+										<f:facet name="header">
+											<p:outputLabel value="Student Name"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.fullName}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Max. Marks">
+										<f:facet name="header">
+											<p:outputLabel value="Max. Marks"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.maxMarks}"></p:outputLabel>
+									</p:column>
+									<p:column headerText="Marks Obtained">
+										<f:facet name="header">
+											<p:outputLabel value="Marks Obtained"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.marksObtained}"></p:outputLabel>
+									</p:column>
+
+								</p:dataTable>
+
+								<center>
+									<p:commandButton value="Proceed To Copy" styleClass="butwid-2"
+										icon="fa fa-check" update=":form2,:form"
+										action="#{onlineExamReport.copyDetails}" />
+								</center>
+
+							</p:panel>
+						</h:form>
+						<h:form id="copyForm" enctype="multipart/form-data">
+							<p:dialog resizable="false" widgetVar="copyDialog"
+								header="Copy To Exam" showEffect="fade" hideEffect="explode"
+								modal="true">
+								<div class="ui-g form-group">
+									<p:outputPanel id="dlgPnl">
+										<p:messages closable="true" autoUpdate="true"></p:messages>
+										<p:panelGrid columns="4"
+											styleClass="ui-panelgrid-blank form-group"
+											style="border:0px none; background-color:transparent;">
+
+											<p:outputLabel for="@next" style="color:red"
+												value="#{studentPerformanceVar.studentPerformanceSelectTermSemesterLabel}"></p:outputLabel>
+											<p:selectOneMenu required="true" filter="true"
+												requiredMessage="Please select a term" id="showTerm"
+												value="#{onlineExamReport.selectedTerm}">
+												<f:selectItem
+													itemLabel="#{studentPerformanceVar.studentPerformanceSelectHereLabel}"
+													itemValue=""></f:selectItem>
+												<f:selectItems value="#{onlineExamReport.termList}"></f:selectItems>
+												<p:ajax update="dlgPnl"
+													listener="#{onlineExamReport.method}"></p:ajax>
+											</p:selectOneMenu>
+
+											<p:outputLabel for="@next" style="color:red"
+												rendered="#{onlineExamReport.showExam}"
+												value="Select Exam type"></p:outputLabel>
+											<p:selectOneMenu rendered="#{onlineExamReport.showExam}"
+												filter="true" required="true"
+												requiredMessage="Please select exam type"
+												value="#{onlineExamReport.selectedCopyExam}">
+												<f:selectItem
+													itemLabel="#{studentPerformanceVar.studentPerformanceSelectHereLabel}"
+													itemValue=""></f:selectItem>
+												<f:selectItems value="#{onlineExamReport.examTypeList}"></f:selectItems>
+												<p:ajax listener="#{onlineExamReport.createSubExamList}"
+													update="dlgPnl"></p:ajax>
+											</p:selectOneMenu>
+
+											<p:outputLabel for="@next" style="color:red"
+												rendered="#{onlineExamReport.showSubExam}"
+												value="Select Sub Exam"></p:outputLabel>
+											<p:selectOneMenu rendered="#{onlineExamReport.showSubExam}"
+												filter="true" value="#{onlineExamReport.subExam}"
+												required="true" requiredMessage="Please Select Sub Exam">
+												<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+												<f:selectItems value="#{onlineExamReport.subExamList}"></f:selectItems>
+												<p:ajax></p:ajax>
+											</p:selectOneMenu>
+
+										</p:panelGrid>
+									</p:outputPanel>
+								</div>
+
+								<br />
+								<p:separator />
+								<center>
+									<p:commandButton styleClass="butwid" icon="fa fa-floppy-o"
+										value="Save Here" action="#{onlineExamReport.submit}" />
+								</center>
+								<p:separator />
+								<br />
+
+							</p:dialog>
+						</h:form>
+
+						<h:form id="messageDia" enctype="multipart/form-data">
+							<p:dialog resizable="false" widgetVar="messageDialog"
+								header="Message" showEffect="fade" hideEffect="explode"
+								modal="true">
+								<div class="ui-g form-group">
+									<p:outputPanel id="msgPnl">
+
+										<p:outputLabel value="#{onlineExamReport.message}"></p:outputLabel>
+
+									</p:outputPanel>
+								</div>
+							</p:dialog>
+						</h:form>
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

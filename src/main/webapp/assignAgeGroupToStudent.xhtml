@@ -1,0 +1,92 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Search Student</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+						<div class="card card-w-title">
+						<h:form id="form2">
+						<p:growl showDetail="true"  autoUpdate="true"></p:growl> 
+							<p:panel header="Search Student by Class-Section">
+								<p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel  for="@next" style="color:red" value="Select Class"></p:outputLabel>
+									<p:selectOneMenu style="width:250px" filter="true" value="#{assignAgeGroupStudent.selectedClass}" required="true" requiredMessage="Please Select A Class">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{assignAgeGroupStudent.classList}"></f:selectItems>
+										<p:ajax update="sectionid,ageId" listener="#{assignAgeGroupStudent.allSections}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Select Section" for="@next" style="color:red" ></p:outputLabel>
+									<p:selectOneMenu id="sectionid" filter="true" value="#{assignAgeGroupStudent.selectedSection}" required="true" requiredMessage="Please Select A Section">
+										<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+										<f:selectItems value="#{assignAgeGroupStudent.sectionList}"></f:selectItems>
+									</p:selectOneMenu>
+									
+									<p:outputLabel value="Select Age Group" for="@next" style="color:red" ></p:outputLabel>
+									<p:selectOneMenu id="ageId" filter="true" value="#{assignAgeGroupStudent.selectedAgeGroup}" required="true" requiredMessage="Please Select A Section">
+										<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+										<f:selectItems value="#{assignAgeGroupStudent.ageGroupList}"></f:selectItems>
+									</p:selectOneMenu>
+									
+									<p:commandButton value="Assign" update=":form3" actionListener="#{assignAgeGroupStudent.searchStudentByClassSection}"/>
+									<p:commandButton value="Remove" update=":form3" actionListener="#{assignAgeGroupStudent.searchStudentByClassSectionForRemove}"/>
+									
+								</p:panelGrid>
+							</p:panel>
+
+						</h:form>
+						</div>
+						<div class="card card-w-title">
+						<h:form id="form3">
+
+							<p:panel header="Student Details">
+									<p:dataTable reflow="true" selection="#{assignAgeGroupStudent.selectedStudentList}" rowKey="#{var.id}" var="var" value="#{assignAgeGroupStudent.studentList}" rows="5" paginator="true" rowsPerPageTemplate="5,10,15">
+
+										<p:column style="width:100px" headerText="Select Here"
+											selectionMode="multiple"></p:column>
+
+										<p:column headerText="Sr No">
+											<p:outputLabel value="#{var.srNo}"></p:outputLabel>
+										</p:column>
+
+										<p:column sortBy="#{var.fname}" headerText="Student Name">
+											<p:outputLabel value="#{var.fname}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Father's Name">
+											<p:outputLabel value="#{var.fathersName}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Class">
+											<p:outputLabel value="#{var.className}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Section">
+											<p:outputLabel value="#{var.sectionName}"></p:outputLabel>
+										</p:column>
+
+										<f:facet name="footer">
+											<p:commandButton rendered="#{assignAgeGroupStudent.flag eq '0'}" actionListener="#{assignAgeGroupStudent.submit}" update=":form3,:form2" value="Submit"></p:commandButton>
+											<p:commandButton rendered="#{assignAgeGroupStudent.flag eq '1'}" actionListener="#{assignAgeGroupStudent.remove}" update=":form3,:form2" value="Remove"></p:commandButton>
+										</f:facet>
+
+									</p:dataTable>
+							</p:panel>
+
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

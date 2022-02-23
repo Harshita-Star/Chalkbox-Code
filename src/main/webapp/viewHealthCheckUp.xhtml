@@ -1,0 +1,113 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Infirmary</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+
+
+						<h:form id="form" style="overflow:hidden">
+						<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+							<p:panel header="Health Check Up">
+								<p:panelGrid columns="2" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:outputLabel value="Date"></p:outputLabel>
+									<p:outputLabel
+										value="#{viewHealthCheckUp.selectedCheckUp.checkUpDate}"></p:outputLabel>
+
+									<p:outputLabel value="Student Name"></p:outputLabel>
+									<p:outputLabel
+										value="#{viewHealthCheckUp.selectedCheckUp.selectedStudent}"></p:outputLabel>
+
+									<p:outputLabel rendered="false" value="Select Check Up type"></p:outputLabel>
+									<p:outputLabel rendered="false"
+										value="#{viewHealthCheckUp.selectedCheckUp.checkUp}"></p:outputLabel>
+
+								</p:panelGrid>
+							<br/>
+								<p:panelGrid columns="4" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none;width:100%; background-color:transparent;">
+
+                              <p:panel header="Any Disease">
+										<p:panelGrid columns="2" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+										
+											<p:outputLabel value="Time*"></p:outputLabel>
+											<p:outputLabel
+												value="#{viewHealthCheckUp.selectedCheckUp.timevalue}"></p:outputLabel>
+										
+											<p:outputLabel value="Reason of Visit*"></p:outputLabel>
+											<p:outputLabel
+												value="#{viewHealthCheckUp.selectedCheckUp.disease}"></p:outputLabel>
+
+											<p:outputLabel value="Treatment Advice*"></p:outputLabel>
+											<p:outputLabel
+												value="#{viewHealthCheckUp.selectedCheckUp.treatment}"></p:outputLabel>
+
+											<p:outputLabel value="Other Remarks"></p:outputLabel>
+											<p:outputLabel
+												value="#{viewHealthCheckUp.selectedCheckUp.remarks}"></p:outputLabel>
+										</p:panelGrid>
+									</p:panel>
+
+
+									<p:panel header="Basic Details">
+										<p:panelGrid columns="2">
+											<p:outputLabel value="Height (In cm)"></p:outputLabel>
+											<p:outputLabel
+												value="#{viewHealthCheckUp.selectedCheckUp.height}"></p:outputLabel>
+
+											<p:outputLabel value="Weight(Kg.Gm)"></p:outputLabel>
+											<p:outputLabel
+												value="#{viewHealthCheckUp.selectedCheckUp.weight}"></p:outputLabel>
+
+											<p:outputLabel value="Blood Pressure"></p:outputLabel>
+											<p:outputLabel
+												value="#{viewHealthCheckUp.selectedCheckUp.bloodPressure}"></p:outputLabel>
+										</p:panelGrid>
+									</p:panel>
+
+									<p:panel header="Blood Details">
+										<p:panelGrid columns="2" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+											<p:outputLabel value="RBC"></p:outputLabel>
+											<p:outputLabel
+												value="#{viewHealthCheckUp.selectedCheckUp.rbc}"></p:outputLabel>
+
+											<p:outputLabel value="WBC"></p:outputLabel>
+											<p:outputLabel
+												value="#{viewHealthCheckUp.selectedCheckUp.wbc}"></p:outputLabel>
+
+											<p:outputLabel value="Hemoglobin"></p:outputLabel>
+											<p:outputLabel
+												value="#{viewHealthCheckUp.selectedCheckUp.hemoglobin}"></p:outputLabel>
+										</p:panelGrid>
+									</p:panel>
+
+								
+
+									
+								</p:panelGrid>
+
+
+							</p:panel>
+
+						</h:form>
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

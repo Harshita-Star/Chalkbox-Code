@@ -1,0 +1,358 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Group Communication</ui:define>
+
+	<ui:define name="content">
+		<script src="pramukhime.js"></script>
+		<script src="pramukhindic.js"></script>
+		<script src="pramukhime-common.js"></script>
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+
+							<p:panel header="Group Communication">
+
+
+
+								<p:messages closable="true" autoUpdate="true"></p:messages>
+								<p:growl showDetail="true"  autoUpdate="true" />
+
+								<p:tabView rendered="false" value="#{attndance.classSection}"
+									var="var">
+									<p:tab title="#{var.className}">
+
+										<p:dataTable value="#{var.categoryList}" var="stu"
+											rowKey="#{stu.category}"
+											selection="#{attndance.selectedCategory}">
+											<p:column style="width:50px" selectionMode="multiple"></p:column>
+											<p:column sortBy="#{stu.category}" headerText="Section Name"
+												style="width:50px">
+												<p:outputLabel value="#{stu.category}"></p:outputLabel>
+											</p:column>
+
+
+
+
+											<f:facet name="footer">
+												<p:commandButton value="Submit"
+													action="#{attndance.sendMessage1}"></p:commandButton>
+
+											</f:facet>
+										</p:dataTable>
+
+									</p:tab>
+								</p:tabView>
+
+								<div style="border: 1px solid black; height: auto;">
+									<p:dataGrid var="var" value="#{attndance.classSection}"
+										columns="4" layout="grid" id="cls">
+
+										<f:facet name="header">
+											<h:panelGrid columns="1" style="width:100%">
+												<p:outputLabel value="Classes" />
+												<p:selectOneButton rendered="true"
+													value="#{attndance.mainOption}">
+													<f:selectItem itemLabel="&#160;&#160;All&#160;&#160;"
+														itemValue="All" />
+													<f:selectItem itemLabel="None" itemValue="None" />
+													<p:ajax event="change"
+														listener="#{attndance.selectAllMethod}" update=":form:cls" />
+												</p:selectOneButton>
+												<!-- <br></br> -->
+												<p:commandButton rendered="false" value="Submit"
+													action="#{attndance.sendMessage1}"></p:commandButton>
+											</h:panelGrid>
+
+										</f:facet>
+
+										<div style="border: 1px dotted black;">
+											<p:panel header="#{var.className}">
+												<h:outputText rendered="false" value="#{var.className}" />
+												<p:selectCheckboxMenu panelStyle="width:200px;"
+													style="width:200px;" rendered="false"
+													panelStyleClass="start-expended"
+													value="#{var.selectedSections}" label="#{var.className}">
+													<f:selectItems value="#{var.sectionList}" />
+												</p:selectCheckboxMenu>
+												<h:panelGrid columns="1" style="width:100%">
+													<p:selectManyCheckbox disabled="#{attndance.show}"
+														value="#{var.selectedSections}" styleClass="mcb"
+														layout="responsive" columns="1">
+														<f:selectItems value="#{var.sectionList}" />
+													</p:selectManyCheckbox>
+												</h:panelGrid>
+
+												<p:dataTable reflow="true" rendered="false"
+													value="#{var.categoryList}" var="stu"
+													rowKey="#{stu.category}" selectionMode="multiple"
+													selection="#{attndance.selectedCategory}">
+
+													<p:column rendered="false" style="width:50px"
+														selectionMode="multiple"></p:column>
+
+													<p:column headerText="#{var.className}" style="width:50px">
+														<p:outputLabel value="#{stu.category}"></p:outputLabel>
+													</p:column>
+
+												</p:dataTable>
+											</p:panel>
+
+										</div>
+
+										<f:facet name="footer">
+											<p:commandButton rendered="false" value="Submit"
+												action="#{attndance.sendMessage1}"></p:commandButton>
+										</f:facet>
+									</p:dataGrid>
+								</div>
+								<br />
+								<hr style="border-top: dotted 1px;" />
+								<p:panelGrid columns="3"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;"
+									rendered="#{attndance.showInstitute}">
+									<p:outputLabel value="Please Select Receivers : " />
+
+									<p:panelGrid columns="2">
+										<p:outputLabel value="Parents : " />
+										<p:selectBooleanCheckbox value="#{attndance.messageParents}" />
+									</p:panelGrid>
+
+									<p:panelGrid columns="2">
+										<p:outputLabel value="Students : " />
+										<p:selectBooleanCheckbox value="#{attndance.messageStudents}" />
+									</p:panelGrid>
+								</p:panelGrid>
+								<hr style="border-top: dotted 1px;" />
+
+								<p:panel header="Include Staff">
+									<p:panelGrid id="stf" columns="1" style="width:100%;">
+										<p:selectBooleanButton rendered="false"
+											value="#{attndance.includeStaff}" onLabel="All"
+											offLabel="None" onIcon="ui-icon-check"
+											offIcon="ui-icon-close" style="font-size:15px !important;" />
+										<p:selectOneButton rendered="true"
+											value="#{attndance.mainOptionEmp}">
+											<f:selectItem itemLabel="&#160;&#160;All&#160;&#160;"
+												itemValue="All" />
+											<f:selectItem itemLabel="None" itemValue="None" />
+											<p:ajax event="change"
+												listener="#{attndance.selectAllEmpMethod}"
+												update=":form:empc" />
+										</p:selectOneButton>
+										<p:selectManyCheckbox id="empc"
+											style="font-size:12px !important;"
+											value="#{attndance.selectedEmp}" styleClass="mcb"
+											layout="responsive" columns="3"
+											disabled="#{attndance.showEmp}">
+											<f:selectItems value="#{attndance.empList}" var="emp"
+												itemLabel="#{emp.category}" itemValue="#{emp.emplist}" />
+										</p:selectManyCheckbox>
+									</p:panelGrid>
+								</p:panel>
+
+								<hr style="border-top: dotted 1px;" />
+								<p:outputPanel id="msg">
+									<p:outputLabel style="font-weight: bold;font-size: 12px;"
+										value="Note: Copying and pasting the special characters ( such as ,' ) might affect the format of SMS. It is adviced to kindly type the message."></p:outputLabel>
+									<br></br>
+									<br></br>
+									<h:inputHidden id="text" value="#{attndance.lang}"></h:inputHidden>
+									<br></br>
+									<p:panelGrid columns="3"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+										<p:selectOneButton id="lang"
+											rendered="#{sideMenuBean.list.country eq 'India'}"
+											value="#{attndance.lang}">
+											<f:selectItem itemLabel="English" itemValue="english" />
+											<f:selectItem itemLabel="हिन्दी" itemValue="hindi" />
+											<p:ajax listener="#{attndance.checklang}"
+												update="selectKeyword,contentTable"></p:ajax>
+										</p:selectOneButton>
+										<p:outputLabel />
+										<p:outputLabel />
+
+
+										<p:outputLabel value="Select Keyword"></p:outputLabel>
+										<p:selectOneMenu id="selectKeyword"
+											value="#{attndance.keyWord}">
+											<f:selectItem itemLabel="ALL" itemValue="-1"></f:selectItem>
+											<f:selectItems value="#{attndance.allKeywords}"></f:selectItems>
+											<p:ajax listener="#{attndance.showData}"
+												update="contentTable" onsuccess="PF('table').filter();"></p:ajax>
+										</p:selectOneMenu>
+										<p:outputLabel />
+
+									</p:panelGrid>
+
+									<p:dataTable style="width: 70%;" id="contentTable"
+										value="#{attndance.allTemplates}" var="var" widgetVar="table">
+
+										<p:column headerText="S.No.">
+											<p:outputLabel value="#{var.srNo}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="content" filterMatchMode="contains" filterBy="#{var.content}">
+											<p:outputLabel value="#{var.content}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Send">
+											<center>
+												<p:commandButton value="Send" styleClass="butwid"
+													icon="fa fa-paper-plane-o"
+													action="#{attndance.checkGroupSeelcted}"
+													update=":MessageDialogOpen"
+													style="font-size:15px !important;">
+													<f:setPropertyActionListener
+														target="#{attndance.selectedTemp}" value="#{var}"></f:setPropertyActionListener>
+												</p:commandButton>
+											</center>
+										</p:column>
+									</p:dataTable>
+								</p:outputPanel>
+								<hr style="border-top: dotted 1px;" />
+							</p:panel>
+						</h:form>
+
+						<h:form id="MsgLimitForm" style="overflow:hidden">
+							<p:dialog header="Low SMS Balance" width="500"
+								widgetVar="MsgLmtDlg" modal="true" showEffect="fade"
+								hideEffect="fade" resizable="false">
+								<center>
+									<p:outputLabel value="#{attndance.balMsg}"
+										style="font-size:14px;font-weight: bold;" />
+								</center>
+								<br></br>
+								<br></br>
+								<center>
+									<p:commandButton value="Skip" action="#{attndance.groupMsg}"
+										update="MsgLimitForm" />
+									<br /> <br />
+									<p:commandButton value="Message Logs"
+										action="messageSchoolHistory.xhtml?faces-redirect=true"
+										update="MsgLimitForm" />
+									<br /> <br />
+									<p:commandButton value="Recharge Now"
+										action="purchaseMsgPack.xhtml?faces-redirect=true"
+										update="MsgLimitForm" />
+								</center>
+								<br></br>
+							</p:dialog>
+						</h:form>
+
+						<h:form id="MsgOverForm" style="overflow:hidden">
+							<p:dialog header="SMS Limit Over" width="500"
+								widgetVar="MsgOvrDlg" modal="true" showEffect="fade"
+								hideEffect="fade" resizable="false">
+								<center>
+									<p:outputLabel value="#{attndance.balMsg}"
+										style="font-size:14px;font-weight: bold;" />
+								</center>
+								<br></br>
+								<br></br>
+								<center>
+									<p:commandButton value="Message Logs"
+										action="messageSchoolHistory.xhtml?faces-redirect=true"
+										update="MsgOverForm" />
+									<br /> <br />
+									<p:commandButton value="Recharge Now"
+										action="purchaseMsgPack.xhtml?faces-redirect=true"
+										update="MsgOverForm" />
+								</center>
+								<br></br>
+							</p:dialog>
+						</h:form>
+
+						<h:form id="MsgOtherForm" style="overflow:hidden">
+							<p:dialog header="SMS Limit Over" width="500"
+								widgetVar="MsgOthDlg" modal="true" showEffect="fade"
+								hideEffect="fade" resizable="false">
+								<center>
+									<p:outputLabel value="#{attndance.balMsg}"
+										style="font-size:14px;font-weight: bold;" />
+								</center>
+								<br></br>
+								<br></br>
+								<center>
+									<p:commandButton value="OK"
+										action="groupMessage.xhtml?faces-redirect=true"
+										update="MsgOtherForm" />
+								</center>
+							</p:dialog>
+						</h:form>
+
+						<h:form id="MessageDialogOpen" style="overflow:hidden">
+							<p:dialog header="Message Confirmation" width="500"
+								widgetVar="SendMessageCheck" modal="true" showEffect="fade"
+								hideEffect="fade" resizable="false">
+								<p:panelGrid columns="1">
+
+									<p:inputTextarea rendered="#{attndance.showEnglish}"
+										value="#{attndance.message}" rows="7" cols="30"
+										maxlength="765" counterTemplate="{0} characters remaining."
+										autoResize="false" style="width:400px !important;"
+										readonly="#{attndance.editable eq 'true' ? 'false' : 'true'}">
+									</p:inputTextarea>
+
+									<p:inputTextarea rendered="#{attndance.showHindi}"
+										value="#{attndance.message}" rows="7" cols="30"
+										maxlength="765" counterTemplate="{0} characters remaining."
+										autoResize="false" style="width:400px !important;"
+										readonly="#{attndance.editable eq 'true' ? 'false' : 'true'}">
+									</p:inputTextarea>
+								</p:panelGrid>
+
+								<p:outputLabel rendered="#{attndance.lang eq 'english'}"
+									value="Regards, #{sideMenuBean.smsName}"
+									style="font-size:15px !important;" />
+								<p:outputLabel rendered="#{attndance.lang eq 'hindi'}"
+									value="सादर, #{sideMenuBean.hindiName}"
+									style="font-size:15px !important;" />
+								<p:outputLabel />
+
+
+								<br />
+								<p:separator />
+								<center>
+
+									<p:commandButton value="Send Message"
+										action="#{attndance.sendMessage1}"
+										update=":form,:MessageDialogOpen"
+										style="width:120px;height:30px;" />
+
+								</center>
+								<p:separator />
+								<br />
+							</p:dialog>
+						</h:form>
+
+						<h:form id="HindiForm" style="overflow:hidden">
+							<p:dialog header="NOTIFICATION" width="500" widgetVar="hindiDi"
+								modal="true" showEffect="fade" hideEffect="fade"
+								resizable="false">
+								<center>
+									<p:outputLabel
+										value="Hindi Message Feature is Temporarily Unavailable"
+										style="font-size:14px;font-weight: bold;" />
+								</center>
+								<br></br>
+
+							</p:dialog>
+						</h:form>
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

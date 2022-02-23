@@ -1,0 +1,131 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+	<f:loadBundle var="addClassVar" basename="myProperties" />
+	<ui:define name="title">Add Class</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<h1>#{addClassVar.classHeaderLabel}</h1>
+
+							<p:panel header="Add Class">
+
+								<p:messages closable="true" autoUpdate="true"></p:messages>
+
+								<p:panelGrid columns="2"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel for="@next" style="color:red"
+										value="#{addClassVar.classNameLabel}"></p:outputLabel>
+									<p:inputText value="#{classBean.name}" id="clsnm"
+										onchange="trimFunc(this.value,'Please Enter Class Name',this.id)"
+										required="true"
+										requiredMessage="#{addClassVar.classNameValidation}"
+										validatorMessage="Please Enter Correct value">
+										<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:inputText>
+								</p:panelGrid>
+
+								<br></br>
+								<p:dataTable reflow="true" rendered="false"
+									value="#{classBean.list}" var="var" id="dt">
+
+									<p:column headerText="S.No." style="width:50px;">
+										<p:outputLabel value="#{var.sno}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Fee Name">
+										<p:outputLabel value="#{var.feeName} (#{var.tempFeeType})"></p:outputLabel>
+									</p:column>
+
+
+									<p:columns value="#{classBean.connList}" var="column"
+										columnIndexVar="colIndex">
+
+										<f:facet name="header">
+											<p:outputLabel value="#{column.category}  "></p:outputLabel>
+										</f:facet>
+										<p:panelGrid columns="2">
+											<p:outputLabel value="New Student Amount"
+												style="font-size:8px !important"></p:outputLabel>
+											<p:inputText style="width:70px!important;"
+												value="#{var.newfeeAmountmap[column.id]}">
+												<p:keyFilter regEx="/[\d]/"></p:keyFilter>
+											</p:inputText>
+
+											<p:outputLabel value="Old Student Amount"
+												style="font-size:8px !important"></p:outputLabel>
+											<p:inputText style="width:70px!important;"
+												value="#{var.olfFeeAmountmap[column.id]}">
+												<p:keyFilter regEx="/[\d]/"></p:keyFilter>
+											</p:inputText>
+										</p:panelGrid>
+									</p:columns>
+
+								</p:dataTable>
+
+								<br></br>
+
+								<p:dataTable reflow="true" id="section" var="var1"
+									value="#{classBean.sectionlist}">
+
+									<p:column headerText="S.No." style="width:50px;">
+										<p:outputLabel value="#{var1.serialNumber}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Section Name">
+										<p:inputText value="#{var1.category}"
+											id="sec#{var1.serialNumber}"
+											onchange="trimFunc(this.value,'Please Section Name',this.id)"
+											validatorMessage="Please Enter Correct value">
+											<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+										</p:inputText>
+									</p:column>
+
+									<p:column headerText="Remove">
+									<center>
+										<p:commandButton immediate="true" value="remove" styleClass="butwid redButt" icon="fa fa-minus"
+											action="#{classBean.remove}" update=":form:section"
+											disabled="#{var1.remove}">
+											<f:setPropertyActionListener value="#{var1}"
+												target="#{classBean.selectedList}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</center>
+									</p:column>
+
+
+									<f:facet name="footer">
+										<p:commandButton rendered="false" ajax="false" styleClass="butwid" icon="fa fa-plus-circle"
+											value="Add New Section" actionListener="#{classBean.addmore}"
+											update=":form:section"></p:commandButton>
+									</f:facet>
+								</p:dataTable>
+								
+								<br />
+								<p:separator />
+								<center>
+									<p:commandButton style="width: 150px;" update="form" styleClass="butwid" icon="fa fa-floppy-o"
+										action="#{classBean.addNewClass}" value="Submit"></p:commandButton>
+								</center>
+								<p:separator />
+								<br />
+							</p:panel>
+
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

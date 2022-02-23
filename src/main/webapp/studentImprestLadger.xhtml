@@ -1,0 +1,125 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Ledger</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+
+
+
+						<h:form id="registrationfeeform">
+							<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+							<p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+								<p:outputLabel value="Student Name/Sr. No"></p:outputLabel>
+								<p:autoComplete id="acSimple"
+									value="#{studentImprestladgerBean.studentName}"
+									minQueryLength="3"
+									completeMethod="#{studentImprestladgerBean.autoCompleteStudentInfo}" validatorMessage="Please Enter Correct value">
+									<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									<p:ajax event="query" global="false" />
+								</p:autoComplete>
+								<p:outputLabel value="Start Date"></p:outputLabel>
+								<p:calendar value="#{studentImprestladgerBean.startDate}" pattern="dd/MM/yyyy" navigator="true" yearRange="c-10:c+10"></p:calendar>
+
+								<p:outputLabel value="End Date"></p:outputLabel>
+								<p:calendar value="#{studentImprestladgerBean.enddate}" pattern="dd/MM/yyyy" navigator="true" yearRange="c-10:c+10"></p:calendar>
+
+								<p:commandButton value="Show Ledger" style="width:150px;"
+									actionListener="#{studentImprestladgerBean.searchLadger}"
+									update=":registrationfeeform"></p:commandButton>
+								<p:commandButton value="Print" style="width:150px;">  
+										<p:printer target="data"></p:printer>
+									</p:commandButton>	
+							</p:panelGrid>
+							
+							<br/>
+							
+							<p:outputPanel id="data">
+									<center>
+									<p
+										style=" font-size: 25px !important; font-weight: bold; margin: 0px;">#{headerBean.name}</p>
+									<p
+										style="  font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.affiliationNo}</p>
+									<p
+										style="  font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.finalAddress}</p>
+									<p
+										style="font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.phoneno}</p>
+
+									<p
+										style="margin: 0px; font-size: 25px !important; font-weight: bold;">Student Imprest Ledger</p>
+									<p
+										style="margin: 0px; font-size: 15px !important; font-weight: bold;">From #{studentImprestladgerBean.strDate} To #{studentImprestladgerBean.endDate}</p>	
+								</center>
+								<br/>
+							<p:dataTable reflow="true" value="#{studentImprestladgerBean.list}" var="var">
+
+								<p:column headerText="Date">
+
+									<p:outputLabel value="#{var.add_date}"></p:outputLabel>
+
+								</p:column>
+
+								<p:column headerText="Description">
+
+									<p:outputLabel value="#{var.description}"></p:outputLabel>
+
+								</p:column>
+
+
+								<p:column headerText="Credit (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})">
+
+									<p:outputLabel value="#{var.creditAmount}"></p:outputLabel>
+									<f:facet name="footer">
+										<p:panelGrid columns="2">
+											<p:outputLabel value="Total Credit"></p:outputLabel>
+											<p:outputLabel
+												value="#{sideMenuBean.list.country eq 'UAE' ? 'AED ' : 'Rs.'}#{studentImprestladgerBean.totalCredit}"></p:outputLabel>
+											<p:outputLabel value="Left Bal."></p:outputLabel>
+											<p:outputLabel
+												value="#{sideMenuBean.list.country eq 'UAE' ? 'AED ' : 'Rs.'}#{studentImprestladgerBean.remaningBal}"></p:outputLabel>
+
+										</p:panelGrid>
+
+
+									</f:facet>
+
+								</p:column>
+
+								<p:column headerText="Debit (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})">
+
+									<p:outputLabel value="#{var.debitamount}"></p:outputLabel>
+									<f:facet name="footer">
+										<p:panelGrid columns="2">
+											<p:outputLabel value="Total Debit "></p:outputLabel>
+											<p:outputLabel value="#{sideMenuBean.list.country eq 'UAE' ? 'AED ' : 'Rs.'}#{studentImprestladgerBean.totalDebit}"></p:outputLabel>
+
+										</p:panelGrid>
+									</f:facet>
+
+								</p:column>
+
+							</p:dataTable>
+							</p:outputPanel>
+
+						</h:form>
+
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,275 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/schoolMasterTemplate.xhtml">
+
+	<ui:define name="title">All Students</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					
+					<div class="card card-w-title">
+						<h:form id="form1">
+
+							<p:messages closable="true" autoUpdate="true"></p:messages>
+
+							<p:panel header="Search Student by Name/Sr. No">
+
+								<p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel value="Student Name/Sr. No"></p:outputLabel>
+									<p:autoComplete id="acSimple" value="#{masterAllStudentReport.name}"
+										minQueryLength="3"
+										completeMethod="#{masterAllStudentReport.autoCompleteStudentInfo}">
+										<p:ajax event="query" global="false" />
+									</p:autoComplete>
+
+									<p:commandButton value="Search" update=":form"
+										actionListener="#{masterAllStudentReport.searchStudentByName}"></p:commandButton>
+
+								</p:panelGrid>
+
+							</p:panel>
+						</h:form>
+					</div>
+					
+					<div class="card card-w-title">
+						<h:form id="form2">
+
+							<p:panel header="Search Student by Class-Section">
+
+								<p:panelGrid columns="6" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+									
+									<p:outputLabel  for="@next" style="color:red" value="Select School*"></p:outputLabel>
+									<p:selectOneMenu value="#{masterAllStudentReport.schid}"
+										required="true" requiredMessage="Please select a school">
+										<f:selectItem itemLabel="All" itemValue="-1"></f:selectItem>
+										<f:selectItems value="#{masterAllStudentReport.branchList}"></f:selectItems>
+
+										<p:ajax listener="#{masterAllStudentReport.branchWiseWork}"
+											update="form2"></p:ajax>
+									</p:selectOneMenu>
+									
+									<p:outputLabel  for="@next" style="color:red" rendered="#{masterAllStudentReport.showClass}" value="Select Class"></p:outputLabel>
+									<p:selectOneMenu rendered="#{masterAllStudentReport.showClass}" style="width:250px"
+										value="#{masterAllStudentReport.selectedCLassSection}" required="true"
+										requiredMessage="Please select a class">
+										<f:selectItem itemLabel="#{searchStudentVar.selectHereLabel}"
+											itemValue=""></f:selectItem>
+											<f:selectItem itemLabel="All"
+											itemValue="-1"></f:selectItem>
+										<f:selectItems value="#{masterAllStudentReport.classSection}"></f:selectItems>
+
+										<p:ajax update="sectionid"
+											listener="#{masterAllStudentReport.allSections}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel for="@next" style="color:red"  rendered="#{masterAllStudentReport.showClass}" value="Select Section"></p:outputLabel>
+									<p:selectOneMenu rendered="#{masterAllStudentReport.showClass}" id="sectionid"
+										value="#{masterAllStudentReport.selectedSection}" required="true"
+										requiredMessage="Please select a section">
+										<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+										<f:selectItem itemLabel="All"
+											itemValue="-1"></f:selectItem>
+										<f:selectItems value="#{masterAllStudentReport.sectionList}"></f:selectItems>
+										
+									</p:selectOneMenu>
+									
+									<p:commandButton value="Search" action="#{masterAllStudentReport.searchStudentByClassSection}" update=":form"/>
+
+								</p:panelGrid>
+
+							</p:panel>
+
+						</h:form>
+						</div>
+					
+					<div class="card card-w-title">
+					
+					
+					<h:form id="initializePageDataForm">
+							<p:remoteCommand name="initializePageDataCommand" autoRun="false"
+								action="#{masterAllStudentReport.init()}" update=" :form" />
+						</h:form>
+						<h:form id="form">
+
+							<p:panel id="dataTable" rendered="#{masterAllStudentReport.b}">
+								<p:commandButton style="width: 100px;" value="Print"
+									rendered="#{masterAllStudentReport.b}"
+									action="printAllStudentList.xhtml?faces-redirect=true" ajax="false" onclick="target='_blank'">
+								</p:commandButton>
+
+								<center>
+									<p
+										style="font-family: initial; font-style: oblique; font-size: 25px !important; font-weight: bold; margin: 0px;">#{masterAllStudentReport.schname}</p>
+									<p
+										style="font-family: initial; font-style: oblique; font-size: 15px !important; font-weight: bold; margin: 0px;">#{masterAllStudentReport.affiliationNo}</p>
+									<p
+										style="font-family: initial; font-style: oblique; font-size: 15px !important; font-weight: bold; margin: 0px;">#{masterAllStudentReport.finalAddress}</p>
+									<p
+										style="font-family: initial; font-style: oblique; font-size: 15px !important; font-weight: bold; margin: 0px;">#{masterAllStudentReport.phoneno}</p>
+
+									<p
+										style="margin: 0px; font-size: 25px !important; font-weight: bold;">All
+										Student Report</p>
+								</center>
+								<p:panelGrid columns="3" style="width:100%">
+
+
+
+									<p:panelGrid columns="2">
+										<p:outputLabel value="Total:-"></p:outputLabel>
+										<h:outputText value="#{masterAllStudentReport.total}"></h:outputText>
+									</p:panelGrid>
+
+								</p:panelGrid>
+
+								<p:dataTable id="up" style="width:100%;border-collapse:collapse"
+									border="1" value="#{masterAllStudentReport.list}" var="var">
+
+									<p:column headerText="S.No."
+										style="width:40px;text-align:center">
+
+										<f:facet name="header">
+											<p:outputLabel value="SNo."></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.sno}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Adm. No."
+										style="width:80px;text-align:center" filterBy="#{var.srNo}" >
+
+										<f:facet name="header">
+											<p:outputLabel value="Add No."></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.srNo}"></p:outputLabel>
+									</p:column>
+
+									<p:column style="width:70px;text-align:center"
+										headerText="Student Name" filterBy="#{var.fname}">
+
+										<f:facet name="header">
+											<p:outputLabel value="Student Name"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.fname}"></p:outputLabel>
+									</p:column>
+
+									<p:column style="width:70px;text-align:center"
+										headerText="Father's Name" filterBy="#{var.fathersName}"
+										filterMatchMode="contains">
+
+										<f:facet name="header">
+											<p:outputLabel value="Father's Name"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.fathersName}"></p:outputLabel>
+									</p:column>
+									<p:column style="width:60px;text-align:center"
+										headerText="Class" sortBy="#{var.className}"
+										filterBy="#{var.className}">
+
+										<f:facet name="header" style="width:60px;text-align:center">
+											<p:outputLabel value="Class"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.className}"></p:outputLabel>
+									</p:column>
+
+									<p:column style="width:40px;text-align:center"
+										headerText="Section" filterBy="#{var.sectionName}">
+
+										<f:facet name="header" style="width:40px;text-align:center">
+											<p:outputLabel value="Section"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.sectionName}"></p:outputLabel>
+									</p:column>
+									<p:column style="width:80px;text-align:center"
+										headerText="Phone No" filterBy="#{var.fathersPhone}">
+
+										<f:facet name="header">
+											<p:outputLabel value="Phone No"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.fathersPhone}"></p:outputLabel>
+									</p:column>
+
+									<p:column rendered="false" exportable="false"
+										headerText="View/Edit/Delete/Inactive"
+										style="width:100px;text-align:center">
+										<p:panelGrid columns="2"
+											styleClass="ui-panelgrid-blank form-group">
+											<p:commandButton ajax="false" onclick="target='_blank'"
+												action="#{masterAllStudentReport.viewDetails}" value="View">
+												<f:setPropertyActionListener
+													target="#{masterAllStudentReport.selectedStudent}" value="#{var}"></f:setPropertyActionListener>
+											</p:commandButton>
+
+											<p:commandButton ajax="false" value="Edit" update=":form"
+												action="#{masterAllStudentReport.editNow}">
+												<f:setPropertyActionListener
+													target="#{masterAllStudentReport.selectedStudent}" value="#{var}"></f:setPropertyActionListener>
+											</p:commandButton>
+
+											<p:commandButton update=":form"
+												oncomplete="PF('dlg1').show();" value="Delete">
+												<f:setPropertyActionListener
+													target="#{masterAllStudentReport.selectedStudent}" value="#{var}"></f:setPropertyActionListener>
+											</p:commandButton>
+
+											<p:commandButton update=":form"
+												oncomplete="PF('dlg2').show();" value="Inactive">
+												<f:setPropertyActionListener
+													target="#{masterAllStudentReport.selectedStudent}" value="#{var}"></f:setPropertyActionListener>
+											</p:commandButton>
+
+										</p:panelGrid>
+
+									</p:column>
+
+
+
+								</p:dataTable>
+
+								<p:dialog resizable="false" widgetVar="dlg1"
+									header="Do you really want to Delete this student permanently"
+									showEffect="fade" hideEffect="explode" modal="true">
+									<div class="ui-g form-group">
+										<p:panelGrid columns="2"
+											styleClass="ui-panelgrid-blank form-group"
+											style="border:0px none; background-color:transparent;">
+											<p:commandButton update=":form"
+												actionListener="#{masterAllStudentReport.deleteStudent}"
+												value="Yes"></p:commandButton>
+											<p:commandButton value="No" update=":form"
+												oncomplete="PF('dlg1').hide();"></p:commandButton>
+										</p:panelGrid>
+									</div>
+								</p:dialog>
+
+								<p:dialog resizable="false" widgetVar="dlg2"
+									header="Do you really want this student to be Inactive"
+									showEffect="fade" hideEffect="explode" modal="true">
+									<div class="ui-g form-group">
+										<p:panelGrid columns="2"
+											styleClass="ui-panelgrid-blank form-group"
+											style="border:0px none; background-color:transparent;">
+											<p:commandButton update=":form"
+												actionListener="#{masterAllStudentReport.inactiveStudent}"
+												value="Yes"></p:commandButton>
+											<p:commandButton value="No" update=":form"
+												oncomplete="PF('dlg2').hide();"></p:commandButton>
+										</p:panelGrid>
+									</div>
+								</p:dialog>
+
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

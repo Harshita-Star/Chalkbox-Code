@@ -1,0 +1,158 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Parent Login Details</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<p:messages closable="true" autoUpdate="true"></p:messages>
+							<p:panel id="dataTable" header="Blocked Students">
+								<center>
+									<p
+										style="font-family: initial; font-style: oblique; font-size: 25px !important; font-weight: bold; margin: 0px;">#{headerBean.name}</p>
+									<p
+										style="font-family: initial; font-style: oblique; font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.affiliationNo}</p>
+									<p
+										style="font-family: initial; font-style: oblique; font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.finalAddress}</p>
+									<p
+										style="font-family: initial; font-style: oblique; font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.phoneno}</p>
+
+									<p
+										style="margin: 0px; font-size: 25px !important; font-weight: bold;">Blocked Student Report</p>
+								</center>
+								<p:panelGrid columns="3"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:outputLabel value="Total:-"></p:outputLabel>
+									<h:outputText value="#{blockedParentLogin.total}"></h:outputText>
+
+									<h:commandLink>
+										<p:graphicImage name="images/excellogo.png"
+											library="avalon-layout" width="100" height="40"></p:graphicImage>
+										<pe:exporter type="xlsx" target=":form:dt"
+											fileName="BlockedStaffLoginReport">
+											</pe:exporter>
+									</h:commandLink>
+								</p:panelGrid>
+								<p:outputPanel id="up">
+
+									<p:dataTable id="dt" reflow="true" var="var" value="#{blockedParentLogin.teacherList}" style="text-align:center;" rowKey="#{var.sno}" selection="#{blockedParentLogin.selectStudent}">
+										<!-- <f:facet name="header">
+											<p:commandButton value="Active Users"></p:commandButton>
+										</f:facet> -->
+										<f:facet name="footer">
+										<center> 
+										<p:commandButton value="Active users" update=":form" styleClass="butwid greenButt" icon="fa fa-users"
+													 action="#{blockedParentLogin.activateUsers}">
+													<p:confirm header="Confirmation"
+														message="Are You Sure To Active User...???"
+														icon="ui-icon-alert" />
+												</p:commandButton>
+										</center>
+										</f:facet>
+										<p:column headerText="Select" selectionMode="multiple"></p:column>
+										
+										<p:column headerText="S.No.">
+										 <f:facet name="header">
+										     <p:outputLabel value="S.No."></p:outputLabel>
+										  </f:facet>
+											<p:outputLabel value="#{var.sno}"></p:outputLabel>
+										</p:column>
+
+										<p:column sortBy="#{var.fname}" headerText="Student Name"
+											filterBy="#{var.fname}" filterMatchMode="contains">
+											 <f:facet name="header">
+										     <p:outputLabel value="Student Name"></p:outputLabel>
+										  </f:facet>
+											<p:outputLabel value="#{var.fname}"></p:outputLabel>
+										</p:column>
+										
+										<p:column headerText="Fathers Name">
+											 <f:facet name="header">
+										     <p:outputLabel value="Fathers Name"></p:outputLabel>
+										  </f:facet>
+											<p:outputLabel value="#{var.fathersName}"></p:outputLabel>
+										</p:column>
+										
+										<p:column headerText="Contact No">
+										<f:facet name="header">
+										     <p:outputLabel value="Contact No"></p:outputLabel>
+										  </f:facet>
+											<p:outputLabel value="#{var.mobile}"></p:outputLabel>
+										</p:column>
+										
+										<p:column headerText="Class" filterBy="#{var.category}"
+											filterMatchMode="contains">
+											<f:facet name="header">
+										     <p:outputLabel value="Class"></p:outputLabel>
+										  </f:facet>
+											<p:outputLabel value="#{var.category}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Section" filterBy="#{var.subCateg}"
+											filterMatchMode="contains">
+											<f:facet name="header">
+										     <p:outputLabel value="Section"></p:outputLabel>
+										  </f:facet>
+											<p:outputLabel value="#{var.subCateg}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="User Name"
+											filterBy="#{var.emplyeeuserid}" filterMatchMode="contains">
+											<f:facet name="header">
+										     <p:outputLabel value="User Name"></p:outputLabel>
+										  </f:facet>
+											<p:outputLabel value="#{var.emplyeeuserid}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Password">
+										<f:facet name="header">
+										     <p:outputLabel value="Password"></p:outputLabel>
+										  </f:facet>
+											<p:outputLabel value="#{var.password}"></p:outputLabel>
+										</p:column>
+
+										 <p:column exportable="false"
+											headerText="Active">
+											<center>
+												<p:commandButton value="Active" update=":form"
+													icon="fa fa-user" styleClass="greenButt" action="#{blockedParentLogin.activateUser}">
+													<f:setPropertyActionListener
+														target="#{blockedParentLogin.selectedEmployee}"
+														value="#{var}"></f:setPropertyActionListener>
+													<p:confirm header="Confirmation"
+														message="Are You Sure To Active User...???"
+														icon="ui-icon-alert" />
+												</p:commandButton>
+											</center>
+										</p:column> 
+									</p:dataTable>
+
+								</p:outputPanel>
+							</p:panel>
+						</h:form>
+						<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+							<p:commandButton value="Yes" type="button"
+								styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+							<p:commandButton value="No" style="margin-left:50px"
+								type="button" styleClass="ui-confirmdialog-no"
+								icon="ui-icon-close" />
+						</p:confirmDialog>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

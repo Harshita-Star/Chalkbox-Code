@@ -1,0 +1,251 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/schoolMasterTemplate.xhtml">
+
+	<ui:define name="title">Fee Collection</ui:define>
+
+	<ui:define name="content">
+
+		<style>
+			body {
+    background-color: white;
+     }
+			
+		</style>
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<p:panel header="Search Student By Name" id="data">
+								<p:growl showDetail="true"  closable="true" autoUpdate="true"></p:growl>
+								<p:panelGrid columns="2" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel  for="@next" style="color:red" value="EBLM NO"></p:outputLabel>
+									<p:autoComplete onfocus="this.select();" value="#{partStdFeeRcptList.autoname}"
+										completeMethod="#{partStdFeeRcptList.autoCompleteStudentInfo}"
+										required="true" minQueryLength="2"
+										requiredMessage="Please select student">
+										<p:ajax event="query" global="false"></p:ajax>
+									</p:autoComplete>
+									
+                                   	<p:commandButton value="Search" update=":form3" action="#{partStdFeeRcptList.searchStudentByAutoName}"></p:commandButton>
+								</p:panelGrid>
+								</p:panel>
+							</h:form>
+							<h:form id="form4">
+								<p:panel header="Search Student By Receipt No">
+									<p:panelGrid columns="2" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+
+										<p:outputLabel  for="@next" style="color:red" value="Receipt No"></p:outputLabel>
+										<p:autoComplete onfocus="this.select();" value="#{partStdFeeRcptList.receiptNo}"
+											completeMethod="#{partStdFeeRcptList.autoCompleteReceiptNo}"
+											required="true" minQueryLength="2"
+											requiredMessage="Please select student">
+											<p:ajax event="query" global="false"></p:ajax>
+										</p:autoComplete>
+									
+                                    	<p:commandButton value="Search" update=":form3" action="#{partStdFeeRcptList.searchStudentByReceiptNo}"></p:commandButton>
+									</p:panelGrid>
+								</p:panel>
+							</h:form>
+							<h:form id="form3">
+								<p:dataTable id="up" reflow="true" tableStyle="table-layout:auto;"  style="float: right;width: 100%;" var="fee" value="#{partStdFeeRcptList.dailyfee}">
+									<f:facet name="header">
+										<p:panelGrid columns="3">
+											<p:outputLabel value="Name:- #{partStdFeeRcptList.name}"></p:outputLabel>
+											<p:outputLabel value="Father Name:- #{partStdFeeRcptList.fathersName}"></p:outputLabel>
+											<p:outputLabel value="Class:- #{partStdFeeRcptList.className}"></p:outputLabel>
+										</p:panelGrid>
+									</f:facet>
+								
+	                                <p:column style="font-size:12px !important" headerText="Receipt no">
+										<f:facet name="header">
+											Receipt No.
+										</f:facet>
+										<h:outputText style="font-size:15px !important" value="#{fee.reciptno}" />
+									</p:column>
+	
+									<p:column style="font-size:12px !important" headerText="Total amount">
+										<f:facet name="header">
+								 			Total Amount
+										</f:facet>
+										<h:outputText style="font-size:15px !important" value="#{fee.amount}" />
+									</p:column>
+	
+									<p:column style="font-size:12px !important" headerText="Total Discount">
+										<f:facet name="header">
+									 		Total  Discount
+										</f:facet>
+										<h:outputText style="font-size:15px !important" value="#{fee.discount}" />
+									</p:column>
+	
+									<p:column style="font-size:12px !important" headerText="Payment Mode">
+										<f:facet name="header">
+											Payment Mode 
+										</f:facet>
+										<h:outputText style="font-size:15px !important" value="#{fee.paymentmode} #{fee.bankname} #{fee.chequenumber}" />
+									</p:column>
+	
+									<p:column style="font-size:12px !important" headerText="Installment">
+										<f:facet name="header">
+											Installment 
+										</f:facet>
+										<h:outputText style="font-size:15px !important" value="#{fee.feeRemark}" />
+									</p:column>
+	
+									<p:column style="font-size:12px !important;width:80px !important;" headerText="Date">
+										<f:facet name="header">
+											Date
+										</f:facet>
+										<h:outputText style="font-size:15px !important" value="#{fee.feeDateStr}" />
+									</p:column>
+	
+									<p:column style="font-size:12px !important;width:80px !important;" headerText="Date">
+										<f:facet name="header">
+											User
+										</f:facet>
+										<h:outputText style="font-size:15px !important" value="#{fee.user}" />
+									</p:column>
+	
+									<p:column rendered="#{partStdFeeRcptList.showAdminAuth}" exportable="false" style="font-size:9px !important;width:50px !important;" headerText="Edit">
+										<f:facet name="Edit">
+											<p:outputLabel style="font-size:9px !important" value="Edit"></p:outputLabel>
+										</f:facet>
+										<p:commandButton value="Edit" action="#{partStdFeeRcptList.editFee}" oncomplete="PF('editfee').show();" update=":form5">
+											<f:setPropertyActionListener target="#{partStdFeeRcptList.selectedstudent}" value="#{fee}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+	
+	                               	<p:column  exportable="false" style="font-size:9px !important;width:50px !important;" headerText="View">
+										<f:facet name="View">
+											<p:outputLabel style="font-size:9px !important" value="Edit"></p:outputLabel>
+										</f:facet>
+										<p:commandButton value="View" action="#{partStdFeeRcptList.editFee}" oncomplete="PF('viewfee').show();" update=":form6">
+											<f:setPropertyActionListener target="#{partStdFeeRcptList.selectedstudent}" value="#{fee}"></f:setPropertyActionListener>
+										</p:commandButton>
+								   	</p:column>
+										
+									<p:column rendered="#{partStdFeeRcptList.showAdminAuth}" exportable="false" style="font-size:9px !important;width:50px !important;" headerText="Cancel">
+										<f:facet name="header">
+											<p:outputLabel style="font-size:9px !important" value="Cancel"></p:outputLabel>
+										</f:facet>
+										<p:commandButton icon="ui-icon-close" action="#{partStdFeeRcptList.checkcancelOTP}" oncomplete="PF('cancelfee').show();" update=":form2">
+											<f:setPropertyActionListener target="#{partStdFeeRcptList.selectedstudent}" value="#{fee}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+								</p:dataTable>
+						</h:form>
+					</div>
+						
+					<h:form id="form5">
+						<p:dialog header="Edit Fee" height="500"  widgetVar="editfee" modal="true">
+							<p:outputPanel id="up">
+								<div class="ui-g form-group">
+									<p:panelGrid columns="2">
+										<p:outputLabel value="Date"></p:outputLabel>
+	                                    <p:calendar value="#{partStdFeeRcptList.changeDate}" pattern="dd/MM/yyyy" navigator="true" yearRange="c-10:c+10"></p:calendar>
+	                                </p:panelGrid>
+									<p:dataTable value="#{partStdFeeRcptList.feesSelected}" scrollable="true" scrollHeight="400" var="var">
+										<p:column headerText="FeeName">
+											<p:outputLabel style="font-size:15px !important" value="#{var.feeName}"></p:outputLabel>
+										</p:column>
+	
+										<p:column headerText="Pay Amount">
+											<p:inputText style="font-size:15px !important" value="#{var.feeamunt}">
+												<p:ajax listener="#{partStdFeeRcptList.updatelistner}" update=":form5:up"></p:ajax>
+											</p:inputText>
+											<f:facet name="footer">
+												<p:outputLabel style="font-size:15px !important" value="#{partStdFeeRcptList.totalPayAmunt}"></p:outputLabel>
+											</f:facet>
+										</p:column>
+	
+										<p:column headerText="Pay Discount">
+											<p:inputText style="font-size:15px !important" value="#{var.discount}">
+												<p:ajax listener="#{partStdFeeRcptList.updatelistner}" update=":form5:up"></p:ajax>
+											</p:inputText>
+	
+											<f:facet name="footer">
+												<p:outputLabel style="font-size:15px !important" value="#{partStdFeeRcptList.totalDiscountAmount}"></p:outputLabel>
+											</f:facet>
+										</p:column>
+	
+										<f:facet name="footer">
+											<p:commandButton value="Update" actionListener="#{partStdFeeRcptList.update}" update=":form5 :form :form3"></p:commandButton>
+										</f:facet>
+									</p:dataTable>
+								</div>
+							</p:outputPanel>
+						</p:dialog>
+					</h:form>
+						
+						
+					<h:form id="form2">
+						<p:dialog header="Cancel Fee" widgetVar="cancelfee" modal="true">
+							<p:outputLabel rendered="#{partStdFeeRcptList.check}" style="font-weight:bold;" value="OTP SEND TO #{partStdFeeRcptList.discoutnNo}"></p:outputLabel>
+							<br/>
+							<br/>
+							<div class="ui-g form-group">
+								<p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group"  style="border:0px none; background-color:transparent;">
+									<p:outputLabel rendered="#{partStdFeeRcptList.check}" value="OTP"></p:outputLabel>
+                             		<p:inputText rendered="#{partStdFeeRcptList.check}" value="#{partStdFeeRcptList.otpInput}"></p:inputText>
+                        
+									<p:outputLabel value="Remark" for="@next" style="color:red" ></p:outputLabel>
+									<p:inputTextarea value="#{partStdFeeRcptList.cancelremark}" required="true" requiredMessage="Please enter  Remark"></p:inputTextarea>
+
+								</p:panelGrid>
+					
+							</div>
+							<br/>
+							<p:commandButton value="yes" actionListener="#{partStdFeeRcptList.cancelReceipt}" update=":form :form2 :form3"></p:commandButton>
+							<br/><br/>
+							<p:commandButton value="No" onclick="PF('cancelfee').hide();" update=":form2"></p:commandButton>
+						</p:dialog>
+					</h:form>
+												
+												
+					<h:form id="form6">
+						<p:dialog header="View Fee"  height="500" widgetVar="viewfee" modal="true" >
+							<p:outputPanel id="up">
+								<div class="ui-g form-group">
+									<p:dataTable value="#{partStdFeeRcptList.feesSelected}" var="var" scrollable="true" scrollHeight="400">
+										<p:column headerText="FeeName">
+											<p:outputLabel style="font-size:15px !important" value="#{var.feeName}"></p:outputLabel>
+										</p:column>
+										
+										<p:column headerText="Installment">
+											<p:outputLabel style="font-size:15px !important" value="#{var.intallment}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Pay Amount">
+											<p:outputLabel style="font-size:15px !important" value="#{var.feeamunt}"> </p:outputLabel>
+											<f:facet name="footer">
+												<p:outputLabel style="font-size:15px !important" value="#{partStdFeeRcptList.totalPayAmunt}"></p:outputLabel>
+											</f:facet>
+										</p:column>
+
+										<p:column headerText="Pay Discount">
+											<p:outputLabel style="font-size:15px !important" value="#{var.discount}"> </p:outputLabel>
+
+											<f:facet name="footer">
+												<p:outputLabel style="font-size:15px !important"
+													value="#{partStdFeeRcptList.totalDiscountAmount}"></p:outputLabel>
+											</f:facet>
+										</p:column>
+
+									</p:dataTable>
+								</div>
+							</p:outputPanel>
+						</p:dialog>
+					</h:form>
+				</div>
+			</div> 
+		</div>
+
+	</ui:define>
+
+</ui:composition>

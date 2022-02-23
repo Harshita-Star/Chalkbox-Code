@@ -1,0 +1,141 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Performance</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<h1>Add Student Performance</h1>
+							<p:panel header="Student Performance">
+								<p:messages closable="true" autoUpdate="true"></p:messages>
+
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:outputLabel  for="@next" style="color:red" value="Select Class"></p:outputLabel>
+									<p:selectOneMenu required="true"
+										requiredMessage="Please Select Class"
+										value="#{addStdPerform.selectedClass}">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{addStdPerform.classList}"></f:selectItems>
+										<p:ajax update=":form"
+											listener="#{addStdPerform.createSectionList}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel  for="@next" style="color:red" value="Select Section"></p:outputLabel>
+									<p:selectOneMenu id="showSection"
+										value="#{addStdPerform.selectedSection}" required="true"
+										requiredMessage="Please select a section">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{addStdPerform.sectionList}"></f:selectItems>
+										<p:ajax></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel for="@next" style="color:red"  value="Type of Area"></p:outputLabel>
+									<p:selectOneMenu value="#{addStdPerform.selectedType}"
+										required="true" requiredMessage="Please Select Type Of Area">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItem itemLabel="Scholastic" itemValue="scholastic"></f:selectItem>
+										<f:selectItem itemLabel="Co-Scholastic"
+											itemValue="coscholastic"></f:selectItem>
+										<p:ajax update=":form" listener="#{addStdPerform.allExamType}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel for="@next" style="color:red"  value="Select Exam"></p:outputLabel>
+									<p:selectOneMenu value="#{addStdPerform.mainExam}"
+										required="true" requiredMessage="Please Select Exam">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{addStdPerform.examTypeList}"></f:selectItems>
+										<p:ajax listener="#{addStdPerform.createSubExamList}"
+											update=":form"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel for="@next" style="color:red"  rendered="#{addStdPerform.showSubExam}"
+										value="Select Sub Exam"></p:outputLabel>
+									<p:selectOneMenu rendered="#{addStdPerform.showSubExam}"
+										value="#{addStdPerform.subExam}" required="true"
+										requiredMessage="Please Select Sub Exam">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{addStdPerform.subExamList}"></f:selectItems>
+										<p:ajax></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel for="@next" style="color:red"  value="Select Subject"></p:outputLabel>
+									<p:selectOneMenu value="#{addStdPerform.selectedSubject}"
+										required="true" requiredMessage="Please Select Subject">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{addStdPerform.allSubjectList}"></f:selectItems>
+										<p:ajax></p:ajax>
+									</p:selectOneMenu>
+
+									<p:commandButton value="Search"
+										actionListener="#{addStdPerform.searchData}" update=":form"></p:commandButton>
+								</p:panelGrid>
+							</p:panel>
+							<br />
+							<p:panel header="Student Performance Details">
+
+								<p:outputPanel id="datatableid">
+									<p:dataTable reflow="true"
+										rendered="#{addStdPerform.showStudentRecord}"
+										value="#{addStdPerform.studentDetails}" var="var">
+
+										<f:facet name="header">
+											<p:outputLabel value="Please Fill 'Ab' For Absent Students"></p:outputLabel>
+										</f:facet>
+
+										<p:column sortBy="#{var.rollNo}" style="width:100px"
+											headerText="ROll NO">
+											<p:outputLabel value="#{var.rollNo}"></p:outputLabel>
+										</p:column>
+
+										<p:column sortBy="#{var.fullName}" style="width:100px"
+											headerText="Student Name">
+											<p:outputLabel value="#{var.fullName}"></p:outputLabel>
+										</p:column>
+
+										<p:column  for="@next" style="color:red" style="width:100px"
+											headerText="#{addStdPerform.subjectName} ( #{addStdPerform.maxMarks}  )">
+											<p:inputText value="#{var.marks}"
+												validatorMessage="Invalid Marks" required="true"
+												requiredMessage="Please Enter Marks of All Students">
+												<p:keyFilter regEx="/[a-z0-9]/i" />
+											</p:inputText>
+										</p:column>
+
+										<f:facet name="footer">
+											<p:panelGrid columns="2" layout="grid"
+												styleClass="ui-panelgrid-blank form-group"
+												style="border:0px none; background-color:transparent;">
+
+												<p:commandButton
+													rendered="#{addStdPerform.showStudentRecordButton}"
+													update=":form" value="Save Record"
+													action="#{addStdPerform.saveData}"></p:commandButton>
+												<p:commandButton
+													rendered="#{addStdPerform.showStudentRecordButton}"
+													update=":form" value="Save Data And Send Message"
+													action="#{addStdPerform.saveDataAndSendMessage}"></p:commandButton>
+											</p:panelGrid>
+										</f:facet>
+									</p:dataTable>
+								</p:outputPanel>
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

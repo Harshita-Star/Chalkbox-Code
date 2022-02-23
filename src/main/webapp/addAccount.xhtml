@@ -1,0 +1,110 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+	<ui:define name="title">Add Account</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form" style="overflow:hidden">
+						<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+							<p:panel header="Add Account">
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel for="@next" style="color:red"  value="Enter Account Name"></p:outputLabel>
+									<p:inputText value="#{addAccountBean.accountName}"
+										required="true" requiredMessage="Account Name Is Requried" validatorMessage="Please Enter Correct value">
+										<f:validateRegex pattern="#{regexVar.regex}" ></f:validateRegex>
+									</p:inputText>
+
+									<p:outputLabel value="Address Line-1"></p:outputLabel>
+									<p:inputText value="#{addAccountBean.address1}" validatorMessage="Please Enter Correct value">
+									  <f:validateRegex pattern="#{regexVar.regex}" ></f:validateRegex>
+									</p:inputText>
+
+									<p:outputLabel value="Address Line-2"></p:outputLabel>
+									<p:inputText value="#{addAccountBean.address2}" validatorMessage="Please Enter Correct value">
+									  <f:validateRegex pattern="#{regexVar.regex}" ></f:validateRegex>
+									</p:inputText>
+
+									<p:outputLabel value="Pincode"></p:outputLabel>
+									<p:inputText value="#{addAccountBean.pincode}" validatorMessage="Please Enter Correct value">
+									  <f:validateRegex pattern="#{regexVar.regex}" ></f:validateRegex>
+									</p:inputText>
+
+									<p:outputLabel value="State"></p:outputLabel>
+									<p:selectOneMenu value="#{addAccountBean.state}" filter="true">
+										<f:selectItem itemLabel="Andhra Pradesh"
+											itemValue="andhra pradesh"></f:selectItem>
+										<f:selectItem itemLabel="Arunachal Pradesh"
+											itemValue="arunachal pradesh"></f:selectItem>
+										<f:selectItem itemLabel="Assam" itemValue="assam"></f:selectItem>
+										<f:selectItem itemLabel="Bihar" itemValue="bihar"></f:selectItem>
+										<f:selectItem itemLabel="Chhattisgarh"
+											itemValue="chhattisgarh"></f:selectItem>
+										<f:selectItem itemLabel="Goa" itemValue="goa"></f:selectItem>
+										<f:selectItem itemLabel="Gujarat" itemValue="gujarat"></f:selectItem>
+										<f:selectItem itemLabel="Haryana" itemValue="haryana"></f:selectItem>
+										<f:selectItem itemLabel="Himachal Pradesh"
+											itemValue="himachal pradesh"></f:selectItem>
+										<f:selectItem itemLabel="Jammu and Kashmir"
+											itemValue="jammu and kashmir"></f:selectItem>
+										<f:selectItem itemLabel="Jharkhand" itemValue="jharkhand"></f:selectItem>
+										<f:selectItem itemLabel="Karnataka" itemValue="karnataka"></f:selectItem>
+										<f:selectItem itemLabel="Kerala" itemValue="kerala"></f:selectItem>
+										<f:selectItem itemLabel="Madhya Pradesh"
+											itemValue="madhya pradesh"></f:selectItem>
+										<f:selectItem itemLabel="Maharashtra" itemValue="maharashtra"></f:selectItem>
+										<f:selectItem itemLabel="Manipur" itemValue="manipur"></f:selectItem>
+										<f:selectItem itemLabel="Meghalaya" itemValue="meghalaya"></f:selectItem>
+										<f:selectItem itemLabel="Mizoram" itemValue="mizoram"></f:selectItem>
+										<f:selectItem itemLabel="Nagaland" itemValue="nagaland"></f:selectItem>
+										<f:selectItem itemLabel="Odisha" itemValue="odisha"></f:selectItem>
+										<f:selectItem itemLabel="Punjab" itemValue="punjab"></f:selectItem>
+										<f:selectItem itemLabel="Rajasthan" itemValue="rajasthan"></f:selectItem>
+										<f:selectItem itemLabel="Sikkim" itemValue="sikkim"></f:selectItem>
+										<f:selectItem itemLabel="TamilNadu	" itemValue="tamilnadu"></f:selectItem>
+										<f:selectItem itemLabel="Telangana" itemValue="telangana"></f:selectItem>
+										<f:selectItem itemLabel="Tripura" itemValue="tripura"></f:selectItem>
+										<f:selectItem itemLabel="Uttar Pradesh"
+											itemValue="uttar pradesh"></f:selectItem>
+										<f:selectItem itemLabel="Uttarakhand" itemValue="uttarakhand"></f:selectItem>
+										<f:selectItem itemLabel="West Bengal" itemValue="west bengal"></f:selectItem>
+
+									</p:selectOneMenu>
+
+
+									<p:outputLabel value="Select Head"></p:outputLabel>
+									<p:autoComplete placeholder="Select Head" scrollHeight="250"
+										value="#{addAccountBean.headName}" forceSelection="true"
+										completeMethod="#{addAccountBean.completeText}" validatorMessage="Please Enter Correct value">
+										<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+										<p:ajax event="query" global="false"></p:ajax>
+									</p:autoComplete>
+
+
+
+
+									<p:commandButton value="Add Account"
+										action="#{addAccountBean.submit}" update=":form"></p:commandButton>
+								</p:panelGrid>
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

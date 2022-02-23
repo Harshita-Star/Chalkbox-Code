@@ -1,0 +1,240 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Homework</ui:define>
+
+
+
+	<ui:define name="content">
+	<script  src="pramukhime.js"></script>
+         				 <script  src="pramukhindic.js"></script>
+         				 <script  src="pramukhime-common.js"></script>
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form enctype="multipart/form-data" id="form">
+							<h1>Upload Home Work</h1>
+							<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+							<p:panel
+								header="Allowed file types are :- jpg,jpeg,png,pdf,doc,docx">
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									
+									<p:outputLabel  for="@next" style="color:red" value="Date:" ></p:outputLabel>
+									<p:calendar 
+										value="#{uploadAssignment.pDate}" navigator="true" mindate="#{uploadAssignment.minDateAssignment}"
+										pattern="dd/MM/yyyy" required="true"
+										requiredMessage="Please Select Date"></p:calendar>
+
+									<p:outputLabel for="@next" style="color:red"  value="Select Class"></p:outputLabel>
+									<p:selectOneMenu
+										value="#{uploadAssignment.selectedCLassSection}"
+										required="true" requiredMessage="Please select a class" filter="true">
+										<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+										<f:selectItems value="#{uploadAssignment.classSection}"></f:selectItems>
+										<p:ajax update="sectionid"
+											listener="#{uploadAssignment.allSections}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel  for="@next" style="color:red" value="Select Section"></p:outputLabel>
+									<p:selectOneMenu id="sectionid"
+										value="#{uploadAssignment.selectedSection}" required="true"
+										requiredMessage="Please select a section" filter="true">
+										<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+										<f:selectItems value="#{uploadAssignment.sectionList}"></f:selectItems>
+										<p:ajax update="subjectid"
+											listener="#{uploadAssignment.allSubjects}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel  for="@next" style="color:red" value="Select Subject"></p:outputLabel>
+									<p:selectOneMenu id="subjectid"
+										value="#{uploadAssignment.subject}" required="true"
+										requiredMessage="Please select a Subject" filter="true">
+										<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+										<f:selectItem itemLabel="All" itemValue="All"></f:selectItem>
+										<f:selectItems value="#{uploadAssignment.subjectList}"></f:selectItems>
+									</p:selectOneMenu>
+
+									<p:outputLabel  for="@next" style="color:red" rendered="false" value="Type:"></p:outputLabel>
+									<p:selectOneMenu rendered="false"
+										value="#{uploadAssignment.type}" required="true"
+										requiredMessage="Please select a Type">
+										<f:selectItem itemLabel="Homework" itemValue="homework"></f:selectItem>
+										<f:selectItem itemLabel="Notes" itemValue="notes"></f:selectItem>
+										<p:ajax update="tp" listener="#{uploadAssignment.checkType}"></p:ajax>
+									</p:selectOneMenu>
+								
+								</p:panelGrid>
+								
+									
+									
+									<p:panelGrid columns="3"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									
+									<p:outputLabel value="Description:"></p:outputLabel>
+									<p:inputTextarea id = "descriptionInput" value="#{uploadAssignment.des}" rows="3"
+										cols="20"></p:inputTextarea>
+										
+									<input type="checkbox" id="languagess" name="" value="pramukhindic:hindi" 
+									onchange="changeLanguage2(this.checked,'form:descriptionInput')" ></input>
+
+									
+
+									<p:outputLabel  for="@next" style="color:red" id="tp" value="#{uploadAssignment.label} Name"></p:outputLabel>
+									<p:inputText value="#{uploadAssignment.assignmentName}"
+										required="true" id="nameinput"
+										requiredMessage="Please Enter #{uploadAssignment.label} Name"></p:inputText>
+									
+									<input type="checkbox" id="languagess" name="" value="pramukhindic:hindi" 
+									onchange="changeLanguage2(this.checked,'form:nameinput')" ></input>
+									
+									</p:panelGrid>
+									
+									<br/>
+									<br/>
+									
+									
+									<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									
+
+									<p:outputLabel rendered="#{uploadAssignment.sendMessageBoolean}"  value="Want to send SMS ?"></p:outputLabel>
+									<p:selectOneRadio rendered="#{uploadAssignment.sendMessageBoolean}"  value="#{uploadAssignment.sms}">
+										<f:selectItem itemLabel="Yes" itemValue="yes"></f:selectItem>
+										<f:selectItem itemLabel="No" itemValue="no"></f:selectItem>
+									</p:selectOneRadio>
+
+									<p:outputLabel value="Choose File1 :"></p:outputLabel>
+									<p:fileUpload 
+									 mode="simple" skinSimple="true" 
+										value="#{uploadAssignment.assignmentPhoto1}"></p:fileUpload>
+
+									<p:outputLabel value="Choose File2 :"></p:outputLabel>
+									<p:fileUpload allowTypes="/(\.|\/)(gif|jpe?g|png)$/"
+										mode="simple" skinSimple="true"
+										value="#{uploadAssignment.assignmentPhoto2}"></p:fileUpload>
+
+									<p:outputLabel value="Choose File3 :"></p:outputLabel>
+									<p:fileUpload allowTypes="/(\.|\/)(gif|jpe?g|png)$/"
+										mode="simple" skinSimple="true"
+										value="#{uploadAssignment.assignmentPhoto3}"></p:fileUpload>
+
+									<p:outputLabel value="Choose File4 :"></p:outputLabel>
+									<p:fileUpload allowTypes="/(\.|\/)(gif|jpe?g|png)$/"
+										mode="simple" skinSimple="true"
+										value="#{uploadAssignment.assignmentPhoto4}"></p:fileUpload>
+
+									<p:outputLabel value="Choose File5 :"></p:outputLabel>
+									<p:fileUpload allowTypes="/(\.|\/)(gif|jpe?g|png)$/"
+										mode="simple" skinSimple="true"
+										value="#{uploadAssignment.assignmentPhoto5}"></p:fileUpload>
+
+									
+
+									<p:outputLabel rendered="false"  value="Want to send Notification ?"></p:outputLabel>
+									<p:selectOneRadio rendered="false" value="#{uploadAssignment.notification}">
+										<f:selectItem itemLabel="Yes" itemValue="yes"></f:selectItem>
+										<f:selectItem itemLabel="No" itemValue="no"></f:selectItem>
+									</p:selectOneRadio>
+								</p:panelGrid>
+								
+								<br />
+								<p:separator />
+								<center>
+									
+									<p:commandButton value="Upload" styleClass="butwid" icon="fa fa-upload"
+										title="Click On to Upload Assignment" ajax="false"
+										update=":form" action="#{uploadAssignment.upload}"></p:commandButton>
+								</center>
+								<p:separator />
+								<br />
+								
+							</p:panel>
+						</h:form>
+
+						<h:form id="MsgLimitForm" style="overflow:hidden">
+							<p:dialog header="Low SMS Balance" width="500"
+								widgetVar="MsgLmtDlg" modal="true" showEffect="fade"
+								hideEffect="fade" resizable="false">
+								<center>
+									<p:outputLabel value="#{uploadAssignment.balMsg}"
+										style="font-size:14px;font-weight: bold;" />
+								</center>
+								<br></br>
+								<br></br>
+								<center>
+									<p:commandButton value="Skip" action="#{uploadAssignment.sendMsg}"
+										update="MsgLimitForm" />
+									<br /> <br />
+									<p:commandButton value="Message Logs"
+										action="messageSchoolHistory.xhtml?faces-redirect=true"
+										update="MsgLimitForm" />
+									<br /> <br />
+									<p:commandButton value="Recharge Now"
+										action="purchaseMsgPack.xhtml?faces-redirect=true"
+										update="MsgLimitForm" />
+								</center>
+								<br></br>
+							</p:dialog>
+						</h:form>
+
+						<h:form id="MsgOverForm" style="overflow:hidden">
+							<p:dialog header="SMS Limit Over" width="500"
+								widgetVar="MsgOvrDlg" modal="true" showEffect="fade"
+								hideEffect="fade" resizable="false">
+								<center>
+									<p:outputLabel value="#{uploadAssignment.balMsg}"
+										style="font-size:14px;font-weight: bold;" />
+								</center>
+								<br></br>
+								<br></br>
+								<center>
+									<p:commandButton value="Message Logs"
+										action="messageSchoolHistory.xhtml?faces-redirect=true"
+										update="MsgOverForm" />
+									<br /> <br />
+									<p:commandButton value="Recharge Now"
+										action="purchaseMsgPack.xhtml?faces-redirect=true"
+										update="MsgOverForm" />
+								</center>
+								<br></br>
+							</p:dialog>
+						</h:form>
+
+						<h:form id="MsgOtherForm" style="overflow:hidden">
+							<p:dialog header="SMS Limit Over" width="500"
+								widgetVar="MsgOthDlg" modal="true" showEffect="fade"
+								hideEffect="fade" resizable="false">
+								<center>
+									<p:outputLabel value="#{uploadAssignment.balMsg}"
+										style="font-size:14px;font-weight: bold;" />
+								</center>
+								<br></br>
+								<br></br>
+								<center>
+									<p:commandButton value="OK"
+										action="uploadAssignment.xhtml?faces-redirect=true"
+										update="MsgOtherForm" />
+								</center>
+							</p:dialog>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

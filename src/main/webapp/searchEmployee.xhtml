@@ -1,0 +1,287 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Search Employee</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form enctype="multipart/form-data" id="form">
+
+							<h1>#{searchEmployeeVar.searchEmployeeTitle}</h1>
+
+							<p:messages closable="true" autoUpdate="true"></p:messages>
+
+							<p:panel>
+								<f:facet name="header">
+									<span>Search Employee By Name</span>
+									<span> <p:commandLink
+											style="float: right;margin-left: 15px;;color: blue;font-size:15px;"
+											immediate="true" value="Bulk Staff Detail Updation"
+											action="bulkEditStaffDetails.xhtml?faces-redirect=true"></p:commandLink>
+									</span>
+								</f:facet>
+
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:outputLabel
+										value="#{searchEmployeeVar.searchEmployeeEnterEmployeeName}"></p:outputLabel>
+									<p:autoComplete id="acSimple" value="#{searchEmployee.name}"
+										completeMethod="#{searchEmployee.autoCompleteStudentInfo}">
+
+										<!-- <p:ajax event="blur" update=":form3:up" listener="#{searchEmployee.searchEmployeeByName}" ></p:ajax> -->
+									</p:autoComplete>
+
+									<p:commandButton value="Search" styleClass="butwid" icon="fa fa-search" 
+										action="#{searchEmployee.searchEmployeeByName}"
+										update=":form3:up"></p:commandButton>
+
+								</p:panelGrid>
+
+							</p:panel>
+
+
+						</h:form>
+						<h:form id="form2" enctype="multipart/form-data">
+
+							<p:panel header="Search Employee by Designation">
+
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel value="Select a Designation" for="@next" style="color:red" ></p:outputLabel>
+									<p:selectOneMenu value="#{searchEmployee.selectedCategory}"
+										filter="true" required="true" requiredMessage="Please select employee designation">
+										<f:selectItem itemLabel="Select here" itemValue=""></f:selectItem>
+										<f:selectItem itemLabel="All" itemValue="All"></f:selectItem>
+										<f:selectItems value="#{searchEmployee.categoryList}"></f:selectItems>
+
+										<p:ajax listener="#{searchEmployee.searchByCategory}"
+											update=":form3:up"></p:ajax>
+									</p:selectOneMenu>
+
+
+								</p:panelGrid>
+
+							</p:panel>
+
+						</h:form>
+						<h:form id="form3" enctype="multipart/form-data">
+
+							<p:panel>
+
+								<p:outputPanel id="up">
+
+									<h:commandLink>
+										<p:graphicImage name="images/excellogo.png"
+											library="avalon-layout" width="100" height="40"></p:graphicImage>
+										<pe:exporter type="xlsx" target=":form3:empTbl"
+											fileName="EmployeeList"></pe:exporter>
+									</h:commandLink>
+									
+									<br/>
+
+									<p:dataTable id="empTbl" reflow="true"
+										selection="#{searchEmployee.selectedEmployee}"
+										rowKey="#{var.id}" rendered="#{searchEmployee.show}" var="var"
+										value="#{searchEmployee.employeeList}">
+							<f:facet name="header">
+								<p:panelGrid columns="2">
+									<p:commandButton value="Download All Images In Zip File" style="width: 265px;" ajax="false" actionListener="#{searchEmployee.downloadAllStudentPhoto}" onclick="PrimeFaces.monitorDownload(start, stop);" icon="ui-icon-image">
+							            <p:fileDownload value="#{searchEmployee.file}" /> 
+						      		</p:commandButton>
+						      		
+						      		<p:commandButton value="Download All Documents In Zip File" style="width: 265px;"  ajax="false" actionListener="#{searchEmployee.downloadAllDocuments}" onclick="PrimeFaces.monitorDownload(start, stop);" icon="ui-icon-image">
+							            <p:fileDownload value="#{searchEmployee.file}" /> 
+						      		</p:commandButton>
+								</p:panelGrid>
+								 	
+							</f:facet>
+									<p:column exportable="false" headerText="Select"
+											style="width:40px" selectionMode="single"></p:column>
+
+										<p:column sortBy="#{var.fname}" headerText="Name">
+											<f:facet name="header">
+												<p:outputLabel value="Name"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.fname}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Father's Name">
+											<f:facet name="header">
+												<p:outputLabel value="Father's Name"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.lname}"></p:outputLabel>
+										</p:column>
+										
+										<p:column headerText="Emp. Unique Id" style="width:55px">
+											<f:facet name="header">
+												<p:outputLabel value="Employee Unique Id"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.employeeUniqueId}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Category">
+											<f:facet name="header">
+												<p:outputLabel value="Category"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.category}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Sub Categ.">
+											<f:facet name="header">
+												<p:outputLabel value="Sub Categ."></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.subCateg}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Contact No." style="width:78px">
+											<f:facet name="header">
+												<p:outputLabel value="Contact No."></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.mobile}"></p:outputLabel>
+										</p:column>
+										
+										
+										<p:column headerText="Email / Zoom Email ID">
+											<f:facet name="header">
+												<p:outputLabel value="Email / Zoom Email ID"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.email}"></p:outputLabel>
+										</p:column>
+										
+										<p:column headerText="Pan No." style="width:75px">
+											<f:facet name="header">
+												<p:outputLabel value="Pan No."></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.panNo}"></p:outputLabel>
+										</p:column>
+										
+										<p:column headerText="Aadhar No." style="width:75px">
+											<f:facet name="header">
+												<p:outputLabel value="Aadhar No."></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.aadhaarNo}"></p:outputLabel>
+										</p:column>
+										
+										
+										<p:column exportable="false" headerText="Employee Image" style="width:78px">
+											<f:facet name="header">
+												<p:outputLabel value="Employee Image"></p:outputLabel>
+											</f:facet>
+											<center>
+												<p:lightBox rendered="#{var.empImageTemp ne ''}" styleClass="imagebox">
+													<h:outputLink value="#{var.empImage}">
+														<p:graphicImage value="#{var.empImage}" width="70"
+															height="70" />
+													</h:outputLink>
+												</p:lightBox>
+											</center>
+										</p:column>
+										
+										<p:column headerText="Download Image" style="width:65px">
+											<f:facet name="header">
+												<p:outputLabel value="Download Image"></p:outputLabel>
+											</f:facet>
+											<p:commandButton disabled="#{var.empImageTemp eq ''}" value="Download"  id="download" onclick="PrimeFaces.monitorDownload(start, stop);" ajax="false" actionListener="#{searchEmployee.downloadMethod}" icon="ui-icon-arrowthick-1-s">
+								                <f:attribute name="empRowId" value="#{var.id}" />
+								                <p:fileDownload value="#{searchEmployee.file}" />
+								        	</p:commandButton>
+								        </p:column>
+								        
+								        <p:column headerText="Download Documents" style="width:65px">
+											<f:facet name="header">
+												<p:outputLabel value="Download Documents"></p:outputLabel>
+											</f:facet>
+											<p:commandButton disabled="#{var.docList.size() eq '0'}" value="Download"  id="download1" onclick="PrimeFaces.monitorDownload(start, stop);" ajax="false" actionListener="#{searchEmployee.downloadDocumentMethod}" icon="ui-icon-arrowthick-1-s">
+								                <f:attribute name="empRowId1" value="#{var.id}" />
+								                <p:fileDownload value="#{searchEmployee.file}" />
+								        	</p:commandButton>
+								        </p:column>
+										
+										<p:column exportable="false" headerText="View" style="width:45px">
+											<p:commandButton action="#{searchEmployee.viewDetails}"
+												icon="ui-icon-search">
+												<f:setPropertyActionListener
+													target="#{searchEmployee.selectedEmployee}" value="#{var}"></f:setPropertyActionListener>
+											</p:commandButton>
+										</p:column>
+
+										<p:column exportable="false" headerText="Inactive" style="width:45px">
+											<p:commandButton update=":form3 :form2 :form" styleClass="redButt"
+												oncomplete="PF('dlg').show();" icon="ui-icon-trash">
+												<f:setPropertyActionListener
+													target="#{searchEmployee.selectedEmployee}" value="#{var}"></f:setPropertyActionListener>
+											</p:commandButton>
+										</p:column>
+									
+
+										<f:facet name="footer">
+											<p:commandButton rendered="#{searchEmployee.show}"
+												actionListener="#{searchEmployee.editNow}" styleClass="butwid-1" icon="fa fa-pencil" 
+												value="#{searchEmployeeVar.searchEmployeeEditButtonLabel}"></p:commandButton>
+										</f:facet>
+
+									</p:dataTable>
+
+								</p:outputPanel>
+
+							</p:panel>
+
+							<p:dialog resizable="false" widgetVar="dlgView"
+								header="Do you really want to View Details" showEffect="fade"
+								hideEffect="explode" modal="true">
+								<div class="ui-g form-group">
+									<p:panelGrid columns="2"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+
+										<p:commandButton update=":form3"
+											actionListener="#{searchEmployee.viewDetails}" value="Yes"></p:commandButton>
+										<p:commandButton value="No" update=":form3"
+											oncomplete="PF('dlgView').hide();"></p:commandButton>
+									</p:panelGrid>
+								</div>
+							</p:dialog>
+
+							<p:dialog resizable="false" widgetVar="dlg"
+								header="Do you really want to Inactive this Employee"
+								showEffect="fade" hideEffect="explode" modal="true">
+								<div class="ui-g form-group">
+									<p:panelGrid columns="2"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+
+										<p:commandButton update=":form3"
+											actionListener="#{searchEmployee.deleteEmployee}" value="Yes"></p:commandButton>
+										<p:commandButton value="No" update=":form3"
+											oncomplete="PF('dlg').hide();"></p:commandButton>
+									</p:panelGrid>
+								</div>
+							</p:dialog>
+
+						</h:form>
+
+
+
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

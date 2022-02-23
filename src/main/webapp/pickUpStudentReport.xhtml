@@ -1,0 +1,100 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Pick Up Report</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form2">
+							<p:panel header="Student Pick Up Report">
+								<p:panelGrid columns="5" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:outputLabel value="From Date" for="@next" style="color:red" ></p:outputLabel>
+									<p:calendar value="#{pickUpReport.startDate}" navigator="true"
+										pattern="dd/MM/yyyy" required="true"
+										requiredMessage="Please Enter From Date"></p:calendar>
+									 
+									<p:outputLabel value="To Date" for="@next" style="color:red" ></p:outputLabel>
+									<p:calendar value="#{pickUpReport.endDate}" navigator="true"
+										pattern="dd/MM/yyyy" required="true"
+										requiredMessage="Please Enter End Date"></p:calendar>	
+									
+									<p:commandButton update=":form2"
+										action="#{pickUpReport.allVisitorList}" value="Search"></p:commandButton>	
+								</p:panelGrid>
+								<br/>
+								<p:dataTable reflow="true" value="#{pickUpReport.studentList}"
+									var="var" >
+									<f:facet name="header">
+										<p:outputLabel
+											value="Total Pick Ups : #{pickUpReport.totalVisitor}"></p:outputLabel>
+									</f:facet>
+
+									<p:column headerText="S.No." style="width:50px;">
+										<p:outputLabel value="#{var.sno}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Date">
+										<p:outputLabel value="#{var.strAdmitDate}"></p:outputLabel>
+									</p:column>
+									
+									<p:column headerText="Sr.No.">
+										<p:outputLabel value="#{var.srNo}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Name" filterBy="#{var.fname}" filterMatchMode="contains">
+										<p:outputLabel value="#{var.fname}"></p:outputLabel>
+									</p:column>
+									
+									<p:column headerText="Class &amp; Section" filterBy="#{var.className}" filterMatchMode="contains">
+										<p:outputLabel value="#{var.className}"></p:outputLabel>
+									</p:column>
+									
+									<p:column headerText="Type">
+										<p:outputLabel value="#{var.assType}"></p:outputLabel>
+									</p:column>
+									
+									<p:column headerText="Relation">
+										<p:outputLabel value="#{var.relation}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Mobile No" filterBy="#{var.mobileNo}" filterMatchMode="contains">
+										<p:outputLabel value="#{var.contactNo}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Picker Name" filterBy="#{var.name}" filterMatchMode="contains">
+										<p:outputLabel value="#{var.name}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Remark">
+										<p:outputLabel value="#{var.remark}"></p:outputLabel>
+									</p:column>
+									
+									<p:column headerText="Pick Time">
+										<p:outputLabel value="#{var.strDob}"></p:outputLabel>
+									</p:column>
+									
+									<p:column headerText="Picker Photo">
+										<p:graphicImage value="#{sideMenuBean.list.downloadpath}#{(var.signImage eq '' || var.signImage eq 'null') ? 'noimage.png' : var.signImage}" height="100px" width="100px" ></p:graphicImage>
+									</p:column>
+									
+								</p:dataTable>
+							</p:panel>
+						</h:form>
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

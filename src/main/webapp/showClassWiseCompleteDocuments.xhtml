@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+<f:loadBundle var="addClassVar" basename="myProperties" />
+<f:view contentType="text/html">
+	<h:head>
+		<title>#{sideMenuBean.companyName} | Complete Documents</title>
+		<f:facet name="first">
+			<meta content='text/html; charset=UTF-8' http-equiv="Content-Type" />
+			<meta http-equiv="X-UA-Compatible" content="EmulateIE8" />
+			
+		</f:facet>
+
+  <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css"></link>
+    		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"></link>
+    	<link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css"></link>
+   <link rel="stylesheet" href="dist/css/AdminLTE.min.css"></link>
+    <link rel="stylesheet" href="dist/css/skins/all-skins.min.css"></link>
+
+	</h:head>
+
+	<h:body>
+      
+      <ui:include src="sideMenu.xhtml"></ui:include> 
+      <div class="content-wrapper">
+          
+                
+          
+	<h:form id="form" >
+				     <h1>Documents Wise Class Report</h1>
+            
+            	<p:panel header="Select a Class">            	
+				<p:messages closable="true" autoUpdate="true"></p:messages>		                
+               	<p:panelGrid columns="6">
+               	       <p:outputLabel value="Select a Class" for="@next" style="color:red" ></p:outputLabel>
+               	       <p:selectOneMenu value="#{showClassWiseDocumentsDetails.selectedClass}" required="true" requiredMessage="Please select a class">
+               	          <f:selectItem itemLabel="Select One" itemValue="select"></f:selectItem> 
+               	          <f:selectItems value="#{showClassWiseDocumentsDetails.classList}"></f:selectItems>
+               	  
+               	       <p:ajax update="sectionid" listener="#{showClassWiseDocumentsDetails.allSections}"></p:ajax>
+               	       </p:selectOneMenu>
+               	       
+               	   		    <p:outputLabel value="Select Section" for="@next" style="color:red" ></p:outputLabel>
+               		 			<p:selectOneMenu id="sectionid" value="#{showClassWiseDocumentsDetails.selectedSection}" required="true" requiredMessage="Please select a section"> 
+               		 			<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+               		 			<f:selectItems value="#{showClassWiseDocumentsDetails.sectionList}"></f:selectItems>
+               		 		
+               		 			 <p:ajax></p:ajax>
+               		 		</p:selectOneMenu>
+               	       
+               	     	   <p:outputLabel value="Select Type" for="@next" style="color:red" ></p:outputLabel>
+               		 			<p:selectOneMenu value="#{showClassWiseDocumentsDetails.selectedType}" required="true" requiredMessage="Please select a type"> 
+               		 			<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+               		 			<f:selectItem itemLabel="Completed" itemValue="true"></f:selectItem>
+               		 			<f:selectItem itemLabel="Incompleted" itemValue="false"></f:selectItem>
+               		 		
+               		 			 <p:ajax update=":form" listener="#{showClassWiseDocumentsDetails.getStudentStrength}"></p:ajax>
+               		 		</p:selectOneMenu>
+               	       
+               	       <p:commandButton value="Print" rendered="#{showClassWiseDocumentsDetails.b}">
+               	       		<p:printer target="dataTable"></p:printer>
+               	       </p:commandButton>
+                               	    
+               	       
+               	</p:panelGrid>
+               	
+               	<p:panel id="dataTable" rendered="#{showClassWiseDocumentsDetails.b}" >   
+               		<center>
+						<p style="font-family: initial;font-style: oblique;font-size: 30px !important;font-weight:bold;margin:0px;">#{headerBean.name}</p>
+						<p style="margin:0px;">#{headerBean.address4}</p>
+					</center>
+					<p:panelGrid columns="3" style="width:100%">
+					
+						<p:panelGrid columns="2">
+							<p:outputLabel value="Class:-"></p:outputLabel>
+							<h:outputText value="#{showClassWiseDocumentsDetails.className}"></h:outputText>
+						</p:panelGrid>
+						
+						<p:panelGrid columns="2">
+							<p:outputLabel value="Section:-"></p:outputLabel>
+							<h:outputText value="#{showClassWiseDocumentsDetails.sectionName}"></h:outputText>
+						</p:panelGrid>
+						
+						<p:panelGrid columns="2">
+							<p:outputLabel value="Total:-"></p:outputLabel>
+							<h:outputText value="#{showClassWiseDocumentsDetails.total}"></h:outputText>
+						</p:panelGrid>
+						
+					</p:panelGrid>	
+               	    
+               	       <h:dataTable border="1" style="width:100%;border-collapse:collapse" value="#{showClassWiseDocumentsDetails.studentList}" var="var" >
+               	         
+               	         	  <p:column headerText="Admission No." >
+               	         	  
+               	         	  		<f:facet name="header"> 
+           					  		     <p:outputLabel value="Admission No."></p:outputLabel>
+         						    </f:facet>
+               	         	<center>      <p:outputLabel value="#{var.addNumber}"></p:outputLabel></center> 
+               	         	  </p:column>
+               	        	
+               	        	   <p:column headerText="Student Name">
+               	        	   		
+               	        	   		<f:facet name="header"> 
+           					  		     <p:outputLabel value="Student Name"></p:outputLabel>
+         						    </f:facet>
+               	            	    <p:outputLabel value="#{var.fullName}"></p:outputLabel>
+               	          	 	</p:column>
+               	         	
+               	         	  <p:column headerText="Father's Name" >
+               	         	  		
+               	         	  		<f:facet name="header"> 
+           					  		     <p:outputLabel value="Father's Name"></p:outputLabel>
+         						    </f:facet>
+               	        	        <p:outputLabel value="#{var.fathersName}"></p:outputLabel>
+               	        	   </p:column>
+               	           
+               	             <p:column headerText="Admission Date" >
+               	             	
+               	             		<f:facet name="header"> 
+           					  		     <p:outputLabel value="Admission Date"></p:outputLabel>
+         						    </f:facet>
+               	          <center>      <p:outputLabel value="#{var.admissionDate}" ></p:outputLabel> </center>
+               	             </p:column>
+               	            
+               	              <p:column headerText="D.O.B." >
+               	              
+               	              		<f:facet name="header"> 
+           					  		     <p:outputLabel value="D.O.B."></p:outputLabel>
+         						    </f:facet>
+               	           <center>     <p:outputLabel value="#{var.dobString}"></p:outputLabel> </center>
+               	             </p:column>
+               	            
+               	             <p:column headerText="Gender"  >
+               	             	
+               	           		  	<f:facet name="header"> 
+           					  		     <p:outputLabel value="Gender"></p:outputLabel>
+         						    </f:facet>
+               	           <center>     <p:outputLabel  value="#{var.gender}" ></p:outputLabel> </center>
+               	             </p:column> 
+               	           
+               	           <p:column headerText="Documents"  >
+               	           		
+               	          	 		<f:facet name="header"> 
+           					  		     <p:outputLabel value="Documents"></p:outputLabel>
+         						    </f:facet>
+               	      <center>          <p:outputLabel value="#{var.documentsSubmitted}"></p:outputLabel> </center>
+               	           </p:column>               	           
+
+               	       </h:dataTable>
+            
+                </p:panel>  
+                </p:panel>
+                </h:form>
+
+          
+      </div>	
+	</h:body>
+</f:view>
+</html>

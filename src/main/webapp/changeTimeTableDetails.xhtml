@@ -1,0 +1,123 @@
+	<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+					xmlns:ui="http://java.sun.com/jsf/facelets"
+					xmlns:h="http://java.sun.com/jsf/html"
+					xmlns:f="http://java.sun.com/jsf/core"
+					xmlns:p="http://primefaces.org/ui"
+					template="/WEB-INF/template.xhtml">
+
+		<ui:define name="title">Time Table Settings</ui:define>
+
+		<ui:define name="content">
+		   
+				<div class="ui-fluid">
+					<div class="ui-g">
+						<div class="ui-g-12">
+							<div class="card card-w-title">
+							     <h:form id="form"  >
+
+				<p:panel header="Change Time Table Details">
+					<p:messages closable="true" autoUpdate="true"></p:messages>
+
+					<p:panelGrid columns="2" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+
+						<p:outputLabel  for="@next" style="color:red" value="Start Time of periods (HH:mm eg.08:00) (SUMMER)"></p:outputLabel>
+						<p:inputText validatorMessage="Invalid Time Format!"
+							required="true"
+							requiredMessage="Please enter starting time of periods (SUMMER)"
+							value="#{changeTimeTable.time}" placeholder="SUMMER">
+							<f:validateRegex pattern="^[0-9:]{4,5}$"></f:validateRegex>
+						</p:inputText>
+						
+						<p:outputLabel  for="@next" style="color:red" value="Start Time of periods (HH:mm eg.08:00) (WINTER)"></p:outputLabel>
+						<p:inputText validatorMessage="Invalid Time Format!"
+							required="true"
+							requiredMessage="Please enter starting time of periods (WINTER)"
+							value="#{changeTimeTable.winterTime}" placeholder="WINTER">
+							<f:validateRegex pattern="^[0-9:]{4,5}$"></f:validateRegex>
+						</p:inputText>
+
+						<p:calendar rendered="false" timeOnly="true" required="true"
+							requiredMessage="Please enter starting time of college"
+							value="#{changeTimeTable.startTime}" pattern="HH:mm">
+						</p:calendar>
+
+
+						<p:outputLabel  for="@next" style="color:red" value="Enter no. of periods:"></p:outputLabel>
+						<p:inputText required="true"
+							requiredMessage="Please enter No. of periods"
+							value="#{changeTimeTable.noOfLec}">
+							<p:keyFilter mask="pnum"></p:keyFilter>
+							<p:ajax event="blur" listener="#{changeTimeTable.showLectures}"
+								update=":form:pnl"></p:ajax>
+						</p:inputText>
+
+
+						<p:outputLabel value="Lunch After(Optional) "></p:outputLabel>
+						<p:inputText value="#{changeTimeTable.lunchAfter}">
+							<p:keyFilter mask="int"></p:keyFilter>
+						</p:inputText>
+
+						<p:outputLabel value="Lunch Duration(In minutes)(Optional) (HH:mm eg.00:30)"></p:outputLabel>
+						<p:inputText value="#{changeTimeTable.timeOfLunch}" validatorMessage="Invalid Time Format!">
+							<f:validateRegex pattern="^[0-9:]{4,5}$"></f:validateRegex>
+						</p:inputText>
+
+					</p:panelGrid>
+				</p:panel>
+				<p:panel id="pnl">
+					<h4>Enter Periods's End Time In Period Time (For Example:-
+						Timing Of Period 1 Is:- 09:00-09:50 Then Enter 09:50 In Period 1
+						Time.)</h4>
+					<p:panelGrid columns="2" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+						<p:outputLabel value="Enter Period Time"></p:outputLabel>
+						<p:dataTable style="width:600px" id="lec"
+							value="#{changeTimeTable.timeOfLecs}" var="var">
+
+							<p:column headerText="Period">
+								<p:outputLabel value="Period #{var.sn}"></p:outputLabel>
+							</p:column>
+
+							<p:column  style="color:red" headerText="SUMMER TIME (In HH:mm)*">
+								<p:inputText style="width:100px !important"
+									validatorMessage="Invalid Time Format!" required="true"
+									requiredMessage="Please enter time of all Periodss"
+									value="#{var.lecTime}">
+									<f:validateRegex pattern="^[0-9:]{4,5}$"></f:validateRegex>
+								</p:inputText>
+							</p:column>
+							
+							<p:column headerText="WINTER TIME (In HH:mm)*" style="color:red" >
+								<p:inputText style="width:100px !important"
+									validatorMessage="Invalid Time Format!" required="true"
+									requiredMessage="Please enter time of all Periodss"
+									value="#{var.winterLecTime}">
+									<f:validateRegex pattern="^[0-9:]{4,5}$"></f:validateRegex>
+								</p:inputText>
+							</p:column>
+
+						</p:dataTable>
+						<p:commandButton rendered="#{changeTimeTable.noOfLec gt 0}"
+							action="#{changeTimeTable.updateDetail}" value="Update Settings"
+							update=":form">
+							<p:confirm header="Confirmation"
+								message="Any change in number of periods will permanently delete time schedules of all classess. Are you still want to continue?"
+								icon="ui-icon-alert" />
+						</p:commandButton>
+					</p:panelGrid>
+				</p:panel>
+
+				<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+					<p:commandButton value="Yes" type="button"
+						styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+					<p:commandButton value="No" type="button"
+						styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+				</p:confirmDialog>
+			</h:form>
+							</div>
+						</div>
+					</div>
+				</div>
+		   
+		</ui:define>
+
+	</ui:composition>

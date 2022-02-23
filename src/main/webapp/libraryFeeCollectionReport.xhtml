@@ -1,0 +1,126 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Assigned Books</ui:define>
+
+	<ui:define name="content">
+		<style type="text/css">
+.blueColored {
+	color: blue;
+}
+</style>
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<p:panel header="Library Fee Collection Report">
+								<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+								<p:messages autoUpdate="true"></p:messages>
+								<p:panelGrid columns="6"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:outputLabel value="Start Date" for="@next" style="color:red"></p:outputLabel>
+									<p:calendar value="#{libFeeCollectReport.startDate}"
+										pattern="dd/MM/yyyy" navigator="true" required="true"
+										requiredMessage="Please Enter Start Date"></p:calendar>
+
+									<p:outputLabel value="End Date" for="@next" style="color:red"></p:outputLabel>
+									<p:calendar value="#{libFeeCollectReport.endDate}"
+										pattern="dd/MM/yyyy" navigator="true" required="true"
+										requiredMessage="Please Enter End Date"></p:calendar>
+								</p:panelGrid>
+
+
+								<br />
+								<p:separator />
+								<center>
+									<p:panelGrid
+										columns="#{libFeeCollectReport.bookList.size() gt 0 ? '3' : '1'}"
+										layout="grid" styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+
+
+
+										<p:commandButton value="Search" update=":form" icon="ui-icon-search"
+											styleClass="butwid"
+											actionListener="#{libFeeCollectReport.searchData}"></p:commandButton>
+
+
+										<h:commandLink rendered="#{libFeeCollectReport.bookList.size() gt 0 }">
+											<p:graphicImage name="images/excellogo.png"
+												library="avalon-layout" width="100" height="40"></p:graphicImage>
+											<pe:exporter type="xlsx" target="dataTable"
+												fileName="Library Fee Report"></pe:exporter>
+										</h:commandLink>
+
+										<p:commandButton rendered="#{libFeeCollectReport.bookList.size() gt 0 }" value="PDF" styleClass="butwid"
+											icon="fa fa-file-pdf-o" ajax="false"
+											process="@this"
+											actionListener="#{libFeeCollectReport.exportLibPdf}">
+
+											<p:fileDownload value="#{libFeeCollectReport.file}" />
+										</p:commandButton>
+									</p:panelGrid>
+								</center>
+								<p:separator />
+								<br />
+
+								<br></br>
+								<p:dataTable id="dataTable" reflow="true"
+									value="#{libFeeCollectReport.bookList}" var="var"
+									rowStyleClass="#{var.receivedStatus eq 'Yes' ? 'blueColored' : ''}">
+									<p:column headerText="S.No" style="width:50px">
+										<p:outputLabel value="#{var.sNo}"></p:outputLabel>
+									</p:column>
+
+									<p:column filterMatchMode="contains" filterBy="#{var.type}"
+										headerText="Type">
+										<p:outputLabel value="#{var.type}"></p:outputLabel>
+									</p:column>
+
+									<p:column filterMatchMode="contains"
+										filterBy="#{var.studentName}" headerText="Name">
+										<p:outputLabel value="#{var.studentName}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Class">
+										<p:outputLabel value="#{var.classSection}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Date">
+										<p:outputLabel value="#{var.receiveDateStr}"></p:outputLabel>
+									</p:column>
+
+									<p:column
+										headerText="Penalty / Late Amount (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})">
+										<p:outputLabel value="#{var.penaltyAmount}"></p:outputLabel>
+									</p:column>
+
+									<p:column
+										headerText="Damage / Discard Charges (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})">
+										<p:outputLabel value="#{var.damageAmount}"></p:outputLabel>
+									</p:column>
+
+									<p:column
+										headerText="Discount (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})">
+										<p:outputLabel value="#{var.discount}"></p:outputLabel>
+									</p:column>
+
+
+								</p:dataTable>
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

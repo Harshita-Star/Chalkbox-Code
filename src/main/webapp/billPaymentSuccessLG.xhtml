@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+<f:loadBundle var="addClassVar" basename="myProperties" />
+<f:view contentType="text/html">
+	<h:head>
+		<title>Payment Successful!</title>
+		<f:facet name="first">
+			<meta content='text/html; charset=UTF-8' http-equiv="Content-Type" />
+			<meta http-equiv="X-UA-Compatible" content="EmulateIE8" />
+
+		</f:facet>
+
+		<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css"></link>
+		<link rel="stylesheet"
+			href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"></link>
+		<link rel="stylesheet"
+			href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css"></link>
+		<link rel="stylesheet" href="dist/css/AdminLTE.min.css"></link>
+		<link rel="stylesheet" href="dist/css/skins/all-skins.min.css"></link>
+		<link rel="stylesheet" type="text/css" href="css/style.css" />
+	</h:head>
+
+	<h:body>
+
+
+		<h:form id="form">
+			<p:panel style="width: 35%;margin: auto;"
+				header="Payment Successful!">
+
+				<p:outputPanel id="print">
+					<p:graphicImage url="paymentsuccess.jpg" style="margin: auto;"></p:graphicImage>
+
+					<table style="margin: auto; width: 100%">
+
+						<tr>
+							<td
+								style="width: 50%; text-align: left; color: gray; font-size: medium;">Payment
+								To</td>
+							<td
+								style="width: 50%; text-align: right; color: black; font-size: medium;">CHALKBOX</td>
+
+						</tr>
+						<tr>
+							<td
+								style="width: 50%; text-align: left; color: gray; font-size: medium;">Amount</td>
+							<td
+								style="width: 50%; text-align: right; color: black; font-size: medium;">Rs. #{billPaymentSuccessBean.amount}</td>
+
+						</tr>
+
+						<tr>
+							<td
+								style="width: 50%; text-align: left; color: gray; font-size: medium;">Order
+								ID</td>
+							<td
+								style="width: 50%; text-align: right; color: black; font-size: medium;">#{billPaymentSuccessBean.orderid}</td>
+
+						</tr>
+
+
+
+
+
+					</table>
+				</p:outputPanel>
+				<table style="margin: auto; width: 100%">
+					<tr>
+						<td
+							style="width: 50%; text-align: right; color: black; font-size: medium;"><p:commandButton
+								action="mySchoolBillsLogout.xhtml?faces-redirect=true" value="Back"></p:commandButton></td>
+
+					</tr>
+
+				</table>
+
+			</p:panel>
+		</h:form>
+
+
+		<p:ajaxStatus onstart="PF('statusDialog').show()"
+			onsuccess="PF('statusDialog').hide()" />
+		<p:dialog modal="true" widgetVar="statusDialog" resizable="false"
+			showHeader="false">
+			<center>
+				<i class="fa fa-circle-o-notch fa-5x fa-spin ajax-loader"></i>
+			</center>
+			<center>
+				<h3>Please Wait...</h3>
+			</center>
+		</p:dialog>
+	</h:body>
+</f:view>
+</html>

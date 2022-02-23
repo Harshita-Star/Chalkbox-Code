@@ -1,0 +1,170 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Generate Document Request</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					
+					<div class="card card-w-title">
+						<h:form id="form1">
+
+							<p:messages closable="true" autoUpdate="true"></p:messages>
+
+							<p:panel>
+								<f:facet name="header">
+									<span>Search Student by Name/Sr.No.</span>
+								</f:facet>
+
+								<p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel value="Student Name/Sr. No"></p:outputLabel>
+									<p:autoComplete id="acSimple" value="#{generateDocumentRequest.name}"
+										minQueryLength="3"
+										completeMethod="#{generateDocumentRequest.autoCompleteStudentInfo}" validatorMessage="Please Enter Correct value">
+										<f:validateRegex pattern="#{regexVar.regex}" />
+										<p:ajax event="query" global="false" />
+									</p:autoComplete>
+
+									<p:commandButton value="Search" update=":form" styleClass="butwid" icon="fa fa-search"
+										actionListener="#{generateDocumentRequest.searchStudentByName}"></p:commandButton>
+										
+								</p:panelGrid>
+
+							</p:panel>
+						</h:form>
+					</div>
+					
+					<div class="card card-w-title">
+						<h:form id="form2">
+
+							<p:panel header="Search Student by Class-Section">
+
+								<p:panelGrid columns="5" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel  for="@next" style="color:red" value="Select Class"></p:outputLabel>
+									<p:selectOneMenu style="width:250px"
+										value="#{generateDocumentRequest.selectedCLassSection}" required="true"
+										requiredMessage="Please select a class">
+										<f:selectItem itemLabel="#{searchStudentVar.selectHereLabel}"
+											itemValue=""></f:selectItem>
+											<f:selectItem itemLabel="All"
+											itemValue="-1"></f:selectItem>
+										<f:selectItems value="#{generateDocumentRequest.classSection}"></f:selectItems>
+
+										<p:ajax update="sectionid"
+											listener="#{generateDocumentRequest.allSections}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel  for="@next" style="color:red" value="Select Section"></p:outputLabel>
+									<p:selectOneMenu id="sectionid"
+										value="#{generateDocumentRequest.selectedSection}" required="true"
+										requiredMessage="Please select a section">
+										<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+										<f:selectItem itemLabel="All"
+											itemValue="-1"></f:selectItem>
+										<f:selectItems value="#{generateDocumentRequest.sectionList}"></f:selectItems>
+										
+									</p:selectOneMenu>
+									
+									<p:commandButton value="Search" styleClass="butwid" icon="fa fa-search" action="#{generateDocumentRequest.searchStudentByClassSection}" update=":form"/>
+
+								</p:panelGrid>
+
+							</p:panel>
+
+						</h:form>
+						</div>
+					
+					<div class="card card-w-title">
+					
+					
+						<h:form id="form">
+							<p:panel id="dataTable" rendered="#{generateDocumentRequest.b}">
+								<p:dataTable id="up" style="width:100%;border-collapse:collapse" selection="#{generateDocumentRequest.selStdList}"
+										rowKey="#{var.sno}"
+									border="1" value="#{generateDocumentRequest.list}" var="var">
+									
+									<p:column style="width:40px" headerText="Select" selectionMode="multiple"></p:column>
+
+									<p:column headerText="Roll No" style="width:40px;text-align:center" sortBy="#{var.rollNo}">
+										<p:outputLabel value="#{var.rollNo}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="S.No." style="width:40px;text-align:center">
+										<p:outputLabel value="#{var.sno}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Add. No." style="width:80px;text-align:center" filterBy="#{var.srNo}" >
+										<p:outputLabel value="#{var.srNo}"></p:outputLabel>
+									</p:column>
+
+									<p:column style="width:70px;text-align:center" headerText="Student Name" filterBy="#{var.fname}">
+										<p:outputLabel value="#{var.fname}"></p:outputLabel>
+									</p:column>
+
+									<p:column style="width:70px;text-align:center" headerText="Father's Name" filterBy="#{var.fathersName}" filterMatchMode="contains">
+										<p:outputLabel value="#{var.fathersName}"></p:outputLabel>
+									</p:column>
+									
+									<p:column style="width:60px;text-align:center" headerText="Class" sortBy="#{var.classStrName}" filterBy="#{var.classStrName}">
+										<p:outputLabel value="#{var.classStrName}"></p:outputLabel>
+									</p:column>
+
+									<p:column style="width:40px;text-align:center" headerText="Section" filterBy="#{var.sectionName}">
+										<p:outputLabel value="#{var.sectionName}"></p:outputLabel>
+									</p:column>
+									
+									<p:column style="width:80px;text-align:center" headerText="Phone No" filterBy="#{var.fathersPhone}">
+										<p:outputLabel value="#{var.fathersPhone}"></p:outputLabel>
+									</p:column>
+									
+									<f:facet name="footer">
+										<p:commandButton action="#{generateDocumentRequest.makeDocumentList}" value="Generate Request" />
+									</f:facet>
+									
+									<f:facet name="header">
+										<p:commandButton action="#{generateDocumentRequest.makeDocumentList}" value="Generate Request" />
+									</f:facet>
+
+								</p:dataTable>
+							</p:panel>
+						</h:form>
+						
+						<h:form id="documentForm">
+							<p:dialog resizable="true" modal="true" widgetVar="documentDialog" header="Select Document" closeOnEscape="true" style="width:100%; !important">
+
+								<p:panelGrid columns="1" columnClasses="ui-grid-col-12" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+									
+									<p:selectManyCheckbox id="showTerm" layout="grid" columns="1" styleClass="term-class" value="#{generateDocumentRequest.selectedDocument}">
+										<f:selectItems value="#{generateDocumentRequest.allDocList}"></f:selectItems>
+									</p:selectManyCheckbox>
+								</p:panelGrid>
+
+								<br />
+								<p:separator />
+								<center>
+									<p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+										<p:commandButton value="Submit" update=":form,:form2,:form1,:documentForm"
+											styleClass="butwid" icon="fa fa-arrow-right" actionListener="#{generateDocumentRequest.submitRequest}"></p:commandButton>
+									</p:panelGrid>
+								</center>
+								<p:separator />
+								<br />
+							</p:dialog>
+						</h:form>
+						
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

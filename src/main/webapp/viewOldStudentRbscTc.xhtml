@@ -1,0 +1,175 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">All Student TC Report</ui:define>
+
+    <ui:define name="content">
+       
+            <div class="ui-fluid">
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <div class="card card-w-title">
+                          <h:form  id="form" >
+			<h1>All Student TC Report</h1>
+				<p:panel header="All TC Student">
+					<p:dataTable var="var" value="#{viewOldStudentRbscTc.studentList}" reflow="true">
+					
+						<p:column headerText="S.No." style="width:40px">
+							<p:outputLabel value="#{var.sno}"></p:outputLabel>
+						</p:column>
+						
+								<p:column headerText="Addmission Number" style="width:150px" filterBy="#{var.addNumber}">
+               		  				<p:outputLabel value="#{var.addNumber}"></p:outputLabel>
+               		  			</p:column>
+               		  			
+               		  			<p:column headerText="TC Date" style="width:70px">
+               		  				<p:outputLabel value="#{var.tcDateStr}"></p:outputLabel>
+               		  			</p:column>
+               		  			
+               		  			<p:column headerText="Student Name" filterBy="#{var.fname}">
+               		  				<p:outputLabel value="#{var.fname}"></p:outputLabel>
+               		  			</p:column>
+               		  			
+               		  			<p:column headerText="Father Name">
+               		  				<p:outputLabel value="#{var.fathersName}"></p:outputLabel>
+               		  			</p:column>
+               		  			
+               		  			<p:column headerText="Reason">
+               		  				<p:outputLabel value="#{var.reason}"></p:outputLabel>
+               		  			</p:column>
+               		  			
+               		  			
+               		  			
+               		  			
+						
+						
+						
+						<p:column headerText="View / Print" style="width:80px">
+							<p:commandButton icon="ui-icon-print" immediate="true" action="#{viewOldStudentRbscTc.printDetails}">
+								<f:setPropertyActionListener target="#{viewOldStudentRbscTc.selectedStudent}" value="#{var}"></f:setPropertyActionListener>
+							</p:commandButton>
+						</p:column>
+						
+						<p:column headerText="Dob / Study" style="width:80px">
+							<p:commandButton icon="ui-icon-print" immediate="true" oncomplete="PF('bDlg').show();">
+								<f:setPropertyActionListener target="#{viewOldStudentRbscTc.selectedStudent}" value="#{var}"></f:setPropertyActionListener>
+							</p:commandButton>
+						</p:column>
+						<p:column headerText="CC" style="width:80px">
+							<p:commandButton icon="ui-icon-print" immediate="true" oncomplete="PF('ccDlg').show();">
+								<f:setPropertyActionListener target="#{viewOldStudentRbscTc.selectedStudent}" value="#{var}"></f:setPropertyActionListener>
+							</p:commandButton>
+						</p:column>
+						
+						<p:column headerText="Edit" style="width:80px">
+							<p:commandButton icon="ui-icon-pencil" immediate="true" action="#{viewOldStudentRbscTc.editDetails}">
+								<f:setPropertyActionListener target="#{viewOldStudentRbscTc.selectedStudent}" value="#{var}"></f:setPropertyActionListener>
+							</p:commandButton>
+						</p:column>
+						<p:column headerText="Delete" style="width:80px">
+							<p:commandButton icon="ui-icon-trash" immediate="true" action="#{viewOldStudentRbscTc.deleteDetails}">
+								<f:setPropertyActionListener target="#{viewOldStudentRbscTc.selectedStudent}" value="#{var}"></f:setPropertyActionListener>
+							</p:commandButton>
+						</p:column>
+						
+						
+					
+					</p:dataTable>
+				</p:panel>
+			</h:form>
+			<h:form id="form2">
+				<p:dialog modal="true" widgetVar="bDlg" header="" >
+					<div class="ui-g form-group">
+					<p:panelGrid columns="2">
+					    
+					    <p:outputLabel value="Type Of Certificate:"></p:outputLabel>
+						<p:selectOneRadio  value="#{viewOldStudentRbscTc.typeofCir}">
+             	        <f:selectItem itemValue="DATE OF BIRTH CERTIFICATE" itemLabel="DOB"></f:selectItem>
+                	    <f:selectItem itemValue="READING CERTIFICATE" itemLabel="STUDYING"></f:selectItem>
+                       </p:selectOneRadio>
+                       
+                        <p:outputLabel value="Select Gender"></p:outputLabel>
+                    	<p:selectOneRadio  value="#{viewOldStudentRbscTc.gender}">
+             	        <f:selectItem itemValue="Male" itemLabel="Male"></f:selectItem>
+                	    <f:selectItem itemValue="Female" itemLabel="Female"></f:selectItem>
+                    
+                    </p:selectOneRadio>
+                       
+						<p:outputLabel for="@next" style="color:red"  value="Issue Date:"></p:outputLabel>
+						<p:calendar value="#{viewOldStudentRbscTc.ccIssueDate}" navigator="true" pattern="dd/MM/yyyy" required="true" requiredMessage="Please select CC Issue Date"></p:calendar>
+					 
+						<p:commandButton action="#{viewOldStudentRbscTc.issueBonafied}" value="Generate" update=":form,:form2"></p:commandButton>
+					</p:panelGrid>
+					</div>
+				</p:dialog>
+			</h:form>
+			<h:form id="form3">
+			  <p:growl showDetail="true"  autoUpdate="true"></p:growl>
+				<p:dialog modal="true" widgetVar="ccDlg" header="CC Detail">
+				<div class="ui-g form-group">
+					<p:panelGrid columns="2">
+						<p:outputLabel for="@next" style="color:red"  value="CC Issue Date:"></p:outputLabel>
+						<p:calendar value="#{viewOldStudentRbscTc.ccIssueDate}" navigator="true" pattern="dd/MM/yyyy" required="true" requiredMessage="Please select CC Issue Date"></p:calendar>
+					
+						<p:outputLabel for="@next" style="color:red"  value="Student Character"></p:outputLabel>
+					   <p:selectOneMenu editable="true" value="#{viewOldStudentRbscTc.character}" required="true" requiredMessage="Enter detail about Character">
+                       <f:selectItem itemLabel="Select " itemValue=""></f:selectItem>
+                                <f:selectItem itemLabel="Good" itemValue="Good"></f:selectItem>
+                                <f:selectItem itemLabel="Comman" itemValue="Comman"></f:selectItem>
+                        </p:selectOneMenu>                  
+						<p:outputLabel value="Activity 1"></p:outputLabel>
+						<p:inputText value="#{viewOldStudentRbscTc.activity1}" validatorMessage="Please Enter Correct value">
+						  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+						</p:inputText>
+						
+						<p:outputLabel value="Activity 2"></p:outputLabel>
+						<p:inputText value="#{viewOldStudentRbscTc.activity2}" validatorMessage="Please Enter Correct value">
+						  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+						</p:inputText>
+						
+						<p:outputLabel value="Class"></p:outputLabel>
+						<p:inputText value="#{viewOldStudentRbscTc.classStudent}" validatorMessage="Please Enter Correct value">
+						  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+						</p:inputText>
+						
+						<p:outputLabel value="Session"></p:outputLabel>
+						<p:inputText value="#{viewOldStudentRbscTc.session}" validatorMessage="Please Enter Correct value">
+						  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+						</p:inputText>
+						
+						
+						<p:outputLabel value="Status"></p:outputLabel>
+						
+						<p:selectOneMenu value="#{viewOldStudentRbscTc.status}" >
+                            <f:selectItem itemLabel="Select Status" itemValue=""></f:selectItem>
+                            <f:selectItem itemLabel="Pass" itemValue="Passed"></f:selectItem>
+                            <f:selectItem itemLabel="Fail" itemValue="Failed"></f:selectItem>
+                        
+                        </p:selectOneMenu>
+                        
+                       
+						
+						
+						<p:commandButton action="#{viewOldStudentRbscTc.issueCC}"  value="Generate CC" update=":form,:form3"></p:commandButton>
+					</p:panelGrid>
+					</div>
+				</p:dialog>
+			</h:form>
+			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+           		<p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+	            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+	        </p:confirmDialog>
+	        
+	        
+                        </div>
+                    </div>
+                </div>
+            </div>
+       
+    </ui:define>
+
+</ui:composition>

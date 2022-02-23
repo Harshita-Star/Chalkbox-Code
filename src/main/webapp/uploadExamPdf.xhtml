@@ -1,0 +1,85 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Search Student</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form1" enctype="multipart/form-data">
+							<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+							<p:panel>
+								<f:facet name="header">
+									<span>Upload Student Marksheet (Allowed file type are :- pdf)</span>
+									<span> <p:commandLink
+											style="float: right;margin-left: 15px;;color: blue;font-size:15px;"
+											immediate="true" value="| Bulk Student Marksheet Upload |"
+											action="bulkExamPdfUpload.xhtml?faces-redirect=true"></p:commandLink>
+									</span>
+									<span> <p:commandLink
+											style="float: right;margin-left: 15px;;color: blue;font-size:15px;"
+											immediate="true" value="| Check report | "
+											action="bulkMarksheetPdfReport.xhtml?faces-redirect=true" rendered="true"></p:commandLink>
+									</span>
+								</f:facet>
+								
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel value="Student Name"></p:outputLabel>
+									<p:autoComplete id="acSimple" value="#{uploadFile.name}"
+										minQueryLength="3"
+										completeMethod="#{uploadFile.autoCompleteStudentInfo}">
+										<p:ajax event="query" global="false" />
+									
+									<p:ajax event="itemSelect" update="exams"
+											listener="#{uploadFile.allExams}"></p:ajax>
+									</p:autoComplete>
+
+
+									<p:outputLabel value="Marksheet Name" for="@next" style="color:red" ></p:outputLabel>
+									<p:selectOneMenu id="exams"
+										value="#{uploadFile.examName}" required="true"
+										requiredMessage="Please select a Marksheet" filter="true"
+										editable="true"
+										placeholder="Select Marksheet / Enter New Marksheet Name">
+										<f:selectItem itemLabel="--Select--" itemValue=""></f:selectItem>
+										<f:selectItems value="#{uploadFile.examList}"></f:selectItems>
+
+									</p:selectOneMenu>
+
+
+									<p:outputLabel value="Upload Marksheet"></p:outputLabel>
+									<p:fileUpload value="#{uploadFile.fileImage}" mode="simple"
+										allowTypes="/(\.|\/)(pdf)$/" />
+									
+
+								</p:panelGrid>
+								
+								<br />
+								<p:separator />
+								<center>
+								<p:commandButton ajax="false" update="form" styleClass="butwid" icon="fa fa-floppy-o"
+										action="#{uploadFile.addNow}" value="Submit"></p:commandButton>
+								</center>
+								<p:separator />
+								<br />
+
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

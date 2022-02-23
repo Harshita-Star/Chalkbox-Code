@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+
+<f:view contentType="text/html">
+	<h:head>
+		<title>#{sideMenuBean.companyName} | Time Table</title>
+		<link rel="stylesheet" type="text/css" href="styles/style.css"></link>
+	</h:head>
+	<body>
+		<h:form id="form1">
+			<p:commandButton value="print" style="width: 100px; height: 40px;">
+				<p:printer target=":form"></p:printer>
+			</p:commandButton>
+			&#160;&#160;&#160;&#160;
+			<h:commandLink>
+				<p:graphicImage name="images/excellogo.png" library="avalon-layout"
+					width="100" height="40"></p:graphicImage>
+				<pe:exporter type="xlsx" target=":form:up"
+					fileName="#{printTimeTable.courseName}-#{printTimeTable.sectionName}_Time_Table"></pe:exporter>
+			</h:commandLink>
+		</h:form>
+
+		<h:form id="form">
+			<center>
+				<p
+					style="font-family: initial; font-style: oblique; font-size: 30px !important; font-weight: bold; margin: 0px;">#{headerBean.name}</p>
+				<p style="margin: 0px;">Class Time Table</p>
+			</center>
+
+			<div style="width: 100%; text-align: center">
+				<b><u> <p:outputLabel style="font-size:80%"
+							value="TIME TABLE">
+							<br></br>
+						</p:outputLabel>
+				</u></b><br></br>
+			</div>
+			<h:dataTable var="var" value="#{printTimeTable.timeTableList}"
+				style="width:100%;border-collapse:collapse;font-size:13px"
+				border="1">
+				<f:facet name="header">
+					<h:panelGrid columns="2" style="width:100%;">
+						<h:outputText
+							value="Class :-#{printTimeTable.courseName} - #{printTimeTable.sectionName}"></h:outputText>
+					</h:panelGrid>
+				</f:facet>
+
+				<p:column headerText="Time" style="width:25px">
+
+					<f:facet name="header">
+						<h:outputText value="Time"></h:outputText>
+					</f:facet>
+					<center>
+						<h:outputText
+							value="#{var.lecNo eq 'LUNCH' ? '' : sideMenuBean.list.lectureLabel} #{var.lecNo}"></h:outputText>
+						<br></br>
+						<h:outputText value="#{var.lecTime}"
+							rendered="#{sideMenuBean.list.timeTableSchedule eq 'summer'}" />
+						<h:outputText value="#{var.winterLecTime}"
+							rendered="#{sideMenuBean.list.timeTableSchedule eq 'winter'}" />
+					</center>
+				</p:column>
+
+				<p:column style="width:70px" headerText="Monday">
+
+					<f:facet name="header">
+						<h:outputText value="Monday"></h:outputText>
+					</f:facet>
+					<center>
+						<h:outputText value="#{var.mon_tchr_name}"></h:outputText>
+						<br></br>
+						<h:outputText value="#{var.mon_sub_name}"></h:outputText>
+					</center>
+
+				</p:column>
+
+				<p:column style="width:70px" headerText="Father's Name">
+
+					<f:facet name="header">
+						<h:outputText value="Tuesday"></h:outputText>
+					</f:facet>
+					<center>
+						<h:outputText value="#{var.tues_tchr_name}"></h:outputText>
+						<br></br>
+						<h:outputText value="#{var.tues_sub_name}"></h:outputText>
+					</center>
+
+				</p:column>
+
+				<p:column style="width:100px" headerText="Occupation">
+
+					<f:facet name="header">
+						<h:outputText value="Wednesday"></h:outputText>
+					</f:facet>
+					<center>
+						<h:outputText value="#{var.wed_tchr_name}"></h:outputText>
+						<br></br>
+						<h:outputText value="#{var.wed_sub_name}"></h:outputText>
+					</center>
+
+				</p:column>
+
+				<p:column style="width:70px" headerText="Mother's Name">
+
+					<f:facet name="header">
+						<h:outputText value="Thursday"></h:outputText>
+					</f:facet>
+					<center>
+						<h:outputText value="#{var.thur_tchr_name}"></h:outputText>
+						<br></br>
+						<h:outputText value="#{var.thur_sub_name}"></h:outputText>
+					</center>
+
+				</p:column>
+
+				<p:column style="width:70px" headerText="Add. Date">
+
+					<f:facet name="header">
+						<h:outputText value="Friday"></h:outputText>
+					</f:facet>
+					<center>
+						<h:outputText value="#{var.fri_tchr_name}"></h:outputText>
+						<br></br>
+						<h:outputText value="#{var.fri_sub_name}"></h:outputText>
+					</center>
+
+				</p:column>
+
+				<p:column style="width:70px" headerText="D.O.B.">
+
+					<f:facet name="header">
+						<h:outputText value="Saturday"></h:outputText>
+					</f:facet>
+					<center>
+						<h:outputText value="#{var.sat_tchr_name}"></h:outputText>
+						<br></br>
+						<h:outputText value="#{var.sat_sub_name}"></h:outputText>
+					</center>
+
+				</p:column>
+
+			</h:dataTable>
+
+			<div style="width: 70%; margin-top: 50px; margin-left: 28%">
+				<h:panelGrid style="width:100%;" columns="2">
+					<h:outputText style="font-size:80%" value="Time Table Incharge" />
+					<h:outputText style="font-size:80%"
+						value="#{printTimeTable.classTeacher}" />
+				</h:panelGrid>
+			</div>
+
+			<p:dataTable rendered="false" id="up" var="var"
+				value="#{printTimeTable.timeTableList}"
+				style="width:100%;border-collapse:collapse;font-size:13px;text-align:center;"
+				border="1">
+				<f:facet name="header">
+					<h:outputText
+						value="Class :-#{printTimeTable.courseName} - #{printTimeTable.sectionName}"></h:outputText>
+				</f:facet>
+
+				<f:facet name="footer">
+					<h:outputText value="Time Table Incharge" />
+					&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+					<h:outputText value="#{printTimeTable.classTeacher}" />
+				</f:facet>
+
+				<p:column headerText="Time" style="width:25px">
+
+					<f:facet name="header">
+						<h:outputText value="Time"></h:outputText>
+					</f:facet>
+					<h:outputText
+						value="#{var.lecNo eq 'LUNCH' ? '' : sideMenuBean.list.lectureLabel} #{var.lecNo} "></h:outputText>
+						&#160;&#160;
+						<h:outputText value="#{var.lecTime}"
+						rendered="#{sideMenuBean.list.timeTableSchedule eq 'summer'}" />
+					<h:outputText value="#{var.winterLecTime}"
+						rendered="#{sideMenuBean.list.timeTableSchedule eq 'winter'}" />
+				</p:column>
+
+				<p:column style="width:70px" headerText="Monday">
+
+					<f:facet name="header">
+						<h:outputText value="Monday"></h:outputText>
+					</f:facet>
+					<h:outputText value="#{var.mon_tchr_name}"></h:outputText>
+					<h:outputText value=" - "></h:outputText>
+					<h:outputText value="#{var.mon_sub_name}"></h:outputText>
+				</p:column>
+
+				<p:column style="width:70px" headerText="Tuesday">
+
+					<f:facet name="header">
+						<h:outputText value="Tuesday"></h:outputText>
+					</f:facet>
+					<h:outputText value="#{var.tues_tchr_name}"></h:outputText>
+					<h:outputText value=" - "></h:outputText>
+					<h:outputText value="#{var.tues_sub_name}"></h:outputText>
+
+				</p:column>
+
+				<p:column style="width:100px" headerText="Wednesday">
+
+					<f:facet name="header">
+						<h:outputText value="Wednesday"></h:outputText>
+					</f:facet>
+					<h:outputText value="#{var.wed_tchr_name}"></h:outputText>
+					<h:outputText value=" - "></h:outputText>
+					<h:outputText value="#{var.wed_sub_name}"></h:outputText>
+
+				</p:column>
+
+				<p:column style="width:70px" headerText="Thursday">
+
+					<f:facet name="header">
+						<h:outputText value="Thursday"></h:outputText>
+					</f:facet>
+					<h:outputText value="#{var.thur_tchr_name}"></h:outputText>
+					<h:outputText value=" - "></h:outputText>
+					<h:outputText value="#{var.thur_sub_name}"></h:outputText>
+
+				</p:column>
+
+				<p:column style="width:70px" headerText="Friday">
+
+					<f:facet name="header">
+						<h:outputText value="Friday"></h:outputText>
+					</f:facet>
+					<h:outputText value="#{var.fri_tchr_name}"></h:outputText>
+					<h:outputText value=" - "></h:outputText>
+					<h:outputText value="#{var.fri_sub_name}"></h:outputText>
+
+				</p:column>
+
+				<p:column style="width:70px" headerText="Saturday">
+
+					<f:facet name="header">
+						<h:outputText value="Saturday"></h:outputText>
+					</f:facet>
+					<h:outputText value="#{var.sat_tchr_name}"></h:outputText>
+					<h:outputText value=" - "></h:outputText>
+					<h:outputText value="#{var.sat_sub_name}"></h:outputText>
+
+				</p:column>
+
+			</p:dataTable>
+
+		</h:form>
+	</body>
+</f:view>
+</html>

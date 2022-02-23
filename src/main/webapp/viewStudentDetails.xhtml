@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+<f:loadBundle var="searchStudentVar" basename="myProperties" />
+<f:view contentType="text/html">
+	<h:head>
+		<title>#{sideMenuBean.companyName} | Student Details</title>
+		<f:facet name="first">
+			<meta content='text/html; charset=UTF-8' http-equiv="Content-Type" />
+			<meta http-equiv="X-UA-Compatible" content="EmulateIE8" />
+			
+		</f:facet>
+
+  <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css"></link>
+    		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"></link>
+    	<link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css"></link>
+   <link rel="stylesheet" href="dist/css/AdminLTE.min.css"></link>
+    <link rel="stylesheet" href="dist/css/skins/all-skins.min.css"></link>
+
+	</h:head>
+
+	<h:body>
+      
+      <ui:include src="sideMenu.xhtml"></ui:include> 
+   
+      <div class="content-wrapper">
+          
+                	<h:form id="form" >
+
+			<h1>Student Details</h1>
+				
+				<p:messages closable="true" autoUpdate="true"></p:messages>
+				
+					<p:panel header="Student Details">
+					
+								<p:panelGrid columns="2">
+									</p:panelGrid>
+								
+						<p:panelGrid columns="4">
+							
+							<p:outputLabel value="Student Image:-"></p:outputLabel>
+							<p:graphicImage  value="#{viewStudent.studentImage}" height="100px" width="100px" ></p:graphicImage>	
+							<p:outputLabel></p:outputLabel>
+							<p:outputLabel></p:outputLabel>
+				
+							<p:outputLabel value="#{searchStudentVar.viewStudentAdmissionNumberLabel}"></p:outputLabel>
+							<p:outputLabel value="#{viewStudent.addNumber}"></p:outputLabel>
+							
+							<p:outputLabel value="#{searchStudentVar.viewStudentJoiningDateLabel}"></p:outputLabel>
+							<p:outputLabel value="#{viewStudent.startingDate}"></p:outputLabel>
+							
+							<p:outputLabel value="Name"></p:outputLabel>
+							<p:outputLabel value="#{viewStudent.fname}" ></p:outputLabel>
+							
+							<p:outputLabel value="#{searchStudentVar.viewStudentFathersNameLabel}"></p:outputLabel>
+							<p:outputLabel value="#{viewStudent.fathersName}"></p:outputLabel>
+					
+							<p:outputLabel value="#{searchStudentVar.viewStudentMothersNameLabel}"></p:outputLabel>
+							<p:outputLabel value="#{viewStudent.motherName}"></p:outputLabel>
+							
+							<p:outputLabel value="#{searchStudentVar.viewStudentClassLabel}"></p:outputLabel>
+							<p:outputLabel value="#{viewStudent.className}"></p:outputLabel>
+							
+							<p:outputLabel value="Admit Class-"></p:outputLabel>
+							<p:outputLabel value="#{viewStudent.admitClass}"></p:outputLabel>
+							
+							<p:outputLabel value="Transport Route"></p:outputLabel>
+							<p:outputLabel value="#{viewStudent.transportRoute}"></p:outputLabel>
+							
+							<p:outputLabel value="#{searchStudentVar.viewStudentDOBLabel}"></p:outputLabel>
+							<p:outputLabel value="#{viewStudent.dob}"></p:outputLabel>
+							
+							<p:outputLabel value="#{searchStudentVar.viewStudentGenderLabel}"></p:outputLabel>
+							<p:outputLabel value="#{viewStudent.gender}"></p:outputLabel>
+							
+							<p:outputLabel value="#{searchStudentVar.viewStudentNationalityLabel}"></p:outputLabel>
+							<p:outputLabel value="#{viewStudent.nationality}"></p:outputLabel>
+							
+							<p:outputLabel value="#{searchStudentVar.viewStudentCurrentAddressLabel}"></p:outputLabel>
+							<p:outputLabel value="#{viewStudent.currentAddress}"></p:outputLabel>
+							
+							<p:outputLabel value="#{searchStudentVar.viewStudentPermanentAddressLabel}"></p:outputLabel>
+							<p:outputLabel value="#{viewStudent.permanentAddress}"></p:outputLabel>
+							
+							<p:outputLabel value="#{searchStudentVar.viewStudentPincodeLabel}"></p:outputLabel>
+							<p:outputLabel value="#{viewStudent.pincode}"></p:outputLabel>
+							
+							<p:outputLabel value="#{searchStudentVar.viewStudentCountryLabel}"></p:outputLabel>
+							<p:outputLabel value="#{viewStudent.country}"></p:outputLabel>
+							
+							<p:outputLabel value="Father's Mobile Number"></p:outputLabel>
+							<p:outputLabel value="#{viewStudent.fathersPhone}"></p:outputLabel>
+							
+							<p:outputLabel value="Mother's Mobile Number"></p:outputLabel>
+							<p:outputLabel value="#{viewStudent.mothersPhone}" ></p:outputLabel>
+							
+							<p:outputLabel value="Fathers's Occupation"></p:outputLabel>
+							<p:outputLabel value="#{viewStudent.fathersOccupation}"></p:outputLabel>
+							
+							<p:outputLabel value="Residence mobile Number"></p:outputLabel>
+							<p:outputLabel value="#{viewStudent.residencePhone}"></p:outputLabel>
+                    	 	
+					  	   <p:outputLabel value="#{searchStudentVar.viewStudentCategoryLabel}"></p:outputLabel>
+                       	   <p:outputLabel value="#{viewStudent.category}"></p:outputLabel>
+                       	   
+                       	    <p:outputLabel value="Whether BPL ? "></p:outputLabel> 
+		                    <p:outputLabel value="#{viewStudent.bpl}"></p:outputLabel>
+		                    
+	                    	<p:outputLabel value="BPL Card No"></p:outputLabel>
+	                    	<p:outputLabel value="#{viewStudent.bplCardNo}"></p:outputLabel>
+		                    
+		                    <p:outputLabel value="Concession"></p:outputLabel> 
+		                    <p:outputLabel value="#{viewStudent.concession}"></p:outputLabel>
+		                    
+		                    <p:outputLabel value="Caste"></p:outputLabel>
+		                    <p:outputLabel value="#{viewStudent.caste}"></p:outputLabel>
+		                    
+		                    <p:outputLabel value="Single Child "></p:outputLabel> 
+		                     <p:outputLabel value="#{viewStudent.singleChild}"></p:outputLabel>
+		                    
+		                    <p:outputLabel value="Blood Group"></p:outputLabel>
+		                    <p:outputLabel value="#{viewStudent.bloodGroup}"></p:outputLabel>
+		                    
+		                    <p:outputLabel value="Child's Aadhaar No"></p:outputLabel>
+		                    <p:outputLabel value="#{viewStudent.aadharNo}"></p:outputLabel>
+		                    
+		                    <p:outputLabel value="Single Parent "></p:outputLabel> 
+		                     <p:outputLabel value="#{viewStudent.singleParent}"></p:outputLabel>
+		                    
+		                    <p:outputLabel value="Living With "></p:outputLabel> 
+		                     <p:outputLabel value="#{viewStudent.livingWith}"></p:outputLabel>
+		                    
+		                    <p:outputLabel value="Father's Email"></p:outputLabel>
+		                    <p:outputLabel value="#{viewStudent.fatherEmail}"></p:outputLabel>
+		                    
+		                    <p:outputLabel value="Mother's Email"></p:outputLabel>
+		                    <p:outputLabel value="#{viewStudent.motherEmail}"></p:outputLabel>
+                    
+							
+								
+					</p:panelGrid>
+					
+				</p:panel>
+				
+					<p:panel header="Guardian Details 1">
+	          			<p:panelGrid columns="2">
+		          			<p:outputLabel value="Name of Guardian"></p:outputLabel>
+		          			<p:outputLabel value="#{viewStudent.fatherFname}" ></p:outputLabel>
+	                   	
+							<p:outputLabel value="Last Name"></p:outputLabel>
+							<p:outputLabel value="#{viewStudent.fatherLname}"></p:outputLabel>
+	            							
+							<p:outputLabel value="Relation"></p:outputLabel>
+							<p:outputLabel value="#{viewStudent.relation}"></p:outputLabel>
+	                	
+	                		<p:outputLabel value="Occupation"></p:outputLabel>
+	                		<p:outputLabel value="#{viewStudent.occupation}" ></p:outputLabel>
+	               		          		
+	               		    <p:outputLabel value="Contact Number"></p:outputLabel>  
+	               		    <p:outputLabel value="#{viewStudent.phone}"></p:outputLabel>
+	               		    
+	               		    <p:outputLabel value="Address"></p:outputLabel>
+	               			<p:outputLabel value="#{viewStudent.address}"></p:outputLabel>     		
+		          		</p:panelGrid>
+	          		</p:panel>
+	          		
+	          		<p:panel header="Guardian Details 2">
+		          		<p:panelGrid columns="4">
+		          			<p:outputLabel value="Name of Guardian"></p:outputLabel>
+		          			<p:outputLabel value="#{viewStudent.fname2}" ></p:outputLabel>
+	                   	
+							<p:outputLabel value="#{registrationParentsVar.registrationParentsLastNameLabel}"></p:outputLabel>
+							<p:outputLabel value="#{viewStudent.lname2}"></p:outputLabel>
+	            							
+							<p:outputLabel value="#{registrationParentsVar.registrationParentsRelationLabel}"></p:outputLabel>
+							<p:outputLabel value="#{viewStudent.relation2}" ></p:outputLabel>
+	                	
+	                		<p:outputLabel value="#{registrationParentsVar.registrationParentsOccupationLabel}"></p:outputLabel>
+	                		<p:outputLabel value="#{viewStudent.occupation2}" ></p:outputLabel>
+	               		          		
+	               		    <p:outputLabel value="Contact Number"></p:outputLabel>  
+	               		    <p:outputLabel value="#{viewStudent.phone2}" ></p:outputLabel>
+	                    	
+	                    	<p:outputLabel value="Address"></p:outputLabel>
+	               			<p:outputLabel value="#{viewStudent.address2}"></p:outputLabel>
+	          			</p:panelGrid>
+	          		</p:panel>
+	          		
+	          		<p:panel header="Father's Detail">
+	          			<p:panelGrid columns="4">
+		          			<p:outputLabel value="Qualification"></p:outputLabel>
+		          			<p:outputLabel value="#{viewStudent.fatherQualification}" ></p:outputLabel>
+	                   	
+							<p:outputLabel value="Designation"></p:outputLabel>
+							<p:outputLabel value="#{viewStudent.fatherDesignation}"></p:outputLabel>
+	            							
+							<p:outputLabel value="Organization"></p:outputLabel>
+							<p:outputLabel value="#{viewStudent.fatherOrganization}" ></p:outputLabel>
+	                	
+	                		<p:outputLabel value="Office Address"></p:outputLabel>
+	                		<p:outputLabel value="#{viewStudent.fatherOfficeAdd}" ></p:outputLabel>
+	               		          		
+	               		    <p:outputLabel value="Annul Income"></p:outputLabel>  
+	               		    <p:outputLabel value="#{viewStudent.fatherIncome}" >
+	                    	</p:outputLabel>
+	                    	
+	                    	<p:outputLabel value="Aadhaar No."></p:outputLabel>
+	               			<p:outputLabel value="#{viewStudent.fatherAadhaar}"></p:outputLabel>
+	               			
+	               			<p:outputLabel value="Is School Employee ? "></p:outputLabel> 
+		                     <p:outputLabel value="#{viewStudent.fatherSchoolEmp}"></p:outputLabel>
+		          		</p:panelGrid>
+	          		</p:panel>
+	          		
+	          		<p:panel header="Mother's Detail">
+	          			<p:panelGrid columns="4">
+		          			<p:outputLabel value="Qualification"></p:outputLabel>
+		          			<p:outputLabel value="#{viewStudent.motherQualification}" ></p:outputLabel>
+	                   	
+							<p:outputLabel value="Designation"></p:outputLabel>
+							<p:outputLabel value="#{viewStudent.motherDesignation}"></p:outputLabel>
+	            							
+							<p:outputLabel value="Organization"></p:outputLabel>
+							<p:outputLabel value="#{viewStudent.motherOrganization}" ></p:outputLabel>
+	                	
+	                		<p:outputLabel value="Office Address"></p:outputLabel>
+	                		<p:outputLabel value="#{viewStudent.motherOfficeAdd}" ></p:outputLabel>
+	               		          		
+	               		    <p:outputLabel value="Annul Income"></p:outputLabel>  
+	               		    <p:outputLabel value="#{viewStudent.motherIncome}" ></p:outputLabel>
+	                    	
+	                    	<p:outputLabel value="Aadhaar No."></p:outputLabel>
+	               			<p:outputLabel value="#{viewStudent.motherAadhaar}"></p:outputLabel>
+	               			
+	               			<p:outputLabel value="Is School Employee ? "></p:outputLabel> 
+		                    <p:outputLabel value="#{viewStudent.motherSchoolEmp}"></p:outputLabel>
+		          		</p:panelGrid>
+	          		</p:panel>
+	          		
+	          			<p:panel header="Previous school details">
+               				<p:panelGrid columns="2">
+               					
+               					<p:outputLabel value="Last School Name"></p:outputLabel>
+               					<p:outputLabel value="#{viewStudent.lastSchoolName}"></p:outputLabel>
+					
+								<p:outputLabel value="Passed Class"></p:outputLabel>
+								<p:outputLabel value="#{viewStudent.passedClass}"></p:outputLabel>
+					
+								<p:outputLabel value="Medium"></p:outputLabel>
+								<p:outputLabel value="#{viewStudent.medium}"></p:outputLabel>
+								
+								<p:outputLabel value="Result"></p:outputLabel>
+               					<p:outputLabel value="#{viewStudent.pResult}"></p:outputLabel>
+					
+								<p:outputLabel value="%Age"></p:outputLabel>
+               					<p:outputLabel value="#{viewStudent.p_percent}"></p:outputLabel>
+					
+								<p:outputLabel value="Reason To Leave"></p:outputLabel>
+               					<p:outputLabel value="#{viewStudent.pReason}"></p:outputLabel>
+					
+								<p:outputLabel value="TC Date"></p:outputLabel>
+								<p:outputLabel value="#{viewStudent.tcDate}"></p:outputLabel>
+               					
+               				</p:panelGrid>
+               			</p:panel>
+               			
+               			<p:panel header="Personality and Health Details">
+               				<p:panelGrid columns="6">
+								<p:outputLabel value="Height"></p:outputLabel>
+               					<p:outputLabel value="#{viewStudent.height}"></p:outputLabel>
+					
+								<p:outputLabel value="Weight"></p:outputLabel>
+               					<p:outputLabel value="#{viewStudent.weight}"></p:outputLabel>
+					
+								<p:outputLabel value="Eyes"></p:outputLabel>
+               					<p:outputLabel value="#{viewStudent.eyes}"></p:outputLabel>
+               					
+               				</p:panelGrid>
+               			</p:panel>
+               			
+               			<p:panel header="Siblings details">
+               					
+               				<p:panelGrid columns="2">
+               				
+               					<p:outputLabel value="1) Name"></p:outputLabel>
+               					<p:outputLabel value="#{viewStudent.sname1}"></p:outputLabel>
+               				
+               					<p:outputLabel value="Class"></p:outputLabel>
+               				    <p:outputLabel value="#{viewStudent.sclassName1}"></p:outputLabel>
+               				
+               					<p:outputLabel value="2) Name"></p:outputLabel>
+               					<p:outputLabel value="#{viewStudent.sname2}"></p:outputLabel>
+               				
+               					<p:outputLabel value="Class"></p:outputLabel>
+	               				<p:outputLabel value="#{viewStudent.sclassName2}"></p:outputLabel>
+               				
+               				</p:panelGrid>
+               			
+               			</p:panel>
+					
+		    </h:form>
+          
+          
+      </div>
+   
+	
+	
+	</h:body>
+</f:view>
+</html>

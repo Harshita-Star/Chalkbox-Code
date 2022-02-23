@@ -1,0 +1,976 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Edit Student Details</ui:define>
+
+	<ui:define name="content">
+	
+	<script>
+	function chekFUnctionSpace(e){
+		var val = document.getElementById('form:tabview:j_idt487').value;
+		val = val.trim();
+		if(val == ""){
+			if (e.keyCode == 32) {
+				document.getElementById('form:tabview:j_idt487').value="";
+			}
+		}
+		
+		
+	}
+	
+	</script>
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form" enctype="multipart/form-data">
+							<h3>Edit Student</h3>
+							<p:messages closable="true" autoUpdate="true"></p:messages>
+							<p:tabView id="tabview">
+								<p:tab title="Admission Details">
+									<p:panelGrid columns="4"
+										columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+										layout="grid" styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+										<p:outputLabel
+											value="#{registrationVar.registrationAddmissionNumberLabel}"></p:outputLabel>
+										<p:inputText value="#{editStudent.srno}"></p:inputText>
+
+										<p:outputLabel for="@next" style="color:red"
+											value="#{registrationVar.registrationAddmissionDateLabel}"></p:outputLabel>
+										<p:calendar yearRange="c-50:c+50"
+											value="#{editStudent.addmissionDate}" navigator="true"
+											required="true"
+											requiredMessage="#{registrationVar.registrationAddmissionDateValidation}"
+											pattern="dd/MM/yyyy"></p:calendar>
+
+										<p:outputLabel value="Student Name" for="@next" 
+											style="color:red"></p:outputLabel>
+										<p:inputText value="#{editStudent.fname}" required="true"
+											requiredMessage="Please enter Student Name" onkeyup="chekFUnctionSpace(event,value);"></p:inputText>
+
+										<p:outputLabel for="@next" style="color:red"
+											value="#{registrationVar.registrationDateOfBirthLabel}"></p:outputLabel>
+										<p:calendar yearRange="c-50:c+50" navigator="true"
+											value="#{editStudent.dob}" required="true"
+											requiredMessage="#{registrationVar.registrationDateOfBirthValidation}"
+											pattern="dd/MM/yyyy"></p:calendar>
+
+										<p:outputLabel value="Select class" for="@next"
+											style="color:red"></p:outputLabel>
+										<p:selectOneMenu disabled="true"
+											value="#{editStudent.className}" required="true"
+											requiredMessage="Please select a class">
+											<f:selectItem itemLabel="#{registrationVar.selectHereLabel}"></f:selectItem>
+											<f:selectItems value="#{editStudent.classList}"></f:selectItems>
+
+											<p:ajax listener="#{editStudent.allSections}"
+												update="sectionid"></p:ajax>
+										</p:selectOneMenu>
+
+										<p:outputLabel value="Select Section" for="@next"
+											style="color:red"></p:outputLabel>
+										<p:selectOneMenu disabled="true" id="sectionid"
+											value="#{editStudent.sectionName}" required="true"
+											requiredMessage="Please select a section">
+											<f:selectItems value="#{editStudent.sectionList}"></f:selectItems>
+
+										</p:selectOneMenu>
+
+										<p:outputLabel value="Roll No"></p:outputLabel>
+										<p:inputText value="#{editStudent.rollno}"></p:inputText>
+
+										<p:outputLabel value="Child's Aadhaar No"></p:outputLabel>
+										<p:inputText value="#{editStudent.aadharNo}"></p:inputText>
+
+										<p:outputLabel value="Father's Mobile Number" for="@next"
+											style="color:red"></p:outputLabel>
+										<p:inputText id="fatNumber" maxlength="10"
+											onkeypress="return AvoidSpace(event)"
+											onkeyup="checkNumberValid2('form:tabview:fatNumber')"
+											validatorMessage="Please Enter 10 Digit Number"
+											required="true"
+											requiredMessage="Please enter father's mobile no"
+											value="#{editStudent.fathersPhone}">
+
+											<f:validateLength minimum="10"></f:validateLength>
+										</p:inputText>
+
+										<p:outputLabel value="Student's Mobile Number*"
+											rendered="#{editStudent.showInstitute}"></p:outputLabel>
+										<p:inputText maxlength="10" id="studentNumber"
+											onkeypress="return AvoidSpace(event)"
+											onkeyup="checkNumberValid2('form:tabview:studentNumber')"
+											validatorMessage="Please Enter 10 Digit Number"
+											value="#{editStudent.studentPhone}"
+											rendered="#{editStudent.showInstitute}">
+
+											<f:validateLength minimum="10"></f:validateLength>
+										</p:inputText>
+
+										<p:outputLabel value="CBSE Reg. No. (IX)"></p:outputLabel>
+										<p:inputText value="#{editStudent.regNo_IX}"></p:inputText>
+
+										<p:outputLabel value="CBSE Reg. No. (XI)"></p:outputLabel>
+										<p:inputText value="#{editStudent.regNo_XI}"></p:inputText>
+
+										<p:outputLabel value="Admission File No."></p:outputLabel>
+										<p:inputText value="#{editStudent.admnFileNo}"></p:inputText>
+
+										<p:outputLabel value="Ledger No."></p:outputLabel>
+										<p:inputText value="#{editStudent.ledgNo}"></p:inputText>
+										
+										<p:outputLabel value="Village" rendered="#{editStudent.schid eq '339'}"></p:outputLabel>
+										<p:inputText value="#{editStudent.village}" rendered="#{editStudent.schid eq '339'}" ></p:inputText>
+										
+
+
+										<p:outputLabel
+											value="#{registrationVar.registrationCurrentAddressLabel}"></p:outputLabel>
+										<p:inputTextarea value="#{editStudent.currentAddress}"
+											requiredMessage="#{registrationVar.registrationCurrentAddressValidation}"
+											rows="5" cols="26">
+										</p:inputTextarea>
+
+										<p:outputLabel
+											value="#{registrationVar.registrationPermanentAddressLabel}"></p:outputLabel>
+										<p:inputTextarea value="#{editStudent.permanentAddress}"
+											rows="5" cols="26"></p:inputTextarea>
+										<p:outputLabel value="Admission Remark"></p:outputLabel>
+										<p:inputTextarea value="#{editStudent.admRemark}" rows="5"
+											cols="26"></p:inputTextarea>
+
+										<p:outputLabel value="Admit Class"></p:outputLabel>
+										<p:inputText value="#{editStudent.admitClassVal}"></p:inputText>
+
+										<p:outputLabel value="Student Status"></p:outputLabel>
+										<p:selectOneMenu value="#{editStudent.studentStatus}">
+											<f:selectItem itemLabel="Old" itemValue="old"></f:selectItem>
+											<f:selectItem itemLabel="New" itemValue="new"></f:selectItem>
+										</p:selectOneMenu>
+
+									</p:panelGrid>
+								</p:tab>
+								<p:tab id="tab2" title="Basic Details">
+									<p:panelGrid columns="4"
+										columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+										layout="grid" styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+
+										<p:outputLabel
+											value="#{registrationVar.registrationGenderLabel}"></p:outputLabel>
+										<p:selectOneRadio value="#{editStudent.gender}">
+											<f:selectItem
+												itemValue="#{registrationVar.registrationMaleLabel}"
+												itemLabel="#{registrationVar.registrationMaleLabel}"></f:selectItem>
+											<f:selectItem
+												itemValue="#{registrationVar.registrationFemaleLabel}"
+												itemLabel="#{registrationVar.registrationFemaleLabel}"></f:selectItem>
+											<f:selectItem itemLabel="Transgender" itemValue="Transgender"></f:selectItem>
+
+										</p:selectOneRadio>
+
+										<p:outputLabel
+											value="#{registrationVar.registrationNationalityLabel}"></p:outputLabel>
+										<p:inputText value="#{editStudent.nationality}"
+											requiredMessage="#{registrationVar.registrationNationalityValidation}"></p:inputText>
+
+										<p:outputLabel
+											value="#{registrationVar.registrationReligionLabel}"></p:outputLabel>
+										<p:selectOneMenu value="#{editStudent.religion}"
+											requiredMessage="#{registrationVar.registrationReligionValidation}">
+											<f:selectItem itemLabel="Select Religion" itemValue=""></f:selectItem>
+											<f:selectItems value="#{editStudent.religionList}"></f:selectItems>
+										</p:selectOneMenu>
+
+
+										<p:outputLabel
+											value="#{registrationVar.registrationCategoryLabel}"></p:outputLabel>
+										<p:selectOneMenu value="#{editStudent.category}"
+											requiredMessage="#{registrationVar.registrationCategoryValidation}">
+											<f:selectItem
+												itemLabel="#{registrationVar.registrationselectCategoryLabel}"
+												itemValue=""></f:selectItem>
+											<f:selectItems value="#{editStudent.categoryList}"></f:selectItems>
+										</p:selectOneMenu>
+
+										<p:outputLabel value="Any Disability? "></p:outputLabel>
+										<p:selectOneRadio value="#{editStudent.disability}">
+											<f:selectItem itemValue="Yes" itemLabel="Yes"></f:selectItem>
+											<f:selectItem itemValue="No" itemLabel="No"></f:selectItem>
+											<p:ajax update=":form:tabview:Id1,:form:tabview:Id2"
+												listener="#{editStudent.showDisability}"></p:ajax>
+										</p:selectOneRadio>
+
+										<p:outputPanel id="Id1">
+											<p:outputLabel rendered="#{editStudent.showDis}"
+												value="Disability Type"></p:outputLabel>
+										</p:outputPanel>
+										<p:outputPanel id="Id2">
+											<p:selectOneMenu rendered="#{editStudent.showDis}"
+												value="#{editStudent.handicap}">
+												<f:selectItem itemValue="" itemLabel="Select Here"></f:selectItem>
+												<f:selectItems value="#{editStudent.handicaplist}"></f:selectItems>
+											</p:selectOneMenu>
+
+										</p:outputPanel>
+
+										<p:outputLabel value="Whether BPL ? "></p:outputLabel>
+										<p:selectOneRadio value="#{editStudent.bpl}">
+											<f:selectItem itemValue="Yes" itemLabel="Yes"></f:selectItem>
+											<f:selectItem itemValue="No" itemLabel="No"></f:selectItem>
+											<p:ajax update=":form:tabview:noId,:form:tabview:noId1"
+												listener="#{editStudent.showBPLNo}"></p:ajax>
+										</p:selectOneRadio>
+
+										<p:outputPanel id="noId">
+											<p:outputLabel rendered="#{editStudent.showBpl}"
+												value="BPL Card No"></p:outputLabel>
+										</p:outputPanel>
+										<p:outputPanel id="noId1">
+											<p:inputText rendered="#{editStudent.showBpl}"
+												value="#{editStudent.bplCardNo}"></p:inputText>
+										</p:outputPanel>
+
+
+										<p:outputLabel
+											value="#{registrationVar.registrationPincodeLabel}"></p:outputLabel>
+										<p:inputText value="#{editStudent.pincode}"
+											requiredMessage="#{registrationVar.registrationPincodeValidation}">
+											<p:keyFilter />
+										</p:inputText>
+
+										<p:outputLabel value="Blood Group" rendered="false"></p:outputLabel>
+										<p:inputText value="#{editStudent.bloodGroup}"
+											rendered="false"></p:inputText>
+
+
+										<p:outputLabel value="Single Parent "></p:outputLabel>
+										<p:selectOneRadio value="#{editStudent.singleParent}">
+											<f:selectItem itemValue="Yes" itemLabel="Yes"></f:selectItem>
+											<f:selectItem itemValue="No" itemLabel="No"></f:selectItem>
+										</p:selectOneRadio>
+										
+										<p:outputLabel value="Minority" rendered="#{editStudent.showminority}"></p:outputLabel>
+											<p:selectOneRadio value="#{editStudent.minority}" rendered="#{editStudent.showminority}">
+												<f:selectItem itemValue="Yes" itemLabel="Yes"></f:selectItem>
+												<f:selectItem itemValue="No" itemLabel="No"></f:selectItem>
+										</p:selectOneRadio>
+
+										<p:outputLabel value="Caste"></p:outputLabel>
+										<p:inputText value="#{editStudent.caste}"></p:inputText>
+
+										<p:outputLabel value="Single Child "></p:outputLabel>
+										<p:selectOneRadio value="#{editStudent.singleChild}">
+											<f:selectItem itemValue="Yes" itemLabel="Yes"></f:selectItem>
+											<f:selectItem itemValue="No" itemLabel="No"></f:selectItem>
+										</p:selectOneRadio>
+
+
+
+
+										<p:outputLabel
+											value="#{registrationVar.registrationCountryLabel}*"></p:outputLabel>
+										<p:inputText value="#{editStudent.country}"
+											requiredMessage="#{registrationVar.registrationCountryValidation}"></p:inputText>
+										<p:outputLabel value="Child's image"></p:outputLabel>
+
+										<p:lightBox>
+											<h:outputLink value="#{editStudent.currstudeimage}">
+												<p:graphicImage id="imageId" height="100px" width="100px"
+													value="#{editStudent.currstudeimage}" />
+											</h:outputLink>
+										</p:lightBox>
+
+
+										<p:outputLabel value="Upload Child's image (Allowed file type are :- gif,jpg,jpeg,png)"></p:outputLabel>
+										<p:fileUpload value="#{editStudent.studentImage}"
+											mode="simple" allowTypes="/(\.|\/)(gif|jpeg|png)$/" />
+
+										<p:outputLabel value=""></p:outputLabel>
+										<p:commandButton value="Remove child Image"
+											action="#{editStudent.removeStudentPhoto}"
+											update=":form:tabview:imageId"
+											style="width:150px;font-size:10px;"></p:commandButton>
+
+										<p:outputLabel value="Residence Phone Number-"></p:outputLabel>
+										<p:inputText id="resiNumber"
+											value="#{editStudent.residencePhone}"
+											onkeypress="return AvoidSpace(event)"
+											onkeyup="checkNumberValid2('form:tabview:resiNumber')">
+
+										</p:inputText>
+
+										<p:outputLabel value="Child Living With Parents "></p:outputLabel>
+										<p:selectOneRadio value="#{editStudent.livingWith}">
+											<f:selectItem itemValue="Yes" itemLabel="yes"></f:selectItem>
+											<f:selectItem itemValue="No" itemLabel="no"></f:selectItem>
+										</p:selectOneRadio>
+
+									</p:panelGrid>
+								</p:tab>
+								<p:tab id="parentTab" title="Parent Details">
+									<p:tabView id="tavViewParent">
+										<p:tab id="fathert1" title="Father's Details">
+											<p:panelGrid columns="4"
+												columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+												layout="grid" styleClass="ui-panelgrid-blank form-group"
+												style="border:0px none; background-color:transparent;">
+
+												<p:outputLabel
+													value="#{registrationVar.registrationFatherNameLabel}"></p:outputLabel>
+												<p:inputText value="#{editStudent.fathersName}"></p:inputText>
+
+												<p:outputLabel value="Father's Email"></p:outputLabel>
+												<p:inputText value="#{editStudent.fatherEmail}"></p:inputText>
+
+												<p:outputLabel value="Father's UID"></p:outputLabel>
+												<p:inputText value="#{editStudent.fatherAadharNo}"></p:inputText>
+
+												<p:outputLabel value="Qualification"></p:outputLabel>
+												<p:inputText value="#{editStudent.fatherQualification}"></p:inputText>
+
+												<p:outputLabel value="Occupation"></p:outputLabel>
+												<p:selectOneMenu editable="true"
+													value="#{editStudent.fathersOccupation}">
+													<f:selectItem itemLabel="Select Occupation" itemValue=""></f:selectItem>
+													<f:selectItem itemLabel="Business" itemValue="Business"></f:selectItem>
+													<f:selectItem itemLabel="Govt.Employee"
+														itemValue="Govt.Employee"></f:selectItem>
+													<f:selectItem itemLabel="Doctor" itemValue="Doctor"></f:selectItem>
+													<f:selectItem itemLabel="Advocate" itemValue="Advocate"></f:selectItem>
+													<f:selectItem itemLabel="Engineer" itemValue="Engineer"></f:selectItem>
+													<f:selectItem itemLabel="Teacher" itemValue="Teacher"></f:selectItem>
+													<f:selectItem itemLabel="Shopkeeper" itemValue="Shopkeeper"></f:selectItem>
+													<f:selectItem itemLabel="Labourer" itemValue="Labourer"></f:selectItem>
+													<f:selectItem itemLabel="Agriculture"
+														itemValue="Agriculture"></f:selectItem>
+													<f:selectItem itemLabel="Private Job"
+														itemValue="Private Job"></f:selectItem>
+												</p:selectOneMenu>
+
+												<p:outputLabel value="Designation"></p:outputLabel>
+												<p:inputText value="#{editStudent.fatherDesignation}"></p:inputText>
+
+												<p:outputLabel value="Annual Income"></p:outputLabel>
+												<p:inputText id="fatherInc"
+													value="#{editStudent.fahterAnnualIncome}"
+													onkeypress="return AvoidSpace(event)"
+													onkeyup="checkNumberValid2('form:tabview:j_idt647:fatherInc')">
+												</p:inputText>
+
+												<p:outputLabel value="Office Contact"></p:outputLabel>
+												<p:inputText value="#{editStudent.fatherofficecontcatno}"></p:inputText>
+
+												<p:outputLabel value="Office Address"></p:outputLabel>
+												<p:inputText value="#{editStudent.fatherOfficeAdd}"></p:inputText>
+
+												<p:outputLabel value="Is School Employee ? "></p:outputLabel>
+												<p:selectOneRadio value="#{editStudent.fatherSchoolEmp}">
+													<f:selectItem itemValue="Yes" itemLabel="Yes"></f:selectItem>
+													<f:selectItem itemValue="No" itemLabel="No"></f:selectItem>
+												</p:selectOneRadio>
+
+												<p:outputLabel value="Father's Image"></p:outputLabel>
+												<p:lightBox>
+													<h:outputLink value="#{editStudent.curfatherimage}">
+														<p:graphicImage id="imageIdFather" height="100px"
+															width="100px" value="#{editStudent.curfatherimage}" />
+													</h:outputLink>
+												</p:lightBox>
+
+												<p:outputLabel value="Upload Father's image (Allowed file type are :- gif,jpg,jpeg,png)"></p:outputLabel>
+												<p:fileUpload value="#{editStudent.fatherImage}"
+													mode="simple" allowTypes="/(\.|\/)(gif|jpeg|png)$/" />
+
+												<p:commandButton value="Remove Father's Image"
+													action="#{editStudent.removeFatherPhoto}"
+													update=":form:tabview:tavViewParent:imageIdFather"
+													style="width:150px;font-size:10px;"></p:commandButton>
+											</p:panelGrid>
+										</p:tab>
+										<p:tab title="Mother's Details">
+											<p:panelGrid columns="4"
+												columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+												layout="grid" styleClass="ui-panelgrid-blank form-group"
+												style="border:0px none; background-color:transparent;">
+
+												<p:outputLabel
+													value="#{registrationVar.registrationMotherNameLabel}"></p:outputLabel>
+												<p:inputText value="#{editStudent.motherName}"></p:inputText>
+
+												<p:outputLabel value="Mother's Email"></p:outputLabel>
+												<p:inputText value="#{editStudent.motherEmail}"></p:inputText>
+
+												<p:outputLabel value="Mother's UID"></p:outputLabel>
+												<p:inputText value="#{editStudent.motherAadhaar}"></p:inputText>
+
+												<p:outputLabel value="Mother's Mobile Number"></p:outputLabel>
+												<p:inputText id="motherNumber"
+													value="#{editStudent.mothersPhone}" maxlength="10"
+													onkeypress="return AvoidSpace(event)"
+													onkeyup="checkNumberValid2('form:tabview:motherNumber')">
+												</p:inputText>
+
+												<p:outputLabel value="Qualification"></p:outputLabel>
+												<p:inputText value="#{editStudent.motherQualification}"></p:inputText>
+
+
+												<p:outputLabel value="Occupation"></p:outputLabel>
+												<p:selectOneMenu editable="true"
+													value="#{editStudent.motherOccupation}">
+													<f:selectItem itemLabel="Select Occupation" itemValue=""></f:selectItem>
+													<f:selectItem itemLabel="Business" itemValue="Business"></f:selectItem>
+													<f:selectItem itemLabel="Govt.Employee"
+														itemValue="Govt.Employee"></f:selectItem>
+													<f:selectItem itemLabel="Doctor" itemValue="Doctor"></f:selectItem>
+													<f:selectItem itemLabel="Advocate" itemValue="Advocate"></f:selectItem>
+													<f:selectItem itemLabel="Engineer" itemValue="Engineer"></f:selectItem>
+													<f:selectItem itemLabel="Teacher" itemValue="Teacher"></f:selectItem>
+													<f:selectItem itemLabel="Shopkeeper" itemValue="Shopkeeper"></f:selectItem>
+													<f:selectItem itemLabel="Labourer" itemValue="Labourer"></f:selectItem>
+													<f:selectItem itemLabel="Agriculture"
+														itemValue="Agriculture"></f:selectItem>
+													<f:selectItem itemLabel="Private Job"
+														itemValue="Private Job"></f:selectItem>
+												</p:selectOneMenu>
+
+												<p:outputLabel value="Designation"></p:outputLabel>
+												<p:inputText value="#{editStudent.motherDesignation}"></p:inputText>
+
+
+
+												<p:outputLabel value="Annual Income"></p:outputLabel>
+												<p:inputText id="motherInc"
+													value="#{editStudent.motherAnnualIncome}"
+													onkeypress="return AvoidSpace(event)"
+													onkeyup="checkNumberValid2('form:tabview:j_idt647:motherInc')">
+												</p:inputText>
+
+												<p:outputLabel value="Office Contact"></p:outputLabel>
+												<p:inputText value="#{editStudent.motherofficecontactno}"></p:inputText>
+
+												<p:outputLabel value="Office Address"></p:outputLabel>
+												<p:inputText value="#{editStudent.motherOfficeAdd}"></p:inputText>
+
+
+												<p:outputLabel value="Is School Employee ? "></p:outputLabel>
+												<p:selectOneRadio value="#{editStudent.motherSchoolEmp}">
+													<f:selectItem itemValue="Yes" itemLabel="Yes"></f:selectItem>
+													<f:selectItem itemValue="No" itemLabel="No"></f:selectItem>
+												</p:selectOneRadio>
+
+												<p:outputLabel value="Mother's Image"></p:outputLabel>
+
+												<p:lightBox>
+													<h:outputLink value="#{editStudent.curmotherimage}">
+														<p:graphicImage id="imageIdMother" height="100px"
+															width="100px" value="#{editStudent.curmotherimage}" />
+													</h:outputLink>
+												</p:lightBox>
+
+												<p:outputLabel value="Upload Mother's image (Allowed file type are :- gif,jpg,jpeg,png)"></p:outputLabel>
+												<p:fileUpload value="#{editStudent.motherImage}"
+													mode="simple" allowTypes="/(\.|\/)(gif|jpeg|png)$/" />
+
+												<p:commandButton value="Remove Mother's Image"
+													action="#{editStudent.removeMotherPhoto}"
+													update=":form:tabview:tavViewParent:imageIdMother"
+													style="width:150px;font-size:10px;"></p:commandButton>
+											</p:panelGrid>
+
+
+										</p:tab>
+									</p:tabView>
+
+								</p:tab>
+
+								<p:tab title="Last Education Details">
+
+									<p:panelGrid columns="4"
+										columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+										layout="grid" styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+
+										<p:outputLabel value="Last School Name"></p:outputLabel>
+										<p:inputText value="#{editStudent.lastSchoolName}"></p:inputText>
+
+										<p:outputLabel value="Passed/Fail Class"></p:outputLabel>
+										<p:inputText value="#{editStudent.passedClass}"></p:inputText>
+
+										<p:outputLabel value="Medium"></p:outputLabel>
+										<p:selectOneRadio value="#{editStudent.medium}">
+											<f:selectItem itemLabel="English" itemValue="English"></f:selectItem>
+											<f:selectItem itemLabel="Hindi" itemValue="Hindi"></f:selectItem>
+										</p:selectOneRadio>
+
+										<p:outputLabel value="Result"></p:outputLabel>
+										<p:inputText value="#{editStudent.pResult}"></p:inputText>
+
+										<p:outputLabel value="Board"></p:outputLabel>
+										<p:inputText value="#{editStudent.boardName}"></p:inputText>
+
+										<p:outputLabel value="%Age"></p:outputLabel>
+										<p:inputText value="#{editStudent.p_percent}"></p:inputText>
+
+										<p:outputLabel value="Reason To Leave"></p:outputLabel>
+										<p:inputText value="#{editStudent.pReason}"></p:inputText>
+
+										<p:outputLabel value="TC Date"></p:outputLabel>
+										<p:calendar value="#{editStudent.tcDate}" navigator="true"
+											pattern="dd/MM/yyyy"></p:calendar>
+									</p:panelGrid>
+								</p:tab>
+
+								<p:tab title="Health Details">
+
+									<p:panelGrid columns="4">
+										<p:outputLabel value="Height (In cm)"></p:outputLabel>
+										<p:inputText value="#{editStudent.height}">
+											<p:keyFilter mask="pint" />
+										</p:inputText>
+
+										<p:outputLabel value="Weight(Kg.Gm)"></p:outputLabel>
+										<p:inputText value="#{editStudent.weight}">
+											<p:keyFilter mask="pnum" />
+										</p:inputText>
+
+										<p:outputLabel value="Eyes(Left/Right)"></p:outputLabel>
+										<p:inputText value="#{editStudent.eyes}"></p:inputText>
+
+										<p:outputLabel value="Blood Group"></p:outputLabel>
+										<p:selectOneMenu value="#{editStudent.bloodGroup}">
+											<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+											<f:selectItem itemLabel="A+" itemValue="A+"></f:selectItem>
+											<f:selectItem itemLabel="B+" itemValue="B+"></f:selectItem>
+											<f:selectItem itemLabel="O+" itemValue="O+"></f:selectItem>
+											<f:selectItem itemLabel="AB+" itemValue="AB+"></f:selectItem>
+											<f:selectItem itemLabel="A-" itemValue="A-"></f:selectItem>
+											<f:selectItem itemLabel="B-" itemValue="B-"></f:selectItem>
+											<f:selectItem itemLabel="O-" itemValue="O-"></f:selectItem>
+											<f:selectItem itemLabel="AB-" itemValue="AB-"></f:selectItem>
+
+										</p:selectOneMenu>
+
+									</p:panelGrid>
+								</p:tab>
+
+								<p:tab title="Guardian Details">
+									<p:tabView>
+										<p:tab title="Guardian Details 1">
+											<p:panelGrid columns="4"
+												columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+												layout="grid" styleClass="ui-panelgrid-blank form-group"
+												style="border:0px none; background-color:transparent;">
+												<p:outputLabel value="Name of Guardian"></p:outputLabel>
+												<p:inputText value="#{editStudent.fname1}"></p:inputText>
+
+												<p:outputLabel
+													value="#{registrationParentsVar.registrationParentsLastNameLabel}"
+													rendered="false"></p:outputLabel>
+												<p:inputText value="#{editStudent.lname1}" rendered="false"></p:inputText>
+
+												<p:outputLabel
+													value="#{registrationParentsVar.registrationParentsRelationLabel}"></p:outputLabel>
+												<p:inputText value="#{editStudent.relation1}"></p:inputText>
+
+												<p:outputLabel
+													value="#{registrationParentsVar.registrationParentsOccupationLabel}"></p:outputLabel>
+												<p:inputText value="#{editStudent.occupation1}"></p:inputText>
+
+												<p:outputLabel value="Contact Number"></p:outputLabel>
+												<p:inputText value="#{editStudent.phone1}">
+													<p:keyFilter mask="num" />
+												</p:inputText>
+
+												<p:outputLabel value="Address"></p:outputLabel>
+												<p:inputText value="#{editStudent.address1}"></p:inputText>
+
+												<p:outputLabel value="Gaurdian1  image"></p:outputLabel>
+												<p:lightBox>
+													<h:outputLink value="#{editStudent3.curg1image}">
+														<p:graphicImage id="g1imageId" height="100px" width="100px"
+															value="#{editStudent.curg1image}" />
+													</h:outputLink>
+												</p:lightBox>
+
+												<p:outputLabel value="Upload First Guardian's image (Allowed file type are :- gif,jpg,jpeg,png)"></p:outputLabel>
+												<p:fileUpload value="#{editStudent.g1Image}" mode="simple"
+													allowTypes="/(\.|\/)(gif|jpeg|png)$/" />
+
+
+
+											</p:panelGrid>
+
+										</p:tab>
+										<p:tab title="Guardian Details 2">
+											<p:panelGrid columns="4"
+												columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+												layout="grid" styleClass="ui-panelgrid-blank form-group"
+												style="border:0px none; background-color:transparent;">
+												<p:outputLabel value="Name of Guardian"></p:outputLabel>
+												<p:inputText value="#{editStudent.fname2}"></p:inputText>
+
+												<p:outputLabel
+													value="#{registrationParentsVar.registrationParentsLastNameLabel}"
+													rendered="false">
+												</p:outputLabel>
+												<p:inputText value="#{editStudent.lname2}" rendered="false"></p:inputText>
+
+												<p:outputLabel
+													value="#{registrationParentsVar.registrationParentsRelationLabel}"></p:outputLabel>
+												<p:inputText value="#{editStudent.relation2}"></p:inputText>
+
+												<p:outputLabel
+													value="#{registrationParentsVar.registrationParentsOccupationLabel}"></p:outputLabel>
+												<p:inputText value="#{editStudent.occupation2}"></p:inputText>
+
+												<p:outputLabel value="Contact Number"></p:outputLabel>
+												<p:inputText value="#{editStudent.phone2}">
+													<p:keyFilter mask="num" />
+												</p:inputText>
+
+												<p:outputLabel value="Address"></p:outputLabel>
+												<p:inputText value="#{editStudent.address2}"></p:inputText>
+												
+												<p:outputLabel value="Gaurdian2  image"></p:outputLabel>
+												<p:lightBox>
+													<h:outputLink value="#{editStudent3.curg2image}">
+														<p:graphicImage id="g2imageId" height="100px" width="100px"
+															value="#{editStudent.curg2image}" />
+													</h:outputLink>
+												</p:lightBox>
+
+												<p:outputLabel value="Upload Second Guardian's image (Allowed file type are :- gif,jpg,jpeg,png)"></p:outputLabel>
+												<p:fileUpload value="#{editStudent.g2Image}" mode="simple"
+													allowTypes="/(\.|\/)(gif|jpeg|png)$/" />
+											</p:panelGrid>
+										</p:tab>
+
+									</p:tabView>
+								</p:tab>
+								<p:tab title="Xth details for(XI and XII)">
+										<p:panelGrid columns="4"
+											columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+											layout="grid" styleClass="ui-panelgrid-blank form-group"
+											style="border:0px none; background-color:transparent;">
+											
+											<p:outputLabel value="Xth Class Roll No."></p:outputLabel>
+											<p:inputText value="#{editStudent.tenRoll}"></p:inputText>
+											
+											<p:outputLabel value="Year Of Passing"></p:outputLabel>
+											<p:inputText value="#{editStudent.tenYearOfPass}"></p:inputText>
+											
+											<p:outputLabel value="Board"></p:outputLabel>
+											<p:selectOneMenu value="#{editStudent.tenBoard}">
+											<f:selectItem itemLabel="Select board" itemValue=""></f:selectItem>
+											 <f:selectItem itemValue="CBSE" itemLabel="CBSE" ></f:selectItem>
+											 <f:selectItem itemValue="ICSE" itemLabel="ICSE"></f:selectItem>
+											 <f:selectItem itemValue="STATE" itemLabel="STATE Board"></f:selectItem>
+											
+											</p:selectOneMenu>
+										
+										</p:panelGrid>
+									</p:tab>
+								<p:tab title="Settings">
+
+									<p:panelGrid columns="4"
+										columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+										layout="grid" styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+
+										<p:outputLabel rendered="false"
+											value="#{registrationVar.registrationRouteNameLabel}"></p:outputLabel>
+										<p:selectOneMenu rendered="false"
+											value="#{editStudent.routeName1}" filter="true"
+											filterMatchMode="contains"
+											style="min-width:min-width: 289.917px;">
+											<f:selectItem itemLabel="#{registrationVar.selectHereLabel}"></f:selectItem>
+											<f:selectItems value="#{editStudent.routeList}"></f:selectItems>
+											<p:ajax listener="#{editStudent.checkRoute}"
+												update="routefee discountfee totalfee"></p:ajax>
+										</p:selectOneMenu>
+
+
+										<p:outputLabel rendered="false" value="Route fees(Per month)"></p:outputLabel>
+										<p:outputLabel rendered="false" id="routefee"
+											value="#{editStudent.routeFees}"></p:outputLabel>
+
+										<p:outputLabel rendered="false"
+											value="Discount fees(Per month)"></p:outputLabel>
+										<p:inputText rendered="false" id="discountfee"
+											value="#{editStudent.discountFee}">
+											<p:keyFilter mask="pnum"></p:keyFilter>
+											<p:ajax event="blur" listener="#{editStudent.checkfees}"
+												update="totalfee"></p:ajax>
+										</p:inputText>
+
+										<p:outputLabel rendered="false" value="Total fees(Per month)"></p:outputLabel>
+										<p:outputLabel rendered="false" id="totalfee"
+											value="#{editStudent.totalFess}"></p:outputLabel>
+
+										<p:outputLabel value="Concession"></p:outputLabel>
+										<p:selectOneRadio value="#{editStudent.concession}"
+											layout="responsive" columns="3" styleClass="form-group">
+											<f:selectItems value="#{editStudent.connsessionList}"></f:selectItems>
+										</p:selectOneRadio>
+
+										<p:outputLabel value="Hostel" />
+										<p:selectOneRadio value="#{editStudent.hostal}">
+											<f:selectItem itemLabel="Yes" itemValue="yes" />
+											<f:selectItem itemLabel="No" itemValue="no" />
+										</p:selectOneRadio>
+
+										<p:outputLabel value="House"></p:outputLabel>
+
+										<p:panelGrid columns="2">
+											<p:selectOneMenu id="allhouses"
+												value="#{editStudent.houseName}">
+												<f:selectItem itemLabel="Select House" itemValue="" />
+												<f:selectItems value="#{editStudent.houseCategorylist}"></f:selectItems>
+											</p:selectOneMenu>
+
+											<p:commandButton rendered="false" value="Add House"
+												immediate="true" oncomplete="PF('dlg1').show();"
+												update=":house"></p:commandButton>
+
+										</p:panelGrid>
+
+									</p:panelGrid>
+									<br />
+
+									<p:panel header="Siblings details if Any (Optional)">
+										<p:dataTable id="dtbSibling"
+											value="#{editStudent.completeList}" var="var">
+
+											<p:column headerText="S.No.">
+												<p:outputLabel value="#{var.sno}"></p:outputLabel>
+											</p:column>
+
+											<p:column headerText="Name">
+												<p:autoComplete id="acSimple" value="#{var.fname}"
+													completeMethod="#{editStudent.autoCompleteStudentInfo}">
+													<f:attribute name="Dummyy" value="#{var.sno}"></f:attribute>
+
+													<p:ajax event="query" global="false" />
+													<p:ajax event="itemSelect"
+														listener="#{editStudent.checkSiblingClass}"
+														update=":form:tabview:dtbSibling"></p:ajax>
+												</p:autoComplete>
+											</p:column>
+
+											<p:column headerText="Class">
+												<center>
+													<p:outputLabel value="#{var.className}"></p:outputLabel>
+												</center>
+											</p:column>
+
+											<p:column headerText="Section">
+												<center>
+													<p:outputLabel value="#{var.sectionName}"></p:outputLabel>
+												</center>
+											</p:column>
+
+											<p:column headerText="Remove" rendered="true">
+												<p:commandButton icon="ui-icon-trash"
+													action="#{editStudent.removeSib}"
+													update=":form:tabview:dtbSibling">
+													<f:setPropertyActionListener value="#{var}"
+														target="#{editStudent.selectedSibling}"></f:setPropertyActionListener>
+												</p:commandButton>
+											</p:column>
+
+
+										</p:dataTable>
+									</p:panel>
+
+									<p:panel rendered="false"
+										header="Siblings details if Any (Optional)">
+										<p:panelGrid columns="4"
+											columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+											layout="grid" styleClass="ui-panelgrid-blank form-group"
+											style="border:0px none; background-color:transparent;">
+											<p:outputLabel value="1) Name"></p:outputLabel>
+											<p:autoComplete onfocus="this.select();" id="acSimple"
+												value="#{editStudent.sname1}"
+												completeMethod="#{editStudent.autoCompleteStudentInfo}">
+												<p:ajax event="blur" global="false" update="sc1"
+													listener="#{editStudent.checkSiblingClass1}" />
+											</p:autoComplete>
+
+											<p:outputLabel value="Class"></p:outputLabel>
+											<p:selectOneMenu id="sc1" disabled="true"
+												value="#{editStudent.sClassName1}">
+												<f:selectItem itemLabel="Select here" itemValue=""></f:selectItem>
+												<f:selectItems value="#{editStudent.classList}"></f:selectItems>
+											</p:selectOneMenu>
+
+											<p:outputLabel value="2) Name"></p:outputLabel>
+											<p:autoComplete onfocus="this.select();" id="acSimple2"
+												value="#{editStudent.sname2}"
+												completeMethod="#{editStudent.autoCompleteStudentInfo}">
+												<p:ajax event="blur" global="false" update="sc2"
+													listener="#{editStudent.checkSiblingClass2}" />
+											</p:autoComplete>
+
+											<p:outputLabel value="Class"></p:outputLabel>
+											<p:selectOneMenu id="sc2" disabled="true"
+												value="#{editStudent.sClassName2}">
+												<f:selectItem itemLabel="Select here" itemValue=""></f:selectItem>
+												<f:selectItems value="#{editStudent.classList}"></f:selectItems>
+
+											</p:selectOneMenu>
+										</p:panelGrid>
+									</p:panel>
+									<br />
+									<p:panel header="Documents Details">
+
+										<p:commandLink value="Add Document" style="float:right;"
+											immediate="true" oncomplete="PF('dlg2').show();"
+											update=":docForm"></p:commandLink>
+										<br />
+										<p:commandLink value="Remove Document" style="float:right;"
+											immediate="true" oncomplete="PF('dlgRemove').show();"
+											update=":docFormRemove"></p:commandLink>
+
+										<p:panelGrid columns="3"
+											columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+											layout="grid" styleClass="ui-panelgrid-blank form-group"
+											style="border:0px none; background-color:transparent;">
+											<p:outputLabel value="Documents submitted"></p:outputLabel>
+											<p:selectManyCheckbox id="document"
+												value="#{editStudent.documentsSubmitted}">
+												<f:selectItems value="#{editStudent.doctypelist}"></f:selectItems>
+											</p:selectManyCheckbox>
+											<p:commandButton rendered="false" value="Add Document"
+												immediate="true" oncomplete="PF('dlg2').show();"
+												update=":house"></p:commandButton>
+
+										</p:panelGrid>
+
+									</p:panel>
+
+
+
+								</p:tab>
+							</p:tabView>
+
+							<br />
+
+							<p:panelGrid columns="2"
+								columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+								layout="grid" styleClass="ui-panelgrid-blank form-group"
+								style="border:0px none; background-color:transparent;">
+								<p:commandButton value="Update Student" ajax="false"
+									action="#{editStudent.updateHere}" update=":form"></p:commandButton>
+								<p:commandButton rendered="false" value="Alumini Student"
+									action="#{editStudent.deleteStudent}" update=":form">
+									<p:confirm header="Confirmation"
+										message="Are you sure Alumini this Student?"
+										icon="ui-icon-alert" />
+
+								</p:commandButton>
+								<p:commandButton value="Delete Student"
+									action="#{editStudent.permanentDeleteStudent}" update=":form">
+									<p:confirm header="Confirmation"
+										message="Are you sure Delete this Student?"
+										icon="ui-icon-alert" />
+								</p:commandButton>
+
+							</p:panelGrid>
+							<br />
+							<p:panel>
+								<p:outputLabel value="Note:- * fields are mandatory"></p:outputLabel>
+							</p:panel>
+
+
+							<p:confirmDialog global="true" showEffect="fade"
+								hideEffect="fade">
+								<p:commandButton style="margin-left:50px" value="Yes"
+									type="button" styleClass="ui-confirmdialog-yes"
+									icon="ui-icon-check" />
+								<p:commandButton style="margin-left:50px" value="No"
+									type="button" styleClass="ui-confirmdialog-no"
+									icon="ui-icon-close" />
+							</p:confirmDialog>
+						</h:form>
+
+						<h:form id="house">
+							<p:dialog header="Add House" id="houseess" widgetVar="dlg1"
+								minHeight="40">
+
+								<p:panelGrid columns="2" layout="grid"
+									styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+								</p:panelGrid>
+
+							</p:dialog>
+
+
+						</h:form>
+
+						<h:form id="docForm">
+
+							<p:dialog header="Add Document" id="docm" widgetVar="dlg2"
+								minHeight="40">
+
+								<p:panelGrid columns="2" layout="grid"
+									styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:inputText value="#{editStudent.doctype}" required="true"
+										requiredMessage="Please enter doucument name">
+									</p:inputText>
+									<p:commandButton value="add" action="#{editStudent.addDocType}"
+										update=":form:tabview:document"
+										oncomplete="PF('dlg2').hide();"></p:commandButton>
+								</p:panelGrid>
+
+							</p:dialog>
+						</h:form>
+
+						<h:form id="docFormRemove">
+
+							<p:dialog header="Remove Document" id="docmRem"
+								widgetVar="dlgRemove" minHeight="40">
+
+								<p:panelGrid columns="2" layout="grid"
+									styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:dataTable id="dtbRem" value="#{editStudent.doctypelist}"
+										var="varRem" style="width:400px;">
+
+										<p:column headerText="Document">
+
+											<p:outputLabel value="#{varRem.label}"></p:outputLabel>
+
+										</p:column>
+
+										<p:column headerText="Remove">
+											<p:commandButton icon="ui-icon-trash"
+												action="#{editStudent.removeDoc}"
+												update=":docFormRemove:dtbRem,:form:tabview:document">
+												<f:setPropertyActionListener value="#{varRem}"
+													target="#{editStudent.selectedDoc}"></f:setPropertyActionListener>
+											</p:commandButton>
+										</p:column>
+
+									</p:dataTable>
+								</p:panelGrid>
+
+							</p:dialog>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,67 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Income Expense Category</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form" style="overflow:hidden">
+							<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+							<p:panel header="All Category">
+								<p:dataTable value="#{all_income_expense_cat.allCategoryList}" var="var">
+									<p:column headerText="S.No." style="width:45px;text-align: center;">
+										<p:outputLabel value="#{var.sNo}"></p:outputLabel>
+									</p:column>
+
+									<p:column filterBy="#{var.incomeCategory}" filterMatchMode="contains" headerText="Income Category">
+										<p:outputLabel value="#{var.incomeCategory}" />
+									</p:column>
+
+									<p:column filterBy="#{var.expenseCategory}" filterMatchMode="contains" headerText="Expense Category">
+										<p:outputLabel value="#{var.expenseCategory}" />
+									</p:column>
+
+									<p:column headerText="Edit" style="text-align: center;">
+										<p:commandButton icon="ui-icon-pencil" oncomplete="PF('editDialog').show()"  styleClass="butwid" update=":editForm" action="#{all_income_expense_cat.editDetails}">
+											<f:setPropertyActionListener target="#{all_income_expense_cat.selectedCat}" value="#{var}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+								</p:dataTable>
+							</p:panel>
+
+						</h:form>
+
+						<h:form id="editForm" style="overflow:hidden">
+							<p:dialog header="Arrange Lecture" widgetVar="editDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+								<div class="ui-g form-group">
+									<p:panelGrid columns="2" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+										<p:outputLabel value="Income Category :" />
+										<p:inputText value="#{all_income_expense_cat.incomeCategory}" validatorMessage="Please Enter Correct value">
+										  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+										</p:inputText>
+
+										<p:outputLabel value="Expense Category :" />
+										<p:inputText value="#{all_income_expense_cat.expenseCategory}" validatorMessage="Please Enter Correct value">
+										  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+										</p:inputText>
+
+										<p:commandButton value="Update"  styleClass="butwid" icon="fa fa-upload" update=":editForm,:form" actionListener="#{all_income_expense_cat.updateCategory}" />
+									</p:panelGrid>
+								</div>
+							</p:dialog>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

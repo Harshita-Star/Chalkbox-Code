@@ -1,0 +1,43 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+	<ui:define name="title">Lecture Plan Report</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form" enctype="multipart/form-data">
+							<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+						<p:panel header="Report">
+							<p:dataTable id="myDataTable" value="#{submitLecPlanReport.subjectList}" var="var" rowStyleClass="#{var.status eq 'Submitted' ? 'blueColored':'redColored' }">
+								
+								<p:column id="classId"  headerText="Class" sortBy="#{var.className}" style="text-align:center;">
+									<p:outputLabel value="#{var.className}"></p:outputLabel>
+								</p:column>
+								
+								<p:column headerText="Section" sortBy="#{var.sectionName}" style="text-align:center;">
+									<p:outputLabel value="#{var.sectionName}"></p:outputLabel>
+								</p:column>
+								
+								<p:column headerText="Subject">
+									<p:outputLabel value="#{var.subjectName}"></p:outputLabel>
+								</p:column>
+								
+								<p:column headerText="Status" filterBy="#{var.status}" filterMatchMode="contains">
+									<p:outputLabel value="#{var.status}"></p:outputLabel>
+								</p:column>
+							</p:dataTable>
+						</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</ui:define>
+
+</ui:composition>

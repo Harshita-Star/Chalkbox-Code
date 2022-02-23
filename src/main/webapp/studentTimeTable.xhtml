@@ -1,0 +1,124 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/studentTemplate.xhtml">
+
+	<ui:define name="title">Time Table</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+							<p:panel header="Time Table">
+							<p:graphicImage value="#{studentTimeTable.file}" rendered="#{studentTimeTable.showImage}"></p:graphicImage>
+							<p:dataTable rendered="#{studentTimeTable.showManual}" var="var" value="#{studentTimeTable.finalTimeTableList}"
+								style="width:100%;border-collapse:collapse;font-size:13px"
+								border="1" reflow="true">
+								
+								<p:column headerText="Time">
+
+									<f:facet name="header">
+										<h:outputText value="Time"></h:outputText>
+									</f:facet>
+									<center>
+										<h:outputText value="Period #{var.lecNo}"></h:outputText>
+										<br></br>
+										<h:outputText value="(#{var.lecTime})"></h:outputText>
+									</center>
+								</p:column>
+
+								<p:column  headerText="Monday">
+
+									<f:facet name="header">
+										<h:outputText value="Monday"></h:outputText>
+									</f:facet>
+									<center>
+										<h:outputText value="#{var.mon_tchr_name}"></h:outputText>
+										<br></br>
+										<h:outputText value="#{var.mon_sub_name}"></h:outputText>
+									</center>
+
+								</p:column>
+
+								<p:column headerText="Tuesday">
+
+									<f:facet name="header">
+										<h:outputText value="Tuesday"></h:outputText>
+									</f:facet>
+									<center>
+										<h:outputText value="#{var.tues_tchr_name}"></h:outputText>
+										<br></br>
+										<h:outputText value="#{var.tues_sub_name}"></h:outputText>
+									</center>
+
+								</p:column>
+
+								<p:column headerText="Wednesday">
+
+									<f:facet name="header">
+										<h:outputText value="Wednesday"></h:outputText>
+									</f:facet>
+									<center>
+										<h:outputText value="#{var.wed_tchr_name}"></h:outputText>
+										<br></br>
+										<h:outputText value="#{var.wed_sub_name}"></h:outputText>
+									</center>
+
+								</p:column>
+
+								<p:column headerText="Thursday">
+
+									<f:facet name="header">
+										<h:outputText value="Thursday"></h:outputText>
+									</f:facet>
+									<center>
+										<h:outputText value="#{var.thur_tchr_name}"></h:outputText>
+										<br></br>
+										<h:outputText value="#{var.thur_sub_name}"></h:outputText>
+									</center>
+
+								</p:column>
+
+								<p:column headerText="Friday">
+
+									<f:facet name="header">
+										<h:outputText value="Friday"></h:outputText>
+									</f:facet>
+									<center>
+										<h:outputText value="#{var.fri_tchr_name}"></h:outputText>
+										<br></br>
+										<h:outputText value="#{var.fri_sub_name}"></h:outputText>
+									</center>
+
+								</p:column>
+
+								<p:column headerText="Saturday">
+
+									<f:facet name="header">
+										<h:outputText value="Saturday"></h:outputText>
+									</f:facet>
+									<center>
+										<h:outputText value="#{var.sat_tchr_name}"></h:outputText>
+										<br></br>
+										<h:outputText value="#{var.sat_sub_name}"></h:outputText>
+									</center>
+
+								</p:column>
+
+							</p:dataTable>
+						</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

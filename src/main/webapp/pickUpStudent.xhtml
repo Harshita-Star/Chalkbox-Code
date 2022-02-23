@@ -1,0 +1,126 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Pick Up Student</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form1">
+							<h1>Pick up Student</h1>
+
+							<p:messages closable="true" autoUpdate="true"></p:messages>
+
+							<p:panel header="Search Student by Name/Sr. No">
+
+								<p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+									<p:outputLabel value="Student Name/Sr. No"></p:outputLabel>
+									<p:autoComplete id="acSimple" value="#{pickUpStudent.name}" minQueryLength="3" completeMethod="#{pickUpStudent.autoCompleteStudentInfo}">
+										<p:ajax event="itemSelect" listener="#{pickUpStudent.searchStudentByName}" update=":form1"/>
+									</p:autoComplete>
+									
+									<p:outputLabel value="Student Image"></p:outputLabel>
+									<p:graphicImage value="#{pickUpStudent.stdInfo.student_image}" height="100px" width="100px"></p:graphicImage>
+									
+								</p:panelGrid>
+								
+								<p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+									<p:outputLabel value="Name"></p:outputLabel>
+									<p:outputLabel value="#{pickUpStudent.stdInfo.fname}"></p:outputLabel>
+									
+									<p:outputLabel value="Class"></p:outputLabel>
+									<p:outputLabel value="#{pickUpStudent.stdInfo.className}"></p:outputLabel>
+									
+									<p:outputLabel value="Remark"></p:outputLabel>
+									<p:inputTextarea value="#{pickUpStudent.remark}"></p:inputTextarea>
+								</p:panelGrid>
+								
+								<p:panelGrid columns="1">
+									<p:dataTable var="var" value="#{pickUpStudent.guardianList}">
+										<p:column headerText="Relation">
+											<p:outputLabel value="#{var.relation1}"></p:outputLabel>
+										</p:column>
+										
+										<p:column headerText="Name">
+											<p:outputLabel value="#{var.fname}"></p:outputLabel>
+										</p:column>
+										
+										<p:column headerText="Phone">
+											<p:outputLabel value="#{var.contactNo}"></p:outputLabel>
+										</p:column>
+										
+										<p:column headerText="Photo">
+											<p:graphicImage value="#{var.signImage}" height="100px" width="100px"></p:graphicImage>
+										</p:column>
+										
+										<p:column headerText="Action">
+											<p:panelGrid columns="2">
+												<p:commandButton value="Pick Up" action="#{pickUpStudent.checkPickUp}">
+													<f:setPropertyActionListener target="#{pickUpStudent.selectedGuardian}" value="#{var}"></f:setPropertyActionListener>
+												</p:commandButton>
+												
+												<p:commandButton rendered="#{var.name ne 'Other'}" value="OTP Verify" action="#{pickUpStudent.checkAction}">
+													<f:setPropertyActionListener target="#{pickUpStudent.selectedGuardian}" value="#{var}"></f:setPropertyActionListener>
+												</p:commandButton>
+											</p:panelGrid>
+										</p:column>
+									
+									</p:dataTable>
+								</p:panelGrid>
+	
+							</p:panel>
+						</h:form>
+						
+						<h:form id="detailForm" enctype="multipart/form-data">
+							<p:dialog resizable="false" modal="true" widgetVar="detailDialog" header="Details (Allowed file type are :- jpg,jpeg,png)" closeOnEscape="true">
+								<div class="ui-g form-group">
+									<p:panelGrid columns="2" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+										<p:outputLabel value="Name" for="@next" style="color:red" ></p:outputLabel>
+										<p:inputText value="#{pickUpStudent.pickUpName}" required="true" requiredMessage="Please Enter Name"></p:inputText>
+										
+										<p:outputLabel value="Mobile" for="@next" style="color:red" ></p:outputLabel>
+										<p:inputText maxlength="10" value="#{pickUpStudent.mobile}" required="true" requiredMessage="Please Enter Mobile"></p:inputText>
+										
+										<p:outputLabel value="Relation" for="@next" style="color:red" ></p:outputLabel>
+										<p:inputText value="#{pickUpStudent.relation}" required="true" requiredMessage="Please Enter Relation"></p:inputText>
+										
+										<p:outputLabel value="Upload Photo"></p:outputLabel>
+										<p:fileUpload 
+										mode="simple" skinSimple="true"
+										value="#{pickUpStudent.photofile}" allowTypes="/(\.|\/)(jpe?g|png|)$/" validatorMessage="Please choose valid file type"></p:fileUpload>
+										
+										
+										<p:commandButton value="OTP Verify" action="#{pickUpStudent.createOTP}" ajax="false" oncomplete="PF('otpDialog').show()" update=":otpForm"></p:commandButton>
+									</p:panelGrid>
+								</div>
+							</p:dialog>
+						</h:form>
+						
+						
+						<h:form id="otpForm">
+							<p:dialog resizable="false" modal="true" widgetVar="otpDialog" header="Enter OTP" closeOnEscape="true">
+								<div class="ui-g form-group">
+									<p:panelGrid columns="2" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+										<p:outputLabel value="Enter OTP" for="@next" style="color:red" ></p:outputLabel>
+										<p:inputText value="#{pickUpStudent.enteredOTP}" required="true" requiredMessage="Please Enter OTP"></p:inputText>
+										
+										<p:commandButton value="Submit" action="#{pickUpStudent.verifyOTP}"></p:commandButton>
+										<p:commandButton value="Resend OTP" action="#{pickUpStudent.resendOTP}"></p:commandButton>
+									</p:panelGrid>
+								</div>
+							</p:dialog>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

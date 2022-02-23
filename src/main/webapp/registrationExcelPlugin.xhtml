@@ -1,0 +1,328 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+	<ui:define name="title">Registration Excel Plugin</ui:define>
+
+	<ui:define name="content"> 
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form" enctype="multipart/form-data">
+							<p:growl>
+								<p:autoUpdate />
+							</p:growl>
+							
+						   <p:panel header="Registration Excel Plugin">	
+							<p:panelGrid columns="2" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+							   <p:outputLabel value="Registration For" for="@next" style="color:red"></p:outputLabel>
+							   <p:selectOneRadio value="#{stuRegThroughExcelNew.registrationType}" requiredMessage="Please Select Registration Type" required="true">
+							   
+							     <f:selectItem itemLabel="All Classes" itemValue="All Classes"></f:selectItem>
+							     <f:selectItem itemLabel="Class Wise" itemValue="Class Wise"></f:selectItem>
+							     <p:ajax listener="#{stuRegThroughExcelNew.checkRegType}" update=":form,:formClass,:formAll,:form1,form1All"></p:ajax>
+							   </p:selectOneRadio>
+                            </p:panelGrid>
+                           </p:panel> 
+							
+							
+							<p:panel header="(Allowed file type are :- xlsx)" rendered="#{stuRegThroughExcelNew.renderClass}">
+					
+                               <p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;" >
+
+									<p:outputLabel  for="@next" style="color:red" value="Select Class"></p:outputLabel>
+									<p:selectOneMenu style="width:250px"
+										value="#{stuRegThroughExcelNew.selectedCLassSection}" required="true"
+										requiredMessage="Please select a class">
+										<f:selectItem itemLabel="Select"
+											itemValue=""></f:selectItem>
+											
+										<f:selectItems value="#{stuRegThroughExcelNew.classSection}"></f:selectItems>
+
+										<p:ajax update="sectionid"
+											listener="#{stuRegThroughExcelNew.allSections}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel  for="@next" style="color:red" value="Select Section"></p:outputLabel>
+									<p:selectOneMenu id="sectionid"
+										value="#{stuRegThroughExcelNew.selectedSection}" required="true"
+										requiredMessage="Please select a section">
+											<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+									
+										<f:selectItems value="#{stuRegThroughExcelNew.sectionList}"></f:selectItems>
+										
+									</p:selectOneMenu>
+
+
+								
+								</p:panelGrid>
+                               
+
+								<p:panelGrid columns="3"
+									styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+                                     
+
+									<p:outputLabel value="Choose file to upload * : "></p:outputLabel>
+								<p:fileUpload allowTypes="/(\.|\/)(xlsx)$/" mode="simple"
+							skinSimple="true" value="#{stuRegThroughExcelNew.excelFile}"
+							update=":form"></p:fileUpload>
+
+							<p:commandButton ajax="false"
+								action="#{stuRegThroughExcelNew.importFromExcelInRegTable}" icon="fa fa-upload"
+								update=":form :form1 :form1All" style="font-size:14px;" value="Upload"
+								title="CLick here to upload Excel sheet. registration">
+							</p:commandButton>
+								</p:panelGrid>
+
+							</p:panel>
+							
+							
+							
+							<p:panel header="(Allowed file type are :- xlsx)" rendered="#{stuRegThroughExcelNew.renderAll}" >
+
+                             <u><h:commandLink  immediate="true" value="Link to get Class and Section Id's to be entered in Excel Upload for Registration" action="#{stuRegThroughExcelNew.goToClasSec}"></h:commandLink></u>
+
+                                <br/><br/><br/>
+								<p:panelGrid columns="3"
+									styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel value="Choose file to upload * : "></p:outputLabel>
+								<p:fileUpload allowTypes="/(\.|\/)(xlsx)$/" mode="simple"
+							skinSimple="true" value="#{stuRegThroughExcelNew.excelFile}"
+							update=":form"></p:fileUpload>
+
+							<p:commandButton ajax="false"
+								action="#{stuRegThroughExcelNew.importFromExcelInRegTableAll}"
+								update=":form,:form1All,:form1" style="font-size:14px;" value="Upload"
+								title="CLick here to upload Excel sheet. registration">
+							</p:commandButton>
+								</p:panelGrid>
+
+							</p:panel>
+							
+						</h:form>
+						<h:form id="formClass">
+							<center>
+								<p:commandButton process="@this" style="font-size:12px;width: 250px;"
+									value="Download Sample Excel Sheet" ajax="false"
+									icon="ui-icon-arrowthick-1-s" rendered="#{stuRegThroughExcelNew.renderClass}"
+									title="Click here to download sample format of registration excel sheet." actionListener="#{registrationExcelPlugin.downloadSample}">
+									<p:fileDownload value="#{registrationExcelPlugin.file}" />
+								</p:commandButton>
+							</center>
+						</h:form>
+						
+						<h:form id="formAll">
+							<center>
+								<p:commandButton process="@this" style="font-size:12px;width: 250px;"
+									value="Download Sample Excel Sheet" ajax="false"
+									icon="ui-icon-arrowthick-1-s" rendered="#{stuRegThroughExcelNew.renderAll}"
+									title="Click here to download sample format of registration excel sheet." actionListener="#{registrationExcelPlugin.downloadSampleAll}">
+									<p:fileDownload value="#{registrationExcelPlugin.file}" />
+								</p:commandButton>
+							</center>
+						</h:form>
+						
+						
+						<h:form id="form1">
+						 <p:panel header="Student List" rendered="#{stuRegThroughExcelNew.show}">
+						     <p:dataTable var="reg" value="#{stuRegThroughExcelNew.mainList}">
+						       <f:facet name="header">
+						        <p:commandButton value="Add Student" action="#{stuRegThroughExcelNew.regstrationform}" update=":form1 :form"> </p:commandButton>
+						      </f:facet>
+						     <p:column headerText="Name">
+						        <p:outputLabel value="#{reg.studentName}"></p:outputLabel>
+						     </p:column>
+						        
+						        <p:column headerText="Sr.No">
+						        <p:outputLabel value="#{reg.srno}"></p:outputLabel>
+						     </p:column>
+						     
+						     <p:column headerText="DOB">
+						        <p:outputLabel value="#{reg.dobStr}"></p:outputLabel>
+						     </p:column>
+						     
+						     <p:column headerText="Addmission">
+						        <p:outputLabel value="#{reg.admissionDate}"></p:outputLabel>
+						     </p:column>
+						    
+						     <p:column headerText="Fathers Phone">
+						        <p:outputLabel value="#{reg.fathersPhone}"></p:outputLabel>
+						     </p:column>
+						     
+						     
+						     <p:column headerText="StudentStatus">
+						        <p:outputLabel value="#{reg.studentStatus}"></p:outputLabel>
+						     </p:column>
+						     
+						       <p:column headerText="AadharNo">
+						        <p:outputLabel value="#{reg.aadharNo}"></p:outputLabel>
+						     </p:column>
+						     
+						       <p:column headerText="Current Add.">
+						        <p:outputLabel value="#{reg.currentAddress}"></p:outputLabel>
+						     </p:column>
+						     
+						     
+						     <p:column headerText="Gender">
+						        <p:outputLabel value="#{reg.gender}"></p:outputLabel>
+						     </p:column>
+						     
+						     
+						     
+						     <p:column headerText="Father Name">
+						        <p:outputLabel value="#{reg.fatherName}"></p:outputLabel>
+						     </p:column>
+						     
+						     
+						     <p:column headerText="Mothers Name">
+						        <p:outputLabel value="#{reg.motherName}"></p:outputLabel>
+						     </p:column>
+						     
+						     
+						     <p:column headerText="Father UDID">
+						        <p:outputLabel value="#{reg.fatherAadhaar}"></p:outputLabel>
+						     </p:column>
+						     
+						     <p:column headerText="Mother UDID">
+						        <p:outputLabel value="#{reg.motherAadhaar}"></p:outputLabel>
+						     </p:column>
+						     
+                              <p:column headerText="Mother Phone">
+						        <p:outputLabel value="#{reg.mothersPhone}"></p:outputLabel>
+						     </p:column>
+						     
+						     
+						     <f:facet name="footer">
+						     
+						        <p:commandButton value="Add Student" action="#{stuRegThroughExcelNew.regstrationform}" update=":form1 :form"> </p:commandButton>
+						     
+						     </f:facet>
+						     
+						     
+						     </p:dataTable>
+						     
+						     
+						     
+						 </p:panel>	
+						
+						</h:form>
+						
+						
+							<h:form id="form1All">
+						 <p:panel id="panAll" header="Student List" rendered="#{stuRegThroughExcelNew.showAll}">
+						     <p:dataTable var="reg" value="#{stuRegThroughExcelNew.mainList}">
+						     
+						     
+						     
+						       <f:facet name="header">
+						     
+						        <p:commandButton value="Add Student" action="#{stuRegThroughExcelNew.regstrationformAll}" update=":form1All :form"> </p:commandButton>
+						     
+						      </f:facet>
+						     <p:column headerText="Name">
+						        <p:outputLabel value="#{reg.studentName}"></p:outputLabel>
+						     </p:column>
+						        
+						        <p:column headerText="Sr.No">
+						        <p:outputLabel value="#{reg.srno}"></p:outputLabel>
+						     </p:column>
+						     
+						     <p:column headerText="DOB">
+						        <p:outputLabel value="#{reg.dobStr}"></p:outputLabel>
+						     </p:column>
+						     
+						     <p:column headerText="Addmission">
+						        <p:outputLabel value="#{reg.admissionDate}"></p:outputLabel>
+						     </p:column>
+						    
+						     <p:column headerText="Class Id">
+						        <p:outputLabel value="#{reg.classId}"></p:outputLabel>
+						     </p:column>
+						     
+						     <p:column headerText="Section Id">
+						        <p:outputLabel value="#{reg.sectionid}"></p:outputLabel>
+						     </p:column>
+						     
+						     <p:column headerText="Fathers Phone">
+						        <p:outputLabel value="#{reg.fathersPhone}"></p:outputLabel>
+						     </p:column>
+						     
+						     
+						     <p:column headerText="StudentStatus">
+						        <p:outputLabel value="#{reg.studentStatus}"></p:outputLabel>
+						     </p:column>
+						     
+						       <p:column headerText="AadharNo">
+						        <p:outputLabel value="#{reg.aadharNo}"></p:outputLabel>
+						     </p:column>
+						     
+						       <p:column headerText="Current Add.">
+						        <p:outputLabel value="#{reg.currentAddress}"></p:outputLabel>
+						     </p:column>
+						     
+						     
+						     <p:column headerText="Gender">
+						        <p:outputLabel value="#{reg.gender}"></p:outputLabel>
+						     </p:column>
+						     
+						     
+						     
+						     <p:column headerText="Father Name">
+						        <p:outputLabel value="#{reg.fatherName}"></p:outputLabel>
+						     </p:column>
+						     
+						     
+						     <p:column headerText="Mothers Name">
+						        <p:outputLabel value="#{reg.motherName}"></p:outputLabel>
+						     </p:column>
+						     
+						     
+						     <p:column headerText="Father UDID">
+						        <p:outputLabel value="#{reg.fatherAadhaar}"></p:outputLabel>
+						     </p:column>
+						     
+						     <p:column headerText="Mother UDID">
+						        <p:outputLabel value="#{reg.motherAadhaar}"></p:outputLabel>
+						     </p:column>
+						     
+                              <p:column headerText="Mother Phone">
+						        <p:outputLabel value="#{reg.mothersPhone}"></p:outputLabel>
+						     </p:column>
+						     
+						     
+						     <f:facet name="footer">
+						     
+						        <p:commandButton value="Add Student" action="#{stuRegThroughExcelNew.regstrationformAll}" update=":form1All :form"> </p:commandButton>
+						     
+						     </f:facet>
+						     
+						     
+						     </p:dataTable>
+						     
+						     
+						     
+						 </p:panel>	
+						
+						</h:form>
+						
+						
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</ui:define>
+
+</ui:composition>

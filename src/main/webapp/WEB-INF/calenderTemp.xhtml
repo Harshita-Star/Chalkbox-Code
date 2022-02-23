@@ -1,0 +1,78 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<f:loadBundle var="regexVar" basename="myProperties" />
+<f:loadBundle var="addClassVar" basename="myProperties" />
+<f:loadBundle var="addExamVar" basename="myProperties" />
+<f:loadBundle var="addSubjectsVar" basename="myProperties" />
+<f:loadBundle var="employeeAddmissionVar" basename="myProperties" />
+<f:loadBundle var="registrationVar" basename="myProperties" />
+<f:loadBundle var="registrationParentsVar" basename="myProperties" />
+<f:loadBundle var="addNewRouteVar" basename="myProperties" />
+<f:loadBundle var="addNewStopVar" basename="myProperties" />
+<f:loadBundle var="addSectionVar" basename="myProperties" />
+<f:loadBundle var="addSemesterVar" basename="myProperties" />
+<f:loadBundle var="searchStudentVar" basename="myProperties" />
+<f:loadBundle var="adminHomeVar" basename="myProperties" />
+<f:loadBundle var="addTestVar" basename="myProperties" />
+<f:loadBundle var="searchEmployeeVar" basename="myProperties" />
+<f:loadBundle var="editEmployeeVar" basename="myProperties" />
+<f:loadBundle var="employeeAddmissionVar" basename="myProperties" />
+<f:loadBundle var="attendanceVar" basename="myProperties" />
+<f:loadBundle var="printTestPerformanceClassWiseVar" basename="myProperties" />
+<f:loadBundle var="feeCollectionVar" basename="myProperties" />
+<f:loadBundle var="collectFeeVar" basename="myProperties" />
+<f:loadBundle var="dueFeeReportVar" basename="myProperties" />
+<f:loadBundle var="studentPerformanceVar" basename="myProperties" />
+<f:loadBundle var="showReportVar" basename="myProperties" />
+<h:head>
+	<f:facet name="first">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="theme-color" content="#{guestPreferences.themeColors[guestPreferences.theme]}" />
+	</f:facet>
+	<title><ui:insert name="title">PrimeFaces Avalon</ui:insert></title>
+	<h:outputScript name="js/nanoscroller.js" library="avalon-layout" />
+	 <h:outputScript name="js/calender.js" library="avalon-layout" /> 
+	<h:outputStylesheet name="css/layout-#{guestPreferences.layout}.css" library="avalon-layout" />
+	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+	<script type="text/javascript"
+		src="https://maps.google.com/maps/api/js?key=AIzaSyAuPUXqTBXELNaxd9MH-lilZ3cw76ch0uo&amp;sensor=false"></script>
+	<ui:insert name="head" />
+</h:head>
+
+<h:body>
+
+	<div class="layout-wrapper #{guestPreferences.menuLayout}">
+		<ui:include src="./topbar.xhtml" />
+		<ui:include src="./#{sideMenuBean.menu}" />
+
+		<div class="layout-main">
+			<ui:insert name="content" />
+		</div>
+
+		<ui:include src="./footer.xhtml" />
+	</div>
+	
+	<p:ajaxStatus onstart="PF('statusDialog').show()"
+		onsuccess="PF('statusDialog').hide()" />
+	<p:dialog modal="true" widgetVar="statusDialog" resizable="false"
+		showHeader="false">
+		<center>
+			<p:graphicImage value="loader2.gif" height="100" width="100" />
+		</center>
+	</p:dialog>
+
+	<h:outputStylesheet name="css/nanoscroller.css" library="avalon-layout" />
+	<h:outputStylesheet name="css/animate.css" library="avalon-layout" />
+	<h:outputStylesheet name="css/layout-#{guestPreferences.layout}.css"
+		library="avalon-layout" />
+</h:body>
+
+</html>

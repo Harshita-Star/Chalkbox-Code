@@ -1,0 +1,269 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Test Performance</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form" enctype="multipart/form-data">
+							<p:messages closable="true" autoUpdate="true"></p:messages>
+							<p:panel header="Add Test Performance">
+								<p:panelGrid columns="8"
+									styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;width:100%">
+
+									<p:outputLabel value="Select Class" for="@next"
+										style="color:red"></p:outputLabel>
+									<p:selectOneMenu required="true" filter="true"
+										requiredMessage="Please select a class"
+										value="#{addPerformance.selectedClass}">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{addPerformance.classList}"></f:selectItems>
+										<p:ajax update=":form" listener="#{addPerformance.allSection}"></p:ajax>
+									</p:selectOneMenu>
+
+									 <p:outputLabel 
+										value="Select Section" ></p:outputLabel>
+									<p:selectOneMenu 
+										id="showSection" filter="true"
+										value="#{addPerformance.selectedSection}">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{addPerformance.sectionList}"></f:selectItems>
+										<p:ajax update=":form" listener="#{addPerformance.allTest}" />
+									</p:selectOneMenu> 
+
+									<p:outputLabel value="Select Date" for="@next"
+										style="color:red"></p:outputLabel>
+									<p:calendar value="#{addPerformance.testDate}" navigator="true"
+										pattern="dd/MM/yyyy" required="true"
+										requiredMessage="Please Select Date">
+										<p:ajax event="dateSelect" update=":form"
+											listener="#{addPerformance.allTest}"></p:ajax>
+									</p:calendar>
+
+									<p:outputLabel value="Select Test" for="@next"
+										style="color:red"></p:outputLabel>
+									<p:selectOneMenu filter="true"
+										value="#{addPerformance.selectedTest}" required="true"
+										requiredMessage="Please select a Test">
+										<f:selectItem itemLabel="select" itemValue=""></f:selectItem>
+										<f:selectItems value="#{addPerformance.test}"></f:selectItems>
+									</p:selectOneMenu>
+									<p:outputLabel value="Select uploading option" for="@next"
+										style="color:red"></p:outputLabel>
+									<p:selectOneRadio value="#{addPerformance.uploadType}">
+										<f:selectItem itemLabel="Excel" itemValue="0"></f:selectItem>
+										<f:selectItem itemLabel="Direct" itemValue="1"></f:selectItem>
+									</p:selectOneRadio>
+								</p:panelGrid>
+
+								<br />
+								<p:separator />
+								<center>
+									<p:commandButton styleClass="butwid" icon="fa fa-floppy-o"
+										value="submit"
+										actionListener="#{addPerformance.showExcelOption}"
+										update=":form"></p:commandButton>
+								</center>
+								<p:separator />
+								<br />
+
+							</p:panel>
+							<br />
+							<p:panel header="(Allowed file type are :- xlsx)" rendered="#{addPerformance.showUploadFile}">
+
+								<p:panelGrid columns="3"
+									styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel value="Choose file to upload * : "></p:outputLabel>
+									<p:fileUpload allowTypes="/(\.|\/)(xlsx)$/" mode="simple"
+										skinSimple="true" value="#{addPerformance.excelFile}"
+										update=":form"></p:fileUpload>
+
+									<p:commandButton ajax="false"
+										action="#{addPerformance.importFromExcelInRegTableAll}"
+										update=":form" style="font-size:14px;" value="Upload"
+										title="CLick here to upload Excel sheet. registration">
+									</p:commandButton>
+								</p:panelGrid>
+
+							</p:panel>
+
+							<br />
+							<p:panel header="Student Performance Details"
+								rendered="#{addPerformance.renderShowTable}">
+
+								<p:outputPanel id="datatableid">
+									<p:dataTable reflow="true"
+										rendered="#{addPerformance.showStudentRecord}"
+										value="#{addPerformance.studentDetails}" var="var"
+										selection="#{addPerformance.selectedabsentStudent}"
+										rowKey="#{var.id}">
+
+										<p:column headerText="Sno.">
+
+											<p:outputLabel value="#{var.sno}"></p:outputLabel>
+										</p:column>
+										<p:column headerText="Add No" filterBy="#{var.srNo}">
+											<p:outputLabel value="#{var.srNo}"></p:outputLabel>
+										</p:column>
+										<p:column headerText="Roll No" filterBy="#{var.rollNo}">
+
+											<p:outputLabel value="#{var.rollNo}"></p:outputLabel>
+										</p:column>
+
+										<p:column sortBy="#{var.fullName}" headerText="Student Name">
+											<p:outputLabel value="#{var.fullName}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Father's Name">
+
+											<p:outputLabel value="#{var.fname}"></p:outputLabel>
+
+										</p:column>
+
+										<p:column
+											headerText="#{addPerformance.testName} (#{addPerformance.maxmarks})">
+											<p:inputText value="#{var.testMarks}"
+												onfocus="this.select();">
+												<p:keyFilter mask="num" />
+											</p:inputText>
+										</p:column>
+
+										<p:column headerText="Absent Student" selectionMode="multiple"
+											style="text-align:center"></p:column>
+										<p:column style="width:50px" headerText="NA Students">
+											<p:selectBooleanCheckbox value="#{var.naStudentsBooolean}" />
+										</p:column>
+										<f:facet name="footer">
+											<p:panelGrid columns="1" layout="grid"
+												styleClass="ui-panelgrid-blank form-group"
+												style="border:0px none; background-color:transparent;">
+												<p:commandButton
+													rendered="#{addPerformance.showStudentRecordButton}"
+													update=":form" value="Save Here"
+													action="#{addPerformance.saveData}"></p:commandButton>
+												<p:commandButton rendered="false" update=":form"
+													value="Send Message And Save Here"
+													action="#{addPerformance.saveDataAndSendMessage}"></p:commandButton>
+											</p:panelGrid>
+										</f:facet>
+
+
+
+									</p:dataTable>
+								</p:outputPanel>
+							</p:panel>
+
+
+							<p:panel header="Student Performance Details"
+								rendered="#{addPerformance.showUploadFile}">
+
+								<p:outputPanel id="datatableid1">
+
+									<h:commandLink>
+										<p:graphicImage name="images/excellogo.png"
+											library="avalon-layout" width="100" height="40"></p:graphicImage>
+										<pe:exporter type="xlsx" target=":form:dt"
+											fileName="#{addPerformance.testName}"></pe:exporter>
+									</h:commandLink>
+
+									<p:dataTable reflow="true" id="dt"
+										rendered="#{addPerformance.showStudentRecord}"
+										value="#{addPerformance.studentDetails}" var="var"
+										selection="#{addPerformance.selectedabsentStudent}"
+										rowKey="#{var.id}">
+
+										<p:column headerText="Sno.">
+											<f:facet name="header">
+												<p:outputLabel value="Sno."></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.sno}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Student Unique Id"
+											filterBy="#{var.addNumber}">
+											<f:facet name="header">
+												<p:outputLabel value="Student Unique Id"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.addNumber}"></p:outputLabel>
+										</p:column>
+										<p:column headerText="Add No" filterBy="#{var.srNo}">
+
+
+											<f:facet name="header">
+												<p:outputLabel value="Add No"></p:outputLabel>
+											</f:facet>
+
+											<p:outputLabel value="#{var.srNo}"></p:outputLabel>
+										</p:column>
+
+
+										<p:column headerText="Roll No" filterBy="#{var.rollNo}">
+
+											<f:facet name="header">
+												<p:outputLabel value="Roll No"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.rollNo}"></p:outputLabel>
+										</p:column>
+
+										<p:column sortBy="#{var.fullName}" headerText="Student Name">
+											<f:facet name="header">
+												<p:outputLabel value="Student Name"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.fullName}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Father's Name">
+											<f:facet name="header">
+												<p:outputLabel value="Father's Name"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.fname}"></p:outputLabel>
+
+										</p:column>
+
+										<p:column
+											headerText="#{addPerformance.testName} (#{addPerformance.maxmarks})">
+
+											<f:facet name="header">
+												<p:outputLabel
+													value="#{addPerformance.testName} (#{addPerformance.maxmarks})"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.testMarks}">
+
+											</p:outputLabel>
+										</p:column>
+
+
+										<f:facet name="footer">
+											<center>
+												<p:commandButton styleClass="butwid" icon="fa fa-floppy-o"
+													rendered="#{addPerformance.showStudentRecordButton}"
+													update=":form" value="Save Here"
+													action="#{addPerformance.saveDataByExcel}"></p:commandButton>
+											</center>
+										</f:facet>
+
+
+
+									</p:dataTable>
+								</p:outputPanel>
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

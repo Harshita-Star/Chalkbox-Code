@@ -1,0 +1,254 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/schoolMasterTemplate.xhtml">
+
+	<ui:define name="title">Daily Fee Collection</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<p:panel>
+
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel value="Select School" for="@next" style="color:red" ></p:outputLabel>
+									<p:selectOneMenu
+										value="#{masterMiniHeaderWiseDailyFeeCollection.schid}"
+										required="true" requiredMessage="Please select a school">
+										<f:selectItem itemLabel="All" itemValue="-1"></f:selectItem>
+										<f:selectItems
+											value="#{masterMiniHeaderWiseDailyFeeCollection.branchList}"></f:selectItems>
+
+										<p:ajax
+											listener="#{masterMiniHeaderWiseDailyFeeCollection.branchWiseWork}"
+											update="form"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel />
+									<p:outputLabel />
+
+									<p:outputLabel
+										rendered="#{masterMiniHeaderWiseDailyFeeCollection.showClass}"
+										value="Select a Class"></p:outputLabel>
+									<p:selectOneMenu
+										rendered="#{masterMiniHeaderWiseDailyFeeCollection.showClass}"
+										value="#{masterMiniHeaderWiseDailyFeeCollection.selectedClass}">
+										<f:selectItem itemLabel="All" itemValue="-1"></f:selectItem>
+										<f:selectItems
+											value="#{masterMiniHeaderWiseDailyFeeCollection.classList}"></f:selectItems>
+										<p:ajax update="sectionid"
+											listener="#{masterMiniHeaderWiseDailyFeeCollection.allSections}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel
+										rendered="#{masterMiniHeaderWiseDailyFeeCollection.showClass}"
+										value="Select Section"></p:outputLabel>
+									<p:selectOneMenu
+										rendered="#{masterMiniHeaderWiseDailyFeeCollection.showClass}"
+										id="sectionid"
+										value="#{masterMiniHeaderWiseDailyFeeCollection.selectedSection}">
+										<f:selectItem itemLabel="All" itemValue="-1"></f:selectItem>
+										<f:selectItems
+											value="#{masterMiniHeaderWiseDailyFeeCollection.sectionList}"></f:selectItems>
+									</p:selectOneMenu>
+
+
+									<p:outputLabel value="From Date" for="@next" style="color:red" ></p:outputLabel>
+									<p:calendar
+										value="#{masterMiniHeaderWiseDailyFeeCollection.feedate}"
+										required="true" requiredMessage="Please select starting date"
+										navigator="true" pattern="dd/MM/yyyy"></p:calendar>
+
+									<p:outputLabel value="To  Date" for="@next" style="color:red" ></p:outputLabel>
+									<p:calendar
+										value="#{masterMiniHeaderWiseDailyFeeCollection.endDate}"
+										required="true" requiredMessage="Please select ending date"
+										navigator="true" pattern="dd/MM/yyyy"></p:calendar>
+
+
+									<p:outputLabel value="Select User ID"></p:outputLabel>
+									<p:selectOneMenu id="operatorid"
+										value="#{masterMiniHeaderWiseDailyFeeCollection.selectedOperator}">
+										<f:selectItem itemLabel="All" itemValue="all"></f:selectItem>
+										<f:selectItems
+											value="#{masterMiniHeaderWiseDailyFeeCollection.operatorList}"></f:selectItems>
+									</p:selectOneMenu>
+
+									<p:commandButton value="show report"
+										actionListener="#{masterMiniHeaderWiseDailyFeeCollection.showReport}"
+										update=":form"></p:commandButton>
+									<p:commandButton value="Print"
+										rendered="#{masterMiniHeaderWiseDailyFeeCollection.show}">
+										<p:printer target="dailyfeereport"></p:printer>
+									</p:commandButton>
+									<h:commandLink
+										rendered="#{masterMiniHeaderWiseDailyFeeCollection.show}"
+										>
+										<p:graphicImage name="images/excellogo.png"
+											library="avalon-layout" width="100" height="40"></p:graphicImage>
+										<pe:exporter type="xlsx" target="up" fileName="Daily_Fee_Report"   />
+
+									</h:commandLink>
+
+
+
+								</p:panelGrid>
+							</p:panel>
+
+							<p:panel id="dailyfeereport"
+								rendered="#{masterMiniHeaderWiseDailyFeeCollection.show}">
+								<center>
+									<p
+										style="font-family: initial; font-style: oblique; font-size: 25px !important; font-weight: bold; margin: 0px;">#{masterMiniHeaderWiseDailyFeeCollection.schname}</p>
+									<p
+										style="font-family: initial; font-style: oblique; font-size: 15px !important; font-weight: bold; margin: 0px;">#{masterMiniHeaderWiseDailyFeeCollection.affiliationNo}</p>
+									<p
+										style="font-family: initial; font-style: oblique; font-size: 15px !important; font-weight: bold; margin: 0px;">#{masterMiniHeaderWiseDailyFeeCollection.finalAddress}</p>
+									<p
+										style="font-family: initial; font-style: oblique; font-size: 15px !important; font-weight: bold; margin: 0px;">#{masterMiniHeaderWiseDailyFeeCollection.phoneno}</p>
+
+									<p
+										style="margin: 0px; font-size: 25px !important; font-weight: bold;">Daily
+										Fee Collection Report</p>
+								</center>
+								<p:panelGrid columns="5"
+									columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4,ui-grid-col-4,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:1px ; background-color:transparent;">
+
+										<h:outputText value="Date:-#{masterMiniHeaderWiseDailyFeeCollection.date}" style="font-weight: bold"></h:outputText>
+									
+										<h:outputText value="Total Amount(by Cash):-#{masterMiniHeaderWiseDailyFeeCollection.cashAmountString}" style="font-weight: bold"></h:outputText>
+									
+										<h:outputText value="Total Amount(by Cheque + by Paytm):-#{masterMiniHeaderWiseDailyFeeCollection.checkAmountString}" style="font-weight: bold"></h:outputText>
+									
+
+										<h:outputText value="Total Amount:-#{masterMiniHeaderWiseDailyFeeCollection.totalamountString}" style="font-weight: bold"></h:outputText>
+									
+										<h:outputText value="Total Discount:-#{masterMiniHeaderWiseDailyFeeCollection.tdiscount}" style="font-weight: bold"></h:outputText>
+									
+								</p:panelGrid>
+
+
+								<p:dataTable id="up" var="fee" value="#{masterMiniHeaderWiseDailyFeeCollection.dailyfee}" reflow="true">
+
+									<f:facet name="header">
+							<p:outputLabel value="BLM Academy  Padampur Devaliya, Gora Parao, Haldwani, Distt. Nainital"></p:outputLabel>
+		    	  	</f:facet>
+
+					<p:column headerText=" S.No." style="font-size:9px !important">
+										<f:facet name="header">
+									      <p:outputLabel value="S.No."></p:outputLabel>
+									   </f:facet>
+										<h:outputText style="font-size:9px !important" value="#{fee.srno}" />
+									</p:column>
+									<p:column headerText="EBLM No." style="font-size:9px !important">
+										<f:facet name="header">
+									      <p:outputLabel value="EBLM No."></p:outputLabel>
+									   </f:facet>
+										<h:outputText style="font-size:9px !important" value="#{fee.srNo}" />
+									</p:column>
+
+									<p:column headerText="Date" style="font-size:10px !important">
+										<f:facet name="header">
+									      <p:outputLabel value="Date"></p:outputLabel>
+									   </f:facet>
+										<h:outputText style="font-size:9px !important" value="#{fee.feeDateStr}" />
+									</p:column>
+
+									<p:column filterBy="#{fee.studentname}" filterMatchMode="contains" headerText="Student Name" style="font-size:9px !important">
+									<f:facet name="header">
+									      <p:outputLabel value="Student Name"></p:outputLabel>
+									   </f:facet>
+										<h:outputText style="font-size:9px !important" value="#{fee.studentname}" />
+									</p:column>
+
+									<p:column headerText="Father Name" style="font-size:9px !important">
+										<f:facet name="header">
+									      <p:outputLabel value="Father Name"></p:outputLabel>
+									   </f:facet>
+										<h:outputText style="font-size:9px !important" value="#{fee.fathername}" />
+									</p:column>
+
+									<p:column headerText="Class"  style="font-size:10px !important">
+									<f:facet name="header">
+									      <p:outputLabel value="Class"></p:outputLabel>
+									   </f:facet>
+										<h:outputText style="font-size:10px !important" value="#{fee.classname}" />
+									</p:column>
+									<p:column  headerText="Receipt No"  style="font-size:10px !important">
+										<f:facet name="header">
+									      <p:outputLabel value="Receipt No"></p:outputLabel>
+									   </f:facet>
+										<h:outputText style="font-size:10px !important" value="#{fee.reciptno}" />
+									</p:column>
+
+									<p:column headerText="School Name"  rendered="#{masterMiniHeaderWiseDailyFeeCollection.showSchool}" style="font-size:10px !important">
+										<f:facet name="header">
+									      <p:outputLabel value="School Name"></p:outputLabel>
+									   </f:facet>
+										<h:outputText style="font-size:10px !important" value="#{fee.schname}" />
+									</p:column>
+							
+							<p:column headerText="Pay Mode"  style="font-size:10px !important">
+										<f:facet name="header">
+									      <p:outputLabel value="Pay Mode"></p:outputLabel>
+									   </f:facet>
+										<h:outputText style="font-size:10px !important"
+											value="#{fee.paymentmode} #{fee.bankname} #{fee.chequenumber}" />
+									</p:column>
+
+									<p:columns style="font-size:10px !important;" value="#{masterMiniHeaderWiseDailyFeeCollection.feelist}" var="column" columnIndexVar="colIndex">
+										<f:facet name="header">
+											<p:outputLabel style="font-size:9px !important;" value="#{column.feeName}"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel style="font-size:9px !important" value="#{fee.allFess[column.feeName]}"></p:outputLabel>
+									</p:columns>
+
+
+
+											
+									<p:column headerText="Discount"  style="font-size:10px !important">
+										<f:facet name="header">
+									      <p:outputLabel value="Discount"></p:outputLabel>
+									   </f:facet>
+										<h:outputText style="font-size:10px !important"
+											value="#{fee.discount}" />
+									</p:column>
+
+									
+
+									<p:column  headerText="Total Amount" style="font-size:10px !important">
+									   <f:facet name="header">
+									      <p:outputLabel value="Total Amount"></p:outputLabel>
+									   </f:facet>
+										<h:outputText style="font-size:10px !important"
+											value="#{fee.amount}" />
+									</p:column>
+
+									
+								</p:dataTable>
+							</p:panel>
+
+						</h:form>
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,55 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/masterTemplate.xhtml">
+
+	<ui:define name="title">Add Message</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+
+							<p:panel header="Add Message">
+
+								<p:messages closable="true" autoUpdate="true"></p:messages>
+
+								<p:panelGrid columns="2"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+
+									<p:outputLabel  for="@next" style="color:red" value="School Name"></p:outputLabel>
+									<p:selectOneMenu filter="true"
+										value="#{addMessage.schNm}" required="true"
+										requiredMessage="Please Select School">
+										<f:selectItem itemLabel="select" itemValue=""></f:selectItem>
+										<f:selectItems value="#{addMessage.schoolList}"></f:selectItems>
+									</p:selectOneMenu>
+
+									<p:outputLabel  for="@next" style="color:red" value="Message Quantity"></p:outputLabel>
+									<p:inputText value="#{addMessage.mszQty}" required="true"
+										requiredMessage="Enter Message Quantity">
+										<p:keyFilter mask="pnum" />
+									</p:inputText>
+
+									<p:commandButton update="form" action="#{addMessage.message}"
+										value="Submit"></p:commandButton>
+
+								</p:panelGrid>
+							</p:panel>
+
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

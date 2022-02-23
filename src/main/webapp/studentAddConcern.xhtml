@@ -1,0 +1,58 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/studentTemplate.xhtml">
+
+	<ui:define name="title">Concern/Feedback</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title" style="background-color: rgb(162, 32, 45, 0.3); ">
+						<h:form id="form" enctype="multipart/form-data">
+							<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+							<p:panel header="View Student add Concern (Allowed file type are :- jpg,jpeg,png)">
+							<f:facet name="header">
+									<span>Concern/Feedback</span>
+									<span> <p:commandLink
+											style="float: right;margin-left: 15px;;color: blue;font-size:15px;"
+											immediate="true" value="View My Concern"
+											action="studentViewConcern.xhtml?faces-redirect=true"></p:commandLink>
+									</span>
+								</f:facet>
+							 <p:panelGrid columns="2" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									
+									
+									<p:outputLabel  for="@next" style="color:red" value="Description"></p:outputLabel>
+									<p:inputTextarea value="#{studentAddConcern.desc}" required="true" requiredMessage="Please Enter Description"></p:inputTextarea>
+									<p:outputLabel value="Attachment (if any) (Allowed file type - jpg,jpeg,png)"></p:outputLabel>
+									<p:fileUpload 
+										mode="simple" skinSimple="true"
+										value="#{studentAddConcern.file}" allowTypes="/(\.|\/)(jpe?g|png)$/" validatorMessage="Please choose valid file type"></p:fileUpload>
+									
+									</p:panelGrid>
+									
+									<br />
+								<p:separator />
+								<center>
+									<p:commandButton ajax="false" value="Submit" styleClass="butwid" icon="fa fa-upload" action="#{studentAddConcern.submit}" update=":form"></p:commandButton>
+									
+								</center>
+								<p:separator />
+								<br />
+									
+						</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

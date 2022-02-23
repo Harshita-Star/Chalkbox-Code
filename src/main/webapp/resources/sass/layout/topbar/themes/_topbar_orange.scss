@@ -1,0 +1,15 @@
+.layout-topbar-orange {
+    $topbarBgColor: #EC7A51;
+    $topbarBoxShadow: 0 2px 10px 0 rgba(25, 26, 28, 0.12);
+    $topbarItemTextColor: #fffffe;
+    $topbarItemTextHoverBgColor:#EF9473;
+    $topbarItemBgColor:#EF9473;
+    $topbarItemSeparatorBorderColor:#EF9473;
+    $topbarItemSubmenuBgColor: #ffffff;
+    $topbarItemSubmenuTextColor: #191a1c;
+    $topbarItemSubmenuSecondaryTextColor: #8b8e90;
+    $topbarItemSubmenuItemHoverBgColor: #EBEDEF;
+    $topbarItemSubmenuBoxShadow: 0 2px 8px 0 rgba(25, 26, 28, 0.12);
+
+    @import '../_topbar_theme';
+}

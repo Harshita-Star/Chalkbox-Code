@@ -1,0 +1,467 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	
+<f:view contentType="text/html">
+	<h:head>
+		<title>Student Registration Form</title>
+		<f:facet name="First">
+			<meta content='text/html; charset=UTF-8' http-equiv="Content-Type" />
+			<meta http-equiv="X-UA-Compatible" content="EmulateIE8" />
+		<title>MainPage</title>
+		</f:facet>
+		
+	</h:head>
+	<style>
+		input[type="checkbox"]{
+		  width: 22px; /*Desired width*/
+		  height: 20px; /*Desired height*/
+		  margin:0px;
+		  margin-left:-4px;
+		  -webkit-appearance: none;
+		  appearance: none;
+		  border: 1px solid;
+		}
+		
+		.checkbox
+		{
+			margin-left:0px !important;
+		}
+		
+		.checkbox1
+		{
+			margin-left:0px !important;
+			 width: 40px !important;
+		  height: 15px !important;
+		}
+		
+	</style>
+	
+
+	<h:body>
+	
+
+	<h:form id="form1">
+	
+		<p:outputPanel styleClass="test" style="width:100%;margin-bottom:-20px;marginf-left:40px;">
+			<table style="width:100%;font-size:11px">
+				<tr>
+					<td>
+			    		<p:graphicImage width="100%" height="110px" value="blmRegFormHeader.png"></p:graphicImage>
+			  		</td>
+				</tr>
+			</table>
+		</p:outputPanel>
+		<br></br>
+		<div style="border-radius:25px;width:98%;height:auto;margin:auto;border:1px solid black;font-size:10px">
+			<h3 style="margin:5px;padding-left:10px;font-size:12px">STUDENT'S DETAILS</h3>
+			<table style="width:98%;margin-left:10px">
+				<tr>
+					<td>Name</td>
+					<td>_______________________________________________________</td>
+				</tr>
+				<tr>
+					<td>Class</td>
+					<td>_______________________________________________________</td>
+					<td>Sec</td>
+					<td>_______________________</td>
+				</tr>
+			</table>
+			<table style="width:98%;margin-left:10px">
+				<tr>
+					<td>Date Of Birth</td>
+					<td>
+						DD <input class="checkbox" type="checkbox" />
+						<input type="checkbox" />
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						MM <input class="checkbox" type="checkbox" />
+						<input  type="checkbox" />
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						YYYY <input class="checkbox" type="checkbox" />
+						<input  type="checkbox" />
+						<input  type="checkbox" />
+						<input  type="checkbox" />
+					</td>
+				</tr>
+				<tr>
+					<td>Date Of Admission</td>
+					<td>
+						DD <input style="margin-left:0px !important" type="checkbox" />
+						<input type="checkbox" />
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						MM <input style="margin-left:0px !important" type="checkbox" />
+						<input  type="checkbox" />
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						YYYY <input style="margin-left:0px !important" type="checkbox" />
+						<input  type="checkbox" />
+						<input  type="checkbox" />
+						<input  type="checkbox" />
+					</td>
+				</tr>
+			</table>
+			<table style="width:98%;margin-left:10px">
+				<tr>
+					<td>Admission Number&nbsp;</td>
+					<td>
+						<input type="checkbox" />
+						<input type="checkbox" />
+						<input type="checkbox" />
+						<input type="checkbox" />
+						<input type="checkbox" />
+						<input type="checkbox" />
+						<input type="checkbox" />
+					</td>
+					<td>Aadhar Number</td>
+					<td>
+						<input type="checkbox" />
+						<input type="checkbox" />
+						<input type="checkbox" />
+						<input type="checkbox" />
+						<input type="checkbox" />
+						<input type="checkbox" />
+						<input type="checkbox" />
+						<input type="checkbox" />
+						<input type="checkbox" />
+						<input type="checkbox" />
+						<input type="checkbox" />
+						<input type="checkbox" />
+					</td>
+				</tr>
+			</table>
+			<table style="width:98%;margin-left:10px">
+				<tr>
+					<td>Religion</td>
+					<td>
+						<input class="checkbox" type="checkbox" /> HINDU
+						<input class="checkbox" type="checkbox"/> MUSLIM
+						<input class="checkbox"  type="checkbox" /> SIKH
+						<input class="checkbox"  type="checkbox" /> CHRISTIAN
+						<input class="checkbox"  type="checkbox" />  CATHOLIC
+						<input class="checkbox"  type="checkbox" />  JAIN
+						<input class="checkbox"  type="checkbox" />  BUDDHIST
+						<input class="checkbox"  type="checkbox" />  CHRISTIAN
+					 	&nbsp;OTHER&nbsp;&nbsp;_________
+					 </td>
+				</tr>
+			</table>
+			<table style="width:98%;margin-left:10px">
+				<tr>
+					<td>Caste</td>
+					<td>
+						<input class="checkbox" type="checkbox" />  SC
+						<input class="checkbox" type="checkbox" />  ST
+						<input class="checkbox" type="checkbox" />  OBC
+						<input class="checkbox" type="checkbox" />  GENERAL
+					</td>
+					<td>Nationality</td>
+					<td>____________________________________</td>
+				</tr>
+			</table>
+			<table style="width:98%;margin-left:10px">
+				<tr>
+					<td>Sibling: Yes / No &nbsp;&nbsp;&nbsp;</td>
+					<td>1) Sibling's Name</td>
+					<td>_____________________</td>
+					<td>Class  / Sec</td>
+					<td>_____________________</td>
+					<td>Adm. No.</td>
+					<td>_____________________</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td>1) Sibling's Name</td>
+					<td>_____________________</td>
+					<td>Class  / Sec</td>
+					<td>_____________________</td>
+					<td>Adm. No.</td>
+					<td>_____________________</td>
+				</tr>
+			</table>
+			<div style="width:100%;">
+				<div style="width:50%;float:left">
+					<table style="width:98%;margin-left:10px">
+						<tr>
+							<td>Student Mobile No (if any)</td>
+							<td>
+								<input type="checkbox" />
+								<input type="checkbox" />
+								<input type="checkbox" />
+								<input type="checkbox" />
+								<input type="checkbox" />
+								<input type="checkbox" />
+								<input type="checkbox" />
+								<input type="checkbox" />
+								<input type="checkbox" />
+								<input type="checkbox" />
+								
+							</td>
+						</tr>
+						<tr>
+							<td>Student Email Id (if any)</td>
+							<td>______________________________________</td>
+						</tr>
+					</table>
+				</div>
+				<div style="width:45%;float:right">
+					<table style="width:100%;">
+						<tr>
+							<td>Address</td>
+							<td><textarea readonly="readonly" style="resize: none;" name="Address" rows="3" cols="35"></textarea></td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			<table style="width:100%"></table>
+		</div>
+		<div style="height:3px"></div>
+		
+		<div style="border-radius:25px;width:98%;font-size:10px;height:auto;margin:auto;border:2px solid black">
+			<h3 style="margin:5px;padding-left:10px;font-size:12px">FATHER'S DETAILS</h3>
+				<div style="width:80%;float:left">
+					<table style="width:98%;margin-left:10px">
+						<tr>
+							<td>Name</td>
+							<td> __________________________________________________________</td>
+						</tr>
+						<tr>
+							<td>Residential Address</td>
+							<td><textarea readonly="readonly" style="resize: none;" name="Address" rows="2" cols="56"></textarea></td>
+						</tr>
+					</table>
+					<table style="width:98%;margin-left:10px">
+						<tr>
+							<td>Date Of Birth</td>
+							<td>&nbsp;&nbsp;
+								DD&nbsp; <input class="checkbox" type="checkbox" />
+								<input type="checkbox" />
+								&nbsp;&nbsp;
+								MM &nbsp;<input class="checkbox" type="checkbox" />
+								<input type="checkbox" />
+								&nbsp;&nbsp;
+								YYYY&nbsp; <input class="checkbox" type="checkbox" />
+								<input type="checkbox" />
+								<input type="checkbox" />
+								<input type="checkbox" />
+							</td>
+							<td>Profession</td>
+							<td>_______________________</td>
+						</tr>
+					</table>
+					<table style="width:98%;margin-left:10px">
+						<tr>
+							<td>Email Id</td>
+							<td>_____________________________________</td>
+							<td>&nbsp;&nbsp;Mobile No</td>
+							<td>
+								<input type="checkbox" />
+								<input type="checkbox" />
+								<input type="checkbox" />
+								<input type="checkbox" />
+								<input type="checkbox" />
+								<input type="checkbox" />
+								<input type="checkbox" />
+								<input type="checkbox" />
+								<input type="checkbox" />
+								<input type="checkbox" />
+							</td>
+						</tr>
+						<tr>
+							<td>Designation</td>
+							<td>_____________________________________</td>
+							<td>&nbsp;&nbsp;Annual Income</td>
+							<td>&nbsp;&nbsp;___________________________</td>
+						</tr>
+					</table>
+				</div>
+				<div style="width:19%;float:right">
+					<table style="width:100%;margin-top:-20px;float:right;">
+						<tr>
+							<td>PHOTOGRAPH</td>
+						</tr>
+						<tr>
+							<td><textarea readonly="readonly" style="resize: none;" name="Address" rows="8" cols="15"></textarea></td>
+						</tr>
+					</table>
+				</div>
+			<table style="width:100%">
+			</table>
+		</div>
+		<div style="height:3px"></div>
+		<div style="border-radius:25px;width:98%;font-size:10px;height:auto;margin:auto;border:2px solid black">
+			<h3 style="margin:5px;padding-left:10px;font-size:12px">MOTHER'S DETAILS</h3>
+				<div style="width:80%;float:left">
+					<table style="width:98%;margin-left:10px">
+						<tr>
+							<td>Name</td>
+							<td> __________________________________________________________</td>
+						</tr>
+						<tr>
+							<td>Residential Address</td>
+							<td><textarea readonly="readonly" style="resize: none;" name="Address" rows="2" cols="56"></textarea></td>
+						</tr>
+					</table>
+					<table style="width:98%;margin-left:10px">
+						<tr>
+							<td>Date Of Birth</td>
+							<td>&nbsp;&nbsp;
+								DD&nbsp; <input class="checkbox" type="checkbox" />
+								<input type="checkbox" />
+								&nbsp;&nbsp;
+								MM &nbsp;<input class="checkbox" type="checkbox" />
+								<input type="checkbox" />
+								&nbsp;&nbsp;
+								YYYY&nbsp; <input class="checkbox" type="checkbox" />
+								<input type="checkbox" />
+								<input type="checkbox" />
+								<input type="checkbox" />
+							</td>
+							<td>Profession</td>
+							<td>_______________________</td>
+						</tr>
+					</table>
+					<table style="width:98%;margin-left:10px">
+						<tr>
+							<td>Email Id</td>
+							<td>_____________________________________</td>
+							<td>&nbsp;&nbsp;Mobile No</td>
+							<td>
+								<input type="checkbox" />
+								<input type="checkbox" />
+								<input type="checkbox" />
+								<input type="checkbox" />
+								<input type="checkbox" />
+								<input type="checkbox" />
+								<input type="checkbox" />
+								<input type="checkbox" />
+								<input type="checkbox" />
+								<input type="checkbox" />
+							</td>
+						</tr>
+						<tr>
+							<td>Designation</td>
+							<td>_____________________________________</td>
+							<td>&nbsp;&nbsp;Annual Income</td>
+							<td>&nbsp;&nbsp;___________________________</td>
+						</tr>
+					</table>
+				</div>
+				<div style="width:19%;float:right">
+					<table style="width:100%;margin-top:-20px;float:right;">
+						<tr>
+							<td>PHOTOGRAPH</td>
+						</tr>
+						<tr>
+							<td><textarea readonly="readonly" style="resize: none;" name="Address" rows="8" cols="15"></textarea></td>
+						</tr>
+					</table>
+				</div>
+			<table style="width:100%">
+			</table>
+		</div>
+		<div style="height:3px"></div>
+		<div style="border-radius:25px;width:98%;font-size:10px;height:auto;margin:auto;border:1px solid black">
+			<h3 style="margin:5px;padding-left:10px;font-size:12px">GUARDIAN DETAILS</h3>
+				<div style="width:80%;float:left">
+					<table style="width:98%;margin-left:10px">
+						<tr>
+							<td>Name</td>
+							<td> _______________________________________________________________</td>
+						</tr>
+						<tr>
+							<td>Relation</td>
+							<td> _______________________________________________________________</td>
+						</tr>
+						<tr>
+							<td>Phone</td>
+							<td> 
+								<input type="checkbox" />
+								<input type="checkbox" />
+								<input type="checkbox" />
+								<input type="checkbox" />
+								<input type="checkbox" />
+								<input type="checkbox" />
+								<input type="checkbox" />
+								<input type="checkbox" />
+								<input type="checkbox" />
+								<input type="checkbox" />
+							</td>
+						</tr>
+						<tr>
+							<td>Address</td>
+							<td><textarea readonly="readonly" style="resize: none;" name="Address" rows="2" cols="60"></textarea></td>
+						</tr>
+					</table>
+				</div>
+				<div style="width:19%;float:right">
+					<table style="width:100%;margin-top:-25px;float:right;">
+						<tr>
+							<td>PHOTOGRAPH</td>
+						</tr>
+						<tr>
+							<td><textarea readonly="readonly" style="resize: none;" name="Address" rows="6" cols="15"></textarea></td>
+						</tr>
+					</table>
+				</div>
+				<table style="width:100%"></table>
+		</div>
+		<div style="height:3px"></div>
+		<div style="border-radius:25px;width:98%;height:auto;font-size:10px;margin:auto;border:2px solid black">
+			<h3 style="margin:5px;padding-left:10px;font-size:12px">SMS SERVICE DETAILS</h3>
+			<table style="width:98%;margin-left:10px">
+				<tr>
+					<td>Contact Person Name</td>
+					<td>__________________________________________</td>
+					<td>Contact Email</td>
+					<td>__________________________________________</td>
+				</tr>
+			</table>
+			<table style="width:98%;margin-left:10px">
+				<tr>
+					<td>Contact Person Mobile No</td>
+					<td>&nbsp;&nbsp;&nbsp;
+						<input type="checkbox" />
+						<input type="checkbox" />
+						<input type="checkbox" />
+						<input type="checkbox" />
+						<input type="checkbox" />
+						<input type="checkbox" />
+						<input type="checkbox" />
+						<input type="checkbox" />
+						<input type="checkbox" />
+						<input type="checkbox" />
+					</td>
+				</tr>
+			</table>
+			<table style="width:98%;margin-left:10px">
+				<tr>
+					<td>Note: Mobile number, on which you wish to receive yourchild's update through SMS.</td>
+				</tr>
+				<tr>
+					<td>I, the undersigned, agree and give my consent to receive SMS from my ward's school regarding his/her performance/attendance/discipline.</td>
+				</tr>
+			
+			</table>
+		</div>
+		<div style="border-radius:25px;width:98%;height:auto;font-size:10px;margin:auto;">
+			<table style="width:30%;float:right">
+			<tr>
+				<td>Parent's Signature</td>
+				<td>______________________</td>
+			</tr>
+			<tr>
+				<td>Name</td>
+				<td>______________________</td>
+			</tr>
+		</table>
+		</div>
+		
+	</h:form>
+</h:body>
+</f:view>
+</html>

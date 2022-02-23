@@ -1,0 +1,186 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">No Dues Report</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form1">
+
+							
+							<p:messages closable="true" autoUpdate="true"></p:messages>
+							<p:panel header="Search Student by Name/Sr. No">
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel  for="@next" style="color:red" value="Student Name/Sr.No"></p:outputLabel>
+									<p:autoComplete value="#{noDuesReport.name}" minQueryLength="3"
+										completeMethod="#{noDuesReport.autoCompleteStudentInfo}"
+										required="true"
+										requiredMessage="Please Enter Student Name" validatorMessage="Please Enter Correct value">
+										<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:autoComplete>
+
+									<p:outputLabel value="Till Date" for="@next" style="color:red" rendered="false"></p:outputLabel>
+									<p:calendar value="#{noDuesReport.date}" required="true" rendered="false"
+										requiredMessage="Please enter date" pattern="dd/MM/yyyy"
+										navigator="true"></p:calendar>
+
+									<p:commandButton update=":form3:up,:form1" styleClass="butwid" icon="fa fa-search"
+										actionListener="#{noDuesReport.searchStudent}"
+										value="Check"></p:commandButton>
+						
+									
+
+								
+
+								</p:panelGrid>
+							</p:panel>
+
+						</h:form>
+					</div>
+					
+					<div class="card card-w-title">
+						<h:form id="form3">
+
+							<p:panel header="No Dues " id="up">
+
+								<p:outputPanel rendered="#{noDuesReport.show}">
+									
+
+									<p:panelGrid columns="2"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent; width: 100%;">
+
+									
+										
+										<p:panelGrid columns="2">
+											<p:outputLabel value="Books Assigned:"></p:outputLabel>
+											<h:outputText value="#{noDuesReport.checkBookAssigned}"></h:outputText>
+										</p:panelGrid>
+
+										<p:panelGrid columns="2">
+											<p:outputLabel value="Library Late Fees:"></p:outputLabel>
+											<h:outputText value="#{noDuesReport.libraryFineAmount}"></h:outputText>
+										</p:panelGrid>
+
+										
+
+									</p:panelGrid>
+									
+								
+									
+									<br/><br/>
+									
+									<p:dataTable reflow="true" id="table" 
+										selection="#{noDuesReport.selectedStudentList}" var="var"
+										value="#{noDuesReport.studentList}">
+
+										<f:facet name="header">
+											<p:outputLabel value=""></p:outputLabel>
+										</f:facet>
+
+
+										<p:column headerText="SR.No.">
+
+
+
+
+											<f:facet name="header">
+												<p:outputLabel value="SR.No."></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.srNo}"></p:outputLabel>
+										</p:column>
+										<p:column 
+											headerText="Student Name">
+
+											<f:facet name="header">
+												<p:outputLabel
+													value="Student Name"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.fname}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Father's Name">
+
+											<f:facet name="header">
+												<p:outputLabel value="Father's Name"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.fathersName}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Contact No.">
+
+											<f:facet name="header">
+												<p:outputLabel value="Contact No."></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.fathersPhone}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Class">
+
+											<f:facet name="header">
+												<p:outputLabel value="Class"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.className}"></p:outputLabel>
+										</p:column>
+
+
+
+										<p:columns value="#{noDuesReport.feelist}" var="column"
+											columnIndexVar="colIndex">
+
+											<f:facet name="header">
+												<p:outputLabel
+													value="#{column.feeName} (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})"></p:outputLabel>
+											</f:facet>
+
+											<p:outputLabel value="#{var.feesMap[column.feeName]}"></p:outputLabel>
+
+										</p:columns>
+
+										<p:column
+											headerText="Total Left Amount (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})">
+											<f:facet name="header">
+												<p:outputLabel
+													value="Total Left Amount (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.tutionFeeDueAmount}"></p:outputLabel>
+										</p:column>
+
+									
+
+									</p:dataTable>
+									
+								
+
+								</p:outputPanel>
+
+							</p:panel>
+							
+							
+
+						</h:form>
+
+						
+
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

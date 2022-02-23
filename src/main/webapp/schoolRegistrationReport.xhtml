@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+<f:loadBundle var="addClassVar" basename="myProperties" />
+<f:view contentType="text/html">
+	<h:head>
+		<title>School Registration Report</title>
+		<f:facet name="first">
+			<meta content='text/html; charset=UTF-8' http-equiv="Content-Type" />
+			<meta http-equiv="X-UA-Compatible" content="EmulateIE8" />
+
+		</f:facet>
+
+		<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css"></link>
+		<link rel="stylesheet"
+			href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"></link>
+		<link rel="stylesheet"
+			href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css"></link>
+		<link rel="stylesheet" href="dist/css/AdminLTE.min.css"></link>
+		<link rel="stylesheet" href="dist/css/skins/all-skins.min.css"></link>
+		<link rel="stylesheet" type="text/css" href="css/style.css" />
+	</h:head>
+
+	<h:body>
+
+<style>
+.ui-datatable thead th {
+    background-color:  #f0f8ff !important;
+}
+</style>
+
+		<h:form id="form">
+			<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+			<p:panel header="School Registration Report">
+
+
+				
+					<p:dataTable id="table" reflow="true"
+									style="width:100%;border-collapse:collapse;text-align:center;"
+									border="1" value="#{schoolEnquiryReport.list}"
+									var="var">
+
+									<p:column headerText="S.No">
+										<p:outputLabel value="#{var.sno}"></p:outputLabel>
+									</p:column>
+
+									
+
+									<p:column headerText="School Name" filterBy="#{var.schoolname}"
+										filterMatchMode="contains">
+										<p:outputLabel style="font-size: 12px !important;" value="#{var.schoolname}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Contact Person Name ">
+										<p:outputLabel style="font-size: 12px !important;" value="#{var.contactperson}" height='15'
+											width='15'></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Designation">
+										<p:outputLabel style="font-size: 12px !important;" value="#{var.degination}" height='15' width='15'></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Address">
+										<p:outputLabel style="font-size: 12px !important;" value="#{var.address}" height='15'
+											width='15'></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Mobile">
+										<p:outputLabel style="font-size: 12px !important;" value="#{var.mobile}" height='15' width='15'></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Date">
+										<p:outputLabel style="font-size: 12px !important;" value="#{var.createDate}" height='15' width='15'></p:outputLabel>
+									</p:column>
+									
+                                    <p:column headerText="Comment">
+										<p:outputLabel style="font-size: 12px !important;" value="#{var.comment}" height='15' width='15'></p:outputLabel>
+									</p:column>
+																		
+									
+									<p:column headerText="Add Comment">
+								     <p:commandButton value="Add Comment" action="#{schoolEnquiryReport.viewComment}" oncomplete="PF('editDialog').show();" update=":form">
+								        <f:setPropertyActionListener value="#{var}" target="#{schoolEnquiryReport.selectedList}"></f:setPropertyActionListener>
+								     </p:commandButton>
+									</p:column>
+									
+
+									<p:column headerText="Delete">
+								     <p:commandButton value="Delete" action="#{schoolEnquiryReport.deletEnquiry}" update=":form">
+								        <f:setPropertyActionListener value="#{var}" target="#{schoolEnquiryReport.selectedList}"></f:setPropertyActionListener>
+								     </p:commandButton>
+									</p:column>
+
+									 
+								</p:dataTable>
+			</p:panel>
+
+		</h:form>
+		
+		<h:form id="editForm" enctype="multipart/form-data">
+							<p:dialog resizable="false"
+								widgetVar="editDialog" header="Edit Details" showEffect="fade"
+								hideEffect="explode" modal="true">
+								<div class="ui-g form-group">
+									<p:panelGrid columns="2">
+										
+										<p:outputLabel value="Update Comment"></p:outputLabel>
+										<p:inputTextarea value="#{schoolEnquiryReport.updatedComment}"></p:inputTextarea>
+
+										<p:commandButton  update=":editForm,:form"
+											actionListener="#{schoolEnquiryReport.updateEnquiryComment}"
+											value="Save Here"></p:commandButton>
+
+									</p:panelGrid>
+								</div>
+							</p:dialog>
+						</h:form>
+		
+		
+
+		<p:ajaxStatus onstart="PF('statusDialog').show()"
+			onsuccess="PF('statusDialog').hide()" />
+		<p:dialog modal="true" widgetVar="statusDialog" resizable="false"
+			showHeader="false">
+			<center>
+				<i class="fa fa-circle-o-notch fa-5x fa-spin ajax-loader"></i>
+			</center>
+			<center>
+				<h3>Please Wait...</h3>
+			</center>
+		</p:dialog>
+	</h:body>
+</f:view>
+</html>

@@ -1,0 +1,195 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Onilne Attendance</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form2" enctype="multipart/form-data">
+							<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+							<p:panel header="Online Attendance ">
+
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel for="@next" style="color:red"
+										value="Select Class"></p:outputLabel>
+									<p:selectOneMenu style="width:250px"
+										value="#{showOnlineAttendaceBean.selectedCLassSection}"
+										required="true" requiredMessage="Please select a class">
+										<f:selectItem itemLabel="select here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{showOnlineAttendaceBean.classSection}"></f:selectItems>
+
+										<p:ajax event="itemSelect" update=":form2"
+											listener="#{showOnlineAttendaceBean.allSections}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel for="@next" style="color:red"
+										value="Select Section"></p:outputLabel>
+									<p:selectOneMenu id="sectionid"
+										value="#{showOnlineAttendaceBean.selectedSection}"
+										required="true" requiredMessage="Please select a section">
+										<f:selectItem itemLabel="select here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{showOnlineAttendaceBean.sectionList}"></f:selectItems>
+										<p:ajax event="itemSelect" update=":form2"
+											listener="#{showOnlineAttendaceBean.render}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="select Date"></p:outputLabel>
+									<p:calendar pattern="dd/MM/yyyy"
+										value="#{showOnlineAttendaceBean.selectDate}" required="true"
+										requiredMessage="please Select Date"
+										beforeShowDay="disableSunday" readonlyInput="true"
+										maxdate="new Date();"></p:calendar>
+								</p:panelGrid>
+
+								<br />
+								<p:separator />
+								<center>
+									<p:panelGrid
+										columns="#{showOnlineAttendaceBean.list.size() gt 0 ? '4' : '1'}"
+										layout="grid" styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+
+
+										<p:commandButton value="Search" icon="fa fa-search"
+											styleClass="butwid"
+											actionListener="#{showOnlineAttendaceBean.dateWiseAttendance}"
+											update=":form2">
+										</p:commandButton>
+
+										<p:commandButton id="btn" value="Mark Attendance"
+											update=":form2" icon="fa fa-check"
+											styleClass="butwid"
+											actionListener="#{showOnlineAttendaceBean.markAbsentForOther}"
+											rendered="#{showOnlineAttendaceBean.renderMarkAtt}">
+										</p:commandButton>
+
+										<h:commandLink rendered="#{showOnlineAttendaceBean.list.size() gt 0}">
+											<p:graphicImage name="images/excellogo.png"
+												library="avalon-layout" width="100" height="40"></p:graphicImage>
+											<pe:exporter type="xlsx" target=":form2:table"
+												fileName="Online_Attendace_Report(#{showOnlineAttendaceBean.selectedClassName})"></pe:exporter>
+										</h:commandLink>
+
+										<p:commandButton value="PDF" icon="fa fa-file-pdf-o" rendered="#{showOnlineAttendaceBean.list.size() gt 0}"
+											styleClass="butwid" ajax="false"
+											immediate="true" process="@this"
+											actionListener="#{showOnlineAttendaceBean.exportClasWisePdf}">
+											<p:fileDownload value="#{showOnlineAttendaceBean.file}" />
+										</p:commandButton>
+
+									</p:panelGrid>
+								</center>
+								<p:separator />
+								<br />
+
+								<br />
+								<br />
+								<p:dataTable stickyHeader="true" id="table"
+									value="#{showOnlineAttendaceBean.list}" var="var"
+									rowIndexVar="cnt" reflow="true">
+
+
+									<f:facet name="header">
+										<p:outputLabel
+											value="class: #{showOnlineAttendaceBean.selectedClassName}"></p:outputLabel>
+									</f:facet>
+									<p:column headerText="S.NO.">
+										<f:facet name="header">
+											<p:outputLabel value="S.NO."></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{cnt+1}"></p:outputLabel>
+
+									</p:column>
+									<p:column headerText="Student Name">
+										<f:facet name="header">
+											<p:outputLabel value="Student Name"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.name}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Class">
+										<f:facet name="header">
+											<p:outputLabel value="Class"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.className}"></p:outputLabel>
+									</p:column>
+
+
+
+									<p:column headerText="Father Name">
+										<f:facet name="header">
+											<p:outputLabel value="Father Name"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.fatherName}"></p:outputLabel>
+									</p:column>
+
+
+
+
+
+								</p:dataTable>
+
+
+							</p:panel>
+						</h:form>
+
+
+						<h:form id="View">
+							<p:dialog header="Files" id="docm" widgetVar="dlg1" height="500"
+								width="500" modal="true" showEffect="fade" hideEffect="fade"
+								resizable="false">
+
+								<div class="ui-g form-group">
+									<p:panelGrid columns="2"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+										<p:dataTable id="dtb2"
+											value="#{viewLectureAssigmentBean.imageList}" var="info">
+
+											<p:column headerText="Files">
+												<p:panelGrid columns="1">
+													<a href="#{info.fileName1}" target="_blank">#{info.fileName}</a>
+													<br></br>
+												</p:panelGrid>
+
+											</p:column>
+
+
+
+
+
+
+
+
+
+										</p:dataTable>
+									</p:panelGrid>
+								</div>
+
+							</p:dialog>
+
+
+						</h:form>
+
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

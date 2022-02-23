@@ -1,0 +1,1397 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">View Enquiry</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<p:messages autoUpdate="true" closable="true" />
+							<p:panel header="Enquiry Details">
+
+								<f:facet name="header">
+									<span>Enquiry Details</span>
+									<span> <p:commandLink
+											style="float: right;margin-left: 15px;;color: blue;font-size:15px;"
+											immediate="true" value="Class Wise Enquiry Report"
+											action="classWiseEnqStrength.xhtml?faces-redirect=true"
+											rendered="#{sideMenuBean.list.branch_id eq '54'}"></p:commandLink>
+									</span>
+								</f:facet>
+
+								<p:panelGrid columns="7"
+									styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:outputLabel for="@next" style="color:red"  value="Enter Enquiry Reference No. / Student Name / Mobile No."></p:outputLabel>
+									<p:inputText rendered="false" value="#{viewEnquiryForBlm.refName}" required="true"
+										requiredMessage="Please enter enquiry reference no./student name/mobile no." validatorMessage="Please Enter Correct value">
+									  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+									</p:inputText>
+									
+									<p:autoComplete id="acSimple" value="#{viewEnquiryForBlm.refName}"
+										minQueryLength="3"
+										completeMethod="#{viewEnquiryForBlm.autoCompleteStudentInfo}" validatorMessage="Please Enter Correct value">
+										<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+										<p:ajax event="query" global="false" />
+									</p:autoComplete>	
+
+									<p:commandButton value="Search Enquiry" styleClass="butwid" icon="fa fa-search"
+										action="#{viewEnquiryForBlm.searchEnquiry}" update=":form:up"></p:commandButton>
+
+								
+								</p:panelGrid>
+								<br />
+								<p:panelGrid columns="7">
+								
+								<p:outputLabel  for="@next" style="color:red"  value="Select Session "></p:outputLabel>
+									<p:selectOneMenu value="#{viewEnquiryForBlm.selectedSession}"
+										required="true" requiredMessage="Please select session">
+										<f:selectItems value="#{viewEnquiryForBlm.sessionList}"></f:selectItems>
+									</p:selectOneMenu>
+								<p:commandButton value="All Pending"  icon="fa fa-clock-o" 
+										action="#{viewEnquiryForBlm.searchAllEnquiry}"
+										update=":form:up" ></p:commandButton>
+
+									<p:outputLabel value="|"
+										style="font-weight:bold;font-size:20px;text-align: center;"
+										rendered="#{viewEnquiryForBlm.info.enqType eq 'prospectus' || viewEnquiryForBlm.info.enqType eq 'registration'}"></p:outputLabel>
+
+                                   <p:commandButton
+										value="#{viewEnquiryForBlm.info.enqType eq 'prospectus' ? 'All Prospectus' : 'All Registrations'}"
+										action="#{viewEnquiryForBlm.searchAllReg}" update=":form:up"
+										rendered="#{viewEnquiryForBlm.info.enqType eq 'prospectus' || viewEnquiryForBlm.info.enqType eq 'registration'}"></p:commandButton>
+
+									<p:commandButton value="All Denied"  icon="fa fa-ban" styleClass="redButt"
+										action="#{viewEnquiryForBlm.searchAllDeny}" update=":form:up"
+										></p:commandButton>
+
+									<p:commandButton value="All Accepted"  icon="fa fa-check-circle" styleClass="greenButt"
+										action="#{viewEnquiryForBlm.searchAllAdmit}" update=":form:up"
+										></p:commandButton>
+								
+								
+								</p:panelGrid>
+								
+								<p:outputPanel id="up">
+									<p:dataTable id="enqDt" reflow="true"
+										value="#{viewEnquiryForBlm.list}" var="var"
+										emptyMessage="No student found "
+										rendered="#{viewEnquiryForBlm.searchType eq 'enq'}"
+										rowKey="#{var.sno}" rowIndexVar="index">
+
+										<f:facet name="header">
+											<p:panelGrid columns="1"
+												styleClass="ui-panelgrid-blank form-group"
+												style="width:100%;">
+												<p:outputLabel value="Enquiries"></p:outputLabel>
+												<h:commandLink immediate="true">
+													<p:graphicImage name="images/excellogo.png"
+														library="avalon-layout" width="100" height="40"></p:graphicImage>
+													<pe:exporter type="xlsx" target=":form:enqDt"
+														fileName="Enquiries"></pe:exporter>
+												</h:commandLink>
+											</p:panelGrid>
+										</f:facet>
+
+										<p:column headerText="S.No">
+											<f:facet name="header">
+												<p:outputLabel value="S.No"></p:outputLabel>
+											</f:facet>
+											<h:outputText value="#{index+1}"></h:outputText>
+										</p:column>
+
+										<p:column headerText="Date"
+											filterBy="#{var.stringadmissionDate}"
+											sortBy="#{var.admissionDate}">
+											<f:facet name="header">
+												<p:outputLabel value="Date"></p:outputLabel>
+											</f:facet>
+											<h:outputText value="#{var.stringadmissionDate}"></h:outputText>
+										</p:column>
+
+										<p:column headerText="Ref. No." filterBy="#{var.refNo}"
+											filterMatchMode="contains">
+											<f:facet name="header">
+												<p:outputLabel value="Ref.No."></p:outputLabel>
+											</f:facet>
+											<h:outputText value="#{var.refNo}"></h:outputText>
+										</p:column>
+
+										<p:column headerText="Student Name"
+											filterBy="#{var.studentName}" filterMatchMode="contains">
+											<f:facet name="header">
+												<p:outputLabel value="Student Name"></p:outputLabel>
+											</f:facet>
+											<h:outputText value="#{var.studentName}"></h:outputText>
+										</p:column>
+
+										<p:column headerText="Father's Name">
+											<f:facet name="header">
+												<p:outputLabel value="Father's Name"></p:outputLabel>
+											</f:facet>
+											<h:outputText value="#{var.fatherName}"></h:outputText>
+										</p:column>
+
+
+										<p:column headerText="F. Mob.No.">
+											<f:facet name="header">
+												<p:outputLabel value="F. Mob.No"></p:outputLabel>
+											</f:facet>
+											<h:outputText value="#{var.mobno}">
+											</h:outputText>
+										</p:column>
+										
+										<p:column headerText="M. Mob.No.">
+											<f:facet name="header">
+												<p:outputLabel value="M. Mob.No"></p:outputLabel>
+											</f:facet>
+											<h:outputText value="#{var.mothmobno}">
+											</h:outputText>
+										</p:column>
+
+										<p:column headerText="Admission Sought for Class"
+											filterBy="#{var.admissionclass}"
+											sortBy="#{var.admissionclass}" filterMatchMode="contains">
+											<f:facet name="header">
+												<p:outputLabel value="Admission Sought for Class"></p:outputLabel>
+											</f:facet>
+											<h:outputText value="#{var.admissionclass}">
+											</h:outputText>
+										</p:column>
+
+										<p:column headerText="Session" filterBy="#{var.session}"
+											sortBy="#{var.session}" filterMatchMode="contains">
+											<f:facet name="header">
+												<p:outputLabel value="Session"></p:outputLabel>
+											</f:facet>
+											<h:outputText value="#{var.session}">
+											</h:outputText>
+										</p:column>
+										
+										
+										
+
+										<p:column headerText="Added By">
+											<f:facet name="header">
+												<p:outputLabel value="Added By"></p:outputLabel>
+											</f:facet>
+											<h:outputText value="#{var.addedby}"></h:outputText>
+										</p:column>
+
+										<p:column headerText="Prospectus Fee"
+											rendered="#{viewEnquiryForBlm.checkPros}">
+											<f:facet name="header">
+												<p:outputLabel value="Prospectus Fee"></p:outputLabel>
+											</f:facet>
+											<p:panelGrid columns="1"
+												styleClass="ui-panelgrid-blank form-group"
+												style="width:100%;">
+												<p:commandButton action="#{viewEnquiryForBlm.prospectusFee}"
+													immediate="true" icon="fa fa-rupee"
+													disabled="#{var.statusProspectus}"
+													oncomplete="PF('prospectusfeeDialog').show()"
+													update=":prospectusfeeform,:form">
+													<f:setPropertyActionListener
+														target="#{viewEnquiryForBlm.selectStudent}" value="#{var}"></f:setPropertyActionListener>
+												</p:commandButton>
+
+												<p:commandButton immediate="true" icon="fa fa-print"
+													rendered="#{var.statusProspectusPrint}"
+													action="#{viewEnquiryForBlm.printProspectusInv}"
+													update=":form">
+													<f:setPropertyActionListener
+														target="#{viewEnquiryForBlm.selectStudent}" value="#{var}"></f:setPropertyActionListener>
+												</p:commandButton>
+											</p:panelGrid>
+										</p:column>
+
+										<p:column headerText="Registration Fee"
+											rendered="#{viewEnquiryForBlm.checkReg}" exportable="false">
+
+											<p:panelGrid columns="1"
+												styleClass="ui-panelgrid-blank form-group"
+												style="width:100%;">
+												<p:commandButton
+													action="#{viewEnquiryForBlm.registrationFee}"
+													immediate="true" icon="fa fa-rupee"
+													disabled="#{var.statusRegistration}"
+													oncomplete="PF('registrationfeeDialog').show()"
+													update="registrationfeeform,:form">
+													<f:setPropertyActionListener
+														target="#{viewEnquiryForBlm.selectStudent}" value="#{var}"></f:setPropertyActionListener>
+												</p:commandButton>
+
+												<p:commandButton immediate="true" icon="fa fa-print"
+													rendered="#{var.statusRegistrationPrint}"
+													action="#{viewEnquiryForBlm.printRegInv}" update=":form">
+													<f:setPropertyActionListener
+														target="#{viewEnquiryForBlm.selectStudent}" value="#{var}"></f:setPropertyActionListener>
+												</p:commandButton>
+											</p:panelGrid>
+										</p:column>
+
+										<p:column headerText="Edit" exportable="false">
+											<p:commandButton immediate="true" icon="ui-icon-pencil"
+												oncomplete="PF('editDialog').show()" update=":form3">
+												<f:setPropertyActionListener
+													target="#{viewEnquiryForBlm.selectStudent}" value="#{var}"></f:setPropertyActionListener>
+											</p:commandButton>
+										</p:column>
+
+										<p:column headerText="Admission"
+											rendered="#{viewEnquiryForBlm.checkAdm}" exportable="false">
+											<p:panelGrid columns="1"
+												styleClass="ui-panelgrid-blank form-group"
+												style="width:100%;">
+												<p:commandButton immediate="true" icon="ui-icon-check" styleClass="greenButt"
+													disabled="#{var.statusAdmission}"
+													oncomplete="PF('addDialog').show()" action="#{viewEnquiryForBlm.details}" update=":addForm,:form">
+													<f:setPropertyActionListener
+														target="#{viewEnquiryForBlm.selectStudent}" value="#{var}"></f:setPropertyActionListener>
+												</p:commandButton>
+
+												<p:commandButton immediate="true" icon="fa fa-print" 
+													rendered="#{var.statusAdmPrint}"
+													action="#{viewEnquiryForBlm.printAdmInv}" update=":form">
+													<f:setPropertyActionListener
+														target="#{viewEnquiryForBlm.selectStudent}" value="#{var}"></f:setPropertyActionListener>
+												</p:commandButton>
+											</p:panelGrid>
+										</p:column>
+
+										<p:column headerText="Admission"
+											rendered="#{viewEnquiryForBlm.checkSimple}"
+											exportable="false">
+											<p:commandButton immediate="true" icon="ui-icon-check" styleClass="greenButt"
+												oncomplete="PF('addDialog').show()" action="#{viewEnquiryForBlm.details}" update=":addForm,:form">
+												<f:setPropertyActionListener
+													target="#{viewEnquiryForBlm.selectStudent}" value="#{var}"></f:setPropertyActionListener>
+											</p:commandButton>
+
+										</p:column>
+
+										<p:column headerText="Deny" exportable="false">
+											<p:commandButton immediate="true" icon="ui-icon-close" styleClass="redButt"
+												action="#{viewEnquiryForBlm.deniedStudent}" update=":form">
+												<f:setPropertyActionListener
+													target="#{viewEnquiryForBlm.selectStudent}" value="#{var}"></f:setPropertyActionListener>
+												<p:confirm header="Confirmation"
+													message="Are you sure deny this enquiry?"
+													icon="ui-icon-alert" />
+
+											</p:commandButton>
+										</p:column>
+										
+										<p:column headerText="Print" exportable="false">
+											<p:commandButton immediate="true" icon="ui-icon-print"
+												action="#{viewEnquiryForBlm.printEnquiry}">
+												<f:setPropertyActionListener
+													target="#{viewEnquiryForBlm.selectStudent}" value="#{var}"></f:setPropertyActionListener>
+											</p:commandButton>
+										</p:column>
+
+									</p:dataTable>
+
+									<p:dataTable id="regDt" reflow="true"
+										value="#{viewEnquiryForBlm.list}" var="var"
+										emptyMessage="No student found "
+										rendered="#{viewEnquiryForBlm.searchType eq 'reg'}"
+										rowKey="#{var.sno}" rowIndexVar="index">
+
+										<f:facet name="header">
+											<p:panelGrid columns="1"
+												styleClass="ui-panelgrid-blank form-group"
+												style="width:100%;">
+												<p:outputLabel
+													value="#{viewEnquiryForBlm.info.enqType eq 'prospectus' ? 'All Prospectus' : 'All Registrations'}"></p:outputLabel>
+
+												<h:commandLink immediate="true">
+													<p:graphicImage name="images/excellogo.png"
+														library="avalon-layout" width="100" height="40"></p:graphicImage>
+													<pe:exporter type="xlsx" target=":form:regDt"
+														fileName="#{viewEnquiryForBlm.info.enqType eq 'prospectus' ? 'All_Prospectus' : 'All_Registrations'}"></pe:exporter>
+												</h:commandLink>
+											</p:panelGrid>
+										</f:facet>
+
+										<p:column headerText="S.No">
+											<f:facet name="header">
+												<p:outputLabel value="S.No"></p:outputLabel>
+											</f:facet>
+											<h:outputText value="#{index+1}"></h:outputText>
+										</p:column>
+
+										<p:column headerText="Date"
+											filterBy="#{var.stringadmissionDate}"
+											sortBy="#{var.stringadmissionDate}">
+											<f:facet name="header">
+												<p:outputLabel value="Date"></p:outputLabel>
+											</f:facet>
+											<h:outputText value="#{var.stringadmissionDate}"></h:outputText>
+										</p:column>
+
+										<p:column headerText="Ref. No." filterBy="#{var.refNo}"
+											filterMatchMode="contains">
+											<f:facet name="header">
+												<p:outputLabel value="Ref.No."></p:outputLabel>
+											</f:facet>
+											<h:outputText value="#{var.refNo}"></h:outputText>
+										</p:column>
+
+										<p:column headerText="Student Name"
+											filterBy="#{var.studentName}" filterMatchMode="contains">
+											<f:facet name="header">
+												<p:outputLabel value="Student Name"></p:outputLabel>
+											</f:facet>
+											<h:outputText value="#{var.studentName}"></h:outputText>
+										</p:column>
+
+										<p:column headerText="Father's Name">
+											<f:facet name="header">
+												<p:outputLabel value="Father's Name"></p:outputLabel>
+											</f:facet>
+											<h:outputText value="#{var.fatherName}"></h:outputText>
+										</p:column>
+
+
+										<p:column headerText="F. Mob.No.">
+											<f:facet name="header">
+												<p:outputLabel value="F. Mob.No"></p:outputLabel>
+											</f:facet>
+											<h:outputText value="#{var.mobno}">
+											</h:outputText>
+										</p:column>
+										
+										<p:column headerText="M. Mob.No.">
+											<f:facet name="header">
+												<p:outputLabel value="M. Mob.No"></p:outputLabel>
+											</f:facet>
+											<h:outputText value="#{var.mothmobno}">
+											</h:outputText>
+										</p:column>
+
+										<p:column headerText="Admission Sought for Class"
+											filterBy="#{var.admissionclass}"
+											sortBy="#{var.admissionclass}" filterMatchMode="contains">
+											<f:facet name="header">
+												<p:outputLabel value="Admission Sought for Class"></p:outputLabel>
+											</f:facet>
+											<h:outputText value="#{var.admissionclass}">
+											</h:outputText>
+										</p:column>
+
+										<p:column headerText="Session" filterBy="#{var.session}"
+											sortBy="#{var.session}" filterMatchMode="contains">
+											<f:facet name="header">
+												<p:outputLabel value="Session"></p:outputLabel>
+											</f:facet>
+											<h:outputText value="#{var.session}">
+											</h:outputText>
+										</p:column>
+										<p:column headerText="Registration Fee"
+											rendered="#{sideMenuBean.list.schid eq '321'}" >
+ 
+ 										<f:facet name="header">
+												<p:outputLabel value="Registration Fee"></p:outputLabel>
+											</f:facet>
+                                            <p:outputLabel value="350"></p:outputLabel>
+											
+										</p:column>
+
+										<p:column headerText="Added By">
+											<f:facet name="header">
+												<p:outputLabel value="Added By"></p:outputLabel>
+											</f:facet>
+											<h:outputText value="#{var.addedby}"></h:outputText>
+										</p:column>
+
+										<p:column headerText="Prospectus Invoice"
+											rendered="#{viewEnquiryForBlm.checkPros}" exportable="false">
+											<p:commandButton immediate="true" icon="fa fa-print"
+												rendered="#{var.statusProspectusPrint}"
+												action="#{viewEnquiryForBlm.printProspectusInv}"
+												update=":form">
+												<f:setPropertyActionListener
+													target="#{viewEnquiryForBlm.selectStudent}" value="#{var}"></f:setPropertyActionListener>
+											</p:commandButton>
+										</p:column>
+
+										<p:column headerText="Registration Invoice"
+											rendered="#{viewEnquiryForBlm.checkReg}" exportable="false">
+
+											<p:commandButton immediate="true" icon="fa fa-print"
+												rendered="#{var.statusRegistrationPrint}"
+												action="#{viewEnquiryForBlm.printRegInv}" update=":form">
+												<f:setPropertyActionListener
+													target="#{viewEnquiryForBlm.selectStudent}" value="#{var}"></f:setPropertyActionListener>
+											</p:commandButton>
+										</p:column>
+
+										<p:column headerText="Edit" exportable="false">
+											<p:commandButton immediate="true" icon="ui-icon-pencil"
+												oncomplete="PF('editDialog').show()" update=":form3">
+												<f:setPropertyActionListener
+													target="#{viewEnquiryForBlm.selectStudent}" value="#{var}"></f:setPropertyActionListener>
+											</p:commandButton>
+										</p:column>
+
+										<p:column headerText="Admission" exportable="false">
+											<p:commandButton immediate="true" icon="ui-icon-check" styleClass="greenButt"
+												oncomplete="PF('addDialog').show()" action="#{viewEnquiryForBlm.details}" update=":addForm,:form">
+												<f:setPropertyActionListener
+													target="#{viewEnquiryForBlm.selectStudent}" value="#{var}"></f:setPropertyActionListener>
+											</p:commandButton>
+
+										</p:column>
+
+										<p:column headerText="Deny" exportable="false">
+											<p:commandButton immediate="true" icon="ui-icon-close" styleClass="redButt"
+												action="#{viewEnquiryForBlm.deniedStudent}" update=":form">
+												<f:setPropertyActionListener
+													target="#{viewEnquiryForBlm.selectStudent}" value="#{var}"></f:setPropertyActionListener>
+												<p:confirm header="Confirmation"
+													message="Are you sure deny this enquiry?"
+													icon="ui-icon-alert" />
+
+											</p:commandButton>
+										</p:column>
+
+									</p:dataTable>
+
+									<p:dataTable id="denyDt" reflow="true"
+										value="#{viewEnquiryForBlm.list}" var="var"
+										emptyMessage="No student found "
+										rendered="#{viewEnquiryForBlm.searchType eq 'deny'}"
+										rowKey="#{var.sno}" rowIndexVar="index">
+
+										<f:facet name="header">
+											<p:panelGrid columns="1"
+												styleClass="ui-panelgrid-blank form-group"
+												style="width:100%;">
+												<p:outputLabel value="Denied Enquiries"></p:outputLabel>
+
+												<h:commandLink immediate="true">
+													<p:graphicImage name="images/excellogo.png"
+														library="avalon-layout" width="100" height="40"></p:graphicImage>
+													<pe:exporter type="xlsx" target=":form:denyDt"
+														fileName="Denied_Enquiries"></pe:exporter>
+												</h:commandLink>
+											</p:panelGrid>
+										</f:facet>
+
+										<p:column headerText="S.No">
+											<f:facet name="header">
+												<p:outputLabel value="S.No"></p:outputLabel>
+											</f:facet>
+											<h:outputText value="#{index+1}"></h:outputText>
+										</p:column>
+
+										<p:column headerText="Date"
+											filterBy="#{var.stringadmissionDate}"
+											sortBy="#{var.stringadmissionDate}">
+											<f:facet name="header">
+												<p:outputLabel value="Date"></p:outputLabel>
+											</f:facet>
+											<h:outputText value="#{var.stringadmissionDate}"></h:outputText>
+										</p:column>
+
+										<p:column headerText="Ref. No." filterBy="#{var.refNo}"
+											filterMatchMode="contains">
+											<f:facet name="header">
+												<p:outputLabel value="Ref.No."></p:outputLabel>
+											</f:facet>
+											<h:outputText value="#{var.refNo}"></h:outputText>
+										</p:column>
+
+										<p:column headerText="Student Name"
+											filterBy="#{var.studentName}" filterMatchMode="contains">
+											<f:facet name="header">
+												<p:outputLabel value="Student Name"></p:outputLabel>
+											</f:facet>
+											<h:outputText value="#{var.studentName}"></h:outputText>
+										</p:column>
+
+										<p:column headerText="Father's Name">
+											<f:facet name="header">
+												<p:outputLabel value="Father's Name"></p:outputLabel>
+											</f:facet>
+											<h:outputText value="#{var.fatherName}"></h:outputText>
+										</p:column>
+
+
+										<p:column headerText="F. Mob.No.">
+											<f:facet name="header">
+												<p:outputLabel value="F. Mob.No"></p:outputLabel>
+											</f:facet>
+											<h:outputText value="#{var.mobno}">
+											</h:outputText>
+										</p:column>
+										
+										<p:column headerText="M. Mob.No.">
+											<f:facet name="header">
+												<p:outputLabel value="M. Mob.No"></p:outputLabel>
+											</f:facet>
+											<h:outputText value="#{var.mothmobno}">
+											</h:outputText>
+										</p:column>
+
+										<p:column headerText="Admission Sought for Class"
+											filterBy="#{var.admissionclass}"
+											sortBy="#{var.admissionclass}" filterMatchMode="contains">
+											<f:facet name="header">
+												<p:outputLabel value="Admission Sought for Class"></p:outputLabel>
+											</f:facet>
+											<h:outputText value="#{var.admissionclass}">
+											</h:outputText>
+										</p:column>
+
+										<p:column headerText="Session" filterBy="#{var.session}"
+											sortBy="#{var.session}" filterMatchMode="contains">
+											<f:facet name="header">
+												<p:outputLabel value="Session"></p:outputLabel>
+											</f:facet>
+											<h:outputText value="#{var.session}">
+											</h:outputText>
+										</p:column>
+
+										<p:column headerText="Added By">
+											<f:facet name="header">
+												<p:outputLabel value="Added By"></p:outputLabel>
+											</f:facet>
+											<h:outputText value="#{var.addedby}"></h:outputText>
+										</p:column>
+
+										<p:column headerText="Prospectus Invoice"
+											rendered="#{viewEnquiryForBlm.checkPros}" exportable="false">
+											<p:commandButton immediate="true" icon="fa fa-print"
+												rendered="#{var.statusProspectusPrint}"
+												action="#{viewEnquiryForBlm.printProspectusInv}"
+												update=":form">
+												<f:setPropertyActionListener
+													target="#{viewEnquiryForBlm.selectStudent}" value="#{var}"></f:setPropertyActionListener>
+											</p:commandButton>
+										</p:column>
+
+										<p:column headerText="Registration Invoice"
+											rendered="#{viewEnquiryForBlm.checkReg}" exportable="false">
+											<p:commandButton immediate="true" icon="fa fa-print"
+												rendered="#{var.statusRegistrationPrint}"
+												action="#{viewEnquiryForBlm.printRegInv}" update=":form">
+												<f:setPropertyActionListener
+													target="#{viewEnquiryForBlm.selectStudent}" value="#{var}"></f:setPropertyActionListener>
+											</p:commandButton>
+										</p:column>
+
+										<p:column headerText="Admission Invoice"
+											rendered="#{viewEnquiryForBlm.checkAdm}" exportable="false">
+											<p:commandButton immediate="true" icon="fa fa-print"
+												rendered="#{var.statusAdmPrint}"
+												action="#{viewEnquiryForBlm.printAdmInv}" update=":form">
+												<f:setPropertyActionListener
+													target="#{viewEnquiryForBlm.selectStudent}" value="#{var}"></f:setPropertyActionListener>
+											</p:commandButton>
+										</p:column>
+
+									</p:dataTable>
+
+									<p:dataTable id="admitDt" reflow="true"
+										value="#{viewEnquiryForBlm.list}" var="var"
+										emptyMessage="No student found "
+										rendered="#{viewEnquiryForBlm.searchType eq 'admit'}"
+										rowKey="#{var.sno}" rowIndexVar="index">
+
+										<f:facet name="header">
+											<p:panelGrid columns="1"
+												styleClass="ui-panelgrid-blank form-group"
+												style="width:100%;">
+												<p:outputLabel value="Accepted Enquiries"></p:outputLabel>
+
+												<h:commandLink immediate="true">
+													<p:graphicImage name="images/excellogo.png"
+														library="avalon-layout" width="100" height="40"></p:graphicImage>
+													<pe:exporter type="xlsx" target=":form:admitDt"
+														fileName="Accepted_Enquiries"></pe:exporter>
+												</h:commandLink>
+											</p:panelGrid>
+										</f:facet>
+
+										<p:column headerText="S.No">
+											<f:facet name="header">
+												<p:outputLabel value="S.No"></p:outputLabel>
+											</f:facet>
+											<h:outputText value="#{index+1}"></h:outputText>
+										</p:column>
+
+										<p:column headerText="Date"
+											filterBy="#{var.stringadmissionDate}"
+											sortBy="#{var.stringadmissionDate}">
+											<f:facet name="header">
+												<p:outputLabel value="Date"></p:outputLabel>
+											</f:facet>
+											<h:outputText value="#{var.stringadmissionDate}"></h:outputText>
+										</p:column>
+
+										<p:column headerText="Ref. No." filterBy="#{var.refNo}"
+											filterMatchMode="contains">
+											<f:facet name="header">
+												<p:outputLabel value="Ref.No."></p:outputLabel>
+											</f:facet>
+											<h:outputText value="#{var.refNo}"></h:outputText>
+										</p:column>
+
+										<p:column headerText="Student Name"
+											filterBy="#{var.studentName}" filterMatchMode="contains">
+											<f:facet name="header">
+												<p:outputLabel value="Student Name"></p:outputLabel>
+											</f:facet>
+											<h:outputText value="#{var.studentName}"></h:outputText>
+										</p:column>
+
+										<p:column headerText="Sr.No." filterBy="#{var.admissionNo}"
+											filterMatchMode="contains">
+											<f:facet name="header">
+												<p:outputLabel value="Sr.No."></p:outputLabel>
+											</f:facet>
+											<h:outputText value="#{var.admissionNo}"></h:outputText>
+										</p:column>
+
+										<p:column headerText="Father's Name">
+											<f:facet name="header">
+												<p:outputLabel value="Father's Name"></p:outputLabel>
+											</f:facet>
+											<h:outputText value="#{var.fatherName}"></h:outputText>
+										</p:column>
+
+
+										<p:column headerText="F. Mob.No.">
+											<f:facet name="header">
+												<p:outputLabel value="F. Mob.No"></p:outputLabel>
+											</f:facet>
+											<h:outputText value="#{var.mobno}">
+											</h:outputText>
+										</p:column>
+										
+										<p:column headerText="M. Mob.No.">
+											<f:facet name="header">
+												<p:outputLabel value="M. Mob.No"></p:outputLabel>
+											</f:facet>
+											<h:outputText value="#{var.mothmobno}">
+											</h:outputText>
+										</p:column>
+
+										<p:column headerText="Addmission Sought for Class"
+											filterBy="#{var.admissionclass}"
+											sortBy="#{var.admissionclass}" filterMatchMode="contains">
+											<f:facet name="header">
+												<p:outputLabel value="Admission Sought for Class"></p:outputLabel>
+											</f:facet>
+											<h:outputText value="#{var.admissionclass}">
+											</h:outputText>
+										</p:column>
+
+										<p:column headerText="Session" filterBy="#{var.session}"
+											sortBy="#{var.session}" filterMatchMode="contains">
+											<f:facet name="header">
+												<p:outputLabel value="Session"></p:outputLabel>
+											</f:facet>
+											<h:outputText value="#{var.session}">
+											</h:outputText>
+										</p:column>
+
+										<p:column headerText="Added By">
+											<f:facet name="header">
+												<p:outputLabel value="Added By"></p:outputLabel>
+											</f:facet>
+											<h:outputText value="#{var.addedby}"></h:outputText>
+										</p:column>
+
+										<p:column headerText="Prospectus Invoice"
+											rendered="#{viewEnquiryForBlm.checkPros}" exportable="false">
+											<p:commandButton immediate="true" icon="fa fa-print"
+												rendered="#{var.statusProspectusPrint}"
+												action="#{viewEnquiryForBlm.printProspectusInv}"
+												update=":form">
+												<f:setPropertyActionListener
+													target="#{viewEnquiryForBlm.selectStudent}" value="#{var}"></f:setPropertyActionListener>
+											</p:commandButton>
+										</p:column>
+
+										<p:column headerText="Registration Invoice"
+											rendered="#{viewEnquiryForBlm.checkReg}" exportable="false">
+											<p:commandButton immediate="true" icon="fa fa-print"
+												rendered="#{var.statusRegistrationPrint}"
+												action="#{viewEnquiryForBlm.printRegInv}" update=":form">
+												<f:setPropertyActionListener
+													target="#{viewEnquiryForBlm.selectStudent}" value="#{var}"></f:setPropertyActionListener>
+											</p:commandButton>
+										</p:column>
+
+										<p:column headerText="Admission Invoice"
+											rendered="#{viewEnquiryForBlm.checkAdm}" exportable="false">
+											<p:commandButton immediate="true" icon="fa fa-print"
+												rendered="#{var.statusAdmPrint}"
+												action="#{viewEnquiryForBlm.printAdmInv}" update=":form">
+												<f:setPropertyActionListener
+													target="#{viewEnquiryForBlm.selectStudent}" value="#{var}"></f:setPropertyActionListener>
+											</p:commandButton>
+										</p:column>
+
+									</p:dataTable>
+
+
+								</p:outputPanel>
+							</p:panel>
+
+
+						</h:form>
+
+						<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+							<p:commandButton value="Yes" type="button"
+								styleClass="ui-confirmdialog-yes greenButt" icon="ui-icon-check" />
+							<p:commandButton value="No" type="button"
+								styleClass="ui-confirmdialog-no redButt" icon="ui-icon-close" />
+						</p:confirmDialog>
+
+						<h:form id="form1">
+							<p:dialog header="Student Info" widgetVar="viewDialog"
+								modal="true" showEffect="explode" hideEffect="explode"
+								resizable="false" closable="true">
+								<p:panelGrid columns="2">
+
+									<p:outputLabel
+										value="Admission Date: #{viewEnquiryForBlm.selectStudent.stringadmissionDate}"></p:outputLabel>
+									<p:outputLabel
+										value="Admission Sought for Class: #{viewEnquiryForBlm.selectStudent.admissionclass}"></p:outputLabel>
+
+
+
+									<p:outputLabel
+										value="Student Name: #{viewEnquiryForBlm.selectStudent.studentName}"></p:outputLabel>
+
+									<p:outputLabel
+										value="Father's Name: #{viewEnquiryForBlm.selectStudent.fatherName}"></p:outputLabel>
+
+									<p:outputLabel
+										value="Mother's Name : #{viewEnquiryForBlm.selectStudent.motherName}"></p:outputLabel>
+
+									<p:outputLabel
+										value="Gender: #{viewEnquiryForBlm.selectStudent.gender}"></p:outputLabel>
+
+									<p:outputLabel
+										value="Date of Birth: #{viewEnquiryForBlm.selectStudent.stringdob}"></p:outputLabel>
+
+									<p:outputLabel
+										value="Address: #{viewEnquiryForBlm.selectStudent.address}"></p:outputLabel>
+
+									<p:outputLabel
+										value="Father's Mob No: #{viewEnquiryForBlm.selectStudent.mobno}"></p:outputLabel>
+										
+									<p:outputLabel
+										value="Mother's Mob No: #{viewEnquiryForBlm.selectStudent.mothmobno}"></p:outputLabel>
+
+									<p:outputLabel
+										value="E-Mail: #{viewEnquiryForBlm.selectStudent.email}"></p:outputLabel>
+								</p:panelGrid>
+							</p:dialog>
+						</h:form>
+
+						<h:form id="form3">
+							<p:dialog header="Enquiry Info" widgetVar="editDialog"
+								modal="true" showEffect="explode" hideEffect="explode"
+								resizable="false" closable="true" height="600">
+								<p:panelGrid columns="2"
+									styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel value="Visiting Date"></p:outputLabel>
+									<p:outputLabel
+										value="#{viewEnquiryForBlm.selectStudent.stringadmissionDate}"></p:outputLabel>
+
+									<p:outputLabel value="Admission sought for session *"></p:outputLabel>
+									<p:outputLabel
+										value="#{viewEnquiryForBlm.selectStudent.session}"></p:outputLabel>
+
+									<p:outputLabel value="Admission  sought  for Class *"></p:outputLabel>
+									<p:outputLabel
+										value="#{viewEnquiryForBlm.selectStudent.admissionclass}"></p:outputLabel>
+
+									<p:outputLabel  for="@next" style="color:red" value="Student Name"></p:outputLabel>
+									<p:inputText required="true"
+										requiredMessage="Please Enter Student Name"
+										value="#{viewEnquiryForBlm.selectStudent.studentName}" validatorMessage="Please Enter Correct value">
+									  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+									</p:inputText>
+
+									<p:outputLabel  for="@next" style="color:red" value="Father's Name"></p:outputLabel>
+									<p:inputText required="true"
+										requiredMessage="Please Enter Father's Name"
+										value="#{viewEnquiryForBlm.selectStudent.fatherName}" validatorMessage="Please Enter Correct value">
+									  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+									</p:inputText>
+
+									<p:outputLabel value="Mother's Name "></p:outputLabel>
+									<p:inputText
+										value="#{viewEnquiryForBlm.selectStudent.motherName}" validatorMessage="Please Enter Correct value">
+									  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+									</p:inputText>
+
+									<p:outputLabel value="Gender "></p:outputLabel>
+									<p:selectOneRadio
+										value="#{viewEnquiryForBlm.selectStudent.gender}">
+										<f:selectItem itemLabel="Male" itemValue="Male"></f:selectItem>
+										<f:selectItem itemLabel="Female" itemValue="Female"></f:selectItem>
+								        <f:selectItem itemLabel="Transgender" itemValue="Transgender"></f:selectItem>
+									</p:selectOneRadio>
+									
+									<p:outputLabel for="@next" style="color:red;"
+										value="Category (certificate needed if belongs to category other than General) "
+										rendered="#{viewEnquiryForBlm.info.branch_id eq '22' || viewEnquiryForBlm.info.branch_id eq '27'}"></p:outputLabel>
+									<p:selectOneMenu value="#{viewEnquiryForBlm.selectStudent.stuCateg}"
+										required="true" requiredMessage="Please Select Category"
+										rendered="#{viewEnquiryForBlm.info.branch_id eq '22' || viewEnquiryForBlm.info.branch_id eq '27'}">
+										<f:selectItem itemLabel="Select Category" itemValue=""></f:selectItem>
+										<f:selectItems value="#{viewEnquiryForBlm.stuCategList}"></f:selectItems>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="DOB "></p:outputLabel>
+									<p:calendar navigator="true" effect="fold" pattern="dd/MM/yyyy"
+										yearRange="c-30:c+30"
+										value="#{viewEnquiryForBlm.selectStudent.dob}"></p:calendar>
+
+									<p:outputLabel value="Address "></p:outputLabel>
+									<p:inputTextarea rows="3" cols="20" maxlength="70"
+										counter="display" counterTemplate="{0} characters remaining."
+										value="#{viewEnquiryForBlm.selectStudent.address}" validatorMessage="Please Enter Correct value"> 
+									  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+									 </p:inputTextarea>
+									<h:outputText />
+									<h:outputText id="display" />
+
+									<p:outputLabel  for="@next" style="color:red" value="Father's Mob. No."></p:outputLabel>
+									<p:inputText required="true"
+										requiredMessage="Please Enter Father's Mob.no" maxlength="10"
+										value="#{viewEnquiryForBlm.selectStudent.mobno}" validatorMessage="Father's mobile no. must be of 10 digits">
+										<f:validateLength minimum="10"></f:validateLength>
+										<p:keyFilter mask="num"></p:keyFilter>
+									</p:inputText>
+									
+									<p:outputLabel value="Mother's Mob. No. *"></p:outputLabel>
+									<p:inputText maxlength="10"
+										value="#{viewEnquiryForBlm.selectStudent.mothmobno}" validatorMessage="Mother's mobile no. must be of 10 digits">
+										<f:validateLength minimum="10"></f:validateLength>
+										<p:keyFilter mask="num"></p:keyFilter>
+									</p:inputText>
+
+									<p:outputLabel value="E-mail"></p:outputLabel>
+									<p:inputText value="#{viewEnquiryForBlm.selectStudent.email}" validatorMessage="Please Enter Correct value">
+									  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:inputText>
+									
+									<p:outputLabel for="@next" style="color:red;"
+										value="Last School"
+										rendered="#{viewEnquiryForBlm.info.branch_id eq '22' || viewEnquiryForBlm.info.branch_id eq '27'}"></p:outputLabel>
+									<p:inputText required="true"
+										requiredMessage="Please Enter Last School Name"
+										value="#{viewEnquiryForBlm.selectStudent.lastSchool}"
+										validatorMessage="Please Enter Correct value"
+										rendered="#{viewEnquiryForBlm.info.branch_id eq '22' || viewEnquiryForBlm.info.branch_id eq '27'}">
+										<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:inputText>
+
+									<p:outputLabel for="@next" value="Referred By"
+										rendered="#{viewEnquiryForBlm.info.branch_id eq '22' || viewEnquiryForBlm.info.branch_id eq '27'}"></p:outputLabel>
+									<p:inputText value="#{viewEnquiryForBlm.selectStudent.referredBy}"
+										validatorMessage="Please Enter Correct value"
+										rendered="#{viewEnquiryForBlm.info.branch_id eq '22' || viewEnquiryForBlm.info.branch_id eq '27'}">
+										<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:inputText>
+
+									<p:outputLabel for="@next" style="color:red" 
+										rendered="#{viewEnquiryForBlm.info.branch_id ne '22' &amp;&amp; viewEnquiryForBlm.info.branch_id ne '27'}"
+										value="How you know about us ?"></p:outputLabel>
+									<p:selectOneRadio
+										rendered="#{viewEnquiryForBlm.info.branch_id ne '22' &amp;&amp; viewEnquiryForBlm.info.branch_id ne '27'}"
+										value="#{viewEnquiryForBlm.selectStudent.categ}"
+										required="true" requiredMessage="Please Select Reference">
+										<f:selectItems value="#{viewEnquiryForBlm.categoryList}"></f:selectItems>
+									</p:selectOneRadio>
+
+
+									<p:outputLabel
+										rendered="#{viewEnquiryForBlm.info.branch_id ne '22' &amp;&amp; viewEnquiryForBlm.info.branch_id ne '27'}"
+										value="Remark"></p:outputLabel>
+									<p:inputTextarea
+										rendered="#{viewEnquiryForBlm.info.branch_id ne '22' &amp;&amp; viewEnquiryForBlm.info.branch_id ne '27'}"
+										rows="3" cols="20"
+										value="#{viewEnquiryForBlm.selectStudent.remark}" validatorMessage="Please Enter Correct value">
+									  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	 
+									</p:inputTextarea>
+
+									
+								</p:panelGrid>
+								<br />
+								<p:separator />
+								<center>
+								<p:commandButton value="Submit" update=":form,:form3" styleClass="butwid" icon="fa fa-upload"
+										action="#{viewEnquiryForBlm.editDetails}"></p:commandButton>
+								</center>
+								<p:separator />
+								<br />
+							</p:dialog>
+						</h:form>
+
+						<h:form id="form2">
+							<p:dialog header="Send Message" widgetVar="sendDialog"
+								modal="true" showEffect="explode" hideEffect="explode"
+								resizable="false" closable="true">
+								<p:panelGrid columns="2">
+									<p:outputLabel value="Messages "></p:outputLabel>
+									<p:inputTextarea value="#{viewEnquiryForBlm.typemessage}" validatorMessage="Please Enter Correct value">
+									  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:inputTextarea>
+									<p:commandButton value="send Message"
+										actionListener="#{viewEnquiryForBlm.sendMessage}"
+										update=":form,:form2"></p:commandButton>
+								</p:panelGrid>
+							</p:dialog>
+						</h:form>
+						<h:form id="prospectusfeeform">
+							<p:dialog header="Fee Details" widgetVar="prospectusfeeDialog"
+								modal="true" showEffect="explode" hideEffect="explode"
+								resizable="false" closable="true">
+								<p:panelGrid columns="2" style="width:100%">
+									<p:outputLabel for="@next" style="color:red"  value="Payment Mode"></p:outputLabel>
+									<p:selectOneRadio value="#{viewEnquiryForBlm.paymentMode}"
+										required="true" requiredMessage="Please Enter Payment Mode">
+										<f:selectItem itemLabel="Cash" itemValue="cash"></f:selectItem>
+										<f:selectItem itemLabel="Cheque" itemValue="cheque"></f:selectItem>
+										<f:selectItem itemLabel="NEFT" itemValue="neft"></f:selectItem>
+										<p:ajax update="chequeForm"
+											listener="#{viewEnquiryForBlm.paymentModeListener}"></p:ajax>
+									</p:selectOneRadio>
+								</p:panelGrid>
+
+								<p:panelGrid id="chequeForm" columns="2" style="width:100%">
+									<p:outputLabel for="@next" style="color:red"  rendered="#{viewEnquiryForBlm.showCheque}"
+										value="Bank Name"></p:outputLabel>
+									<p:inputText required="true"
+										requiredMessage="Please Enter Bank name"
+										rendered="#{viewEnquiryForBlm.showCheque}"
+										value="#{viewEnquiryForBlm.bankName}" validatorMessage="Please Enter Correct value">
+									  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:inputText>
+
+									<p:outputLabel value="Submitted To Bank"
+										rendered="#{viewEnquiryForBlm.showCheque}"></p:outputLabel>
+									<p:selectOneMenu filter="true"
+										value="#{viewEnquiryForBlm.submittedBankName}"
+										rendered="#{viewEnquiryForBlm.showCheque}">
+										<f:selectItem itemLabel="Select Here" itemValue="N/A" />
+										<f:selectItems value="#{viewEnquiryForBlm.bankList}"></f:selectItems>
+										<p:ajax></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel for="@next" style="color:red"  rendered="#{viewEnquiryForBlm.showCheque}"
+										value="Cheque / Neft Number"></p:outputLabel>
+									<p:inputText required="true"
+										requiredMessage="Please Enter Cheque / Neft Number"
+										rendered="#{viewEnquiryForBlm.showCheque}"
+										value="#{viewEnquiryForBlm.chequeNumber}" validatorMessage="Please Enter Correct value">
+									  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+									</p:inputText>
+
+									<p:outputLabel for="@next" style="color:red"  rendered="#{viewEnquiryForBlm.showCheque}"
+										value="Cheque / Neft Date"></p:outputLabel>
+									<p:calendar required="true"
+										requiredMessage="Please Enter Cheque / Neft Date"
+										rendered="#{viewEnquiryForBlm.showCheque}"
+										value="#{viewEnquiryForBlm.chequeDate}" pattern="dd/MM/yyyy"
+										navigator="true" yearRange="c-10:c+10" />
+								</p:panelGrid>
+
+								<p:panelGrid columns="2" style="width:100%">
+									<p:outputLabel value="Fee Amount *"></p:outputLabel>
+									<p:inputText disabled="#{viewEnquiryForBlm.disableAmount}"
+										value="#{viewEnquiryForBlm.feeAmount}" rendered="true"
+										requiredMessage="Please Enter Fee Amount"
+										onfocus="this.select();">
+										<p:keyFilter mask="money"></p:keyFilter>
+									</p:inputText>
+
+									<p:outputLabel for="@next" style="color:red"  value="Remark "></p:outputLabel>
+									<p:inputTextarea value="#{viewEnquiryForBlm.remark}"
+										required="true" requiredMessage="Please Enetr Remark" validatorMessage="Please Enter Correct value">
+									  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+									</p:inputTextarea>
+									<p:commandButton value="Payment"
+										actionListener="#{viewEnquiryForBlm.prospectusPayment}"
+										update=":form,:prospectusfeeform"></p:commandButton>
+								</p:panelGrid>
+							</p:dialog>
+						</h:form>
+						<h:form id="registrationfeeform">
+							<p:dialog header="Fee Details" widgetVar="registrationfeeDialog"
+								modal="true" showEffect="explode" hideEffect="explode"
+								resizable="false" closable="true">
+								<p:panelGrid columns="2" style="width:100%">
+									<p:outputLabel for="@next" style="color:red"  value="Payment Mode "></p:outputLabel>
+									<p:selectOneRadio value="#{viewEnquiryForBlm.paymentMode}"
+										required="true" requiredMessage="Please Enter Payment Mode">
+										<f:selectItem itemLabel="Cash" itemValue="cash"></f:selectItem>
+										<f:selectItem itemLabel="Cheque" itemValue="cheque"></f:selectItem>
+										<f:selectItem itemLabel="NEFT" itemValue="neft"></f:selectItem>
+										<p:ajax update="chequeForm"
+											listener="#{viewEnquiryForBlm.paymentModeListener}"></p:ajax>
+									</p:selectOneRadio>
+								</p:panelGrid>
+
+								<p:panelGrid id="chequeForm" columns="2" style="width:100%">
+									<p:outputLabel for="@next" style="color:red"  rendered="#{viewEnquiryForBlm.showCheque}"
+										value="Bank Name"></p:outputLabel>
+									<p:inputText required="true"
+										requiredMessage="Please Enter Bank name"
+										rendered="#{viewEnquiryForBlm.showCheque}"
+										value="#{viewEnquiryForBlm.bankName}" validatorMessage="Please Enter Correct value">
+									  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+									</p:inputText>
+
+									<p:outputLabel value="Submitted To Bank"
+										rendered="#{viewEnquiryForBlm.showCheque}"></p:outputLabel>
+									<p:selectOneMenu filter="true"
+										value="#{viewEnquiryForBlm.submittedBankName}"
+										rendered="#{viewEnquiryForBlm.showCheque}">
+										<f:selectItem itemLabel="Select Here" itemValue="N/A" />
+										<f:selectItems value="#{viewEnquiryForBlm.bankList}"></f:selectItems>
+										<p:ajax></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel for="@next" style="color:red"  rendered="#{viewEnquiryForBlm.showCheque}"
+										value="Cheque / Neft Number"></p:outputLabel>
+									<p:inputText required="true"
+										requiredMessage="Please Enter Cheque / Neft Number"
+										rendered="#{viewEnquiryForBlm.showCheque}"
+										value="#{viewEnquiryForBlm.chequeNumber}" validatorMessage="Please Enter Correct value">
+									  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+									</p:inputText>
+
+									<p:outputLabel for="@next" style="color:red"  rendered="#{viewEnquiryForBlm.showCheque}"
+										value="Cheque / Neft Date"></p:outputLabel>
+									<p:calendar required="true"
+										requiredMessage="Please Enter Cheque / Neft Date"
+										rendered="#{viewEnquiryForBlm.showCheque}"
+										value="#{viewEnquiryForBlm.chequeDate}" pattern="dd/MM/yyyy"
+										navigator="true" yearRange="c-10:c+10" />
+								</p:panelGrid>
+
+								<p:panelGrid columns="2" style="width:100%">
+
+									<p:outputLabel
+										rendered="#{viewEnquiryForBlm.info.branch_id eq '22'}"
+										value="Screening Test Date"></p:outputLabel>
+									<p:calendar
+										rendered="#{viewEnquiryForBlm.info.branch_id eq '22'}"
+										navigator="true" effect="fold" pattern="dd/MM/yyyy"
+										yearRange="c-30:c+30" value="#{viewEnquiryForBlm.testDate}"></p:calendar>
+
+									<p:outputLabel value="Fee Amount *"></p:outputLabel>
+									<p:inputText disabled="#{viewEnquiryForBlm.disableAmount}"
+										value="#{viewEnquiryForBlm.feeAmount}" rendered="true"
+										requiredMessage="Please Enter Fee Amount"
+										onfocus="this.select();">
+										<p:keyFilter mask="money"></p:keyFilter>
+									</p:inputText>
+
+									<p:outputLabel for="@next" style="color:red"  value="Remark"></p:outputLabel>
+									<p:inputTextarea value="#{viewEnquiryForBlm.remark}"
+										required="true" requiredMessage="Please Enetr Remark" validatorMessage="Please Enter Correct value">
+									  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+									</p:inputTextarea>
+									<p:commandButton value="Payment"
+										actionListener="#{viewEnquiryForBlm.registrationPayment}"
+										update=":form,:registrationfeeform"></p:commandButton>
+								</p:panelGrid>
+							</p:dialog>
+						</h:form>
+
+						<h:form id="addForm">
+							<p:dialog header="Registration Details" widgetVar="addDialog"
+								modal="true" showEffect="explode" hideEffect="explode"
+								resizable="false" closable="true" width="100%" height="450px">
+								<p:panelGrid columns="4"
+									styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;width: 100%;">
+
+									<p:outputLabel for="@next" style="color:red"  value="Admission No"></p:outputLabel>
+									<p:inputText id="srno"
+										disabled="#{viewEnquiryForBlm.disableSrNo}" required="true"
+										requiredMessage="Please Enter Admission Number"
+										value="#{viewEnquiryForBlm.addmissionNumber}" validatorMessage="Please Enter Correct value">
+									  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+									</p:inputText>
+
+									<p:outputLabel for="@next" style="color:red"  value="Admission Date "></p:outputLabel>
+									<p:calendar value="#{viewEnquiryForBlm.addmissionDate}"
+										navigator="true" required="true"
+										requiredMessage="Please Select Addmission Date"
+										pattern="dd/MM/yyyy"></p:calendar>
+
+									<p:outputLabel for="@next" style="color:red"  value="Select Class"></p:outputLabel>
+									<p:selectOneMenu value="#{viewEnquiryForBlm.className1}"
+										required="true" requiredMessage="Please Select a Class">
+										<f:selectItem itemLabel="Select"></f:selectItem>
+										<f:selectItems value="#{viewEnquiryForBlm.classList}"></f:selectItems>
+
+										<p:ajax listener="#{viewEnquiryForBlm.allSections}"
+											update="sectionid,admdt,pmt,amt,rmrk,allhouses"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel for="@next" style="color:red"  value="Select Section"></p:outputLabel>
+									<p:selectOneMenu id="sectionid"
+										value="#{viewEnquiryForBlm.selectedSection}" required="true"
+										requiredMessage="Please Select A Section">
+										<f:selectItems value="#{viewEnquiryForBlm.sectionList}"></f:selectItems>
+									</p:selectOneMenu>
+
+									<p:outputLabel for="@next" style="color:red"  value="House"
+										rendered="#{viewEnquiryForBlm.info.branch_id eq '22' || viewEnquiryForBlm.info.branch_id eq '27'}"></p:outputLabel>
+									<p:selectOneMenu id="allhouses"
+										value="#{viewEnquiryForBlm.houseName}"
+										required="#{viewEnquiryForBlm.info.branch_id eq '22'}"
+										requiredMessage="Please select house"
+										rendered="#{viewEnquiryForBlm.info.branch_id eq '22' || viewEnquiryForBlm.info.branch_id eq '27'}">
+										<f:selectItem itemLabel="Select House" itemValue="" />
+										<f:selectItems value="#{viewEnquiryForBlm.houseCategorylist}"></f:selectItems>
+										<p:ajax listener="#{viewEnquiryForBlm.houseSrno}"
+											update="srno" global="false"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Child's Aadhaar No"></p:outputLabel>
+									<p:inputText value="#{viewEnquiryForBlm.aadhar}" validatorMessage="Please Enter Correct value">
+									  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:inputText>
+									
+									<p:outputLabel value="Father's Aadhaar No"></p:outputLabel>
+									<p:inputText value="#{viewEnquiryForBlm.faadhar}" validatorMessage="Please Enter Correct value">
+									  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:inputText>
+									
+									<p:outputLabel value="Mother's Aadhaar No"></p:outputLabel>
+									<p:inputText value="#{viewEnquiryForBlm.maadhar}" validatorMessage="Please Enter Correct value">
+									  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:inputText>
+									
+									<p:outputLabel value="Mother's Mob. No.*"></p:outputLabel>
+									<p:inputText value="#{viewEnquiryForBlm.mothMob}">
+										<p:keyFilter mask="num"></p:keyFilter>
+									</p:inputText>
+
+									<p:outputLabel value="Category"></p:outputLabel>
+									<p:selectOneMenu value="#{viewEnquiryForBlm.stuCateg}"
+										requiredMessage="Please select Category">
+										<f:selectItems value="#{viewEnquiryForBlm.stuCategList}"></f:selectItems>
+									</p:selectOneMenu>
+
+									<p:outputLabel
+										value="Transport Route"></p:outputLabel>
+									<p:selectOneMenu value="#{viewEnquiryForBlm.routeName1}"
+										filter="true" filterMatchMode="contains">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{viewEnquiryForBlm.routeList}"></f:selectItems>
+									</p:selectOneMenu>
+									
+									<p:outputLabel value="Concession"></p:outputLabel>
+									<p:selectOneMenu value="#{viewEnquiryForBlm.concession}">
+										<f:selectItems value="#{viewEnquiryForBlm.connsessionList}"></f:selectItems>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Remark (If any)"></p:outputLabel>
+									<p:inputTextarea id="rmrk" value="#{viewEnquiryForBlm.remark}" validatorMessage="Please Enter Correct value">
+									  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:inputTextarea>
+
+									<p:outputLabel for="@next" style="color:red" 
+										rendered="#{viewEnquiryForBlm.info.branch_id eq '54'}"
+										value="Payment Mode"></p:outputLabel>
+									<p:selectOneRadio
+										rendered="#{viewEnquiryForBlm.info.branch_id eq '54'}"
+										id="pmt" value="#{viewEnquiryForBlm.paymentMode}"
+										required="true" requiredMessage="Please Enter Payment Mode">
+										<f:selectItem itemLabel="Cash" itemValue="cash"></f:selectItem>
+										<f:selectItem itemLabel="Cheque" itemValue="cheque"></f:selectItem>
+										<f:selectItem itemLabel="NEFT" itemValue="neft"></f:selectItem>
+										<p:ajax update="ch"
+											listener="#{viewEnquiryForBlm.paymentModeListener}"></p:ajax>
+									</p:selectOneRadio>
+								</p:panelGrid>
+								<p:panelGrid id="ch" columns="6"
+									rendered="#{viewEnquiryForBlm.info.branch_id eq '54'}">
+									<p:outputLabel for="@next" style="color:red"  rendered="#{viewEnquiryForBlm.showCheque}"
+										value="Bank Name"></p:outputLabel>
+									<p:inputText required="true"
+										requiredMessage="Please Enter Bank name"
+										rendered="#{viewEnquiryForBlm.showCheque}"
+										value="#{viewEnquiryForBlm.bankName}" validatorMessage="Please Enter Correct value">
+									  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+									 </p:inputText>
+
+									<p:outputLabel value="Submitted To Bank"
+										rendered="#{viewEnquiryForBlm.showCheque}"></p:outputLabel>
+									<p:selectOneMenu filter="true"
+										value="#{viewEnquiryForBlm.submittedBankName}"
+										rendered="#{viewEnquiryForBlm.showCheque}">
+										<f:selectItem itemLabel="Select Here" itemValue="N/A" />
+										<f:selectItems value="#{viewEnquiryForBlm.bankList}"></f:selectItems>
+										<p:ajax></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel for="@next" style="color:red"  rendered="#{viewEnquiryForBlm.showCheque}"
+										value="Cheque / Neft Number"></p:outputLabel>
+									<p:inputText required="true"
+										requiredMessage="Please Enter Cheque / Neft Number"
+										rendered="#{viewEnquiryForBlm.showCheque}"
+										value="#{viewEnquiryForBlm.chequeNumber}" validatorMessage="Please Enter Correct value">
+									  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:inputText>
+
+									<p:outputLabel for="@next" style="color:red"  rendered="#{viewEnquiryForBlm.showCheque}"
+										value="Cheque / Neft Date"></p:outputLabel>
+									<p:calendar required="true"
+										requiredMessage="Please Enter Cheque / Neft Date"
+										rendered="#{viewEnquiryForBlm.showCheque}"
+										value="#{viewEnquiryForBlm.chequeDate}" pattern="dd/MM/yyyy"
+										navigator="true" yearRange="c-10:c+10" />
+
+									<p:outputLabel value="Fee Amount *"></p:outputLabel>
+									<p:inputText id="amt" value="#{viewEnquiryForBlm.feeAmount}"
+										rendered="true" requiredMessage="Please Enter Fee Amount"
+										onfocus="this.select();">
+										<p:keyFilter mask="money"></p:keyFilter>
+									</p:inputText>
+
+								</p:panelGrid>
+								<br />
+								<p:dataTable id="admdt" value="#{viewEnquiryForBlm.admFeeList}"
+									var="var" style="width:100%"
+									rendered="#{viewEnquiryForBlm.info.branch_id eq '54'}">
+									<p:column headerText="S.No.">
+										<p:outputLabel value="#{var.srno}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Particulars">
+										<p:outputLabel value="#{var.feeName}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Amount">
+										<p:outputLabel value="#{var.amount}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Discount (If any)">
+										<p:inputText value="#{var.payDiscount}">
+											<p:ajax listener="#{viewEnquiryForBlm.calculateAmount}"
+												update=":addForm:amt, :addForm:admdt"></p:ajax>
+											<p:keyFilter mask="money"></p:keyFilter>
+										</p:inputText>
+									</p:column>
+								</p:dataTable>
+								
+								<br />
+								<p:separator />
+								<center>
+								<p:commandButton value="Add" update=":addForm,:form" styleClass="butwid" icon="fa fa-plus-circle"
+									action="#{viewEnquiryForBlm.acceptStudent}">
+									<p:confirm header="Confirmation"
+										message="Are you sure accpect this enquiry?"
+										icon="ui-icon-alert" />
+								</p:commandButton>
+								</center>
+								<p:separator />
+								
+								
+							</p:dialog>
+						</h:form>
+
+						<h:form id="MsgLimitForm" style="overflow:hidden">
+							<p:dialog header="Low SMS Balance" width="500"
+								widgetVar="MsgLmtDlg" modal="true" showEffect="fade"
+								hideEffect="fade" resizable="false">
+								<center>
+									<p:outputLabel value="#{viewEnquiryForBlm.balMsg}"
+										style="font-size:14px;font-weight: bold;" />
+								</center>
+								<br></br>
+								<br></br>
+								<center>
+									<p:commandButton value="Skip"
+										action="#{viewEnquiryForBlm.sendMsg}"
+										update="MsgLimitForm,form" />
+									<br /> <br />
+									<p:commandButton value="Message Logs"
+										action="messageSchoolHistory.xhtml?faces-redirect=true"
+										update="MsgLimitForm" />
+									<br /> <br />
+									<p:commandButton value="Recharge Now"
+										action="purchaseMsgPack.xhtml?faces-redirect=true"
+										update="MsgLimitForm" />
+								</center>
+								<br></br>
+							</p:dialog>
+						</h:form>
+
+						<h:form id="MsgOverForm" style="overflow:hidden">
+							<p:dialog header="SMS Limit Over" width="500"
+								widgetVar="MsgOvrDlg" modal="true" showEffect="fade"
+								hideEffect="fade" resizable="false">
+								<center>
+									<p:outputLabel value="#{viewEnquiryForBlm.balMsg}"
+										style="font-size:14px;font-weight: bold;" />
+								</center>
+								<br></br>
+								<br></br>
+								<center>
+									<p:commandButton value="Message Logs"
+										action="messageSchoolHistory.xhtml?faces-redirect=true"
+										update="MsgOverForm" />
+									<br /> <br />
+									<p:commandButton value="Recharge Now"
+										action="purchaseMsgPack.xhtml?faces-redirect=true"
+										update="MsgOverForm" />
+								</center>
+								<br></br>
+							</p:dialog>
+						</h:form>
+
+						<h:form id="MsgOtherForm" style="overflow:hidden">
+							<p:dialog header="SMS Limit Over" width="500"
+								widgetVar="MsgOthDlg" modal="true" showEffect="fade"
+								hideEffect="fade" resizable="false">
+								<center>
+									<p:outputLabel value="#{viewEnquiryForBlm.balMsg}"
+										style="font-size:14px;font-weight: bold;" />
+								</center>
+								<br></br>
+								<br></br>
+								<center>
+									<p:commandButton value="OK"
+										action="viewEnquiryForBlm.xhtml?faces-redirect=true"
+										update="MsgOtherForm" />
+								</center>
+							</p:dialog>
+						</h:form>
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

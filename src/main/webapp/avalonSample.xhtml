@@ -1,0 +1,132 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Sample</ui:define>
+
+    <ui:define name="content">
+        
+            <div class="ui-fluid">
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <div class="card card-w-title">
+                        <h:form>
+                            <h1>Form Elements</h1>
+                            
+                            <p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+                                <p:outputLabel for="input" value="Input"/>
+                                <p:inputText id="input"/>
+
+                                <p:outputLabel for="area" value="Textarea"/>
+                                <p:inputTextarea id="area" autoResize="false"/>
+
+                                <p:outputLabel for="calendar" value="Calendar"/>
+                                <p:calendar id="calendar"/>
+
+                                <p:outputLabel for="mask" value="Mask"/>
+                                <p:inputMask id="mask" mask="99/99/9999"/>
+
+                                <p:outputLabel for="pwd" value="Password"/>
+                                <p:password id="pwd" />
+
+                                <p:outputLabel for="keyboard" value="Keyboard"/>
+                                <p:keyboard id="keyboard" />
+
+                                <p:outputLabel for="onemenu" value="OneMenu"/>
+                                <p:selectOneMenu id="onemenu">
+                                    <f:selectItem itemLabel="Select One" itemValue="" />
+                                    <f:selectItem itemLabel="Xbox One" itemValue="Xbox One" />
+                                    <f:selectItem itemLabel="PS4" itemValue="PS4" />
+                                    <f:selectItem itemLabel="Wii U" itemValue="Wii U" />
+                                </p:selectOneMenu>
+
+                                <p:outputLabel for="spinner" value="Spinner"/>
+                                <p:spinner id="spinner"/>
+
+                                <p:outputLabel for="slider" value="Slider"/>
+                                <p:outputPanel>
+                                    <p:inputText id="slider"/>
+                                    <p:slider for="slider" />
+                                </p:outputPanel>
+
+                                <p:outputLabel for="radio" value="Radio"/>
+                                <p:selectOneRadio id="radio" value="#{radioView.city}" layout="responsive" columns="2" styleClass="form-group">
+                                    <f:selectItems value="#{radioView.cities}" var="c" itemLabel="#{city}" itemValue="#{city}"/>
+                                </p:selectOneRadio>
+
+                                <p:outputLabel for="chkbox" value="Checkbox"/>
+                                <p:selectManyCheckbox id="chkbox" layout="responsive" columns="2" styleClass="form-group">
+                                    <f:selectItems value="#{checkboxView.cities}" var="city" itemLabel="#{city}" itemValue="#{city}" />
+                                </p:selectManyCheckbox>
+
+                                <p:outputLabel for="btn" value="Button" />
+                                <p:commandButton id="btn" value="Edit" icon="ui-icon-edit" type="button"/>
+
+                                <p:outputLabel for="spbtn" value="SplitButton" />
+                                <p:splitButton id="spbtn" value="Save" type="button" icon="fa fa-check" style="max-width:150px;">
+                                    <p:menuitem value="Update" url="#" icon="fa fa-refresh" />
+                                    <p:menuitem value="Delete" url="#" icon="fa fa-trash" />
+                                    <p:separator />
+                                    <p:menuitem value="Homepage" url="http://www.primefaces.org" icon="fa fa-home" />
+                                </p:splitButton>
+
+                                <p:outputLabel for="chkmenu" value="Checkbox Menu" />
+                                <p:selectCheckboxMenu id="chkmenu" label="Cities">
+                                    <f:selectItems value="#{checkboxView.cities}" />
+                                </p:selectCheckboxMenu>
+
+                                <p:outputLabel for="booleanBtn" value="Boolean Button" />
+                                <p:selectBooleanButton id="booleanBtn" onLabel="Yes" offLabel="No" onIcon="ui-icon-check" offIcon="ui-icon-close"/>
+
+                                <p:outputLabel for="oneBtn" value="OneButton" />
+                                <p:selectOneButton id="oneBtn">
+                                    <f:selectItem itemLabel="Spark" itemValue="Spark" />
+                                    <f:selectItem itemLabel="Ronin" itemValue="Ronin" />
+                                </p:selectOneButton>
+
+                                <p:outputLabel for="manyBtn" value="Many Button"/>
+                                <p:selectManyButton id="manyBtn">
+                                    <f:selectItem itemLabel="Spark" itemValue="Spark" />
+                                    <f:selectItem itemLabel="Ronin" itemValue="Ronin" />
+                                    <f:selectItem itemLabel="Rio" itemValue="Rio" />
+                                </p:selectManyButton>
+
+                                <p:outputLabel for="listbox" value="Listbox"/>
+                                <p:selectOneListbox id="listbox">
+                                    <f:selectItem itemLabel="Sentinel" itemValue="Sentinel" />
+                                    <f:selectItem itemLabel="Spark" itemValue="Spark" />
+                                    <f:selectItem itemLabel="Ronin" itemValue="Ronin" />
+                                    <f:selectItem itemLabel="Rio" itemValue="Rio" />
+                                    <f:selectItem itemLabel="Primus" itemValue="Primus" />
+                                </p:selectOneListbox>
+
+                                <p:outputLabel for="listbox" value="Dialog"/>
+
+                                <p:commandButton id="dialog2" value="Dialog" icon="fa fa-home" type="button" onclick="PF('dlg').show()" style="max-width:150px;"/>
+                            </p:panelGrid>
+
+                            <p:dialog header="Login" widgetVar="dlg" closable="true" resizable="false" draggable="false" responsive="true" hideEffect="scale">
+                                <div class="ui-g form-group">
+                                    <div class="ui-g-12">
+                                        <p:inputText placeholder="Username" value="#{avs.username}"/>
+                                    </div>
+                                    <div class="ui-g-12">
+                                        <p:password placeholder="Password" value="#{avs.password}"/>
+                                    </div>
+                                </div>
+                                <f:facet name="footer">
+                                    <p:commandButton value="Login" action="#{avs.submit()}" style="width:auto" icon="fa fa-user" />
+                                </f:facet>  
+                            </p:dialog>
+                            </h:form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+    </ui:define>
+
+</ui:composition>

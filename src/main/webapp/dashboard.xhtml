@@ -1,0 +1,1349 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui" xmlns:po="http://primefaces.org/pandora" template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Dashboard</ui:define>
+    <ui:define name="viewname">
+        <li>Pandora</li>
+        <li><i class="pi pi-angle-right"/></li>
+        <li>
+            <p:link outcome="/dashboard">Dashboard</p:link>
+        </li>
+    </ui:define>
+    <ui:define name="head">
+        <h:outputScript name="js/chart.js" library="demo" />
+        <script type="text/javascript">
+            setInterval(function () {
+                setAnimation(PF('knob1'));
+                setAnimation(PF('knob2'));
+                setAnimation(PF('knob3'));
+            }, 2000);
+
+            function setAnimation(widget) {
+                widget.jq.animate({value: generateRandomNumber()}, {
+                    duration: 1000,
+                    easing: 'linear',
+                    progress: function()
+                    {
+                        widget.setValue(Math.floor(this.value));
+                    }
+                });
+            }
+
+            function generateRandomNumber() {
+                return Math.floor(Math.random() * 100) + 1;
+            }
+
+            $(function () {
+                var newsrow = $('.news-row');
+                    $('.point').on('click', function (e) {
+                        var point = $(this);
+
+                        point.siblings('.active-point').removeClass('active-point');
+                        point.addClass('active-point');
+
+                        newsrow.removeClass('news-1-active');
+
+                        if (point.hasClass('point-1')) {
+                            newsrow.css('transform', 'translate3d(0, 0, 0)');
+                            newsrow.removeClass('news-2-active');
+                            newsrow.removeClass('news-3-active');
+                            newsrow.addClass('news-1-active');
+                        } else if (point.hasClass('point-2')) {
+                            newsrow.css('transform', 'translate3d(-100%, 0, 0)');
+                            newsrow.removeClass('news-1-active');
+                            newsrow.removeClass('news-3-active');
+                            newsrow.addClass('news-2-active');
+                        } else if (point.hasClass('point-3')) {
+                            newsrow.css('transform', 'translate3d(-200%, 0, 0)');
+                            newsrow.removeClass('news-2-active');
+                            newsrow.removeClass('news-1-active');
+                            newsrow.addClass('news-3-active');
+                        }
+
+                        e.preventDefault();
+                });
+                $('.slide-button').on('click', function (e) {
+                        var button = $(this);
+                        var point= $('.point');
+                        var point1= $('.point-1');
+                        var point2= $('.point-2');
+                        var point3= $('.point-3');
+
+                        point.siblings('.active-point').removeClass('active-point');
+
+                        if (button.hasClass('right-button')) {
+                            if (newsrow.hasClass('news-1-active')) {
+                                newsrow.css('transform', 'translate3d(-100%, 0, 0)');
+                                newsrow.removeClass('news-1-active');
+                                newsrow.removeClass('news-3-active');
+                                newsrow.addClass('news-2-active');
+                                point2.addClass('active-point');
+                            }
+                            else if (newsrow.hasClass('news-2-active')) {
+                                newsrow.css('transform', 'translate3d(-200%, 0, 0)');
+                                newsrow.removeClass('news-2-active');
+                                newsrow.removeClass('news-1-active');
+                                newsrow.addClass('news-3-active');
+                                point3.addClass('active-point');
+                            }
+                        } else if (button.hasClass('left-button')) {
+                            if (newsrow.hasClass('news-2-active')) {
+                                newsrow.css('transform', 'translate3d(0, 0, 0)');
+                                newsrow.removeClass('news-2-active');
+                                newsrow.removeClass('news-3-active');
+                                newsrow.addClass('news-1-active');
+                                point1.addClass('active-point');
+                            }
+                            else if (newsrow.hasClass('news-3-active')) {
+                                newsrow.css('transform', 'translate3d(-100%, 0, 0)');
+                                newsrow.removeClass('news-1-active');
+                                newsrow.removeClass('news-3-active');
+                                newsrow.addClass('news-2-active');
+                                point2.addClass('active-point');
+                            }
+                        } 
+                        e.preventDefault();
+                });
+            });
+
+            $(function () {
+                var sections = $('.charts-sections'),
+                    department = $('.department'),
+                    chartContent = sections.children('.chart-content');
+                    activeChartContent = chartContent.eq(department.filter('.active-chart').index());
+
+                    activeChartContent.addClass('active-chart-content');
+
+                    department.on('click', function (e) {
+                    var button = $(this);
+                    button.siblings('.active-chart').removeClass('active-chart');
+                    button.addClass('active-chart');
+
+                    chartContent.height('');
+
+                    if (button.hasClass('dept-1')) {
+                        sections.css('transform', 'translate3d(0, 0, 0)');
+                    } else if (button.hasClass('dept-2')) {
+                        sections.css('transform', 'translate3d(-100%, 0, 0)');
+                    } else if (button.hasClass('dept-3')) {
+                        sections.css('transform', 'translate3d(-200%, 0, 0)');
+                    } else if (button.hasClass('dept-4')) {
+                        sections.css('transform', 'translate3d(-300%, 0, 0)');
+                    } else if (button.hasClass('dept-5')) {
+                        sections.css('transform', 'translate3d(-400%, 0, 0)');
+                    }
+                    e.preventDefault();
+                });
+
+               
+            });
+        </script>
+        
+         <script type="text/javascript">
+          $(function () {
+            var ctx = document.getElementById("chart2").getContext('2d');
+            var myChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+                        datasets: [{
+                            label: 'Sapphire',
+                            data: [1, 2, 5, 3, 12, 7, 15],
+                            borderColor: [
+                                '#F95052'
+                            ],
+                            borderWidth: 3,
+                            fill: true,
+                            backgroundColor: [
+                                'rgba(253,176,175,.3)',
+                            ]
+                        },
+                        {
+                            label: 'Roma',
+                            data: [3, 7, 2, 17, 15, 13, 19],
+                            borderColor: [
+                                '#68DBD3'
+                            ],
+                            borderWidth: 3,
+                            fill: false
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        fontFamily: "IBMPlexSans",
+                        hover: {
+                            mode: 'index'
+                        },
+                        scales: {
+                            xAxes: [{
+                                gridLines: {
+                                    display: false
+                                },
+                                ticks: {
+                                    fontColor: '#65686a'
+                                }
+                            }],
+                            yAxes: [{
+                                gridLines: {
+                                    display: false
+                                },
+                                ticks: {
+                                    fontColor: '#65686a'
+                                }
+                            }]
+                        },
+                        legend: {
+                            display: true,
+                            labels: {
+                                fontColor: '#191a1c'
+                            }
+                        }
+                    }
+                });
+            var ctx2 = document.getElementById("chart1").getContext('2d');
+            var myChart2 = new Chart(ctx2, {
+                    type: 'radar',
+                    data: {
+                        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+                        datasets: [{
+                            label: 'Units',
+                            data: [0,10, 20, 20, 30, 40, 50],
+                            backgroundColor: [
+                                '#F99D53',
+                            ],
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        fontFamily: "'Candara', 'Calibri', 'Courier', 'serif'",
+                        hover: {
+                            mode: 'index'
+                        },
+                        scales: {
+                            xAxes: [{
+                                gridLines: {
+                                    display: false
+                                },
+                                ticks: {
+                                    fontColor: '#9199a9'
+                                }
+                            }],
+                            yAxes: [{
+                                gridLines: {
+                                    display: false
+                                },
+                                ticks: {
+                                    fontColor: '#9199a9'
+                                }
+                            }]
+                        },
+                        legend: {
+                            display: true,
+                            labels: {
+                                fontColor: '#9199a9'
+                            }
+                        }
+                    }
+                });
+
+            var ctx3 = document.getElementById("chart3").getContext('2d');
+            var myChart3 = new Chart(ctx3, {
+                    type: 'horizontalBar',
+                    data: {
+                        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+                        datasets: [{
+                            label: 'Ads',
+                            barPercentage: 0.5,
+                            barThickness: 6,
+                            maxBarThickness: 8,
+                            minBarLength: 2,
+                            data: [0,10, 20, 20, 30, 40, 50],
+                            backgroundColor: [
+                                '#7DF2EA',
+                                '#95C4EF',
+                                '#FED3B0',
+                                '#FDB0B0',
+                                '#F493D4',
+                                '#6492BD',
+                                '#D153A8',
+                            ],
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        fontFamily: "'Candara', 'Calibri', 'Courier', 'serif'",
+                        hover: {
+                            mode: 'index'
+                        },
+                        scales: {
+                            xAxes: [{
+                                gridLines: {
+                                    display: false
+                                },
+                                ticks: {
+                                    fontColor: '#9199a9'
+                                }
+                            }],
+                            yAxes: [{
+                                gridLines: {
+                                    display: false
+                                },
+                                ticks: {
+                                    fontColor: '#9199a9'
+                                }
+                            }]
+                        },
+                        legend: {
+                            display: true,
+                            labels: {
+                                fontColor: '#9199a9'
+                            }
+                        }
+                    }
+                });
+            
+
+            var ctx4 = document.getElementById("chart4").getContext('2d');
+            var myChart4 = new Chart(ctx4, {
+                    type: 'line',
+                    data: {
+                        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+                        datasets: [{
+                            label: 'Sales',
+                            data: [12, 19, 3, 5, 2, 3, 9],
+                            borderColor: [
+                                '#68DBD3',
+                            ],
+                            borderWidth: 3,
+                            borderDash:[5, 5],
+                            fill: false,
+                            pointRadius: 3
+                        }, {
+                            label: 'Income',
+                            data: [1, 2, 5, 3, 12, 7, 15],
+                            backgroundColor: [
+                                'rgba(254,229,208,0.4)',
+                            ],
+                            borderColor: [
+                                '#FDB071',
+                            ],
+                            borderWidth: 3,
+                            fill: true
+                        },
+                        {
+                            label: 'Expenses',
+                            data: [7, 12, 15, 5, 3, 13, 21],
+                            borderColor: [
+                                '#81B1DD',
+                            ],
+                            borderWidth: 3,
+                            fill: false,
+                            pointRadius: [4, 6, 4, 12, 8, 0, 4]
+                        },
+                        {
+                            label: 'New Users',
+                            data: [3, 7, 2, 17, 15, 13, 19],
+                            borderColor: [
+                                '#DE73BB',
+                            ],
+                            borderWidth: 3,
+                            fill: false
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        hover: {
+                            mode: 'index'
+                        },
+                        scales: {
+                            xAxes: [{
+                                display: true,
+                            }],
+                            yAxes: [{
+                                display: true,
+                            }]
+                        }
+                    }
+                });
+
+                var ctx5 = document.getElementById("chart5").getContext('2d');
+                var myChart5 = new Chart(ctx5, {
+                    type: 'bar',
+                    data: {
+                        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+                        datasets: [{
+                            label: 'Ads',
+                            barPercentage: 0.5,
+                            barThickness: 6,
+                            maxBarThickness: 8,
+                            minBarLength: 2,
+                            data: [0,10, 20, 20, 30, 40, 50],
+                            backgroundColor: [
+                                '#BE3D94',
+                                '#7DF2EA',
+                                '#95C4EF',
+                                '#FED3B0',
+                                '#FDB0B0',
+                                '#F493D4',
+                                '#6492BD',
+                                '#D153A8',
+                            ],
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        fontFamily: "'Candara', 'Calibri', 'Courier', 'serif'",
+                        hover: {
+                            mode: 'index'
+                        },
+                        scales: {
+                            xAxes: [{
+                                gridLines: {
+                                    display: false
+                                },
+                                ticks: {
+                                    fontColor: '#9199a9'
+                                }
+                            }],
+                            yAxes: [{
+                                gridLines: {
+                                    display: false
+                                },
+                                ticks: {
+                                    fontColor: '#9199a9'
+                                }
+                            }]
+                        },
+                        legend: {
+                            display: true,
+                            labels: {
+                                fontColor: '#9199a9'
+                            }
+                        }
+                    }
+                });
+           });
+     
+        </script>
+    </ui:define>
+
+    <ui:define name="content">
+        <div class="p-grid layout-dashboard">
+            <div class="p-col-12 p-md-6 p-lg-3">
+                <div class="overview-box messages">
+                    <div class="box-text">
+                        <h4>Messages</h4>
+                        <span class="span-text">24 new since last visit</span>
+                    </div>
+                    <div class="box-image">
+                        <p:graphicImage name="images/dashboard/asset-messages.svg" library="pandora-layout" />
+                    </div>
+                </div>
+            </div>
+            <div class="p-col-12 p-md-6 p-lg-3">
+                <div class="overview-box logins">
+                    <div class="box-text">
+                        <h4>Logins</h4>
+                        <span class="span-text">48 new since last visit</span>
+                    </div>
+                    <div class="box-image">
+                        <p:graphicImage name="images/dashboard/asset-login.svg" library="pandora-layout" />
+                    </div>
+                </div>
+            </div>
+            <div class="p-col-12 p-md-6 p-lg-3">
+                <div class="overview-box files">
+                    <div class="box-text">
+                        <h4>Files Synced</h4>
+                        <span class="span-text">163,02 / 240 GB</span>
+                    </div>
+                    <div class="box-image">
+                        <p:graphicImage name="images/dashboard/asset-filessynced.svg" library="pandora-layout" />
+                    </div>
+                </div>
+            </div>
+            <div class="p-col-12 p-md-6 p-lg-3">
+                <div class="overview-box users">
+                    <div class="box-text">
+                        <h4>Users Online</h4>
+                        <span class="span-text">72 new user this week</span>
+                    </div>
+                    <div class="box-image">
+                        <p:graphicImage name="images/dashboard/asset-usersonline.svg" library="pandora-layout" />
+                    </div>
+                </div>
+            </div>
+            <div class="p-col-12">
+                <div class="p-grid">
+                    <div class="p-col-12 p-md-6">
+                        <div class="p-grid">
+                            <div class="p-col-12 p-md-6">
+                                <div class="card profile">
+                                    <div class="profile-header">
+                                        <div class="profile-image">
+                                                <p:graphicImage styleClass="center" name="images/dashboard/avatar-and-info.png" library="pandora-layout" />
+                                        </div>
+                                        <div class="profile-info">
+                                            <h4>Alex Walker</h4>
+                                            <span class="span-text"><i class="pi pi-map-marker"/> Ankara, Turkey</span>
+                                            <span class="span-text"><i class="pi pi-phone"/> 312-265-02-55</span>
+                                        </div>
+                                    </div>
+                                    <div class="profile-content">
+                                        <div class="profile-content-info">
+                                            <div class="icon"><i class="pi pi-undo"/></div>
+                                            <p>Action History</p>
+                                            <i class="pi pi-angle-right"/>
+                                        </div>
+                                        <div class="profile-content-info">
+                                            <div class="icon"><i class="pi pi-comment"/></div>
+                                            <p>Messages</p>
+                                            <i class="pi pi-angle-right"/>
+                                        </div>
+                                        <div class="profile-content-info">
+                                            <div class="icon"><i class="pi pi-list"/></div>
+                                            <p>Assignments</p>
+                                            <i class="pi pi-angle-right"/>
+                                        </div>
+                                        <div class="profile-content-info">
+                                            <div class="icon"><i class="pi pi-user"/></div>
+                                            <p>Related Persons</p>
+                                            <i class="pi pi-angle-right"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-col-12 p-md-6">
+                                <div class="card stats card-w-title">
+                                    <div class="card-header">
+                                        <h4>Stats Overview</h4>
+                                        <h:form>
+                                            <p:menuButton icon="pi pi-ellipsis-v">
+                                                <p:menuitem value="Save" icon="pi pi-save"/>
+                                                <p:menuitem value="Update" icon="pi pi-refresh"/>
+                                                <p:menuitem value="Delete" icon="pi pi-times"/>
+                                            </p:menuButton>
+                                        </h:form>
+                                    </div>
+                                    <div class="stats-content">
+                                        <div class="stat">
+                                            <div class="stat-title">
+                                                <h6>Mirage</h6>
+                                                <span class="span-text">PrimeNG</span>
+                                            </div>
+                                            <div class="progress-bar">
+                                                <span class="progress"></span>
+                                                <span class="progress-bar-background"></span>
+                                            </div>
+                                            <span class="span-text">55%</span>
+                                        </div>
+                                        <div class="stat">
+                                            <div class="stat-title">
+                                                <h6>Prestige</h6>
+                                                <span class="span-text">PrimeVue</span>
+                                            </div>
+                                            <div class="progress-bar">
+                                                <span class="progress"></span>
+                                                <span class="progress-bar-background"></span>
+                                            </div>
+                                            <span class="span-text">23%</span>
+                                        </div>
+                                        <div class="stat">
+                                            <div class="stat-title">
+                                                <h6>Posedion</h6>
+                                                <span class="span-text">PrimeFaces</span>
+                                            </div>
+                                            <div class="progress-bar">
+                                                <span class="progress"></span>
+                                                <span class="progress-bar-background"></span>
+                                            </div>
+                                            <span class="span-text">38%</span>
+                                        </div>
+                                        <div class="stat">
+                                            <div class="stat-title">
+                                                <h6>Olympia</h6>
+                                                <span class="span-text">PrimeReact</span>
+                                            </div>
+                                            <div class="progress-bar">
+                                                <span class="progress"></span>
+                                                <span class="progress-bar-background"></span>
+                                            </div>
+                                            <span class="span-text">44%</span>
+                                        </div>
+                                        <div class="stat">
+                                            <div class="stat-title">
+                                                <h6>Ecuador</h6>
+                                                <span class="span-text">PrimeFaces</span>
+                                            </div>
+                                            <div class="progress-bar">
+                                                <span class="progress"></span>
+                                                <span class="progress-bar-background"></span>
+                                            </div>
+                                            <span class="span-text">80%</span>
+                                        </div>
+                                        <div class="stat">
+                                            <div class="stat-title">
+                                                <h6>Icarus</h6>
+                                                <span class="span-text">PrimeNG</span>
+                                            </div>
+                                            <div class="progress-bar">
+                                                <span class="progress"></span>
+                                                <span class="progress-bar-background"></span>
+                                            </div>
+                                            <span class="span-text">66%</span>
+                                        </div>
+                                        <div class="stat">
+                                            <div class="stat-title">
+                                                <h6>Sapphire</h6>
+                                                <span class="span-text">PrimeNG</span>
+                                            </div>
+                                            <div class="progress-bar">
+                                                <span class="progress"></span>
+                                                <span class="progress-bar-background"></span>
+                                            </div>
+                                            <span class="span-text">21%</span>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="p-col-12">
+                                <div class="card event">
+                                    <div class="event-text">
+                                        <h4>Meeting with Product Team</h4>
+                                        <span  class="span-text">Details of phase 2 will be discussed tomorrow morning.</span>
+                                    </div>
+                                    <div class="event-attendees">
+                                        <div class="person">
+                                            <span class="span-text">MB</span>
+                                        </div>
+                                        <div class="person">
+                                            <span class="span-text">ZG</span>
+                                        </div>
+                                        <div class="person">
+                                            <span class="span-text">BH</span>
+                                        </div>
+                                        <div class="person">
+                                            <span class="span-text">SI</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-col-12">
+                                <div class="card event event-2">
+                                    <div class="event-text">
+                                        <h4>Q3 Budget Planning</h4>
+                                        <span class="span-text">All executives are required to join this event.</span>
+                                    </div>
+                                    <div class="event-attendees">
+                                        <div class="person">
+                                            <span class="span-text">SS</span>
+                                        </div>
+                                        <div class="person">
+                                            <span class="span-text">GE</span>
+                                        </div>
+                                        <div class="person">
+                                            <span class="span-text">SI</span>
+                                        </div>
+                                        <div class="person">
+                                            <span class="span-text">ZG</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="p-col-12 p-md-6">
+                        <div class="card timeline">
+                            <span class="span-text">Sunday</span>
+                            <h4 class="span-text">12 January</h4>
+                            <ul>
+                                <li>
+                                    <div class="timeline-item-left">
+                                        <div class="timeline-icon">
+                                            <i class="pi pi-twitter"/>
+                                            <span class="span-text">12:42</span>
+                                        </div>
+                                        <i class="pi pi-ellipsis-v"/>
+                                    </div>
+                                    <div class="timeline-item-right">
+                                        <span class="span-text">12/5/2021</span>
+                                        <span class="span-text"><i class="pi pi-circle-on"/> TWITTER</span>
+                                        <h5>Evelyn Allen</h5>
+                                        <p>Earum porro tenetur consequuntur veritatis eos vel natus quisquam.</p>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="timeline-item-left">
+                                        <div class="timeline-icon">
+                                            <i class="pi pi-youtube"/>
+                                            <span class="span-text">12:42</span>
+                                        </div>
+                                        <i class="pi pi-ellipsis-v"/>
+                                    </div>
+                                    <div class="timeline-item-right">
+                                        <span class="span-text">12/5/2021</span>
+                                        <span class="span-text"><i class="pi pi-circle-on"/> YOUTUBE</span>
+                                        <h5>Pavith Nadal</h5>
+                                        <p>Quibusdam ratione est repellat qui nam quisquam veniam quibusdam ratione..
+                                        </p>
+                                        <div class="images">
+                                            <p:graphicImage name="images/dashboard/posters.jpg"
+                                                library="pandora-layout" />
+                                            <p:graphicImage name="images/dashboard/amsterdam.jpg"
+                                                library="pandora-layout" />
+                                            <p:graphicImage name="images/dashboard/shape.jpg"
+                                                library="pandora-layout" />
+                                            <p:graphicImage name="images/dashboard/painting.jpg"
+                                                library="pandora-layout" />
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="timeline-item-left">
+                                        <div class="timeline-icon">
+                                            <i class="pi pi-twitter"/>
+                                            <span class="span-text">12:42</span>
+                                        </div>
+                                        <i class="pi pi-ellipsis-v"/>
+                                    </div>
+                                    <div class="timeline-item-right">
+                                        <span class="span-text">12/5/2021</span>
+                                        <span class="span-text"><i class="pi pi-circle-on"/> TWITTER</span>
+                                        <h5>Olivia Arribas</h5>
+                                        <p>Mauris malesuada quis risus ut consequat. Maecenas ornare nunc risus,
+                                            pulvinar euismod mi pellentesque eget.</p>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="timeline-item-left">
+                                        <div class="timeline-icon">
+                                            <i class="pi pi-facebook"/>
+                                            <span class="span-text">12:42</span>
+                                        </div>
+                                        <i class="pi pi-ellipsis-v"/>
+                                    </div>
+                                    <div class="timeline-item-right">
+                                        <span class="span-text">12/5/2021</span>
+                                        <span class="span-text"><i class="pi pi-circle-on"/> FACEBOOK</span>
+                                        <h5>Song Bao</h5>
+                                        <p>Capitalize on low hanging fruit to identify a ballpark value added activity.
+                                        </p>
+                                        <div class="images">
+                                            <p:graphicImage styleClass="landscape" name="images/dashboard/windows.jpg"
+                                                library="pandora-layout" />
+                                            <p:graphicImage name="images/dashboard/holland.jpg"
+                                                library="pandora-layout" />
+                                            <p:graphicImage name="images/dashboard/ship.jpg" library="pandora-layout" />
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="p-col-12 p-md-6 p-lg-3">
+                <div class="card survey">
+                    <p:graphicImage name="images/dashboard/path-6.svg" library="pandora-layout" />
+                    <i class="pi pi-user"/>
+                    <h6>It's about the future, isn't it?</h6>
+                    <span class="span-text">Kids, we're gonna have to eat this cake by ourselves, Uncle Joey didn't make parole again. I
+                        think it would be nice, if you all dropped him a line.</span>
+                    <p:commandButton value="Yes, it is about the future" />
+                    <p:commandButton styleClass="second-button" value="No, invalid question" />
+                </div>
+            </div>
+            <div class="p-col-12 p-md-6 ">
+                <div class="card statistics">
+                    <div class="statistics-header">
+                        <h4>Department Statistics</h4>
+                        <div class="tags">
+                            <span class="span-text">LAST MONTH</span>
+                            <span class="span-text">LAST WEEK</span>
+                        </div>
+                    </div>
+                    <div class="statistics-images">
+                        <div class="image image-1">
+                            <h6>Design Team</h6>
+                            <span class="span-text"><span>44</span> people resolved <span>9123</span> issues today</span>
+                        </div>
+                        <div class="image image-2">
+                            <h6>Mobile Integrations</h6>
+                            <span class="span-text"><span>12</span> people resolved <span>564</span> issues today </span>
+                        </div>
+                    </div>
+                    <div class="stats">
+                        <div class="stat stat-1">
+                            <p:knob thickness=".2" showLabel="false" disabled="true" foregroundColor="#00acad" height="55" width="55" backgroundColor="#d8dadc" widgetVar="knob1" value="20.59"/>
+                            <div class="stats-info">
+                                <h4>System Changes</h4>
+                                <span>20.59%</span>
+                            </div>
+                        </div>
+                        <div class="stat stat-1">
+                            <p:knob thickness=".2" showLabel="false" disabled="true" foregroundColor="#c03995" height="55" width="55"  backgroundColor="#d8dadc" widgetVar="knob2" value="68.44"/>
+                            <div class="stats-info">
+                                <h4>New Features</h4>
+                                <span>68.44%</span>
+                            </div>
+                        </div>
+                        <div class="stat stat-1">
+                            <p:knob thickness=".2" showLabel="false" disabled="true" foregroundColor="#f3a841" height="55" width="55"  backgroundColor="#d8dadc" widgetVar="knob3" value="74.9"/>
+                            <div class="stats-info">
+                                <h4>Revisions</h4>
+                                <span>74.9%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="p-col-12 p-md-6 p-lg-3">
+                <div class="card map card-w-title">
+                    <div class="card-header">
+                        <h4>Last Location</h4>
+                        <h:form>
+                            <p:menuButton icon="pi pi-ellipsis-v">
+                                <p:menuitem value="Save" icon="pi pi-save"/>
+                                <p:menuitem value="Update" icon="pi pi-refresh"/>
+                                <p:menuitem value="Delete" icon="pi pi-times"/>
+                            </p:menuButton>
+                        </h:form>
+                    </div>
+                    <div class="map-info">
+                        <span class="span-text"><i class="pi pi-clock"/> 15.13 PM EST</span>
+                        <span class="span-text"><i class="pi pi-map-marker"/> Amsterdam, Netherlands</span>
+                    </div>
+
+                    <div class="pin"></div>
+
+                </div>
+            </div>
+            <div class="p-col-12 p-md-6 news-row-wrapper">
+                <div class="news-row news-1-active">
+                    <div class="card news news-1 active-news">
+                        <span class="news-header">Recent News</span>
+                        <div class="news-content">
+                            <div class="date">
+                                <span class="span-text">Jan</span>
+                                <span class="span-text">12</span>
+                            </div>
+                            <div class="news-text">
+                                <h5>MIT scientists made a shape-shifting  material</h5>
+                                <p>It morphs into a human face using 4D printing, as reported in PNAS. "4D materials" are designed to deform over time in response to changes in the environment, like humidity and temperature, also known as active origami or shape-morphing systems.</p>
+                                <a href="#">Read More</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card news news-2">
+                        <span class="news-header">Recent News</span>
+                        <div class="news-content">
+                            <div class="date">
+                                <span class="span-text">Apr</span>
+                                <span class="span-text">1</span>
+                            </div>
+                            <div class="news-text">
+                                <h5>Oceans can be restored to former glory within 30 years</h5>
+                                <p>The glory of the world’s oceans could be restored within a generation, according to a major new scientific review. It reports rebounding sea life, from humpback whales off Australia to elephant seals in the US and green turtles in Japan.</p>
+                                <a href="#">Read More</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card news news-3">
+                        <span class="news-header">Recent News</span>
+                        <div class="news-content">
+                            <div class="date">
+                                <span class="span-text">Apr</span>
+                                <span class="span-text">2</span>
+                            </div>
+                            <div class="news-text">
+                                <h5>Mindfulness training might enhance cognitive control processes</h5>
+                                <p>Mindfulness training might enhance cognitive control processes and the ability to overcome distractions, according to new research. The findings, published in the journal Mindfulness, suggest that meditation practices can improve the ability to focus and detect new changes in the environment.</p>
+                                <a href="#">Read More</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="link-points">
+                    <div class="points">
+                        <div class="left-button slide-button">
+                            <i class="pi pi-arrow-left"/>
+                        </div>
+                        <div class=" point point-1 active-point"></div>
+                        <div class=" point point-2 "></div>
+                        <div class=" point point-3 "></div>
+                        <div class="right-button slide-button">
+                            <i class="pi pi-arrow-right"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="p-col-12 p-md-6 p-lg-3">
+                <div class="card progress-card card-w-title">
+                    <div class="card-header">
+                        <h4>Progress</h4>
+                        <p:selectOneMenu id="languageDropdown" >
+                            <f:selectItem itemLabel="TR" itemValue="TR" />
+                            <f:selectItem itemLabel="US" itemValue="US" />
+                        </p:selectOneMenu>
+                    </div>
+                    <div class="progresses">
+                        <div class="progress-item">
+                            <div class="progress-title">
+                                <span >Fahrenheit</span>
+                                <span >489 / 961</span>
+                            </div>
+                           
+                            <div class="progress-bar">
+                                <span class="progress"></span>
+                                <span class="progress-bar-background"></span>
+                            </div>
+                            <span><span>22</span> trophies earned</span>
+                            <span><i class="pi pi-circle-on"/><span>412</span> decisions made</span>
+                        </div>
+                        <div class="progress-item">
+                            <div class="progress-title">
+                                <span >Detroit: Become Human</span>
+                                <span >221 / 1404</span>
+                            </div>
+                          
+                            <div class="progress-bar">
+                                <span class="progress"></span>
+                                <span class="progress-bar-background"></span>
+                            </div>
+                            <span><span>12</span> trophies earned</span>
+                            <span><i class="pi pi-circle-on"/><span>179</span> decisions made</span>
+                        </div>
+
+                        <div class="progress-item">
+                            <div class="progress-title">
+                                <span >Spiderman: Homecoming</span>
+                                <span >221 / 1404</span>
+                            </div>
+                          
+                            <div class="progress-bar">
+                                <span class="progress"></span>
+                                <span class="progress-bar-background"></span>
+                            </div>
+                            <span><span>12</span> trophies earned</span>
+                            <span><i class="pi pi-circle-on"/><span>179</span> decisions made</span>
+                        </div>
+
+                        <span><span class="mini-box"></span> Playstation 4</span>
+
+                        <span><span class="mini-box box-2"></span> Nintendo Switch</span>
+                    </div>
+
+                   
+
+                </div>
+            </div>
+            <div class="p-col-12 p-md-6 p-lg-3">
+                <div class="card revenue  card-w-title">
+                    <div class="card-header">
+                        <h4>Revenue Statistics</h4>
+                        <h:form>
+                            <p:menuButton icon="pi pi-ellipsis-v">
+                                <p:menuitem value="Save" icon="pi pi-save"/>
+                                <p:menuitem value="Update" icon="pi pi-refresh"/>
+                                <p:menuitem value="Delete" icon="pi pi-times"/>
+                            </p:menuButton>
+                        </h:form>
+                    </div>
+                    <div class="revenue-content">
+                        <span><span class="mini-box"></span>R:X1</span>
+                        <span><span class="mini-box box-2"></span>R:X2</span>
+                        <span><span class="mini-box box-3"></span>Expectation</span>
+                        <p:graphicImage name="images/dashboard/asset-graph.png" library="pandora-layout" />
+                    </div>
+                </div>
+            </div>
+            <div class="p-col-12 p-md-6 p-lg-4">
+                <div class="card tasks  card-w-title">
+                    <div class="card-header">
+                        <h4>Tasks</h4>
+                    </div>
+                    <div class="tasks-content">
+                        <span class="category active">ALL</span>
+                        <span class="category">MARKETING</span>
+                        <span class="category">FINANCE</span>
+                        <span class="category">PERSONAL</span>
+
+                        <ul>
+                            <li>
+                                <div class="checkbox">
+                                    <p:selectBooleanCheckbox />
+                                    <p>Sales Reports</p>
+                                </div>
+                                <div class="tag">
+                                    <span class="category">FINANCE</span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="checkbox">
+                                    <p:selectBooleanCheckbox />
+                                    <p>Pay Invoices</p>
+                                </div>
+                                <div class="tag">
+                                    <span class="category">FINANCE</span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="checkbox">
+                                    <p:selectBooleanCheckbox />
+                                    <p>Dinner with Tony</p>
+                                </div>
+                                <div class="tag">
+                                    <span class="category">PERSONAL</span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="checkbox">
+                                    <p:selectBooleanCheckbox />
+                                    <p>Client Meeting</p>
+                                </div>
+                                <div class="tag">
+                                    <span class="category">MARKETING</span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="checkbox">
+                                    <p:selectBooleanCheckbox />
+                                    <p>New Theme</p>
+                                </div>
+                                <div class="tag">
+                                    <span class="category">PERSONAL</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+            <div class="p-col-12 p-md-6 p-lg-4">
+                <div class="card members card-w-title">
+                    <div class="card-header">
+                        <h4>Add members to Pandora Network</h4>
+                    </div>
+                    <div class="members-content">
+                        <div class="inputs">
+                            <div class="emails">
+                                <h4>Email Address</h4>
+                                <p:inputText placeholder="name@example.com" />
+                                <p:inputText placeholder="name@example.com" />
+                            </div>
+                            <div class="names">
+                                <h4>Name</h4>
+                                <p:inputText placeholder="Optional" />
+                                <p:inputText placeholder="Optional" />
+                            </div>
+                        </div>
+                        <p:commandButton styleClass="second-button" value="Add another" icon='pi pi-plus' />
+                        <div class="upload-area">
+                            <h4>Upload Bulk File</h4>
+                            <div class="upload">
+                                <i class="pi pi-upload"/>
+                                <p>Drop file here or Browse</p>
+                            </div>
+                            
+                        </div>
+                        <p:commandButton value="ADD MEMBERS" />
+                        
+                    </div>
+
+                </div>
+            </div>
+            <div class="p-col-12 p-md-6 p-lg-4">
+                <div class="card messages  card-w-title">
+                    <div class="card-header">
+                        <h4>Messages</h4>
+                    </div>
+                    <div class="messages-content">
+                        <ul>
+                            <li>
+                                <p:graphicImage name="images/dashboard/avatar-karl.png"
+                                library="pandora-layout" />
+                                <div class="messages-item-right new-messgae">
+                                    <span>12.23</span>
+                                    <span><i class="pi pi-circle-on"/> 12/5/2021</span>
+                                    <span><i class="pi pi-circle-on"/> NEW</span>
+                                    <h5>Karl Kalagin</h5>
+                                    <p>Doc, look, all we need is a little plutonium. I need fuel.</p>
+                                </div>
+                            </li>
+                            <li>
+                                <p:graphicImage name="images/dashboard/avatar-harmen.png"
+                                library="pandora-layout" />
+                                <div class="messages-item-right">
+                                    <span>12.29</span>
+                                    <span><i class="pi pi-circle-on"/> 12/5/2021</span>
+                                    <h5>Harmen Porter</h5>
+                                    <p>Go ahead, quick, get in the car. Re-elect Mayor Goldie Wilson. Progress is his middle name.</p>
+                                </div>
+                            </li>
+                            <li>
+                                <p:graphicImage name="images/dashboard/avatar-emmy.png"
+                                library="pandora-layout" />
+                                <div class="messages-item-right">
+                                    <span>12.29</span>
+                                    <span><i class="pi pi-circle-on"/> 12/5/2021</span>
+                                    <h5>Emmy Elsner</h5>
+                                    <p>What? I'm sure that in 1985, plutonium is available at every corner drug store, but in 1955…</p>
+                                </div>
+                            </li>
+                            
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+            <div class="p-col-12 p-md-6 p-lg-4">
+                <div class="card reviews card-w-title">
+                    <div class="card-header">
+                        <h4>Team Reviews</h4>
+                    </div>
+                    <div class="reviews-content">
+                        <p:accordionPanel>
+                            <p:tab title="Finance">
+                                <p:outputPanel>
+                                    <div class="review">
+                                        <p:graphicImage name="images/dashboard/avatar-tadic.png" library="pandora-layout" />
+                                        <div class="reviewer">
+                                            <h6 >Miglena Tadic</h6>
+                                            <span>F2-MEMBER</span>
+                                        </div>
+                                        <div class="review-stars">
+                                            <p:rating />
+                                        </div>
+                                    </div>
+                                    <div class="review">
+                                        <p:graphicImage name="images/dashboard/avatar-hugo.png" library="pandora-layout" />
+                                        <div class="reviewer">
+                                            <h6>Hugo Assunção</h6>
+                                            <span>F2-Lead</span>
+                                        </div>
+                                        <div class="review-stars">
+                                            <p:rating />
+                                        </div>
+                                    </div>
+                                </p:outputPanel>
+                            </p:tab>
+                            <p:tab title="Entertainment">
+                                <p:outputPanel>
+                                    <div class="review">
+                                        <p:graphicImage name="images/dashboard/avatar-griffin.png" library="pandora-layout" />
+                                        <div class="reviewer">
+                                            <h6>Neville Griffin</h6>
+                                            <span>F4-DESIGNER</span>
+                                        </div>
+                                        <div class="review-stars">
+                                            <p:rating />
+                                        </div>
+                                    </div>
+                                    <div class="review">
+                                        <p:graphicImage name="images/dashboard/avatar-magnus.png" library="pandora-layout" />
+                                        <div class="reviewer">
+                                            <h6>Magnus Kekhuis</h6>
+                                            <span>F4-DESIGNER</span>
+                                        </div>
+                                        <div class="review-stars">
+                                            <p:rating />
+                                        </div>
+                                    </div>
+                                </p:outputPanel>
+                            </p:tab>
+                            <p:tab title="Insurance">
+                                <p:outputPanel>
+                                    <div class="review">
+                                        <p:graphicImage name="images/dashboard/avatar-himona.png" library="pandora-layout" />
+                                        <div class="reviewer">
+                                            <h6>Uruewa Himona</h6>
+                                            <span>F2-SENIOR</span>
+                                        </div>
+                                        <div class="review-stars">
+                                            <p:rating />
+                                        </div>
+                                    </div>
+                                    <div class="review">
+                                        <p:graphicImage name="images/dashboard/avatar-tatiana.png" library="pandora-layout" />
+                                        <div class="reviewer">
+                                            <h6>Tatiana Gagelman</h6>
+                                            <span>F2-SENIOR</span>
+                                        </div>
+                                        <div class="review-stars">
+                                            <p:rating />
+                                        </div>
+                                    </div>
+                                </p:outputPanel>
+                            </p:tab>
+                        </p:accordionPanel>
+                    </div>
+                </div>
+            </div>
+            <div class="p-col-12 p-lg-8">
+                <div class="card statistic-charts card-w-title">
+                    <div class="departments">
+                        <div class="header">
+                            <h4>Department Statistics</h4>
+                        </div>
+                        <a href="#" class="department dept-1 active-chart">
+                            <span class="dept-icon">
+                                <p:graphicImage name="images/dashboard/icon-tech.png" library="pandora-layout" />
+                            </span>
+                            <h4>Tech</h4>
+                            <div class="stats">
+                                <h6>$90,228.14</h6>
+                                <span>Expectation: $12,200</span>
+                            </div>
+                        </a>
+                        <a href="#" class="department dept-2">
+                            <span class="dept-icon">
+                                <p:graphicImage name="images/dashboard/icon-cyber.png" library="pandora-layout" />
+                            </span>
+                            <h4>Cyber Security</h4>
+                            <div class="stats">
+                                <h6>$65,550.32</h6>
+                                <span>Expectation: $95,200</span>
+                            </div>
+                        </a>
+                        <a href="#" class="department dept-3">
+                            <span class="dept-icon">
+                                <p:graphicImage name="images/dashboard/icon-mail.png" style="width: 34px;" library="pandora-layout" />
+                            </span>
+                            <h4>Marketing</h4>
+                            <div class="stats">
+                                <h6>$44,902.80</h6>
+                                <span>Expectation: $30,000</span>
+                            </div>
+                        </a>
+                        <a href="#" class="department dept-4">
+                            <span class="dept-icon">
+                                <p:graphicImage name="images/dashboard/icon-biz.png" library="pandora-layout" />
+                            </span>
+                            <h4>Business</h4>
+                            <div class="stats">
+                                <h6>$58,712.04</h6>
+                                <span>Expectation: $60,000</span>
+                            </div>
+                        </a>
+                        <a href="#" class="department dept-5">
+                            <span class="dept-icon">
+                                <p:graphicImage name="images/dashboard/icon-brush.png" library="pandora-layout" />
+                            </span>
+                            <h4>Design</h4>
+                            <div class="stats">
+                                <h6>$123,457.68</h6>
+                                <span>Expectation: $987,653</span>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="charts">
+                        <div class="header">
+                            <h4>Marketing</h4>
+                            <p:selectOneMenu id="language" >
+                                <f:selectItem itemLabel="TR" itemValue="TR" />
+                                <f:selectItem itemLabel="US" itemValue="US" />
+                            </p:selectOneMenu>
+                        </div>
+                        <div class="charts-wrapper">
+                            <div class="charts-sections">
+                                <div class="chart-content chart-1">
+                                    <canvas id="chart1"></canvas>
+                                </div>
+                                <div class="chart-content chart-1">
+                                    <canvas id="chart2"></canvas>
+                                </div>
+                                <div class="chart-content chart-1">
+                                    <canvas id="chart3"></canvas>
+                                </div>
+                                <div class="chart-content chart-1">
+                                    <canvas id="chart4"></canvas>
+                                </div>
+                                <div class="chart-content chart-1">
+                                    <canvas id="chart5"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="p-col-12 p-lg-8">
+                <div class="card sales card-w-title">
+                    <div class="card-header">
+                        <h4>Inventory</h4>
+                    </div>
+                    <div class="sales-content">
+                        <p:dataTable id="productsTable" var="product" value="#{dataTableDemoView.products1}" reflow="true"
+                                     paginatorPosition="bottom" size="small"
+                                     rowKey="#{product.id}" paginator="true" rows="5">
+                            <p:column headerText="Id" sortBy="#{product.id}">
+                                <h:outputText value="#{product.id}"/>
+                            </p:column>
+                            <p:column headerText="Category" sortBy="#{product.category}">
+                                <h:outputText value="#{product.category}"/>
+                            </p:column>
+                            <p:column headerText="Price" sortBy="#{product.price}">
+                                <h:outputText value="#{product.price}">
+                                    <f:convertNumber currencySymbol="$" type="currency"/>
+                                </h:outputText>
+                            </p:column>
+                            <p:column headerText="Status" sortBy="#{product.inventoryStatus}">
+                                <span class="product-badge status-#{product.inventoryStatus.name().toLowerCase()}">#{product.inventoryStatus}</span>
+                            </p:column>
+                            <p:column style="text-align: center">
+                                <p:commandButton icon="pi pi-search"/>
+                            </p:column>
+                        </p:dataTable>
+                    </div>
+                </div>
+            </div>
+            <div class="p-col-12 p-md-12 p-lg-4">
+                <div class="card tutorials  card-w-title">
+                    <div class="card-header">
+                        <h4>Tutorials</h4>
+                        <p:commandButton value="ADD NEW" />
+                    </div>
+                    <div class="tutorials-content">
+                        <div class="progress-row">
+                            <div class="progress-bar">
+                                <span class="progress"></span>
+                                <span class="progress-bar-background"></span>
+                            </div>
+                            <span>68%</span>
+                        </div>
+                       
+                        <h6>WHAT’S NEXT?</h6>
+                        <div class="tutorial-task">
+                            <div class="task-info">
+                                <p>Setup style file preferences</p>
+                                <span>5 experience point</span>
+                            </div>
+                            <p:graphicImage name="images/dashboard/asset-step-1.png" library="pandora-layout" />
+                        </div>
+                        <div class="tutorial-task">
+                            <div class="task-info">
+                                <p>Collect information </p>
+                                <span>15 experience point</span>
+                            </div>
+                            <p:graphicImage name="images/dashboard/asset-step-2.png" library="pandora-layout" />
+                        </div>
+                        <div class="tutorial-task">
+                            <div class="task-info">
+                                <p>Read privacy policy</p>
+                                <span>30 experience point</span>
+                            </div>
+                            <p:graphicImage name="images/dashboard/asset-step-3.png" library="pandora-layout" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ui:define>
+</ui:composition>

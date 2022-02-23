@@ -1,0 +1,94 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Wrong Contact Number Report</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+
+						<h:form id="form" style="overflow:hidden">
+						<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+						<h1>Wrong Contact Number Report</h1>
+						<br/>
+					<p:panelGrid columns="2" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+						
+						  <h:outputLabel for="menu" value="Select Contacts:" />
+                          <p:selectCheckboxMenu id="menu" value="#{wrongContactReport.selectedContacts}" label="Contacts"
+                              filter="true" filterMatchMode="startsWith" panelStyle="width:250px">
+                                 <f:selectItems value="#{wrongContactReport.allContacts}" />
+                          </p:selectCheckboxMenu>
+                          
+                         <p:outputLabel  value="Add Contact No." style="font-size:15px;" />
+                         <p:outputLabel  value="" />
+                         
+                         <p:outputLabel value="Contact 1"></p:outputLabel>
+                         <p:inputText id="con1" value="#{wrongContactReport.contact1}" onkeypress="return AvoidSpace(event)" onkeyup="checkNumberValid2('form:con1')">
+                         </p:inputText>
+                         
+                          <p:outputLabel value="Contact 2"></p:outputLabel>
+                         <p:inputText id="con2" value="#{wrongContactReport.contact2}" onkeypress="return AvoidSpace(event)" onkeyup="checkNumberValid2('form:con2')">
+                         </p:inputText>
+                         
+                          <p:outputLabel value="Contact 3"></p:outputLabel>
+                         <p:inputText id="con3" value="#{wrongContactReport.contact3}" onkeypress="return AvoidSpace(event)" onkeyup="checkNumberValid2('form:con3')">
+                         </p:inputText>
+                         
+                          
+                          
+                          <p:commandButton value="Filter Report For Selected Contacts" style="width:270px;" icon="fa fa-filter" action="#{wrongContactReport.filterReport}" update=":form"></p:commandButton>
+						
+						</p:panelGrid>
+						
+						<br/>
+						
+							<p:panel header="">
+
+								<p:dataTable var="var" stickyHeader="true" value="#{wrongContactReport.studentList}" rowIndexVar="index">
+
+									<p:column style="width:50px;" headerText="S.No">
+										<p:outputLabel value="#{index+1}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Student Name">
+										<p:outputLabel value="#{var.studentName}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Add Number">
+										<p:outputLabel value="#{var.srNo}"></p:outputLabel>
+									</p:column>
+									
+									<p:column headerText="Father Name">
+										<p:outputLabel value="#{var.fatherName}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Contact No">
+										<p:outputLabel value="#{var.fathersPhone}"></p:outputLabel>
+									</p:column>
+									
+									<p:column headerText="Class">
+										<p:outputLabel value="#{var.classStrName}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Section">
+										<p:outputLabel value="#{var.sectionName}"></p:outputLabel>
+									</p:column>
+
+
+								</p:dataTable>
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

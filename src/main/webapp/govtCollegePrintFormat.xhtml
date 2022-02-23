@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+	
+
+<f:view contentType="text/html">
+	<h:head>
+		<title>#{sideMenuBean.companyName} | Print Receipt</title>
+		<f:facet name="first">
+			<meta content='text/html; charset=UTF-8' http-equiv="Content-Type" />
+			<meta http-equiv="X-UA-Compatible" content="EmulateIE8" />
+		</f:facet>
+
+	</h:head>
+
+	<h:body >
+	
+		<script>
+		
+			function printwin() {
+				document.getElementById('test').style.display="none";	
+				window.print();
+				document.getElementById('test').style.display="block";
+				document.URL="";
+			}
+	
+		</script>
+	
+	<style>
+	
+		.test .ui-widget-content
+		{
+			border:none;
+		}
+		.test2 .ui-panelgrid .ui-panelgrid-cell
+		{
+			border:none;
+		}
+	
+	</style>
+	
+	<p:panelGrid columns="2" id="test">
+		<p:commandButton action="#{printDuplicateSale.backPage}" value="Back"></p:commandButton>
+		<p:commandButton value="Print" onclick="printwin();"></p:commandButton>
+	</p:panelGrid>
+	
+		<h:form style="font-size:9px" id="form">
+		
+			<p:outputPanel styleClass="test test2" style="width:100%; border: 1px solid black;float:left	">
+			
+				<p:outputPanel style="width:100%">
+				
+							<table style="width:100%">
+								<tr>
+									<td style="width:40%"> </td>
+									
+								</tr>
+							</table>
+							<center><p:outputLabel style="font-weight:bold;font-size:20px" value="#{schoolPrint.schoolName}"></p:outputLabel> </center>
+							<center><p:outputLabel style="font-weight:bold;font-size:16px" value="#{schoolPrint.schoolContact}"></p:outputLabel></center>
+							<center><p:outputLabel style="font-weight:bold;font-size:16px" value="#{schoolPrint.schoolAddress}"></p:outputLabel> </center>
+				
+				
+				<table  border="1" cellpadding="5" cellspacing="0" style="width:100%;margin-top:12px"   >
+				<tr>
+<td style="width:25%;font-size:15px;">शाला दर्पण स्कूल कोड :</td>
+<td style="width:25%;font-size:15px;"> <h:outputLabel value="#{schoolPrint.schoolCode}" /></td>
+<td style="width:25%;font-size:15px;">स्वीकृत बोर्ड क्र: </td>
+<td style="width:25%;font-size:15px;"> <h:outputLabel value="#{schoolPrint.boardNumber}" /></td>
+</tr>
+
+
+
+				</table>
+				
+				<center><p:outputLabel style="font-weight:bold;font-size:16px;text-decoration:underline;margin-top:12px" value="स्थानांतरण प्रमाण पत्र"></p:outputLabel> </center>
+				
+				
+				
+				<table  border="1" cellpadding="5" cellspacing="0" style="width:100%;margin-top:28px"   >
+				<tr>
+<td style="width:25%;font-size:15px;">टी. सी. जारी दिनांक :</td>
+<td style="width:25%;font-size:15px;"> <h:outputLabel value="#{schoolPrint.strtcDate}" /></td>
+<td style="width:25%;font-size:15px;">टी. सी. क्रमांक  </td>
+<td style="width:25%;font-size:15px;"> <h:outputLabel value="#{schoolPrint.tcNumber}" /></td>
+</tr>
+<tr>
+<td style="width:25%;font-size:15px;">नाम :</td>
+<td style="width:25%;font-size:15px;"> <h:outputLabel value="#{schoolPrint.name}" /></td>
+<td style="width:25%;font-size:15px;">एस आर नं. : </td>
+<td style="width:25%;font-size:15px;"> <h:outputLabel value="#{schoolPrint.srno}" /></td>
+</tr>
+<tr>
+<td style="width:25%;font-size:15px;">पिता  का नाम :</td>
+<td style="width:25%;font-size:15px;"> <h:outputLabel value="#{schoolPrint.fathersName}" /></td>
+<td style="width:25%;font-size:15px;">माता का नाम: </td>
+<td style="width:25%;font-size:15px;"> <h:outputLabel value="#{schoolPrint.mothersName}" /></td>
+</tr>
+<tr>
+<td style="width:25%;font-size:15px;">जन्म दिनांक :</td>
+<td style="width:25%;font-size:15px;"> <h:outputLabel value="#{schoolPrint.strDob}" /></td>
+<td style="width:25%;font-size:15px;">विदयार्थी  का संवर्ग : </td>
+<td style="width:25%;font-size:15px;"> <h:outputLabel value="#{schoolPrint.category}" /></td>
+</tr>
+<tr>
+<td style="width:25%;font-size:15px;">विद्यालय मे प्रथम प्रवेश कक्षा :</td>
+<td style="width:25%;font-size:15px;"> <h:outputLabel value="#{schoolPrint.admitClass}" /></td>
+<td style="width:25%;font-size:15px;">प्रथम प्रवेश दिनांक   : </td>
+<td style="width:25%;font-size:15px;"> <h:outputLabel value="#{schoolPrint.strAdmitDate}" /></td>
+</tr>
+<tr>
+<td style="width:25%;font-size:15px;">प्रवेश मे पूर्व के विद्यालय का नाम जिसमे विदयार्थी ने अध्ययन  किया हो  :</td>
+<td style="width:25%;font-size:15px;"> <h:outputLabel value="#{schoolPrint.oldSchoolName}" /></td>
+<td style="width:25%;font-size:15px;">पूर्व विद्यालय की अंतिम  कक्षा  : </td>
+<td style="width:25%;font-size:15px;"> <h:outputLabel value="#{schoolPrint.oldSchoolLastClassName}" /></td>
+</tr>
+<tr>
+<td style="width:25%;font-size:15px;"> विद्यालय छोड़ते समय की कक्षा </td>
+<td style="width:25%;font-size:15px;"> <h:outputLabel value="#{schoolPrint.leavingClassName}" /></td>
+<td style="width:25%;font-size:15px;">परीक्षा परिणाम : </td>
+<td style="width:25%;font-size:15px;"> <h:outputLabel value="#{schoolPrint.examResult}" /></td>
+</tr>
+<tr>
+<td style="width:25%;font-size:15px;">परीक्षा परिणाम की दिनांक :</td>
+<td style="width:25%;font-size:15px;"> <h:outputLabel value="#{schoolPrint.strExamResultDate}" /></td>
+<td style="width:25%;font-size:15px;">इस  विद्यालय मे यदि अनुतीर्ण रहा है यदि हाँ तो कितनी बार (संख्या  भरे ) </td>
+<td style="width:25%;font-size:15px;"> <h:outputLabel value="#{schoolPrint.failureTimes}" /></td>
+</tr>
+<tr>
+<td style="width:25%;font-size:15px;">शौक्षणिक सत्र में कुल कार्य दिवस  :</td>
+<td style="width:25%;font-size:15px;"> <h:outputLabel value="#{schoolPrint.workingDays}" /></td>
+<td style="width:25%;font-size:15px;">विदयार्थी  उपस्थिती : </td>
+<td style="width:25%;font-size:15px;"> <h:outputLabel value="#{schoolPrint.studentPresent}" /></td>
+</tr>
+<tr>
+<td style="width:25%;font-size:15px;">विदयार्थी का आवरण :</td>
+<td style="width:25%;font-size:15px;"> <h:outputLabel value="#{schoolPrint.behaviour}" /></td>
+<td style="width:25%;font-size:15px;">विद्यालय छोड़ने का कारण : </td>
+<td style="width:25%;font-size:15px;"> <h:outputLabel value="#{schoolPrint.leavingSchoolReason}" /></td>
+</tr>
+<tr>
+<td style="width:25%;font-size:15px;">विशेष  विवरण    :</td>
+<td style="width:25%;font-size:15px;" colspan="3"> <h:outputLabel value="#{schoolPrint.description}" /></td>
+</tr>
+</table>
+		</p:outputPanel>
+			</p:outputPanel>
+		<p:outputPanel style="margin-top:12px;">
+<table  border="0" cellpadding="5" cellspacing="0"  style="float: right;margin-top:70px" >
+ <thead>
+<tr>
+<td style="font-size:15px;"></td>
+<td style="width:45%;font-size:15px;"> <h:outputLabel value="#{schoolPrint.totalBillAmount}" /></td>
+</tr>
+<tr>
+<td style="font-size:15px;"></td>
+<td style="width:50%;font-size:15px;"> <h:outputLabel style="font-weight:bold;" value="हस्ताक्षर(विद्यालय की मोहर )" /></td>
+</tr>
+</thead>
+</table>
+</p:outputPanel>
+</h:form>
+</h:body>
+</f:view>
+</html>

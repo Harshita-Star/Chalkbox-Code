@@ -1,0 +1,129 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Sample</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+
+							<p:panel header="Select a Class">
+								<p:messages closable="true" autoUpdate="true"></p:messages>
+								<p:panelGrid columns="6"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:outputLabel  for="@next" style="color:red" value="Select a Class"></p:outputLabel>
+									<p:selectOneMenu filter="true"
+										value="#{verifyConcessionStatus.selectedClass}"
+										required="true" requiredMessage="Please select a class">
+										<f:selectItem itemLabel="Select Class" itemValue="select"></f:selectItem>
+										<f:selectItems value="#{verifyConcessionStatus.classList}"></f:selectItems>
+										<p:ajax update="sectionid"
+											listener="#{verifyConcessionStatus.allSections}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel for="@next" style="color:red"  value="Select Section"></p:outputLabel>
+									<p:selectOneMenu id="sectionid" filter="true"
+										value="#{verifyConcessionStatus.selectedSection}"
+										required="true" requiredMessage="Please select a section">
+										<f:selectItem itemLabel="Select Section" itemValue=""></f:selectItem>
+										<f:selectItem itemLabel="All" itemValue="-1"></f:selectItem>
+										<f:selectItems value="#{verifyConcessionStatus.sectionList}"></f:selectItems>
+										<p:ajax></p:ajax>
+									</p:selectOneMenu>
+
+									<p:commandButton value="Search"
+										actionListener="#{verifyConcessionStatus.getStudentStrength}"
+										update=":form1">
+									</p:commandButton>
+								</p:panelGrid>
+							</p:panel>
+							</h:form>
+							</div>
+							<div class="card card-w-title">
+							<h:form id="form1">
+							<p:panel id="dataTable" rendered="#{verifyConcessionStatus.b}">
+								<p:dataTable id="up" style="border-collapse:collapse"
+									border="1" value="#{verifyConcessionStatus.studentList}"
+									var="var" rowKey="#{var.addNumber}"
+									selection="#{verifyConcessionStatus.multipleStudentList}">
+									<f:facet name="header">
+										<p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group"
+											style="border:0px none;width:100%; background-color:transparent;">
+											<p:commandButton style="width:150px;" action="#{verifyConcessionStatus.accept}"
+												value="Accept" update=":form,form1"></p:commandButton>
+											<p:commandButton style="width:150px;" action="#{verifyConcessionStatus.deny}"
+												value="Deny" update=":form,form1"></p:commandButton>
+										</p:panelGrid>
+									</f:facet>
+									<p:column selectionMode="multiple"
+										style="width:20px;text-align:center" />
+									<p:column headerText="SNo."
+										style="width:30px;text-align:center">
+										<f:facet name="header">
+											<p:outputLabel value="S.No."></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.sno}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Add. No." sortBy="#{var.srNo}"
+										filterBy="#{var.srNo}" filterMatchMode="contains"
+										style="width:50px;text-align:center">
+										<f:facet name="header">
+											<p:outputLabel value="SR. No."></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.srNo}"></p:outputLabel>
+									</p:column>
+
+									<p:column style="width:70px;text-align:center"
+										sortBy="#{var.fullName}" filterBy="#{var.fullName}"
+										filterMatchMode="contains" headerText="Student Name">
+
+										<f:facet name="header">
+											<p:outputLabel value="Student Name"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.fullName}"></p:outputLabel>
+									</p:column>
+
+									<p:column style="width:70px;text-align:center"
+										headerText="Father's Name" filterBy="#{var.fathersName}"
+										filterMatchMode="contains">
+										<f:facet name="header">
+											<p:outputLabel value="Father's Name"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.fathersName}"></p:outputLabel>
+									</p:column>
+
+									<p:column style="width:70px;text-align:center"
+										headerText="Concession Assign">
+										<p:outputLabel value="#{var.currentConcessionAssign}"></p:outputLabel>
+									</p:column>
+
+									<f:facet name="footer">
+										<p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group"
+											style="border:0px none;width:100%; background-color:transparent;">
+											<p:commandButton style="width:150px;" action="#{verifyConcessionStatus.accept}"
+												value="Accept" update=":form,form1"></p:commandButton>
+											<p:commandButton style="width:150px;" action="#{verifyConcessionStatus.deny}"
+												value="Deny" update=":form,form1"></p:commandButton>
+										</p:panelGrid>
+									</f:facet>
+								</p:dataTable>
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

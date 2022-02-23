@@ -1,0 +1,276 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Combine Report</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+
+							<h1>#{showReportVar.showReportTitle}</h1>
+
+							<p:panel id="main" header="Report">
+								<p:messages closable="true" autoUpdate="true"></p:messages>
+								<p:panelGrid columns="2"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel for="@next" style="color:red"  value="Show Report By "></p:outputLabel>
+
+									<p:selectOneMenu value="#{report.selectedFilter}" filter="true"
+										required="true"
+										requiredMessage="#{showReportVar.showReportSelectCategoryValidation}">
+
+										<f:selectItem itemValue=""
+											itemLabel="#{showReportVar.selectHereLabel}"></f:selectItem>
+										<f:selectItem
+											itemValue="#{showReportVar.showReportDailyLabel}"
+											itemLabel="#{showReportVar.showReportDailyLabel}"></f:selectItem>
+										<f:selectItem
+											itemValue="#{showReportVar.showReportWeeklyLabel}"
+											itemLabel="#{showReportVar.showReportWeeklyLabel}"></f:selectItem>
+										<f:selectItem
+											itemValue="#{showReportVar.showReportMonthlyLabel}"
+											itemLabel="#{showReportVar.showReportMonthlyLabel}"></f:selectItem>
+										<f:selectItem
+											itemValue="#{showReportVar.showReportQuarterlyLabel}"
+											itemLabel="#{showReportVar.showReportQuarterlyLabel}"></f:selectItem>
+										<f:selectItem
+											itemValue="#{showReportVar.showReportYearlyLabel}"
+											itemLabel="#{showReportVar.showReportYearlyLabel}"></f:selectItem>
+										<f:selectItem itemValue="Customreport"
+											itemLabel="#{showReportVar.showReportCustomReportLabel}"></f:selectItem>
+
+										<p:ajax update="main" listener="#{report.selectedFilter}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel  for="@next" style="color:red" rendered="#{report.dailyShow}"
+										value="#{showReportVar.showReportSelectADayLabel}"></p:outputLabel>
+									<p:calendar rendered="#{report.dailyShow}" pattern="dd/MM/yyyy"
+										navigator="true" value="#{report.dailySelected}"
+										required="true"
+										requiredMessage="#{showReportVar.showReportSelectDayValidation}"></p:calendar>
+									
+
+									<p:outputLabel  for="@next" style="color:red" rendered="#{report.weeklyShow}"
+										value="#{showReportVar.showReportSelectAWeekDayLabel}"></p:outputLabel>
+									<p:calendar rendered="#{report.weeklyShow}"
+										pattern="dd/MM/yyyy" navigator="true"
+										value="#{report.weeklySelected}" required="true"
+										requiredMessage="#{showReportVar.showReportSelectAWeekDayLabel}"></p:calendar>
+									
+
+									<p:outputLabel for="@next" style="color:red"  rendered="#{report.monthlyShow}"
+										value="#{showReportVar.showReportSelectMonthLabel}"></p:outputLabel>
+									<p:selectOneMenu rendered="#{report.monthlyShow}"
+										value="#{report.selectedMonth}" required="true"
+										requiredMessage="#{showReportVar.showReportSelectMonthValidation}">
+										<f:selectItem itemLabel="#{showReportVar.selectHereLabel}"
+											itemValue=""></f:selectItem>
+										<f:selectItems value="#{report.monthList}"></f:selectItems>
+									</p:selectOneMenu>
+									
+
+									<p:outputLabel for="@next" style="color:red"  rendered="#{report.quarterlyShow}"
+										value="#{showReportVar.showReportSelectQuarterLabel}"></p:outputLabel>
+									<p:selectOneMenu rendered="#{report.quarterlyShow}"
+										value="#{report.selectedQuarter}" required="true"
+										requiredMessage="#{showReportVar.showReportSelectQuarterValidation}">
+										<f:selectItem itemLabel="#{showReportVar.selectHereLabel}"
+											itemValue=""></f:selectItem>
+										<f:selectItem
+											itemLabel="#{showReportVar.showReportSelectFirstQuarterLabel}"
+											itemValue="1"></f:selectItem>
+										<f:selectItem
+											itemLabel="#{showReportVar.showReportSelectSecondQuarterLabel}"
+											itemValue="2"></f:selectItem>
+										<f:selectItem
+											itemLabel="#{showReportVar.showReportSelectThirdQuarterLabel}"
+											itemValue="3"></f:selectItem>
+									</p:selectOneMenu>
+									
+
+									<p:outputLabel for="@next" style="color:red"  rendered="#{report.yearlyShow}"
+										value="#{showReportVar.showReportSelectYearlyLabel}"></p:outputLabel>
+									<p:selectOneMenu rendered="#{report.yearlyShow}"
+										value="#{report.selectedYear}" required="true"
+										requiredMessage="#{showReportVar.showReportSelectYearValidation}">
+
+										<f:selectItem itemLabel="#{showReportVar.selectHereLabel}"
+											itemValue=""></f:selectItem>
+										<f:selectItems value="#{report.yearList}"></f:selectItems>
+
+									</p:selectOneMenu>
+									
+								</p:panelGrid>
+								<p:outputPanel rendered="#{report.dailyShow || report.weeklyShow || report.monthlyShow || report.quarterlyShow || report.yearlyShow}">
+								<br />
+								<p:separator />
+								<center>
+									<p:panelGrid
+										columns="2"
+										layout="grid" styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+
+										<p:commandButton actionListener="#{report.yearlyReport}" styleClass="butwid" icon="fa fa-search"
+										update=":form:up" rendered="#{report.yearlyShow}"
+										value="#{showReportVar.showReportSearchNowButtonLabel}"></p:commandButton>
+										
+										<p:commandButton actionListener="#{report.quarterlyReport}" styleClass="butwid" icon="fa fa-search"
+										update=":form:up" rendered="#{report.quarterlyShow}"
+										value="#{showReportVar.showReportSearchNowButtonLabel}"></p:commandButton>
+										
+										<p:commandButton actionListener="#{report.monthlyReport}" styleClass="butwid" icon="fa fa-search"
+										update=":form:up" rendered="#{report.monthlyShow}"
+										value="#{showReportVar.showReportSearchNowButtonLabel}"></p:commandButton>
+										
+										<p:commandButton update=":form:up"
+										actionListener="#{report.weeklyReport}" styleClass="butwid" icon="fa fa-search"
+										rendered="#{report.weeklyShow}"
+										value="#{showReportVar.showReportSearchNowButtonLabel}"></p:commandButton>
+										
+										<p:commandButton update=":form:up"
+										actionListener="#{report.dailyReport}" styleClass="butwid" icon="fa fa-search"
+										rendered="#{report.dailyShow}"
+										value="#{showReportVar.showReportSearchNowButtonLabel}"></p:commandButton>
+										
+										<p:commandButton styleClass="butwid" icon="fa fa-print"
+										 value="Print">
+										<p:printer target="dataTable"></p:printer>
+										</p:commandButton>
+										
+									</p:panelGrid>
+								</center>
+								<p:separator />
+								<br />
+								</p:outputPanel>
+								
+								
+
+								<p:panelGrid rendered="#{report.customShow}" columns="2">
+
+									<p:outputLabel for="@next" style="color:red" 
+										value="#{showReportVar.showReportEnterStartingDateLabel}"></p:outputLabel>
+									<p:calendar value="#{report.startingDate}" pattern="dd/MM/yyyy"
+										navigator="true" required="true"
+										requiredMessage="#{showReportVar.showReportSelectStartingDateValidation}"></p:calendar>
+
+									<p:outputLabel for="@next" style="color:red" 
+										value="#{showReportVar.showReportEnterEndingDateLabel}"></p:outputLabel>
+									<p:calendar value="#{report.endingDate}" pattern="dd/MM/yyyy"
+										navigator="true" required="true"
+										requiredMessage="#{showReportVar.showReportSelectEndingDateValidation}"></p:calendar>
+								</p:panelGrid>
+								
+								
+								<p:outputPanel rendered="#{report.customShow}">
+								<br />
+								<p:separator />
+								<center>
+									<p:panelGrid
+										columns="2"
+										layout="grid" styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+
+										<p:commandButton update=":form:up" action="#{report.showTable}"  styleClass="butwid" icon="fa fa-search"
+										value="#{showReportVar.showReportSearchNowButtonLabel}"></p:commandButton>
+										
+										<p:commandButton  styleClass="butwid" icon="fa fa-print"
+										 value="Print">
+										<p:printer target="dataTable"></p:printer>
+										</p:commandButton>
+										
+									</p:panelGrid>
+								</center>
+								<p:separator />
+								<br />
+								</p:outputPanel>
+								
+
+								<br />
+
+								<p:outputPanel id="up">
+									<p:dataTable rendered="#{report.reportShow}" id="dataTable"
+										var="var" value="#{report.report}">
+
+										<p:column headerText="Inc./Exp. Category">
+											<p:outputLabel value="#{var.category}"></p:outputLabel>
+										</p:column>
+										
+										<p:column headerText="Voucher/Receipt No">
+											<p:outputLabel value="#{var.voucherNo}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Description">
+											<p:outputLabel value="#{var.description}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="#{showReportVar.showReportHeaderDate}">
+											<p:outputLabel value="#{var.strIncomeDate}"></p:outputLabel>
+										</p:column>
+
+										<p:column
+											headerText="#{showReportVar.showReportHeaderAmount} (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})">
+											<p:outputLabel value="#{var.amount}">
+												<f:convertNumber groupingUsed="false" minFractionDigits="2"
+													maxFractionDigits="2"></f:convertNumber>
+											</p:outputLabel>
+										</p:column>
+
+
+										<p:column headerText="Type">
+											<p:outputLabel value="#{var.income}"></p:outputLabel>
+										</p:column>
+
+										<f:facet name="footer">
+											<p:panelGrid columns="3">
+												<p:outputLabel
+													value="Income From Fees : #{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'} #{report.feeAmount}"
+													style="float:right;" />
+												<p:outputLabel
+													value="Income From Other Source(s) : #{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'} #{report.otherIncAmount}"
+													style="float:right;" />
+												<p:outputLabel
+													value="Total Income : #{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'} #{report.incomeAmount}"
+													style="float:right;" />
+
+												<p:outputLabel />
+												<p:outputLabel />
+												<p:outputLabel
+													value="Total Expense : #{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'} #{report.expenseAmount}"
+													style="float:right;" />
+
+												<p:outputLabel />
+												<p:outputLabel />
+												<p:outputLabel
+													value="Net Profit : #{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'} #{report.totalAmount}"
+													style="float:right;" />
+
+											</p:panelGrid>
+										</f:facet>
+
+									</p:dataTable>
+
+
+
+								</p:outputPanel>
+
+							</p:panel>
+
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,124 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Fee Estimate Report</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form1">
+							<h1>Fee Estimate</h1>
+							<p:messages closable="true" autoUpdate="true"></p:messages>
+							<p:panel header="Search Report">
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:outputLabel for="@next" style="color:red"
+										value="Select Student Type"></p:outputLabel>
+									<p:selectOneRadio value="#{feeEstimate.studentType}"
+										required="true" requiredMessage="Please Select Student Type">
+										<f:selectItem itemLabel="New" itemValue="New"></f:selectItem>
+										<f:selectItem itemLabel="Old" itemValue="Old"></f:selectItem>
+									</p:selectOneRadio>
+
+									<p:commandButton value="Search" icon="fa fa-search" styleClass="butwid"
+										actionListener="#{feeEstimate.checkStudentType}"
+										update=":oldFee,:newFee"></p:commandButton>
+								</p:panelGrid>
+							</p:panel>
+						</h:form>
+
+						<h:form id="oldFee">
+							<p:panel header="Search Student By Name"
+								rendered="#{feeEstimate.showOld}">
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:outputLabel value="Search Student"></p:outputLabel>
+									<p:autoComplete id="acSimple"
+										value="#{feeEstimate.studentName}"
+										completeMethod="#{feeEstimate.autoCompleteStudentInfo}">
+										<p:ajax event="query" global="false" />
+									</p:autoComplete>
+
+									<p:commandButton value="Search" icon="fa fa-search" styleClass="butwid"
+										actionListener="#{feeEstimate.submitDetails}"></p:commandButton>
+								</p:panelGrid>
+							</p:panel>
+						</h:form>
+
+						<h:form id="newFee">
+							<p:panel header="Enter Details" rendered="#{feeEstimate.showNew}">
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:outputLabel value="Enter Student Name"></p:outputLabel>
+									<p:inputText value="#{feeEstimate.studentName}">
+									</p:inputText>
+
+									<p:outputLabel value="Select Class" for="@next"
+										style="color:red"></p:outputLabel>
+									<p:selectOneMenu value="#{feeEstimate.selectedClass}"
+										required="true" requiredMessage="Please Select Class">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{feeEstimate.classList}"></f:selectItems>
+										<p:ajax update="sectionid"
+											listener="#{feeEstimate.allSections}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Select Section"></p:outputLabel>
+									<p:selectOneMenu id="sectionid"
+										value="#{feeEstimate.selectedSection}">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{feeEstimate.sectionList}"></f:selectItems>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Transport Route"></p:outputLabel>
+									<p:selectOneMenu value="#{feeEstimate.selectedRoute}"
+										filter="true" filterMatchMode="contains">
+										<f:selectItem itemLabel="Select Here"></f:selectItem>
+										<f:selectItems value="#{feeEstimate.routeList}"></f:selectItems>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Concession Category"></p:outputLabel>
+									<p:selectOneMenu value="#{feeEstimate.concessionCategory}">
+										<f:selectItem itemLabel="Select Here"></f:selectItem>
+										<f:selectItems value="#{feeEstimate.concessionCategoryList}"></f:selectItems>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Concession Amount"></p:outputLabel>
+									<p:inputText value="#{feeEstimate.concessionAmount}">
+
+									</p:inputText>
+								</p:panelGrid>
+								
+								
+								<br />
+								<p:separator />
+								<center>
+									<p:commandButton value="Submit" icon="fa fa-upload" styleClass="butwid"
+										action="#{feeEstimate.submitDetails}"></p:commandButton>
+								</center>
+								<p:separator />
+								<br />
+								
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

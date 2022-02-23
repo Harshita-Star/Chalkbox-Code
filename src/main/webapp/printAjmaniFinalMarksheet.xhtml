@@ -1,0 +1,397 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	
+<f:view contentType="text/html">
+	<h:head>
+		<title>Student Marksheet</title>
+		<f:facet name="First">
+			<meta content='text/html; charset=UTF-8' http-equiv="Content-Type" />
+			<meta http-equiv="X-UA-Compatible" content="EmulateIE8" />
+		<title>MainPage</title>
+		</f:facet>
+		
+		<script>
+		function printwin() 
+		{
+			document.getElementById('test').style.display="none";	
+			window.print();
+			document.getElementById('test').style.display="block";
+			document.URL="";
+		}
+	</script>
+		
+	</h:head>
+	
+	
+
+	<h:body>
+	<style>
+		.ui-panelgrid .ui-panelgrid-cell {
+		    border-width: 1px;
+		    border-style: solid;
+		    border-color: inherit;
+		    padding: 4px 12px;
+		    width: 153px;
+		    height:10px;
+		}
+		.ui-outputlabel ui-widget
+		{
+		   font-weight: bold;
+		}
+		.ab tr,.ab td{
+		border-color: white;
+		}
+		.abc tr,.abc td{
+		border-color: white;
+		}
+		.pr tr,.pr td{
+		border-color: white;
+		}
+		.ps tr,.ps td{
+		border-color: white;
+		}
+		.pd tr,.pd td{
+		border-color: white;
+		}
+		
+		.test .ui-widget-content 
+		{
+			font-size:9px;
+		}
+		
+		.test2 .ui-widget-header
+		{
+			font-size:9px;
+		}
+		
+		.ui-datatable table {
+    table-layout: auto
+}
+		
+	</style>
+
+	<h:panelGrid columns="2">
+	
+		<p:commandButton rendered="false" value="Back" action="#{navigation.managePrintingWorkDashboard}" styleClass="back_button" style="float:right;margin-right:80px"></p:commandButton>
+		<p:commandButton id="test" value="Print" onclick="printwin()"/>
+	</h:panelGrid>
+
+	<h:form id="form1">
+	
+		<ui:repeat var="mainVar" value="#{printBLMFinalMarksheet.listOfStudent}">
+		<p:outputPanel style="border-width: 2px;border-style: groove;">
+		<p:outputPanel styleClass="test" style="width:100%;margin-bottom:-20px;marginf-left:40px;">
+			<table style="width:100%;font-size:11px">
+				<tr>
+					<td>
+			    <p:graphicImage width="100%" height="120px" value="#{printBLMFinalMarksheet.headerImagePath}"></p:graphicImage>
+			  </td>
+				</tr>
+			</table>
+			 <p:outputPanel style="border-width: 1px;border-style: groove; margin:5px;">
+			<p:outputPanel style="background:  lightgray;">
+				<h3 style="text-align: center; margin: 1px;font-size: 15px;border-width: .5px;border-style: groove;">REPORT CARD FOR CLASS - #{mainVar.className} ROLL NO. #{mainVar.rollNo}</h3>
+			</p:outputPanel>
+			<table border="0" style="width:100%;font-size:11px;border-collapse: collapse;">
+				<tr>
+				    <td><b>Student Name </b></td>
+					<td style="font-size:15px"><b>: #{mainVar.fname}</b></td>
+				
+					<td><b>Admn.No.</b></td>
+					<td><b>: #{mainVar.srNo}</b></td>
+					<td rowspan="3">
+					<center><p:graphicImage value="#{mainVar.student_image}" height="80"></p:graphicImage></center>
+					</td>
+				</tr>
+				<tr>
+				    	<td><b>Father's Name</b></td>
+					<td><b>: #{mainVar.fathersName}</b></td>
+				
+					<td><b>Date of Birth</b></td>
+					<td><b>: #{mainVar.dobString}</b></td>
+					
+				</tr>	
+				<tr>
+				   	<td><b>Mother's Name</b></td>
+					<td><b>: #{mainVar.motherName}</b></td> 
+					
+					<td><b>Mobile No.</b></td>
+					<td><b>: #{mainVar.fathersPhone}</b></td>
+					
+				</tr>
+				
+			</table>	
+			</p:outputPanel>		
+		</p:outputPanel>
+          
+		<p:dataTable rendered="false"  style="width:100%;border-collapse:collapse;font-size:9px;margin-top:25px" border="1" value="#{mainVar.extraFieldList}" var="var">
+         	<p:column headerText="Height">
+         		<center><p:outputLabel value="#{var.height}"></p:outputLabel></center> 
+         	</p:column>
+         	
+         	<p:column headerText="Weight">
+         		<center><p:outputLabel value="#{var.weight}"></p:outputLabel></center>
+         	</p:column>
+         	
+         	<p:column headerText="Vision">
+         		<center><p:outputLabel value="#{var.vision}"></p:outputLabel></center>
+         	</p:column>
+         	
+         	<p:column headerText="Blood Group">
+         		<center><p:outputLabel value="#{var.bloodGroup}"></p:outputLabel></center>
+         	</p:column>
+         	
+         	<p:columns headerText="Attendance #{ll.termName}" value="#{mainVar.extraFieldColumnsList}" var="ll">
+            	<center><p:outputLabel value="#{ll.attendance}" /></center>
+            </p:columns>
+            
+         </p:dataTable>
+         <br></br>
+	     
+       
+	    <p:dataTable style="margin: 5px;width: 99%;border-collapse:collapse;font-size:7.5px" border="1" value="#{mainVar.markList}" var="var">
+				<p:columnGroup type="header">
+					<p:row>
+		                 <p:column rowspan="4" style="width:170px;padding:0px;border: 1px solid black !important" headerText="SUBJECT" />
+		                 <ui:repeat value="#{mainVar.termList}" var="term">
+	                    	<p:column style="border: 1px solid black !important;background: gray;font-size:9px;" colspan="#{term.examListSize}" headerText="#{term.termName}" />
+	               	 	 </ui:repeat>
+		            </p:row>
+		            <p:row>
+		            	<ui:repeat value="#{mainVar.termList}" var="term">
+		            		
+			                <ui:repeat value="#{term.examInfoForHeader}" var="exam">
+			                    <p:column style="border: 1px solid black !important;" colspan="#{exam.subExamList.size()}" headerText="#{exam.examName}" />
+			                </ui:repeat>
+	                	</ui:repeat>
+		            </p:row>
+		            
+		            		            <p:row>
+		            	<ui:repeat value="#{mainVar.termList}" var="term">
+			                <ui:repeat value="#{term.examInfoForHeader}" var="exam">
+			                	<ui:repeat value="#{exam.subExamList}" var="subExam">
+			                    	<p:column colspan="1" headerText="#{subExam.subExamUpperCase}" />
+			                    </ui:repeat>
+			                </ui:repeat>
+	                	</ui:repeat>
+		            </p:row>
+		        </p:columnGroup>
+		        
+		        <p:column style="border: 1px solid black !important">
+            		<p:outputLabel value="#{var.subjectName}" style="font-weight: bold;"></p:outputLabel>
+            	</p:column>
+            
+				<p:columns  style="border: 1px solid black !important;font-size:9px" value="#{mainVar.scholasticColumnsList}" var="ll">
+	            	<center><p:outputLabel style="font-size:10px" value="#{var.marksMap[ll]}" /></center>
+	            </p:columns>
+	            
+	            <f:facet  name="footer">
+	               <p:outputPanel style="width: 100%;text-align: right !important;">
+	               <p:outputLabel style="font-size:15px;width: 100%;text-align: right;"  value="#{mainVar.percentageRemark}"></p:outputLabel>
+	               </p:outputPanel>
+	            </f:facet>
+	            
+         	</p:dataTable>
+         	 <p:dataTable rendered="false"  style="width:100%;border-collapse:collapse;font-size:9px" border="1" value="#{mainVar.footerList}" var="var">
+				<p:columnGroup type="header">
+					<p:row>
+		                 <p:column rowspan="1" style="width:170px;padding:0px !important;border: 1px solid black !important" headerText="" />
+		                 <ui:repeat value="#{mainVar.termList}" var="term">
+	                    	<p:column style="padding:0px !important;border: 1px solid black !important" colspan="1" />
+	               	 	 </ui:repeat>
+		            </p:row>
+		        </p:columnGroup>
+		        
+		        <p:column style="border: 1px solid black !important">
+            		 <b><p:outputLabel value="#{var.subjectName}"></p:outputLabel></b>
+            	</p:column>
+            	
+				<p:columns style="border: 1px solid black !important" value="#{mainVar.footerColumnsList}" var="ll">
+	            	<center><p:outputLabel value="#{var.marksMap[ll]}" /></center>
+	            </p:columns>
+         	</p:dataTable>  
+         
+         <br></br> 
+         <br></br> 
+          <br></br> 
+            
+             <p:outputPanel style="width:100%;">                                          
+	         <p:outputPanel style="width:69%;float:left">  
+	          <p:dataTable style="width:100%;border-collapse:collapse;font-size:9px" border="1" value="#{mainVar.markListCoscholastic}" var="var">
+			
+			<f:facet name="header">
+			    <p:outputLabel value="Co-Scholastic Area"></p:outputLabel>
+			</f:facet>
+			
+			
+			<p:columnGroup type="header">
+	            <p:row>
+	              <p:column  headerText="SUBJECT" />
+		               
+	            
+	            	<ui:repeat value="#{mainVar.termListForCoscholastic}" var="term">
+	                    <p:column headerText="#{term.termName}" />
+	                </ui:repeat>
+	            </p:row>
+	        </p:columnGroup>
+            <p:column >
+			  <p:outputLabel value="#{var.subjectName}"></p:outputLabel>
+			</p:column>
+            <p:columns value="#{mainVar.coscholasticColumnsList}" var="ll">
+            	<center><p:outputLabel value="#{var.marksMap[ll]}" /></center>
+            </p:columns>
+            
+            
+         </p:dataTable> 
+		       
+		         <br></br>
+		         
+		         <p:dataTable  style="width:100%;border-collapse:collapse;font-size:12px;text-align:center;"  border="1" value="#{mainVar.extraFieldList}" var="var">
+		         <f:facet name="header">
+		         	<p:outputPanel style="background-color: gray;-webkit-print-color-adjust: exact;">
+		         		<h:outputText value="Health Status &amp; Attendance"></h:outputText>
+		         		</p:outputPanel>
+		         	</f:facet>
+         	<p:column headerText="Height">
+         	<f:facet name="header">
+		         		<h:outputText value="Height(cm)"></h:outputText>
+		         		</f:facet>
+         		<center><p:outputLabel value="#{var.height}"></p:outputLabel></center> 
+         	</p:column>
+         	
+         	<p:column headerText="Weight">
+         	<f:facet name="header">
+		         		<h:outputText value="Weight(kg)"></h:outputText>
+		         	</f:facet>	
+         		<center><p:outputLabel value="#{var.weight}"></p:outputLabel></center>
+         	</p:column>
+         
+         	
+         	<p:columns headerText="Attendance #{ll.termName}" value="#{mainVar.extraFieldColumnsList}" var="ll">
+            	<center><p:outputLabel value="#{ll.attendance}" /></center>
+            </p:columns>
+            
+         </p:dataTable>
+		         
+		         <h:dataTable rendered="false" style="width:100%;border-collapse:collapse;font-size:12px;text-align:center;" border="1" value="#{mainVar.extraFieldList}" var="var">	
+		         	<f:facet name="header">
+		         	<p:outputPanel style="background-color: gray;-webkit-print-color-adjust: exact;">
+		         		<h:outputText value="Health Status &amp; Attendance"></h:outputText>
+		         		</p:outputPanel>
+		         	</f:facet>
+		         		<p:column headerText="Height">
+         		<center><p:outputLabel value="#{var.height}"></p:outputLabel></center> 
+         	</p:column>
+         	
+         	<p:column headerText="Weight">
+         		<center><p:outputLabel value="#{var.weight}"></p:outputLabel></center>
+         	</p:column>
+         	
+         
+         	
+         	<p:columns headerText="Attendance #{ll.termName}" value="#{mainVar.extraFieldColumnsList}" var="ll">
+            	<center><p:outputLabel value="#{ll.attendance}" /></center>
+            </p:columns>
+		         	
+		         </h:dataTable>
+	         </p:outputPanel>
+	         <p:outputPanel style="width:30%;float:right;">
+	         	 <h:dataTable style="width:100%;border-collapse:collapse;font-size:12px;text-align:center" border="1" value="#{printBLMFinalMarksheet.gradeScaleList}" var="var">
+					
+					<f:facet name="header">
+					<p:outputPanel style="background: gray;">
+						GRADE SCALE FOR SCHOLASTIC AREA
+					</p:outputPanel>	
+					</f:facet>
+					
+					<p:column headerText="MARKS RANGE">
+					<f:facet name="header">
+						<h:outputText value="Marks Range"></h:outputText>
+					</f:facet>
+						<h:outputText value="#{var.label}"></h:outputText>
+					</p:column>
+	
+					<p:column headerText="GRADE">
+					<f:facet name="header">
+						<h:outputText value="Grade"></h:outputText>
+					</f:facet>
+						<h:outputText value="#{var.value}"></h:outputText>
+					</p:column>
+	
+		         </h:dataTable>
+		         <h:dataTable rendered="false" style="width:100%;border-collapse:collapse;font-size:12px;text-align:center" border="1" value="#{printBLMFinalMarksheet.gradeScaleListForCoSchol}" var="var">
+					<f:facet name="header">
+					<p:outputPanel style="background: gray !important;">
+						GRADE SCALE FOR CO-SCHOLASTIC AREA
+					</p:outputPanel>
+					</f:facet>
+					<p:column>
+						<h:outputText value="#{var.label}"></h:outputText>
+					</p:column>
+	
+					<p:column>
+						<h:outputText value="#{var.value}"></h:outputText>
+					</p:column>
+	
+		         </h:dataTable>
+	         </p:outputPanel>
+	         </p:outputPanel>
+	         <p:outputPanel style="width:100%;float:left;">
+              <table style="font-size:15px;width:100% ">
+         
+         	<tr>
+         		<td style="width:30%"><b>Class Teacher's Remark : </b></td>
+         		<td style="border-bottom:2px solid black;">#{mainVar.remark}</td>
+         	</tr>
+         	
+         	
+         	<tr>
+         		<td><b>Result : </b></td>
+         		<td>Promotion Granted/Not Granted</td>
+         	</tr>
+         
+         	
+          </table>
+             	</p:outputPanel>
+         <br></br>
+<br></br>
+<br></br>
+<br></br>
+<br></br>
+<br></br>
+<br></br>
+<br></br>
+<br></br>
+<br></br>
+
+
+         <table style="width:100%;font-size:10px">
+         	<tr style="height:30px">
+         		<td></td>
+         		<td></td>
+         		<td> <p:graphicImage width="45%" height="45%" url="http://www.chalkboxerp.in/ajmani/sign.jpg"></p:graphicImage></td>
+         			<td>  
+			  </td>
+         	</tr>
+         	<tr>
+         		<td style="width:25%">Teacher's Signature</td>
+         		<td style="width:25%">Date:- #{printBLMFinalMarksheet.dateEntry}</td>
+         		<td style="width:25%">Principal's Signature</td>
+         		<td style="width:25%">Parents's Signature</td>
+         	</tr>
+         </table>
+         <br></br>
+      
+         </p:outputPanel>
+         </ui:repeat>
+	</h:form>
+</h:body>
+</f:view>
+</html>

@@ -1,0 +1,196 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+	<ui:define name="title">Assigned Books</ui:define>
+
+	<ui:define name="content">
+		<style type="text/css">
+.blueColored {
+	color: blue;
+}
+</style>
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<p:panel header="Assign Book Report">
+								<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+								<p:messages autoUpdate="true"></p:messages>
+								<p:panelGrid columns="7"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:outputLabel value="Start Date" for="@next" style="color:red"></p:outputLabel>
+									<p:calendar value="#{assignBookReport.startDate}"
+										pattern="dd/MM/yyyy" navigator="true" required="true"
+										requiredMessage="Please Enter Start Date"></p:calendar>
+
+									<p:outputLabel value="End Date" for="@next" style="color:red"></p:outputLabel>
+									<p:calendar value="#{assignBookReport.endDate}"
+										pattern="dd/MM/yyyy" navigator="true" required="true"
+										requiredMessage="Please Enter End Date"></p:calendar>
+								</p:panelGrid>
+
+								<br />
+								<p:separator />
+								<center>
+									<p:panelGrid
+										columns="#{assignBookReport.bookList.size() gt 0 ? '3' : '1'}"
+										layout="grid" styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+
+
+										<p:commandButton value="Search" update=":form" icon="ui-icon-search" styleClass="butwid"
+											actionListener="#{assignBookReport.searchData}"></p:commandButton>
+
+
+										<h:commandLink rendered="#{assignBookReport.bookList.size() gt 0}">
+											<p:graphicImage name="images/excellogo.png"
+												library="avalon-layout" width="100" height="40"></p:graphicImage>
+											<pe:exporter type="xlsx" target="dataTable"
+												fileName="Assigned_Book_Report"></pe:exporter>
+										</h:commandLink>
+
+
+										<p:commandButton value="PDF" styleClass="butwid" rendered="#{assignBookReport.bookList.size() gt 0}" 
+										icon="fa fa-file-pdf-o" ajax="false"
+											process="@this"
+											actionListener="#{assignBookReport.exportAssignBookPdf}">
+
+											<p:fileDownload value="#{assignBookReport.file}" />
+										</p:commandButton>
+									</p:panelGrid>
+								</center>
+								<p:separator />
+								<br />
+
+
+								<br></br>
+								<p:dataTable id="dataTable" reflow="true"
+									value="#{assignBookReport.bookList}" var="var"
+									rowStyleClass="#{var.receivedStatus eq 'Yes' ? 'blueColored' : ''}">
+									<f:facet name="header">
+										<p:outputLabel
+											value="From #{assignBookReport.strDate} To #{assignBookReport.enDate}" />
+											&#160;&#160;&#160;&#160;	
+											<p:outputLabel
+											value="Total Books : #{assignBookReport.bookList.size()}"></p:outputLabel>
+											&#160;&#160;&#160;&#160;
+											<p:outputLabel
+											value="Returned : #{assignBookReport.totalRet}"></p:outputLabel>
+											&#160;&#160;&#160;&#160;
+											<p:outputLabel
+											value="Pending : #{assignBookReport.totalPend}"></p:outputLabel>
+
+									</f:facet>
+									<p:column headerText="S.No" style="width:50px">
+										<f:facet name="header">
+											<p:outputLabel value="S.No."></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.sNo}"></p:outputLabel>
+									</p:column>
+
+									<p:column filterMatchMode="contains" filterBy="#{var.bookName}"
+										headerText="Book Name">
+										<f:facet name="header">
+											<p:outputLabel value="Book Name"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.bookName}"></p:outputLabel>
+									</p:column>
+
+									<p:column filterMatchMode="contains" filterBy="#{var.bookId}"
+										headerText="Accession No">
+										<f:facet name="header">
+											<p:outputLabel value="Accession No"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.bookId}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Author Name">
+										<f:facet name="header">
+											<p:outputLabel value="Author Name"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.authorName}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Publication Name">
+										<f:facet name="header">
+											<p:outputLabel value="Publication Name"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.publicationName}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Subject Name">
+										<f:facet name="header">
+											<p:outputLabel value="Subject Name"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.subjectName}"></p:outputLabel>
+									</p:column>
+
+									<p:column filterMatchMode="contains" filterBy="#{var.type}"
+										headerText="Type">
+										<f:facet name="header">
+											<p:outputLabel value="Type"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.type}"></p:outputLabel>
+									</p:column>
+
+									<p:column filterMatchMode="contains"
+										filterBy="#{var.studentName}" headerText="Name">
+										<f:facet name="header">
+											<p:outputLabel value="Name"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.studentName}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Class">
+										<f:facet name="header">
+											<p:outputLabel value="Class"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.classSection}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Issue Date">
+										<f:facet name="header">
+											<p:outputLabel value="Issue Date"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.assignDateStr}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Expire Date">
+										<f:facet name="header">
+											<p:outputLabel value="Expire Date"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.expireDateStr}"></p:outputLabel>
+									</p:column>
+
+									<p:column filterMatchMode="contains"
+										filterBy="#{var.receivedStatus}" headerText="Returned">
+										<f:facet name="header">
+											<p:outputLabel value="Returned"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.receivedStatus}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Returned Date">
+										<f:facet name="header">
+											<p:outputLabel value="Returned Date"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.receiveDateStr}"></p:outputLabel>
+									</p:column>
+								</p:dataTable>
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,120 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Apply Leave</ui:define>
+
+    <ui:define name="content">
+        
+            <div class="ui-fluid">
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <div class="card card-w-title">
+                        <h:form id="form">
+					<p:panel header="Apply Leave">
+						<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+						<p:panelGrid columns="2" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">	
+						
+							<p:outputLabel value="Apply Date:- "></p:outputLabel>
+							<p:outputLabel value="#{leaveApply.applyDate}"/>
+							
+							<p:outputLabel  for="@next" style="color:red" value="Leave For:-"></p:outputLabel>
+							<p:selectOneRadio value="#{leaveApply.leaveType}" required="true" requiredMessage="Please Select Leave For.">
+								<f:selectItem itemLabel="Half Day" itemValue="Half Day"></f:selectItem>
+								<f:selectItem itemLabel="Full Day" itemValue="Full Day"></f:selectItem>
+								<p:ajax listener="#{leaveApply.checkLeaveType}" update="form"></p:ajax>
+							</p:selectOneRadio>
+							
+							<p:outputLabel rendered="#{leaveApply.showSubCat}" value="Select Half:-"></p:outputLabel>
+							<p:selectOneRadio  rendered="#{leaveApply.showSubCat}" value="#{leaveApply.subLeaveType}">
+								<f:selectItems value="#{leaveApply.subCatList}"/>
+							</p:selectOneRadio>
+							
+							<p:outputLabel  for="@next" style="color:red" value="Select Leave Type:-"></p:outputLabel>
+							<p:selectOneMenu value="#{leaveApply.leaveBasis}" required="true" requiredMessage="Please Select Leave Type" filter="true">
+								<f:selectItems value="#{leaveApply.leaveBasisList}"/>
+							</p:selectOneMenu>
+							
+							<p:outputLabel value="From" for="@next" style="color:red" ></p:outputLabel>
+							<p:calendar mindate="#{leaveApply.viewDate}" maxdate="#{leaveApply.viewDate}" navigator="true" pattern="dd/MM/yyyy" yearRange="c-10:c+10" value="#{leaveApply.startDate}" required="true" requiredMessage="Please Enter Start Date">
+								<p:ajax event="dateSelect"></p:ajax>
+							</p:calendar>
+							
+							<p:outputLabel rendered="#{leaveApply.showEndDate}" value="To:-" for="@next" style="color:red" ></p:outputLabel>
+							<p:calendar rendered="#{leaveApply.showEndDate}" navigator="true" pattern="dd/MM/yyyy" yearRange="c-10:c+10" value="#{leaveApply.endDate}" required="true" requiredMessage="Please Enter End Date">
+								<p:ajax event="dateSelect" listener="#{leaveApply.calculateDay}" update=":form:myDay"></p:ajax>
+							</p:calendar>
+							
+							<p:outputLabel value="Days:- "></p:outputLabel>
+							<p:outputLabel id="myDay" value="#{leaveApply.days}"/>
+							
+							<p:outputLabel value="Reason For Leave:- " for="@next" style="color:red" ></p:outputLabel>
+							<p:inputTextarea required="true" requiredMessage="Please Enter Reason For Leave" value="#{leaveApply.description}" rows="3" cols="50" validatorMessage="Please Enter Correct value">
+							  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+							</p:inputTextarea>
+							
+							<p:commandButton update="form:dt" actionListener="#{leaveApply.checkLectures}" style="float:right" value="Arrange Your Lectures"></p:commandButton>
+						</p:panelGrid>
+						
+						<br/>
+						
+						<p:dataTable reflow="true" id="dt" value="#{leaveApply.list}" var="var">
+								
+								<p:column headerText="Date" style="text-align: center;">
+									<p:outputLabel value="#{var.currentDateStr}"></p:outputLabel>
+								</p:column>
+								
+								<p:column headerText="Lec.No." style="text-align: center;">
+									<p:outputLabel value="#{var.lecNo}"></p:outputLabel>
+								</p:column>
+								
+								<p:column headerText="Subject" style="text-align:center;">
+									<h:outputText value="#{var.subjectName}" />
+								</p:column>
+								
+								<p:column headerText="Class" style="text-align: center;">
+									<h:outputText value="#{var.mon_class}" />
+								</p:column>
+								
+								
+								
+								<p:column headerText="Arrange" style="text-align: center;">
+									<p:commandButton immediate="true" icon="ui-icon-plus" oncomplete="PF('editDialog').show()" update=":form3" action="#{leaveApply.checkStaff}">
+										<f:setPropertyActionListener target="#{leaveApply.selectedLec}" value="#{var}"></f:setPropertyActionListener> 
+									</p:commandButton>
+								</p:column>
+							</p:dataTable>
+					</p:panel>
+					
+					
+				</h:form>
+
+					<h:form id="form3" style="overflow:hidden">
+						<p:dialog header="Arrange Lecture" widgetVar="editDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+							<div class="ui-g form-group">
+									<p:panelGrid columns="2"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+								<p:outputLabel  for="@next" style="color:red" value="Select Faculty :" />
+								
+								<p:selectOneMenu filter="true" filterMatchMode="contains" value="#{leaveApply.staff}" required="true" requiredMessage="Please select teacher.">
+									<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+									<f:selectItems value="#{leaveApply.staffList}"></f:selectItems>
+								</p:selectOneMenu>
+
+								<p:commandButton value="Add Request" actionListener="#{leaveApply.arrangeLecture}"/>
+							</p:panelGrid>
+							</div>
+						</p:dialog>
+					</h:form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+    </ui:define>
+
+</ui:composition>

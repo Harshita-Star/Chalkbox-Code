@@ -1,0 +1,188 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	<f:loadBundle var="addClassVar" basename="myProperties" />
+
+	<ui:define name="title">Add Admit Card</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form" enctype="multipart/form-data">
+							<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+							<h1>Add Admit Card</h1>
+							<p:panel
+								header="Add Admit Card (Allowed file type are :- jpg,jpeg,png)">
+								<p:messages closable="true" autoUpdate="true"></p:messages>
+
+								<h4>Note : Size limit for an file is 1MB. Please do not
+									upload file(s) of size greater than 1MB</h4>
+								<br />
+
+								<p:panelGrid columns="2"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:outputLabel for="@next" style="color:red"
+										value="Select Type" />
+									<p:selectOneRadio value="#{addAdmitCard.type}" required="true"
+										requiredMessage="Please Select Type">
+										<f:selectItem itemLabel="Academics" itemValue="academics"></f:selectItem>
+										<f:selectItem itemLabel="Sports" itemValue="sports"></f:selectItem>
+										<p:ajax listener="#{addAdmitCard.checkType}" update=":form"></p:ajax>
+									</p:selectOneRadio>
+
+									<p:outputLabel for="@next" style="color:red" id="exmLbl"
+										value="#{addAdmitCard.examLabel}"></p:outputLabel>
+									<p:inputText value="#{addAdmitCard.examName}" required="true"
+										requiredMessage="Please Enter #{addAdmitCard.examLabel}">
+										<p:ajax></p:ajax>
+									</p:inputText>
+
+									<p:outputLabel for="@next" style="color:red"
+										value="Select Class"></p:outputLabel>
+									<p:selectOneMenu rendered="#{addAdmitCard.showAcademic}"
+										filter="true" value="#{addAdmitCard.selectedClass}"
+										required="true" requiredMessage="Please Select Class">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{addAdmitCard.classList}"></f:selectItems>
+										<p:ajax listener="#{addAdmitCard.allSections}"
+											update=":form:sectionid,:form:tbl"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:selectOneMenu rendered="#{addAdmitCard.showSports}"
+										filter="true" value="#{addAdmitCard.selectedClass}"
+										required="true" requiredMessage="Please Select Class">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{addAdmitCard.classList}"></f:selectItems>
+										<p:ajax listener="#{addAdmitCard.allSections}"
+											update=":form:sectionid,:form:tblSports"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel for="@next" style="color:red"
+										value="Select Section"></p:outputLabel>
+									<p:selectOneMenu id="sectionid" filter="true"
+										value="#{addAdmitCard.selectedSection}" required="true"
+										requiredMessage="Please select a Section">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+z										<f:selectItems value="#{addAdmitCard.sectionList}"></f:selectItems>
+										<p:ajax></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel for="@next" style="color:red"
+										value="Select Data Upload Type"></p:outputLabel>
+									<p:selectOneRadio id="datatype" filter="true"
+										value="#{addAdmitCard.uploadType}" required="true"
+										requiredMessage="Please select Upload Type">
+										<f:selectItem itemLabel="manual" itemValue="manual"></f:selectItem>
+										<f:selectItem itemLabel="file" itemValue="photo"></f:selectItem>
+										<p:ajax listener="#{addAdmitCard.checkRenderCondition}"
+											update=":form"></p:ajax>
+									</p:selectOneRadio>
+
+									<p:outputPanel id="photoType"
+										rendered="#{addAdmitCard.typePhoto}">
+										<p:fileUpload mode="simple" value="#{addAdmitCard.file}"
+											allowTypes="/(\.|\/)(gif|jpeg|png|pdf)$/" sizeLimit="1000000"></p:fileUpload>
+
+									</p:outputPanel>
+
+									<p:outputPanel id="manualType"
+										rendered="#{addAdmitCard.typeManual}">
+										<p:outputLabel rendered="#{addAdmitCard.showAcademic}"
+											value="Enter Exam Details"></p:outputLabel>
+
+										<p:dataTable reflow="true"
+											rendered="#{addAdmitCard.showAcademic}" id="tbl"
+											style="width:600px" value="#{addAdmitCard.admitInfo}"
+											var="var">
+											<p:column headerText="S.No." style="width:60px">
+												<p:outputLabel value="#{var.sNo}"></p:outputLabel>
+											</p:column>
+
+											<p:column headerText="Subject*">
+												<p:selectOneMenu value="#{var.subjectId}" filter="true">
+													<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+													<f:selectItems value="#{addAdmitCard.subjectList}"></f:selectItems>
+													<f:attribute name="sNo" value="#{var.sNo}"></f:attribute>
+													<p:ajax listener="#{addAdmitCard.checkSubject}"
+														update=":form:tbl"></p:ajax>
+												</p:selectOneMenu>
+											</p:column>
+
+											<p:column headerText="Date*">
+												<p:calendar value="#{var.examDate}" navigator="true"
+													pattern="dd/MM/yyyy" yearRange="c-10:c+10">
+													<p:ajax event="dateSelect"></p:ajax>
+												</p:calendar>
+											</p:column>
+
+											<p:column headerText="Time">
+												<p:inputText value="#{var.timeExam}">
+													<f:attribute name="sNo" value="#{var.sNo}"></f:attribute>
+													<p:ajax></p:ajax>
+												</p:inputText>
+											</p:column>
+										</p:dataTable>
+
+										<p:outputLabel rendered="#{addAdmitCard.showSports}"
+											value="Enter Event Details"></p:outputLabel>
+
+										<p:dataTable reflow="true" id="tblSports" style="width:600px"
+											value="#{addAdmitCard.admitInfo}" var="var"
+											rendered="#{addAdmitCard.showSports}">
+											<p:column headerText="S.No." style="width:60px">
+												<p:outputLabel value="#{var.sNo}"></p:outputLabel>
+											</p:column>
+
+											<p:column headerText="Description*">
+												<p:inputText value="#{var.description}">
+												</p:inputText>
+											</p:column>
+
+											<p:column headerText="Date*">
+												<p:calendar value="#{var.examDate}" navigator="true"
+													pattern="dd/MM/yyyy" yearRange="c-10:c+10">
+												</p:calendar>
+											</p:column>
+
+											<p:column headerText="Time">
+												<p:inputText value="#{var.timeExam}">
+												</p:inputText>
+											</p:column>
+
+											<f:facet name="footer">
+												<p:commandButton value="Add More" update=":form"
+													actionListener="#{addAdmitCard.addMore}" ajax="false"></p:commandButton>
+											</f:facet>
+
+										</p:dataTable>
+
+									</p:outputPanel>
+
+								</p:panelGrid>
+
+								<p:panel>
+									<p:inputTextarea value="#{addAdmitCard.instructions}"></p:inputTextarea>
+								</p:panel>
+								<br />
+								<p:commandButton value="Submit" update=":form" ajax="false"
+									actionListener="#{addAdmitCard.submitAdmitCard}"
+									style="width:200px;"></p:commandButton>
+
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

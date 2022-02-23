@@ -1,0 +1,174 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Blocked App Modules</ui:define>
+
+	<ui:define name="content">
+
+		<style>
+.ui-datatable-scrollable .ui-datatable-scrollable-header,
+	.ui-datatable-scrollable .ui-datatable-scrollable-footer {
+	position: sticky !important;
+	top: 60px !important;
+	z-index: 9 !important;
+}
+
+body .ui-datatable thead th, body .ui-datatable tbody td {
+	width: var(--w) !important;
+}
+</style>
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h1>Student App Blocked Modules</h1>
+						<h:form id="form">
+
+							<p:panel header="Search Student by Class-Section">
+
+								<p:panelGrid columns="5"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel for="@next" style="color:red"
+										value="Select Class"></p:outputLabel>
+									<p:selectOneMenu style="width:250px"
+										value="#{studentModBlockReport.selectedClass}" required="true"
+										requiredMessage="Please select a class">
+										<f:selectItem itemLabel="Select Class" itemValue=""></f:selectItem>
+										<f:selectItems value="#{studentModBlockReport.classList}"></f:selectItems>
+
+										<p:ajax update="sectionid"
+											listener="#{studentModBlockReport.allSections}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel for="@next" style="color:red"
+										value="Select Section"></p:outputLabel>
+									<p:selectOneMenu id="sectionid"
+										value="#{studentModBlockReport.selectedSection}"
+										required="true" requiredMessage="Please select a section">
+										<f:selectItem itemLabel="Select Section" itemValue=""></f:selectItem>
+										<f:selectItems value="#{studentModBlockReport.sectionList}"></f:selectItems>
+
+									</p:selectOneMenu>
+
+								</p:panelGrid>
+								<br />
+								<p:separator />
+								<center>
+									<p:panelGrid
+										columns="#{studentModBlockReport.list.size() gt 0 ? '2' : '1'}"
+										layout="grid" styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+
+										<p:commandButton value="Search"
+											actionListener="#{studentModBlockReport.search}"
+											update=":form,:form1" icon="ui-icon-search" styleClass="butwid">
+										</p:commandButton>
+
+										<p:commandButton value="PDF" styleClass="butwid"
+											icon="fa fa-file-pdf-o" ajax="false" process="@this"
+											actionListener="#{studentModBlockReport.exportPdf}"
+											rendered="#{studentModBlockReport.list.size() gt 0}">
+											<p:fileDownload value="#{studentModBlockReport.file}" />
+										</p:commandButton>
+									</p:panelGrid>
+								</center>
+								<p:separator />
+								<br />
+							</p:panel>
+						</h:form>
+					</div>
+
+					<div class="card card-w-title">
+						<h:form id="form1">
+							<p:outputPanel rendered="#{studentModBlockReport.list.size() gt 0}">
+									<p:dataTable stickyHeader="true" id="table"
+									value="#{studentModBlockReport.list}" var="var"
+									rowIndexVar="cnt" reflow="true">
+
+									<f:facet name="header">
+										<p:outputLabel value="Student App Blocked Modules" />
+									</f:facet>
+									<p:column headerText="S.NO.">
+										<f:facet name="header">
+											<p:outputLabel value="S.NO."></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{cnt+1}"></p:outputLabel>
+
+									</p:column>
+									<p:column headerText="Student Name">
+										<f:facet name="header">
+											<p:outputLabel value="Student Name"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.fname}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Father Name">
+										<f:facet name="header">
+											<p:outputLabel value="Father Name"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.fatherName}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Contact No.">
+										<f:facet name="header">
+											<p:outputLabel value="Contact No."></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.contactNo}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Class">
+										<f:facet name="header">
+											<p:outputLabel value="Class"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.className} - #{var.sectionName}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Type">
+										<f:facet name="header">
+											<p:outputLabel value="Type"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.status}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Due Amount">
+										<f:facet name="header">
+											<p:outputLabel value="Due Amount"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.dueAmount}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Modules Blocked">
+										<f:facet name="header">
+											<p:outputLabel value="Modules Blocked"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.modules}"></p:outputLabel>
+									</p:column>
+								</p:dataTable>
+							</p:outputPanel>
+						</h:form>
+
+
+						<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+							<p:commandButton value="Yes" type="button"
+								styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+							<p:commandButton value="No" type="button"
+								styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+						</p:confirmDialog>
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

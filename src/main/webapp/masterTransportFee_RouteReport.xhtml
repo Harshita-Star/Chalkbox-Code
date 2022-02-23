@@ -1,0 +1,140 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/schoolMasterTemplate.xhtml">
+
+	<ui:define name="title">Transport Fee Report</ui:define>
+
+		<ui:define name="content">
+		   
+			<div class="ui-fluid">
+				<div class="ui-g">
+					<div class="ui-g-12">
+						<div class="card card-w-title">
+							<h:form id="form2">
+								<p:panel header="Search Student">
+									<p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+									
+										<p:outputLabel value="Select School" for="@next" style="color:red" ></p:outputLabel>
+										<p:selectOneMenu value="#{transFee_RouteReport.schid}" required="true" requiredMessage="Please select a school">
+											<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+											<f:selectItem itemLabel="All" itemValue="-1"></f:selectItem>
+											<f:selectItems value="#{transFee_RouteReport.branchList}"></f:selectItems>
+											<p:ajax listener="#{transFee_RouteReport.branchWiseWork}" update="form2"></p:ajax>
+										</p:selectOneMenu>
+							
+																			
+										<p:outputLabel rendered="#{transFee_RouteReport.showClass}"  for="@next" style="color:red" value="Select Class"></p:outputLabel>
+										<p:selectOneMenu rendered="#{transFee_RouteReport.showClass}" style="width:250px" value="#{transFee_RouteReport.selectedClass}" required="true" requiredMessage="Please select a class">
+											<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+											<f:selectItem itemLabel="All" itemValue="-1"></f:selectItem>
+											<f:selectItems value="#{transFee_RouteReport.classList}"></f:selectItems>
+											<p:ajax update="form2" listener="#{transFee_RouteReport.allSections}"></p:ajax>
+										</p:selectOneMenu>
+	
+										<p:outputLabel rendered="#{transFee_RouteReport.showClass}" for="@next" style="color:red"  value="Select Section"></p:outputLabel>
+										<p:selectOneMenu rendered="#{transFee_RouteReport.showClass}" id="sectionid" value="#{transFee_RouteReport.selectedSection}" required="true" requiredMessage="Please select a section">
+											<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+											<f:selectItem itemLabel="All" itemValue="-1"></f:selectItem>
+											<f:selectItems value="#{transFee_RouteReport.sectionList}"></f:selectItems>
+										</p:selectOneMenu>
+										
+										
+										<p:outputLabel value="Type" for="@next" style="color:red" ></p:outputLabel>
+										<p:selectOneRadio value="#{transFee_RouteReport.type}" required="true" requiredMessage="Please select a section">
+											<f:selectItem itemLabel="Route" itemValue="route"></f:selectItem>
+											<f:selectItem itemLabel="Amount" itemValue="amount"></f:selectItem>
+										</p:selectOneRadio>
+	
+										<p:commandButton update=":form3:up,:form2" actionListener="#{transFee_RouteReport.searchReport}" value="Search"></p:commandButton>
+									</p:panelGrid>
+	
+								</p:panel>
+	
+							</h:form>
+						</div>
+	               		 <div class="card card-w-title">
+			               	<h:form id="form3">	 
+               		 
+               		 			<p:panel header="Transport Fee Report" id="up"  >
+               		 				<p:outputPanel rendered="#{transFee_RouteReport.show}">
+			               		 	<center>
+										<p style="font-family: initial;font-style: oblique;font-size: 25px !important;font-weight:bold;margin:0px;">#{transFee_RouteReport.schname}</p>
+										<p style="font-family: initial;font-style: oblique;font-size: 15px !important;font-weight:bold;margin:0px;">#{transFee_RouteReport.affiliationNo}</p>
+										<p style="font-family: initial;font-style: oblique;font-size: 15px !important;font-weight:bold;margin:0px;">#{transFee_RouteReport.finalAddress}</p>
+										<p style="font-family: initial;font-style: oblique;font-size: 15px !important;font-weight:bold;margin:0px;">#{transFee_RouteReport.phoneno}</p>
+										
+										<p style="margin:0px;font-size: 25px !important;font-weight:bold;">Transport Fee Report</p>
+									</center>
+									<br></br>
+				
+               		  				<p:dataTable reflow="true"  id="table"  var="var" value="#{transFee_RouteReport.studentList}"> 
+										<f:facet name="header">
+		    	  							<p:panelGrid columns="1">
+		    	  								<p:outputLabel value="BLM Academy Padampur Devaliya, Gora Parao, Haldwani, Distt. Nainital"></p:outputLabel>
+		    	  							</p:panelGrid>
+		    	  						</f:facet>
+		    	
+			               		  		<p:column headerText="S.No.">
+											<f:facet name="header">
+												<p:outputLabel value="S.No."></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.sno}"></p:outputLabel>
+										</p:column>
+										
+										<p:column headerText="EBLM No.">
+											<f:facet name="header">
+												<p:outputLabel value="EBLM No."></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.srNo}"></p:outputLabel>
+										</p:column>
+										
+										<p:column sortBy="#{var.fname}" headerText="Student Name"> 
+											<f:facet name="header">
+												<p:outputLabel value="Student Name"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.fname}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Father's Name">
+											<f:facet name="header">
+												<p:outputLabel value="Father's Name"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.fatherName}"></p:outputLabel>
+										</p:column>
+ 
+ 										<p:column headerText="Class">
+ 											<f:facet name="header">
+												<p:outputLabel value="Class"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.className}"></p:outputLabel>
+										</p:column>
+										
+										<p:column rendered="#{transFee_RouteReport.showSchool}" headerText="School" >
+											<f:facet name="header">
+												<p:outputLabel value="School"></p:outputLabel>
+											</f:facet>
+		               		  				<p:outputLabel value="#{var.schname}"></p:outputLabel>
+		               		  			</p:column>
+
+										<p:columns value="#{transFee_RouteReport.monthList}" var="column" columnIndexVar="colIndex">
+											<f:facet name="header">
+												<p:outputLabel value="#{column.label}"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.feesMap[column.value]}"></p:outputLabel>
+										</p:columns>
+									</p:dataTable>
+									</p:outputPanel>
+								</p:panel>
+							</h:form>
+						</div>
+					</div>
+				</div>
+			</div>
+		   
+	</ui:define>
+
+</ui:composition>

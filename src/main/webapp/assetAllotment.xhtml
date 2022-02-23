@@ -1,0 +1,81 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Hostel</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+
+						<h:form id="form" style="overflow:hidden">
+							<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+							<p:panel header="Asset Allotment">
+								<p:panelGrid columns="3"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel  for="@next" style="color:red" value="Date"></p:outputLabel>
+									<p:calendar effect="fold" pattern="dd/MM/yyyy" navigator="true"
+										yearRange="c-30:c+30" value="#{assetAllotment.entryDate}"
+										required="true" requiredMessage="Please Enter date"></p:calendar>
+									<p:outputLabel></p:outputLabel>
+
+									<p:outputLabel  for="@next" style="color:red" value="Select Asset Name"></p:outputLabel>
+									<p:selectOneMenu value="#{assetAllotment.assetName}"
+										required="true" requiredMessage="Please Select Asset">
+										<f:selectItem itemLabel="Select Asset" itemValue=""></f:selectItem>
+										<f:selectItems value="#{assetAllotment.assetList}"></f:selectItems>
+										<p:ajax listener="#{assetAllotment.viewCurrentStock}"
+											update="balance"></p:ajax>
+									</p:selectOneMenu>
+									<p:outputLabel></p:outputLabel>
+
+									<p:outputLabel  for="@next" style="color:red" value="Quantity"></p:outputLabel>
+									<p:inputText id="quantity" value="#{assetAllotment.quantity}"
+										required="true" requiredMessage="Please Select Quantity">
+										<p:keyFilter mask="pnum"></p:keyFilter>
+									</p:inputText>
+									<p:outputLabel
+										value="Available Quantity:  #{assetAllotment.availableStock}"
+										id="balance"></p:outputLabel>
+									
+									<p:outputLabel value="Hostel Name"></p:outputLabel>
+									<p:selectOneMenu  filter="true"
+										value="#{assetAllotment.hostelName}">
+										<f:selectItem itemLabel="Select Hostel Name" itemValue=""></f:selectItem>
+										<f:selectItems value="#{assetAllotment.hostelNameList}"></f:selectItems>
+										<p:ajax update="rooms" listener="#{assetAllotment.roomsDetails}"></p:ajax>
+									</p:selectOneMenu>
+									<p:outputLabel></p:outputLabel>
+
+									<p:outputLabel  for="@next" style="color:red" value="To Room No"></p:outputLabel>
+									<p:selectOneMenu id="rooms" value="#{assetAllotment.toRoomNo}"
+										required="true" requiredMessage="Please Select Room No.">
+										<f:selectItem itemLabel="Select Room No" itemValue=""></f:selectItem>
+										<f:selectItems value="#{assetAllotment.roomList}"></f:selectItems>
+										<p:ajax></p:ajax>
+									</p:selectOneMenu>
+									<p:outputLabel></p:outputLabel>
+									<p:commandButton value="Allot Asset"
+										action="#{assetAllotment.allotAsset}" update=":form"></p:commandButton>
+
+								</p:panelGrid>
+							</p:panel>
+
+						</h:form>
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

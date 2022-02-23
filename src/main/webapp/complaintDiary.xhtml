@@ -1,0 +1,141 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Complaint Diary</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form1">
+
+							<p:messages closable="true" autoUpdate="true"></p:messages>
+
+							<p:panel>
+								<f:facet name="header">
+									<span>Student Behaviour Report</span>
+									<span> <p:commandLink
+									style="float: right;margin-left: 15px;;color: blue;font-size:15px;"
+									immediate="true" value="Add Student Behaviour"
+									action="addComplaintDiary.xhtml?faces-redirect=true"></p:commandLink>
+									</span>
+								</f:facet>
+								
+
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel value="Search by Student Name"></p:outputLabel>
+									<p:autoComplete id="acSimple"
+										value="#{complaintDiaryBean.name}"
+										completeMethod="#{complaintDiaryBean.autoCompleteStudentInfo}"
+										forceSelection="true"
+										validatorMessage="Please Select from Autocomplete List">
+									  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+									</p:autoComplete>
+
+									<p:outputLabel value="Search By Complaint Date"></p:outputLabel>
+									<p:calendar value="#{complaintDiaryBean.complaintDate}"
+										navigator="true" pattern="dd/MM/yyyy" yearRange="c-10:c+10">
+									</p:calendar>
+									
+									<p:outputLabel rendered="false" value="Select Criteria"></p:outputLabel>
+									<p:selectOneMenu rendered="false" value="#{complaintDiaryBean.type}">
+										<f:selectItem itemLabel="All" itemValue="all"></f:selectItem>
+										<f:selectItem itemLabel="Complaint" itemValue="complaint"></f:selectItem>
+										<f:selectItem itemLabel="Appreciation" itemValue="appreciation"></f:selectItem>
+										
+									</p:selectOneMenu>
+								</p:panelGrid>
+								
+								<br />
+								<p:separator />
+								<center>
+									<p:panelGrid
+										columns="2"
+										layout="grid" styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+
+										<p:commandButton update=":form3:up" value="Search" styleClass="butwid" icon="fa fa-search"
+										action="#{complaintDiaryBean.searchComplaint}"></p:commandButton>
+									<p:commandButton value="Print" styleClass="butwid" icon="fa fa-print">
+			               	       		<p:printer target="form3:up"></p:printer>
+			               	       </p:commandButton>
+			               	       
+									</p:panelGrid>
+								</center>
+								<p:separator />
+								<br />
+							</p:panel>
+						</h:form>
+					</div>
+					<div class="card card-w-title">
+						<h:form id="form3">
+							<p:panel header="Student Behaviour Details">
+
+								<p:outputPanel id="up">
+									<p:dataTable reflow="true" var="var"
+										value="#{complaintDiaryBean.studentList}">
+
+										<p:column headerText="S.No.">
+											<p:outputLabel value="#{var.sno}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Admission No.">
+											<p:outputLabel value="#{var.srNo}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Student Name">
+											<p:outputLabel value="#{var.studentName}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Father's Name">
+											<p:outputLabel value="#{var.fatherName}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Contact No.">
+											<p:outputLabel value="#{var.mobileNo}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Class">
+											<p:outputLabel value="#{var.classSection}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Date">
+											<p:outputLabel value="#{var.strDate}"></p:outputLabel>
+										</p:column>
+										
+										<p:column headerText="Type">
+											<p:graphicImage value="#{var.type eq 'complaint' ? 'red.png' : var.type eq 'appreciation' ? 'green.png' : 'blue.png'}" style="width:30px; height:40px;"></p:graphicImage>
+										</p:column>
+
+										<p:column headerText="Description">
+											<p:outputLabel value="#{var.description}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Posted By">
+											<p:outputLabel value="#{var.complaintBy}"></p:outputLabel>
+										</p:column>
+
+
+									</p:dataTable>
+								</p:outputPanel>
+
+							</p:panel>
+
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

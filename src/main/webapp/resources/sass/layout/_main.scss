@@ -1,0 +1,51 @@
+html {
+  height: 100%;
+  font-size: $fontSize;
+}
+
+body {
+  font-family: $fontFamily;
+  font-size: $fontSize;
+  font-weight: 400;
+  color: $textColor;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  padding: 0;
+  margin: 0;
+  min-height: 100%;
+  background-color: $bodyBgColor;
+
+  &.blocked-scroll {
+    overflow: auto;
+  }
+
+}
+
+a {
+  text-decoration: none;
+}
+
+.ajax-loader {
+  font-size: 32px;
+  color: $primaryColor;
+}
+
+.layout-main {
+  padding-top: 56px;
+  @include flex();
+  @include flex-direction-column();
+  @include flex-justify-between();
+  min-height: 100vh;
+
+  .layout-content {
+    flex: 1 0 auto;
+    padding: 2em;
+  }
+}
+
+@media (max-width: 992px) {
+  .layout-main {
+    padding-top: 112px;
+  }
+}
+

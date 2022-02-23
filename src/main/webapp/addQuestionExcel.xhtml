@@ -1,0 +1,100 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Add Question</ui:define>
+
+	<ui:define name="content">
+		<style>
+body .ui-md-6 {
+	width: 84% !important;
+}
+</style>
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form" enctype="multipart/form-data">
+
+							<h1>Add Question</h1>
+
+							<p:panel header="Add Question">
+								<p:messages closable="true" autoUpdate="true"></p:messages>
+
+								<p:panelGrid columns="2"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel for="@next" style="color:red"
+										value="Select Class"></p:outputLabel>
+									<p:selectOneMenu id="classId"
+										value="#{questionbean.selectedClass}" filter="true"
+										required="true"
+										requiredMessage="#{addExamVar.selectClassValidation}">
+										<f:selectItem itemLabel="#{addExamVar.selectHereLabel}"
+											itemValue=""></f:selectItem>
+										<f:selectItems value="#{questionbean.classList}"></f:selectItems>
+										<p:ajax event="itemSelect"
+											listener="#{questionbean.getSubjects}" update="subjectId"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel for="@next" style="color:red"
+										value="Select Subject"></p:outputLabel>
+									<p:selectOneMenu id="subjectId" required="true"
+										value="#{questionbean.selectedSubject}"
+										requiredMessage="Subject selection is required">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{questionbean.subjectList}"></f:selectItems>
+										<p:ajax event="itemSelect" listener="#{questionbean.getExams}"
+											update="examId"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel for="@next" style="color:red"
+										value="Select Exam"></p:outputLabel>
+									<p:selectOneMenu id="examId" required="true"
+										value="#{questionbean.examName}"
+										requiredMessage="Exam selection is required">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{questionbean.examList}"></f:selectItems>
+										<p:ajax event="itemSelect" listener="#{questionbean.getLanguage}" update="la"></p:ajax>
+									</p:selectOneMenu>
+									
+									<p:outputLabel  for="@next" 
+										value="Language"></p:outputLabel>
+									<p:inputText id="la"  disabled="#{questionbean.lang}" 
+										value="#{questionbean.examLang}"></p:inputText>
+
+									<p:outputLabel for="@next" style="color:red" value="Excel File"></p:outputLabel>
+									<p:fileUpload allowTypes="/(\.|\/)(xls)$/" mode="simple"
+										skinSimple="true" value="#{questionbean.file}"
+										update=":form"></p:fileUpload>
+								</p:panelGrid>
+								<br />
+								<br />
+								<center>
+									<p:commandButton style="width:14%" value="Upload" action="#{questionbean.uploadFile}" ajax="false"></p:commandButton>
+								</center>
+							</p:panel>
+						</h:form>
+						<h:form id="exlform">
+						<center><p:commandButton process="@this"
+										style="font-size:12px;width: 250px;"
+										value="Download Sample Excel Sheet" ajax="false"
+										icon="ui-icon-arrowthick-1-s"
+										title="Click here to download sample format of registration excel sheet."
+										actionListener="#{questionbean.downloadSample}">
+										<p:fileDownload value="#{questionbean.fileForShow}" />
+									</p:commandButton></center>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

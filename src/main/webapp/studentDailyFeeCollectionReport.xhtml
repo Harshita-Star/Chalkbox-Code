@@ -1,0 +1,315 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Student Fee Collection</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+							<p:panel header="Search Student by Name/Sr. No">
+								<p:commandLink
+									style="float: right;margin-left: 15px;color: blue;font-size:15px;"
+									immediate="true" value="Daily Collection Report"
+									action="dailyFeecolletionReport.xhtml?faces-redirect=true"></p:commandLink>
+
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:outputLabel value="Student Name/Sr. No"></p:outputLabel>
+									<p:autoComplete minQueryLength="3"
+										completeMethod="#{studentDailyFeeCollectionReport.autoCompleteStudentInfo}"
+										forceSelection="true" id="acSimple"
+										value="#{studentDailyFeeCollectionReport.name}"
+										validatorMessage="Please Enter Correct value">
+										<f:validateRegex
+											pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:autoComplete>
+									
+									<p:commandButton value="Search" update=":form" icon = "fa fa-search" styleClass="butwid"
+										actionListener="#{studentDailyFeeCollectionReport.searchStudentByName}"></p:commandButton>
+
+									<h:commandLink
+										rendered="#{studentDailyFeeCollectionReport.dailyfee.size() gt 0}">
+										<p:graphicImage name="images/excellogo.png"
+											library="avalon-layout" width="100" height="40"></p:graphicImage>
+										<pe:exporter type="xlsx" target=":form:up"
+											fileName="FeeCollection"></pe:exporter>
+									</h:commandLink>
+									
+								</p:panelGrid>
+
+							</p:panel>
+							<p:panel id="dailyfeereport"
+								rendered="#{studentDailyFeeCollectionReport.show}">
+								<center>
+									<p
+										style="font-size: 25px !important; font-weight: bold; margin: 0px;">#{headerBean.name}</p>
+									<p
+										style="font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.affiliationNo}</p>
+									<p
+										style="font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.finalAddress}</p>
+									<p
+										style="font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.phoneno}</p>
+
+									<p
+										style="margin: 0px; font-size: 25px !important; font-weight: bold;">Daily
+										Fee Collection Report</p>
+								</center>
+								<p:panelGrid columns="5"
+									styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent; width: 100%;">
+
+									<p:panelGrid columns="2">
+										<p:outputLabel value="Date:"></p:outputLabel>
+										<h:outputText value="#{studentDailyFeeCollectionReport.date}"></h:outputText>
+									</p:panelGrid>
+
+									<p:panelGrid columns="2">
+										<p:outputLabel value="Total Amount(Cash):"></p:outputLabel>
+										<h:outputText
+											value="#{sideMenuBean.list.country eq 'UAE' ? 'AED ' : 'Rs.'}#{studentDailyFeeCollectionReport.cashAmount}"></h:outputText>
+									</p:panelGrid>
+
+									<p:panelGrid columns="2">
+										<p:outputLabel value="Total Amount(Cheque):"></p:outputLabel>
+										<h:outputText
+											value="#{sideMenuBean.list.country eq 'UAE' ? 'AED ' : 'Rs.'}#{studentDailyFeeCollectionReport.chequeAmount}"></h:outputText>
+									</p:panelGrid>
+
+
+									<p:panelGrid columns="2">
+										<p:outputLabel value="Total Amount:"></p:outputLabel>
+										<h:outputText
+											value="#{sideMenuBean.list.country eq 'UAE' ? 'AED ' : 'Rs.'}#{studentDailyFeeCollectionReport.tamount}"></h:outputText>
+									</p:panelGrid>
+
+									<p:panelGrid columns="2">
+										<p:outputLabel value="Total Discount:"></p:outputLabel>
+										<h:outputText
+											value="#{sideMenuBean.list.country eq 'UAE' ? 'AED ' : 'Rs.'}#{studentDailyFeeCollectionReport.tdiscount}"></h:outputText>
+									</p:panelGrid>
+								</p:panelGrid>
+
+
+								<p:dataTable id="up" reflow="true"
+									tableStyle="table-layout:auto;" var="fee"
+									value="#{studentDailyFeeCollectionReport.dailyfee}">
+
+
+									<p:column headerText="Sno" style="font-size:8px !important">
+										<f:facet name="header">
+											<p:outputLabel value="S.NO."></p:outputLabel>
+										</f:facet>
+										<p:outputLabel style="font-size:8px !important"
+											value="#{fee.srno}"></p:outputLabel>
+									</p:column>
+
+
+									<p:column style="font-size:9px !important"
+										headerText="Student name">
+										<f:facet name="header">
+											<p:outputLabel value="Student Name"></p:outputLabel>
+										</f:facet>
+										<h:outputText style="font-size:9px !important"
+											value="#{fee.studentname}" />
+									</p:column>
+									<p:column style="font-size:9px !important"
+										headerText="Father name">
+										<f:facet name="header">
+											<p:outputLabel value="Father Name"></p:outputLabel>
+										</f:facet>
+										<h:outputText style="font-size:9px !important"
+											value="#{fee.fathername}" />
+									</p:column>
+
+									<p:column style="font-size:10px !important" headerText="Class">
+										<f:facet name="header">
+											<p:outputLabel value="Class"></p:outputLabel>
+										</f:facet>
+										<h:outputText style="font-size:10px !important"
+											value="#{fee.classname}" />
+									</p:column>
+									<p:column style="font-size:10px !important"
+										headerText="Section">
+
+										<f:facet name="header">
+											<p:outputLabel value="Section"></p:outputLabel>
+										</f:facet>
+										<h:outputText style="font-size:10px !important"
+											value="#{fee.section}" />
+									</p:column>
+
+
+									<p:column style="font-size:10px !important"
+										headerText="Receipt no">
+
+										<f:facet name="header">
+											<p:outputLabel value="Receipt No"></p:outputLabel>
+										</f:facet>
+										<h:outputText style="font-size:10px !important"
+											value="#{fee.reciptno}" />
+									</p:column>
+
+
+									<p:columns style="font-size:10px !important;"
+										value="#{studentDailyFeeCollectionReport.feelist}"
+										var="column" columnIndexVar="colIndex">
+
+										<f:facet name="header">
+											<p:outputLabel style="font-size:9px !important;"
+												value="#{column.feeName} (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})"></p:outputLabel>
+										</f:facet>
+
+										<p:outputLabel style="font-size:9px !important"
+											value="#{fee.allFess[column.feeId]}"></p:outputLabel>
+
+									</p:columns>
+
+									<p:column style="font-size:10px !important"
+										headerText="Total amount">
+
+
+										<f:facet name="header">
+											<p:outputLabel
+												value="Total Amount (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})"></p:outputLabel>
+										</f:facet>
+										<h:outputText style="font-size:10px !important"
+											value="#{fee.amount}" />
+									</p:column>
+
+									<p:column style="font-size:10px !important"
+										headerText="Total Discount">
+
+
+										<f:facet name="header">
+											<p:outputLabel
+												value="Total Discount (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})"></p:outputLabel>
+										</f:facet>
+										<h:outputText style="font-size:10px !important"
+											value="#{fee.discount}" />
+									</p:column>
+
+									<p:column style="font-size:10px !important"
+										headerText="Payment Mode">
+
+
+										<f:facet name="header">
+											<p:outputLabel value="Payment Mode"></p:outputLabel>
+										</f:facet>
+										<h:outputText style="font-size:10px !important"
+											value="#{fee.paymentmode} #{fee.bankname} #{fee.chequenumber}" />
+									</p:column>
+
+									<p:column
+										style="font-size:10px !important;width:80px !important;"
+										headerText="Date">
+
+
+										<f:facet name="header">
+											<p:outputLabel value="Date"></p:outputLabel>
+										</f:facet>
+										<h:outputText style="font-size:9px !important"
+											value="#{fee.feeDateStr}" />
+									</p:column>
+
+									<p:column
+										style="font-size:10px !important;width:80px !important;"
+										headerText="Date">
+
+
+										<f:facet name="header">
+											<p:outputLabel value="User"></p:outputLabel>
+										</f:facet>
+										<h:outputText style="font-size:9px !important"
+											value="#{fee.user}" />
+									</p:column>
+
+									<p:column exportable="false"
+										style="font-size:9px !important;width:50px !important;"
+										headerText="Print">
+										<f:facet name="header">
+											<p:outputLabel style="font-size:9px !important"
+												value="Duplicate"></p:outputLabel>
+										</f:facet>
+										<p:commandButton icon="ui-icon-print"
+											action="#{studentDailyFeeCollectionReport.duplicateFee}">
+											<f:setPropertyActionListener
+												target="#{studentDailyFeeCollectionReport.selectedstudent}"
+												value="#{fee}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+
+									<p:column exportable="false" rendered="false"
+										style="font-size:9px !important;width:50px !important;"
+										headerText="Cancel">
+										<f:facet name="header">
+											<p:outputLabel style="font-size:9px !important"
+												value="Cancel"></p:outputLabel>
+										</f:facet>
+										<p:commandButton disabled="#{fee.disableCancel}"
+											icon="ui-icon-close" oncomplete="PF('cancelfee').show();"
+											update=":form">
+											<f:setPropertyActionListener
+												target="#{studentDailyFeeCollectionReport.selectedstudent}"
+												value="#{fee}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+
+
+
+								</p:dataTable>
+
+
+
+							</p:panel>
+
+						</h:form>
+
+						<h:form id="form2">
+							<p:dialog header="Cancel Fee" widgetVar="cancelfee" modal="true"
+								height="100">
+								<div class="ui-g form-group">
+									<p:panelGrid columns="2"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+										<p:outputLabel value="Remark " for="@next" style="color:red"></p:outputLabel>
+										<p:inputTextarea
+											value="#{studentDailyFeeCollectionReport.remark}"
+											required="true" requiredMessage="Please enter  Remark"
+											validatorMessage="Please Enter Correct value">
+											<f:validateRegex
+												pattern="#{regexVar.regex}"></f:validateRegex>
+										</p:inputTextarea>
+										<p:commandButton value="yes"
+											actionListener="#{studentDailyFeeCollectionReport.cancelReceipt}"
+											update=":form :form2"></p:commandButton>
+										<p:commandButton value="No" onclick="PF('cancelfee').hide();"
+											update=":form"></p:commandButton>
+
+									</p:panelGrid>
+								</div>
+							</p:dialog>
+						</h:form>
+
+
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,420 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Bus RFID Record</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<p:focus context=":form:srcpnl"></p:focus>
+						<h:form id="form">
+							<p:messages closable="true" autoUpdate="true"></p:messages>
+
+							<p:panel header="Bus RFID Record" id="srcpnl">
+							<h4>Note: Reports of the dates before 01-11-2019 will be available shortly</h4>
+								<p:panelGrid columns="5"
+									styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none;width:100%; background-color:transparent;">
+
+									<p:outputLabel value="Select Bus" for="@next" style="color:red" ></p:outputLabel>
+									<p:selectOneMenu rendered="true" id="sectionid"
+										value="#{busWiseRFIDRecord.selectedBus}" required="true"
+										requiredMessage="Please select a bus" filter="true">
+										<f:selectItem itemLabel="Select Bus" itemValue=""></f:selectItem>
+										<f:selectItems value="#{busWiseRFIDRecord.busList}"></f:selectItems>
+									</p:selectOneMenu>
+									<p:selectOneMenu rendered="false" id="sectionid1"
+										value="#{busWiseRFIDRecord.selectedBus}" required="true"
+										requiredMessage="Please select a bus" filter="true">
+										<f:selectItem itemLabel="Select Bus" itemValue=""></f:selectItem>
+										<f:selectItems value="#{busWiseRFIDRecord.busList}" var="var"
+											itemLabel="#{var.rfidName}" itemValue="#{var.rfidImei}"></f:selectItems>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Select Date" for="@next" style="color:red" ></p:outputLabel>
+									<p:calendar value="#{busWiseRFIDRecord.date}"
+										pattern="dd/MM/yyyy" navigator="true" required="true"
+										requiredMessage="Please Select Date" mindate="01/11/2019" maxdate="new Date();"
+										mask="true" readonlyInput="true" id="temp"
+										focusOnSelect="true">
+									</p:calendar>
+
+									<p:commandButton action="#{busWiseRFIDRecord.showRFID}"
+										value="Show" update=":form"></p:commandButton>
+
+									<h:commandLink>
+										<p:graphicImage name="images/excellogo.png"
+											library="avalon-layout" width="100" height="40"></p:graphicImage>
+										<pe:exporter type="xlsx" target="upp"
+											fileName="RFID_Record_#{busWiseRFIDRecord.busName.replaceAll(' ','_')}_#{busWiseRFIDRecord.dateStr}"></pe:exporter>
+									</h:commandLink>
+
+									<p:commandButton value="PDF" style="width:100px;" ajax="false"
+										process="@this"
+										actionListener="#{busWiseRFIDRecord.exportLibPdf}">
+
+										<p:fileDownload value="#{busWiseRFIDRecord.file}" />
+									</p:commandButton>
+
+								</p:panelGrid>
+
+							</p:panel>
+
+							<p:dataTable id="up" stickyHeader="true"
+								value="#{busWiseRFIDRecord.slist}" var="stats"
+								rowIndexVar="rowId" rowStyleClass="#{(stats.rfidDataInfo.inBusMornName ne '' || stats.rfidDataInfo.outBusMornName ne '' || stats.rfidDataInfo.inBusEvenName ne '' || stats.rfidDataInfo.outBusEvenName ne '') ? 'ABSENT' : ''}">
+
+								<p:column headerText="S.No.">
+									<f:facet name="header">
+										<p:outputLabel value="S.No."></p:outputLabel>
+									</f:facet>
+									<h:outputText value="#{rowId+1}"></h:outputText>
+								</p:column>
+
+								<p:column headerText="Name">
+									<f:facet name="header">
+										<p:outputLabel value="Name"></p:outputLabel>
+									</f:facet>
+									<h:outputText value="#{stats.fullName}"></h:outputText>
+								</p:column>
+
+								<p:column headerText="Class">
+									<f:facet name="header">
+										<p:outputLabel value="Class"></p:outputLabel>
+									</f:facet>
+									<h:outputText value="#{stats.className} - #{stats.sectionName}"></h:outputText>
+								</p:column>
+
+								<p:column headerText="Attendance">
+									<f:facet name="header">
+										<p:outputLabel value="Attendance"></p:outputLabel>
+									</f:facet>
+									<p:panelGrid columns="1"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none;width:100%;text-align:center; background-color:transparent;">
+										
+										<h:outputText style="font-weight:bold;"
+											value="#{stats.attendance}" />
+											
+									</p:panelGrid>
+								</p:column>
+
+
+
+								<p:column headerText="Pick From Home Stop">
+									<f:facet name="header">
+										<p:outputLabel value="Pick From Home Stop"></p:outputLabel>
+									</f:facet>
+									<p:panelGrid columns="1"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none;width:100%;text-align:center; background-color:transparent;">
+										<p:graphicImage
+											value="#{stats.rfidDataInfo.inBusMorn ne '' ? 'tick.png' : 'cross.png' }"
+											height='15' width='15' />
+										<h:outputText style="font-weight:bold;"
+											value="#{stats.rfidDataInfo.inBusMorn}" />
+										<h:outputText style="font-weight:bold;"
+											value="#{stats.rfidDataInfo.inBusMornName}" />	
+									</p:panelGrid>
+									
+									<f:facet name="footer">
+										<p:panelGrid columns="1"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none;width:100%;text-align:center; background-color:transparent;">
+											<p:outputLabel value="Total Students = #{busWiseRFIDRecord.slist.size()}"></p:outputLabel>
+											<p:outputLabel value="#{busWiseRFIDRecord.inBusMorn}"></p:outputLabel>
+											<p:outputLabel value="#{busWiseRFIDRecord.otherInMorn}"></p:outputLabel>
+											<p:outputLabel value="#{busWiseRFIDRecord.notInBusMorn}"></p:outputLabel>
+										</p:panelGrid>
+									</f:facet>
+								</p:column>
+
+								<p:column headerText="Drop In School">
+									<f:facet name="header">
+										<p:outputLabel value="Drop In School"></p:outputLabel>
+									</f:facet>
+									<p:panelGrid columns="1"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none;width:100%;text-align:center; background-color:transparent;">
+										<p:graphicImage
+											value="#{stats.rfidDataInfo.outBusMorn ne '' ? 'tick.png' : 'cross.png' }"
+											height='15' width='15' />
+										<h:outputText style="font-weight:bold;"
+											value="#{stats.rfidDataInfo.outBusMorn}" />
+										<h:outputText style="font-weight:bold;"
+											value="#{stats.rfidDataInfo.outBusMornName}" />	
+									</p:panelGrid>
+									
+									<f:facet name="footer">
+										<p:panelGrid columns="1"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none;width:100%;text-align:center; background-color:transparent;">
+											<p:outputLabel value="Total Students = #{busWiseRFIDRecord.slist.size()}"></p:outputLabel>
+											<p:outputLabel value="#{busWiseRFIDRecord.outBusMorn}"></p:outputLabel>
+											<p:outputLabel value="#{busWiseRFIDRecord.otherOutMorn}"></p:outputLabel>
+											<p:outputLabel value="#{busWiseRFIDRecord.notOutBusMorn}"></p:outputLabel>
+										</p:panelGrid>
+									</f:facet>	
+								</p:column>
+
+								<p:column rendered="false" headerText="Enter In School">
+									<f:facet name="header">
+										<p:outputLabel value="Enter In School"></p:outputLabel>
+									</f:facet>
+									<p:panelGrid columns="1"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none;width:100%;text-align:center; background-color:transparent;">
+										<p:graphicImage
+											value="#{stats.rfidDataInfo.inSchool ne '' ? 'tick.png' : 'cross.png' }"
+											height='15' width='15' />
+										<h:outputText style="font-weight:bold;"
+											value="#{stats.rfidDataInfo.inSchool}" />
+									</p:panelGrid>
+									
+									<f:facet name="footer">
+										<p:panelGrid columns="1"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none;width:100%;text-align:center; background-color:transparent;">
+											<p:outputLabel value="Total Students = #{busWiseRFIDRecord.slist.size()}"></p:outputLabel>
+											<p:outputLabel value="#{busWiseRFIDRecord.inSchool}"></p:outputLabel>
+											<p:outputLabel value="#{busWiseRFIDRecord.notInSchool}"></p:outputLabel>
+										</p:panelGrid>
+									</f:facet>	
+								</p:column>
+
+								<p:column rendered="false" headerText="Exit From School">
+									<f:facet name="header">
+										<p:outputLabel value="Exit From School"></p:outputLabel>
+									</f:facet>
+									<p:panelGrid columns="1"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none;width:100%;text-align:center; background-color:transparent;">
+										<p:graphicImage
+											value="#{stats.rfidDataInfo.outSchool ne '' ? 'tick.png' : 'cross.png' }"
+											height='15' width='15' />
+										<h:outputText style="font-weight:bold;"
+											value="#{stats.rfidDataInfo.outSchool}" />
+									</p:panelGrid>
+									
+									<f:facet name="footer">
+										<p:panelGrid columns="1"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none;width:100%;text-align:center; background-color:transparent;">
+											<p:outputLabel value="Total Students = #{busWiseRFIDRecord.slist.size()}"></p:outputLabel>
+											<p:outputLabel value="#{busWiseRFIDRecord.outSchool}"></p:outputLabel>
+											<p:outputLabel value="#{busWiseRFIDRecord.notOutSchool}"></p:outputLabel>
+										</p:panelGrid>
+									</f:facet>	
+								</p:column>
+
+								<p:column headerText="Pick From School">
+									<f:facet name="header">
+										<p:outputLabel value="Pick From School"></p:outputLabel>
+									</f:facet>
+									<p:panelGrid columns="1"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none;width:100%;text-align:center; background-color:transparent;">
+										<p:graphicImage
+											value="#{stats.rfidDataInfo.inBusEven ne '' ? 'tick.png' : 'cross.png' }"
+											height='15' width='15' />
+										<h:outputText style="font-weight:bold;"
+											value="#{stats.rfidDataInfo.inBusEven}" />
+										<h:outputText style="font-weight:bold;"
+											value="#{stats.rfidDataInfo.inBusEvenName}" />	
+									</p:panelGrid>
+									
+									<f:facet name="footer">
+										<p:panelGrid columns="1"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none;width:100%;text-align:center; background-color:transparent;">
+											<p:outputLabel value="Total Students = #{busWiseRFIDRecord.slist.size()}"></p:outputLabel>
+											<p:outputLabel value="#{busWiseRFIDRecord.inBusEven}"></p:outputLabel>
+											<p:outputLabel value="#{busWiseRFIDRecord.otherInEven}"></p:outputLabel>
+											<p:outputLabel value="#{busWiseRFIDRecord.notInBusEven}"></p:outputLabel>
+										</p:panelGrid>
+									</f:facet>	
+								</p:column>
+
+								<p:column headerText="Drop At Home Stop">
+									<f:facet name="header">
+										<p:outputLabel value="Drop At Home Stop"></p:outputLabel>
+									</f:facet>
+									<p:panelGrid columns="1"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none;width:100%;text-align:center; background-color:transparent;">
+										<p:graphicImage
+											value="#{stats.rfidDataInfo.outBusEven ne '' ? 'tick.png' : 'cross.png' }"
+											height='15' width='15' />
+										<h:outputText style="font-weight:bold;"
+											value="#{stats.rfidDataInfo.outBusEven}" />
+										<h:outputText style="font-weight:bold;"
+											value="#{stats.rfidDataInfo.outBusEvenName}" />	
+									</p:panelGrid>
+									
+									<f:facet name="footer">
+										<p:panelGrid columns="1"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none;width:100%;text-align:center; background-color:transparent;">
+											<p:outputLabel value="Total Students = #{busWiseRFIDRecord.slist.size()}"></p:outputLabel>
+											<p:outputLabel value="#{busWiseRFIDRecord.outBusEven}"></p:outputLabel>
+											<p:outputLabel value="#{busWiseRFIDRecord.otherOutEven}"></p:outputLabel>
+											<p:outputLabel value="#{busWiseRFIDRecord.notOutBusEven}"></p:outputLabel>
+										</p:panelGrid>
+									</f:facet>	
+								</p:column>
+								
+								
+									<p:column headerText="Geo Fance Message Time Morning">
+									<f:facet name="header">
+										<p:outputLabel value="Geo Fance Message Time Morning"></p:outputLabel>
+									</f:facet>
+									<p:panelGrid columns="1"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none;width:100%;text-align:center; background-color:transparent;">
+										
+										<h:outputText style="font-weight:bold;"
+											value="#{stats.geoFanceTime}" />
+											
+									</p:panelGrid>
+								</p:column>
+								
+								
+								
+									<p:column headerText="Geo Fance Message Time Evening">
+									<f:facet name="header">
+										<p:outputLabel value="Geo Fance Message Time Evening"></p:outputLabel>
+									</f:facet>
+									<p:panelGrid columns="1"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none;width:100%;text-align:center; background-color:transparent;">
+										
+										<h:outputText style="font-weight:bold;"
+											value="#{stats.eveningGeoFancingTime}" />
+											
+									</p:panelGrid>
+								</p:column>
+							</p:dataTable>
+
+							<p:dataTable id="upp" rendered="false" stickyHeader="true"
+								value="#{busWiseRFIDRecord.slist}" var="stats"
+								rowIndexVar="rowId">
+
+								<p:column headerText="S.No.">
+									<f:facet name="header">
+										<p:outputLabel value="S.No."></p:outputLabel>
+									</f:facet>
+									<h:outputText value="#{rowId+1}"></h:outputText>
+								</p:column>
+
+								<p:column headerText="Name">
+									<f:facet name="header">
+										<p:outputLabel value="Name"></p:outputLabel>
+									</f:facet>
+									<h:outputText value="#{stats.fullName}"></h:outputText>
+								</p:column>
+
+								<p:column headerText="Class">
+									<f:facet name="header">
+										<p:outputLabel value="Class"></p:outputLabel>
+									</f:facet>
+									<h:outputText value="#{stats.className} - #{stats.sectionName}"></h:outputText>
+								</p:column>
+
+								<p:column headerText="Pick From Home Stop">
+									<f:facet name="header">
+										<p:outputLabel value="Pick From Home Stop"></p:outputLabel>
+									</f:facet>
+									<h:outputText style="font-weight:bold;"
+										value="#{stats.rfidDataInfo.inBusMorn}" />
+										<h:outputText style="font-weight:bold;"
+										value="#{stats.rfidDataInfo.inBusMornName}" />
+										
+									<f:facet name="footer">
+										<p:outputLabel value="#{busWiseRFIDRecord.inBus1}"></p:outputLabel>
+									</f:facet>	
+								</p:column>
+
+								<p:column headerText="Drop In School">
+									<f:facet name="header">
+										<p:outputLabel value="Drop In School"></p:outputLabel>
+									</f:facet>
+									<h:outputText style="font-weight:bold;"
+										value="#{stats.rfidDataInfo.outBusMorn}" />
+									<h:outputText style="font-weight:bold;"
+										value="#{stats.rfidDataInfo.outBusMornName}" />	
+										
+									<f:facet name="footer">
+										<p:outputLabel value="#{busWiseRFIDRecord.outBus1}"></p:outputLabel>
+									</f:facet>	
+								</p:column>
+
+								<p:column headerText="Enter In School">
+									<f:facet name="header">
+										<p:outputLabel value="Enter In School"></p:outputLabel>
+									</f:facet>
+									<h:outputText style="font-weight:bold;"
+										value="#{stats.rfidDataInfo.inSchool}" />
+										
+									<f:facet name="footer">
+										<p:outputLabel value="#{busWiseRFIDRecord.inSch}"></p:outputLabel>
+									</f:facet>	
+								</p:column>
+
+								<p:column headerText="Exit From School">
+									<f:facet name="header">
+										<p:outputLabel value="Exit From School"></p:outputLabel>
+									</f:facet>
+									<h:outputText style="font-weight:bold;"
+										value="#{stats.rfidDataInfo.outSchool}" />
+										
+									<f:facet name="footer">
+										<p:outputLabel value="#{busWiseRFIDRecord.outSch}"></p:outputLabel>
+									</f:facet>	
+								</p:column>
+
+								<p:column headerText="Pick From School">
+									<f:facet name="header">
+										<p:outputLabel value="Pick From School"></p:outputLabel>
+									</f:facet>
+									<h:outputText style="font-weight:bold;"
+										value="#{stats.rfidDataInfo.inBusEven}" />
+									<h:outputText style="font-weight:bold;"
+										value="#{stats.rfidDataInfo.inBusEvenName}" />	
+										
+									<f:facet name="footer">
+										<p:outputLabel value="#{busWiseRFIDRecord.inBus2}"></p:outputLabel>
+									</f:facet>	
+								</p:column>
+
+								<p:column headerText="Drop At Home Stop">
+									<f:facet name="header">
+										<p:outputLabel value="Drop At Home Stop"></p:outputLabel>
+									</f:facet>
+									<h:outputText style="font-weight:bold;"
+										value="#{stats.rfidDataInfo.outBusEven}" />
+									<h:outputText style="font-weight:bold;"
+										value="#{stats.rfidDataInfo.outBusEvenName}" />	
+										
+									<f:facet name="footer">
+										<p:outputLabel value="#{busWiseRFIDRecord.outBus2}"></p:outputLabel>
+									</f:facet>	
+								</p:column>
+
+							</p:dataTable>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

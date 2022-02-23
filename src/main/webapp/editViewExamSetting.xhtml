@@ -1,0 +1,74 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Edit Exam Setting</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<p:panel header="View / Edit Exam Setting">
+
+								<p:messages closable="true" autoUpdate="true"></p:messages>
+
+								<p:panelGrid columns="1" columnClasses="ui-grid-col-12"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:dataTable value="#{viewEditExamSetting.examList}" var="var"
+										rowIndexVar="index">
+										<p:column headerText="S.No.">
+											<center>
+												<p:outputLabel style="font-weight:bold" value="#{index+1}"></p:outputLabel>
+											</center>
+										</p:column>
+
+										<p:column headerText="Class Name">
+											<center>
+												<p:outputLabel style="font-weight:bold"
+													value="#{var.className}"></p:outputLabel>
+											</center>
+										</p:column>
+
+
+
+										<p:column headerText="View">
+											<center>
+												<p:commandButton action="#{viewEditExamSetting.viewDetails}"
+													icon="ui-icon-search" styleClass="butwid">
+													<f:setPropertyActionListener
+														target="#{viewEditExamSetting.selectedExam}"
+														value="#{var}"></f:setPropertyActionListener>
+												</p:commandButton>
+											</center>
+										</p:column>
+
+										<p:column headerText="Edit">
+											<center>
+												<p:commandButton action="#{viewEditExamSetting.editDetails}"
+													icon="ui-icon-pencil" styleClass="butwid">
+													<f:setPropertyActionListener
+														target="#{viewEditExamSetting.selectedExam}"
+														value="#{var}"></f:setPropertyActionListener>
+												</p:commandButton>
+											</center>
+										</p:column>
+									</p:dataTable>
+								</p:panelGrid>
+							</p:panel>
+						</h:form>
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

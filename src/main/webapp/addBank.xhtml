@@ -1,0 +1,112 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+	<ui:define name="title">Add Bank</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<p:messages autoUpdate="true" closable="true"></p:messages>
+
+							<p:panel header="Add Bank">
+								<p:panelGrid columns="2"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:outputLabel for="@next" style="color:red"
+										value="Entry Date*"></p:outputLabel>
+									<p:calendar value="#{addBank.entryDate}" navigator="true"
+										pattern="dd/MM/yyyy" yearRange="c-10:c+10" required="true"
+										requiredMessage="Please Enter Entry Date">
+									</p:calendar>
+
+									<p:outputLabel value="Bank Name*"></p:outputLabel>
+									<p:inputText value="#{addBank.bankName}" required="true"
+										requiredMessage="Please Enter Bank Name"
+										validatorMessage="Please Enter Correct value">
+										<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:inputText>
+
+									<p:outputLabel for="@next" style="color:red"
+										value="Bank Branch*"></p:outputLabel>
+									<p:inputText value="#{addBank.bankBranch}" required="true"
+										requiredMessage=" Please Enter Bank Branch"
+										validatorMessage="Please Enter Correct value">
+										<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:inputText>
+
+									<p:outputLabel for="@next" style="color:red" value="Address*"></p:outputLabel>
+									<p:inputTextarea rows="3" cols="50"
+										value="#{addBank.bankAddress}" required="true"
+										requiredMessage="Please Enter Address"
+										validatorMessage="Please Enter Correct value">
+										<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:inputTextarea>
+
+									<p:outputLabel for="@next" style="color:red" value="Acc.No.*"></p:outputLabel>
+									<p:inputText value="#{addBank.accNo}" required="true"
+										requiredMessage="Please Enter Acc.No."
+										validatorMessage="Please Enter Correct value">
+										<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:inputText>
+
+									<p:outputLabel value="Opening Balance"></p:outputLabel>
+									<p:inputText value="#{addBank.amount}">
+										<p:keyFilter mask="num"></p:keyFilter>
+									</p:inputText>
+
+									<p:outputLabel value="Bank Code"></p:outputLabel>
+									<p:inputText value="#{addBank.bankCode}"
+										validatorMessage="Please Enter Correct value">
+										<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:inputText>
+
+									<p:outputLabel value="Bank IFSC Code"></p:outputLabel>
+									<p:inputText value="#{addBank.bankIFSC}"
+										validatorMessage="Please Enter Correct value">
+										<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:inputText>
+
+									<p:outputLabel value="Description"></p:outputLabel>
+									<p:inputTextarea value="#{addBank.description}" rows="3"
+										cols="50" validatorMessage="Please Enter Correct value">
+										<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:inputTextarea>
+
+									<p:outputLabel></p:outputLabel>
+								</p:panelGrid>
+								<center>
+									<p:commandButton update="form" 
+										actionListener="#{addBank.addBankAcc}" style="width:150px;"
+										value="Add Now">
+										<p:confirm header="Confirmation"
+											message="Are You Sure To Add Bank...???" icon="ui-icon-alert" />
+									</p:commandButton></center>
+								
+							</p:panel>
+							<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+							<p:commandButton value="Yes" type="button"
+								styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+							<p:commandButton value="No" style="margin-left:50px"
+								type="button" styleClass="ui-confirmdialog-no"
+								icon="ui-icon-close" />
+						</p:confirmDialog>
+						</h:form>
+
+						
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

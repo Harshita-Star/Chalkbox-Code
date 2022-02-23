@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<f:loadBundle var="addSectionVar" basename="myProperties" />
+<f:view contentType="text/html">
+	<h:head>
+		<title>#{sideMenuBean.companyName} | Print Expense Report</title>
+		<f:facet name="first">
+			<meta content='text/html; charset=UTF-8' http-equiv="Content-Type" />
+			<meta http-equiv="X-UA-Compatible" content="EmulateIE8" />
+		</f:facet>
+
+      	    <link rel="stylesheet" type="text/css" href="css/style.css"/>				
+
+	</h:head>
+	
+	<script>
+		
+			function printwin() {
+				document.getElementById('test').style.display="none";	
+				window.print();
+				document.getElementById('test').style.display="block";
+				document.URL="";
+			}
+	
+		</script>
+
+	<h:body>
+		
+		<p:commandButton onclick="printwin()" id="test" value="Print"></p:commandButton>
+		
+		
+			<h:form id="form">
+
+				<p:panel id="show" >
+					<center>
+						<p style="font-family: initial;font-style: oblique;font-size: 30px !important;font-weight:bold;margin:0px;">#{headerBean.name}</p>
+						<p style="margin:0px;">#{headerBean.address4}</p>
+						<p style="margin:0px;">Expense Report</p>
+					</center>	
+					<p:panelGrid columns="4" style="width:100%">
+					
+						<p:panelGrid columns="2">
+							<p:outputLabel value="Category:-"></p:outputLabel>
+							<h:outputText value="#{showExpense.selectedCategory}"></h:outputText>
+						</p:panelGrid>
+						
+					</p:panelGrid>		
+					
+					<h:dataTable style="width:100%;border-collapse:collapse" border="1"  var="var" value="#{showExpense.expenseList}" >
+            		
+            			<p:column style="width:20px" headerText="Sr. No.">
+            				
+            				<f:facet name="header"> 
+           			  		     <p:outputLabel value="Sr. No."></p:outputLabel>
+         				    </f:facet>
+            				<p:outputLabel value="#{var.sNo}"></p:outputLabel>
+            			</p:column>
+            			
+            			<p:column style="width:70px" headerText="Date">
+            			
+            				<f:facet name="header"> 
+           			  		     <p:outputLabel value="Date"></p:outputLabel>
+         				    </f:facet>
+            				<p:outputLabel value="#{var.strIncomeDate}"></p:outputLabel>
+            			</p:column>
+            			
+            			<p:column headerText="Category">
+            			
+            				<f:facet name="header"> 
+           			  		     <p:outputLabel value="Category"></p:outputLabel>
+         				    </f:facet>
+            				<p:outputLabel value="#{var.category}"></p:outputLabel>
+            			</p:column>
+            			
+            			<p:column headerText="Pay To">
+            			
+            				<f:facet name="header"> 
+           			  		     <p:outputLabel value="Pay To"></p:outputLabel>
+         				    </f:facet>
+            				<p:outputLabel value="#{var.payTo}"></p:outputLabel>
+            			</p:column>
+            			
+            			<p:column style="width:250px" headerText="Particulars">
+            			
+            				<f:facet name="header"> 
+           			  		     <p:outputLabel value="Particulars"></p:outputLabel>
+         				    </f:facet>
+            				<p:outputLabel value="#{var.description}"></p:outputLabel>
+            			</p:column>
+            		
+            			<p:column headerText="Amount">
+            			
+            				<f:facet name="header"> 
+           			  		     <p:outputLabel value="Amount (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})"></p:outputLabel>
+         				    </f:facet>
+            				<p:outputLabel value="#{var.amount}"></p:outputLabel>
+            			</p:column>
+            			
+            			<p:column style="width:45px" headerText="Voucher No.">
+            			
+            				<f:facet name="header"> 
+           			  		     <p:outputLabel value="Voucher No."></p:outputLabel>
+         				    </f:facet>
+            				<p:outputLabel value="#{var.voucherNo}"></p:outputLabel>
+            			</p:column>
+            			
+            			<p:column style="width:50px" headerText="Cash/ Cheque">
+            			
+            				<f:facet name="header"> 
+           			  		     <p:outputLabel value="Cash/ Cheque"></p:outputLabel>
+         				    </f:facet>
+            				<p:outputLabel value="#{var.paymentMode}"></p:outputLabel>
+            			</p:column>
+            	
+            		</h:dataTable>
+            		<p:panelGrid columns="3" style="width:100%">
+					
+							<p:outputLabel value="Total(Cash) : #{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'} #{showExpense.totalCash}"></p:outputLabel>
+							<h:outputText value="Total(Cheque): #{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'} #{showExpense.totalCheque}"></h:outputText>
+							<p:outputLabel value="Total: #{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'} #{showExpense.expenseAmount}"></p:outputLabel>
+													
+					</p:panelGrid>
+					
+				</p:panel>
+
+</h:form>
+			
+			
+	</h:body>
+</f:view>
+</html>

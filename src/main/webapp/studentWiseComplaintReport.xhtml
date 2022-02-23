@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+<f:loadBundle var="searchStudentVar" basename="myProperties" />
+<f:view contentType="text/html">
+	<h:head>
+		<title>#{sideMenuBean.companyName} | Search Student</title>
+		<f:facet name="first">
+			<meta content='text/html; charset=UTF-8' http-equiv="Content-Type" />
+			<meta http-equiv="X-UA-Compatible" content="EmulateIE8" />
+			
+		</f:facet>
+
+  			<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css"></link>
+    		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"></link>
+    		<link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css"></link>
+   			<link rel="stylesheet" href="dist/css/AdminLTE.min.css"></link>
+    		<link rel="stylesheet" href="dist/css/skins/all-skins.min.css"></link>
+        	<link rel="stylesheet" type="text/css" href="css/style.css"/>	
+
+	</h:head>
+
+	<h:body>
+      
+      <ui:include src="sideMenu.xhtml"></ui:include> 
+      <div class="content-wrapper">
+          
+                
+          <h:form id="form1" enctype="multipart/form-data">
+            	
+            		<h1>Student Complaint</h1>
+               		
+               		 <p:messages closable="true" autoUpdate="true"></p:messages>
+               		 		
+               		 		<p:panel header="Search Student by Name/Sr. No">
+	               						
+               		 		<p:panelGrid columns="2">
+               		 	 		
+               		 			<p:outputLabel value="Student Name/Sr. No"></p:outputLabel>      
+               		 			<p:autoComplete id="acSimple" value="#{studentWiseComplaintReport.name}" minQueryLength="3" completeMethod="#{studentWiseComplaintReport.autoCompleteStudentInfo}" validatorMessage="Please Enter Correct value">
+               		 				 <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+               		 				<p:ajax event="query" global="false"/>
+               		 			</p:autoComplete>
+               		 			
+               		 			<p:commandButton value="Search" ajax="false" update=":form1,:form3" actionListener="#{studentWiseComplaintReport.search}" ></p:commandButton>
+               		 			
+               		 		</p:panelGrid> 
+               						 		
+               		 		</p:panel>
+               		 </h:form>
+              	<h:form id="form3">
+               		 	<p:panel header="Complaint Details">
+               		  		 <p:dataTable  var="var" value="#{studentWiseComplaintReport.list}" rows="10" paginator="true" rowsPerPageTemplate="5,10,15"> 
+               		  			<p:column headerText="Image">
+			        				<p:graphicImage url="#{var.imageName}" height="80px" width="80px"></p:graphicImage>
+			        			</p:column>
+               		  			<p:column headerText="Complaint">
+               		  				<p:outputLabel value="#{var.description}"></p:outputLabel>
+               		  			</p:column>
+               		  			<p:column headerText="Complaint By">
+               		  				<p:outputLabel value="#{var.teacherName}"></p:outputLabel>
+               		  			</p:column>               
+               		  		
+               		  		</p:dataTable>
+               		  </p:panel>
+					</h:form>
+      </div>	
+	</h:body>
+</f:view>
+</html>

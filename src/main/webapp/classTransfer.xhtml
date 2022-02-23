@@ -1,0 +1,201 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Class Transfer</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form1">
+
+							<h1>Class Transfer</h1>
+
+							<p:messages closable="true" autoUpdate="true"></p:messages>
+
+							<p:panel header="Search Student">
+
+
+                                 <p:selectOneRadio value="#{searchStudent.selectedtransferType}">
+									<f:selectItem itemLabel="Transfer Student at Section" itemValue="section"></f:selectItem>
+									<f:selectItem itemLabel="Transfer Student at Class" itemValue="Class"></f:selectItem>
+									<p:ajax global="false"></p:ajax>
+								</p:selectOneRadio>
+							
+								<p:selectOneRadio value="#{searchStudent.selectedtype}">
+									<f:selectItem itemLabel="Single Student" itemValue="byName"></f:selectItem>
+									<f:selectItem itemLabel="Multiple Student" itemValue="byClass"></f:selectItem>
+									<p:ajax listener="#{searchStudent.searchby}" update=":form1"></p:ajax>
+								</p:selectOneRadio>
+
+							</p:panel>
+							<br/>
+							<p:panel rendered="#{searchStudent.byname}"
+								header="Search Student by Name/Sr. No">
+
+								<p:panelGrid columns="3">
+
+									<p:outputLabel value="Student Name/Sr. No"></p:outputLabel>
+									<p:autoComplete id="acSimple" value="#{searchStudent.name}"
+										minQueryLength="3"
+										completeMethod="#{searchStudent.autoCompleteStudentInfo}" validatorMessage="Please Enter Correct value">
+										<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+										<p:ajax event="query" global="false" />
+									</p:autoComplete>
+
+									<p:commandButton value="Search" update=":form1" styleClass="butwid" icon="fa fa-search"
+										actionListener="#{searchStudent.searchClassTransfer}"></p:commandButton>
+
+								</p:panelGrid>
+							</p:panel>
+							<br/>
+							<p:panel rendered="#{searchStudent.byclass}"
+								header="Search Student by Class">
+
+								<p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel value="Select Class"></p:outputLabel>
+									<p:selectOneMenu value="#{searchStudent.selectedCLassSection}">
+										<f:selectItem itemLabel="#{searchStudentVar.selectHereLabel}"
+											itemValue=""></f:selectItem>
+										<f:selectItems value="#{searchStudent.classSection}"></f:selectItems>
+										<p:ajax update=":form1"
+											listener="#{searchStudent.allSectionforTransfer}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel  for="@next" style="color:red" value="Select Section"></p:outputLabel>
+									<p:selectOneMenu id="sectionid"
+										value="#{searchStudent.selectedSection}" required="true"
+										requiredMessage="Please select a section">
+										<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+										<f:selectItems value="#{searchStudent.sectionList}"></f:selectItems>
+										<p:ajax update=":form1"
+											listener="#{searchStudent.searchClassSection}"></p:ajax>
+									</p:selectOneMenu>
+								</p:panelGrid>
+							</p:panel>
+
+							<br/>
+							<p:panel rendered="#{searchStudent.classtt}" id="mypanel" header="Student Details">
+								<p:dataTable id="sectionid1" reflow="true" value="#{searchStudent.studentList}" var="var">
+									<f:facet name="header">
+										<p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+											<p:outputLabel value="Transfer All to:-"></p:outputLabel>
+											<p:selectOneMenu disabled="#{searchStudent.classDisabled}"
+												value="#{searchStudent.selectedClassSection1}">
+												<f:selectItem itemLabel="Select Class" itemValue=""></f:selectItem>
+												<f:selectItems value="#{searchStudent.classSection}"></f:selectItems>
+												<p:ajax update="sectionid3"
+													listener="#{searchStudent.allSectionforTransfer2}"></p:ajax>
+											</p:selectOneMenu>
+
+											<p:selectOneMenu id="sectionid3"
+												value="#{searchStudent.selectedSection1}" required="true"
+												requiredMessage="Please select a section">
+												<f:selectItem itemLabel="Select Section" itemValue=""></f:selectItem>
+												<f:selectItems value="#{searchStudent.sectionList1}"></f:selectItems>
+												<p:ajax></p:ajax>
+											</p:selectOneMenu>
+
+											<p:commandButton value="Done" update=":form1"  styleClass="butwid" icon="fa fa-check-circle"
+												immediate="true" action="#{searchStudent.transferAll}"></p:commandButton>
+
+										</p:panelGrid>
+									</f:facet>
+									<p:column headerText="S.No.">
+										<p:outputLabel value="#{var.sno}"></p:outputLabel>
+									</p:column>
+									
+									<p:column headerText="Adm. No.">
+										<p:outputLabel value="#{var.srNo}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Student Name">
+										<p:outputLabel value="#{var.fname}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Select Class">
+										<p:selectOneMenu disabled="#{searchStudent.classDisabled}"	
+											value="#{var.selectedclass}">
+											<f:selectItem itemLabel="#{searchStudentVar.selectHereLabel}"
+												itemValue=""></f:selectItem>
+											<f:selectItems value="#{var.classSection}"></f:selectItems>
+											<p:ajax update=":form1:sectionid1"
+												listener="#{searchStudent.allSectionforTransferRowWise}"></p:ajax>
+												<f:attribute name="auto1" value="#{var.sno}"></f:attribute>
+										</p:selectOneMenu>
+									</p:column>
+									<p:column headerText="Select Section*" style="color:red" >
+										<p:selectOneMenu 
+											value="#{var.selectedsection1}"  required="true"
+											requiredMessage="Please select a section">
+											<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+											<f:selectItems value="#{var.sectionList1}"></f:selectItems>
+											<p:ajax></p:ajax>
+										</p:selectOneMenu>
+									</p:column>
+									<f:facet name="footer">
+									<center>
+										<p:commandButton value="Done" styleClass="butwid" icon="fa fa-check-circle" update=":form1" immediate="true"
+											action="#{searchStudent.done}"></p:commandButton>
+									</center>
+									
+									</f:facet>
+								</p:dataTable>
+							</p:panel>
+							<br/>
+							<p:panel rendered="#{searchStudent.afterbyname}" header="Student Details">
+
+								<p:panelGrid columns="4" rendered="#{searchStudent.byname}" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+									<p:outputLabel value="AddNumber : #{searchStudent.srNo}"></p:outputLabel>
+									<p:outputLabel value="Student Name : #{searchStudent.studentname}"></p:outputLabel>
+									<p:outputLabel value="Current Class : #{searchStudent.currentClass}"></p:outputLabel>
+									<p:outputLabel></p:outputLabel>
+
+
+									<p:outputLabel value="Select Class" for="@next" style="color:red" ></p:outputLabel>
+									<p:selectOneMenu
+										value="#{searchStudent.selectedCLassSection}" disabled="#{searchStudent.classDisabled}" required="true"
+										requiredMessage="Please select a class">
+										<f:selectItem itemLabel="#{searchStudentVar.selectHereLabel}"
+											itemValue=""></f:selectItem>
+										<f:selectItems value="#{searchStudent.classSection}"></f:selectItems>
+
+										<p:ajax update="sectionid2"
+											listener="#{searchStudent.allSectionforTransfer}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Select Section" for="@next" style="color:red" ></p:outputLabel>
+									<p:selectOneMenu id="sectionid2"
+										value="#{searchStudent.selectedSection}" required="true"
+										requiredMessage="Please select a section">
+										<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+										<f:selectItems value="#{searchStudent.sectionList}"></f:selectItems>
+									</p:selectOneMenu>
+
+
+									
+								</p:panelGrid>
+								<br />
+								<p:separator />
+								<center>
+									<p:commandButton value="Class Transfer" update=":form1" styleClass="butwid" icon="fa fa-exchange"
+										action="#{searchStudent.updateclassTranfer}"></p:commandButton>
+								</center>
+								<p:separator />
+								<br />
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

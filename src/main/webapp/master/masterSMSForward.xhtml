@@ -1,0 +1,85 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/masterTemplate.xhtml">
+
+	<ui:define name="title">SMS Forward</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form1">
+						<p:messages closable="true" autoUpdate="true"></p:messages>
+						<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+							<p:panel header="Forward SMS Balance">
+							
+							<center><h2>Forward SMS Balance From #{masterSMSForward.preSession} To #{masterSMSForward.currSession}</h2></center>
+							<h2 style="color: red;">Note</h2>
+							<h3 style="color: red;"> 1) SMS Balance will be forwarded only if 'FORWARD SMS + ADD SMS BALANCE > 0'</h3>
+							<h3 style="color: red;"> 2) Put New Session SMS Balance in 'ADD SMS BALANCE in #{masterSMSForward.currSession}' Column , Forwarded SMS will be automatically added to this SMS Balance.  </h3>
+							
+								<p:dataTable value="#{masterSMSForward.list}" var="var"
+									reflow="true" rowIndexVar="index">
+
+									<p:column headerText="S.No.">
+										<p:outputLabel value="#{index+1}"></p:outputLabel>
+									</p:column>
+
+									<p:column filterBy="#{var.id}" filterMatchMode="contains"
+										headerText="School Id">
+										<p:outputLabel value="#{var.id}"
+											style=" word-break: break-all;"></p:outputLabel>
+									</p:column>
+
+									<p:column filterBy="#{var.schoolName}"
+										filterMatchMode="contains" headerText="School Name">
+										<p:outputLabel value="#{var.schoolName}"
+											style=" word-break: break-all;"></p:outputLabel>
+									</p:column>
+									
+									<p:column headerText="SMS Balance in #{masterSMSForward.preSession}">
+										<p:outputLabel value="#{var.balance}"></p:outputLabel>
+									</p:column>
+									
+									<p:column headerText="Forward SMS in #{masterSMSForward.currSession}">
+										<p:outputLabel value="#{var.forward}"></p:outputLabel>
+									</p:column>
+									
+									<p:column headerText="Add SMS BALANCE in #{masterSMSForward.currSession}">
+										<p:inputText value="#{var.newBal}">
+											<p:keyFilter mask="pnum" />
+										</p:inputText>
+									</p:column>
+									
+									<p:column headerText="Total">
+										<p:inputText value="#{var.newBal}">
+											<p:keyFilter mask="pnum" />
+										</p:inputText>
+									</p:column>
+
+									<f:facet name="footer">
+										<p:commandButton value="Submit" update=":form1"
+											action="#{masterSMSForward.submit}" style="width: 150px;"></p:commandButton>
+									</f:facet>
+									<f:facet name="header">
+										<p:commandButton value="Submit" update=":form1"
+											action="#{masterSMSForward.submit}" style="width: 150px;"></p:commandButton>
+									</f:facet>
+								</p:dataTable>
+							</p:panel>
+
+						</h:form>
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,264 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Student Performance</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<h1>#{studentPerformanceVar.studentPerformanceStudentPerformanceTitleLabel}</h1>
+
+
+							<p:panel header="Student Performance">
+
+								<p:messages closable="true" autoUpdate="true"></p:messages>
+
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:outputLabel for="@next" style="color:red" 
+										value="#{studentPerformanceVar.studentPerformanceSelectClassLabel}"></p:outputLabel>
+									<p:selectOneMenu required="true" filter="true"
+										requiredMessage="Please select a class"
+										value="#{studentPerformance.selectedClass}">
+										<f:selectItem
+											itemLabel="#{studentPerformanceVar.studentPerformanceSelectHereLabel}"
+											itemValue=""></f:selectItem>
+										<f:selectItems value="#{studentPerformance.classList}"></f:selectItems>
+										<p:ajax update=":form,:form1"
+											listener="#{studentPerformance.allTerm}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel for="@next" style="color:red"  value="Select Section"></p:outputLabel>
+									<p:selectOneMenu id="showSection"  filter="true"
+										value="#{studentPerformance.selectedSection}" required="true"
+										requiredMessage="Please select a section">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{studentPerformance.sectionList}"></f:selectItems>
+										<p:ajax></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel for="@next" style="color:red" 
+										value="#{studentPerformanceVar.studentPerformanceSelectTermSemesterLabel}"></p:outputLabel>
+									<p:selectOneMenu required="true"  filter="true"
+										requiredMessage="Please select a term" id="showTerm"
+										value="#{studentPerformance.selectedTerm}">
+										<f:selectItem
+											itemLabel="#{studentPerformanceVar.studentPerformanceSelectHereLabel}"
+											itemValue=""></f:selectItem>
+										<f:selectItems value="#{studentPerformance.termList}"></f:selectItems>
+										<p:ajax update=":form" listener="#{studentPerformance.method}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel  for="@next" style="color:red" value="Type of Area"></p:outputLabel>
+									<p:selectOneMenu required="true" id="typeofarea"  filter="true"
+										requiredMessage="Please select type of area"
+										value="#{studentPerformance.selectedType}">
+										<f:selectItem
+											itemLabel="#{studentPerformanceVar.studentPerformanceSelectHereLabel}"
+											itemValue=""></f:selectItem>
+										<f:selectItems value="#{studentPerformance.subjectTypeList}"></f:selectItems>
+										<p:ajax update=":form"
+											listener="#{studentPerformance.allExamType}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel  for="@next" style="color:red" rendered="#{studentPerformance.showExam}"
+										value="Select Exam type"></p:outputLabel>
+									<p:selectOneMenu rendered="#{studentPerformance.showExam}"  filter="true" required="true" requiredMessage="Please select exam type" value="#{studentPerformance.selectedExam}">
+										<f:selectItem itemLabel="#{studentPerformanceVar.studentPerformanceSelectHereLabel}" itemValue=""></f:selectItem>
+										<f:selectItems value="#{studentPerformance.examTypeList}"></f:selectItems>
+										<p:ajax listener="#{studentPerformance.createSubExamList}" update=":form"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel  for="@next" style="color:red" rendered="#{studentPerformance.showSubExam}"
+										value="Select Sub Exam"></p:outputLabel>
+									<p:selectOneMenu rendered="#{studentPerformance.showSubExam}"  filter="true"
+										value="#{studentPerformance.subExam}" required="true"
+										requiredMessage="Please Select Sub Exam">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{studentPerformance.subExamList}"></f:selectItems>
+										<p:ajax></p:ajax>
+									</p:selectOneMenu>
+
+
+									<p:outputLabel for="@next" style="color:red"  value="Select Subject"></p:outputLabel>
+									<p:selectOneMenu required="true"  filter="true"
+										requiredMessage="Please Select Subject"
+										value="#{studentPerformance.selectedSubject}">
+										<f:selectItem
+											itemLabel="#{studentPerformanceVar.studentPerformanceSelectHereLabel}"
+											itemValue=""></f:selectItem>
+										<f:selectItems value="#{studentPerformance.allSubjectList}"></f:selectItems>
+										<p:ajax></p:ajax>
+									</p:selectOneMenu>
+
+
+								</p:panelGrid>
+								
+								
+								<br />
+								<p:separator />
+								<center>
+									<p:panelGrid
+										columns="2"
+										layout="grid" styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+
+									<p:commandButton value="Search" icon="fa fa-search" styleClass="butwid"
+										actionListener="#{studentPerformance.sessionDetails}"
+										update=":form,:form1" />
+
+                                       
+									<h:commandLink >
+										<p:graphicImage name="images/excellogo.png"
+											library="avalon-layout" width="100" height="40"></p:graphicImage>
+										<pe:exporter type="xlsx" target=":form1:table"
+											fileName="Class Excel"></pe:exporter>
+									</h:commandLink>
+									</p:panelGrid>
+								</center>
+								<p:separator />
+								<br />
+
+							</p:panel>
+							</h:form>
+							<br/>
+							<h:form id="form1">
+							<p:panel header="Student Performance Details">
+								<p:outputPanel id="datatableid"
+									rendered="#{studentPerformance.renderShowTable}">
+									<h1>Please Fill 'Ab' For Absent And 'ML' For Medical</h1>
+									<p:dataTable reflow="true" id="table"
+										rendered="#{studentPerformance.showStudentRecord}"
+										value="#{studentPerformance.studentDetails}" var="var" rowIndexVar="index">
+                                        
+                                        <f:facet name="header">
+                                           <h:outputText style="height:0px;width:0px;" value="#{studentPerformance.marksFormat}" id="marksformatetest"></h:outputText>
+                                        </f:facet>
+                                        
+
+										<p:column headerText="S.No">
+										<f:facet name="header">
+										   <p:outputLabel value="S.No"></p:outputLabel>
+										 </f:facet>
+											<p:outputLabel value="#{index+1}"></p:outputLabel>
+										</p:column>
+										
+										<p:column headerText="Roll No" sortBy="#{var.rollNo}">
+										<f:facet name="header">
+										    <p:outputLabel value="Roll No"></p:outputLabel>
+										</f:facet>
+											<p:outputLabel value="#{var.rollNo}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Add. Number">
+										   <f:facet name="header">
+										    <p:outputLabel value="Add. Number"></p:outputLabel>
+										    
+										   </f:facet>
+										 
+											<p:outputLabel value="#{var.srNo}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Student Name" sortBy="#{var.fullName}">
+										
+										<f:facet name="header">
+										    <p:outputLabel value="Student Name"></p:outputLabel>
+										    
+										   </f:facet>
+											<p:outputLabel value="#{var.fullName}"></p:outputLabel>
+										</p:column>
+
+										<p:column rendered="#{studentPerformance.showScholastic}" headerText="#{studentPerformance.sub}">
+											<f:facet name="header">
+										    <p:outputLabel value="#{studentPerformance.sub}"></p:outputLabel>
+										    
+										   </f:facet>
+
+											<p:inputText id="marks1" rendered="#{studentPerformance.marksFormat eq 'grade'}" value="#{var.marks}">
+													<p:keyFilter regEx="/[a-e+]/i" />
+											</p:inputText>
+											<p:inputText id="marks" rendered="#{studentPerformance.marksFormat eq 'marks'}" value="#{var.marks}" onkeyup="marksCheck(#{var.serialNumber})">
+												<p:keyFilter regEx="/[0-9.]/i" />
+											</p:inputText>
+										</p:column>
+										
+										<p:column rendered="#{studentPerformance.showCoScholastic}"  headerText="#{studentPerformance.sub}">
+											<f:facet name="header">
+										    <p:outputLabel value="#{studentPerformance.sub}"></p:outputLabel>
+										    
+										   </f:facet>
+											<p:inputText id="marks3"  maxlength="2" value="#{var.marks}">
+
+												<p:keyFilter regEx="/^(?:[A-E_NI_IS+_1-2])$/" />
+											</p:inputText>
+										</p:column>
+
+										<p:column  headerText="AB/ML" 
+											style="text-align:center">
+											<p:selectOneRadio  id="type" value="#{var.marksType}"  onchange="changeMarks(#{index},this.value,#{studentPerformance.schoolid});">
+											
+											<f:selectItem itemLabel="AB" itemValue="AB"></f:selectItem> 
+											<f:selectItem itemLabel="ML" itemValue="ML"></f:selectItem> 
+											<f:selectItem itemLabel="MARKS" itemValue="MARKS"></f:selectItem> 
+											
+											</p:selectOneRadio>
+											
+										</p:column>
+
+										<f:facet name="footer">
+										<center>
+											<p:commandButton styleClass="butwid" icon="fa fa-floppy-o"
+												rendered="#{studentPerformance.showStudentRecordButton}"
+												update=":form,:form1,:MsgLimitForm"
+												value="#{studentPerformanceVar.studentPerformanceSaveHereButtonLabel}"
+												action="#{studentPerformance.saveData}" 
+												oncomplete="PF('MsgLmtDlg').show();"
+												
+												></p:commandButton>
+										</center>
+										</f:facet>
+									</p:dataTable>
+								</p:outputPanel>
+							</p:panel>
+							</h:form>
+						
+						
+						
+							<h:form id="MsgLimitForm" style="overflow:hidden">
+				<p:dialog header="ALERT : " width="500" widgetVar="MsgLmtDlg"
+					modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+					<center>
+						<p:outputLabel value="#{studentPerformance.message}"
+							style="font-size:14px;font-weight: bold;" />
+					</center>
+					<br></br>
+					<br></br>
+					<center>
+						<p:commandButton value="OK" 
+							update="MsgLimitForm"
+							onclick="PF('MsgLmtDlg').hide();"
+												
+							 />
+						<br /> <br />
+											</center>
+					<br></br>
+				</p:dialog>
+			</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

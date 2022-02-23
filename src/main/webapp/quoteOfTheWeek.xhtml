@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+		xmlns:pe="http://primefaces.org/ui/extensions">
+<f:view contentType="text/html">
+	<h:head>
+		<title>#{sideMenuBean.companyName} | Quote Of The Week</title>
+		<f:facet name="first">
+			<meta content='text/html; charset=UTF-8' http-equiv="Content-Type" />
+			<meta http-equiv="X-UA-Compatible" content="EmulateIE8" />
+		</f:facet>
+			<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css"></link>
+    		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"></link>
+    		<link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css"></link>
+   			<link rel="stylesheet" href="dist/css/AdminLTE.min.css"></link>
+    		<link rel="stylesheet" href="dist/css/skins/all-skins.min.css"></link>
+    	 	<link rel="stylesheet" type="text/css" href="css/style.css"/>	  			
+	</h:head>
+	<h:body>
+        	 <ui:include src="sideMenu.xhtml"></ui:include> 
+      		<div class="content-wrapper">
+          
+          <section class="content-header">
+	       </section>
+					<h:form id="form" style="overflow:hidden" enctype="multipart/form-data">
+					<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+					<p:messages closable="true" autoUpdate="true"></p:messages>	
+						<p:panel header="QUOTE OF THE WEEK">
+							<p:panelGrid columns="3">
+							  <p:outputLabel value="QUOTE OF THE WEEK"></p:outputLabel>
+							  <p:inputTextarea value="#{quote.quoteOfTheWeek}" rows="3" cols="50" style="width:1000%">
+							  </p:inputTextarea>
+						      <p:commandButton value="Submit" actionListener="#{quote.insertDeatils}" ajax="false"></p:commandButton>
+							</p:panelGrid>
+						</p:panel>
+						
+						<p:panel header="Recent Quote">
+							<ui:repeat var="var" value="#{quote.informationList}">
+							<p:panelGrid columns="2">
+								<p:outputLabel value="Quote Of The Week*"></p:outputLabel>
+								<p:outputLabel value="#{var.quoteOfTheweek}"></p:outputLabel>
+							</p:panelGrid>
+							</ui:repeat>
+						</p:panel>
+					</h:form>
+	</div>
+	</h:body>
+	</f:view>
+	</html>
+	

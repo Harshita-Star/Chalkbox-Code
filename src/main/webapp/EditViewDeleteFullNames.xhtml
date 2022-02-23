@@ -1,0 +1,251 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+	<ui:define name="title">Set Exam Name</ui:define>
+
+	<ui:define name="content">
+		<style>
+body .ui-datalist {
+	min-width: 100%;
+}
+
+body .ui-widget-content {
+	background-color: transparent;
+	border: 0px solid #dddddd;
+}
+</style>
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+						<p:messages closable="true" autoUpdate="true"></p:messages>
+							<p:panel id="dataTable" rendered="#{editfullexamName.showTable}">
+							
+								<f:facet name="header">
+									<span> <p:commandLink style="float: right;margin-left: 15px;;color: blue;font-size:15px;"
+											immediate="true" value="Add Full Names" action="FullExamName.xhtml?faces-redirect=true"></p:commandLink>
+									</span>
+								</f:facet>
+								<p:dataTable id="up" style="width:100%;border-collapse:collapse"
+									rowKey="#{var.sno}" border="1"
+									value="#{editfullexamName.allFullNames}" var="var">
+
+									<p:columnGroup type="header">
+										<p:row>
+											<p:column style="border: 1px solid black !important;width: 60px;"
+												rowspan="4" headerText="S.No." />
+											<p:column style="border: 1px solid black !important"
+												headerText="Class" />
+											<p:column style="border: 1px solid black !important"
+												headerText="Short Name" />
+											<p:column style="border: 1px solid black !important"
+												headerText="Action" />
+										</p:row>
+									</p:columnGroup>
+									<p:column style="border: 1px solid black !important;width: 60px;">
+										<p:outputLabel style="font-size:9.5px" value="#{var.sno}"></p:outputLabel>
+									</p:column>
+
+									<p:column style="border: 1px solid black !important">
+										<p:dataList value="#{var.forClassNames}" var="innerListObject"
+											itemType="ordered">
+											<p:outputLabel value="#{innerListObject.label}" />
+										</p:dataList>
+									</p:column>
+
+									<p:column style="border: 1px solid black !important">
+										<p:dataList value="#{var.fullExamNames}" var="innerList"
+											itemType="ordered">
+											<p:outputLabel
+												value="#{innerList.shortName} : #{innerList.fullName}" />
+										</p:dataList>
+									</p:column>
+
+									<p:column style="border: 1px solid black !important">
+										<center>
+
+											<p:panelGrid columns="3" layout="grid"
+												styleClass="ui-panelgrid-blank form-group"
+												style="border:0px none;width: 72%; background-color:transparent;">
+												<p:commandButton value="Remove Class" disabled="#{var.forClassNames.size() eq 1 ? 'true' : 'false'}" action="#{editfullexamName.loadClass}" oncomplete="PF('clsDlg').show();" update=":editClass" styleClass="redButt">
+												<f:setPropertyActionListener
+													target="#{editfullexamName.selectedRow}" value="#{var}"></f:setPropertyActionListener>
+												</p:commandButton>
+												<p:commandButton value="Add Class" action="#{editfullexamName.loadFullRow}" oncomplete="PF('addDlg').show();" update=":add">
+												<f:setPropertyActionListener
+													target="#{editfullexamName.selectedforAdd}" value="#{var}"></f:setPropertyActionListener>
+												</p:commandButton>
+												<p:commandButton value="Edit Names" action="#{editfullexamName.loadNames}" oncomplete="PF('nameDlg').show();" update=":editName">
+												<f:setPropertyActionListener
+													target="#{editfullexamName.selectedRowName}" value="#{var}"></f:setPropertyActionListener>
+												</p:commandButton>
+											</p:panelGrid>
+										</center>
+										<center>
+											<p:commandButton value="Remove Full Names"  oncomplete="PF('dlg1').show()"
+												styleClass="butwid-2 redButt" icon="fa fa-trash-o" >
+												<f:setPropertyActionListener
+													target="#{editfullexamName.selectedFullRow}" value="#{var}"></f:setPropertyActionListener>
+												</p:commandButton>
+										</center>
+									</p:column>
+								</p:dataTable>
+							</p:panel>
+							<p:panel id="dataTable1" rendered="#{editfullexamName.showPanel}">
+								<f:facet name="header">
+									<span> <p:commandLink style="float: right;margin-left: 15px;;color: blue;font-size:15px;"
+											immediate="true" value="Add Full Names" action="FullExamName.xhtml?faces-redirect=true"></p:commandLink>
+									</span>
+								</f:facet>
+								
+								<p:outputLabel value="There is no exam names right now."></p:outputLabel>
+								
+							</p:panel>
+						</h:form>
+						
+					<h:form id="conForm" style="overflow:hidden">
+						<p:dialog resizable="false" widgetVar="dlg1"
+									header="Do you really want to Delete this student permanently"
+									showEffect="fade" hideEffect="explode" modal="true">
+									<div class="ui-g form-group">
+										<p:panelGrid columns="2"
+											styleClass="ui-panelgrid-blank form-group"
+											style="border:0px none; background-color:transparent;">
+											<p:commandButton update=":form"
+												actionListener="#{editfullexamName.removeNames}"
+												value="Yes" styleClass="greenButt"></p:commandButton>
+											<p:commandButton value="No" update=":form"
+												oncomplete="PF('dlg1').hide();" styleClass="redButt"></p:commandButton>
+										</p:panelGrid>
+									</div>
+								</p:dialog>
+					</h:form>
+						
+						
+						<h:form id="editClass" style="overflow:hidden">
+							<p:dialog header="Remove Class" width="400" widgetVar="clsDlg"
+								modal="true" resizable="false">
+								<p:panelGrid columns="2"
+									
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+										
+										<p:outputLabel value="Select Class : "></p:outputLabel>
+										<p:selectManyCheckbox value="#{editfullexamName.selectedClasses}" 
+                                                  layout="pageDirection" >
+										<f:selectItems value="#{editfullexamName.viewClass}"></f:selectItems>
+									</p:selectManyCheckbox>
+									</p:panelGrid>
+									<br />
+								<p:separator />
+								<center>
+										<p:commandButton value="Update Class" update=":form,:editClass" action="#{editfullexamName.updateClasses}" styleClass="butwid" icon="fa fa-floppy-o"></p:commandButton>
+								</center>
+								<p:separator />
+								<br />
+							</p:dialog>
+						</h:form>
+						
+						<h:form id="editName" style="overflow:hidden">
+							<p:dialog header="Remove Class" width="400" widgetVar="nameDlg"
+								modal="true" resizable="false">
+								<p:dataTable id="up" style="width:100%;border-collapse:collapse"
+										rowKey="#{var.sno}"
+									border="1" value="#{editfullexamName.allExamNamesDlg}" var="var">
+									<p:column headerText="S.No."
+										style="width:40px;text-align:center">
+
+										<p:outputLabel value="#{var.sno}"></p:outputLabel>
+									</p:column>
+									<p:column headerText="Exam Name"
+										style="width:40px;text-align:center">
+
+										<p:outputLabel value="#{var.examNameUpperCase}"></p:outputLabel>
+									</p:column>
+									
+									<p:column headerText="Full Name" style="width:40px;text-align:center">
+
+										<p:inputText value="#{var.fullName}" disabled="#{var.disableEdit}"></p:inputText>
+										
+									</p:column>
+								</p:dataTable>
+									<br />
+								<p:separator />
+								<center>
+										<p:commandButton value="Update Names" update=":form,:editName" action="#{editfullexamName.updateNames}" styleClass="butwid" icon="fa fa-floppy-o"></p:commandButton>
+								</center>
+								<p:separator />
+								<br />
+							</p:dialog>
+						</h:form>
+						
+						<h:form id="add" style="overflow:hidden">
+							<p:dialog header="Add Classes" width="400" widgetVar="addDlg"  height="600" 
+								modal="true" resizable="false">
+								<p:panelGrid columns="2"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+										<p:outputLabel value="Select Class : "></p:outputLabel>
+										<p:selectCheckboxMenu value="#{editfullexamName.selectedcls}" label="Classes"
+                                                  panelStyle="width:170px;background:white;" >
+										<f:selectItems value="#{editfullexamName.viewALlClass}"></f:selectItems>
+									</p:selectCheckboxMenu>
+									</p:panelGrid>
+									<p:outputPanel id="up1" >
+								<p:dataTable rendered="#{editfullexamName.showTableEdit}"  style="width:100%;border-collapse:collapse"
+										rowKey="#{var.sno}"
+									border="1" value="#{editfullexamName.allExamNamesDlg}" var="var">
+									<p:column headerText="S.No."
+										style="width:40px;text-align:center">
+
+										<p:outputLabel value="#{var.sno}"></p:outputLabel>
+									</p:column>
+									<p:column headerText="Exam Name"
+										style="width:40px;text-align:center">
+
+										<p:outputLabel value="#{var.examNameUpperCase}"></p:outputLabel>
+									</p:column>
+									
+									<p:column headerText="Full Name" style="width:40px;text-align:center">
+
+										<p:inputText value="#{var.fullName}" disabled="#{var.disableEdit}"></p:inputText>
+										
+									</p:column>
+								</p:dataTable>
+								</p:outputPanel>
+								
+								<p:outputPanel id="btnupda">
+								
+								
+								<br />
+								<p:separator />
+								<center>
+									<p:panelGrid
+										columns="#{editfullexamName.showTableEdit eq 'true' ? '2' : '1'}"
+										layout="grid" styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+
+										<p:commandButton   value="Add Class" update="add:up1,:add:btnupda" action="#{editfullexamName.openNames}" styleClass="butwid" icon="fa fa-plus"></p:commandButton>
+										<p:commandButton rendered="#{editfullexamName.showTableEdit}" value="Update" update=":form,:add" action="#{editfullexamName.update}" styleClass="butwid" icon="fa fa-upload"></p:commandButton>
+										
+									</p:panelGrid>
+								</center>
+								<p:separator />
+								<br />
+							
+								</p:outputPanel>
+							</p:dialog>
+						</h:form>
+						
+				
+						
+					</div>
+				</div>
+			</div>
+		</div>
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	
+<f:view contentType="text/html">
+	<h:head>
+		<title>Student Marksheet</title>
+		<f:facet name="First">
+			<meta content='text/html; charset=UTF-8' http-equiv="Content-Type" />
+			<meta http-equiv="X-UA-Compatible" content="EmulateIE8" />
+		<title>MainPage</title>
+		</f:facet>
+		
+		<script>
+		function printwin() 
+		{
+			document.getElementById('test').style.display="none";	
+			window.print();
+			document.getElementById('test').style.display="block";
+			document.URL="";
+		}
+	</script>
+		
+	</h:head>
+	
+	
+
+	<h:body>
+	<style>
+		.ui-panelgrid .ui-panelgrid-cell {
+		    border-width: 1px;
+		    border-style: solid;
+		    border-color: inherit;
+		    padding: 4px 12px;
+		    width: 153px;
+		    height:10px;
+		}
+		.ab tr,.ab td{
+		border-color: white;
+		}
+		.abc tr,.abc td{
+		border-color: white;
+		}
+		.pr tr,.pr td{
+		border-color: white;
+		}
+		.ps tr,.ps td{
+		border-color: white;
+		}
+		.pd tr,.pd td{
+		border-color: white;
+		}
+		
+		.test .ui-widget-content 
+		{
+			font-size:9px;
+		}
+		
+		.test2 .ui-widget-header
+		{
+			font-size:9px;
+		}
+		
+	.imageStyle
+	{
+		height:15px;
+		width:20px;
+	
+	}
+		
+	</style>
+
+	<h:panelGrid columns="2">
+	
+		<p:commandButton rendered="false" value="Back" action="#{navigation.managePrintingWorkDashboard}" styleClass="back_button" style="float:right;margin-right:80px"></p:commandButton>
+		<p:commandButton id="test" value="Print" onclick="printwin()">
+		</p:commandButton>
+	</h:panelGrid>
+
+	<h:form id="form1">
+	
+		<ui:repeat var="mainVar" value="#{printEYFSMarksheet.listOfStudent}">
+		<p:outputPanel styleClass="test" style="width:100%;marginf-left:40px;">
+	
+			<table style="width:100%;font-size:11px">
+				<tr>
+					<td>
+					<p:outputPanel>
+				    		<p:graphicImage width="100%" height="150px" value="#{printEYFSMarksheet.headerImagePath}"></p:graphicImage>
+				    </p:outputPanel>
+			  </td>
+				</tr>
+			</table>
+			<p:outputPanel>
+			<hr></hr>
+			</p:outputPanel>
+			<p:outputPanel>
+				<h1 style="text-align:center;margin:0px;font-size:18px">Academic Session: #{mainVar.session}</h1>
+				
+				<h3 style="text-align:center;margin:0px;font-size:17px">Report Card </h3>
+				
+				<h3 style="text-align:center;margin:0px;font-size:17px">Annual Result</h3> 
+			</p:outputPanel>
+			<br></br>
+			<table style="width:100%;font-size:11px">
+				<tr>
+					<td>Admn.No.:-</td>
+					<td>#{mainVar.srNo}</td>
+				 <td></td>
+					 <td></td>
+					
+					<td>Class / Section:- </td>
+					<td>#{mainVar.className}</td>
+					
+					<td rowspan="3">
+						<center><p:graphicImage value="#{mainVar.student_image}" height="100" width="100"></p:graphicImage></center>
+					</td>
+				
+				</tr>
+				<tr>
+				    	<td>Student Name:-</td>
+					<td>#{mainVar.fname}</td>
+				
+				     <td></td>
+					 <td></td>
+					
+					<td>Roll No:-</td>
+					<td>#{mainVar.rollNo}</td>
+				</tr>
+				<tr>
+				    	<td>Father's Name:-</td>
+					<td>#{mainVar.fathersName}</td>
+				
+				 <td></td>
+					 <td></td>
+					
+					<td>Date of Birth:-</td>
+					<td>#{mainVar.dobString}</td>
+				</tr>	
+				<tr>
+				   	<td>Mother's Name:-</td>
+					<td>#{mainVar.motherName}</td> 
+					 <td>  </td>
+					 <td></td>
+				</tr>
+			</table>				
+		</p:outputPanel>
+		 <br></br>
+		<ui:repeat var="mainId" value="#{mainVar.eyfsMarkList}">
+			<p:dataTable value="#{mainId.subParaList}" var="sub" style="font-size: 14px !important;">
+				<p:columnGroup type="header">
+					<p:row>
+		                 <p:column colspan="#{mainId.ageGroupGradeList.size()+1}" style="width:190px;border: 1px solid black !important;background: #0070C0;color: white;" headerText="#{mainId.mainParameterName}" />
+		                 <!-- <p:column style="width:10px;border: 1px solid black !important;background: #C00000-marron,#00B050-green,#00B0F0-blue;color: white;#FF512DA8-mainpara" headerText="#{mainId.totalMark}" /> -->
+		            </p:row>
+		            <p:row>
+		                 <p:column style="border: 1px solid black !important;color: white;background: #F2CC93;"/>
+		                 <ui:repeat value="#{mainId.ageGroupGradeList}" var="grade">
+	                    	<p:column style="border: 1px solid black !important;background: #F2CC93;width:150px;color: white;" colspan="1" headerText="#{grade.label}" />
+	               	 	 </ui:repeat>
+		            </p:row>
+		        </p:columnGroup>
+		        
+		        <p:column style="border: 1px solid black !important;background: white;">
+            		<p:outputLabel value="#{sub.name}"></p:outputLabel>
+            	</p:column>
+            
+            <!-- <p:columns rendered="#{sideMenuBean.list.country eq 'India'}"  style="border: 1px solid black !important;background: white;" value="#{mainId.ageGroupGradeList}" var="ll">
+	            		<center><p:graphicImage rendered="#{ll.value eq sub.gradeId}" value="rightTick.png"  styleClass="imageStyle" /></center>
+	            </p:columns> 
+	            background: #{ll.value eq sub.gradeId ? (ll.label eq 'Working Towards' ? '#F79B83E6' : (ll.label eq 'Meeting Expectations' ? '#8DC8FF' : '#93F2A3')) : 'white'};"
+	            -->
+            
+				<p:columns style="border: 1px solid black !important;" value="#{mainId.ageGroupGradeList}" var="ll">
+	            		<center><p:graphicImage rendered="#{ll.value eq sub.gradeId}" value="rightTick.png" styleClass="imageStyle"/></center>
+	            </p:columns>
+			</p:dataTable>
+		</ui:repeat>
+         <br></br>
+          
+		<p:dataTable value="#{mainVar.eyfsMarkList}" var="main" style="font-size: 14px !important;">
+			<p:columnGroup type="header">
+				<p:row>
+	                 <p:column colspan="2" style="width:190px;border: 1px solid black !important;background: #0070C0;color: white;" headerText="Assessment Report - Written" />
+	            </p:row>
+	        </p:columnGroup>
+	        
+	        <p:column style="border: 1px solid black !important;background: white;">
+           		<p:outputLabel value="#{main.mainParameterName}"></p:outputLabel>
+           	</p:column>
+           	
+           	<p:column style="border: 1px solid black !important;background: white;">
+           		<p:outputLabel value="#{main.comment}"></p:outputLabel>
+           	</p:column>
+		</p:dataTable>
+		<br></br>
+          
+		<p:dataTable value="#{mainVar.eyfsMarkList}" var="mainatt" style="font-size: 14px !important;">
+			<p:columnGroup type="header">
+				<p:row>
+	                 <p:column colspan="2" style="width:190px;border: 1px solid black !important;background: #0070C0;color: white;" headerText="Assessment Report - Attachment" />
+	            </p:row>
+	        </p:columnGroup>
+	        
+	        <p:column style="border: 1px solid black !important;background: white;">
+           		<p:outputLabel value="#{mainatt.mainParameterName}"></p:outputLabel>
+           	</p:column>
+           	
+           	<p:column style="border: 1px solid black !important;background: white;">
+           		<p:graphicImage value="#{mainatt.attachment eq '' ? 'noimage.png' : mainatt.attachment}" height="#{mainatt.attachment eq '' ? '100' : '120'}" width="#{mainatt.attachment eq '' ? '100' : '600'}"></p:graphicImage>
+           	</p:column>
+		</p:dataTable>
+		
+		<br></br>
+		<p:dataTable style="border: 1px solid black !important;font-size: 14px !important;" value="#{mainVar.eyfsMarkList}" var="main">
+		
+			<p:columnGroup type="header">
+				<p:row>
+	                 <p:column colspan="1" style="width:63px;border: 1px solid black !important;background: #0070C0;color: white;" headerText="Main Heading" />
+	                 <p:column colspan="1" style="width:63px;border: 1px solid black !important;background: #0070C0;color: white;" headerText="Total Points" />
+	                 <p:column colspan="1" style="width:63px;border: 1px solid black !important;background: #0070C0;color: white;" headerText="Total Achieved" />
+	            </p:row>
+	        </p:columnGroup>
+		
+	        <p:column style="border: 1px solid black !important;background: white;">
+           		<p:outputLabel value="#{main.mainParameterName}"></p:outputLabel>
+           	</p:column>
+           	
+           	<p:column style="border: 1px solid black !important;text-align: center;background: white;">
+           		<p:outputLabel value="#{main.totalMark}"></p:outputLabel>
+           	</p:column>
+           	
+           	<p:column style="border: 1px solid black !important;text-align: center;background: white;">
+           		<p:outputLabel value="#{main.totalAchieved}"></p:outputLabel>
+           	</p:column>
+           	
+		</p:dataTable>
+         
+         <p:chart type="bar" model="#{mainVar.combinedModel}" style="height:300px" />
+         
+         </ui:repeat>
+	</h:form>
+</h:body>
+</f:view>
+</html>

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+<f:loadBundle var="addClassVar" basename="myProperties" />
+<f:view contentType="text/html">
+	<h:head>
+		<title>#{sideMenuBean.companyName} | PreSession Fee Collection</title>
+		<f:facet name="first">
+			<meta content='text/html; charset=UTF-8' http-equiv="Content-Type" />
+			<meta http-equiv="X-UA-Compatible" content="EmulateIE8" />
+			
+		</f:facet>
+
+  <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css"></link>
+    		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"></link>
+    	<link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css"></link>
+   <link rel="stylesheet" href="dist/css/AdminLTE.min.css"></link>
+    <link rel="stylesheet" href="dist/css/skins/all-skins.min.css"></link>
+
+	</h:head>
+
+	<h:body>
+      
+      <ui:include src="sideMenu.xhtml"></ui:include> 
+      <div class="content-wrapper">
+          
+			<h:form id="form">
+   			        <h1>#{collectFeeVar.collectFeeTitle}</h1>
+            		
+            		<p:panel header="Previous Session Fee " id="data">
+            			<p:messages closable="true" autoUpdate="true" ></p:messages>
+               			<p:panelGrid columns="6" style="width:100%">
+               				
+               				<p:outputLabel value="Session"></p:outputLabel>
+               				<p:outputLabel value="#{previousSessionFee.preSession}"></p:outputLabel>
+               			
+               				<p:outputLabel value="#{collectFeeVar.collectFeeAdmissionNumberLabel}"></p:outputLabel>
+               				<p:outputLabel value="#{previousSessionFee.addmissionNumber}"></p:outputLabel>
+               			
+               				<p:outputLabel value="#{collectFeeVar.collectFeeStudentNameLabel}"></p:outputLabel>
+               				<p:outputLabel value="#{previousSessionFee.name}"></p:outputLabel>
+               				
+               				<p:outputLabel value="#{collectFeeVar.collectFeeFathersNameLabel}"></p:outputLabel>
+               				<p:outputLabel value="#{previousSessionFee.fathersName}"></p:outputLabel>
+               				
+               				<p:outputLabel value="#{collectFeeVar.collectFeeGenderLabel}"></p:outputLabel>
+               				<p:outputLabel value="#{previousSessionFee.gender}"></p:outputLabel>
+               				
+               				<p:outputLabel value="#{collectFeeVar.collectFeeDOBLabel}"></p:outputLabel>
+               				<p:outputLabel value="#{previousSessionFee.dobString}"></p:outputLabel>
+               				
+               				<p:outputLabel value="Total Due Amount"></p:outputLabel>
+               				<p:outputLabel value="#{previousSessionFee.leftAmount}"></p:outputLabel>
+               			</p:panelGrid>
+				  </p:panel>
+               			
+               			
+               			<p:panel id="Fee_Structure">
+               			<p:dataTable id="dataTable0" value="#{previousSessionFee.feeStructureList}" var="var" >
+               				               					
+               				    <f:facet name="header">
+               				     	<p:outputLabel value="Fee Status"></p:outputLabel>
+               				    </f:facet> 
+               				    					
+               					<p:column headerText="Fee Type">
+               						<p:outputLabel  value="#{var.feeName}"></p:outputLabel>
+               					</p:column>       
+               					
+               					<p:column headerText="Fee Periods">
+               						<p:outputLabel  value="#{var.feePeriod}"></p:outputLabel>
+               					</p:column>         					
+               				               					
+               					<p:column headerText="Fee Amount">
+               						<p:outputLabel  value="#{var.totalFeeAmount}"></p:outputLabel>
+               					</p:column>
+               					
+               					<p:column headerText="Fee Paid">
+               						<p:outputLabel value="#{var.totalFeePaidAmount}"></p:outputLabel>
+               					</p:column>
+               					
+               					<p:column headerText="Balance Left">
+               						<p:outputLabel value="#{var.totalFeeLeftAmount}"></p:outputLabel>
+               					</p:column>
+               					
+               			</p:dataTable>
+               			
+               			
+               			<p:dataTable rendered="#{adminHome.showTransport}"  id="dataTable4" value="#{previousSessionFee.transportfeeStatus}" var="var">
+               				
+               				<f:facet name="header">
+               					Transport Fee Details
+               				</f:facet>
+               				
+               				<p:column headerText="Months">
+               					<p:outputLabel value="#{var.month}"></p:outputLabel>
+               				</p:column>
+               				
+               				<p:column headerText="Transport Route">
+               					<p:outputLabel value="#{var.transportRouteName}"></p:outputLabel>
+               				</p:column>
+               				
+               				<p:column headerText="Transport Fee">
+               					<p:outputLabel value="#{var.transportFee}"></p:outputLabel>
+               				</p:column>
+               				
+               				<p:column headerText="Fee paid">
+               					<p:outputLabel value="#{var.status}"></p:outputLabel>
+               				</p:column>
+               				
+               				<p:column headerText="Balance Left">
+               					<p:outputLabel value="#{var.balanceLeft}"></p:outputLabel>
+               				</p:column>
+               			</p:dataTable>
+               			</p:panel>
+			</h:form>		
+                
+          
+          
+      </div>
+	</h:body>
+</f:view>
+</html>

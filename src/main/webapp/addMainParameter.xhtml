@@ -1,0 +1,80 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	<f:loadBundle var="addClassVar" basename="myProperties"/>
+
+		<ui:define name="title">Add Main Parameter</ui:define>
+
+		<ui:define name="content">
+
+			<div class="ui-fluid">
+				<div class="ui-g">
+					<div class="ui-g-12">
+						<div class="card card-w-title">
+							<h:form id="form" enctype="multipart/form-data">
+								<p:panel header="Add Main Parameter">
+									<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+									<p:panelGrid columns="5" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+										<p:outputLabel value="Parameter Name"></p:outputLabel>
+										<p:inputText for="@next" style="color:red"  value="#{addMainPara.name}" required="true" requiredMessage="Please Enter Parameter Name" validatorMessage="Please Enter Correct value">
+										  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+										</p:inputText>
+										
+										<p:outputLabel value="Description"></p:outputLabel>
+										<p:inputTextarea value="#{addMainPara.description}" validatorMessage="Please Enter Correct value">
+										 <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+										</p:inputTextarea>
+										
+										<p:commandButton update=":form,:form1" value="Submit" actionListener="#{addMainPara.addMainParameter}"></p:commandButton>										
+									</p:panelGrid>
+								</p:panel>
+							</h:form>
+							
+							<h:form id="form1">
+							<p:panel header="All Main Parameter">
+								<p:dataTable var="var" value="#{addMainPara.allParameterList}" paginator="true" rowIndexVar="index" rowsPerPageTemplate="20,50,100">
+									<f:facet name="header">
+										<p:outputLabel value="Total:- #{addMainPara.totalParameter}"></p:outputLabel>
+									</f:facet>
+									<p:column headerText="S.No.">
+										<p:outputLabel value="#{index+1}"></p:outputLabel>
+									</p:column>
+									
+									<p:column headerText="Name" filterMatchMode="contains" filterBy="#{var.mainParameterName}">
+										<p:outputLabel value="#{var.mainParameterName}"></p:outputLabel>
+									</p:column>
+									
+									<p:column headerText="Description">
+										<p:outputLabel value="#{var.description}"></p:outputLabel>
+									</p:column>
+									
+									<p:column headerText="Edit" rendered="false">
+										<p:commandButton icon="ui-icon-pencil" action="#{addMainPara.editDetails}" update=":form">
+											<f:setPropertyActionListener value="#{var}" target="#{addMainPara.selectedPara}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+									
+									<p:column headerText="Delete">
+										<p:commandButton icon="ui-icon-trash" action="#{addMainPara.deleteMainParameter}" update=":form1">
+											<f:setPropertyActionListener value="#{var}" target="#{addMainPara.selectedPara}"></f:setPropertyActionListener>
+											<p:confirm header="Confirmation" message="Surely You Want To Delete This Parameter ???" icon="ui-icon-alert" />
+										</p:commandButton>
+									</p:column>
+									
+								</p:dataTable>
+							</p:panel>
+						</h:form>
+						<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+							<p:commandButton style="margin-left:50px" value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+							<p:commandButton style="margin-left:50px" value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+						</p:confirmDialog>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</ui:define>
+</ui:composition>

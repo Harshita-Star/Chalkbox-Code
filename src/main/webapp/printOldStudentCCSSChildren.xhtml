@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+<f:loadBundle var="addClassVar" basename="myProperties" />
+<f:view contentType="text/html">
+	<h:head>
+		<title>#{sideMenuBean.companyName} | Certificate Printing</title>
+		<f:facet name="first">
+			<meta content='text/html; charset=UTF-8' http-equiv="Content-Type" />
+			<meta http-equiv="X-UA-Compatible" content="EmulateIE8" />
+
+		</f:facet>
+
+		<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css"></link>
+		<link rel="stylesheet"
+			href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"></link>
+		<link rel="stylesheet"
+			href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css"></link>
+		<link rel="stylesheet" href="dist/css/AdminLTE.min.css"></link>
+		<link rel="stylesheet" href="dist/css/skins/all-skins.min.css"></link>
+		<link rel="stylesheet" type="text/css" href="css/style.css" />
+
+		<style>
+.box {
+	display: initial;
+	border-top: 1px solid black;
+	border-left: 1px solid black;
+	border-right: 2px solid black;
+	border-bottom: 4px solid black;
+	padding: 10px 20px;
+	font-style: bold;
+	font-size: 16px !important;
+}
+</style>
+
+		<style>
+.statistics_lines {
+	text-decoration: underline;
+	text-decoration-style: dotted;
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+.statistics_lines:after {
+	content: "\a0\a0\a0\a0\a0\a0\a0";
+}
+</style>
+
+		<style>
+.dob {
+	text-decoration: underline;
+	text-decoration-style: dotted;
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+.dob:after {
+	content:
+		"\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0";
+}
+</style>
+
+		<style>
+.dobCharacter {
+	text-decoration: underline;
+	text-decoration-style: dotted;
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+.dobCharacter:after {
+	content:
+		"\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0";
+}
+</style>
+
+		<style>
+.classCharacter {
+	text-decoration: underline;
+	text-decoration-style: dotted;
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+.classCharacter:after {
+	content:
+		"\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0";
+}
+</style>
+
+		<style>
+.sessionCharacter {
+	text-decoration: underline;
+	text-decoration-style: dotted;
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+.sessionCharacter:after {
+	content:
+		"\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0";
+}
+</style>
+
+		<style>
+.studentCharacter {
+	text-decoration: underline;
+	text-decoration-style: dotted;
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+.studentCharacter:after {
+	content:
+		"\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0";
+}
+</style>
+
+		<style>
+.fathersCharacter {
+	text-decoration: underline;
+	text-decoration-style: dotted;
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+.fathersCharacter:after {
+	content:
+		"\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0";
+}
+</style>
+
+		<style>
+.dobWord {
+	text-decoration: underline;
+	text-decoration-style: dotted;
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+.dobWord:after {
+	content:
+		"\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0";
+}
+</style>
+
+		<style>
+.dobWordCharacter {
+	text-decoration: underline;
+	text-decoration-style: dotted;
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+.dobWordCharacter:after {
+	content:
+		"\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0";
+}
+</style>
+
+		<style>
+@media print {
+	html, body {
+		border: 1px solid white;
+		height: 99%;
+		page-break-after: always;
+		page-break-before: always;
+	}
+}
+</style>
+	</h:head>
+
+	<h:body>
+
+		<div class="content-wrapper">
+
+
+
+			<h:form id="form12" rendered="false">
+				<p:commandButton style="width:50px;" 
+					value="Print" type="button">
+					<p:printer target=":forms"></p:printer>
+				</p:commandButton>
+
+
+
+			</h:form>
+			<br />
+			<h:form id="forms">
+
+				<p:panel>
+
+
+					<table style="width: 100%; font-size: 11px">
+						<tr>
+							<td><p:graphicImage width="100%" height="120px"
+									value="#{printOldStdCC.headerImage}"></p:graphicImage></td>
+						</tr>
+					</table>
+					<hr style="border-top: solid 1px;" />
+					<br></br>
+
+					<center>
+						<p:outputLabel styleClass="box" value="CHARACTER CERTIFICATE"></p:outputLabel>
+					</center>
+					<br></br>
+
+					<br></br>
+					<br></br>
+					<table style="margin: -20px">
+						<tr>
+							<td
+								style="font-family: timesRoman; font-size: 18px; line-height: 34px;">
+								<p style="text-align: justify;">
+									Certified that #{printOldStdCC.gender.toLowerCase() eq
+									'male' ? 'Mr. ' : 'Km. '} <b><p:outputLabel
+											value="#{printOldStdCC.studentName}"
+											style="font-size:19px !important;"></p:outputLabel></b>
+									#{printOldStdCC.gender.toLowerCase() eq 'male' ? 'S/O' :
+									'D/O'} of Mr. <b><p:outputLabel
+											value="#{printOldStdCC.fatherName}"
+											style="font-size:19px !important;"></p:outputLabel></b> is a
+									bonafide student of this institution during the period <b><p:outputLabel
+											value="#{printOldStdCC.session}" style="font-size:19px !important;"></p:outputLabel></b>.
+									#{printOldStdCC.gender.toLowerCase() eq 'male' ? 'He ' :
+									'She'} has #{printOldStdCC.result.toLowerCase()}
+									#{printOldStdCC.result.toLowerCase().contains('fail') ? ' in':''} class <b><p:outputLabel
+											value="#{printOldStdCC.lastSchoolExam}"
+											style="font-size:19px !important;"></p:outputLabel></b>
+									examination of the school/CBSE.
+									#{printOldStdCC.gender.toLowerCase() eq 'male' ? 'His' :
+									'Her'} date of birth, as per school records is <b><p:outputLabel
+											value="#{printOldStdCC.dobString}"
+											style="font-size:19px !important;"></p:outputLabel></b> <b><p:outputLabel
+											value="(#{printOldStdCC.dobInWord})"
+											style="font-size:19px !important;"></p:outputLabel></b>.
+									#{printOldStdCC.gender.toLowerCase() eq 'male' ? 'He ' :
+									'She'} bears a good moral character.
+									#{printOldStdCC.gender.toLowerCase() eq 'male' ? 'His ' :
+									'Her'} conduct during the stay in this institution had been
+									good. #{printOldStdCC.gender.toLowerCase() eq 'male' ?
+									'He ' : 'She'} had been an active participant in the
+									co-curricular activities.<br></br> <br></br> I wish
+									#{printOldStdCC.gender.toLowerCase() eq 'male' ? 'him ' :
+									'her'} success and a bright future.<br /> Remarks :
+									#{printOldStdCC.remark}
+								</p>
+							</td>
+						</tr>
+					</table>
+					<br></br>
+					<br></br>
+					<br></br>
+					<br></br>
+
+
+
+
+					<table style="width: 100%; margin-top: 120px; font-size: 17px;">
+						<tr>
+							<td align="left"><b>Date: #{printOldStdCC.currentDate}</b></td>
+							<p:outputPanel
+								rendered="#{sideMenuBean.list.branch_id eq '99' ? 'true' : 'false'}">
+								<td align="right" style="padding-right: 67px;"><b>Principal</b></td>
+							</p:outputPanel>
+							<p:outputPanel
+								rendered="#{sideMenuBean.list.branch_id eq '101' ? 'true' : 'false'}">
+								<td align="right" style="padding-right: 135px;"><b>Principal</b></td>
+							</p:outputPanel>
+						</tr>
+
+						<tr>
+							<td align="left"><b></b></td>
+							<td align="right" style="padding-right: 5px;"><b>#{printOldStdCC.schinfo.schoolName}</b></td>
+						</tr>
+					</table>
+				</p:panel>
+
+			</h:form>
+		</div>
+	</h:body>
+</f:view>
+</html>

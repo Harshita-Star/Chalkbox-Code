@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<f:view contentType="text/html">
+	<h:head>
+		<title>#{sideMenuBean.companyName} | Income Voucher</title>
+		<f:facet name="First">
+			<meta content='text/html; charset=UTF-8' http-equiv="Content-Type" />
+			<meta http-equiv="X-UA-Compatible" content="EmulateIE8" />
+		
+		</f:facet>
+		
+		<link href="smartkids.css" rel="stylesheet"/>
+	</h:head>
+	
+		<script>
+		
+			function printwin() {
+				document.getElementById('test').style.display="none";	
+				window.print();
+				document.getElementById('test').style.display="block";
+				document.URL="";
+			}
+	
+		</script>
+
+<h:body style="margin:0px;">
+
+<p:panelGrid columns="2" id="test">
+	<p:commandButton value="Back" action="#{navigation.addIncome}"></p:commandButton>
+	<p:commandButton value="Print" onclick="printwin()" ></p:commandButton>
+</p:panelGrid>
+
+<h:form style="font-size:10px" id="form1">
+
+<div class="outer_section">
+	<div class="inner_section">
+		<div class="header">
+			<div class="header_left">
+				
+			</div>
+			<div class="header_right">
+								<h1 style="text-align:center;margin:0px;font-size:30px">#{headerBean.name}</h1>
+								<p style="text-align:center;margin:0px;font-size:18px">#{headerBean.address1}</p>
+								<p style="text-align:center;margin:0px;font-size:18px">#{headerBean.address2}</p>
+								<p style="text-align:center;margin:0px;font-size:18px">#{headerBean.address3}</p>
+								<p style="text-align:center;margin:0px;font-size:20px">Income Voucher</p>
+			</div>
+		</div>
+		
+		<div class="table_header">
+			<div class="table_header_l">No. #{incomeVoucher.id}</div>
+			<div class="table_header_r">Date:- #{incomeVoucher.date3}</div>
+		</div>
+		<div class="table">
+			<table class="table_body"  style="border-collapse:collapse">
+				<tr>
+					<td style="width:75%;">Received from : #{incomeVoucher.receivedFrom}</td>
+					<td style="text-align:center">Amount</td>
+				</tr>
+				<tr>
+					<td>Account Head: #{incomeVoucher.name}</td>
+					<td style="text-align:center" rowspan="2"> #{incomeVoucher.total} </td>
+				</tr>
+				<tr>
+					<td style="min-height:90px;">
+						Particulars: #{incomeVoucher.particular}
+					</td>
+				</tr>
+				<tr>
+					<td style="text-align:right">Total:</td>
+					<td style="text-align:center;margin-right:30px">#{incomeVoucher.total}</td>
+				</tr>
+				<tr>
+					<td colspan="2">Rupees in words: #{incomeVoucher.amountword}
+</td>
+				</tr>
+			</table>
+		</div>
+		<div class="footer">
+		<div class="footer_left">
+			<div class="footer_left_upper">
+				<div class="footer_left_upper_block">Payment Mode: #{incomeVoucher.paymode}</div>
+				<div class="footer_left_upper_block">Cheque No. #{incomeVoucher.checkno}</div>
+				<div class="footer_left_upper_block">Bank Name: #{incomeVoucher.bankName}</div>
+			</div>
+			<div class="footer_left_lower">Approved By:</div>
+			<div class="footer_right">
+			<div class="footer_right_block"></div>
+			<font>Receiver Sign.</font>
+		</div>
+		</div>
+		
+		</div>
+	</div>
+
+</div>
+
+</h:form>
+
+
+</h:body>
+</f:view>
+</html>

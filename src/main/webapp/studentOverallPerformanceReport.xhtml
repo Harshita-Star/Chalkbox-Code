@@ -1,0 +1,189 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Student Overall Performance Report</ui:define>
+
+	<ui:define name="content">
+
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form2">
+							<h1>Student Overall Performance Report</h1>
+							<p:panel header="Search Student">
+
+								<p:panelGrid columns="6" layout="grid"
+									styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel value="Select Class" for="@next"
+										style="color:red"></p:outputLabel>
+									<p:selectOneMenu
+										value="#{overallPerReport.selectedClassSection}" filter="true"
+										required="true"
+										requiredMessage="#{searchStudentVar.searchStudentSelectClassValidation}">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{overallPerReport.classSection}"></f:selectItems>
+
+										<p:ajax update="sectionid,termid"
+											listener="#{overallPerReport.allSections}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Select Section" for="@next"
+										style="color:red"></p:outputLabel>
+									<p:selectOneMenu id="sectionid"
+										value="#{overallPerReport.selectedSection}" filter="true"
+										required="true" requiredMessage="Please select a section">
+										<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+										<f:selectItems value="#{overallPerReport.sectionList}"></f:selectItems>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Type of Area" for="@next"
+										style="color:red"></p:outputLabel>
+									<p:selectOneMenu required="true"
+										requiredMessage="Please select type of area" filter="true"
+										value="#{overallPerReport.subjectType}">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{overallPerReport.subjectTypeList}"></f:selectItems>
+									</p:selectOneMenu>
+
+									<p:outputLabel for="@next" style="color:red"
+										value="Select Term"></p:outputLabel>
+									<p:selectManyCheckbox id="termid"
+										value="#{overallPerReport.selectedTerm}" layout="responsive"
+										columns="2" required="true"
+										requiredMessage="Please Select Term" styleClass="form-group">
+										<f:selectItems value="#{overallPerReport.termNewList}"></f:selectItems>
+									</p:selectManyCheckbox>
+								</p:panelGrid>
+								<br />
+								<p:separator />
+								<center>
+									<p:panelGrid columns="3" layout="grid"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+
+
+										<p:commandButton value="Print" ajax="false" icon="fa fa-print"
+											styleClass="butwid"
+											actionListener="#{overallPerReport.printReport}"
+											onclick="target='_blank'"></p:commandButton>
+										<p:commandButton value="Search" update=":form3"
+											icon="fa fa-search" styleClass="butwid"
+											actionListener="#{overallPerReport.searchReport}"></p:commandButton>
+										<h:commandLink>
+											<p:graphicImage name="images/excellogo.png"
+												library="avalon-layout" width="100" height="40"></p:graphicImage>
+											<pe:exporter type="xlsx" target=":form3:dtb2"
+												postProcessor="#{overallPerReport.toNum}"
+												fileName="Student_Overall_Performance_Report"></pe:exporter>
+										</h:commandLink>
+
+									</p:panelGrid>
+								</center>
+								<p:separator />
+								<br />
+
+							</p:panel>
+
+						</h:form>
+						<h:form id="form3">
+							<p:panel>
+								<p:dataTable id="dtb" rendered="#{overallPerReport.show}"
+									style="font-size:10px !important;" reflow="true" var="var"
+									value="#{overallPerReport.studentList}" rowIndexVar="index">
+									<f:facet name="header">
+										<p:panelGrid columns="3">
+											<p:outputLabel value="Class :- #{overallPerReport.className}"></p:outputLabel>
+											<p:outputLabel
+												value="Section :- #{overallPerReport.sectionName}"></p:outputLabel>
+										</p:panelGrid>
+									</f:facet>
+									<p:columnGroup type="header">
+										<p:row>
+											<p:column rowspan="1" headerText="S.No." />
+											<p:column rowspan="1" headerText="Student Name"
+												style="width: 120px !important;" />
+											<ui:repeat value="#{overallPerReport.termList}" var="term">
+												<p:column colspan="#{term.subjectList.size()}"
+													headerText="#{term.termName}" />
+											</ui:repeat>
+										</p:row>
+										<p:row>
+											<p:column rowspan="1" headerText="" />
+											<p:column rowspan="1" headerText="" />
+											<ui:repeat value="#{overallPerReport.termList}" var="term">
+												<ui:repeat value="#{term.subjectList}" var="subject">
+													<p:column headerText="#{subject.subjectName}" />
+												</ui:repeat>
+											</ui:repeat>
+										</p:row>
+									</p:columnGroup>
+
+									<p:column>
+										<p:outputLabel value="#{index+1}"></p:outputLabel>
+									</p:column>
+									<p:column sortBy="#{var.fname}" style="width: 120px !important">
+										<p:outputLabel value="#{var.fname}"></p:outputLabel>
+									</p:column>
+
+									<p:columns value="#{overallPerReport.scholasticColumnsList}"
+										var="ll">
+										<center>
+											<p:outputLabel value="#{var.marksMap[ll]}" />
+										</center>
+									</p:columns>
+								</p:dataTable>
+
+
+								<p:dataTable id="dtb2" 
+									style="font-size:10px !important;display:none;" reflow="true" var="var"
+									value="#{overallPerReport.studentList}" rowIndexVar="index">
+									<f:facet name="header">
+										<p:panelGrid columns="3">
+											<p:outputLabel
+												value="Class :- #{overallPerReport.className} "></p:outputLabel>
+											<p:outputLabel
+												value=" Section :- #{overallPerReport.sectionName}"></p:outputLabel>
+										</p:panelGrid>
+									</f:facet>
+
+									<p:columnGroup type="header">
+										<p:row>
+
+										</p:row>
+										<p:row>
+
+										</p:row>
+									</p:columnGroup>
+
+									<p:column>
+										<p:outputLabel value="#{index+1}"></p:outputLabel>
+									</p:column>
+									<p:column sortBy="#{var.fname}" style="width: 120px !important">
+										<p:outputLabel value="#{var.fname}"></p:outputLabel>
+									</p:column>
+
+									<p:columns value="#{overallPerReport.scholasticColumnsList}"
+										var="ll">
+										<p:outputLabel value="#{var.marksMap[ll]}" />
+									</p:columns>
+								</p:dataTable>
+
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

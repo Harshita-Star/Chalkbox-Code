@@ -1,0 +1,104 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	<f:loadBundle var="addClassVar" basename="myProperties" />
+
+	<ui:define name="title">Courseware Stock</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+					 <h:form id="form" >
+			
+				     
+            		<p:panel header="Courseware Stock Report" id="main">
+            		
+            		
+            		<p:dataTable  reflow="true" var="var" value="#{coursewareStock.stockList}" >
+            			
+            			<p:column headerText="S.No." style="width:60px">
+            				<p:outputLabel value="#{var.sNo}"></p:outputLabel>
+            			</p:column>
+            			
+            			<p:column headerText="Courseware Name">
+            				<p:outputLabel value="#{var.bookName}"></p:outputLabel>
+            			</p:column>
+            			
+            			<p:column headerText="Subject">
+            				<p:outputLabel value="#{var.subjectName}"></p:outputLabel>
+            			</p:column>
+            			
+            			<p:column headerText="Total Quantity">
+            				<p:outputLabel value="#{var.inQuant}"></p:outputLabel>
+            			</p:column>
+            			
+            			<p:column headerText="Assigned Quantity">
+            				<p:commandLink value="#{var.outQuant}" action="#{coursewareStock.showDetails}" oncomplete="PF('addDialog').show();" update=":form,:addForm">
+            				<f:setPropertyActionListener value="#{var}" target="#{coursewareStock.selected}"></f:setPropertyActionListener>
+            				</p:commandLink>
+            			</p:column>
+            			
+            			<p:column headerText="Final Balance">
+            				<p:outputLabel value="#{var.stockInHand}"></p:outputLabel>
+            			</p:column>
+            			
+            		</p:dataTable>
+            		            		
+            		</p:panel>
+            		
+			</h:form>
+			
+			<h:form id="addForm">
+				<p:dialog header="Assigned Courseware Details" widgetVar="addDialog"
+					modal="true" showEffect="explode" hideEffect="explode"
+					resizable="false" closable="true" >
+					
+					<p:dataTable id="admdt" value="#{coursewareStock.assignList}"
+						var="var" style="width:100%">
+						<p:column headerText="S.No.">
+							<p:outputLabel value="#{var.sNo}"></p:outputLabel>
+						</p:column>
+
+						<p:column headerText="Courseware Name">
+							<p:outputLabel value="#{var.bookName}"></p:outputLabel>
+						</p:column>
+
+						<p:column headerText="Student Name">
+							<p:outputLabel value="#{var.studentName}"></p:outputLabel>
+						</p:column>
+						
+						<p:column headerText="Student Sr.No.">
+							<p:outputLabel value="#{var.srNo}"></p:outputLabel>
+						</p:column>
+						
+						<p:column headerText="Class">
+							<p:outputLabel value="#{var.className}"></p:outputLabel>
+						</p:column>
+						
+						<p:column headerText="Contact No.">
+							<p:outputLabel value="#{var.mobile}"></p:outputLabel>
+						</p:column>
+						
+						<p:column headerText="Assign Date">
+							<p:outputLabel value="#{var.assignDateStr}"></p:outputLabel>
+						</p:column>
+						
+					</p:dataTable>
+					
+				</p:dialog>
+			</h:form>
+							
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

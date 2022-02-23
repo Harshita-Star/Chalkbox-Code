@@ -1,0 +1,66 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:pu="http://primefaces.org/avalon">
+
+    <div class="topbar clearfix">
+    <h:form>
+        <div class="topbar-left">            
+            <p:graphicImage name="images/logo.png" library="avalon-layout" styleClass="topbar-logo"/>
+        </div>
+        
+        <div class="topbar-right">
+            <a id="menu-button" href="#">
+                <i class="fa fa-angle-left"></i>
+            </a>
+            
+            <a id="topbar-menu-button" href="#">
+                <i class="fa fa-bars"></i>
+            </a>
+            <ul class="topbar-items fadeInDown animated">
+                <ui:fragment rendered="#{guestPreferences.profileMode == 'overlay'||guestPreferences.menuLayout == 'menu-layout-static menu-layout-horizontal'}">
+                    <li class="profile-item">
+                        <a href="#">                            
+                            <p:graphicImage name="images/avatar.png" library="avalon-layout" styleClass="profile-image" style="border: 0 none"/>
+                            <span class="topbar-item-name">Chalkbox</span>
+                            <span class="topbar-item-role">Master Admin</span>
+                        </a>
+                        
+                        <ul class="layout-menu animated">
+                            <li role="menuitem">
+                                <a href="#">
+                                    <i class="fa fa-fw fa-user"></i>
+                                    <span>Profile</span>
+                                </a>
+                            </li>
+                            <li role="menuitem">
+                                <a href="#">
+                                    <i class="fa fa-fw fa-user-secret"></i>
+                                    <span>Privacy</span>
+                                </a>
+                            </li>
+                            <li role="menuitem">
+                                <a href="#">
+                                    <i class="fa fa-fw fa-cog"></i>
+                                    <span>Settings</span>
+                                </a>
+                            </li>
+                            <li role="menuitem">
+                                <a href="#">
+                                    <i class="fa fa-fw fa-sign-out"></i>
+                                    <span>Logout</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ui:fragment>
+                
+            </ul>
+        </div>
+        </h:form>
+    </div>
+
+</ui:composition>

@@ -1,0 +1,203 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Transaction</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form1" style="overflow:hidden">
+						<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+							<p:panel header="Add Transaction">
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+
+									<p:outputLabel value="Select Account"></p:outputLabel>
+									<p:autoComplete placeholder="Select Account" scrollHeight="250"
+										value="#{addTransactionDetails.accountName}"
+										forceSelection="true"
+										completeMethod="#{addTransactionDetails.completeText}" validatorMessage="Please Enter Correct value">
+										<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+										<p:ajax event="query" global="false"></p:ajax>
+									</p:autoComplete>
+									<p:outputLabel value="Select Transaction Type :"></p:outputLabel>
+									<p:selectOneMenu value="#{addTransactionDetails.billType}" filter="true">
+										<f:selectItem itemLabel="Select Transaction Type" itemValue=""></f:selectItem>
+										<f:selectItem itemLabel="Submit A bill" itemValue="bill"></f:selectItem>
+										<f:selectItem itemLabel="Transaction" itemValue="cash"></f:selectItem>
+										<p:ajax listener="#{addTransactionDetails.checkBillType}"
+											update="form1:op1,form1:ol"></p:ajax>
+									</p:selectOneMenu>
+								</p:panelGrid>
+
+								<br />
+
+								<p:outputPanel id="op1">
+									<p:panelGrid columns="4"
+										columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+										layout="grid" styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+										<p:outputLabel value="Select Transcation Type :"
+											rendered="#{addTransactionDetails.billRender}"></p:outputLabel>
+										<p:selectOneRadio value="#{addTransactionDetails.creditType}"
+											rendered="#{addTransactionDetails.billRender}">
+											<f:selectItem itemLabel="Cr" itemValue="cr"></f:selectItem>
+											<f:selectItem itemLabel="Dr" itemValue="Dr"></f:selectItem>
+											<p:ajax global="false"></p:ajax>
+										</p:selectOneRadio>
+
+										<p:outputLabel value="Enter Amount :"
+											rendered="#{addTransactionDetails.billRender}" />
+										<p:inputText value="#{addTransactionDetails.amount}"
+											onfocus="this.select();"
+											rendered="#{addTransactionDetails.billRender}">
+											<p:keyFilter mask="pnum"></p:keyFilter>
+										</p:inputText>
+
+										<p:outputLabel value="Description :"
+											rendered="#{addTransactionDetails.billRender}"></p:outputLabel>
+										<p:inputTextarea value="#{addTransactionDetails.description}"
+											rendered="#{addTransactionDetails.billRender}" validatorMessage="Please Enter Correct value">
+										  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+										</p:inputTextarea>
+										<p:outputLabel value="Date:" for="@next" style="color:red" 
+											rendered="#{addTransactionDetails.billRender}" />
+										<p:calendar rendered="#{addTransactionDetails.billRender}"
+											readonlyInput="true" disabled="#{welcome.disableDate}"
+											value="#{addTransactionDetails.currentDate}" effect="fold"
+											pattern="dd/MM/yyyy" navigator="true" yearRange="c-30:c+30"
+											required="true" requiredMessage="Please Enter Date">
+											<p:ajax event="dateSelect"></p:ajax>
+										</p:calendar>
+
+										<p:outputLabel value="Payment Mode: " for="@next" style="color:red" 
+											rendered="#{addTransactionDetails.billRender}" />
+										<p:selectOneMenu id="pmd"
+											value="#{addTransactionDetails.paymentMode}" required="true"
+											requiredMessage="Please Select Payment Mode"
+											rendered="#{addTransactionDetails.billRender}">
+											<f:selectItem itemLabel="Select" itemValue="" />
+											<f:selectItem itemLabel="Cash" itemValue="cash" />
+											<f:selectItem itemLabel="Cheque" itemValue="cheque" />
+											<p:ajax listener="#{addTransactionDetails.chequeRender}"
+												update="form1:ol"></p:ajax>
+										</p:selectOneMenu>
+
+									</p:panelGrid>
+
+									<br />
+
+									<p:panelGrid columns="4" id="new"
+										columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+										layout="grid" styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+										<p:outputLabel value="Select Transcation Type :"
+											rendered="#{addTransactionDetails.billRenderOther}"></p:outputLabel>
+										<p:selectOneRadio value="#{addTransactionDetails.creditType}"
+											rendered="#{addTransactionDetails.billRenderOther}">
+											<f:selectItem itemLabel="Cr" itemValue="cr"></f:selectItem>
+											<f:selectItem itemLabel="Dr" itemValue="Dr"></f:selectItem>
+											<p:ajax global="false"></p:ajax>
+										</p:selectOneRadio>
+
+										<p:outputLabel value="Enter Amount :"
+											rendered="#{addTransactionDetails.billRenderOther}" />
+										<p:inputText value="#{addTransactionDetails.amount}"
+											onfocus="this.select();"
+											rendered="#{addTransactionDetails.billRenderOther}">
+											<p:keyFilter mask="pnum"></p:keyFilter>
+										</p:inputText>
+
+										<p:outputLabel value="Description :"
+											rendered="#{addTransactionDetails.billRenderOther}"></p:outputLabel>
+										<p:inputTextarea value="#{addTransactionDetails.description}"
+											rendered="#{addTransactionDetails.billRenderOther}" validatorMessage="Please Enter Correct value">
+										  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+										</p:inputTextarea>
+
+										<p:outputLabel value="Date:" for="@next" style="color:red" 
+											rendered="#{addTransactionDetails.billRenderOther}" />
+										<p:calendar
+											rendered="#{addTransactionDetails.billRenderOther}"
+											readonlyInput="true" disabled="#{welcome.disableDate}"
+											value="#{addTransactionDetails.currentDate}" effect="fold"
+											pattern="dd/MM/yyyy" navigator="true" yearRange="c-30:c+30"
+											required="true" requiredMessage="Please Enter Date">
+											<p:ajax event="dateSelect"></p:ajax>
+										</p:calendar>
+
+									</p:panelGrid>
+								</p:outputPanel>
+
+								<br />
+
+								<p:outputPanel id="ol">
+									<p:panelGrid columns="4"
+										columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+										layout="grid" styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+										<p:outputLabel value="Cheque No.: " id="l1" for="@next" style="color:red" 
+											rendered="#{addTransactionDetails.chequeRen}" />
+										<p:inputText id="l5" value="#{addTransactionDetails.chequeNo}"
+											required="true" requiredMessage="Please Enter Cheque No."
+											rendered="#{addTransactionDetails.chequeRen}" validatorMessage="Please Enter Correct value">
+											<p:ajax global="false"></p:ajax>
+											<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+										</p:inputText>
+
+										<p:outputLabel value="Cheque Date: " id="l2" for="@next" style="color:red" 
+											rendered="#{addTransactionDetails.chequeRen}" />
+										<p:calendar id="l6" readonlyInput="true"
+											value="#{addTransactionDetails.chequeDate}" effect="fold"
+											pattern="dd/MM/yyyy" navigator="true" yearRange="c-30:c+30"
+											required="true" requiredMessage="Please Enter Cheque Date"
+											rendered="#{addTransactionDetails.chequeRen}">
+											<p:ajax event="dateSelect"></p:ajax>
+										</p:calendar>
+
+										<p:outputLabel value="IFSC Code : " id="l3"
+											rendered="#{addTransactionDetails.chequeRen}" />
+										<p:inputText id="l7" value="#{addTransactionDetails.ifscCode}"
+											rendered="#{addTransactionDetails.chequeRen}" validatorMessage="Please Enter Correct value">
+											<p:ajax global="false"></p:ajax>
+											<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+										</p:inputText>
+
+										<p:outputLabel value="Bank Name" id="l4"
+											rendered="#{addTransactionDetails.chequeRen}"  for="@next" style="color:red" ></p:outputLabel>
+										<p:selectOneMenu id="l8" filter="true"
+											value="#{addTransactionDetails.bankName}"
+											rendered="#{addTransactionDetails.chequeRen}" required="true"
+											requiredMessage="Please Select Submitted To Bank.">
+											<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+											<f:selectItems value="#{addTransactionDetails.bankList}"></f:selectItems>
+											<p:ajax global="false"></p:ajax>
+										</p:selectOneMenu>
+									</p:panelGrid>
+
+								</p:outputPanel>
+								<br />
+								<center>
+								<p:commandButton value="Submit" style="width:150px;"
+									action="#{addTransactionDetails.insertDetails}" update="form1" /></center>
+							</p:panel>
+
+
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

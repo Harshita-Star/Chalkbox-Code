@@ -1,0 +1,290 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	<f:loadBundle var="addClassVar" basename="myProperties" />
+	<ui:define name="title">Add News</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form1" enctype="multipart/form-data">
+							<h1>News</h1>
+							<p:messages autoUpdate="true" closable="true"></p:messages>
+							<p:outputPanel id="allStudentDatatable">
+
+								<p:panel>
+									<f:facet name="header">
+										
+										<span>Add News (Allowed file type are :- jpg,jpeg,png,gif,pdf,doc,docx)</span>
+									<span> <p:commandLink
+											style="float: right;margin-left: 15px;;color: blue;font-size:15px;"
+											immediate="true" value="Add News Student Wise"
+											action="addStudentWiseNews.xhtml?faces-redirect=true"></p:commandLink>
+									</span>
+										
+									</f:facet>
+
+									<p:panelGrid id="myPanel" columns="3"
+										columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+										layout="grid" styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+
+										<p:outputLabel value="News For"></p:outputLabel>
+										<p:selectOneRadio value="#{addNews.type}">
+											<f:selectItem itemLabel="All Classes" itemValue="all"></f:selectItem>
+											<f:selectItem itemLabel="Class Wise" itemValue="classwise"></f:selectItem>
+											<p:ajax listener="#{addNews.checkType}" update=":form:dt"></p:ajax>
+										</p:selectOneRadio>
+										<p:outputLabel></p:outputLabel>
+
+										<p:outputLabel value="Attachment (If Any)"></p:outputLabel>
+										<p:fileUpload value="#{addNews.file}" mode="advanced"
+											uploadLabel="" cancelLabel="" style="width:-moz-min-content"
+											sizeLimit="5000000" fileLimit="1"
+											allowTypes="/(\.|\/)(gif|jpe?g|png|pdf|doc|docx|xls|xlsx)$/"
+											listener="#{addNews.fileUpload}" auto="true"
+											update="senfl" />
+										<p:outputPanel id="senfl">
+											<p:commandLink action="#{addNews.viewFile(addNews.fileUrl)}"
+												value="View Attachment"
+												rendered="#{addNews.fileUrl ne 'NA'}" immediate="true" />
+										</p:outputPanel>
+
+									</p:panelGrid>
+								</p:panel>
+							</p:outputPanel>
+						</h:form>
+
+
+						<h:form id="form">
+							<script src="pramukhime.js"></script>
+							<script src="pramukhindic.js"></script>
+							<script src="pramukhime-common.js"></script>
+							<h:inputHidden id="text" value="#{sendMessage.language}"></h:inputHidden>
+							<p:outputPanel id="langPnl">
+								<p:panel>
+									<p:panelGrid id="myPanel" columns="2"
+										columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+										layout="grid" styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+										<p:outputLabel
+											rendered="#{sideMenuBean.list.country eq 'India'}"
+											value="Choose Language : "></p:outputLabel>
+										<p:selectOneButton id="lang"
+											rendered="#{sideMenuBean.list.country eq 'India'}"
+											style="width: 250px;" value="#{addNews.language}">
+											<f:selectItem itemLabel="English" itemValue="english" />
+											<f:selectItem itemLabel="हिन्दी" itemValue="hindi" />
+											<p:ajax listener="#{addNews.checkLanguage}"
+												oncomplete="javascript:changeLanguage3('form:text','true','form:transliterateDiv')"
+												update="langPnl,:form:lang"></p:ajax>
+										</p:selectOneButton>
+
+										<p:outputLabel for="@next" style="color:red"
+											rendered="#{addNews.englishShow}" value="Type Message Here"></p:outputLabel>
+										<p:inputTextarea rendered="#{addNews.englishShow}"
+											value="#{addNews.message}" rows="7" cols="30"
+											autoResize="false" style="width:400px !important;"
+											required="true" requiredMessage="Please Write a News to Send"
+											onkeyup="changeColor(this.value)" id="engmsg"
+											onchange="trimFunc(this.value,'Please Section Name',this.id)">
+										</p:inputTextarea>
+
+
+
+										<p:outputLabel for="@next" rendered="#{addNews.hindiShow}"
+											style="color:red" value="यहां संदेश टाइप करें"></p:outputLabel>
+										<p:panelGrid columns="3" rendered="#{addNews.hindiShow}">
+											<p:inputTextarea rendered="#{addNews.hindiShow}"
+												value="#{addNews.message}" rows="7" cols="30"
+												autoResize="false" style="width:400px !important;"
+												required="true"
+												requiredMessage="कृपया भेजने के लिए एक संदेश लिखें"
+												onkeyup="changeColor1(this.value)" id="transliterateDiv">
+												<p:keyFilter preventPaste="true"></p:keyFilter>
+											</p:inputTextarea>
+											<input type="checkbox" id="languagess" name=""
+												value="pramukhindic:hindi" checked="checked"
+												onchange="javascript:changeLanguage2(this.checked,'form:transliterateDiv')"></input>
+
+										</p:panelGrid>
+									</p:panelGrid>
+								</p:panel>
+							</p:outputPanel>
+
+							<br />
+
+							<p:outputPanel id="dt">
+								<p:dataTable rendered="#{addNews.showTable}" reflow="true"
+									selection="#{addNews.selectedClassList}"
+									rowKey="#{var.sectionId}" value="#{addNews.classSectionList}"
+									var="var">
+
+									<p:column selectionMode="multiple"
+										style="width:16px;text-align:center"></p:column>
+
+									<p:column filterBy="#{var.className}"
+										filterMatchMode="contains" style="width:100px"
+										headerText="Class Name">
+										<p:outputLabel value="#{var.className}"></p:outputLabel>
+									</p:column>
+
+									<p:column filterBy="#{var.sectionName}"
+										filterMatchMode="contains" style="width:100px"
+										headerText="Section">
+										<p:outputLabel value="#{var.sectionName}"></p:outputLabel>
+									</p:column>
+
+								</p:dataTable>
+							</p:outputPanel>
+							
+							<br />
+								<p:separator />
+								<center>
+									<p:commandButton styleClass="butwid" icon="fa fa-floppy-o" value="Submit"
+									action="#{addNews.sendMessage}" update=":form :form1 :form2"></p:commandButton>
+								</center>
+								<p:separator />
+								<br />
+						</h:form>
+					</div>
+
+					<div class="card card-w-title">
+						<h:form id="form2">
+							<p:panel rendered="#{addNews.list.size() gt '0'}"
+								header="View News">
+
+								<p:dataTable reflow="true" value="#{addNews.list}" var="var">
+
+									<f:facet name="header">
+										<center>
+											<p:commandButton value="Delete Multiple News" icon="fa fa-trash" styleClass="butwid-1 redButt"
+												action="#{addNews.deleteMultiple}" update=":form2"
+												></p:commandButton>
+										</center>
+									</f:facet>
+
+									<p:column style="width:60px" headerText="Select">
+										<p:selectBooleanCheckbox value="#{var.selection}" />
+									</p:column>
+
+									<p:column headerText="S.No.">
+										<p:outputLabel value="#{var.sno}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Date" filterBy="#{var.dateStr}">
+										<p:outputLabel value="#{var.dateStr}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="News">
+										<p:outputLabel value="#{var.news}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="For Class" filterBy="#{var.showClass}">
+										<p:outputLabel value="#{var.showClass}"></p:outputLabel>
+									</p:column>
+
+									<p:column rendered="false" headerText="Edit">
+										<p:commandButton update=":editForm"
+											oncomplete="PF('editDialog').show();" icon="ui-icon-pencil"
+											action="#{addNews.editActivityDetails}">
+											<f:setPropertyActionListener
+												target="#{addNews.selectedActivity}" value="#{var}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+
+									<p:column headerText="Attachment">
+										<p:commandButton rendered="#{var.fileName ne 'NA'}"
+											value="View" icon="fa fa-fw fa-paperclip"
+											action="#{addNews.view1}">
+											<f:setPropertyActionListener
+												target="#{addNews.selectedActivity}" value="#{var}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+
+									<p:column headerText="Delete">
+										<p:commandButton update=":form2"
+											oncomplete="PF('dlg').show();" icon="ui-icon-trash" styleClass="redButt">
+											<f:setPropertyActionListener
+												target="#{addNews.selectedActivity}" value="#{var}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+
+									<f:facet name="footer">
+										<center>
+											<p:commandButton value="Delete Multiple News" styleClass="butwid-1 redButt" icon="fa fa-trash"
+												action="#{addNews.deleteMultiple}" update=":form2"
+												></p:commandButton>
+										</center>
+									</f:facet>
+								</p:dataTable>
+
+								<p:dialog resizable="false" widgetVar="dlg"
+									header="Do you really want to delete this news"
+									showEffect="fade" hideEffect="explode" modal="true">
+									<div class="ui-g form-group">
+										<p:panelGrid columns="2"
+											styleClass="ui-panelgrid-blank form-group"
+											style="border:0px none; background-color:transparent;">
+											<p:commandButton update=":form2"
+												actionListener="#{addNews.deleteNow}" value="Yes" styleClass="greenButt"></p:commandButton>
+											<p:commandButton value="No" update=":form2" styleClass="redButt"
+												oncomplete="PF('dlg').hide();"></p:commandButton>
+										</p:panelGrid>
+									</div>
+								</p:dialog>
+
+							</p:panel>
+						</h:form>
+						<h:form id="editForm">
+							<p:dialog restyle="height:500px;" resizable="false"
+								widgetVar="editDialog" header="Edit Details" showEffect="fade"
+								hideEffect="explode" modal="true">
+								<div class="ui-g form-group">
+									<p:panelGrid columns="2"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+
+										<p:outputLabel for="@next" style="color:red" value="News:"></p:outputLabel>
+										<p:inputTextarea value="#{addNews.message}" required="true"
+											requiredMessage="Please Enter Message" rows="3" cols="20"></p:inputTextarea>
+									</p:panelGrid>
+								</div>
+								<br />
+								<p:separator />
+								<center>
+										<p:commandButton update=":editForm,:form,:form2" styleClass="butwid" icon="fa fa-floppy-o"
+											actionListener="#{addNews.editNow}" value="Save Here"></p:commandButton>
+								</center>
+								<p:separator />
+								<br />
+							</p:dialog>
+						</h:form>
+
+						<h:form id="HindiForm" style="overflow:hidden">
+							<p:dialog header="NOTIFICATION" width="500" widgetVar="hindiDi"
+								modal="true" showEffect="fade" hideEffect="fade"
+								resizable="false">
+								<center>
+									<p:outputLabel
+										value="Hindi Message Feature is Temporarily Unavailable"
+										style="font-size:14px;font-weight: bold;" />
+								</center>
+								<br></br>
+
+							</p:dialog>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

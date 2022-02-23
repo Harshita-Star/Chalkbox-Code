@@ -1,0 +1,146 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Edit Stop</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<h1>Edit/Delete Route Stop</h1>
+
+
+							<p:panel header="Edit Route Stop" id="panel">
+
+								<p:messages closable="true" autoUpdate="true"></p:messages>
+
+								<p:panelGrid id="pGrid" columns="2" styleClass="form-group" style="border:0px none; background-color:transparent;">
+									<p:dataTable reflow="true" rowKey="#{var.id}"
+										value="#{editRoute.routeStopList}" var="var">
+										<f:facet name="header">
+										All Stop
+									</f:facet>
+										
+										<p:column headerText="Serial Number">
+											<p:outputLabel value="#{var.serialNumber}"></p:outputLabel>
+										</p:column>
+										<p:column headerText="Route Name" filterBy="#{var.routeName}">
+											<p:outputLabel value="#{var.routeName}"></p:outputLabel>
+										</p:column>
+
+
+										<p:column sortBy="#{var.stopName}" filterBy="#{var.stopName}"
+											headerText="Stop">
+											<p:outputLabel value="#{var.stopName}"></p:outputLabel>
+										</p:column>
+										<p:column headerText="Delete">
+										<center>
+										<p:commandButton update=":form" styleClass="redButt butwid"
+												oncomplete="PF('dlg').show();" icon="ui-icon-trash">
+												<f:setPropertyActionListener target="#{editRoute.list}"
+													value="#{var}"></f:setPropertyActionListener>
+											</p:commandButton>
+										</center>
+										</p:column>
+										<p:column headerText="Edit">
+										<center>
+										<p:commandButton update=":form"  styleClass="butwid"
+												action="#{editRoute.editSeletedRow}" icon="ui-icon-pencil">
+												<f:setPropertyActionListener target="#{editRoute.list}"
+													value="#{var}"></f:setPropertyActionListener>
+											</p:commandButton>
+										</center>
+										</p:column>
+									</p:dataTable>
+									
+									<p:panelGrid rendered="#{editRoute.editDetailsShow}"
+										columns="2" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+										<p:outputLabel value="Transport Route" for="@next" style="color:red" ></p:outputLabel>
+										<p:selectOneMenu disabed="true"
+											value="#{editRoute.selectedRoute}" required="true"
+											requiredMessage="Please select transport route">
+											<f:selectItem itemLabel="Select here" itemValue=""></f:selectItem>
+											<f:selectItems value="#{editRoute.routeList}"></f:selectItems>
+										</p:selectOneMenu>
+										<p:outputLabel value="Stop Name" for="@next" style="color:red" ></p:outputLabel>
+										<p:inputText value="#{editRoute.stopName}" required="true"
+											requiredMessage="Please enter stop Name" id="stpnm" onchange="trimFunc(this.value,'Please Section Name',this.id)" validatorMessage="Please Enter Correct value">
+										  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+										</p:inputText>
+											
+										<p:outputLabel rendered="#{editRoute.showAmount}"  for="@next" style="color:red" value="Amount"></p:outputLabel>
+										<p:inputText rendered="#{editRoute.showAmount}"  value="#{editRoute.amount}" required="true"
+											requiredMessage="Please enter amount">
+											<p:keyFilter mask="num" />
+										</p:inputText>
+										
+										<p:outputLabel rendered="#{editRoute.showCategory}" value="Category"></p:outputLabel>
+										<p:selectOneMenu rendered="#{editRoute.showCategory}"  value="#{editRoute.categoryId}">
+											<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+											<f:selectItems value="#{editRoute.categoryList}"></f:selectItems>
+										</p:selectOneMenu>
+<p:commandButton oncomplete="PF('dlgUpdate').show()"  styleClass="butwid" icon="fa fa-floppy-o"
+											update=":dialogForm" action="#{editRoute.monthDetails}"
+											value="Save Here"></p:commandButton>
+									</p:panelGrid>
+									
+								</p:panelGrid>
+							</p:panel>
+							<p:dialog resizable="false" widgetVar="dlg"
+								header="Do you really want to delete this stop?"
+								showEffect="fade" hideEffect="explode" modal="true">
+								<div class="ui-g form-group">
+									<p:panelGrid columns="2"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+										<p:commandButton update=":form"
+											actionListener="#{editRoute.deleteNow}" styleClass="greenButt"
+											oncomplete="PF('dlg').hide();" value="Yes"></p:commandButton>
+										<p:commandButton value="No" update=":form" styleClass="redButt"
+											oncomplete="PF('dlg').hide();"></p:commandButton>
+									</p:panelGrid>
+								</div>
+							</p:dialog>
+						</h:form>
+
+						<h:form id="dialogForm">
+
+							<p:dialog resizable="false" widgetVar="dlgUpdate"
+								header="Enter Details" showEffect="fade" hideEffect="explode"
+								modal="true">
+								<div class="ui-g form-group">
+									<p:panelGrid columns="2"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+
+										<p:outputLabel value="Update From"></p:outputLabel>
+										<p:selectOneMenu value="#{editRoute.selectedMonth}">
+											<f:selectItem itemLabel="Update For Whole Session"
+												itemValue="-1"></f:selectItem>
+											<f:selectItems value="#{editRoute.monthList}"></f:selectItems>
+
+										</p:selectOneMenu>
+
+										<p:commandButton update=":form:panel,:dialogForm"
+											actionListener="#{editRoute.updateNow}"
+											value="Confirm Update"></p:commandButton>
+
+									</p:panelGrid>
+								</div>
+							</p:dialog>
+
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,96 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/schoolMasterTemplate.xhtml">
+	<f:loadBundle var="addClassVar" basename="myProperties" />
+	<ui:define name="title">Fee Paid Report</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<h1></h1>
+
+							<p:panel header="Fee Paid Report">
+								<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+								<p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+								
+									<p:outputLabel for="@next" style="color:red"  value="Select School"></p:outputLabel>
+						  <p:selectOneMenu value="#{blmFeePaidReportBean.selectedSchool}"
+							required="true" requiredMessage="Please select a school">
+							<f:selectItem itemLabel="All" itemValue="-1"></f:selectItem>
+							<f:selectItems value="#{blmFeePaidReportBean.branchList}"></f:selectItems>
+
+							<p:ajax listener="#{blmFeePaidReportBean.branchWiseWork}"
+								update="form"></p:ajax>
+						</p:selectOneMenu>
+						
+						<p:outputLabel/><p:outputLabel/>
+						
+						<p:outputLabel rendered="#{blmFeePaidReportBean.showClass}" value="Select a Class"></p:outputLabel>
+						<p:selectOneMenu rendered="#{blmFeePaidReportBean.showClass}" value="#{blmFeePaidReportBean.selectedClass}">
+							<f:selectItem itemLabel="All" itemValue="-1"></f:selectItem>
+							<f:selectItems value="#{blmFeePaidReportBean.classList}"></f:selectItems>
+							<p:ajax update="sectionid"
+								listener="#{blmFeePaidReportBean.allSections}"></p:ajax>
+						</p:selectOneMenu>
+
+						<p:outputLabel rendered="#{blmFeePaidReportBean.showClass}" value="Select Section"></p:outputLabel>
+						<p:selectOneMenu rendered="#{blmFeePaidReportBean.showClass}" id="sectionid"
+							value="#{blmFeePaidReportBean.selectedSection}">
+							<f:selectItem itemLabel="All" itemValue="-1"></f:selectItem>
+							<f:selectItems value="#{blmFeePaidReportBean.sectionList}"></f:selectItems>
+						</p:selectOneMenu>
+						 <p:commandButton value="Submit" actionListener="#{blmFeePaidReportBean.searchReport}" update=":form"></p:commandButton>
+								
+								 <p:commandButton value="pdf" ajax="false" process="@this" actionListener="#{blmFeePaidReportBean.exportFeeEstimatePdf}">
+                   
+          <p:fileDownload value="#{blmFeePaidReportBean.file}"/>
+         </p:commandButton>
+            <h:commandLink >
+                                        <p:graphicImage name="images/excellogo.png"
+                                            library="avalon-layout" width="100" height="40"></p:graphicImage>
+                                        <pe:exporter type="xlsx" target="table"
+                                            fileName=" Fee_Estimate_Report" ></pe:exporter>
+                                    </h:commandLink>
+								</p:panelGrid>
+							</p:panel>
+							<p:panel>
+								<p:dataTable id="table" rowIndexVar="index" value="#{blmFeePaidReportBean.feeEstimateList}" var="var">
+										<f:facet name="header">
+											<p:outputLabel value=""></p:outputLabel>
+									
+									</f:facet>
+									<p:column headerText="Installment">
+									<f:facet name="header">
+											<p:outputLabel value="Installment"></p:outputLabel>
+									
+									</f:facet>
+										<p:outputLabel value="#{var.installmentName}"></p:outputLabel>
+									</p:column>
+									
+									<p:columns value="#{blmFeePaidReportBean.feeInfo}" var="column" columnIndexVar="colIndex">
+										<f:facet name="header">
+											<p:outputLabel value="#{column.feeName} "></p:outputLabel>
+										</f:facet>
+
+										<p:outputLabel value=" #{var.feeMap[column.feeName]}"></p:outputLabel>
+
+									</p:columns>
+								</p:dataTable>
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

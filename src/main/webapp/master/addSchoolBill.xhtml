@@ -1,0 +1,78 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/masterTemplate.xhtml">
+
+	<ui:define name="title">Add Bill</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form" enctype="multipart/form-data">
+
+							<p:panel header="Add Bill ">
+
+								<p:messages closable="true" autoUpdate="true"></p:messages>
+
+								<p:panelGrid columns="2"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+
+									<p:outputLabel for="@next" style="color:red" value="Select School"></p:outputLabel>
+									<p:selectOneMenu filter="true" value="#{addSchoolBill.schNm}"
+										required="true" requiredMessage="Please Select School">
+										<f:selectItem itemLabel="Select School" itemValue=""></f:selectItem>
+										<f:selectItems value="#{addSchoolBill.schoolList}"></f:selectItems>
+									</p:selectOneMenu>
+
+									<p:outputLabel for="@next" style="color:red" value="Bill no"></p:outputLabel>
+									<p:inputText value="#{addSchoolBill.billNo}" required="true"
+										requiredMessage="Enter Bill No.">
+									</p:inputText>
+
+									<p:outputLabel for="@next" style="color:red" value="Bill Date"></p:outputLabel>
+									<p:calendar value="#{addSchoolBill.billDate}" navigator="true"
+										pattern="dd/MM/yyyy" required="true"
+										requiredMessage="Please Enter Bill Date" mindate="new Date();"
+										readonlyInput="true"></p:calendar>
+
+									<p:outputLabel for="@next" style="color:red" value="Due Date"></p:outputLabel>
+									<p:calendar value="#{addSchoolBill.dueDate}" navigator="true"
+										pattern="dd/MM/yyyy" required="true"
+										requiredMessage="Please Enter Due Date"
+										mindate="#{addSchoolBill.limit}" readonlyInput="true"></p:calendar>
+
+									<p:outputLabel for="@next" style="color:red" value="Amount To Pay"></p:outputLabel>
+									<p:inputText value="#{addSchoolBill.amount}" required="true"
+										requiredMessage="Enter Amount To Pay">
+										<p:keyFilter mask="pnum" />
+									</p:inputText>
+
+									<p:outputLabel for="@next" style="color:red" value="Upload Bill (Only PDF file)"></p:outputLabel>
+									<p:fileUpload required="true"
+										requiredMessage="Please Upload Bill" mode="simple"
+										value="#{addSchoolBill.file}" allowTypes="/(\.|\/)(pdf)$/"
+										invalidFileMessage="Please choose only PDF file"></p:fileUpload>
+
+									<p:commandButton update=":form" ajax="false"
+										action="#{addSchoolBill.add}" value="Add Bill"></p:commandButton>
+
+								</p:panelGrid>
+							</p:panel>
+
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,175 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Edit Subjects</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<h1>Edit/Delete Subjects</h1>
+
+
+							<p:panel header="Edit Subjects" id="panel">
+
+								<p:messages closable="true" autoUpdate="true"></p:messages>
+
+								<h:commandLink>
+									<p:graphicImage name="images/excellogo.png"
+										library="avalon-layout" width="100" height="40"></p:graphicImage>
+									<pe:exporter type="xlsx" target=":form:dt"
+										fileName="subjectsReport"></pe:exporter>
+								</h:commandLink>
+								&#160;&#160;&#160;&#160;
+								
+								<br />
+								<p:separator />
+								<center>
+									<p:commandButton rendered="#{sideMenuBean.renderInSession}" action="#{editSubjects.deleteMultipleNow}" styleClass="butwid-1 redButt" icon="fa fa-trash" update=":form" value="Delete Selected Subjects">
+								</p:commandButton>
+								</center>
+								<p:separator />
+								<br />
+								
+
+								<p:dataTable id="dt" value="#{editSubjects.subjectList}"
+									var="var" selection="#{editSubjects.selectSubjList}"
+									rowKey="#{var.id}" rowSelectMode="add">
+									<f:facet name="header">
+										ALL SUBJECTS
+									</f:facet>
+
+									<p:column selectionMode="multiple" style="width:60px;"></p:column>
+
+									<p:column headerText="S.No.">
+
+										<p:outputLabel value="#{var.serialNumber}"></p:outputLabel>
+
+									</p:column>
+
+									<p:column sortBy="#{var.className}" filterBy="#{var.className}"
+										headerText="Class Name">
+
+										<p:outputLabel value="#{var.className}"></p:outputLabel>
+
+									</p:column>
+
+									<p:column sortBy="#{var.subjectName}"
+										filterBy="#{var.subjectName}" headerText="Subject Name">
+
+										<p:outputLabel value="#{var.subjectName.toUpperCase()}"></p:outputLabel>
+
+									</p:column>
+
+									<p:column sortBy="#{var.subjectType}" headerText="Subject Area">
+
+										<p:outputLabel value="#{var.subjectType.toUpperCase()}"></p:outputLabel>
+
+									</p:column>
+
+									<p:column headerText="Edit">
+										<center>
+										<p:commandButton update=":editForm" styleClass="butwid"
+											oncomplete="PF('editDialog').show();" icon="ui-icon-pencil"
+											action="#{editSubjects.editSubjectDetails}">
+											<f:setPropertyActionListener
+												target="#{editSubjects.selectedSubject}" value="#{var}"></f:setPropertyActionListener>
+										</p:commandButton>
+										</center>
+									</p:column>
+
+									<p:column rendered="#{sideMenuBean.renderInSession}" headerText="Delete">
+										<center>
+										<p:commandButton update=":form" oncomplete="PF('dlg').show();" styleClass="butwid redButt"
+											icon="ui-icon-trash">
+											<f:setPropertyActionListener
+												target="#{editSubjects.selectedSubject}" value="#{var}"></f:setPropertyActionListener>
+										</p:commandButton>
+										</center>
+									</p:column>
+								</p:dataTable>
+								<br/>
+								<p:separator />
+								<center>
+									<p:commandButton action="#{editSubjects.deleteMultipleNow}" styleClass="butwid-1 redButt" icon="fa fa-trash" update=":form" value="Delete Selected Subjects">
+								</p:commandButton>
+								</center>
+								<p:separator />
+								<br />
+								
+								<p:dialog resizable="false" widgetVar="dlg"
+									header="Do you really want to delete this subject"
+									showEffect="fade" hideEffect="explode" modal="true">
+									<div class="ui-g form-group">
+										<p:panelGrid columns="2"
+											styleClass="ui-panelgrid-blank form-group"
+											style="border:0px none; background-color:transparent;">
+
+											<p:commandButton update=":form" styleClass="greenButt" 
+												actionListener="#{editSubjects.deleteNow}" value="Yes"></p:commandButton>
+											<p:commandButton value="No" styleClass="redButt" update=":form"
+												oncomplete="PF('dlg').hide();"></p:commandButton>
+										</p:panelGrid>
+									</div>
+								</p:dialog>
+
+							</p:panel>
+
+						</h:form>
+						<h:form id="editForm">
+							<p:dialog style="height:500px;" resizable="false"
+								widgetVar="editDialog" header="Edit Details" showEffect="fade"
+								hideEffect="explode" modal="true">
+								<div class="ui-g form-group">
+									<p:panelGrid columns="2"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+
+										<p:outputLabel  value="Type of Area"></p:outputLabel>
+										<p:selectOneMenu disabled="#{sideMenuBean.disableInSession}" for="@next" style="color:red" value="#{editSubjects.type}" required="true"
+											requiredMessage="Please select a class">
+											<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+											<f:selectItems value="#{editSubjects.subjectTypeList}"></f:selectItems>
+										</p:selectOneMenu>
+
+										<p:outputLabel value="Add Subject In Exam"></p:outputLabel>
+										<p:selectOneRadio value="#{editSubjects.addInExam}">
+											<f:selectItem itemLabel="Yes" itemValue="yes"></f:selectItem>
+											<f:selectItem itemLabel="No" itemValue="no"></f:selectItem>
+										</p:selectOneRadio>
+
+										<p:outputLabel  for="@next" style="color:red" value="Subject Name"></p:outputLabel>
+										<p:inputText value="#{editSubjects.subjectName}"
+											required="true" requiredMessage="Please enter Subject Name"
+											id="secnm"
+											onchange="trimFunc(this.value,'Please Section Name',this.id)" validatorMessage="Please Enter Correct value">
+										  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+										</p:inputText>
+									</p:panelGrid>
+								</div>
+								<br />
+								<p:separator />
+								<center>
+										<p:commandButton update=":form:panel,:editForm" styleClass="butwid" icon="fa fa-floppy-o"
+											actionListener="#{editSubjects.updateNow}" value="Save Here"></p:commandButton>
+								</center>
+								<p:separator />
+								<br />
+								
+							</p:dialog>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

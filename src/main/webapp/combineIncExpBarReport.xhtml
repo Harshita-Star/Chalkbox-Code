@@ -1,0 +1,71 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	<f:loadBundle var="addClassVar" basename="myProperties" />
+
+	<ui:define name="title">Income/Expense Bar</ui:define>
+
+	<ui:define name="content">
+	<h:form id="form">
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						  
+							<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+							<p:panel header="Income/Expense Report">
+							<p:panelGrid columns="2">
+						   
+						   
+                             <f:facet name="header">
+						    <p:outputLabel value="select type"> </p:outputLabel><br/>
+							<p:outputLabel value="Income"></p:outputLabel>
+						   <p:selectBooleanCheckbox value="#{combineIncExpBarReport.value1}"/>
+						   <p:outputLabel value="Expense"></p:outputLabel>
+						   <p:selectBooleanCheckbox value="#{combineIncExpBarReport.value2}"/>
+					       </f:facet>
+                            
+                            <p:outputLabel value="Report Type"></p:outputLabel>
+							<p:selectOneMenu value="#{combineIncExpBarReport.days}" filter="true">
+							<f:selectItem itemLabel="Custom" itemValue="custom"></f:selectItem>
+							<f:selectItem itemLabel="Last 7 days" itemValue="lastweek"></f:selectItem>
+							<f:selectItem itemLabel="Last 30 days" itemValue="lastmonth"></f:selectItem>
+							<f:selectItem itemLabel="Monthly" itemValue="month"></f:selectItem>
+							<p:ajax update=":form" listener="#{combineIncExpBarReport.custom}" event="itemSelect"></p:ajax>
+						    </p:selectOneMenu>
+							
+							 <p:outputLabel  for="@next" style="color:red" value="startdate:" rendered="#{combineIncExpBarReport.showCustom}" />
+                             <p:calendar value="#{combineIncExpBarReport.stdate}" required="true" requiredMessage="Please select date!" locale="de" navigator="true" pattern="yyyy-MM-dd" rendered="#{combineIncExpBarReport.showCustom}">
+                             </p:calendar>
+                             
+                              <p:outputLabel for="@next" style="color:red"  value="Enddate" rendered="#{combineIncExpBarReport.showCustom}"/>
+                             <p:calendar value="#{combineIncExpBarReport.endate}"  required="true" requiredMessage="Please select date!" locale="de" navigator="true" pattern="yyyy-MM-dd" rendered="#{combineIncExpBarReport.showCustom}">
+                             </p:calendar>
+                             
+                             <p:outputLabel  for="@next" style="color:red" value="Select Year" rendered="#{combineIncExpBarReport.showmonth}"></p:outputLabel>
+                             <p:selectOneMenu value="#{combineIncExpBarReport.year}"  required="true" requiredMessage="Please select date!" rendered="#{combineIncExpBarReport.showmonth}">
+							<f:selectItem itemLabel="Select Year" itemValue=""></f:selectItem>
+							<f:selectItems value="#{combineIncExpBarReport.yearList}"></f:selectItems>
+							</p:selectOneMenu>
+                            
+                            
+                            <f:facet name="footer">
+                            <p:commandButton value="Show" style="margin-left:24px;"  styleClass="butwid" icon="fa fa-eye" update=":form" action="#{combineIncExpBarReport.show}"></p:commandButton>
+                            </f:facet>
+                            </p:panelGrid>
+							<p:chart type="bar" style="height:300px" model="#{combineIncExpBarReport.barmodel1}" rendered="#{combineIncExpBarReport.showBar1}"></p:chart>
+							<p:chart type="bar" style="height:300px" model="#{combineIncExpBarReport.barmodel2}" rendered="#{combineIncExpBarReport.showBar2}" ></p:chart>
+							</p:panel>
+					</div>
+				</div>
+			</div>
+		</div>
+		</h:form>
+
+	</ui:define>
+
+</ui:composition>
+ 

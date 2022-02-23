@@ -1,0 +1,105 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">EYFS Marks Report</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<p:panel header="EYFS Marks Report">
+
+								<p:messages closable="true" autoUpdate="true"></p:messages>
+
+								<p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+									<p:outputLabel value="Select Class" for="@next" style="color:red" ></p:outputLabel>
+									<p:selectOneMenu required="true" filter="true" requiredMessage="Please Select A Class" value="#{eyfs_classSubMarksReport.selectedClass}">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{eyfs_classSubMarksReport.classList}"></f:selectItems>
+										<p:ajax update=":form" listener="#{eyfs_classSubMarksReport.allSection}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Select Section" for="@next" style="color:red" ></p:outputLabel>
+									<p:selectOneMenu id="showSection" filter="true" value="#{eyfs_classSubMarksReport.selectedSection}" required="true" requiredMessage="Please select a section">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{eyfs_classSubMarksReport.sectionList}"></f:selectItems>
+										<p:ajax></p:ajax>
+									</p:selectOneMenu>
+									
+									<p:outputLabel value="Select Age Group" for="@next" style="color:red" ></p:outputLabel>
+									<p:selectOneMenu id="showAgeeGroup" filter="true"
+										value="#{eyfs_classSubMarksReport.selectedAgeGroup}" required="true"
+										requiredMessage="Please select Age Group">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{eyfs_classSubMarksReport.ageGroupList}"></f:selectItems>
+										<p:ajax update=":form"
+											listener="#{eyfs_classSubMarksReport.allMainParaList}"></p:ajax>
+									</p:selectOneMenu>
+									
+									<p:outputLabel value="Select Term" for="@next" style="color:red" ></p:outputLabel>
+									<p:selectOneMenu required="true"  filter="true" requiredMessage="Please select a term" id="showTerm" value="#{eyfs_classSubMarksReport.selectedTerm}">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{eyfs_classSubMarksReport.termList}"></f:selectItems>
+										<p:ajax></p:ajax>
+									</p:selectOneMenu>
+									
+									<p:outputLabel value="Select Main Parameter" for="@next" style="color:red" ></p:outputLabel>
+									<p:selectOneMenu required="true"  filter="true" requiredMessage="Please Select Subject" value="#{eyfs_classSubMarksReport.mainParaId}">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{eyfs_classSubMarksReport.mainParaList}"></f:selectItems>
+										<p:ajax update=":form" listener="#{eyfs_classSubMarksReport.allSubParameter}"></p:ajax>
+									</p:selectOneMenu>
+									
+									<p:commandButton value="Search" actionListener="#{eyfs_classSubMarksReport.searchStudentDetail}" update=":form,:form1" />
+
+									<h:commandLink>
+										<p:graphicImage name="images/excellogo.png" library="avalon-layout" width="100" height="40"></p:graphicImage>
+										<pe:exporter type="xlsx" target=":form1:table" fileName="Class_Marks"></pe:exporter>
+									</h:commandLink>
+								</p:panelGrid>
+							</p:panel>
+							</h:form>
+							<br/>
+							<h:form id="form1">
+							<p:panel header="Student Performance Details" rendered="#{eyfs_classSubMarksReport.renderShowTable}">
+								<p:dataTable id="table" value="#{eyfs_classSubMarksReport.studentDetails}" var="var" >
+								
+									<p:columnGroup type="header">
+										<p:row>
+ 											 <p:column rowspan="1" headerText="S.No." />
+											 <p:column rowspan="1" headerText="Students" />
+							                 <ui:repeat value="#{eyfs_classSubMarksReport.subParaList}" var="mainPara">
+						                    	<p:column colspan="1" headerText="#{mainPara.label}" />
+						               	 	 </ui:repeat>
+										</p:row>
+									</p:columnGroup>
+									<p:column>
+										<p:outputLabel value="#{var.sno}"></p:outputLabel>
+									</p:column>
+
+									<p:column>
+										<p:outputLabel value="#{var.fullName}"></p:outputLabel>
+									</p:column>
+									
+									<p:columns value="#{eyfs_classSubMarksReport.subParaList}" var="ll">
+						            	<center><p:outputLabel value="#{var.marksMap[ll.value]}"  /></center>
+						            </p:columns>
+									
+								</p:dataTable>
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,154 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Fee Collection</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form1">
+							<h1>#{feeCollectionVar.feeCollectionTitle}</h1>
+
+							<p:panel header="Search Student by Name/Sr. No">
+								<p:messages closable="true" autoUpdate="true"></p:messages>
+
+								<p:panelGrid columns="3"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel  for="@next" style="color:red" value="Student Name/Sr. No/Father Name"></p:outputLabel>
+									<p:autoComplete value="#{refundFee.name}"
+										completeMethod="#{refundFee.autoCompleteStudentInfo}"
+										required="true" minQueryLength="3"
+										requiredMessage="#{feeCollectionVar.feeCollectionEnterStudentNameValidation}" validatorMessage="Please Enter Correct value">
+										<p:ajax event="query" global="false"></p:ajax>
+										<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:autoComplete>
+
+									<p:commandButton value="Search" update=":form2"
+										action="#{refundFee.searchStudentByName}"></p:commandButton>
+
+
+								</p:panelGrid>
+
+							</p:panel>
+						</h:form>
+					</div>
+
+					<div class="card card-w-title">
+						<h:form id="form3">
+							<p:panel header="Search Student by Class-Section">
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel  for="@next" style="color:red" value="Select Class"></p:outputLabel>
+									<p:selectOneMenu value="#{refundFee.selectedClassSection}"
+										required="true"
+										requiredMessage="#{feeCollectionVar.feeCollectionSelectClassValidation}">
+										<f:selectItem itemLabel="Select Class" itemValue=""></f:selectItem>
+										<f:selectItems value="#{refundFee.classSection}"></f:selectItems>
+
+										<p:ajax update="sectionid"
+											listener="#{refundFee.allSections}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel  for="@next" style="color:red" value="Select Section"></p:outputLabel>
+									<p:selectOneMenu id="sectionid"
+										value="#{refundFee.selectedSection}" required="true"
+										requiredMessage="Please select a section">
+										<f:selectItem itemLabel="Select Section" itemValue=""></f:selectItem>
+										<f:selectItems value="#{refundFee.sectionList}"></f:selectItems>
+
+										<p:ajax update=":form2:up"
+											listener="#{refundFee.searchStudentByClassSection}"></p:ajax>
+									</p:selectOneMenu>
+
+								</p:panelGrid>
+
+							</p:panel>
+
+						</h:form>
+					</div>
+					<div class="card card-w-title">
+						<h:form id="form2">
+
+							<p:panel header="Student Record">
+
+								<p:outputPanel id="up">
+
+									<p:dataTable reflow="true" rendered="#{refundFee.show}"
+										var="var" value="#{refundFee.studentList}" rows="20"
+										paginator="true" rowsPerPageTemplate="20,30,50">
+
+										<p:column headerText="Select" style="width:50px !important;text-align:center">
+											<p:selectBooleanCheckbox disabled="#{var.absent eq 'refunded'}" value="#{var.check}"></p:selectBooleanCheckbox>
+										</p:column>
+
+										<p:column
+											headerText="#{feeCollectionVar.feeCollectionHeaderAdmissionNumber}">
+											<p:outputLabel value="#{var.srNo}"></p:outputLabel>
+										</p:column>
+
+										<p:column sortBy="#{var.fname}" filterBy="#{var.fname}"
+											headerText="#{feeCollectionVar.feeCollectionHeaderFirstName}">
+											<p:outputLabel value="#{var.fname}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Father's Name">
+											<p:outputLabel value="#{var.fathersName}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Class">
+											<p:outputLabel value="#{var.className}"></p:outputLabel>
+										</p:column>
+										
+										<p:column headerText="Refund Status">
+											<p:outputLabel value="#{var.absent}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Fee Amount">
+											<p:outputLabel value="#{var.fee}"></p:outputLabel>
+										</p:column>
+										
+										<p:column headerText="Paid Amount">
+											<p:outputLabel value="#{var.paidFee}"></p:outputLabel>
+										</p:column>
+										
+										<p:column headerText="Paid Discount">
+											<p:outputLabel value="#{var.discountFees}"></p:outputLabel>
+										</p:column>
+										
+										<p:column headerText="Left Amount">
+											<p:outputLabel value="#{var.leftFee}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Refund Amount">
+											<p:inputText disabled="#{var.absent eq 'refunded'}" value="#{var.feeamount}">
+												<p:keyFilter mask="num"></p:keyFilter>
+											</p:inputText>
+										</p:column>
+										
+										<f:facet name="footer">
+											<p:commandButton actionListener="#{refundFee.payRefundFee}" update=":form1,:form2,:form3" value="Pay"></p:commandButton>
+										</f:facet>
+									</p:dataTable>
+								</p:outputPanel>
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

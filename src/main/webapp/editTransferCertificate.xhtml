@@ -1,0 +1,463 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Edit TC</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+
+						<h:form id="form">
+							<p:panel header="All TC">
+							
+							
+								<br />
+								<p:separator />
+								<center>
+									<p:panelGrid
+										columns="2"
+										layout="grid" styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+									
+									<h:commandLink 
+										immediate="true">
+										<p:graphicImage name="images/excellogo.png"
+											library="avalon-layout" width="100" height="40"></p:graphicImage>
+										<pe:exporter type="xlsx" target=":form:dtable"
+											fileName="All Students tc table"></pe:exporter>
+									</h:commandLink>
+
+									<p:commandButton  value="PDF" styleClass="butwid" icon="fa fa-file-pdf-o" ajax="false"
+										immediate="true" process="@this"
+										actionListener="#{editTc.exportTc}">
+
+										<p:fileDownload value="#{editTc.file}" />
+									</p:commandButton>
+										
+									</p:panelGrid>
+								</center>
+								<p:separator />
+								<br />
+							
+								<p:dataTable var="var" value="#{editTc.allStudentTCList}"
+									reflow="true" paginator="true" rows="10" id="dtable" widgetVar="tableALl"
+									paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+									rowsPerPageTemplate="10,20,30" filterDelay="1500" sortMode="single" allowUnsorting="true">
+									
+									
+									<p:column  style="width:40px" >
+									<f:facet name="header" >
+									<p:outputLabel value="S.No."></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.sNo}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Adm. No." filterBy="#{var.srno}"
+										filterMatchMode="contains">
+										<f:facet name="header">
+											<p:outputLabel value="Adm. No."></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.srno}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="TC No." filterBy="#{var.tcNo}" sortBy="#{var.tcNo}"
+										filterMatchMode="contains" >
+										<f:facet name="header">
+											<p:outputLabel value="TC No."></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.tcNo}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Student Name"
+										filterBy="#{var.studentName}" filterMatchMode="contains"  >
+										<f:facet name="header">
+											<p:outputLabel value="Student Name"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.studentName}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Father Name">
+									<f:facet name="header">
+											<p:outputLabel value="Father Name"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.fatherName}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Admission Class"
+										filterBy="#{var.addClass}" filterMatchMode="contains">
+										<f:facet name="header">
+											<p:outputLabel value="Admission Class"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.addClass}"></p:outputLabel>
+									</p:column>
+
+
+									<p:column headerText="Last Class">
+									<f:facet name="header">
+											<p:outputLabel value="Last Class"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.lastClass}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Issue Date">
+									<f:facet name="header">
+											<p:outputLabel value="Issue Date"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.issueDateStr}"></p:outputLabel>
+									</p:column>
+									
+									<p:column headerText="Fee Statement" exportable="false">
+										<p:commandButton icon="fa fa-inr" immediate="true"
+											action="#{editTc.feeStatement}">
+											<f:setPropertyActionListener target="#{editTc.selectedTC}"
+												value="#{var}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+
+									<p:column headerText="Edit" exportable="false">
+										<p:commandButton update=":editForm" rendered="#{sideMenuBean.list.schid ne '306'}" icon="ui-icon-pencil"
+											oncomplete="PF('editDialogMain').show()"
+											action="#{editTc.editDetails}">
+											<f:setPropertyActionListener target="#{editTc.selectedTC}"
+												value="#{var}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+
+									<p:column headerText="Edit Basic Details" exportable="false">
+										<p:commandButton update=":editBasicForm" icon="ui-icon-pencil"
+											oncomplete="PF('editDialog').show()"
+											action="#{editTc.editBasicDetails}">
+											<f:setPropertyActionListener target="#{editTc.selectedTC}"
+												value="#{var}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+
+
+									<p:column headerText="Print TC" exportable="false">
+										<p:commandButton icon="ui-icon-print" immediate="true"
+											action="#{editTc.printDetails}">
+											<f:setPropertyActionListener target="#{editTc.selectedTC}"
+												value="#{var}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+
+									<p:column headerText="Print CC" exportable="false">
+										<p:commandButton icon="ui-icon-print" immediate="true"
+											action="#{editTc.printCCDetails}">
+											<f:setPropertyActionListener target="#{editTc.selectedTC}"
+												value="#{var}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+
+									<p:column headerText="Cancel" exportable="false">
+										<p:commandButton icon="ui-icon-close" update=":form"  styleClass="redButt"
+											action="#{editTc.cancelTC}">
+											<f:setPropertyActionListener target="#{editTc.selectedTC}"
+												value="#{var}"></f:setPropertyActionListener>
+											<p:confirm header="Confirmation"
+												message="Are you sure for Cancellation of TC ?"
+												icon="ui-icon-alert" />
+										</p:commandButton>
+									</p:column>
+								</p:dataTable>
+							</p:panel>
+						</h:form>
+
+						<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+							<p:commandButton value="Yes" type="button"
+								styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+							<p:commandButton value="No" type="button"
+								styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+						</p:confirmDialog>
+
+						<h:form id="editForm">
+							<p:dialog modal="true" widgetVar="editDialogMain" resizable="false" 
+								closable="true">
+								<p:panel header="Edit TC Details" style="max-height: 15cm;">
+									<div class="ui-g form-group" >
+										<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+										<p:panelGrid columns="4"
+											styleClass="ui-panelgrid-blank form-group"
+											style="border:0px none; background-color:transparent;">
+											<p:outputLabel  for="@next" style="color:red" value="Reason"></p:outputLabel>
+											<p:selectOneMenu required="true"
+												requiredMessage="Please select the reason"
+												value="#{editTc.reason}">
+												<f:selectItem itemLabel="Select Reason" itemValue=""></f:selectItem>
+												<f:selectItems value="#{editTc.reasons}"></f:selectItems>
+
+												<p:ajax update=":editForm:text1,:editForm:text2"
+													listener="#{editTc.checkOtherReason}"></p:ajax>
+											</p:selectOneMenu>
+
+											<p:outputPanel id="text1">
+												<p:outputLabel style="color:red"  rendered="#{editTc.showTextBox}"
+													value="Other Reason"></p:outputLabel>
+											</p:outputPanel>
+
+											<p:outputPanel id="text2">
+												<p:inputText rendered="#{editTc.showTextBox}"
+													required="true"
+													requiredMessage="Please enter the other reason"
+													value="#{editTc.otherReason}" validatorMessage="Please Enter Correct value">
+												  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+												</p:inputText>
+											</p:outputPanel>
+
+                                            <p:outputLabel value="Book No." rendered="#{editTc.showBookNo}"></p:outputLabel>
+											<p:inputText value="#{editTc.bookNo}" rendered="#{editTc.showBookNo}"></p:inputText>
+											
+											<p:outputLabel value="T.C. No."></p:outputLabel>
+											<p:inputText disabled="true" value="#{editTc.tcNumber}"></p:inputText>
+											
+
+											<p:outputLabel value="Date Of Name Struck off" for="@next" style="color:red" rendered="#{editTc.ssDetails}"></p:outputLabel>
+											<p:calendar 
+												value="#{editTc.lastDate}" pattern="dd/MM/yyyy"
+												navigator="true" rendered="#{editTc.ssDetails}"></p:calendar>
+
+											<p:outputLabel for="@next" style="color:red" 
+												value="#{sideMenuBean.list.schid eq '213' ? 'Date of Leaving/ last attended the class*' : 'Date of Application for Certificate*'}"></p:outputLabel>
+											<p:calendar required="true"
+												requiredMessage="Please enter the #{sideMenuBean.list.schid eq '213' ? 'Date of Leaving/ last attended the class' : 'Date of Application for Certificate*'}"
+												value="#{editTc.applicationDate}" pattern="dd/MM/yyyy"
+												navigator="true"></p:calendar>
+
+											<p:outputLabel value="First Admission Class in School" for="@next" style="color:red" ></p:outputLabel>
+											<p:inputText value="#{editTc.admitClass}" required="true"
+												requiredMessage="Please enter 'first admission class in school'" validatorMessage="Please Enter Correct value">
+											  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+											</p:inputText>
+												
+
+											<p:outputLabel value="Last Class From School"></p:outputLabel>
+											<p:inputText disabled="true" value="#{editTc.lastClass}"
+												readonly="true" validatorMessage="Please Enter Correct value">
+											  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+											</p:inputText>
+
+											<p:outputLabel value="General Conduct" for="@next" style="color:red" ></p:outputLabel>
+											<p:inputText value="#{editTc.perform}" required="true"
+												requiredMessage="Please enter the performance grade" validatorMessage="Please Enter Correct value">
+											  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+											 </p:inputText>
+
+											<p:outputLabel value="Date of Issue Certificate" for="@next" style="color:red" ></p:outputLabel>
+											<p:calendar pattern="dd/MM/yyyy" navigator="true"
+												required="true"
+												requiredMessage="Please enter the date of issue certificate"
+												value="#{editTc.issueDate}"></p:calendar>
+												
+											<p:outputLabel value="Proof for Date of Birth submitted at the time of admission" rendered="#{sideMenuBean.list.schid eq '213'}"></p:outputLabel>
+											<p:inputText  value="#{editTc.proofDob}" validatorMessage="Please Enter Correct value" rendered="#{sideMenuBean.list.schid eq '213'}">
+											 <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+											</p:inputText>		
+
+                                           <p:outputLabel value="Transfer Certificated From (Previous Institute)" for="@next" style="color:red" rendered="#{editTc.renTransferCertificateFrom}"></p:outputLabel>
+									     <p:inputText value="#{editTc.transferCertificatedFrom}" rendered="#{editTc.renTransferCertificateFrom}" required="true" requiredMessage="Please Fill Transfer Certificated From (Previous Institute)" validatorMessage="Please Enter Correct value">
+									       <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+								 	     </p:inputText> 
+
+											<p:outputLabel
+												value="School/Board Annual examination last taken with result"></p:outputLabel>
+											<p:inputText value="#{editTc.schoolExam}" validatorMessage="Please Enter Correct value">
+											  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+											</p:inputText>
+											
+											<p:outputLabel
+												value="Result"></p:outputLabel>
+											<p:inputText value="#{editTc.result}" validatorMessage="Please Enter Correct value">
+											  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+											</p:inputText>
+
+											<p:outputLabel
+												value="Whether failed, if so once/twice in the same class"></p:outputLabel>
+											<p:inputText value="#{editTc.failedOrNot}" validatorMessage="Please Enter Correct value">
+											  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+											</p:inputText>
+
+											<p:outputLabel value="Subject Studied"></p:outputLabel>
+											  <p:selectCheckboxMenu  value="#{editTc.selectedSubjects}" label="Subjects"
+                                                   filter="true" filterMatchMode="startsWith" panelStyle="width:250px">
+                                               <f:selectItems value="#{editTc.subjectList}" />
+                                   </p:selectCheckboxMenu>
+
+                                            <p:outputLabel value="Whether qualified for promotion to the higher class?"></p:outputLabel>  
+                                            <p:selectOneRadio value="#{editTc.qualifiedPromotionCheck}">
+									         <f:selectItem itemLabel="YES" itemValue="YES"></f:selectItem>
+									  <f:selectItem itemLabel="NO" itemValue="NO"></f:selectItem>
+									        </p:selectOneRadio>
+
+											<p:outputLabel
+												value="Class in which student is qualified for promotion"></p:outputLabel>
+											<p:inputText value="#{editTc.qualifiedPromotion}" validatorMessage="Please Enter Correct value">
+											  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+											</p:inputText>
+
+											<p:outputLabel
+												value="Month upto which the (pupil has paid ) school dues/paid"></p:outputLabel>
+											<p:inputText value="#{editTc.monthOfFeePaid}" validatorMessage="Please Enter Correct value">
+											  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+											</p:inputText>
+
+											<p:outputLabel value="Total No. of working days"></p:outputLabel>
+											<p:inputText value="#{editTc.workingDays}" validatorMessage="Please Enter Correct value">
+											  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+											</p:inputText>
+
+											<p:outputLabel value="Total No. of working days present"></p:outputLabel>
+											<p:inputText value="#{editTc.workingDayPresent}" validatorMessage="Please Enter Correct value">
+											  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+											</p:inputText>
+
+											<p:outputLabel
+												value="Any fee concession availed of : if so, the nature of such concession"></p:outputLabel>
+											<p:inputText value="#{editTc.feeConcession}" validatorMessage="Please Enter Correct value">
+											  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+											</p:inputText>
+
+											<p:outputLabel
+												value="Whether the pupil is NCC Cadet/Boy Scout/ Girl Guide ( give details)" rendered="#{editTc.ssDetails}"></p:outputLabel>
+											<p:inputText value="#{editTc.ncc}" validatorMessage="Please Enter Correct value" rendered="#{editTc.ssDetails}">
+											  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+											</p:inputText>
+
+											<p:outputLabel
+												value="#{sideMenuBean.list.branch_id ne '30' ? 'Games Played' : 'Games Played or Extra-curricular activities'}"></p:outputLabel>
+											<p:inputText value="#{editTc.gamesPlayed}" validatorMessage="Please Enter Correct value">
+											  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+											</p:inputText>
+
+											<p:outputLabel value="Extra-curricular activities"
+												rendered="#{sideMenuBean.list.branch_id ne '30'}"></p:outputLabel>
+											<p:inputText value="#{editTc.extraActivity}"
+												rendered="#{sideMenuBean.list.branch_id ne '30'}" validatorMessage="Please Enter Correct value">
+											  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+											</p:inputText>
+
+											<p:outputLabel value="Any other remarks"></p:outputLabel>
+											<p:inputText value="#{editTc.otherRemark}" validatorMessage="Please Enter Correct value">
+											  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+											</p:inputText>
+										</p:panelGrid>
+									</div>
+									<br />
+								<p:separator />
+								<center>
+									<p:commandButton value="Update" update=":editForm,:form"  onsuccess="PF('tableALl').filter();" styleClass="butwid" icon="fa fa-upload"
+												actionListener="#{editTc.updateTCDetails}"></p:commandButton>
+								</center>
+								<p:separator />
+								<br />
+								</p:panel>
+							</p:dialog>
+						</h:form>
+
+						<h:form id="editBasicForm">
+							<p:dialog modal="true" widgetVar="editDialog" resizable="false"
+								closable="true">
+								<p:panel header="Edit Basic Details">
+									<p:panelGrid columns="4">
+
+										<p:outputLabel value="Sr.No" for="@next" style="color:red" ></p:outputLabel>
+										<p:inputText value="#{editTc.srno}" required="true"
+											requiredMessage="Please Enter Sr .no." validatorMessage="Please Enter Correct value">
+										 <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+										</p:inputText>
+
+										<p:outputLabel value="Student Name" for="@next" style="color:red" ></p:outputLabel>
+										<p:inputText value="#{editTc.studentName}" required="true"
+											requiredMessage="Please Enter Student Name" validatorMessage="Please Enter Correct value">
+										  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+										</p:inputText>
+
+										<p:outputLabel />
+										<p:outputLabel />
+
+										<p:outputLabel value="Student Aadhar"></p:outputLabel>
+										<p:inputText value="#{editTc.stadhar}" validatorMessage="Please Enter Correct value"> 
+										  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+										</p:inputText>
+
+										<p:outputLabel value="Father Name" for="@next" style="color:red" ></p:outputLabel>
+										<p:inputText value="#{editTc.fatherName}" required="true"
+											requiredMessage="Please Enter Father Name" validatorMessage="Please Enter Correct value">
+										  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+										</p:inputText>
+
+										<p:outputLabel value="Father Aadhar"></p:outputLabel>
+										<p:inputText value="#{editTc.fadhar}" validatorMessage="Please Enter Correct value">
+										  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+										</p:inputText>
+
+										<p:outputLabel value="Mother Name" for="@next" style="color:red" ></p:outputLabel>
+										<p:inputText value="#{editTc.motherName}" required="true"
+											requiredMessage="Please Enter Mother Name" validatorMessage="Please Enter Correct value">
+										  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+									    </p:inputText>
+
+										<p:outputLabel value="Mother Aadhar"></p:outputLabel>
+										<p:inputText value="#{editTc.madhar}" validatorMessage="Please Enter Correct value">
+										  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+										</p:inputText>
+
+										<p:outputLabel value="Date Of Admission" for="@next" style="color:red" ></p:outputLabel>
+										<p:calendar pattern="dd/MM/yyyy" navigator="true"
+											required="true"
+											requiredMessage="Please enter the date of admission"
+											value="#{editTc.doa}"></p:calendar>
+
+										<p:outputLabel value="Date Of Birth" for="@next" style="color:red" ></p:outputLabel>
+										<p:calendar pattern="dd/MM/yyyy" navigator="true"
+											required="true"
+											requiredMessage="Please enter the date of birth"
+											value="#{editTc.dob}"></p:calendar>
+
+										<p:outputLabel value="Nationality" for="@next" style="color:red" ></p:outputLabel>
+										<p:inputText value="#{editTc.nationality}" required="true"
+											requiredMessage="Please Enter Nationality" validatorMessage="Please Enter Correct value">
+										  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+										</p:inputText>
+
+										<p:outputLabel value="Category" for="@next" style="color:red" ></p:outputLabel>
+										<p:selectOneMenu value="#{editTc.categoryId}" required="true"
+											requiredMessage="Please Select Category">
+											<f:selectItem itemLabel="Select Category" itemValue=""></f:selectItem>
+											<f:selectItems value="#{editTc.categoryList}"></f:selectItems>
+										</p:selectOneMenu>
+
+										
+									</p:panelGrid>
+									
+									
+								<br />
+								<p:separator />
+								<center>
+									<p:commandButton value="Update" update=":editBasicForm,:form"  styleClass="butwid" icon="fa fa-upload"
+											actionListener="#{editTc.updateBasicDetails}"></p:commandButton>
+								</center>
+								<p:separator />
+								<br />
+									
+								</p:panel>
+							</p:dialog>
+						</h:form>
+
+
+
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

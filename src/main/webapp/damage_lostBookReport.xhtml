@@ -1,0 +1,72 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Damage / Discard Books Report</ui:define>
+
+	<ui:define name="content">
+	<style type="text/css">
+	
+		.blueColored
+		{
+			color:blue;
+		}
+	</style>
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+						<p:messages autoUpdate="true" closable="true"></p:messages>
+							<p:panel header="Damage / Discard Books Report">
+							
+							   <p:commandButton value="PDF" styleClass="butwid" icon="fa fa-file-pdf-o" ajax="false" process="@this" actionListener="#{damageBookReport.exportDamageBookPdf}"> 
+                    
+                                <p:fileDownload value="#{damageBookReport.file}" />
+                               </p:commandButton>
+							
+									<p:dataTable id="dataTable" reflow="true" value="#{damageBookReport.bookList}" var="var">
+										<p:column headerText="S.No" style="width:50px">
+											<p:outputLabel value="#{var.sNo}"></p:outputLabel>
+										</p:column>
+
+										<p:column filterMatchMode="contains" filterBy="#{var.bookName}" headerText="Book Name">
+											<p:outputLabel value="#{var.bookName}"></p:outputLabel>
+										</p:column>
+										
+										<p:column filterMatchMode="contains" filterBy="#{var.bookId}" headerText="Accession No">
+											<p:outputLabel value="#{var.bookId}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Author Name">
+											<p:outputLabel value="#{var.authorName}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Publication Name">
+											<p:outputLabel value="#{var.publicationName}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Subject Name">
+											<p:outputLabel value="#{var.subjectName}"></p:outputLabel>
+										</p:column>
+										
+										<p:column filterMatchMode="contains" filterBy="#{var.type}" headerText="Type">
+											<p:outputLabel value="#{var.type}"></p:outputLabel>
+										</p:column>
+										
+										<p:column filterMatchMode="contains" filterBy="#{var.studentName}" headerText="Damaged By">
+											<p:outputLabel value="#{var.studentName}"></p:outputLabel>
+										</p:column>
+									</p:dataTable>
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

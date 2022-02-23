@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	
+<f:view contentType="text/html">
+	<h:head>
+		<title>Student Marksheet</title>
+		<f:facet name="First">
+			<meta content='text/html; charset=UTF-8' http-equiv="Content-Type" />
+			<meta http-equiv="X-UA-Compatible" content="EmulateIE8" />
+		<title>MainPage</title>
+		</f:facet>
+		
+		<script>
+		function printwin() 
+		{
+			document.getElementById('test').style.display="none";	
+			window.print();
+			document.getElementById('test').style.display="block";
+			document.URL="";
+		}
+	</script>
+		
+	</h:head>
+	
+	
+
+	<h:body>
+	<style>
+		.ui-panelgrid .ui-panelgrid-cell {
+		    border-width: 1px;
+		    border-style: solid;
+		    border-color: inherit;
+		    padding: 4px 12px;
+		    width: 153px;
+		    height:10px;
+		}
+		.ab tr,.ab td{
+		border-color: white;
+		}
+		.abc tr,.abc td{
+		border-color: white;
+		}
+		.pr tr,.pr td{
+		border-color: white;
+		}
+		.ps tr,.ps td{
+		border-color: white;
+		}
+		.pd tr,.pd td{
+		border-color: white;
+		}
+		
+		.test .ui-widget-content 
+		{
+			font-size:9px;
+		}
+		
+		.test2 .ui-widget-header
+		{
+			font-size:9px;
+		}
+		
+		.ui-datatable table {
+    table-layout: auto
+}
+		
+	</style>
+
+
+	<h:form id="form1">
+		<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+		<p:panelGrid>
+			<p:commandButton value="Submit" action="#{fillBLMPreMarks.submitMarks}" styleClass="back_button" style="float:right;margin-right:80px"></p:commandButton>
+		</p:panelGrid>
+		<ui:repeat var="mainVar" value="#{fillBLMPreMarks.listOfStudent}">
+		<p:outputPanel styleClass="test" style="width:100%;margin-bottom:-20px;marginf-left:40px;">
+			<hr></hr>
+			<p:outputPanel>
+				<h3 style="text-align:center;margin:0px;font-size:15px">PRE-PRIMARY</h3>
+			</p:outputPanel>
+			<br></br>
+			<table border="1" style="width:100%;font-size:11px;border-collapse: collapse;">
+				<tr>
+				    <td>Student Name</td>
+					<td>#{mainVar.fname}</td>
+				
+					<td>Enrollment. No.</td>
+					<td>#{mainVar.addNumber}</td>
+					<td rowspan="3">
+					<center><p:graphicImage value="#{mainVar.student_image}" height="80"></p:graphicImage></center>
+					</td>
+				</tr>
+				<tr>
+				    <td>Class &amp; Sec</td>
+					<td>#{mainVar.className}</td>
+				
+					<td>Roll No.</td>
+					<td>#{mainVar.rollNo}</td>
+					
+				</tr>
+				<tr>
+				    <td>Father's Name</td>
+					<td>#{mainVar.fathersName}</td>
+				
+					<td>Date of Birth</td>
+					<td>#{mainVar.dobString}</td>
+					
+				</tr>	
+				<tr>
+				   	<td>Mother's Name</td>
+					<td>#{mainVar.motherName}</td> 
+				</tr>
+				<tr>	
+					<td>Address</td>
+					<td>#{mainVar.currentAddress}</td>
+					
+				</tr>
+				
+			</table>				
+		</p:outputPanel>
+          <br></br>
+	    <p:dataTable style="width:100%;border-collapse:collapse;font-size:9px" border="1" value="#{mainVar.iqSubjectList}" var="var">
+	    	<f:facet name="header">
+	    		<p:outputLabel value="Intelligence Quotient (I.Q.)"></p:outputLabel>
+	    	</f:facet>
+	        <p:column style="width:200px" headerText="Subject Name">
+           		<p:outputLabel value="#{var.subjectName}"></p:outputLabel>
+           	</p:column>
+           
+			<p:column headerText="Values*" style="color:red" >
+            	<p:selectOneRadio value="#{var.result}" required="true" requiredMessage="Pleae Fill I.Q. Values">
+					<f:selectItem itemLabel="Very Good" itemValue="Very Good"></f:selectItem>
+					<f:selectItem itemLabel="Good" itemValue="Good"></f:selectItem>
+					<f:selectItem itemLabel="Average" itemValue="Average"></f:selectItem>
+					<f:selectItem itemLabel="Needs Improvement" itemValue="Needs Improvement"></f:selectItem>
+				</p:selectOneRadio>
+            </p:column>
+       	</p:dataTable>
+       	
+       	<p:dataTable style="width:100%;border-collapse:collapse;font-size:9px" border="1" value="#{mainVar.eqSubList}" var="var">
+       		<f:facet name="header">
+	    		<p:outputLabel value="Emotional Quotient (E.Q.)"></p:outputLabel>
+	    	</f:facet>
+	        <p:column style="width:200px" headerText="Subject Name">
+           		<p:outputLabel value="#{var.subjectName}"></p:outputLabel>
+           	</p:column>
+           
+			<p:column style="color:red" headerText="Values*">
+            	<p:selectOneRadio  rendered="#{var.subjectName eq 'Emotional Outburst'}" value="#{var.result}"  required="true" requiredMessage="Pleae Fill E.Q. Values">
+					<f:selectItem itemLabel="Frequently" itemValue="Frequently"></f:selectItem>
+					<f:selectItem itemLabel="Sometimes" itemValue="Sometimes"></f:selectItem>
+					<f:selectItem itemLabel="Rarely" itemValue="Rarely"></f:selectItem>
+				</p:selectOneRadio>
+				
+				
+            	<p:selectOneMenu style="width:400px!important" rendered="#{var.subjectName eq 'Dominant Emotion'}" value="#{var.result}"  required="true" requiredMessage="Pleae Fill E.Q. Values">
+            		<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+            		<f:selectItem itemLabel="JOY" itemValue="JOY"></f:selectItem>
+            		<f:selectItem itemLabel="Affection" itemValue="Affection"></f:selectItem>
+            		<f:selectItem itemLabel="Fear" itemValue="Fear"></f:selectItem>
+            		<f:selectItem itemLabel="Grief" itemValue="Grief"></f:selectItem>
+            	<f:selectItem itemLabel="Anger" itemValue="Anger"></f:selectItem>
+            	
+            	</p:selectOneMenu>
+            </p:column>
+       	</p:dataTable>
+       	
+       	<p:dataTable style="width:100%;border-collapse:collapse;font-size:9px" border="1" value="#{mainVar.sqSubList}" var="var">
+       		<f:facet name="header">
+	    		<p:outputLabel value="Spiritual Quotient (S.Q.)"></p:outputLabel>
+	    	</f:facet>
+	    	<p:column  style="width:200px" headerText="Subject Name">
+           		<p:outputLabel value="#{var.subjectName}" ></p:outputLabel>
+           	</p:column>
+           
+			<p:column style="color:red" headerText="Values*">
+            	<p:selectOneRadio value="#{var.result}"  required="true" requiredMessage="Please Fill S.Q. Values">
+					<f:selectItem itemLabel="A+" itemValue="A+"></f:selectItem>
+					<f:selectItem itemLabel="A" itemValue="A"></f:selectItem>
+					<f:selectItem itemLabel="B" itemValue="B"></f:selectItem>
+					<f:selectItem itemLabel="C" itemValue="C"></f:selectItem>
+				</p:selectOneRadio>
+            </p:column>
+       	</p:dataTable>
+       	
+       	
+       	<p:dataTable style="width:100%;border-collapse:collapse;font-size:9px" border="1" value="#{mainVar.pmdSubList}" var="var">
+       		<f:facet name="header">
+	    		<p:outputLabel value="Physical and Motor Development"></p:outputLabel>
+	    	</f:facet>
+	        <p:column style="width:200px" headerText="Subject Name">
+           		<p:outputLabel value="#{var.subjectName}"></p:outputLabel>
+           	</p:column>
+           
+			<p:column style="color:red" headerText="Values*">
+            	<p:selectOneRadio value="#{var.result}"  required="true" requiredMessage="Please Fill Physical and Motor Developement Values">
+					<f:selectItem itemLabel="Very Good" itemValue="Very Good"></f:selectItem>
+					<f:selectItem itemLabel="Good" itemValue="Good"></f:selectItem>
+					<f:selectItem itemLabel="Average" itemValue="Average"></f:selectItem>
+					<f:selectItem itemLabel="Needs Improvement" itemValue="Needs Improvement"></f:selectItem>
+				</p:selectOneRadio>
+            </p:column>
+       	</p:dataTable>
+       	
+       	
+       	<p:dataTable style="width:100%;border-collapse:collapse;font-size:9px" border="1" value="#{mainVar.lifeScienceSubList}" var="var">
+       		<f:facet name="header">
+	    		<p:outputLabel value="Life Science"></p:outputLabel>
+	    	</f:facet>
+	        <p:column style="width:200px" headerText="Subject Name">
+           		<p:outputLabel value="#{var.subjectName}"></p:outputLabel>
+           	</p:column>
+           
+			<p:column style="color:red" headerText="Values*">
+            	<p:selectOneRadio value="#{var.result}"  required="true" requiredMessage="Please Fill Life Science Values">
+					<f:selectItem itemLabel="A+" itemValue="A+"></f:selectItem>
+					<f:selectItem itemLabel="A" itemValue="A"></f:selectItem>
+					<f:selectItem itemLabel="B" itemValue="B"></f:selectItem>
+					<f:selectItem itemLabel="C" itemValue="C"></f:selectItem>
+				</p:selectOneRadio>
+            </p:column>
+       	</p:dataTable>
+       	
+       	<p:dataTable style="width:100%;border-collapse:collapse;font-size:9px" border="1" value="#{mainVar.csoeSubList}" var="var">
+       		<f:facet name="header">
+	    		<p:outputLabel value="Communication Skills"></p:outputLabel>
+	    	</f:facet>
+	        <p:column style="width:200px" headerText="Subject Name">
+           		<p:outputLabel value="#{var.subjectName}"></p:outputLabel>
+           	</p:column>
+           
+			<p:column style="color:red" headerText="Values*">
+            	<p:selectOneRadio value="#{var.result}"  required="true" requiredMessage="Please Fill Communication Skill Values">
+					<f:selectItem itemLabel="Frequently" itemValue="Frequently"></f:selectItem>
+					<f:selectItem itemLabel="Sometimes" itemValue="Sometimes"></f:selectItem>
+					<f:selectItem itemLabel="Rarely" itemValue="Rarely"></f:selectItem>
+				</p:selectOneRadio>
+            </p:column>
+       	</p:dataTable>
+
+       	<p:dataTable style="width:100%;border-collapse:collapse;font-size:9px" border="1" value="#{mainVar.csSubList}" var="var">
+	        <p:column style="width:200px" headerText="Subject Name">
+           		<p:outputLabel value="#{var.subjectName}"></p:outputLabel>
+           	</p:column>
+           
+			<p:column style="color:red"  headerText="Values*">
+            	<p:selectOneRadio value="#{var.result}" required="true" requiredMessage="Please Fill Communication Skill Values">
+					<f:selectItem itemLabel="A+" itemValue="A+"></f:selectItem>
+					<f:selectItem itemLabel="A" itemValue="A"></f:selectItem>
+					<f:selectItem itemLabel="B" itemValue="B"></f:selectItem>
+					<f:selectItem itemLabel="C" itemValue="C"></f:selectItem>
+				</p:selectOneRadio>
+            </p:column>
+       	</p:dataTable>
+       	
+       	<p:dataTable style="width:100%;border-collapse:collapse;font-size:9px" border="1" value="#{mainVar.otherSubjectlist}" var="var">
+	        <p:column style="width:200px" headerText="Subject Name">
+           		<p:outputLabel value="#{var.subjectName}"></p:outputLabel>
+           	</p:column>
+           
+			<p:column headerText="Values">
+            	
+            	  	<p:selectOneMenu style="width:400px!important"  filter="true"  value="#{var.result}"  >
+            		<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+            		<f:selectItem itemLabel="Clarity Of Speech" itemValue="Clarity Of Speech"></f:selectItem>
+            		<f:selectItem itemLabel="Oral Expression" itemValue="Oral Expression"></f:selectItem>
+            		<f:selectItem itemLabel="Building Confidence" itemValue="Building Confidence"></f:selectItem>
+            		<f:selectItem itemLabel="Developing good food habit" itemValue="Developing good food habit"></f:selectItem>
+            	    <f:selectItem itemLabel="Developing patience" itemValue="Developing patience"></f:selectItem>
+            		<f:selectItem itemLabel="Developing fine Motor Skills" itemValue="Developing fine Motor Skills"></f:selectItem>
+            		<f:selectItem itemLabel="Developing gross Motor Skills" itemValue="Developing gross Motor Skills"></f:selectItem>
+            	    <f:selectItem itemLabel="Developing Scientific Temperament" itemValue="Developing Scientific Temperament"></f:selectItem>
+            		<f:selectItem itemLabel="Blessed with good Grasping Power" itemValue="Blessed with good Grasping Power"></f:selectItem>
+            		<f:selectItem itemLabel="Generous in Sharing" itemValue="Generous in Sharing"></f:selectItem>
+            	    <f:selectItem itemLabel="Good Listener" itemValue="Good Listener"></f:selectItem>
+            		<f:selectItem itemLabel="Participates actively in all the activities" itemValue="Participates actively in all the activities"></f:selectItem>
+            		<f:selectItem itemLabel="Very humble and courteous" itemValue="Very humble and courteous"></f:selectItem>
+            	    <f:selectItem itemLabel="Try hard there  still a lot of time to improve" itemValue="Try hard there  still a lot of time to improve"></f:selectItem>
+                    <f:selectItem itemLabel="Remarkable team sprit" itemValue="Remarkable team sprit"></f:selectItem>
+            		<f:selectItem itemLabel="Admires the nature" itemValue="Admires the nature"></f:selectItem>
+            		<f:selectItem itemLabel="Sincerely shoulders the responsibilities" itemValue="Sincerely shoulders the responsibilities"></f:selectItem>
+            	    <f:selectItem itemLabel="Vary Co-opratives with teacher and friends" itemValue="Vary Co-opratives with teacher and friends"></f:selectItem>
+          	
+          
+          </p:selectOneMenu>
+            </p:column>
+       	</p:dataTable>
+       	
+         </ui:repeat>
+	</h:form>
+</h:body>
+</f:view>
+</html>

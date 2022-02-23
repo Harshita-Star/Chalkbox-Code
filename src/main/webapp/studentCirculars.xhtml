@@ -1,0 +1,87 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/studentTemplate.xhtml">
+	<ui:define name="title">Circulars</ui:define>
+	<ui:define name="content">
+		<script>
+		 /*<![CDATA[*/
+	window.onload = function() {
+		  var length = $('tr').last().attr('data-ri');
+		  for(i=0;i<=length;i++){
+			  var text = document.getElementById("form:dt:"+i+":msgLab").textContent;
+			  var parent = document.getElementById("form:dt:"+i+":msgLab").parentElement;
+			  if(text.match(/(?:www|https?)[^\s]+/g)){
+				  var ele = document.getElementById("form:dt:"+i+":msgLab");
+				  ele.remove();
+				  const aLink = [];
+				  const linksFound = text.match(/(?:www|https?)[^\s]+/g);
+				  for( let j=0;j<linksFound.length;j++){
+				  	 let replace = linksFound[j];
+				  	 
+				  	aLink.push('<a href="'+replace+'"target="_blank" style="color: blue;">'+replace+ '</a>');
+		            
+		             text = text.split(linksFound[j]).map(item => {
+		                 return aLink[j].includes('iframe') ? item.trim() : item
+		             }).join(aLink[j]);
+				   }
+				  var y = document.createElement("LABEL");
+				  y.innerHTML = text;
+				  parent.appendChild(y);
+			  }
+		  }
+	};
+	 /*]]>*/
+	</script>
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title"
+						style="background-color: rgb(254, 180, 2, 0.3);">
+						<h:form id="form" enctype="multipart/form-data">
+							<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+							<p:panel id="circulars" header="Circulars">
+
+								<p:dataTable filterDelay="1500" id="dt" var="var"
+									value="#{studentCirculars.newsList}" paginator="true" rows="10"
+									rowsPerPageTemplate="10,30,50">
+
+
+									<p:column headerText="S.No.">
+										<p:outputLabel value="#{var.sno}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Date">
+										<p:outputLabel value="#{var.strUdate}"></p:outputLabel>
+									</p:column>
+
+									<p:column id="msg" headerText="Message">
+										<p:outputLabel id="msgLab" value="#{var.message}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Attachment">
+									<center>
+									<p:commandButton rendered="#{var.showFile}" styleClass="butwid"
+											icon="fa fa-fw fa-paperclip" value="View"
+											action="#{studentCirculars.view}">
+											<f:setPropertyActionListener
+												target="#{studentCirculars.selected}" value="#{var}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</center>
+									</p:column>
+
+								</p:dataTable>
+
+							</p:panel>
+
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

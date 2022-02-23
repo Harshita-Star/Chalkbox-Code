@@ -1,0 +1,106 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Infirmary</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+
+						<h:form id="form" style="overflow:hidden">
+							<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+							<p:panel header="Health Check Up Report" style="width:100%">
+								<p:panelGrid columns="3"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:outputLabel for="@next" style="color:red"  value="Select Student"></p:outputLabel>
+									<p:autoComplete value="#{healthCheckUpReport.selectedStudent}"
+										completeMethod="#{healthCheckUpReport.autoCompleteStudent}"
+										forceSelection="true" required="true"
+										requiredMessage="Please Select Student" validatorMessage="Please Enter Correct value">
+										<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+										<p:ajax event="query" global="false" />
+									</p:autoComplete>
+
+									<p:commandButton value="Search"
+										action="#{healthCheckUpReport.searchStudent}" update=":form"></p:commandButton>
+								</p:panelGrid>
+							</p:panel>
+							<p:panel rendered="#{healthCheckUpReport.showTable}">
+								<p:dataTable reflow="true" id="dt"
+									value="#{healthCheckUpReport.healthList}" var="var">
+
+									<p:column headerText="S.No.">
+										<p:outputLabel value="#{var.sno}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Check Up Date" 
+										filterBy="#{var.checkUpDate}" filterMatchMode="contains" style="width:100px;">
+										<p:outputLabel value="#{var.checkUpDate}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Student Name" style="width:100px;">
+										<p:outputLabel value="#{var.selectedStudent}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Check Time" style="width:100px;">
+										<p:outputLabel value="#{var.timevalue}"></p:outputLabel>
+									</p:column>
+									
+									<p:column headerText="Disease" style="width:100px;">
+										<p:outputLabel value="#{var.disease}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Treatment" style="width:100px;">
+										<p:outputLabel value="#{var.treatment}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Remarks" style="width:100px;">
+										<p:outputLabel value="#{var.remarks}"></p:outputLabel>
+									</p:column>
+
+									
+
+									<p:column headerText="Height" style="width:100px;">
+										<p:outputLabel value="#{var.height}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Weight" style="width:100px;">
+										<p:outputLabel value="#{var.weight}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="B.P." style="width:100px;">
+										<p:outputLabel value="#{var.bloodPressure}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="RBC" style="width:100px;">
+										<p:outputLabel value="#{var.rbc}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="WBC" style="width:100px;">
+										<p:outputLabel value="#{var.wbc}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Hemoglobin" style="width:100px;">
+										<p:outputLabel value="#{var.hemoglobin}"></p:outputLabel>
+									</p:column>
+
+								</p:dataTable>
+							</p:panel>
+						</h:form>
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,71 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	<f:loadBundle var="addClassVar" basename="myProperties" />
+
+	<ui:define name="title">Recharge Successfull</ui:define>
+
+	<ui:define name="content">
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						 <h:form id="form" >
+						  <p:panel  style="width: 35%;margin: auto;" header="Recharge Successfull">
+						      
+						      <p:outputPanel id="print"> 
+						       <p:graphicImage url="paymentsuccess.jpg" style="margin: auto;" ></p:graphicImage>
+						       
+						       <table style="margin: auto;width:100% ">
+ 
+							  <tr>
+							    <td style="width:50%;text-align: left;color: gray;font-size: medium;">Payment To</td>
+							    <td style="width:50%;text-align: right;color: black;font-size: medium;">CHALKBOX</td> 
+							    
+							  </tr>
+							    <tr>
+							    <td style="width:50%;text-align: left;color: gray;font-size: medium;">Message Quantity</td>
+							    <td style="width:50%;text-align: right;color: black;font-size: medium;">#{recahrgePaymentSuccessfullBean.quantity}</td> 
+							   
+							  </tr>
+							  <tr>
+							    <td style="width:50%;text-align: left;color: gray;font-size: medium;">Amount</td>
+							    <td style="width:50%;text-align: right;color: black;font-size: medium;">#{recahrgePaymentSuccessfullBean.amount}</td> 
+							   
+							  </tr>
+							  
+							   <tr>
+							    <td style="width:50%;text-align: left;color: gray;font-size: medium;">Order ID</td>
+							    <td style="width:50%;text-align: right;color: black;font-size: medium;">#{recahrgePaymentSuccessfullBean.orderid}</td> 
+							   
+							  </tr>
+							  
+							  
+							  
+							  
+							  
+							</table>
+							</p:outputPanel>
+							<table style="margin: auto;width:100%" >						       
+						       <tr>
+							     <td style="width:50%;text-align: right;color: black;font-size: medium;"><p:commandButton
+							     action="purchaseMsgPack.xhtml?faces-redirect=true" value="Back To Dashboard" ></p:commandButton></td> 
+							   
+							  </tr>
+							  
+							  </table>
+						     
+						  </p:panel>
+					  </h:form>
+						
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

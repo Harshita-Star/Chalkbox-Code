@@ -1,0 +1,72 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	<f:loadBundle var="addClassVar" basename="myProperties" />
+
+	<ui:define name="title">Class Performance Comparision</ui:define>
+
+	<ui:define name="content">
+	<h:form id="form">
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						 <h:form id="form" >
+						 <p:growl showDetail="true"  autoUpdate="true"></p:growl>
+						 <p:panel header="Class performance Comparision">
+                         <p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+               		 	 		
+               		 			
+               		 			
+               		 		<p:outputLabel value="Select Class"></p:outputLabel>
+               		 		<p:selectOneMenu value="#{classPerformanceComparision.selectClass}" filter="true">
+               		 		<p:ajax global="false" listener="#{classPerformanceComparision.allTerm}" update=":form" ></p:ajax>
+               		 		<f:selectItem itemLabel="Select Class" itemValue=""></f:selectItem>
+               		 		<f:selectItems value="#{classPerformanceComparision.classList}">
+               		 		
+               		 		</f:selectItems>
+               		 		</p:selectOneMenu>
+               		 		
+               		 			<p:outputLabel value="Select Term"></p:outputLabel>
+               		 		<p:selectOneMenu value="#{classPerformanceComparision.selectTerm}" filter="true">
+               		 		<f:selectItem itemLabel="Select Term" itemValue=""></f:selectItem>
+               		 		<f:selectItems value="#{classPerformanceComparision.termList}"></f:selectItems>
+               		 		</p:selectOneMenu>
+               		 		
+               		 			<p:outputLabel value="Select Sections *"></p:outputLabel>
+               		 		 <p:selectManyCheckbox  value="#{classPerformanceComparision.subSelec}"    columns="2" >
+                                    <f:selectItems value="#{classPerformanceComparision.sectionList}"   />
+                             </p:selectManyCheckbox>
+               		 		
+               		 	 
+               		 		
+               		 		</p:panelGrid>  
+               		 		
+               		 		
+               		 		<br />
+								<p:separator />
+								<center>
+								   <p:commandButton update=":form" value="Search" action="#{classPerformanceComparision.search}" styleClass="butwid" icon="fa fa-balance-scale"></p:commandButton>
+								</center>
+								<p:separator />
+								<br />
+               		 		
+               		 		
+							</p:panel>
+							<p:chart type="line" rendered="#{classPerformanceComparision.show}" model="#{classPerformanceComparision.lineModel1}" style="height:300px;"/>	
+                         
+	                  </h:form>
+							
+							
+					</div>
+				</div>
+			</div>
+		</div>
+		</h:form>
+
+	</ui:define>
+
+</ui:composition>

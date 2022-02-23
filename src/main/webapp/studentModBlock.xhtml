@@ -1,0 +1,248 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Block/Unblock Modules</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h1>Block/Unblock Modules For Students (Mobile App)</h1>
+						<h:form id="form1">
+							<p:messages closable="true" autoUpdate="true"></p:messages>
+							<p:panel header="Search Student By Name">
+								<f:facet name="header">
+									<span>Search By Students</span>
+								</f:facet>
+
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel value="Student Name/Sr. No"></p:outputLabel>
+									<p:autoComplete id="acSimple" value="#{studentModBlock.name}"
+										minQueryLength="3"
+										completeMethod="#{studentModBlock.autoCompleteStudentInfo}"
+										validatorMessage="Please Enter Correct value">
+										<p:ajax event="query" global="false" />
+										<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:autoComplete>
+
+									<p:commandButton value="Search" update=":form,:form4" styleClass="butwid" icon="fa fa-search"
+										actionListener="#{studentModBlock.searchStudentByName}"></p:commandButton>
+
+								</p:panelGrid>
+							</p:panel>
+						</h:form>
+					</div>
+
+					<div class="card card-w-title">
+						<h:form id="form2">
+							<p:panel header="Search Student By Class Section">
+
+								<p:panelGrid columns="5"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel for="@next" style="color:red"
+										value="Select Class"></p:outputLabel>
+									<p:selectOneMenu style="width:250px"
+										value="#{studentModBlock.selectedCLassSection}"
+										required="true" requiredMessage="Please select a class">
+										<f:selectItem itemLabel="Select Class" itemValue=""></f:selectItem>
+										<f:selectItems value="#{studentModBlock.classSection}"></f:selectItems>
+
+										<p:ajax update="sectionid"
+											listener="#{studentModBlock.allSections}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel for="@next" style="color:red"
+										value="Select Section"></p:outputLabel>
+									<p:selectOneMenu id="sectionid"
+										value="#{studentModBlock.selectedSection}" required="true"
+										requiredMessage="Please select a section">
+										<f:selectItem itemLabel="Select Section" itemValue=""></f:selectItem>
+										<f:selectItems value="#{studentModBlock.sectionList}"></f:selectItems>
+
+									</p:selectOneMenu>
+
+									
+								</p:panelGrid>
+								<br />
+								<p:separator />
+								<center>
+									<p:commandButton value="Search" styleClass="butwid" icon="fa fa-search"
+										action="#{studentModBlock.searchStudentByClassSection}"
+										update=":form,:form4" />
+								</center>
+								<p:separator />
+								<br />
+							</p:panel>
+						</h:form>
+					</div>
+
+					<div class="card card-w-title">
+
+						<h:form id="form4">
+							<p:panel header="Block/Unblock App Modules (Copy to All)"
+								rendered="#{studentModBlock.b}">
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel value="Select Modules" />
+									<p:selectCheckboxMenu multiple="true"
+										value="#{studentModBlock.selectedModule}">
+										<f:selectItems value="#{studentModBlock.allMods}" />
+									</p:selectCheckboxMenu>
+
+									<p:outputLabel value="Block Reason/Message" />
+									<p:inputTextarea autoResize="false"
+										value="#{studentModBlock.blockMsg}"
+										validatorMessage="Please Enter Valid Reason/Message">
+										<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:inputTextarea>
+
+								</p:panelGrid>
+								<br />
+								<p:separator />
+								<center>
+									<p:commandButton update=":form"
+										actionListener="#{studentModBlock.copyBlockStuff}" icon="fa fa-clone"
+										value="Copy For All Students Below" style="width: 250px" />
+
+								</center>
+								<p:separator />
+							</p:panel>
+						</h:form>
+					</div>
+
+					<div class="card card-w-title">
+						<h:form id="form">
+							<p:panel id="dataTable" rendered="#{studentModBlock.b}"
+								header="Student List">
+
+								<p:dataTable id="dt" reflow="true"
+									rendered="#{studentModBlock.show}" var="var"
+									value="#{studentModBlock.studentList}"
+									selection="#{studentModBlock.selectedStudentList}"
+									rowKey="#{var.emplyeeuserid}" rowSelectMode="add">
+
+									<f:facet name="header">
+										<center>
+											<p:commandButton styleClass="butwid" icon="fa fa-pencil"
+												update=":form,:form1" value="Update"
+												actionListener="#{studentModBlock.updateAction}">
+											</p:commandButton>
+										</center>
+									</f:facet>
+
+									<f:facet name="footer">
+										<center>
+											<p:commandButton styleClass="butwid" icon="fa fa-pencil"
+												update=":form,:form1" value="Update"
+												actionListener="#{studentModBlock.updateAction}">
+											</p:commandButton>
+										</center>
+									</f:facet>
+
+
+									<p:column exportable="false" selectionMode="multiple"
+										style="width:50px;text-align:center"></p:column>
+
+									<p:column headerText="S.No." style="text-align:center;">
+										<f:facet name="header">
+											<p:outputLabel value="S.No."></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.sno}"></p:outputLabel>
+									</p:column>
+
+									<p:column sortBy="#{var.fname}" headerText="Student Name"
+										filterBy="#{var.fname}" filterMatchMode="contains"
+										style="text-align:center;">
+										<f:facet name="header">
+											<p:outputLabel value="Student Name"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.fname}"></p:outputLabel>
+									</p:column>
+
+									<p:column sortBy="#{var.lname}" headerText="Fathers Name"
+										filterBy="#{var.lname}" filterMatchMode="contains"
+										style="text-align:center;">
+										<f:facet name="header">
+											<p:outputLabel value="Fathers Name"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.lname}"></p:outputLabel>
+									</p:column>
+
+									<p:column sortBy="#{var.mname}" headerText="Mother Name"
+										filterBy="#{var.mname}" filterMatchMode="contains"
+										style="text-align:center;">
+										<f:facet name="header">
+											<p:outputLabel value="Mother Name"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.mname}"></p:outputLabel>
+									</p:column>
+
+
+									<p:column headerText="Class" filterBy="#{var.category}"
+										filterMatchMode="contains" style="text-align:center;">
+										<f:facet name="header">
+											<p:outputLabel value="Class"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.category}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Section" filterBy="#{var.subCateg}"
+										filterMatchMode="contains" style="text-align:center;">
+										<f:facet name="header">
+											<p:outputLabel value="Section"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.subCateg}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Block Modules" width="250px;">
+										<p:selectManyMenu value="#{var.blockModList}" id="subject"
+											showCheckbox="true">
+											<f:selectItems value="#{var.modList}"></f:selectItems>
+										</p:selectManyMenu>
+									</p:column>
+
+									<p:column headerText="Reason / Message" width="200px;"
+										style="text-align:center;">
+										<p:inputTextarea autoResize="false" value="#{var.msg}"
+											validatorMessage="Please Enter Valid Reason/Message">
+										</p:inputTextarea>
+									</p:column>
+
+								</p:dataTable>
+
+							</p:panel>
+
+						</h:form>
+						<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+							<p:commandButton value="Yes" type="button"
+								styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+							<p:commandButton value="No" style="margin-left:50px"
+								type="button" styleClass="ui-confirmdialog-no"
+								icon="ui-icon-close" />
+						</p:confirmDialog>
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

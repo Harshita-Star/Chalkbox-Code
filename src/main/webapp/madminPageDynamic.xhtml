@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <f:facet name="first">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+            <meta name="apple-mobile-web-app-capable" content="yes" />
+        </f:facet>
+        <title>Welcome Master Admin</title>
+    </h:head>
+
+    <h:body styleClass="landing-body" style="background-color: white;">
+    <h:form>
+    
+     <p:commandButton  value="Logout" style="float:right;margin-top:25px;margin-right:50px;" action="#{madminDynamic.logout}"></p:commandButton>
+       
+        <div class="landing-wrapper" >
+             
+    
+            <div id="pricing">
+                    
+                    <div class="ui-g">
+                    
+                      	<ui:repeat var="school" value="#{madminDynamic.schoolList}">
+                        <div class="ui-g-12 ui-lg-4">
+                            <div class="price-type">
+                                <div class="price-header">
+                                    <h3>#{school.schoolName}</h3>
+
+                                </div>
+                                <div class="price-content">
+                                		<center>
+                                    <p:graphicImage width="200" value="#{school.imagePath}" library="avalon-layout"/>
+                                   </center>
+                                </div>
+                                <div class="price-footer">
+                                	<p:commandButton action="#{madminDynamic.goToWork}" value="Get Started" styleClass="blue-btn raised-btn">
+                                		<f:param name="action" value="#{school.schid}" />
+                                	</p:commandButton>
+                                </div>
+                            </div>
+                        </div>
+                        </ui:repeat>
+                    </div>
+            </div>
+            
+        </div>
+        </h:form>
+        <h:outputStylesheet name="css/animate.css" library="avalon-layout" />
+        <h:outputStylesheet name="css/layout-#{guestPreferences.theme}.css" library="avalon-layout" />
+    </h:body>
+
+</html>

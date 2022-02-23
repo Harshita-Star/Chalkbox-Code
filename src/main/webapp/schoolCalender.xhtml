@@ -1,0 +1,492 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Calendar</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<p:messages closable="true" autoUpdate="true"></p:messages>
+							<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+							<p:panel header="School Calender">
+								<p:commandLink
+									style="float: right;margin-left: 15px;color: blue;font-size:15px;"
+									immediate="true" value="View Calendar "
+									action="viewSchoolCalendar.xhtml?faces-redirect=true"></p:commandLink>
+								<p:panelGrid columns="2"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+
+									<p:outputLabel value="From Date" for="@next" style="color:red"></p:outputLabel>
+									<p:calendar value="#{schoolCalender.selectedDay}"
+										pattern="dd/MM/yyyy" navigator="true" required="true"
+										requiredMessage="Please Select 'From Date'"></p:calendar>
+
+									<p:outputLabel value="To Date" for="@next" style="color:red"></p:outputLabel>
+									<p:calendar value="#{schoolCalender.endDate}"
+										pattern="dd/MM/yyyy" navigator="true" required="true"
+										requiredMessage="Please Select 'To Date'"></p:calendar>
+
+									<p:outputLabel value="Select Type" for="@next"
+										style="color:red"></p:outputLabel>
+									<p:selectOneMenu value="#{schoolCalender.selectedOne}"
+										filter="true" required="true"
+										requiredMessage="Please select any of One">
+										<f:selectItem itemLabel="Select Here" itemValue="" />
+										<f:selectItems value="#{schoolCalender.eventList}" />
+										<f:selectItem itemLabel="Other" itemValue="Other" />
+
+										<p:ajax listener="#{schoolCalender.checkType}"
+											update=":form:dt :form:hf :form:hfl :form:other :form:otherVal"></p:ajax>
+									</p:selectOneMenu>
+
+
+									<p:outputPanel id="other">
+										<p:outputLabel style="color:red"
+											rendered="#{schoolCalender.showOtherEntry}"
+											value="Specify Type"></p:outputLabel>
+									</p:outputPanel>
+
+									<p:outputPanel id="otherVal">
+										<p:inputText rendered="#{schoolCalender.showOtherEntry}"
+											value="#{schoolCalender.otherValue}" required="true"
+											requiredMessage="Please specify type"
+											validatorMessage="Please Enter Correct value">
+											<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+										</p:inputText>
+									</p:outputPanel>
+
+									<p:outputPanel id="hfl">
+										<p:outputLabel style="color:red"
+											rendered="#{schoolCalender.showHolidayFor}"
+											value="Holiday For *"></p:outputLabel>
+									</p:outputPanel>
+
+									<p:outputPanel id="hf">
+										<p:selectOneRadio rendered="#{schoolCalender.showHolidayFor}"
+											value="#{schoolCalender.holidayFor}" required="true"
+											requiredMessage="Please select holiday for">
+											<f:selectItem itemLabel="All Classes" itemValue="all" />
+											<f:selectItem itemLabel="Particular Class(es)"
+												itemValue="particular" />
+											<p:ajax listener="#{schoolCalender.checkHolidayType}"
+												update=":form:dt"></p:ajax>
+										</p:selectOneRadio>
+									</p:outputPanel>
+
+
+									<p:outputLabel for="@next" style="color:red"
+										value="Select Duration Type"></p:outputLabel>
+									<p:selectOneRadio value="#{schoolCalender.selectedTime}"
+										required="true" requiredMessage="Please select any of One">
+										<f:selectItem itemLabel="Full Day" itemValue="FullDay" />
+										<f:selectItem itemLabel="Timing" itemValue="Timing" />
+										<p:ajax listener="#{schoolCalender.checkTiming}"
+											update=":form:a :form:b :form:c :form:d"></p:ajax>
+									</p:selectOneRadio>
+
+									<p:outputLabel value="Description:" for="@next"
+										style="color:red"></p:outputLabel>
+									<p:inputTextarea value="#{schoolCalender.desc}" required="true"
+										requiredMessage="Please enter Description" rows="3" cols="20"
+										validatorMessage="Please Enter Correct value">
+										<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:inputTextarea>
+
+									<p:outputPanel id="a">
+										<p:outputLabel style="color:red"
+											rendered="#{schoolCalender.show}" value="Start Time *"></p:outputLabel>
+									</p:outputPanel>
+									<p:outputPanel id="b">
+										<p:inputText rendered="#{schoolCalender.show}"
+											value="#{schoolCalender.hr}" required="true"
+											requiredMessage="Please Enter Start Time"
+											validatorMessage="Please Enter Correct value">
+											<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+										</p:inputText>
+									</p:outputPanel>
+									<p:outputPanel id="c">
+										<p:outputLabel style="color:red"
+											rendered="#{schoolCalender.show}" value="End Time *"></p:outputLabel>
+									</p:outputPanel>
+									<p:outputPanel id="d">
+										<p:inputText rendered="#{schoolCalender.show}"
+											value="#{schoolCalender.min}" required="true"
+											requiredMessage="Please Enter End Time"
+											validatorMessage="Please Enter Correct value">
+											<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+										</p:inputText>
+									</p:outputPanel>
+
+								</p:panelGrid>
+
+								<br />
+
+								<p:outputPanel id="dt">
+									<p:dataTable rendered="#{schoolCalender.showTable}"
+										reflow="true" selection="#{schoolCalender.selectedClassList}"
+										rowKey="#{var.sectionId}"
+										value="#{schoolCalender.classSectionList}" var="var">
+
+										<p:column selectionMode="multiple"
+											style="width:16px;text-align:center"></p:column>
+
+										<p:column sortBy="#{var.rankInt}" style="width:100px"
+											headerText="Class Name">
+											<p:outputLabel value="#{var.className}"></p:outputLabel>
+										</p:column>
+
+										<p:column style="width:100px" headerText="Section">
+											<p:outputLabel value="#{var.sectionName}"></p:outputLabel>
+										</p:column>
+
+									</p:dataTable>
+								</p:outputPanel>
+
+								<br />
+								<p:separator />
+								<center>
+									<p:commandButton update=":form,:form2"
+										action="#{schoolCalender.addEvent}" value="Submit"
+										styleClass="butwid" icon="fa fa-check"></p:commandButton>
+								</center>
+								<p:separator />
+								<br />
+
+
+							</p:panel>
+
+						</h:form>
+					</div>
+					<div class="card card-w-title">
+						<h:form id="form2">
+
+
+							<br />
+							<p:separator />
+							<center>
+								<p:panelGrid columns="2" layout="grid"
+									styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<h:commandLink>
+										<p:graphicImage name="images/excellogo.png"
+											library="avalon-layout" width="100" height="40"></p:graphicImage>
+										<pe:exporter type="xlsx" target=":form2:calData"
+											fileName="School Calender"></pe:exporter>
+									</h:commandLink>
+
+									<p:commandButton value="PDF"
+										style="position: absolute;height:40px;" styleClass="butwid"
+										ajax="false" process="@this"
+										actionListener="#{schoolCalender.exportnewPdf}">
+										<p:fileDownload value="#{schoolCalender.file}" />
+									</p:commandButton>
+
+
+								</p:panelGrid>
+							</center>
+							<p:separator />
+							<br />
+							<p:panel header="Edit Activity">
+								<center>
+									<p:commandButton value="Delete Multiple Events"
+										action="#{schoolCalender.deleteMultiple}" update=":form2"
+										style="margin-bottom:7px;" styleClass="butwid-1 redButt"
+										icon="fa fa-trash"></p:commandButton>
+								</center>
+
+								<p:dataTable id="calData" value="#{schoolCalender.list}"
+									var="var" reflow="true">
+
+									<p:column exportable="false" style="width:60px"
+										headerText="Select">
+										<p:selectBooleanCheckbox value="#{var.selection}" />
+									</p:column>
+
+									<p:column headerText="S.No.">
+										<f:facet name="header">
+											<p:outputLabel value="S.No."></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.sno}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Date">
+										<f:facet name="header">
+											<p:outputLabel value="Date"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.date}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Activity">
+										<f:facet name="header">
+											<p:outputLabel value="Activity"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.event}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Description">
+										<f:facet name="header">
+											<p:outputLabel value="Description"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.desc}"></p:outputLabel>
+									</p:column>
+
+									<p:column rendered="false" headerText="Start Time">
+										<f:facet name="header">
+											<p:outputLabel value="Start Time"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.hr}"></p:outputLabel>
+									</p:column>
+
+									<p:column rendered="false" headerText="End Time">
+										<f:facet name="header">
+											<p:outputLabel value="End Time"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.min}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Event For">
+										<f:facet name="header">
+											<p:outputLabel value="Event For"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel
+											value="#{var.holidayFor.toLowerCase() eq 'all' ? 'All Classes' : 'Particular Class(es)'}"></p:outputLabel>
+									</p:column>
+									<p:column exportable="false" headerText="Edit">
+										<p:commandButton update=":editForm" icon="ui-icon-pencil"
+											rendered="#{var.renderEdit}"
+											action="#{schoolCalender.editActivityDetails}">
+											<f:setPropertyActionListener
+												target="#{schoolCalender.selectedActivity}" value="#{var}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+
+									<p:column exportable="false" rendered="true"
+										headerText="Details">
+										<p:commandButton update=":viewForm" icon="ui-icon-search"
+											action="#{schoolCalender.viewActivityDetails}">
+											<f:setPropertyActionListener
+												target="#{schoolCalender.selectedActivity}" value="#{var}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+
+									<p:column exportable="false" rendered="true"
+										headerText="Delete">
+										<p:commandButton update=":form,:form2" icon="ui-icon-trash"
+											styleClass="redButt" action="#{schoolCalender.delete}">
+											<f:setPropertyActionListener
+												target="#{schoolCalender.selectedActivity}" value="#{var}"></f:setPropertyActionListener>
+											<p:confirm header="Confirmation"
+												message="Are You Sure To Delete...?" icon="ui-icon-alert" />
+										</p:commandButton>
+									</p:column>
+								</p:dataTable>
+								<f:facet name="footer">
+									<center>
+										<p:commandButton value="Delete Multiple Events"
+											action="#{schoolCalender.deleteMultiple}" update=":form2"
+											styleClass="butwid-1 redButt" icon="fa fa-trash"></p:commandButton>
+									</center>
+								</f:facet>
+							</p:panel>
+						</h:form>
+
+						<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+							<p:commandButton style="margin-left:30px" value="Yes"
+								type="button" styleClass="ui-confirmdialog-yes greenButt"
+								icon="ui-icon-check" />
+							<p:commandButton style="margin-left:50px" value="No"
+								type="button" styleClass="ui-confirmdialog-no redButt"
+								icon="ui-icon-close" />
+						</p:confirmDialog>
+
+						<h:form id="editForm">
+							<p:dialog resizable="false" widgetVar="editDialog"
+								header="Edit Details" showEffect="fade" hideEffect="explode"
+								modal="true">
+								<div class="ui-g form-group">
+									<p:panelGrid columns="2"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+										<p:outputLabel for="@next" style="color:red"
+											value="Select Date"></p:outputLabel>
+										<p:calendar value="#{schoolCalender.selectedDay}"
+											mindate="#{schoolCalender.minDateForEdit}"
+											pattern="dd/MM/yyyy" navigator="true" required="true"
+											requiredMessage="Please Select a Date"></p:calendar>
+
+
+										<p:outputLabel for="@next" style="color:red"
+											value="Select One"></p:outputLabel>
+										<p:selectOneMenu value="#{schoolCalender.selectedOne}"
+											required="true" requiredMessage="Please select any of One">
+											<f:selectItem itemLabel="Select Here" itemValue="" />
+											<f:selectItems value="#{schoolCalender.eventList}" />
+											<f:selectItem itemLabel="Other" itemValue="Other" />
+											<p:ajax listener="#{schoolCalender.checkTypeUpdate}"
+												update=":editForm:otherUpdate :editForm:otherValUpdate"></p:ajax>
+										</p:selectOneMenu>
+
+
+										<p:outputPanel id="otherUpdate">
+											<p:outputLabel style="color:red"
+												rendered="#{schoolCalender.showOtherEntryUpdate}"
+												value="Specify Type *"></p:outputLabel>
+										</p:outputPanel>
+
+										<p:outputPanel id="otherValUpdate">
+											<p:inputText
+												rendered="#{schoolCalender.showOtherEntryUpdate}"
+												value="#{schoolCalender.otherValue}" required="true"
+												requiredMessage="Please specify type"
+												validatorMessage="Please Enter Correct value">
+												<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+											</p:inputText>
+										</p:outputPanel>
+
+										<p:outputLabel for="@next" style="color:red"
+											value="Select One"></p:outputLabel>
+										<p:selectOneRadio value="#{schoolCalender.selectedTime}"
+											required="true" requiredMessage="Please select any of One">
+											<f:selectItem itemLabel="Full Day" itemValue="FullDay" />
+											<f:selectItem itemLabel="Timing" itemValue="Timing" />
+											<p:ajax listener="#{schoolCalender.checkTiming}"
+												update=":editForm:a :editForm:b :editForm:c :editForm:d"></p:ajax>
+										</p:selectOneRadio>
+
+										<p:outputLabel for="@next" style="color:red"
+											value="Description:"></p:outputLabel>
+										<p:inputTextarea value="#{schoolCalender.desc}"
+											required="true" requiredMessage="Please enter Description"
+											rows="3" cols="20"
+											validatorMessage="Please Enter Correct value">
+											<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+										</p:inputTextarea>
+
+										<p:outputPanel id="a">
+											<p:outputLabel style="color:red"
+												rendered="#{schoolCalender.showEditUpdate}"
+												value="Start Time *"></p:outputLabel>
+										</p:outputPanel>
+										<p:outputPanel id="b">
+											<p:inputText rendered="#{schoolCalender.showEditUpdate}"
+												value="#{schoolCalender.hr}" required="true"
+												requiredMessage="Please Enter Start Time"
+												validatorMessage="Please Enter Correct value">
+												<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+											</p:inputText>
+										</p:outputPanel>
+										<p:outputPanel id="c">
+											<p:outputLabel style="color:red"
+												rendered="#{schoolCalender.showEditUpdate}"
+												value="End Time *"></p:outputLabel>
+										</p:outputPanel>
+										<p:outputPanel id="d">
+											<p:inputText rendered="#{schoolCalender.showEditUpdate}"
+												value="#{schoolCalender.min}" required="true"
+												requiredMessage="Please Enter End Time"
+												validatorMessage="Please Enter Correct value">
+												<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+											</p:inputText>
+										</p:outputPanel>
+									</p:panelGrid>
+								</div>
+
+								<br />
+								<p:separator />
+								<center>
+									<p:commandButton update=":editForm,:form,:form2"
+										styleClass="butwid" icon="fa fa-upload"
+										actionListener="#{schoolCalender.editNow}" value="Update"></p:commandButton>
+
+								</center>
+								<p:separator />
+								<br />
+							</p:dialog>
+						</h:form>
+
+						<h:form id="viewForm">
+							<p:dialog resizable="false" widgetVar="viewDialog"
+								header="View Details" showEffect="fade" hideEffect="explode"
+								modal="true" width="700" height="400">
+								<div class="ui-g form-group">
+									<p:panelGrid columns="4"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none;width:100%;background-color:transparent;">
+										<p:outputLabel value="Event Date" style="font-weight: bold;"></p:outputLabel>
+										<p:outputLabel value="#{schoolCalender.selectedActivity.date}"></p:outputLabel>
+
+										<p:outputLabel value="Event" style="font-weight: bold;"></p:outputLabel>
+										<p:outputLabel
+											value="#{schoolCalender.selectedActivity.event}"></p:outputLabel>
+
+										<p:outputLabel value="Timings" style="font-weight: bold;"></p:outputLabel>
+										<p:outputLabel
+											value="#{schoolCalender.selectedActivity.eventTime.toLowerCase() eq 'fullday' ? 'Full Day' : 'From '.concat(schoolCalender.selectedActivity.hr).concat(' to ').concat(schoolCalender.selectedActivity.min)}"></p:outputLabel>
+
+										<p:outputLabel value="Description" style="font-weight: bold;"></p:outputLabel>
+										<p:outputLabel value="#{schoolCalender.selectedActivity.desc}"></p:outputLabel>
+
+										<p:outputLabel value="Event For" style="font-weight: bold;"></p:outputLabel>
+										<p:outputLabel
+											value="#{schoolCalender.selectedActivity.holidayFor.toLowerCase() eq 'all' ? 'All Classes' : 'Particular Class(es)'}"></p:outputLabel>
+									</p:panelGrid>
+								</div>
+								<br />
+								<br />
+								<p:outputPanel
+									rendered="#{schoolCalender.selectedActivity.holidayFor.toLowerCase() ne 'all'}">
+									<p:dataTable reflow="true" id="vData"
+										value="#{schoolCalender.eventClassList}" var="var">
+
+										<p:column sortBy="#{var.rankInt}" style="text-align: center;"
+											headerText="Class Name">
+											<f:facet name="header">
+												<p:outputLabel value="Class Name"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.className}"></p:outputLabel>
+										</p:column>
+
+										<p:column style="text-align: center;" headerText="Section">
+											<f:facet name="header">
+												<p:outputLabel value="Section"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.sectionName}"></p:outputLabel>
+										</p:column>
+
+										<p:column style="width: 60px;" rendered="true"
+											headerText="Delete">
+											<p:commandButton update=":form,:form2,:viewForm"
+												icon="ui-icon-trash" styleClass="redButt"
+												action="#{schoolCalender.deleteClass}">
+												<f:setPropertyActionListener
+													target="#{schoolCalender.selectedClass}" value="#{var}"></f:setPropertyActionListener>
+												<p:confirm header="Confirmation"
+													message="Are You Sure To Delete...?" icon="ui-icon-alert" />
+											</p:commandButton>
+										</p:column>
+
+									</p:dataTable>
+								</p:outputPanel>
+
+							</p:dialog>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

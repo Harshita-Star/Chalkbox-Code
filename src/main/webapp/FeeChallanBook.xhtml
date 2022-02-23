@@ -1,0 +1,966 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:p="http://primefaces.org/ui">
+
+<f:view contentType="text/html">
+
+	<h:head>
+		<title>#{sideMenuBean.companyName} | Fee Book Challan</title>
+		<f:facet name="first">
+			<meta content='text/html; charset=UTF-8' http-equiv="Content-Type" />
+			<meta http-equiv="X-UA-Compatible" content="EmulateIE8" />
+		</f:facet>
+
+		<script>
+		
+			function printwin() 
+			{
+				document.getElementById('test').style.display="none";	
+				document.getElementById('test1').style.display="none";
+				window.print();
+				document.getElementById('test').style.display="block";
+				document.getElementById('test1').style.display="block";
+
+				document.URL="";
+			}
+	
+		</script>
+	</h:head>
+
+	<h:body>
+		<p:commandButton rendered="false" onclick="printwin()" id="test"
+			value="Print" icon="ui-icon-print"></p:commandButton>
+		<h:form id="form2">
+		<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+
+			<style>
+.ui-widget .ui-widget {
+	font-size: #{feeBookChallanBean.fontSize
+}
+
+;
+}
+.test .ui-panelgrid-cell {
+	width: 10%;
+	border: none;
+}
+
+.test .ui-panelgrid .ui-panelgrid-cell .ui-widget-content {
+	border-style: hidden;
+	border: 0px !important;
+}
+
+.rightSide .ui-panelgrid-cell {
+	text-align: right;
+}
+
+.aa .ui-widget-content {
+	border: 0px !important;
+	text-align: left;
+}
+</style>
+
+			<p:outputPanel styleClass="aa"
+				style="height: auto;
+float: left;
+font-size: 7px;
+border: 1px solid black;
+margin-right: 0%; width: #{feeBookChallanBean.width};">
+
+				<p:outputPanel>
+
+					<table width="100%;">
+						<tr>
+							<td style="width: 20%"><p
+									style="margin: 0px; text-align: left; font-size: 7px;"></p></td>
+
+							<td style="width: 80%"><h2
+									style="margin: 0px; text-align: right">#{feeBookChallanBean.a}</h2></td>
+						</tr>
+						<tr>
+							<td style="width: 20%" rowspan="1"><p
+									style="margin: 0px; text-align: left; font-size: 7px;"></p></td>
+
+							<td style="width: 80%"><p
+									style="margin: 0px; text-align: right; font-size: 7px;"></p></td>
+						</tr>
+
+						<tr>
+							<td style="width: 15%"><p
+									style="text-align: left; margin: 0px; font-size: 6.7px;'"></p></td>
+						</tr>
+						
+						
+						
+	
+						<tr>
+							<td style="width: 85%"><h1
+									style="margin: 0px; text-align: left; margin-left: 10px;">#{feeBookChallanBean.schoolName}</h1></td>
+						</tr>
+						<tr>
+							<td style="width: 85%"><p
+									style="text-align: left; margin: 0px; margin-left: 10px;">#{feeBookChallanBean.add1}</p></td>
+						</tr>
+						<tr>
+							<td style="width: 85%"><p
+									style="text-align: left; margin: 0px; margin-left: 10px;">#{feeBookChallanBean.add2}</p></td>
+						</tr>
+						<tr>
+							<td style="width: 85%"><p
+									style="text-align: left; margin: 0px; margin-left: 10px;">#{feeBookChallanBean.add3}</p></td>
+						</tr>
+
+						<tr>
+							<td style="width: 85%"><p
+									style="text-align: left; margin: 0px; margin-left: 10px;">Ph.No.-#{feeBookChallanBean.phoneNo}</p></td>
+						</tr>
+
+						<tr>
+							<td style="width: 85%"><p
+									style="text-align: left; margin: 0px; margin-left: 10px;">#{feeBookChallanBean.emailId}
+									#{feeBookChallanBean.website}</p></td>
+						</tr>
+					</table>
+
+				</p:outputPanel>
+
+				<p:outputPanel
+					style="width:100%;float-left;border-top: 1px solid black;float:left;">
+                    <table style="width: 100%">
+                    
+                    <tr style="width: 100%">
+                    <td style="width: 100%"><p
+									style="text-align: center;margin: 0px;font-size: 14px;'">PUNJAB NATIONAL BANK</p></td>
+						</tr>
+						<tr style="width: 100%">
+                    <td style="width: 100%"><p
+									style="text-align: center;margin: 0px;font-size: 14px;'">USE FCMBR ONLY</p></td>
+						</tr>
+                    <tr style="width: 100%">
+                    <td style="width: 100%"><p
+									style="text-align: center;margin: 0px;font-size: 14px;'">PAY - IN - SLIP</p></td>
+						</tr>
+					</table>
+					<p:outputPanel style="width:60%;float:left;">
+
+						<p:outputPanel style="width:90%;float:left">
+							<p:panelGrid styleClass="test" columns="1">
+								<p:outputLabel
+									value="Institute ID:- SSBIP"></p:outputLabel>
+									<p:outputLabel
+									value="Collection ID:- SSBIP"></p:outputLabel>
+									
+					
+								<p:outputLabel
+									value="Student Name:- #{feeBookChallanBean.studentname}"></p:outputLabel>
+								<p:outputLabel
+									value="Father's Name:- #{feeBookChallanBean.fathername}"></p:outputLabel>
+								<p:outputLabel value="Fees Upto:- #{feeBookChallanBean.feeUpto} (#{feeBookChallanBean.session})"></p:outputLabel>
+							</p:panelGrid>
+						</p:outputPanel>
+
+						<!-- <p:outputPanel style="width:50%;float:right">
+											
+											<p:panelGrid columns="1" styleClass="test">
+												
+												<p:outputLabel value="Session - #{feeBookChallanBean.session}"></p:outputLabel>
+											</p:panelGrid>
+									
+									</p:outputPanel>
+									 -->
+					</p:outputPanel>
+
+					<p:outputPanel style="width:40%;float:right">
+
+						<p:outputPanel style="width:80%;float:right">
+							<p:panelGrid styleClass="test" columns="1">
+										<p:outputLabel
+									value=""></p:outputLabel>
+					
+								<p:outputLabel
+									value="Class:- #{feeBookChallanBean.studentclass}"></p:outputLabel>
+								<p:outputLabel value="SR.No.:- #{feeBookChallanBean.srNo}"></p:outputLabel>
+								<p:outputLabel value="Date:- "></p:outputLabel>
+							</p:panelGrid>
+						</p:outputPanel>
+
+					</p:outputPanel>
+
+				</p:outputPanel>
+
+				<p:outputPanel style="width:100%;">
+
+					<hr style="margin: 0px"></hr>
+
+					<h:dataTable value="#{feeBookChallanBean.selectedFees}" var="var"
+						style="width:100%;border-collapse:collapse; border-right: none; border-left: none;"
+						border="1">
+
+						<f:facet name="header">
+               					Fee Details
+               				</f:facet>
+
+						<p:column headerText="Stationary Fee Tpye">
+							<f:facet name="header">Fee type</f:facet>
+							<p:outputLabel value="#{var.feeName}" style="font-size: 14px;"></p:outputLabel>
+						</p:column>
+
+
+
+						<p:column rendered="#{sideMenuBean.list.country eq 'UAE'}"
+							headerText="Amount ">
+							<f:facet name="header">Amount (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})</f:facet>
+							<p:outputLabel
+								style="float:right;margin-right:50px;font-size: 14px;"
+								value="#{var.mainAmount}"></p:outputLabel>
+						</p:column>
+
+
+						<p:column rendered="#{sideMenuBean.list.country eq 'UAE'}"
+							headerText="Tax Amount ">
+							<f:facet name="header">Tax Amount (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})</f:facet>
+							<p:outputLabel
+								style="float:right;margin-right:50px;font-size: 14px;"
+								value="#{var.taxAmount}"></p:outputLabel>
+						</p:column>
+
+
+
+						<p:column headerText="Amount ">
+							<f:facet name="header">Amount (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})</f:facet>
+							<p:outputLabel
+								style="float:right;margin-right:50px;font-size: 14px;"
+								value="#{var.dueamount}"></p:outputLabel>
+						</p:column>
+
+						<p:column headerText="Discount "
+							rendered="#{sideMenuBean.list.country eq 'UAE'}">
+							<f:facet name="header">Discount (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})</f:facet>
+							<p:outputLabel
+								style="float:right;margin-right:50px;font-size: 14px;"
+								value="#{var.payDiscount}"></p:outputLabel>
+						</p:column>
+
+
+
+
+					</h:dataTable>
+
+
+				</p:outputPanel>
+
+				<p:outputPanel
+					style="border: 1px solid black; border-right: none; border-left: none;">
+
+					<p:panelGrid styleClass="test" style="width:100%" columns="1">
+						<p:outputLabel
+							value="Payable Fees: #{sideMenuBean.list.country eq 'UAE' ? 'AED ' : 'Rs.'}#{feeBookChallanBean.payableAmt}"
+							style="float:right;font-size: 14px;"></p:outputLabel>
+					</p:panelGrid>
+
+					<hr style="margin: 0px"></hr>
+
+
+					<hr style="margin: 0px"></hr>
+						<p:panelGrid style="width:100%" columns="6">
+						<p:outputLabel value="DENO"></p:outputLabel>
+						<p:outputLabel value="2000x"></p:outputLabel>
+						<p:outputLabel value="500x"></p:outputLabel>
+						<p:outputLabel value="200x"></p:outputLabel>
+						<p:outputLabel value="100x"></p:outputLabel>
+						<p:outputLabel value="50x"></p:outputLabel>
+						
+						
+						<p:outputLabel value="AMT."></p:outputLabel>
+						<p:outputLabel value=""></p:outputLabel>
+						<p:outputLabel value=""></p:outputLabel>
+						<p:outputLabel value=""></p:outputLabel>
+						<p:outputLabel value=""></p:outputLabel>
+						<p:outputLabel value=""></p:outputLabel>
+						
+						
+
+
+
+					</p:panelGrid>
+
+
+					<p:panelGrid style="width:100%" columns="7">
+						<p:outputLabel value="DENO"></p:outputLabel>
+						<p:outputLabel value="20x"></p:outputLabel>
+						<p:outputLabel value="10x"></p:outputLabel>
+						<p:outputLabel value="5x"></p:outputLabel>
+						<p:outputLabel value="2x"></p:outputLabel>
+						<p:outputLabel value="1x"></p:outputLabel>
+						<p:outputLabel value="TOTAL"></p:outputLabel>
+						<p:outputLabel value="AMT."></p:outputLabel>
+						<p:outputLabel value=""></p:outputLabel>
+						<p:outputLabel value=""></p:outputLabel>
+						<p:outputLabel value=""></p:outputLabel>
+						<p:outputLabel value=""></p:outputLabel>
+						<p:outputLabel value=""></p:outputLabel>
+						<p:outputLabel value=""></p:outputLabel>
+
+
+
+					</p:panelGrid>
+
+
+
+					<hr style="margin: 0px"></hr>
+
+
+
+					<h4 style="margin-left: 10px;">Cheque Deposit</h4>
+					<p:panelGrid style="width:100%" columns="4">
+						<p:outputLabel value="ChequeNo"></p:outputLabel>
+						<p:outputLabel value="IssueDate"></p:outputLabel>
+						<p:outputLabel value="NameOfBank"></p:outputLabel>
+						<p:outputLabel value="Amount"></p:outputLabel>
+
+						<p:outputLabel value=""></p:outputLabel>
+						<p:outputLabel value=""></p:outputLabel>
+						<p:outputLabel value=""></p:outputLabel>
+						<p:outputLabel value=""></p:outputLabel>
+
+
+
+					</p:panelGrid>
+
+					<hr style="margin: 0px"></hr>
+
+					<h5 style="margin-left: 10px;">Amount (in words) :-</h5>
+					<h5 style="margin-left: 10px;">Name Of the Depositor :</h5>
+					<h5 style="margin-left: 10px;">Signature :</h5>
+					<h5 style="margin-left: 10px;">Phone no :-</h5>
+
+
+
+
+
+
+					<p:panelGrid styleClass="test" style="width:100%" columns="2">
+
+						<p:outputLabel value="Acknowledgement  "></p:outputLabel>
+						<p:outputLabel value=" Cashier/Officer" style="float:right;"></p:outputLabel>
+					</p:panelGrid>
+
+
+
+				</p:outputPanel>
+
+			</p:outputPanel>
+
+			<!-- <hr style="margin:20px"></hr> -->
+
+			<p:outputPanel rendered="#{feeBookChallanBean.r1}" styleClass="aa"
+				style="height: auto;
+
+float: left;
+font-size: 7px;
+border: 1px solid black;
+margin-left: #{feeBookChallanBean.marginBetween};
+width: #{feeBookChallanBean.width};">
+
+				<p:outputPanel>
+
+					<table width="100%;">
+						<tr>
+							<td style="width: 20%"><p
+									style="margin: 0px; text-align: left; font-size: 7px;"></p></td>
+
+							<td style="width: 80%"><h2
+									style="margin: 0px; text-align: right">#{feeBookChallanBean.b}</h2></td>
+						</tr>
+						<tr>
+							<td style="width: 20%" rowspan="1"><p
+									style="margin: 0px; text-align: left; font-size: 7px;"></p></td>
+
+							<td style="width: 80%"><p
+									style="margin: 0px; text-align: right; font-size: 7px;"></p></td>
+						</tr>
+
+						<tr>
+							<td style="width: 15%"><p
+									style="text-align: left; margin: 0px; font-size: 6.7px;'"></p></td>
+						</tr>
+
+
+							<tr>
+							<td style="width: 85%"><h1
+									style="margin: 0px; text-align: left; margin-left: 10px;">#{feeBookChallanBean.schoolName}</h1></td>
+						</tr>
+
+
+						<tr>
+							<td style="width: 85%"><p
+									style="text-align: left; margin: 0px; margin-left: 10px;">#{feeBookChallanBean.add1}</p></td>
+						</tr>
+						<tr>
+							<td style="width: 85%"><p
+									style="text-align: left; margin: 0px; margin-left: 10px;">#{feeBookChallanBean.add2}</p></td>
+						</tr>
+						<tr>
+							<td style="width: 85%"><p
+									style="text-align: left; margin: 0px; margin-left: 10px;">#{feeBookChallanBean.add3}</p></td>
+						</tr>
+
+						<tr>
+							<td style="width: 85%"><p
+									style="text-align: left; margin: 0px; margin-left: 10px;">Ph.No.-#{feeBookChallanBean.phoneNo}</p></td>
+						</tr>
+
+						<tr>
+							<td style="width: 85%"><p
+									style="text-align: left; margin: 0px; margin-left: 10px;">#{feeBookChallanBean.emailId}
+									#{feeBookChallanBean.website}</p></td>
+						</tr>
+					</table>
+
+
+
+
+				</p:outputPanel>
+
+				<p:outputPanel
+					style="width:100%;float-left;border-top: 1px solid black;float:left;">
+ <table style="width: 100%">
+  <tr style="width: 100%">
+                    <td style="width: 100%"><p
+									style="text-align: center;margin: 0px;font-size: 14px;'">PUNJAB NATIONAL BANK</p></td>
+						</tr>
+						<tr style="width: 100%">
+                    <td style="width: 100%"><p
+									style="text-align: center;margin: 0px;font-size: 14px;'">USE FCMBR ONLY</p></td>
+						</tr>
+                    <tr style="width: 100%">
+                    <td style="width: 100%"><p
+									style="text-align: center;margin: 0px;font-size: 14px;'">PAY - IN - SLIP</p></td>
+						</tr>
+					</table>
+					<p:outputPanel style="width:60%;float:left;">
+					
+
+						<p:outputPanel style="width:90%;float:left">
+						
+							<p:panelGrid styleClass="test" columns="1">
+							<p:outputLabel
+									value="Institute ID:- SSBIP"></p:outputLabel>
+									<p:outputLabel
+									value="Collection ID:- SSBIP"></p:outputLabel>
+								<p:outputLabel
+									value="Student Name:- #{feeBookChallanBean.studentname}"></p:outputLabel>
+								<p:outputLabel
+									value="Father's Name:- #{feeBookChallanBean.fathername}"></p:outputLabel>
+								<p:outputLabel value="Fees Upto:- #{feeBookChallanBean.feeUpto} (#{feeBookChallanBean.session})"></p:outputLabel>
+							</p:panelGrid>
+						</p:outputPanel>
+
+						<!-- <p:outputPanel style="width:50%;float:right">
+											
+											<p:panelGrid columns="1" styleClass="test">
+												
+												<p:outputLabel value="Session - #{feeBookChallanBean.session}"></p:outputLabel>
+											</p:panelGrid>
+									
+									</p:outputPanel>
+									 -->
+					</p:outputPanel>
+
+					<p:outputPanel style="width:40%;float:right">
+
+						<p:outputPanel style="width:80%;float:right">
+							<p:panelGrid styleClass="test" columns="1">
+							<p:outputLabel
+									value=""></p:outputLabel>
+								<p:outputLabel
+									value="Class:- #{feeBookChallanBean.studentclass}"></p:outputLabel>
+								<p:outputLabel value="SR.No.:- #{feeBookChallanBean.srNo}"></p:outputLabel>
+								<p:outputLabel value="Date:- "></p:outputLabel>
+							</p:panelGrid>
+						</p:outputPanel>
+					</p:outputPanel>
+				</p:outputPanel>
+
+				<p:outputPanel style="width:100%;">
+
+					<hr style="margin: 0px"></hr>
+
+					<h:dataTable value="#{feeBookChallanBean.selectedFees}" var="var"
+						style="width:100%;border-collapse:collapse; border-right: none; border-left: none;"
+						border="1">
+
+						<f:facet name="header">
+               					Fee Details
+               				</f:facet>
+
+						<p:column headerText="Stationary Fee Tpye">
+							<f:facet name="header">Fee type</f:facet>
+							<p:outputLabel value="#{var.feeName}" style="font-size: 14px;"></p:outputLabel>
+						</p:column>
+
+
+
+						<p:column rendered="#{sideMenuBean.list.country eq 'UAE'}"
+							headerText="Amount ">
+							<f:facet name="header">Amount (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})</f:facet>
+							<p:outputLabel
+								style="float:right;margin-right:50px;font-size: 14px;"
+								value="#{var.mainAmount}"></p:outputLabel>
+						</p:column>
+
+
+						<p:column rendered="#{sideMenuBean.list.country eq 'UAE'}"
+							headerText="Tax Amount ">
+							<f:facet name="header">Tax Amount (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})</f:facet>
+							<p:outputLabel
+								style="float:right;margin-right:50px;font-size: 14px;"
+								value="#{var.taxAmount}"></p:outputLabel>
+						</p:column>
+
+
+
+						<p:column headerText="Amount ">
+							<f:facet name="header">Due Amount (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})</f:facet>
+							<p:outputLabel
+								style="float:right;margin-right:50px;font-size: 14px;"
+								value="#{var.dueamount}"></p:outputLabel>
+						</p:column>
+
+						<p:column headerText="Discount "
+							rendered="#{sideMenuBean.list.country eq 'UAE'}">
+							<f:facet name="header">Discount (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})</f:facet>
+							<p:outputLabel
+								style="float:right;margin-right:50px;font-size: 14px;"
+								value="#{var.payDiscount}"></p:outputLabel>
+						</p:column>
+
+
+
+
+					</h:dataTable>
+
+
+				</p:outputPanel>
+
+				<p:outputPanel
+					style="border: 1px solid black; border-right: none; border-left: none;">
+
+					<p:panelGrid styleClass="test" style="width:100%" columns="1">
+						<p:outputLabel
+							value="Payable Fees: #{sideMenuBean.list.country eq 'UAE' ? 'AED ' : 'Rs.'}#{feeBookChallanBean.payableAmt}"
+							style="float:right;font-size: 14px;"></p:outputLabel>
+					</p:panelGrid>
+
+					<hr style="margin: 0px"></hr>
+
+
+					<hr style="margin: 0px"></hr>
+						<p:panelGrid style="width:100%" columns="6">
+						<p:outputLabel value="DENO"></p:outputLabel>
+						<p:outputLabel value="2000x"></p:outputLabel>
+						<p:outputLabel value="500x"></p:outputLabel>
+						<p:outputLabel value="200x"></p:outputLabel>
+						<p:outputLabel value="100x"></p:outputLabel>
+						<p:outputLabel value="50x"></p:outputLabel>
+						
+						
+						<p:outputLabel value="AMT."></p:outputLabel>
+						<p:outputLabel value=""></p:outputLabel>
+						<p:outputLabel value=""></p:outputLabel>
+						<p:outputLabel value=""></p:outputLabel>
+						<p:outputLabel value=""></p:outputLabel>
+						<p:outputLabel value=""></p:outputLabel>
+						
+						
+
+
+
+					</p:panelGrid>
+
+
+					<p:panelGrid style="width:100%" columns="7">
+						<p:outputLabel value="DENO"></p:outputLabel>
+						<p:outputLabel value="20x"></p:outputLabel>
+						<p:outputLabel value="10x"></p:outputLabel>
+						<p:outputLabel value="5x"></p:outputLabel>
+						<p:outputLabel value="2x"></p:outputLabel>
+						<p:outputLabel value="1x"></p:outputLabel>
+						<p:outputLabel value="TOTAL"></p:outputLabel>
+						<p:outputLabel value="AMT."></p:outputLabel>
+						<p:outputLabel value=""></p:outputLabel>
+						<p:outputLabel value=""></p:outputLabel>
+						<p:outputLabel value=""></p:outputLabel>
+						<p:outputLabel value=""></p:outputLabel>
+						<p:outputLabel value=""></p:outputLabel>
+						<p:outputLabel value=""></p:outputLabel>
+
+
+
+					</p:panelGrid>
+
+					<hr style="margin: 0px"></hr>
+
+
+					<h4 style="margin-left: 10px;">Cheque Deposit</h4>
+					<p:panelGrid style="width:100%" columns="4">
+						<p:outputLabel value="ChequeNo"></p:outputLabel>
+						<p:outputLabel value="IssueDate"></p:outputLabel>
+						<p:outputLabel value="NameOfBank"></p:outputLabel>
+						<p:outputLabel value="Amount"></p:outputLabel>
+
+						<p:outputLabel value=""></p:outputLabel>
+						<p:outputLabel value=""></p:outputLabel>
+						<p:outputLabel value=""></p:outputLabel>
+						<p:outputLabel value=""></p:outputLabel>
+
+
+
+					</p:panelGrid>
+
+
+
+
+
+					<hr style="margin: 0px"></hr>
+
+
+
+
+					<h5 style="margin-left: 10px;">Amount (in words) :-</h5>
+					<h5 style="margin-left: 10px;">Name Of the Depositor :</h5>
+					<h5 style="margin-left: 10px;">Signature :</h5>
+					<h5 style="margin-left: 10px;">Phone no :-</h5>
+
+					<!-- <br></br>
+									<br></br><br></br>
+									<br></br><br></br>
+									<br></br><br></br> -->
+
+					<p:panelGrid styleClass="test" style="width:100%" columns="2">
+
+						<p:outputLabel value="Acknowledgement  "></p:outputLabel>
+						<p:outputLabel value=" Cashier/Officer" style="float:right;"></p:outputLabel>
+					</p:panelGrid>
+
+
+
+				</p:outputPanel>
+
+
+			</p:outputPanel>
+
+
+			<p:outputPanel rendered="#{feeBookChallanBean.r2}" styleClass="aa"
+				style="height: auto;
+float: left;
+font-size: 7px;
+border: 1px solid black;
+margin-left: #{feeBookChallanBean.marginBetween};
+width: #{feeBookChallanBean.width};">
+
+				<p:outputPanel>
+
+					<table width="100%;">
+						<tr>
+							<td style="width: 20%"><p
+									style="margin: 0px; text-align: left; font-size: 7px;"></p></td>
+
+							<td style="width: 80%"><h2
+									style="margin: 0px; text-align: right">#{feeBookChallanBean.c}</h2></td>
+						</tr>
+						<tr>
+							<td style="width: 20%" rowspan="1"><p
+									style="margin: 0px; text-align: left; font-size: 7px;"></p></td>
+
+							<td style="width: 80%"><p
+									style="margin: 0px; text-align: right; font-size: 7px;"></p></td>
+						</tr>
+
+						<tr>
+							<td style="width: 15%"><p
+									style="text-align: left; margin: 0px; font-size: 6.7px;'"></p></td>
+						</tr>
+
+						
+						<tr>
+							<td style="width: 85%"><h1
+									style="margin: 0px; text-align: left; margin-left: 10px;">#{feeBookChallanBean.schoolName}</h1></td>
+						</tr>
+
+
+						<tr>
+							<td style="width: 85%"><p
+									style="text-align: left; margin: 0px; margin-left: 10px;">#{feeBookChallanBean.add1}</p></td>
+						</tr>
+						<tr>
+							<td style="width: 85%"><p
+									style="text-align: left; margin: 0px; margin-left: 10px;">#{feeBookChallanBean.add2}</p></td>
+						</tr>
+						<tr>
+							<td style="width: 85%"><p
+									style="text-align: left; margin: 0px; margin-left: 10px;">#{feeBookChallanBean.add3}</p></td>
+						</tr>
+
+						<tr>
+							<td style="width: 85%"><p
+									style="text-align: left; margin: 0px; margin-left: 10px;">Ph.No.-#{feeBookChallanBean.phoneNo}</p></td>
+						</tr>
+
+						<tr>
+							<td style="width: 85%"><p
+									style="text-align: left; margin: 0px; margin-left: 10px;">#{feeBookChallanBean.emailId}
+									#{feeBookChallanBean.website}</p></td>
+						</tr>
+					</table>
+
+
+				</p:outputPanel>
+
+				<p:outputPanel
+					style="width:100%;float-left;border-top: 1px solid black;float:left;">
+
+ <table style="width: 100%">
+  <tr style="width: 100%">
+                    <td style="width: 100%"><p
+									style="text-align: center;margin: 0px;font-size: 14px;'">PUNJAB NATIONAL BANK</p></td>
+						</tr>
+						<tr style="width: 100%">
+                    <td style="width: 100%"><p
+									style="text-align: center;margin: 0px;font-size: 14px;'">USE FCMBR ONLY</p></td>
+						</tr>
+                    <tr style="width: 100%">
+                    <td style="width: 100%"><p
+									style="text-align: center;margin: 0px;font-size: 14px;'">PAY - IN - SLIP</p></td>
+						</tr>
+					</table>
+					<p:outputPanel style="width:60%;float:left;">
+
+						<p:outputPanel style="width:90%;float:left">
+							<p:panelGrid styleClass="test" columns="1">
+							<p:outputLabel
+									value="Institute ID:- SSBIP"></p:outputLabel>
+									<p:outputLabel
+									value="Collection ID:- SSBIP"></p:outputLabel>
+								<p:outputLabel
+									value="Student Name:- #{feeBookChallanBean.studentname}"></p:outputLabel>
+								<p:outputLabel
+									value="Father's Name:- #{feeBookChallanBean.fathername}"></p:outputLabel>
+								<p:outputLabel value="Fees Upto:- #{feeBookChallanBean.feeUpto} (#{feeBookChallanBean.session})"></p:outputLabel>
+							</p:panelGrid>
+						</p:outputPanel>
+
+						<!-- <p:outputPanel style="width:50%;float:right">
+											
+											<p:panelGrid columns="1" styleClass="test">
+												
+												<p:outputLabel value="Session - #{feeBookChallanBean.session}"></p:outputLabel>
+											</p:panelGrid>
+									
+									</p:outputPanel>
+									 -->
+					</p:outputPanel>
+
+					<p:outputPanel style="width:40%;float:right">
+
+						<p:outputPanel style="width:80%;float:right">
+							<p:panelGrid styleClass="test" columns="1">
+							<p:outputLabel
+									value=""></p:outputLabel>
+								<p:outputLabel
+									value="Class:- #{feeBookChallanBean.studentclass}"></p:outputLabel>
+								<p:outputLabel value="SR.No.:- #{feeBookChallanBean.srNo}"></p:outputLabel>
+								<p:outputLabel value="Date:- "></p:outputLabel>
+							</p:panelGrid>
+						</p:outputPanel>
+					</p:outputPanel>
+				</p:outputPanel>
+
+				<p:outputPanel style="width:100%;">
+
+					<hr style="margin: 0px"></hr>
+
+					<h:dataTable value="#{feeBookChallanBean.selectedFees}" var="var"
+						style="width:100%;border-collapse:collapse; border-right: none; border-left: none;"
+						border="1">
+
+						<f:facet name="header">
+               					Fee Details
+               				</f:facet>
+
+						<p:column headerText="Stationary Fee Tpye">
+							<f:facet name="header">Fee type</f:facet>
+							<p:outputLabel value="#{var.feeName}" style="font-size: 14px;"></p:outputLabel>
+						</p:column>
+
+
+
+						<p:column rendered="#{sideMenuBean.list.country eq 'UAE'}"
+							headerText="Amount ">
+							<f:facet name="header">Amount (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})</f:facet>
+							<p:outputLabel
+								style="float:right;margin-right:50px;font-size: 14px;"
+								value="#{var.mainAmount}"></p:outputLabel>
+						</p:column>
+
+
+						<p:column rendered="#{sideMenuBean.list.country eq 'UAE'}"
+							headerText="Tax Amount ">
+							<f:facet name="header">Tax Amount (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})</f:facet>
+							<p:outputLabel
+								style="float:right;margin-right:50px;font-size: 14px;"
+								value="#{var.taxAmount}"></p:outputLabel>
+						</p:column>
+
+
+
+						<p:column headerText="Amount ">
+							<f:facet name="header">Due Amount (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})</f:facet>
+							<p:outputLabel
+								style="float:right;margin-right:50px;font-size: 14px;"
+								value="#{var.dueamount}"></p:outputLabel>
+						</p:column>
+
+						<p:column headerText="Discount "
+							rendered="#{sideMenuBean.list.country eq 'UAE'}">
+							<f:facet name="header">Discount (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})</f:facet>
+							<p:outputLabel
+								style="float:right;margin-right:50px;font-size: 14px;"
+								value="#{var.payDiscount}"></p:outputLabel>
+						</p:column>
+
+
+
+
+					</h:dataTable>
+
+
+				</p:outputPanel>
+
+				<p:outputPanel
+					style="border: 1px solid black; border-right: none; border-left: none;">
+
+					<p:panelGrid styleClass="test" style="width:100%" columns="1">
+						<p:outputLabel
+							value="Payable Fees: #{sideMenuBean.list.country eq 'UAE' ? 'AED ' : 'Rs.'}#{feeBookChallanBean.payableAmt}"
+							style="float:right;font-size: 14px;"></p:outputLabel>
+					</p:panelGrid>
+
+					<hr style="margin: 0px"></hr>
+
+
+					<hr style="margin: 0px"></hr>
+					<p:panelGrid style="width:100%" columns="6">
+						<p:outputLabel value="DENO"></p:outputLabel>
+						<p:outputLabel value="2000x"></p:outputLabel>
+						<p:outputLabel value="500x"></p:outputLabel>
+						<p:outputLabel value="200x"></p:outputLabel>
+						<p:outputLabel value="100x"></p:outputLabel>
+						<p:outputLabel value="50x"></p:outputLabel>
+						
+						
+						<p:outputLabel value="AMT."></p:outputLabel>
+						<p:outputLabel value=""></p:outputLabel>
+						<p:outputLabel value=""></p:outputLabel>
+						<p:outputLabel value=""></p:outputLabel>
+						<p:outputLabel value=""></p:outputLabel>
+						<p:outputLabel value=""></p:outputLabel>
+						
+						
+
+
+
+					</p:panelGrid>
+
+
+					<p:panelGrid style="width:100%" columns="7">
+						<p:outputLabel value="DENO"></p:outputLabel>
+						<p:outputLabel value="20x"></p:outputLabel>
+						<p:outputLabel value="10x"></p:outputLabel>
+						<p:outputLabel value="5x"></p:outputLabel>
+						<p:outputLabel value="2x"></p:outputLabel>
+						<p:outputLabel value="1x"></p:outputLabel>
+						<p:outputLabel value="TOTAL"></p:outputLabel>
+						<p:outputLabel value="AMT."></p:outputLabel>
+						<p:outputLabel value=""></p:outputLabel>
+						<p:outputLabel value=""></p:outputLabel>
+						<p:outputLabel value=""></p:outputLabel>
+						<p:outputLabel value=""></p:outputLabel>
+						<p:outputLabel value=""></p:outputLabel>
+						<p:outputLabel value=""></p:outputLabel>
+
+
+
+					</p:panelGrid>
+
+
+					<hr style="margin: 0px"></hr>
+
+
+
+
+					<h4 style="margin-left: 10px;">Cheque Deposit</h4>
+					<p:panelGrid style="width:100%" columns="4">
+						<p:outputLabel value="ChequeNo"></p:outputLabel>
+						<p:outputLabel value="IssueDate"></p:outputLabel>
+						<p:outputLabel value="NameOfBank"></p:outputLabel>
+						<p:outputLabel value="Amount"></p:outputLabel>
+
+						<p:outputLabel value=""></p:outputLabel>
+						<p:outputLabel value=""></p:outputLabel>
+						<p:outputLabel value=""></p:outputLabel>
+						<p:outputLabel value=""></p:outputLabel>
+
+
+
+					</p:panelGrid>
+
+					<hr style="margin: 0px"></hr>
+
+
+					<h5 style="margin-left: 10px;">Amount (in words) :-</h5>
+					<h5 style="margin-left: 10px;">Name Of the Depositor :</h5>
+					<h5 style="margin-left: 10px;">Signature :</h5>
+					<h5 style="margin-left: 10px;">Phone no :-</h5>
+
+
+					<!-- <br></br>
+									<br></br><br></br>
+									<br></br><br></br>
+									<br></br><br></br> -->
+
+
+					<p:panelGrid styleClass="test" style="width:100%" columns="2">
+
+						<p:outputLabel value="Acknowledgement  "></p:outputLabel>
+						<p:outputLabel value=" Cashier/Officer" style="float:right;"></p:outputLabel>
+					</p:panelGrid>
+
+
+				</p:outputPanel>
+
+
+			</p:outputPanel>
+
+		</h:form>
+
+		<p:ajaxStatus style="height:24px;width:30px"
+			onstart="PF('statusDialog').show()"
+			onsuccess="PF('statusDialog').hide()" />
+		<p:dialog widgetVar="statusDialog" modal="true" draggable="false"
+			closable="false" resizable="false" showHeader="false">
+			<p:graphicImage value="images/ar.gif" />
+		</p:dialog>
+		<script src="js.1/jquery.min.js"></script>
+		<script src="js.1/bootstrap.min.js"></script>
+	</h:body>
+
+</f:view>
+</html>
+

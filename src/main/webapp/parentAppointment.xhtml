@@ -1,0 +1,76 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/studentTemplate.xhtml">
+
+	<ui:define name="title">Take Appointment</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title"
+						style="background-color: rgb(162, 32, 45, 0.3);">
+						<h:form id="form">
+							<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+							<p:panel header="Take Appointment">
+								<f:facet name="header">
+									<span>Take Appointment</span>
+									<span> <p:commandLink
+											style="float: right;margin-left: 15px;color: blue;font-size:15px;"
+											immediate="true" value="My Requests"
+											action="viewParentAppointment.xhtml?faces-redirect=true"></p:commandLink>
+									</span>
+								</f:facet>
+								<p:panelGrid columns="2"
+									styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel  for="@next" style="color:red" value="Appointment Date"></p:outputLabel>
+									<p:calendar value="#{parentAppointment.appointmentDate}"
+										mindate="new Date()+1" pattern="dd/MM/yyyy" navigator="true"
+										yearRange="c-10:c+10" required="true"
+										requiredMessage="Please Select Date">
+									</p:calendar>
+
+									<p:outputLabel  for="@next" style="color:red" value="Appointment Time"></p:outputLabel>
+									<p:selectOneMenu value="#{parentAppointment.selectTime}"
+										required="true" requiredMessage="Please Select Time">
+										<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+										<f:selectItems value="#{parentAppointment.timeList}"></f:selectItems>
+									</p:selectOneMenu>
+
+									<p:outputLabel  for="@next" style="color:red" value="To Meet"></p:outputLabel>
+									<p:selectOneMenu value="#{parentAppointment.toMeet}"
+										required="true" requiredMessage="Please Select Whom You to Meet.">
+										<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+										<f:selectItems value="#{parentAppointment.toMeetList}"></f:selectItems>
+									</p:selectOneMenu>  
+
+									<p:outputLabel  for="@next" style="color:red" value="Description"></p:outputLabel>
+									<p:inputTextarea value="#{parentAppointment.description}"
+										required="true" requiredMessage="Please Enter Description" validatorMessage="Please Enter Correct value">
+									  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+									</p:inputTextarea>
+								</p:panelGrid>
+								<br />
+								<p:separator />
+								<center>
+									<p:commandButton value="Request Appointment" styleClass="butwid-1" icon="fa fa-bookmark"
+										action="#{parentAppointment.submit}" update=":form"></p:commandButton>
+								</center>
+								<p:separator />
+								<br />
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

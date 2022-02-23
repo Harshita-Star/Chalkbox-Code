@@ -1,0 +1,69 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/studentTemplate.xhtml"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	<f:loadBundle var="addClassVar" basename="myProperties" />
+
+	<ui:define name="title">Select Exam</ui:define>
+
+	<ui:define name="content">
+		
+			<div class="ui-fluid">
+				<div class="ui-g">
+					<div class="ui-g-12">
+						<div class="card card-w-title" style="background-color: rgb(0, 86, 128, 0.8); ">
+                         <h:form id="form">
+							<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+
+
+							<p:panel header="Select Exam">
+								<p:dataTable value="#{studentSelectExam.list}" var="info">
+								
+								<p:column headerText="Exam Name">
+								<p:outputLabel value="#{info.examName}"></p:outputLabel>
+								</p:column>
+								
+								<p:column headerText="View">
+								<center>
+								<p:commandButton action="#{studentSelectExam.view}" styleClass="butwid" icon="fa fa-eye" update=":View" value="View" oncomplete="PF('dlg1').show()">
+								<f:setPropertyActionListener value="#{info}" target="#{studentSelectExam.selected}"></f:setPropertyActionListener>
+								</p:commandButton>
+								</center>
+								</p:column>
+								</p:dataTable>
+								
+							</p:panel>
+							</h:form>
+							<h:form id="View">
+							<p:dialog header="#{studentSelectExam.selected.examName}" id="docm" widgetVar="dlg1"
+								height="500" width="500" modal="true" showEffect="fade" hideEffect="fade"
+								resizable="false">
+
+								<div class="ui-g form-group">
+									<p:panelGrid columns="2"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+										<p:dataTable value="#{studentSelectExam.subExamList}" var="info1">
+										
+										<p:column headerText="Subject Name">
+										<p:outputLabel value="#{info1.subjectName}"></p:outputLabel>
+									   </p:column>
+									   
+										<p:column headerText="Obtained Marks">
+										<p:outputLabel value="#{info1.marksObtained}"></p:outputLabel>
+								 	</p:column>
+									
+										</p:dataTable>
+									</p:panelGrid>
+								</div>
+
+							</p:dialog>
+						</h:form>
+						</div>
+					</div>
+				</div>
+			</div>
+	</ui:define>
+</ui:composition>

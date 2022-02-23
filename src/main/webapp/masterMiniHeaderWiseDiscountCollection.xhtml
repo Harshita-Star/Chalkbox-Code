@@ -1,0 +1,155 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/schoolMasterTemplate.xhtml">
+
+	<ui:define name="title">Discount Collection</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<p:panel>
+
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:commandButton value="Print">
+										<p:printer target="dailyfeereport"></p:printer>
+									</p:commandButton>
+									
+									
+							   <h:commandLink>
+                                        <p:graphicImage name="images/excellogo.png"
+                                            library="avalon-layout" width="100" height="40"></p:graphicImage>
+                                        <pe:exporter type="xlsx" target="up" fileName="Discount_Report.xlsx"  />
+
+                                    </h:commandLink>
+                                                  <p:commandButton value="pdf" ajax="false" process="@this" actionListener="#{masterMiniHeaderWiseDiscountCollection.exportMasterDiscountPdf}">
+                    
+          <p:fileDownload value="#{masterMiniHeaderWiseDiscountCollection.file}" />
+         </p:commandButton>
+									
+								</p:panelGrid>
+							</p:panel>
+
+							<p:panel id="dailyfeereport" >
+								<center>
+									<p
+										style="font-family: initial; font-style: oblique; font-size: 25px !important; font-weight: bold; margin: 0px;">#{masterMiniHeaderWiseDiscountCollection.schname}</p>
+									<p
+										style="font-family: initial; font-style: oblique; font-size: 15px !important; font-weight: bold; margin: 0px;">#{masterMiniHeaderWiseDiscountCollection.affiliationNo}</p>
+									<p
+										style="font-family: initial; font-style: oblique; font-size: 15px !important; font-weight: bold; margin: 0px;">#{masterMiniHeaderWiseDiscountCollection.finalAddress}</p>
+									<p
+										style="font-family: initial; font-style: oblique; font-size: 15px !important; font-weight: bold; margin: 0px;">#{masterMiniHeaderWiseDiscountCollection.phoneno}</p>
+
+									<p
+										style="margin: 0px; font-size: 25px !important; font-weight: bold;">Discount Collection Report</p>
+								</center>
+								<p:dataTable id="up" var="fee" value="#{masterMiniHeaderWiseDiscountCollection.dailyfee}" reflow="true">
+
+									<f:facet name="header">
+							<p:outputLabel value=""></p:outputLabel>
+		    	  	</f:facet>
+
+<p:column headerText="S.No." style="font-size:9px !important">
+										<f:facet name="header">
+									      <p:outputLabel value="S.No."></p:outputLabel>
+									   </f:facet>
+										<h:outputText style="font-size:9px !important" value="#{fee.srno}" />
+									</p:column>
+					
+									<p:column headerText="EBLM No." style="font-size:9px !important">
+										<f:facet name="header">
+									      <p:outputLabel value="EBLM No."></p:outputLabel>
+									   </f:facet>
+										<h:outputText style="font-size:9px !important" value="#{fee.srNo}" />
+									</p:column>
+
+									<p:column headerText="Date" style="font-size:10px !important">
+										<f:facet name="header">
+									      <p:outputLabel value="Date"></p:outputLabel>
+									   </f:facet>
+										<h:outputText style="font-size:9px !important" value="#{fee.feeDateStr}" />
+									</p:column>
+
+									<p:column filterBy="#{fee.studentname}" filterMatchMode="contains" headerText="Student Name" style="font-size:9px !important">
+									<f:facet name="header">
+									      <p:outputLabel value="Student Name"></p:outputLabel>
+									   </f:facet>
+										<h:outputText style="font-size:9px !important" value="#{fee.studentname}" />
+									</p:column>
+
+									<p:column headerText="Father Name" style="font-size:9px !important">
+										<f:facet name="header">
+									      <p:outputLabel value="Father Name"></p:outputLabel>
+									   </f:facet>
+										<h:outputText style="font-size:9px !important" value="#{fee.fathername}" />
+									</p:column>
+
+									<p:column headerText="Class"  style="font-size:10px !important">
+									<f:facet name="header">
+									      <p:outputLabel value="Class"></p:outputLabel>
+									   </f:facet>
+										<h:outputText style="font-size:10px !important" value="#{fee.classname}" />
+									</p:column>
+									<p:column  headerText="Receipt No"  style="font-size:10px !important">
+										<f:facet name="header"> 
+									      <p:outputLabel value="Receipt No"></p:outputLabel>
+									   </f:facet>
+										<h:outputText style="font-size:10px !important" value="#{fee.reciptno}" />
+									</p:column>
+
+									<p:column headerText="School Name"  style="font-size:10px !important">
+										<f:facet name="header">
+									      <p:outputLabel value="School Name"></p:outputLabel>
+									   </f:facet>
+										<h:outputText style="font-size:10px !important" value="#{fee.schname}" />
+									</p:column>
+							
+							<p:column headerText="Pay Mode"  style="font-size:10px !important">
+										<f:facet name="header">
+									      <p:outputLabel value="Pay Mode"></p:outputLabel>
+									   </f:facet>
+										<h:outputText style="font-size:10px !important"
+											value="#{fee.paymentmode} #{fee.bankname} #{fee.chequenumber}" />
+									</p:column>
+
+									<p:columns style="font-size:10px !important;" value="#{masterMiniHeaderWiseDiscountCollection.feelist}" var="column" columnIndexVar="colIndex">
+										<f:facet name="header">
+											<p:outputLabel style="font-size:9px !important;" value="#{column.feeName}"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel style="font-size:9px !important" value="#{fee.allFess[column.feeName]}"></p:outputLabel>
+									</p:columns>
+									
+									<p:column  headerText="Total Amount" style="font-size:10px !important">
+									   <f:facet name="header">
+									      <p:outputLabel value="Total Amount"></p:outputLabel>
+									   </f:facet>
+										<h:outputText style="font-size:10px !important"
+											value="#{fee.amount}" />
+									</p:column>
+
+									
+								</p:dataTable>
+							</p:panel>
+
+						</h:form>
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

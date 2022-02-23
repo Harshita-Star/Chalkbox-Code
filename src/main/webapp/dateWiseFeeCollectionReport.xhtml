@@ -1,0 +1,135 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Date Wise Fee</ui:define>
+
+	<ui:define name="content">
+
+		<style>
+.ui-datatable .ui-datatable-scrollable-body,
+	.ui-datatable-scrollable-header, .ui-datatable-footer,
+	.ui-datatable-header, .ui-datatable-scrollable-footer {
+	width: 100% !important;
+}
+
+.ui-datatable-scrollable .ui-datatable-scrollable-header,
+	.ui-datatable-scrollable .ui-datatable-scrollable-footer {
+	position: sticky !important;
+	top: 60px !important;
+}
+
+body .ui-datatable thead th, body .ui-datatable tbody td {
+	width: var(--w) !important;
+}
+</style>
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<h1>Date Wise Fee Collection</h1>
+							<p:messages autoUpdate="true" closable="true"></p:messages>
+							<p:panel header="Search Data">
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:outputLabel value="Start Date:-" for="@next"
+										style="color:red"></p:outputLabel>
+									<p:calendar value="#{dateFeeCollection.startDate}"
+										navigator="true" pattern="dd/MM/yyyy" required="true"
+										requiredMessage="Please Enter Start Date" />
+
+									<p:outputLabel value="End Date:-" for="@next" style="color:red"></p:outputLabel>
+									<p:calendar value="#{dateFeeCollection.endDate}"
+										navigator="true" pattern="dd/MM/yyyy" required="true"
+										requiredMessage="Please Enter End Date" />
+
+								</p:panelGrid>
+
+								<br />
+								<p:separator />
+								<center>
+									<p:panelGrid
+										columns="#{dateFeeCollection.feeList.size() gt 0 ? '4' : '1'}"
+										layout="grid" styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+
+										<p:commandButton value="Search" styleClass="butwid" icon = "fa fa-search"
+											actionListener="#{dateFeeCollection.searchData}"
+											update=":form"></p:commandButton>
+										<p:commandButton value="Print" styleClass="butwid" icon = "fa fa-print"
+											rendered="#{dateFeeCollection.showPrintButton}">
+											<p:printer target="dataTable"></p:printer>
+										</p:commandButton>
+
+										<p:commandButton value="PDF" rendered="#{dateFeeCollection.showData}"  styleClass="butwid" icon = "fa fa-file-pdf-o" ajax="false"
+											process="@this"
+											actionListener="#{dateFeeCollection.exportDateWiseColPdf}">
+
+											<p:fileDownload value="#{dateFeeCollection.file}" />
+										</p:commandButton>
+
+										<h:commandLink rendered="#{dateFeeCollection.showData}">
+											<p:graphicImage name="images/excellogo.png"
+												library="avalon-layout" width="100" height="40"></p:graphicImage>
+											<pe:exporter type="xlsx" target="tbl"
+												fileName="Date_Wise_Fee_Collection.xlsx"
+												></pe:exporter>
+										</h:commandLink>
+									</p:panelGrid>
+								</center>
+								<p:separator />
+								<br />
+
+							</p:panel>
+							<p:panel id="dataTable" rendered="#{dateFeeCollection.showData}">
+
+								<center>
+									<p
+										style="font-family: initial; font-style: oblique; font-size: 30px !important; font-weight: bold; margin: 0px;">#{headerBean.name}</p>
+								</center>
+
+								<p:dataTable id="tbl" rowIndexVar="index" scrollable="true"
+									scrollWidth="100%" style="border-collapse:collapse" border="1"
+									var="var" value="#{dateFeeCollection.feeList}">
+
+									<f:facet name="header">
+										<p:outputLabel value="Date Wise Fee Collection Report"></p:outputLabel>
+									</f:facet>
+
+									<p:column headerText="Date" style="--w:70px">
+										<f:facet name="header">
+											<p:outputLabel value="Date"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.dateName}"></p:outputLabel>
+									</p:column>
+
+									<p:columns style="--w:70px"
+										value="#{dateFeeCollection.classFeeList}" var="column"
+										columnIndexVar="colIndex">
+										<f:facet name="header">
+											<p:outputLabel
+												value="#{column.feeName} (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel
+											value="#{index+1 eq dateFeeCollection.feeList.size() ? (sideMenuBean.list.country eq 'UAE' ? 'AED ' : 'Rs.') : ''} #{var.feeMap[column.feeName]}"></p:outputLabel>
+									</p:columns>
+								</p:dataTable>
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

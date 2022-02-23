@@ -1,0 +1,126 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/studentTemplate.xhtml">
+
+	<ui:define name="title">Meeting Requests</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title" style="background-color: rgb(162, 32, 45, 0.3); ">
+					<h:form id="form">
+						<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+						<p:panel header="Meeting Request">
+						<p:panelGrid columns="3">
+						
+						
+						<p:commandButton update=":form" styleClass="butwid" icon="fa fa-clock-o" action="#{meetingConsentForStudent.allPendingList}"
+						value="Pending (#{meetingConsentForStudent.pending})"></p:commandButton>
+						
+						 <p:commandButton update=":form" styleClass="butwid greenButt" icon="fa fa-check-circle" action="#{meetingConsentForStudent.allApprovedList}"
+						value="Approved (#{meetingConsentForStudent.approved})"></p:commandButton>
+						
+						<p:commandButton update=":form" styleClass="butwid redButt" icon="fa fa-ban" action="#{meetingConsentForStudent.allRejectedList}"
+						value="Rejected (#{meetingConsentForStudent.rejected})"></p:commandButton>
+						
+					  
+					
+						</p:panelGrid>
+						</p:panel>
+						<p:panel header="Details :">
+							<p:dataTable value="#{meetingConsentForStudent.appointmentList}" id="d1" var="info">
+							
+							<p:column headerText="S No">
+							<p:outputLabel value="#{info.sno}"></p:outputLabel>
+							</p:column>
+							
+							
+							<p:column headerText="Date">
+							<p:outputLabel value="#{info.strAppointmentdate}"></p:outputLabel>
+							</p:column>
+							
+							<p:column headerText="Time">
+							<p:outputLabel value="#{info.appointment_time}"></p:outputLabel>
+							</p:column>
+							
+							<p:column headerText="Add Time">
+							<p:outputLabel value="#{info.strAdddate}"></p:outputLabel>
+							</p:column>
+							
+							<p:column headerText="Requested By">
+							<p:outputLabel value="#{info.addedBy}"></p:outputLabel>
+							</p:column>
+							
+							<p:column rendered="false" headerText="Type">
+							<p:outputLabel value="#{info.type}"></p:outputLabel>
+							</p:column>
+							
+							<p:column headerText="Description">
+							<p:outputLabel value="#{info.description}"></p:outputLabel>
+							</p:column>
+							
+							
+							<p:column headerText="Status">
+							<p:outputLabel value="#{info.status}"></p:outputLabel>
+							</p:column>
+							
+							<p:column headerText="Your Remark" rendered="#{meetingConsentForStudent.showRemark}">
+							<p:outputLabel value="#{info.remark}" rendered="#{meetingConsentForStudent.showRemark}"></p:outputLabel>
+							</p:column>
+							
+							<p:column headerText="Approve" rendered="#{meetingConsentForStudent.showApproved}" >
+							<center>
+							<p:commandButton icon="ui-icon-check" styleClass="greenButt" update=":form1 :form" action="#{meetingConsentForStudent.details}" oncomplete="PF('dialog').show()" >
+							<f:setPropertyActionListener value="#{info}" target="#{meetingConsentForStudent.selected}"></f:setPropertyActionListener>
+							</p:commandButton>
+							</center>
+							</p:column>
+							
+							<p:column headerText="Deny" rendered="#{meetingConsentForStudent.showDeny}">
+							<p:commandButton icon="ui-icon-times" styleClass="redButt" update=":form1 :form" action="#{meetingConsentForStudent.details1}" oncomplete="PF('dialog').show()" >
+							<f:setPropertyActionListener value="#{info}" target="#{meetingConsentForStudent.selected}"></f:setPropertyActionListener>
+							</p:commandButton>
+							</p:column>
+							
+							
+							 </p:dataTable>
+						</p:panel>
+						<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+			           <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes greenButt" icon="ui-icon-check" />
+			           <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no redButt" icon="ui-icon-close" />
+			         </p:confirmDialog>
+							</h:form>
+							
+							 <h:form id="form1" enctype="multipart/form-data" >
+			      <p:dialog resizable="false" modal="true" widgetVar="dialog" header="Modifiy Request :" closeOnEscape="true">
+					<p:panelGrid style="margin:auto" columns="2">	 	
+					<p:outputLabel value="Remark" for="@next" style="color:red" ></p:outputLabel>
+					<p:inputText value="#{meetingConsentForStudent.selected.remark}" required="true" requiredMessage="Please Enter Your Remark!"></p:inputText>
+							
+					</p:panelGrid>
+					<br />
+								<p:separator />
+								<center>
+									<p:commandButton update=":form1 :form" action="#{meetingConsentForStudent.submit}"
+										styleClass="butwid" icon="fa fa-wrench"
+									style="float:right" value="Modify">
+					</p:commandButton>
+								</center>
+								<p:separator />
+								<br />		
+					
+			</p:dialog>
+		</h:form>		
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

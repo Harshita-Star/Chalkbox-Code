@@ -1,0 +1,183 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/masterTemplate.xhtml">
+
+	<ui:define name="title">All Schools</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<p:messages autoUpdate="true" closable="true"></p:messages>
+						<h:form id="form" style="overflow:hidden">
+
+							<p:panel header="All School">
+								<p:panelGrid columns="3">
+									<p:outputLabel value="Select District"></p:outputLabel>
+									<p:selectCheckboxMenu multiple="true" value="#{districtSchoolList.selectedCountryList}">
+										<f:selectItems value="#{districtSchoolList.countryList}"></f:selectItems>
+									</p:selectCheckboxMenu>
+								
+									<p:commandButton value="Submit" actionListener="#{districtSchoolList.searchData}" update="dtTable"></p:commandButton>
+								</p:panelGrid>
+								<p:dataTable id="dtTable" reflow="true" value="#{districtSchoolList.dataList}"
+									var="var" rows="25" paginator="true" rowsPerPageTemplate="25,50,100">
+
+									<p:column headerText="S.No." style="width:50px">
+										<p:outputLabel value="#{var.sNo}"></p:outputLabel>
+									</p:column>
+									
+									<p:column  headerText="School Id">
+										<p:outputLabel value="#{var.id}"
+											style=" word-break: break-all;"></p:outputLabel>
+									</p:column>
+
+									<p:column filterBy="#{var.schoolName}" filterMatchMode="contains" headerText="School Name">
+										<p:outputLabel value="#{var.schoolName}"
+											style=" word-break: break-all;"></p:outputLabel>
+									</p:column>
+
+									<p:column filterBy="#{var.contactName}" headerText="Contact Person">
+										<p:outputLabel value="#{var.contactName}"></p:outputLabel>
+									</p:column>
+
+									<p:column filterBy="#{var.contactNo}" filterMatchMode="contains" headerText="Contact No.">
+										<p:outputLabel value="#{var.contactNo}"
+											style=" word-break: break-all;"></p:outputLabel>
+									</p:column>
+									
+									<p:outputLabel value="No of Students"></p:outputLabel>
+									<p:outputLabel value="#{var.noOfStudents}"></p:outputLabel>
+									
+
+									<p:column headerText="Exp. Date">
+										<p:outputLabel value="#{var.expireDateStr}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Last Login">
+										<p:outputLabel value="#{var.lastLogin}"></p:outputLabel>
+									</p:column>
+
+
+									<p:column headerText="U.Name / Password">
+										<p:outputLabel value="U- #{var.username}"></p:outputLabel>
+										<br></br>
+										<p:outputLabel value="P- #{var.password}"></p:outputLabel>
+									</p:column>
+									
+									<p:column headerText="View">
+										<p:commandButton icon="ui-icon-search" oncomplete="PF('viewDialog').show()" update=":viewForm">
+											<f:setPropertyActionListener value="#{var}"
+												target="#{districtSchoolList.selectedRow}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+								</p:dataTable>
+							</p:panel>
+						</h:form>
+
+						<h:form id="viewForm">
+							<p:dialog resizable="false" modal="true" widgetVar="viewDialog"
+								header="School Details" closeOnEscape="true">
+								<div class="ui-g form-group">
+									<p:panelGrid columns="4"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+										<p:outputLabel value="School Name:-"></p:outputLabel>
+										<p:outputLabel value="#{districtSchoolList.selectedRow.schoolName}"></p:outputLabel>
+
+										<p:outputLabel value="Alias Name:-"></p:outputLabel>
+										<p:outputLabel value="#{districtSchoolList.selectedRow.aliasName}"></p:outputLabel>
+
+										<p:outputLabel value="User Name:-"></p:outputLabel>
+										<p:outputLabel value="#{districtSchoolList.selectedRow.username}"></p:outputLabel>
+
+										<p:outputLabel value="Password:-"></p:outputLabel>
+										<p:outputLabel value="#{districtSchoolList.selectedRow.password}"></p:outputLabel>
+
+										<p:outputLabel value="Contact No:-"></p:outputLabel>
+										<p:outputLabel value="#{districtSchoolList.selectedRow.contactNo}"></p:outputLabel>
+
+										<p:outputLabel value="Contact Name:-"></p:outputLabel>
+										<p:outputLabel value="#{districtSchoolList.selectedRow.contactName}"></p:outputLabel>
+
+										<p:outputLabel value="Starting Session:-"></p:outputLabel>
+										<p:outputLabel value="#{districtSchoolList.selectedRow.session}"></p:outputLabel>
+
+										<p:outputLabel value="Start Date:-"></p:outputLabel>
+										<p:outputLabel value="#{districtSchoolList.selectedRow.startDateStr}"></p:outputLabel>
+
+										<p:outputLabel value="Expire Date:-"></p:outputLabel>
+										<p:outputLabel value="#{districtSchoolList.selectedRow.expireDateStr}"></p:outputLabel>
+
+										<p:outputLabel value="Renewal Date:-"></p:outputLabel>
+										<p:outputLabel value="#{districtSchoolList.selectedRow.renewalDateStr}"></p:outputLabel>
+
+										<p:outputLabel value="Amount:-"></p:outputLabel>
+										<p:outputLabel value="#{districtSchoolList.selectedRow.chalkBoxAmount}">
+										</p:outputLabel>
+
+										<p:outputLabel value="Renewal Amount :-"></p:outputLabel>
+										<p:outputLabel
+											value="#{districtSchoolList.selectedRow.imgRenewalAmount}">
+										</p:outputLabel>
+
+										<p:outputLabel value="GPS :-"></p:outputLabel>
+										<p:outputLabel value="#{districtSchoolList.selectedRow.gps}">
+										</p:outputLabel>
+
+										<p:outputLabel value="Time Table :-"></p:outputLabel>
+										<p:outputLabel value="#{districtSchoolList.selectedRow.timetable}">
+										</p:outputLabel>
+
+										<p:outputLabel value="School Session :-"></p:outputLabel>
+										<p:outputLabel value="#{districtSchoolList.selectedRow.feeStartName}">
+										</p:outputLabel>
+
+										<p:outputLabel value="Fees Start From :-"></p:outputLabel>
+										<p:outputLabel value="#{districtSchoolList.selectedRow.feeStart}">
+										</p:outputLabel>
+
+										<p:outputLabel value="Admin Login :-"></p:outputLabel>
+										<p:outputLabel value="#{districtSchoolList.selectedRow.adminLogin}">
+										</p:outputLabel>
+										<p:outputLabel value="Teacher Login :-"></p:outputLabel>
+										<p:outputLabel value="#{districtSchoolList.selectedRow.teacherLogin}">
+										</p:outputLabel>
+										<p:outputLabel value="Student App :-"></p:outputLabel>
+										<p:outputLabel value="#{districtSchoolList.selectedRow.studentApp}">
+										</p:outputLabel>
+										<p:outputLabel value="App type :-"></p:outputLabel>
+										<p:outputLabel value="#{districtSchoolList.selectedRow.appType}">
+										</p:outputLabel>
+
+										<p:outputLabel value="Project Type :-"></p:outputLabel>
+										<p:outputLabel value="#{districtSchoolList.selectedRow.type}">
+										</p:outputLabel>
+
+										<p:outputLabel value="Client Type :-"></p:outputLabel>
+										<p:outputLabel value="#{districtSchoolList.selectedRow.clientType}">
+										</p:outputLabel>
+
+										<p:outputLabel value="No of Students"></p:outputLabel>
+										<p:outputLabel value="#{districtSchoolList.selectedRow.noOfStudents}"></p:outputLabel>
+
+										<p:outputLabel value="Message Left"></p:outputLabel>
+										<p:outputLabel value="#{districtSchoolList.selectedRow.messageLeft}"></p:outputLabel>
+									</p:panelGrid>
+								</div>
+							</p:dialog>
+						</h:form>
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,108 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Sample</ui:define>
+
+    <ui:define name="content">
+       
+            <div class="ui-fluid">
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <div class="card card-w-title">
+                       <h:form id="form" >	
+			 <h1>Concession Fee Detail</h1>
+            	<p:panel header="Select a Class">  
+				<p:messages closable="true" autoUpdate="true"></p:messages>		                
+               		<p:panelGrid columns="7" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+               	      	 <p:outputLabel value="Select a Class" for="@next" style="color:red" ></p:outputLabel>
+               	       		<p:selectOneMenu value="#{feeConcessionDetailReport.selectedClass}" required="true" requiredMessage="Please select a class">
+               	          	<f:selectItem itemLabel="Select Class" itemValue="select"></f:selectItem> 
+               	          	<f:selectItems value="#{feeConcessionDetailReport.classList}"></f:selectItems>
+               	       	 	 <p:ajax update="sectionid" listener="#{feeConcessionDetailReport.allSections}"></p:ajax>
+               	      	 </p:selectOneMenu>
+               	       
+               	   	 	 <p:outputLabel value="Select Section" for="@next" style="color:red" ></p:outputLabel>
+               		 		<p:selectOneMenu id="sectionid" value="#{feeConcessionDetailReport.selectedSection}" required="true" requiredMessage="Please select a section"> 
+               		 		<f:selectItem itemLabel="Select Section" itemValue=""></f:selectItem>
+               		 	    <f:selectItem itemLabel="All" itemValue="-1"></f:selectItem> 
+               		 		<f:selectItems value="#{feeConcessionDetailReport.sectionList}"></f:selectItems>
+               		 		<p:ajax  ></p:ajax>
+               		 		</p:selectOneMenu>
+               		 		
+               		 		<p:outputLabel value="Select a Category" for="@next" style="color:red" ></p:outputLabel>
+               	       		<p:selectOneMenu value="#{feeConcessionDetailReport.selectedCategory}" required="true" requiredMessage="Please select a class">
+               	          	<f:selectItem itemLabel="Select Category" itemValue="select"></f:selectItem> 
+               	          	<f:selectItem itemLabel="All" itemValue="-1"></f:selectItem>
+               	          	<f:selectItems value="#{feeConcessionDetailReport.concessionCategoryList}"></f:selectItems>
+               	      	 	</p:selectOneMenu>
+               	       	
+               	       	<p:commandButton value="Search" actionListener="#{feeConcessionDetailReport.getStudentStrength}" update=":form" >
+               	       </p:commandButton>
+               	       
+               	         <p:commandButton value="PDF" style="width:50px;" ajax="false" process="@this" actionListener="#{feeConcessionDetailReport.exportConFeePdf}"> 
+                    
+                           <p:fileDownload value="#{feeConcessionDetailReport.file}"/>
+                         </p:commandButton>
+                         
+               		</p:panelGrid>
+               	
+               	<p:panel id="dataTable" rendered="#{feeConcessionDetailReport.b}" >   
+               	    <p:dataTable id="up" reflow="true" style="width:100%;border-collapse:collapse" border="1" value="#{feeConcessionDetailReport.studentList}" var="var" rowKey="#{var.addNumber}" selection="#{feeConcessionDetailReport.multipleStudentList}">
+               	           <p:column headerText="SNo."  style="width:30px;text-align:center"  >
+               	           		<f:facet name="header"> 
+           			  			     <p:outputLabel value="S.No."></p:outputLabel>
+         					    </f:facet>
+               	               <p:outputLabel value="#{var.sno}"></p:outputLabel> 
+               	           </p:column>
+               	          
+               	           <p:column headerText="Add. No."  sortBy="#{var.srNo}" filterBy="#{var.srNo}" filterMatchMode="contains" style="text-align:center"  >
+               	           		<f:facet name="header"> 
+           			  			     <p:outputLabel value="SR. No."></p:outputLabel>
+         					    </f:facet>
+               	               <p:outputLabel value="#{var.srNo}"></p:outputLabel> 
+               	           </p:column>
+               	     
+               	           <p:column style="text-align:center" sortBy="#{var.fullName}" filterBy="#{var.fullName}" filterMatchMode="contains"  headerText="Student Name">
+               	           
+               	           		<f:facet name="header"> 
+           			  			     <p:outputLabel value="Student Name"></p:outputLabel>
+         					    </f:facet>
+               	                <p:outputLabel value="#{var.fullName}"></p:outputLabel>
+               	           </p:column>
+               	         
+               	           <p:column style="text-align:center" headerText="Father's Name"  filterBy="#{var.fathersName}" filterMatchMode="contains">
+               	           		<f:facet name="header"> 
+           			  			     <p:outputLabel value="Father's Name"></p:outputLabel>
+         					    </f:facet>
+               	                <p:outputLabel value="#{var.fathersName}"></p:outputLabel>
+               	           </p:column>
+               	           
+               	            <p:column style="text-align:center" headerText="Concession Assign" >
+               	            <p:outputLabel value="#{var.currentConcessionAssign}"></p:outputLabel>
+               	            </p:column>
+               	            
+               	             <p:column style="text-align:center" headerText="Student Type" >
+               	            <p:outputLabel value="#{var.studentType}"></p:outputLabel>
+               	            </p:column>
+               	            
+               	             <p:column style="text-align:center" headerText="Total Amount (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})" >
+               	           	 <p:outputLabel value="#{var.feeConcession}"></p:outputLabel>
+               	            </p:column>
+               	       </p:dataTable>
+               	       
+               	       
+                </p:panel>  
+                </p:panel>
+					</h:form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+       
+    </ui:define>
+
+</ui:composition>

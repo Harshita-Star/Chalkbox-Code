@@ -1,0 +1,7 @@
+@charset "UTF-8";
+.layout-topbar .layout-topbar-wrapper .layout-topbar-left .layout-topbar-logo > img {
+     width: 180px;
+}	
+.card h1 {
+    font-size: 20px !important;
+}

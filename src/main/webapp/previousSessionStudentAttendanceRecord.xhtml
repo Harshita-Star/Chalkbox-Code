@@ -1,0 +1,170 @@
+	<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+					xmlns:ui="http://java.sun.com/jsf/facelets"
+					xmlns:h="http://java.sun.com/jsf/html"
+					xmlns:f="http://java.sun.com/jsf/core"
+					xmlns:p="http://primefaces.org/ui"
+					template="/WEB-INF/template.xhtml"
+					xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+		<ui:define name="title">Previous Attendance Record</ui:define>
+
+		<ui:define name="content">
+		   
+				<div class="ui-fluid">
+					<div class="ui-g">
+						<div class="ui-g-14">
+							<div class="card card-w-title">
+							       <h:form id="form">
+			 <p:growl showDetail="true"  autoUpdate="true"></p:growl>
+			 <p:panel header="Search Student by Name/Sr. No" >
+				<p:panelGrid columns="5" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+					<p:outputLabel value="Select Session"></p:outputLabel>
+					<p:selectOneMenu value="#{previousSessionStudentAttendance.session}" filter="true">
+						<f:selectItems value="#{previousSessionStudentAttendance.sessionList}"></f:selectItems>
+						<p:ajax></p:ajax>
+					</p:selectOneMenu>
+					
+					<p:outputLabel value="Student Name/Sr. No"></p:outputLabel>
+					<p:autoComplete minQueryLength="3" completeMethod="#{previousSessionStudentAttendance.autoCompleteStudentInfo}" forceSelection="true" id="acSimple" value="#{previousSessionStudentAttendance.name}"></p:autoComplete>
+					
+					<p:commandButton value="Search" update=":form" actionListener="#{previousSessionStudentAttendance.searchStudentByName}"></p:commandButton>
+					
+					<p:commandButton value="PDF" style="width:50px;" ajax="false" process="@this" actionListener="#{previousSessionStudentAttendance.exportPreSesPdf}"> 
+                    
+          <p:fileDownload value="#{previousSessionStudentAttendance.file}"/>
+         </p:commandButton>
+				</p:panelGrid>
+			
+			 </p:panel>
+
+				<p:panel id="show" >
+					<center>
+						<p style="font-family: initial;font-style: oblique;font-size: 30px !important;font-weight:bold;margin:0px;">#{headerBean.name}</p>
+						<p style="margin:0px;">#{headerBean.address4}</p>
+						<p style="margin:0px;">Student Attendance Record</p>
+					</center>	
+					<p:panelGrid columns="12" columnClasses="ui-grid-col-2,ui-grid-col-3,ui-grid-col-2,ui-grid-col-3" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;width:100%">
+					
+							<p:outputLabel value="Student Name:-"></p:outputLabel>
+							<h:outputText value="#{previousSessionStudentAttendance.studentName}"></h:outputText>
+
+							<p:outputLabel value="Father's Name:-"></p:outputLabel>
+							<h:outputText value="#{previousSessionStudentAttendance.fatherName}"></h:outputText>
+
+							<p:outputLabel value="Class:-"></p:outputLabel>
+							<h:outputText value="#{previousSessionStudentAttendance.className}"></h:outputText>
+						
+							<p:outputLabel value="Section:-"></p:outputLabel>
+							<h:outputText value="#{previousSessionStudentAttendance.section}"></h:outputText>
+
+							<p:outputLabel value="Session:-"></p:outputLabel>
+							<h:outputText value="#{previousSessionStudentAttendance.session}"></h:outputText>
+						
+					</p:panelGrid>		
+					<h:dataTable style="border-collapse:collapse" border="1"  var="var" value="#{previousSessionStudentAttendance.studentDetails}">
+						<p:column style="width:50px" headerText="Months">
+						
+							<f:facet name="header">
+								<p:outputLabel value="Months" style="font-weight:bold"></p:outputLabel>
+							</f:facet>
+						
+					        <h:outputText value="#{var.month}" />
+					    </p:column>
+					    	
+					     <c:forEach items="#{previousSessionStudentAttendance.days.toArray()}" var="column">
+					    	
+   						     <p:column>
+   							     	<f:facet name="header"> 
+           					  		     <p:outputLabel style="font-weight:bold" value="#{column.date}"></p:outputLabel>
+         						    </f:facet>
+   						     
+   				 			       #{var.attendanceMap[column.date]}
+      	 					 </p:column> 
+    				
+    					</c:forEach>
+					 
+					     <p:column headerText="Present(in this month)">
+				
+						     <f:facet name="header">
+								<p:outputLabel value="Present(in this month)" style="font-weight:bold"></p:outputLabel>
+							</f:facet>
+					  <center>     <h:outputText value="#{var.present}" /></center>
+					    </p:column>
+				
+					     <p:column headerText="Total Present(Up to last month)">
+					 
+					     	<f:facet name="header">
+								<p:outputLabel value="Total Present(Up to last month)" style="font-weight:bold"></p:outputLabel>
+							</f:facet>
+					 <center>       <h:outputText value="#{var.totalPresentUpToLastMonth}" /></center>
+					    </p:column>
+				
+					    <p:column headerText="Total Present">
+					    
+					    	<f:facet name="header">
+								<p:outputLabel value="Total Present" style="font-weight:bold"></p:outputLabel>
+							</f:facet>
+					   <center>     <h:outputText value="#{var.totalPresent}" /></center>
+					    </p:column>
+					    
+					    <p:column headerText="Absent(in this month)">
+					    	
+					    	<f:facet name="header">
+								<p:outputLabel value="Absent(in this month)" style="font-weight:bold"></p:outputLabel>
+							</f:facet>
+					 <center>       <h:outputText value="#{var.absent}" /></center>
+					    </p:column>
+					    
+					     <p:column headerText="Total Absent(Up to last month)">
+					     
+					     	<f:facet name="header">
+								<p:outputLabel value="Total Absent(Up to last month)" style="font-weight:bold"></p:outputLabel>
+							</f:facet>
+					     <center>   <h:outputText value="#{var.totalAbsentUpToLastMonth}" /></center>
+					    </p:column>
+					    
+					    <p:column headerText="Total Absent">
+					    
+					    	<f:facet name="header">
+								<p:outputLabel value="Total Absent" style="font-weight:bold"></p:outputLabel>
+							</f:facet>
+					<center>        <h:outputText value="#{var.totalAbsent}" /></center>
+					    </p:column>
+					    
+					    <p:column headerText="Leave(in this month)">
+					    	
+					    	<f:facet name="header">
+								<p:outputLabel value="Leave(in this month)" style="font-weight:bold"></p:outputLabel>
+							</f:facet>
+					 <center>       <h:outputText value="#{var.holidays}" /></center>
+					    </p:column>
+					    
+					     <p:column headerText="Total Leave(Up to last month)">
+					     
+					     	<f:facet name="header">
+								<p:outputLabel value="Total Leave(Up to last month)" style="font-weight:bold"></p:outputLabel>
+							</f:facet>
+					 <center>       <h:outputText value="#{var.totalHolidayUpToLastMonth}" /></center>
+					    </p:column>
+					    
+					    <p:column headerText="Total Leave">
+					    
+					    	<f:facet name="header">
+								<p:outputLabel value="Total Leave" style="font-weight:bold"></p:outputLabel>
+							</f:facet>
+					   <center>     <h:outputText value="#{var.totalHoliday}" /></center>
+					    </p:column>
+					    
+					</h:dataTable>
+				</p:panel>
+
+</h:form>
+			
+							</div>
+						</div>
+					</div>
+				</div>
+		   
+		</ui:define>
+
+	</ui:composition>

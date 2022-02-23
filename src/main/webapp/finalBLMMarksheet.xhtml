@@ -1,0 +1,412 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<style>
+body .ui-panelgrid-cell {
+	width: 100% !important;
+}
+</style>
+	<ui:define name="title">Print MarkSheet</ui:define>
+
+	<ui:define name="content">
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form1">
+							<h1>Print MarkSheet</h1>
+							<p:messages closable="true" autoUpdate="true"></p:messages>
+
+							<p:panel header="Search Student By Class Name">
+
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel value="Student Name"></p:outputLabel>
+									<p:autoComplete minQueryLength="3" id="acSimple"
+										value="#{finalBLMMarksheet.name}"
+										completeMethod="#{finalBLMMarksheet.autoCompleteStudentInfo}">
+									</p:autoComplete>
+
+									<p:commandButton update=":form3:up,:fillForm:showTerm"
+										value="Search" styleClass="butwid" icon="fa fa-search"
+										action="#{finalBLMMarksheet.searchStudentByName}"></p:commandButton>
+
+								</p:panelGrid>
+							</p:panel>
+						</h:form>
+					</div>
+					<div class="card card-w-title">
+
+						<h:form id="form2">
+
+							<p:panel header="Search Student by Class Section">
+
+								<p:panelGrid columns="5"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel value="Select Class" for="@next"
+										style="color:red"></p:outputLabel>
+									<p:selectOneMenu style="width:250px" filter="true"
+										value="#{finalBLMMarksheet.selectedClassSection}"
+										required="true" requiredMessage="Please Select Class">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{finalBLMMarksheet.classSection}"></f:selectItems>
+
+										<p:ajax update="sectionid,:form3:up"
+											listener="#{finalBLMMarksheet.allSections}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Select Section" for="@next"
+										style="color:red"></p:outputLabel>
+									<p:selectOneMenu id="sectionid" filter="true"
+										value="#{finalBLMMarksheet.selectedSection}" required="true"
+										requiredMessage="Please select a section">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{finalBLMMarksheet.sectionList}"></f:selectItems>
+									</p:selectOneMenu>
+
+									<p:commandButton
+										actionListener="#{finalBLMMarksheet.searchStudentByClassSection}"
+										styleClass="butwid" icon="fa fa-search" value="Search"
+										update=":form3:up"></p:commandButton>
+								</p:panelGrid>
+
+							</p:panel>
+
+						</h:form>
+					</div>
+					<div class="card card-w-title">
+
+						<h:form id="form3">
+
+							<p:panel header="Student Details">
+								<p:outputPanel id="up">
+
+									<p:dataTable rendered="#{finalBLMMarksheet.show}" reflow="true"
+										var="var" value="#{finalBLMMarksheet.studentList}"
+										selection="#{finalBLMMarksheet.selectedStudentList}"
+										rowKey="#{var.id}">
+
+										<p:column headerText="Select" selectionMode="multiple"></p:column>
+
+										<p:column
+											headerText="#{searchStudentVar.searchStudentAdmissionNumberLabel}">
+											<p:outputLabel value="#{var.srNo}"></p:outputLabel>
+										</p:column>
+
+										<p:column sortBy="#{var.fname}"
+											headerText="#{searchStudentVar.seacrhStudentFirstNameLabel}">
+											<p:outputLabel value="#{var.fname}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Father's Name">
+											<p:outputLabel value="#{var.fathersName}"></p:outputLabel>
+										</p:column>
+
+										<f:facet name="footer">
+											<p:panelGrid columns="4">
+												<p:outputLabel value="Select Date" for="@next"
+													style="color:red"></p:outputLabel>
+												<p:calendar value="#{finalBLMMarksheet.dateOfEntry}"
+													navigator="true" pattern="dd/MM/yyyy" required="true"
+													yearRange="c-7:c+2" requiredMessage="Please Select Date">
+													<p:ajax></p:ajax>
+												</p:calendar>
+
+												<p:commandButton rendered="#{finalBLMMarksheet.showFill}"
+													value="Fill Marks" update=":fillForm" styleClass="butwid-1"
+													icon="fa fa-arrow-circle-up"
+													oncomplete="PF('fillDialog').show()" />
+												<p:commandButton styleClass="butwid-1"
+													icon="fa fa-arrow-circle-up" actionListener="#{finalBLMMarksheet.unselect}"
+													rendered="#{finalBLMMarksheet.printBtnForOther}"
+													value="Proceed to Print" update=":printForm"
+													oncomplete="PF('printDialog').show()" />
+												<p:commandButton styleClass="butwid-1"
+													icon="fa fa-arrow-circle-up"
+													rendered="#{finalBLMMarksheet.printBtnForInitium}"
+													value="Proceed to Print" update=":printFormForInitium"
+													oncomplete="PF('printDialogForInitium').show()" />
+												<p:commandButton styleClass="butwid-1"
+													icon="fa fa-arrow-circle-up"
+													rendered="#{finalBLMMarksheet.showCoButton}"
+													value="Proceed For Co-Scholastic"
+													oncomplete="PF('markFillDialog').show()"
+													update=":markFillForm"></p:commandButton>
+												<p:commandButton value="Proceed For Periodic"
+													styleClass="butwid-1" icon="fa fa-arrow-circle-up"
+													oncomplete="PF('printDialog2').show()"
+													action="#{finalBLMMarksheet.periodicValueSet}"
+													update=":printForm2"></p:commandButton>
+
+											</p:panelGrid>
+										</f:facet>
+
+									</p:dataTable>
+								</p:outputPanel>
+
+							</p:panel>
+
+						</h:form>
+						<h:form id="markFillForm" style="width:600px !important">
+							<p:dialog style="width:600px !important" resizable="false"
+								modal="true" widgetVar="markFillDialog" header="Fill Marks"
+								closeOnEscape="true">
+								<p:panel>
+									<p:panelGrid columns="2"
+										styleClass="ui-panelgrid-blank form-group"
+										style="width:600px;border:0px none; background-color:transparent;">
+										<p:outputLabel value="Roll No:"></p:outputLabel>
+										<p:inputText value="#{finalBLMMarksheet.rollNo}"></p:inputText>
+
+									</p:panelGrid>
+									<p:panelGrid columns="1"
+										styleClass="ui-panelgrid-blank form-group"
+										style="width:600px;border:0px none; background-color:transparent;">
+										<p:dataTable
+											style="width:600px;border-collapse:collapse;font-size:9px;"
+											border="1" value="#{finalBLMMarksheet.markListCoscholastic}"
+											var="var">
+											<p:column headerText="Co-Scholastic Areas">
+												<center>
+													<p:outputLabel value="#{var.subjectName}" />
+												</center>
+											</p:column>
+
+											<p:column headerText="Grade">
+												<center>
+													<p:inputText value="#{var.description}">
+
+													</p:inputText>
+												</center>
+											</p:column>
+										</p:dataTable>
+										<p:commandButton value="Yes" update=":markFillForm"
+											styleClass="butwid" icon="fa fa-check"
+											action="#{finalBLMMarksheet.proceedCo}"></p:commandButton>
+									</p:panelGrid>
+								</p:panel>
+							</p:dialog>
+						</h:form>
+
+						<h:form id="fillForm">
+							<p:dialog resizable="false" modal="true" widgetVar="fillDialog"
+								header="Confirmation" closeOnEscape="true">
+								<p:panelGrid columns="4"
+									styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel value="Select Term" for="@next"
+										style="color:red"></p:outputLabel>
+									<p:selectOneRadio required="true"
+										requiredMessage="Please Select A Term" id="showTerm"
+										value="#{finalBLMMarksheet.termId}">
+										<f:selectItems value="#{finalBLMMarksheet.termList}"></f:selectItems>
+									</p:selectOneRadio>
+
+								</p:panelGrid>
+
+								<br />
+								<p:separator />
+								<center>
+									<p:commandButton value="Proceed" update=":fillForm,:form3"
+										styleClass="butwid" icon="fa fa-arrow-right"
+										action="#{finalBLMMarksheet.fillMarks}"></p:commandButton>
+								</center>
+								<p:separator />
+								<br />
+
+							</p:dialog>
+						</h:form>
+
+						<h:form id="printForm">
+							<p:dialog resizable="true" modal="true" widgetVar="printDialog"
+								header="Confirmation" closeOnEscape="true"
+								style="width:100%; !important">
+
+								<p:panelGrid columns="2"
+									columnClasses="ui-grid-col-2,ui-grid-col-12" layout="grid"
+									styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									
+									
+									<p:outputLabel value="Select All"></p:outputLabel>
+									<p:selectBooleanCheckbox id="all-select" value="#{finalBLMMarksheet.checkVal}"  styleClass="select-class" valueChangeListener="#{finalBLMMarksheet.selectAll}">
+									<p:ajax  oncomplete="selectAll(id)" update="showExam"></p:ajax>
+									</p:selectBooleanCheckbox>
+
+									<p:outputLabel value="Select Term" for="@next"
+										style="color:red"></p:outputLabel>
+									<p:selectManyCheckbox id="showTerm" styleClass="term-class"
+										value="#{finalBLMMarksheet.selectedTerm}">
+										<f:selectItems value="#{finalBLMMarksheet.termList}"></f:selectItems>
+										<p:ajax listener="#{finalBLMMarksheet.getExams}"
+											update="showExam" oncomplete="unselect()"></p:ajax>
+
+									</p:selectManyCheckbox>
+								</p:panelGrid>
+
+								<p:panelGrid id="showExam" columns="2"
+									columnClasses="ui-grid-col-12,ui-grid-col-12" layout="grid"
+									styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:panelGrid rendered="#{finalBLMMarksheet.showExam}"
+										columns="2" columnClasses="ui-grid-col-2.5,ui-grid-col-10"
+										layout="grid" styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+										<p:outputLabel value="Select Scholastic Exams"
+											style="color:red"></p:outputLabel>
+										<p:selectManyCheckbox onchange="checkSelectFunction(id)"
+											id="scholastic" layout="pageDirection"
+											styleClass="select-check"
+											value="#{finalBLMMarksheet.selectdExam}">
+											<f:selectItems value="#{finalBLMMarksheet.allExamList}"></f:selectItems>
+											<p:ajax oncomplete="checkAllSelect(id)"></p:ajax>
+										</p:selectManyCheckbox>
+									</p:panelGrid>
+									<p:panelGrid rendered="#{finalBLMMarksheet.showExamAdd}"
+										columns="2" columnClasses="ui-grid-col-2.5,ui-grid-col-10"
+										layout="grid" styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+										<p:outputLabel value="Select Additional Exams"
+											style="color:red"></p:outputLabel>
+										<p:selectManyCheckbox styleClass="select-check-1"
+											id="additional" onchange="checkSelectFunction(id)"
+											layout="pageDirection"
+											value="#{finalBLMMarksheet.selectdExamAdditional}">
+											<f:selectItems
+												value="#{finalBLMMarksheet.allExamListForAdditional}"></f:selectItems>
+											<p:ajax oncomplete="checkAllSelect(id)"></p:ajax>
+										</p:selectManyCheckbox>
+									</p:panelGrid>
+								</p:panelGrid>
+
+								<br />
+								<p:separator />
+								<center>
+									<p:panelGrid columns="1" layout="grid"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+
+										<p:commandButton value="Proceed" update=":fillForm,:form3,:form1"
+											styleClass="butwid" icon="fa fa-arrow-right"
+											actionListener="#{finalBLMMarksheet.proceed}"></p:commandButton>
+
+										<p:commandButton rendered="false" value="Proceed For Grade"
+											update=":fillForm,:form3"
+											action="#{finalBLMMarksheet.proceed1}"></p:commandButton>
+
+									</p:panelGrid>
+								</center>
+								<p:separator />
+								<br />
+
+							</p:dialog>
+						</h:form>
+
+						<h:form id="printForm2">
+							<p:dialog resizable="false" modal="true" widgetVar="printDialog2"
+								header="Confirmation" closeOnEscape="true">
+								<p:panelGrid columns="4"
+									styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel value="Select Term" for="@next"
+										style="color:red"></p:outputLabel>
+									<p:selectManyCheckbox id="showTerm"
+										value="#{finalBLMMarksheet.selectedTerm}">
+										<f:selectItems value="#{finalBLMMarksheet.termList}"></f:selectItems>
+										<p:ajax listener="#{finalBLMMarksheet.allExamListForPeriodic}"
+											update="showExam"></p:ajax>
+									</p:selectManyCheckbox>
+								</p:panelGrid>
+
+								<p:panelGrid id="showExam" columns="#{finalBLMMarksheet.size}"
+									columnClasses="ui-grid-col-2,ui-grid-col-10" layout="grid"
+									styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:outputLabel rendered="#{finalBLMMarksheet.showExamPeriodic}"
+										value="Select Exams"></p:outputLabel>
+									<p:selectManyCheckbox
+										rendered="#{finalBLMMarksheet.showExamPeriodic}"
+										layout="pageDirection"
+										value="#{finalBLMMarksheet.selectdExam}">
+										<f:selectItems value="#{finalBLMMarksheet.allExamList}"></f:selectItems>
+									</p:selectManyCheckbox>
+								</p:panelGrid>
+
+								<br />
+								<p:separator />
+								<center>
+									<p:panelGrid columns="1" layout="grid"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+
+										<p:commandButton value="Proceed" update=":fillForm,:form3"
+											styleClass="butwid" icon="fa fa-arrow-right"
+											actionListener="#{finalBLMMarksheet.proceed}"></p:commandButton>
+										<p:commandButton rendered="false" value="Proceed For Grade"
+											update=":fillForm,:form3"
+											action="#{finalBLMMarksheet.proceed1}"></p:commandButton>
+
+									</p:panelGrid>
+								</center>
+								<p:separator />
+								<br />
+
+							</p:dialog>
+						</h:form>
+
+						<h:form id="printFormForInitium">
+							<p:dialog resizable="false" modal="true"
+								widgetVar="printDialogForInitium" header="Confirmation"
+								closeOnEscape="true">
+								<p:panelGrid columns="4"
+									styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel value="Select Term" for="@next"
+										style="color:red"></p:outputLabel>
+									<p:selectOneRadio required="true"
+										requiredMessage="Please Select A Term" id="showTerm"
+										value="#{finalBLMMarksheet.selTermInitium}">
+										<f:selectItems value="#{finalBLMMarksheet.termList}"></f:selectItems>
+									</p:selectOneRadio>
+								</p:panelGrid>
+
+								<br />
+								<p:separator />
+								<center>
+									<p:panelGrid columns="1" layout="grid"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+										<p:commandButton value="Proceed" update=":fillForm,:form3"
+											styleClass="butwid" icon="fa fa-arrow-right"
+											action="#{finalBLMMarksheet.proceed}"></p:commandButton>
+										<p:commandButton rendered="false" value="Proceed For Grade"
+											update=":fillForm,:form3"
+											action="#{finalBLMMarksheet.proceed1}"></p:commandButton>
+
+									</p:panelGrid>
+								</center>
+								<p:separator />
+								<br />
+							</p:dialog>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

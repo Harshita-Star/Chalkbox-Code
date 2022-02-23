@@ -1,0 +1,882 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Dashboard</ui:define>
+
+	<ui:define name="head">
+		<script type="text/javascript">
+			function skinPie() {
+				this.cfg.shadow = false;
+				this.cfg.title = '';
+				this.cfg.seriesColors = [ '#337ab7', '#2ea59f', '#2d34a4',
+						'#2ea563' ];
+				this.cfg.grid = {
+					background : '#ffffff',
+					borderColor : '#ffffff',
+					gridLineColor : '#F5F5F5',
+					shadow : false
+				};
+				this.cfg.axesDefaults = {
+					rendererOptions : {
+						textColor : '#292B2C',
+					}
+				};
+				this.cfg.seriesDefaults = {
+					renderer : $.jqplot.PieRenderer,
+					shadow : false,
+					lineWidth : 1,
+					markerOptions : {
+						shadow : false,
+						size : 7,
+						style : 'circle'
+					}
+				}
+
+			}
+		</script>
+		<style type="text/css">
+.jqplot-xaxis-label, .jqplot-yaxis-label, .jqplot-y2axis-label,
+	.jqplot-x2axis-label {
+	color: #757575;
+}
+
+table.jqplot-table-legend {
+	background-color: #ffffff;
+	color: #757575;
+	border-color: #F5F5F5;
+}
+</style>
+	</ui:define>
+
+	<ui:define name="content">
+		<div class="dashboard-banking">
+		<h:form>
+		
+			<div class="ui-g overview-boxes">
+
+				<div class="ui-g-12 ui-md-4 ui-lg-2">
+					<h:commandLink action="#{topbar.changeSession}">
+                        	<div class="overview clearfix">
+							<div class="overview-icon">
+								<p:graphicImage
+									name="images/dashboard-banking/icon-cardtransfer.png"
+									library="avalon-layout" width="52"
+									styleClass="icon-cardtransfer" />
+							</div>
+
+							<div class="overview-text">
+								<span class="overview-title">Session</span> <span
+									class="overview-subtitle">#{sideMenuBean.session}</span>
+							</div>
+						</div>
+					</h:commandLink>
+				</div>
+
+
+				<div class="ui-g-12 ui-md-4 ui-lg-2">
+					<a class="#{sideMenuBean.renderInSession eq 'false' ? 'inactiveLink': ''}" href="#{adminMain.addPage}">
+						<div class="#{sideMenuBean.renderInSession eq 'false' ? 'overview1 clearfix': 'overview clearfix'}">
+							<div class="overview-icon">
+								<p:graphicImage
+									name="images/dashboard-banking/icon-transfer.png"
+									library="avalon-layout" width="52" styleClass="icon-transfer" />
+							</div>
+
+							<div class="overview-text">
+								<span class="overview-title">Register</span> <span
+									class="overview-subtitle">Student</span>
+							</div>
+						</div>
+					</a>
+				</div>
+
+				<div class="ui-g-12 ui-md-4 ui-lg-2">
+					<a href="sendMessageStep1.xhtml">
+						<div class="overview clearfix">
+							<div class="overview-icon">
+								<p:graphicImage
+									name="images/dashboard-banking/icon-receivemoney.png"
+									library="avalon-layout" width="52"
+									styleClass="icon-receivemoney" />
+							</div>
+
+							<div class="overview-text">
+								<span class="overview-title">Send</span> <span
+									class="overview-subtitle">Messages</span>
+							</div>
+						</div>
+					</a>
+				</div>
+
+				<div class="ui-g-12 ui-md-4 ui-lg-2">
+					<a class="#{sideMenuBean.renderInSession eq 'false' ? 'inactiveLink': ''}" href="attendance.xhtml">
+						<div class="#{sideMenuBean.renderInSession eq 'false' ? 'overview1 clearfix': 'overview clearfix'}">
+							<div class="overview-icon">
+								<p:graphicImage
+									name="images/dashboard-banking/icon-creditcards.png"
+									library="avalon-layout" width="52"
+									styleClass="icon-creditcards" />
+							</div>
+
+							<div class="overview-text">
+								<span class="overview-title">Mark</span> <span
+									class="overview-subtitle">Attendance</span>
+							</div>
+						</div>
+					</a>
+				</div>
+
+
+				<div class="ui-g-12 ui-md-4 ui-lg-2">
+					<a href="addGallary.xhtml">
+						<div class="overview clearfix">
+							<div class="overview-icon">
+								<p:graphicImage
+									name="images/dashboard-banking/icon-transactions.png"
+									library="avalon-layout" width="52"
+									styleClass="icon-transactions" />
+							</div>
+
+							<div class="overview-text">
+								<span class="overview-title">Add</span> <span
+									class="overview-subtitle">Gallery</span>
+							</div>
+						</div>
+					</a>
+				</div>
+
+				<div class="ui-g-12 ui-md-4 ui-lg-2">
+					<a class="#{sideMenuBean.renderInSession eq 'false' ? 'inactiveLink': ''}" href="schoolInformation.xhtml">
+						<div class="#{sideMenuBean.renderInSession eq 'false' ? 'overview1 clearfix': 'overview clearfix'}">
+							<div class="overview-icon">
+								<p:graphicImage name="images/dashboard-banking/icon-ticket.png"
+									library="avalon-layout" width="52" styleClass="icon-ticket" />
+							</div>
+
+							<div class="overview-text">
+								<span class="overview-title">#{headerBean.type}</span> <span
+									class="overview-subtitle">Information</span>
+							</div>
+						</div>
+					</a>
+				</div>
+
+
+
+			</div>
+		</h:form>
+		</div>
+		<div class="dashboard">
+			<h:form>
+				<div class="ui-g overview-boxes">
+
+					<div class="ui-g-12 ui-md-6 ui-lg-3">
+						<h:commandLink action="#{adminMain.goToAllStudent}">
+							<div class="ui-g overview-box overview-box-1" style="padding-bottom:0px">
+								<div class="overview-box-title">
+									<i class="fa fa-users" /> <span>Total Student</span>
+								</div>
+								<div class="overview-box-count">#{adminMain.cunt}</div>
+								<div class="overview-box-count" style="font-size:10px !important;visibility:#{sideMenuBean.renderInSession eq 'true'? 'collapse':'visible'}">NP*-Not Promoted, P*-Promoted</div>
+								<div class="overview-box-stats"></div>
+							</div>
+						</h:commandLink>
+					</div>
+
+					<div class="ui-g-12 ui-md-6 ui-lg-3">
+						<a href="viewEditDeleteImages.xhtml">
+							<div class="ui-g overview-box overview-box-4">
+								<div class="overview-box-title">
+									<i class="fa fa-camera-retro" /> <span>Total Gallery</span>
+								</div>
+								<div class="overview-box-count">#{adminMain.totalGallery}</div>
+								<div class="overview-box-stats"></div>
+							</div>
+						</a>
+					</div>
+
+					<div class="ui-g-12 ui-md-6 ui-lg-3">
+						<a href="absentStudentReport.xhtml">
+							<div class="ui-g overview-box overview-box-3">
+								<div class="overview-box-title">
+									<i class="fa fa-user-times" /> <span>Absent | Leave
+										Students Today</span>
+								</div>
+								<div class="overview-box-count">#{adminMain.enquirystudent}
+									| #{adminMain.leaveStudent}</div>
+								<div class="overview-box-stats"></div>
+							</div>
+						</a>
+					</div>
+
+					<div class="ui-g-12 ui-md-6 ui-lg-3">
+						<a href="messageDeliveryReport.xhtml">
+							<div class="ui-g overview-box overview-box-2">
+								<div class="overview-box-title">
+									<i class="fa fa-folder" /> <span>SMS Sent Today</span>
+								</div>
+								<div class="overview-box-count">#{adminMain.messageStduent}</div>
+								<div class="overview-box-stats"></div>
+							</div> <p:progressBar value="#{adminMain.smsSliderValue}"
+								labelTemplate="#{adminMain.smsDr} / #{adminMain.smsCr}"
+								style="height:12px !important;margin-top: -12px;font-size: smaller;" />
+						</a>
+					</div>
+
+
+				</div>
+
+
+
+			</h:form>
+			<div class="ui-g ui-fluid">
+
+				<div class="ui-g-12 ui-lg-6">
+					<p:panel>
+						<f:facet name="header">
+							<span>Attendance Chart</span>
+						</f:facet>
+						<a href="absentStudentReport.xhtml"> <p:chart type="pie"
+								id="pie" model="#{pieChartView.pieModel1}" responsive="true"
+								style="background-color: white !important;height: 324px !important" />
+						</a>
+					</p:panel>
+				</div>
+
+				<div class="ui-g-12 ui-lg-6">
+					<h:form id="ticketForm" enctype="multipart/form-data">
+						<p:panel>
+							<f:facet name="header">
+								<span>Customer Support</span>
+								<span> <h:commandLink immediate="true"
+										style="float:right" value="View All"
+										action="viewUserTicket.xhtml?faces-redirect=true" />
+								</span>
+							</f:facet>
+
+							<div class="support-top">
+								<center>
+									<p:graphicImage width="95" height="95" name="images/help.png"
+										library="avalon-layout" />
+								</center>
+							</div>
+
+							<div class="ui-g">
+								<div class="ui-g-12">
+									<p:inputText disabled="true"
+										value="USER ID - #{adminMain.userid}" />
+								</div>
+
+
+								<div class="ui-g-12">
+									<p:selectOneRadio value="#{adminMain.ticketType}"
+										required="true"
+										requiredMessage="Please Select Error/Suggestion">
+										<f:selectItem itemLabel="Error" itemValue="error"></f:selectItem>
+										<f:selectItem itemLabel="Query" itemValue="Query"></f:selectItem>
+										<f:selectItem itemLabel="Suggestion" itemValue="suggestion"></f:selectItem>
+										<f:selectItem itemLabel="Training" itemValue="Training"></f:selectItem>
+										<p:ajax event="change" update=":ticketForm"
+											listener="#{adminMain.ticketCheck}"></p:ajax>
+									</p:selectOneRadio>
+								</div>
+
+								<div class="ui-g-12">
+									<p:selectOneMenu value="#{adminMain.timing}"
+										rendered="#{adminMain.showtiming}">
+										<f:selectItem itemLabel="09:30 AM" itemValue="09:30 AM"></f:selectItem>
+										<f:selectItem itemLabel="10:00 AM" itemValue="10:00 AM"></f:selectItem>
+										<f:selectItem itemLabel="10:30 AM" itemValue="10:30 AM"></f:selectItem>
+										<f:selectItem itemLabel="11:00 AM" itemValue="11:30 AM"></f:selectItem>
+										<f:selectItem itemLabel="11:30 AM" itemValue="11:30 AM"></f:selectItem>
+										<f:selectItem itemLabel="12:00 PM" itemValue="12:00 PM"></f:selectItem>
+										<f:selectItem itemLabel="12:30 PM" itemValue="12:30 PM"></f:selectItem>
+										<f:selectItem itemLabel="01:00 PM" itemValue="01:00 PM"></f:selectItem>
+										<f:selectItem itemLabel="01:30 PM" itemValue="01:30 PM"></f:selectItem>
+										<f:selectItem itemLabel="02:00 PM" itemValue="02:00 PM"></f:selectItem>
+										<f:selectItem itemLabel="02:30 PM" itemValue="02:30 PM"></f:selectItem>
+										<f:selectItem itemLabel="03:00 PM" itemValue="03:00 PM"></f:selectItem>
+										<f:selectItem itemLabel="03:30 PM" itemValue="03:30 PM"></f:selectItem>
+										<f:selectItem itemLabel="04:00 PM" itemValue="04:00 PM"></f:selectItem>
+										<f:selectItem itemLabel="04:30 PM" itemValue="04:30 PM"></f:selectItem>
+										<f:selectItem itemLabel="05:00 PM" itemValue="05:00 PM"></f:selectItem>
+
+									</p:selectOneMenu>
+								</div>
+
+								<div class="ui-g-12">
+									<p:inputTextarea value="#{adminMain.description}" id="tcktdesc"
+										onchange="trimFunc(this.value,'Please Section Name',this.id)"
+										required="true" requiredMessage="Please write description"
+										placeholder="Description" rows="2" autoResize="false" />
+								</div>
+
+								<div class="ui-g-12">
+									<p:outputLabel value="Upload Screenshot (If Any)" />
+									&#160;&#160;&#160;&#160;
+									<p:fileUpload mode="simple" value="#{adminMain.fileNew}"></p:fileUpload>
+								</div>
+
+								<div class="ui-g-12 btn-padding">
+									<p:commandButton ajax="false" value="Submit"
+										action="#{adminMain.addTicket}" update=":ticketForm"></p:commandButton>
+								</div>
+							</div>
+						</p:panel>
+					</h:form>
+				</div>
+
+				<div class="ui-g">
+					<div class="ui-g-12 ui-lg-12 chat">
+						<p:panel>
+							<f:facet name="header">
+								<i class="fa fa-birthday-cake" />
+								<span>Birthdays</span>
+								<span> <p:commandLink style="float:right"
+										rendered="#{adminMain.showWishAll}" value="Wish To All"
+										update=":birthdayForm" action="#{adminMain.allStudentMsz}" />
+								</span>
+
+							</f:facet>
+							<p:dataTable reflow="true" var="var"
+								value="#{adminMain.birthdayStudentList}" scrollable="true"
+								scrollHeight="150">
+								<p:column headerText="Adm.No.">
+									<center>
+										<p:outputLabel value="#{var.srNo}" />
+									</center>
+								</p:column>
+
+								<p:column headerText="Name">
+									<p:outputLabel value="#{var.fname}" />
+								</p:column>
+
+								<p:column headerText="Class">
+									<p:outputLabel value="#{var.className}" />
+								</p:column>
+
+								<p:column headerText="Wish">
+									<p:commandButton value="Wish" update=":birthdayForm"
+										oncomplete="PF('birthdayDialog').show()"
+										action="#{adminMain.selectStudentMsz}" style="width:70px;">
+										<f:setPropertyActionListener
+											target="#{adminMain.selectStudent}" value="#{var}"></f:setPropertyActionListener>
+									</p:commandButton>
+								</p:column>
+
+							</p:dataTable>
+
+						</p:panel>
+					</div>
+				</div>
+			</div>
+
+			<div class="ui-g">
+				<div class="ui-g-12 ui-lg-12 chat">
+					<p:panel header="Send Message">
+						<h:form id="mainForm">
+						<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+							<p:selectOneRadio value="#{adminMain.sendTo}"
+								styleClass="form-group">
+								<f:selectItem itemLabel="All Students" itemValue="student"></f:selectItem>
+								<f:selectItem itemLabel="All Staff Members" itemValue="staff"></f:selectItem>
+								<p:ajax listener="#{adminMain.checkCommType}" update=":mainForm"></p:ajax>
+							</p:selectOneRadio>
+							<br />
+							<p:selectBooleanCheckbox
+								itemLabel="#{sideMenuBean.list.country ne 'India' ? 'Send As Email' : 'Send As SMS'}"
+								value="#{adminMain.sms}">
+								<p:ajax></p:ajax>
+							</p:selectBooleanCheckbox>
+							<br />
+							<br />
+							<p:selectBooleanCheckbox disabled="true"
+								itemLabel="Send As App Notification (Please Send Notification Through NEWS)"
+								value="#{adminMain.notification}">
+								<p:ajax></p:ajax>
+							</p:selectBooleanCheckbox>
+							
+							<br />
+							<br />
+							<p:outputLabel style="font-weight: bold;font-size: 12px;" value="Note: Copying and pasting the special characters ( such as ,' ) might affect the format of SMS. It is adviced to kindly type the message."></p:outputLabel>
+							   <h:inputHidden id="text" value="#{adminMain.lang}"></h:inputHidden>
+							
+							<br></br>
+							<br />
+						
+							<p:selectOneButton id="lang"
+								rendered="#{sideMenuBean.list.country eq 'India'}"
+								value="#{adminMain.lang}">
+								<f:selectItem itemLabel="English" itemValue="english" />
+								<f:selectItem itemLabel="हिन्दी" itemValue="hindi" />
+								<p:ajax listener="#{adminMain.checkLanguage}" update=":mainForm" oncomplete="javascript:changeLanguage3('mainForm:text','true','mainForm:transliterateDiv')"></p:ajax>
+							</p:selectOneButton>
+							<br />
+							<p:outputPanel rendered="#{adminMain.showEnglish}">
+								<p:outputLabel  for="@next"  value="Dear Parent/Student/Staff Member,"
+									style="font-size:15px !important;color:red" />
+								<br></br>
+								<br></br>
+								<p:inputTextarea rows="5" style="width:100%;"
+									value="#{adminMain.typeMessage}" required="true"
+									requiredMessage="Please Write Your Message" id="engmsg"
+									onchange="trimFunc(this.value,'Please Section Name',this.id)">
+								</p:inputTextarea>
+								<br></br>
+								<br></br>
+								<p:outputLabel value="Regards, #{sideMenuBean.smsName}"
+									style="font-size:15px !important;" />
+								<p:commandButton value="Send" style="float:right;"
+									action="#{adminMain.sendMessageToAll}"></p:commandButton>
+							</p:outputPanel>
+
+							<p:outputPanel rendered="#{adminMain.showHindi}">
+								<p:outputLabel  for="@next"  value="प्रिय अभिभावक/विद्यार्थी/कर्मचारी,"
+									style="font-size:15px !important;color:red" />
+								<br></br>
+								<br></br>
+								<p:inputTextarea required="true"
+									requiredMessage="Please Write Your Message" rows="5"
+									style="width:100%;" value="#{adminMain.typeMessage}"
+									id="transliterateDiv" >
+									<p:keyFilter preventPaste="true"></p:keyFilter>
+								</p:inputTextarea>
+								
+									<input type="checkbox" id="languagess" name="" value="pramukhindic:hindi" checked="checked"  onchange="javascript:changeLanguage2(this.checked,'mainForm:transliterateDiv')" ></input>
+                                
+								<br></br>
+								<br></br>
+								<p:outputLabel value="सादर, #{sideMenuBean.hindiName}"
+									style="font-size:15px !important;" />
+								<p:commandButton value="Send" style="float:right;"
+									action="#{adminMain.sendMessageToAll}"></p:commandButton>
+							</p:outputPanel>
+						</h:form>
+						<!-- <div class="new-message">
+							<div class="message-attachment">
+								<i class="fa fa-paperclip" />
+							</div>
+							<div class="message-input">
+								<input type="text" placeholder="Write a message"
+									class="ui-inputfield" />
+							</div>
+						</div> -->
+					</p:panel>
+
+					<!-- <p:panel header="Recent Sales">
+						<h:form>
+							<p:dataTable var="car"
+								selectionMode="single" rowKey="#{car.id}" reflow="true"
+								style="margin-bottom:20px">
+								<p:column headerText="Id" sortBy="#{car.id}">
+									<h:outputText value="#{car.id}" />
+								</p:column>
+
+								<p:column headerText="Year" sortBy="#{car.year}">
+									<h:outputText value="#{car.year}" />
+								</p:column>
+
+								<p:column headerText="Brand" sortBy="#{car.brand}">
+									<h:outputText value="#{car.brand}" />
+								</p:column>
+
+								<p:column headerText="Color" sortBy="#{car.color}">
+									<h:outputText value="#{car.color}" />
+								</p:column>
+							</p:dataTable>
+						</h:form>
+					</p:panel> -->
+				</div>
+
+				<!-- <div class="ui-g-12 ui-lg-4">
+					<div class="card timeline ui-fluid">
+						<div class="ui-g">
+							<div class="ui-g-3">
+								<span class="event-time">just now</span> <i
+									class="fa fa-map-signs" style="color: #147df0"></i>
+							</div>
+							<div class="ui-g-9">
+								<span class="event-owner" style="color: #147df0">Katherine
+									May</span> <span class="event-text">Lorem ipsun dolor amet</span>
+								<div class="event-content">
+									<p:graphicImage name="images/dashboard/bridge.png"
+										library="avalon-layout" width="100" />
+								</div>
+							</div>
+
+							<div class="ui-g-3">
+								<span class="event-time">12h ago</span> <i class="fa fa-star"
+									style="color: #ed3c76"></i>
+							</div>
+							<div class="ui-g-9">
+								<span class="event-owner" style="color: #ed3c76">Brandon
+									Santos</span> <span class="event-text">Ab nobis, magnam sunt
+									eum. Laudantium, repudiandae, similique!.</span>
+							</div>
+
+							<div class="ui-g-3">
+								<span class="event-time">15h ago</span> <i class="fa fa-comment"
+									style="color: #3e9018"></i>
+							</div>
+							<div class="ui-g-9">
+								<span class="event-owner" style="color: #3e9018">Stephan
+									Ward</span> <span class="event-text">Omnis veniam quibusdam
+									ratione est repellat qui nam quisquam ab mollitia dolores ullam
+									voluptates, similique, dignissimos.</span>
+							</div>
+
+							<div class="ui-g-3">
+								<span class="event-time">2d ago</span> <i class="fa fa-map"
+									style="color: #ffb200"></i>
+							</div>
+							<div class="ui-g-9">
+								<span class="event-owner" style="color: #ffb200">Jason
+									Smith</span> <span class="event-text">Laudantium, repudiandae,
+									similique!</span>
+								<div class="event-content">
+									<p:graphicImage name="images/dashboard/map.png"
+										library="avalon-layout" />
+								</div>
+							</div>
+
+							<div class="ui-g-3">
+								<span class="event-time">1w ago</span> <i class="fa fa-heart"
+									style="color: #633ea5"></i>
+							</div>
+							<div class="ui-g-9">
+								<span class="event-owner">Kevin Cox</span> <span
+									class="event-text">Quibusdam ratione est repellat qui
+									nam quisquam veniam quibusdam ratione.</span>
+							</div>
+
+							<div class="ui-g-3">
+								<span class="event-time">2w ago</span> <i class="fa fa-history"
+									style="color: #599597"></i>
+							</div>
+							<div class="ui-g-9">
+								<span class="event-owner" style="color: #599597">Walter
+									White</span> <span class="event-text">I am the one who knocks!</span>
+							</div>
+
+							<div class="ui-g-12">
+								<p:commandButton type="button" value="Refresh"
+									icon="ui-icon-refresh" styleClass="rounded-btn raised-btn" />
+							</div>
+						</div>
+					</div>
+				</div> -->
+
+			</div>
+
+			<h:form id="msgForm" style="overflow:hidden">
+				<p:dialog header="Please Select Receivers : " height="80"
+					widgetVar="msgDialog" modal="true" showEffect="fade"
+					hideEffect="fade" resizable="false">
+					<br></br>
+					<br></br>
+					<center>
+						<p:panelGrid columns="5">
+							<p:outputLabel value="Parents : "
+								style="font-size:14px;font-weight: bold;" />
+							<p:selectBooleanCheckbox value="#{adminMain.messageParents}" />
+
+							<p:outputLabel value="Students : "
+								style="font-size:14px;font-weight: bold;" />
+							<p:selectBooleanCheckbox value="#{adminMain.messageStudents}" />
+
+							<p:commandButton value="Check Preview"
+								actionListener="#{adminMain.institutePreview}" />
+						</p:panelGrid>
+					</center>
+				</p:dialog>
+			</h:form>
+
+			<h:form id="errorForm" style="overflow:hidden">
+				<p:dialog header="Status : " widgetVar="errorDialog" modal="true"
+					showEffect="fade" hideEffect="fade" resizable="false" height="50"
+					width="400">
+					<br></br>
+					<center>
+						<p:outputLabel value="#{adminMain.errorLabel}"
+							style="font-size:12px;font-weight: bold;" />
+					</center>
+				</p:dialog>
+			</h:form>
+
+			<h:form id="birthdayForm">
+				<p:dialog style="height:1000px;" resizable="false"
+					styleClass="ui-panelgrid" widgetVar="birthdayDialog"
+					header="Send Message" showEffect="fade" hideEffect="explode"
+					modal="true">
+
+					<p:selectOneRadio value="#{adminMain.template}" columns="1"
+						layout="responsive" styleClass="form-group">
+						<f:selectItem itemLabel="#{adminMain.temp1}"
+							itemValue="#{adminMain.temp1}" />
+						<f:selectItem itemLabel="#{adminMain.temp2}"
+							itemValue="#{adminMain.temp2}" />
+						<f:selectItem itemLabel="#{adminMain.temp3}"
+							itemValue="#{adminMain.temp3}" />
+						<f:selectItem itemLabel="#{adminMain.temp4}"
+							itemValue="#{adminMain.temp4}" />
+					</p:selectOneRadio>
+
+					<p:panelGrid columns="2" styleClass="ui-panelgrid-blank form-group"
+						style="border:0px none; background-color:transparent;">
+						<p:outputLabel value="Custom Message : "
+							style="font-size:15px !important;" />
+						<p:outputLabel />
+						<p:outputLabel value="Dear Student,"
+							style="font-size:15px !important;" />
+						<p:outputLabel />
+						<p:inputTextarea value="#{adminMain.birthdayWish}" rows="7"
+							cols="30" counter="display" maxlength="765"
+							counterTemplate="{0} characters remaining." autoResize="false"
+							style="width:400px !important;" onkeyup="changeColor(this.value)"
+							id="bdymsg"
+							onchange="trimFunc(this.value,'Please Section Name',this.id)">
+					
+						</p:inputTextarea>
+						<p:outputLabel id="display" style="font-size:15px !important;" />
+
+
+						<p:outputLabel value="Regards, #{sideMenuBean.smsName}"
+							style="font-size:15px !important;" />
+						<p:outputLabel />
+
+
+						<p:commandButton value="Send" action="#{adminMain.wishPreview}"
+							style="font-size:15px !important;width:200px;" />
+						<p:outputLabel />
+					</p:panelGrid>
+				</p:dialog>
+			</h:form>
+
+			<h:form id="prevForm" style="overflow:hidden">
+				<p:dialog header="Message Preview : " width="500"
+					widgetVar="prevDialog" modal="true" showEffect="fade"
+					hideEffect="fade" resizable="false">
+					<p:outputLabel value="#{adminMain.preview}"
+						style="font-size:14px;font-weight: bold;" />
+					<br></br>
+					<br></br>
+					<center>
+						<p:commandButton value="Send Now"
+							actionListener="#{adminMain.sendMessageNow}" />
+					</center>
+					<br></br>
+				</p:dialog>
+			</h:form>
+
+			<h:form id="bdyPrevForm" style="overflow:hidden">
+				<p:dialog header="Message Preview : " width="500"
+					widgetVar="bdyPrevDialog" modal="true" showEffect="fade"
+					hideEffect="fade" resizable="false">
+					<p:outputLabel value="#{adminMain.bdyPreview}"
+						style="font-size:14px;font-weight: bold;" />
+					<br></br>
+					<br></br>
+					<center>
+						<p:commandButton value="Send Now"
+							actionListener="#{adminMain.sendWish}" />
+					</center>
+					<br></br>
+				</p:dialog>
+			</h:form>
+
+			<h:form id="billForm" style="overflow:hidden">
+				<p:dialog header="Due Bills" width="500" widgetVar="billDlg"
+					modal="true" showEffect="fade" hideEffect="fade">
+					<center>
+						<p:outputLabel value="#{adminMain.billMsg}"
+							style="font-size:14px;font-weight: bold;" />
+					</center>
+					<br></br>
+					<br></br>
+					<center>
+						<p:commandButton value="Skip" oncomplete="PF('billDlg').hide()"
+							action="#{adminMain.skip}" />
+						<br /> <br />
+						<p:commandButton value="Show My Bills"
+							action="#{adminMain.myBills}" update="billForm" />
+					</center>
+					<br></br>
+				</p:dialog>
+			</h:form>
+
+			<h:form id="MsgLimitForm" style="overflow:hidden">
+				<p:dialog header="Low SMS Balance" width="500" widgetVar="MsgLmtDlg"
+					modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+					<center>
+						<p:outputLabel value="#{adminMain.balMsg}"
+							style="font-size:14px;font-weight: bold;" />
+					</center>
+					<br></br>
+					<br></br>
+					<center>
+						<p:commandButton value="Skip" action="#{adminMain.sendMessage}"
+							update="MsgLimitForm" />
+						<br /> <br />
+						<p:commandButton value="Message Logs"
+							action="messageSchoolHistory.xhtml?faces-redirect=true"
+							update="MsgLimitForm" />
+						<br /> <br />
+						<p:commandButton value="Recharge Now"
+							action="purchaseMsgPack.xhtml?faces-redirect=true"
+							update="MsgLimitForm" />
+					</center>
+					<br></br>
+				</p:dialog>
+			</h:form>
+
+			<h:form id="MsgLimitForm1" style="overflow:hidden">
+				<p:dialog header="Low SMS Balance" width="500"
+					widgetVar="MsgLmtDlg1" modal="true" showEffect="fade"
+					hideEffect="fade" resizable="false">
+					<center>
+						<p:outputLabel value="#{adminMain.balMsg}"
+							style="font-size:14px;font-weight: bold;" />
+					</center>
+					<br></br>
+					<br></br>
+					<center>
+						<p:commandButton value="Skip" action="#{adminMain.allBdMsg}"
+							update="MsgLimitForm" />
+						<br /> <br />
+						<p:commandButton value="Message Logs"
+							action="messageSchoolHistory.xhtml?faces-redirect=true"
+							update="MsgLimitForm" />
+						<br /> <br />
+						<p:commandButton value="Recharge Now"
+							action="purchaseMsgPack.xhtml?faces-redirect=true"
+							update="MsgLimitForm" />
+					</center>
+					<br></br>
+				</p:dialog>
+			</h:form>
+
+			<h:form id="MsgOverForm" style="overflow:hidden">
+				<p:dialog header="SMS Limit Over" width="500" widgetVar="MsgOvrDlg"
+					modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+					<center>
+						<p:outputLabel value="#{adminMain.balMsg}"
+							style="font-size:14px;font-weight: bold;" />
+					</center>
+					<br></br>
+					<br></br>
+					<center>
+						<p:commandButton value="Message Logs"
+							action="messageSchoolHistory.xhtml?faces-redirect=true"
+							update="MsgOverForm" />
+						<br /> <br />
+						<p:commandButton value="Recharge Now"
+							action="purchaseMsgPack.xhtml?faces-redirect=true"
+							update="MsgOverForm" />
+					</center>
+					<br></br>
+				</p:dialog>
+			</h:form>
+
+			<h:form id="MsgOtherForm" style="overflow:hidden">
+				<p:dialog header="SMS Limit Over" width="500" widgetVar="MsgOthDlg"
+					modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+					<center>
+						<p:outputLabel value="#{adminMain.balMsg}"
+							style="font-size:14px;font-weight: bold;" />
+					</center>
+					<br></br>
+					<br></br>
+					<center>
+						<p:commandButton value="OK" oncomplete="PF('MsgOthDlg').hide()"
+							update="MsgOtherForm" />
+					</center>
+				</p:dialog>
+			</h:form>
+
+			<h:form id="MsgLimitFormSn" style="overflow:hidden">
+				<p:dialog header="Low SMS Balance" width="500"
+					widgetVar="MsgLmtDlgSn" modal="true" showEffect="fade"
+					hideEffect="fade" resizable="false">
+					<center>
+						<p:outputLabel value="#{adminMain.balMsg}"
+							style="font-size:14px;font-weight: bold;" />
+					</center>
+					<br></br>
+					<br></br>
+					<center>
+						<p:commandButton value="Skip"
+							oncomplete="PF('MsgLmtDlgSn').hide()" update="MsgLimitFormSn" />
+						<br></br> <br></br>
+						<p:commandButton value="Snooze This Alert"
+							oncomplete="PF('snoozeSms').show()"
+							update="MsgLimitFormSn,snoozeForm" />
+						<br /> <br />
+						<p:commandButton value="Message Logs"
+							action="messageSchoolHistory.xhtml?faces-redirect=true"
+							update="MsgLimitForm1" />
+						<br /> <br />
+						<p:commandButton value="Recharge Now"
+							action="purchaseMsgPack.xhtml?faces-redirect=true"
+							update="MsgLimitForm1" />
+					</center>
+					<br></br>
+				</p:dialog>
+			</h:form>
+
+			<h:form id="snoozeForm">
+				<p:dialog header="Snooze SMS Alert" widgetVar="snoozeSms"
+					modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+					<div class="ui-g form-group">
+						<p:outputPanel id="snSms" style="text-align:center;">
+							<p:panelGrid columns="2" columnClasses="label,value"
+								styleClass="ui-panelgrid-blank form-group"
+								style="border:0px none; background-color:transparent;">
+
+								<p:outputLabel for="@next" style="color:red" 
+									value="Enter No. of SMS below which you want SMS limit reminder"></p:outputLabel>
+								<p:inputText value="#{adminMain.smsNo}" required="true"
+									requiredMessage="Please enter no. of SMS">
+									<p:keyFilter mask="pnum"></p:keyFilter>
+								</p:inputText>
+
+								<p:commandButton update="snoozeForm" value="Snooze"
+									action="#{adminMain.snooze}"></p:commandButton>
+							</p:panelGrid>
+						</p:outputPanel>
+					</div>
+				</p:dialog>
+			</h:form>
+			
+			<h:form id="sessionForm" style="overflow:hidden">
+					<p:dialog header="Want to change the ERP session?" width="500"
+						widgetVar="sessionDlg" modal="true" showEffect="fade"
+						hideEffect="fade" resizable="false" closable="false"
+						closeOnEscape="false">
+						<center>
+							<p:outputLabel value="#{adminMain.sessMsg}"
+								style="font-size:14px;font-weight: bold;" />
+						</center>
+						<br></br>
+						<br></br>
+						<center>
+							<p:commandButton value="Continue In #{adminMain.oldSession} >>>"
+								action="#{adminMain.continueOld}" />
+							<br></br> <br></br>
+							<p:commandButton value="Move To #{adminMain.newSession} >>>"
+								action="#{adminMain.continueNew}" />
+							<br /> <br />
+						</center>
+						<br></br>
+					</p:dialog>
+				</h:form>
+
+		</div>
+
+
+
+	</ui:define>
+
+</ui:composition>

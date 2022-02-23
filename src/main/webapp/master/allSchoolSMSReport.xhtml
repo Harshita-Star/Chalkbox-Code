@@ -1,0 +1,87 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/masterTemplate.xhtml">
+
+    <ui:define name="title">SMS Report</ui:define>
+
+    <ui:define name="content">
+       
+            <div class="ui-fluid">
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <div class="card card-w-title">
+                              <h:form id="form" >    
+          
+       
+			        	  <p:panel header="View Message History">
+            	
+					<p:dataTable value="#{allSchoolSMSReport.dataList}" id="id" var="var" reflow="true">
+			        
+			        <f:facet name="header">
+			        		<p:selectOneMenu value="#{allSchoolSMSReport.session}" required="true" requiredMessage="Please Select Session">
+			        		<f:selectItem itemLabel="Select Session" itemValue=""></f:selectItem>
+			        		<f:selectItems value="#{allSchoolSMSReport.sessionList}"></f:selectItems>
+			        		</p:selectOneMenu>
+			        		
+			        		<p:commandButton value="Show Report" action="#{allSchoolSMSReport.show}" update=":form"></p:commandButton>
+			        </f:facet>
+			        
+			        	<p:column headerText="S. No." >
+			        		<p:outputLabel value="#{var.sNo}"></p:outputLabel>
+			        	</p:column>
+			        	
+			        	<p:column filterBy="#{var.id}" sortBy="#{var.intId}" filterMatchMode="contains" headerText="School Id">
+			        		<p:outputLabel value="#{var.id}"></p:outputLabel>
+			        	</p:column>
+			        	
+			        	<p:column filterBy="#{var.schoolName}" filterMatchMode="contains" headerText="School Name">
+			        		<p:outputLabel value="#{var.schoolName}"></p:outputLabel>
+			        	</p:column>
+			        	
+			        	<p:column headerText="Contact No.">
+			        		<p:outputLabel value="#{var.contactNo}"></p:outputLabel>
+			        	</p:column>
+			        	
+			        	<p:column headerText="Sender Id" filterBy="#{var.senderid}" filterMatchMode="contains">
+			        		<p:outputLabel value="#{var.senderid}"></p:outputLabel>
+			        	</p:column>
+			        	
+			        	<p:column headerText="Credit">
+			        		<p:outputLabel value="#{var.credit}"></p:outputLabel>
+			        		  
+			        	</p:column>
+			        	
+			        	
+			        	<p:column headerText="Debit">
+			        		<p:outputLabel value="#{var.debit}"></p:outputLabel>
+			        		  
+			        	</p:column>  
+			        	
+			        	<p:column headerText="Balance" sortBy="#{var.balance}">
+			        		<p:outputLabel value="#{var.balance}"></p:outputLabel>
+			        		  
+			        	</p:column>
+			        	
+			        	<p:column headerText="SMS Reminder On" sortBy="#{var.smsRemind}">
+			        		<p:outputLabel value="#{var.smsRemind}"></p:outputLabel>
+			        		  
+			        	</p:column>  	
+			        	
+			        
+			        </p:dataTable>
+			        
+			        
+			        
+			   </p:panel> 
+			        </h:form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+       
+    </ui:define>
+
+</ui:composition>

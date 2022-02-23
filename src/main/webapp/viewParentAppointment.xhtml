@@ -1,0 +1,141 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/studentTemplate.xhtml">
+
+	<ui:define name="title">My Appointment Requests</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title"
+						style="background-color: rgb(162, 32, 45, 0.3);">
+						<h:form id="form">
+							<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+							<p:panel header="My Appointment Requests">
+							
+							<f:facet name="header">
+									<span>My Appointment Requests</span>
+									<span> <p:commandLink
+											style="float: right;margin-left: 15px;color: blue;font-size:15px;"
+									immediate="true" value="Take Appointment"
+											action="parentAppointment.xhtml?faces-redirect=true"></p:commandLink>
+									</span>
+									</f:facet>
+							
+							
+								<p:dataTable value="#{viewParentAppointment.appointmentList}"
+									var="info">
+
+									<p:column headerText="S No">
+										<p:outputLabel value="#{info.sno}"></p:outputLabel>
+									</p:column>
+
+
+									<p:column headerText="Appointment Date">
+										<p:outputLabel value="#{info.strAppointmentdate}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Appointment Time">
+										<p:outputLabel value="#{info.appointment_time}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Add Time">
+										<p:outputLabel value="#{info.strAdddate}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="To Meet">
+										<p:outputLabel value="#{info.toMeet}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Description">
+										<p:outputLabel value="#{info.description}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Status" filterBy="#{info.status}" filterMatchMode="contains">
+										<p:outputLabel value="#{info.status}"></p:outputLabel>
+									</p:column>
+									
+									<p:column headerText="Remark From School">
+										<p:outputLabel value="#{info.remark}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Delete">
+									<center>
+									<p:commandButton icon="ui-icon-trash" update=":form1 :form" styleClass="redButt"
+											action="#{viewParentAppointment.delete}"
+											disabled="#{info.showDelete}">
+											<f:setPropertyActionListener value="#{info}"
+												target="#{viewParentAppointment.selected}"></f:setPropertyActionListener>
+											<p:confirm header="Confirmation"
+												message="Are You Sure To Delete...?" icon="ui-icon-alert" />
+										</p:commandButton>
+									</center>
+									</p:column>
+
+									<p:column rendered="false" headerText="Modified">
+									<center>
+										<p:commandButton icon="ui-icon-pencil" update=":form1"
+											oncomplete="PF('dialog1').show()"
+											disabled="#{info.showModified}">
+											<f:setPropertyActionListener value="#{info}"
+												target="#{viewParentAppointment.selected}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</center>
+									</p:column>
+
+
+
+
+								</p:dataTable>
+							</p:panel>
+						</h:form>
+						<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+							<p:commandButton value="Yes" type="button"
+								styleClass="ui-confirmdialog-yes greenButt" icon="ui-icon-check" />
+							<p:commandButton value="No" type="button"
+								styleClass="ui-confirmdialog-no redButt" icon="ui-icon-close" />
+						</p:confirmDialog>
+
+						<h:form id="form1" enctype="multipart/form-data">
+							<p:dialog resizable="false" modal="true" widgetVar="dialog1"
+								header="Modifiy Request :" closeOnEscape="true">
+								<p:panelGrid style="margin:auto" columns="2">
+									<p:outputLabel for="@next" style="color:red"  value="Appointment Date"></p:outputLabel>
+									<p:calendar value="#{viewParentAppointment.appointmentDate}"
+										pattern="dd/MM/yyyy" navigator="true" yearRange="c-10:c+10"
+										required="true" requiredMessage="Please Select Date">
+									</p:calendar>
+
+									<p:outputLabel  for="@next" style="color:red" value="Appointment Time"></p:outputLabel>
+									<p:selectOneMenu value="#{viewParentAppointment.selectTime}"
+										required="true" requiredMessage="Please Select Time">
+										<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+										<f:selectItems value="#{viewParentAppointment.timeList}"></f:selectItems>
+									</p:selectOneMenu>
+
+								</p:panelGrid>
+								<br />
+								<p:separator />
+								<center>
+									<p:commandButton update=":form1 :form" styleClass="butwid" icon="fa fa-wrench"
+									actionListener="#{viewParentAppointment.modified}"
+									style="float:right" value="Modify">
+								</p:commandButton>
+								</center>
+								<p:separator />
+								<br />
+							</p:dialog>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

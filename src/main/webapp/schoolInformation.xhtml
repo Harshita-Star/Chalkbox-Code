@@ -1,0 +1,423 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">School Information</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form" enctype="multipart/form-data">
+							<h1>#{headerBean.type} Information</h1>
+
+
+								<p:messages closable="true" autoUpdate="true"></p:messages>
+
+								<p:separator />
+								<p:outputLabel value="General School Information"
+									style="font-weight:bold;font-size:14px;" />
+								<p:separator />
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+
+									<p:outputLabel  for="@next" style="color:red;font-weight:bold;"
+										value="#{headerBean.type} Name"></p:outputLabel>
+									<p:inputText value="#{schoolInfo.schoolName}" required="true"
+										requiredMessage="Please Enter #{headerBean.type} Name"></p:inputText>
+										
+									<p:outputLabel rendered="#{schoolInfo.showAlias}" style="font-weight:bold;color:red;"
+									value="School Code: Parent App Login *"></p:outputLabel>
+									<p:inputText rendered="#{schoolInfo.showAlias}" disabled="true" value="#{schoolInfo.aliasName}"></p:inputText>
+
+									<p:outputLabel for="@next" style="color:red;font-weight:bold;"
+										value="School Mobile No"></p:outputLabel>
+									<p:inputText value="#{schoolInfo.mobileNo}" maxlength="10"
+										required="true" requiredMessage="Please Enter Mobile No.">
+										<p:keyFilter mask="num" />
+										<f:validateLength minimum="10"></f:validateLength>
+									</p:inputText>
+
+									<p:outputLabel  for="@next" style="color:red;font-weight:bold;"
+										value="Address 1"></p:outputLabel>
+									<p:inputText value="#{schoolInfo.add1}" required="true"
+										requiredMessage="Please enter Address 1">
+									</p:inputText>
+
+									<p:outputLabel style="font-weight:bold;" value="Address 2"></p:outputLabel>
+									<p:inputText value="#{schoolInfo.add2}">
+									</p:inputText>
+
+									<p:outputLabel style="font-weight:bold;" value="Address 3"></p:outputLabel>
+									<p:inputText value="#{schoolInfo.add3}">
+									</p:inputText>
+
+									<p:outputLabel  for="@next" style="color:red;font-weight:bold;"
+										value="Phone No "></p:outputLabel>
+									<p:inputText value="#{schoolInfo.phoneNo}" required="true"
+										requiredMessage="Please enter Phone No"></p:inputText>
+
+									<p:outputLabel  for="@next" style="color:red;font-weight:bold;"
+										value="Country "></p:outputLabel>
+									<p:selectOneMenu value="#{schoolInfo.country}" required="true"
+										requiredMessage="Please Select Country">
+										<f:selectItem itemLabel="Select Country" itemValue=""></f:selectItem>
+										<f:selectItem itemLabel="India" itemValue="India"></f:selectItem>
+										<f:selectItem itemLabel="UAE" itemValue="UAE"></f:selectItem>
+									</p:selectOneMenu>
+
+									<p:outputLabel  for="@next" style="color:red;font-weight:bold;"
+										value="State "></p:outputLabel>
+									<p:inputText value="#{schoolInfo.state}" required="true"
+										requiredMessage="Please Enter State"></p:inputText>
+
+									<p:outputLabel  for="@next" style="color:red;font-weight:bold;"
+										value="District"></p:outputLabel>
+									<p:inputText value="#{schoolInfo.district}" required="true"
+										requiredMessage="Please Enter District"></p:inputText>
+
+									<p:outputLabel  for="@next" style="color:red;font-weight:bold"
+										value="Zone"></p:outputLabel>
+									<p:selectOneMenu value="#{schoolInfo.zone}" required="true"
+										requiredMessage="Please Enter Zone" editable="true">
+										<f:selectItem itemLabel="Select Zone" itemValue=""></f:selectItem>
+										<f:selectItem itemLabel="East Zone" itemValue="East"></f:selectItem>
+										<f:selectItem itemLabel="West Zone" itemValue="West"></f:selectItem>
+										<f:selectItem itemLabel="North Zone" itemValue="North"></f:selectItem>
+										<f:selectItem itemLabel="South Zone" itemValue="South"></f:selectItem>
+									</p:selectOneMenu>
+
+									<p:outputLabel style="font-weight:bold;" value="Website"></p:outputLabel>
+									<p:inputText value="#{schoolInfo.website}"></p:inputText>
+
+									<p:outputLabel style="font-weight:bold;" value="Email Id / Zoom Email Id"></p:outputLabel>
+									<p:inputText value="#{schoolInfo.emailId}"></p:inputText>
+									
+									<p:outputLabel value="School Category"  for="@next" style="color:red" ></p:outputLabel>
+									<p:selectOneMenu value="#{schoolInfo.schoolCategory}" required="true"
+										requiredMessage="Please Enter School Category" >
+										<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+										<f:selectItem itemLabel="Government" itemValue="Government"></f:selectItem>
+										<f:selectItem itemLabel="Minority" itemValue="Minority"></f:selectItem>
+										<f:selectItem itemLabel="Independent" itemValue="Independent"></f:selectItem>
+									</p:selectOneMenu>
+									
+
+								</p:panelGrid>
+
+								<p:separator />
+								<p:outputLabel value="School Registration Information"
+									style="font-weight:bold;font-size:14px;" />
+								<p:separator />
+
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel  for="@next" style="font-weight:bold;color:red;"
+										value="#{headerBean.type} Code"></p:outputLabel>
+									<p:inputText value="#{schoolInfo.regNo}" required="true"
+										requiredMessage="Please Enter School Code"></p:inputText>
+
+									<p:outputLabel  for="@next" style="font-weight:bold;color:red;"
+										value="Reg. No."></p:outputLabel>
+									<p:inputText value="#{schoolInfo.schRegNo}" required="true"
+										requiredMessage="Please Enter Reg No."></p:inputText>
+
+									<p:outputLabel  for="@next" style="font-weight:bold;color:red;"
+										value="Affiliation No "></p:outputLabel>
+									<p:inputText value="#{schoolInfo.add4}" required="true"
+										requiredMessage="Please Enter Affiliation No"></p:inputText>
+										
+									<p:outputLabel  for="@next" style="font-weight:bold;color:red;"
+										value="UDISE No. "></p:outputLabel>
+									<p:inputText value="#{schoolInfo.udiseNo}" required="true"
+										requiredMessage="Please Enter Udise No."></p:inputText>	
+
+								</p:panelGrid>
+
+								<p:separator />
+								<p:outputLabel value="Communication Information"
+									style="font-weight:bold;font-size:14px;" />
+								<p:separator />
+
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel for="@next" style="font-weight:bold;color:red;"
+										value="#{headerBean.type} Name For SMS "></p:outputLabel>
+									<p:inputText value="#{schoolInfo.smsSchoolName}"
+										required="true"
+										requiredMessage="Please Enter #{headerBean.type} Name For SMS"></p:inputText>
+
+									<p:outputLabel  for="@next" style="font-weight:bold;color:red;"
+										value="#{headerBean.type} Name For SMS (Hindi)"></p:outputLabel>
+									<p:commandButton value="#{schoolInfo.hindiName}"
+										style="font-size:18px; font-weight: bold;" immediate="true"
+										oncomplete="PF('hindiDlg').show()" update="mainForm"></p:commandButton>
+									<p:inputText rendered="false" value="#{schoolInfo.hindiName}"
+										required="true"
+										requiredMessage="Please Enter #{headerBean.type} Name For SMS (Hindi)"
+										id="transliterateDiv" onkeypress="onLoad1();"></p:inputText>
+										 
+									<p:outputLabel for="@next" style="font-weight:bold;color:red;"
+										value="Attendant App Notifications" rendered="#{sideMenuBean.attendantApp}"></p:outputLabel>
+									<p:selectOneMenu value="#{schoolInfo.attendComm}" required="true"
+										requiredMessage="Attendant App Notifications" rendered="#{sideMenuBean.attendantApp}">
+										<f:selectItem itemLabel="No Notification" itemValue="no"></f:selectItem>
+										<f:selectItem itemLabel="Notification to Parent" itemValue="parent"></f:selectItem>
+										<f:selectItem itemLabel="Notification to School Admin" itemValue="admin"></f:selectItem>
+										<f:selectItem itemLabel="Notification to Both" itemValue="both"></f:selectItem>
+									</p:selectOneMenu>
+									
+									<p:outputLabel for="@next" style="font-weight:bold;color:red;"
+										value="RFID Communication Type*" rendered="#{sideMenuBean.allotRfid}"></p:outputLabel>
+									<p:selectOneMenu value="#{schoolInfo.rfidComm}" required="true"
+										requiredMessage="Please Select RFID Communication Type" rendered="#{sideMenuBean.allotRfid}">
+										<f:selectItem itemLabel="No Communication" itemValue="no"></f:selectItem>
+										<f:selectItem itemLabel="Notification" itemValue="notification"></f:selectItem>
+										<f:selectItem itemLabel="SMS" itemValue="sms"></f:selectItem>
+										<f:selectItem itemLabel="Both" itemValue="both"></f:selectItem>
+									</p:selectOneMenu>	
+
+								</p:panelGrid>
+
+								<p:separator />
+								<p:outputLabel value="School Logo (Allowed file type are :- jpg,jpeg,png)"
+									style="font-weight:bold;font-size:14px;" />
+								<p:separator />
+
+								<p:panelGrid columns="5"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-2"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel style="font-weight:bold;"
+										value="#{headerBean.type} Logo"></p:outputLabel>
+									<p:fileUpload value="#{schoolInfo.image}" mode="simple"
+										allowTypes="/(\.|\/)(gif|jpeg|png)$/" />
+
+									<p:outputLabel style="font-weight:bold;" value="Logo"></p:outputLabel>
+									<p:graphicImage id="schooImgId" style="height:100px;width:120px;"
+										value="#{schoolInfo.imagePath}" />
+										
+								<p:commandButton value="Remove School Logo" styleClass="butwid-1 redButt" icon="fa fa-minus-circle" action="#{schoolInfo.removeSchoolLogo}" update=":form:schooImgId"></p:commandButton>		
+
+									<p:outputLabel style="font-weight:bold;"
+										value="Marksheet Header Logo"></p:outputLabel>
+									<p:fileUpload value="#{schoolInfo.marksheetHeader}"
+										mode="simple" allowTypes="/(\.|\/)(gif|jpeg|png)$/" />
+
+									<p:outputLabel style="font-weight:bold;"
+										value="Marksheet Header"></p:outputLabel>
+									<p:graphicImage id="mrksheetImgId" style="height:100px;width:120px;"
+										value="#{schoolInfo.marksheetHeaderImagePath}" />
+										
+							<p:commandButton value="Remove Marksheet Header" styleClass="butwid-1 redButt" icon="fa fa-minus-circle" action="#{schoolInfo.removeMarksheetHeader}" update=":form:mrksheetImgId"></p:commandButton>		
+									
+									
+								<p:outputLabel style="font-weight:bold;"
+										value="TC Header Logo"></p:outputLabel>
+									<p:fileUpload value="#{schoolInfo.tcHeader}"
+										mode="simple" allowTypes="/(\.|\/)(gif|jpeg|png)$/" />
+
+									<p:outputLabel style="font-weight:bold;"
+										value="Tc Header"></p:outputLabel>
+									<p:graphicImage id="tcImgId" style="height:100px;width:120px;"
+										value="#{schoolInfo.tcHeaderImagePath}" />
+										
+							<p:commandButton value="Remove TC Header" styleClass="butwid-1 redButt" icon="fa fa-minus-circle" action="#{schoolInfo.removeTCHeader}" update=":form:tcImgId"></p:commandButton>		
+												
+
+								</p:panelGrid>
+
+								<p:separator />
+								<p:outputLabel value="Security Settings"
+									style="font-weight:bold;font-size:14px;" />
+								<p:separator />
+
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel style="font-weight:bold;"
+										value="OTP For Fee Discount"></p:outputLabel>
+									<p:selectOneRadio value="#{schoolInfo.discountotp}">
+										<f:selectItem itemValue="yes" itemLabel="Yes"></f:selectItem>
+										<f:selectItem itemValue="no" itemLabel="No"></f:selectItem>
+									</p:selectOneRadio>
+
+
+									<p:outputLabel style="font-weight:bold;"
+										value="Discount OTP Mob. No"></p:outputLabel>
+									<p:inputText value="#{schoolInfo.discountOtpNo}">
+										<p:keyFilter mask="num" />
+									</p:inputText>
+
+									<p:outputLabel style="font-weight:bold;"
+										value="OTP For Cancel Fee Receipt"></p:outputLabel>
+									<p:selectOneRadio value="#{schoolInfo.cancelfee}">
+										<f:selectItem itemValue="yes" itemLabel="Yes"></f:selectItem>
+										<f:selectItem itemValue="no" itemLabel="No"></f:selectItem>
+									</p:selectOneRadio>
+
+									<p:outputLabel style="font-weight:bold;"
+										value="Cancel Fee OTP Mob. No"></p:outputLabel>
+									<p:inputText value="#{schoolInfo.cancelOtpNo}">
+										<p:keyFilter mask="num" />
+									</p:inputText>
+
+									<p:outputLabel style="font-weight:bold;"
+										value="Auto Collection SMS"></p:outputLabel>
+									<p:selectOneRadio value="#{schoolInfo.autoCollection}">
+										<f:selectItem itemValue="yes" itemLabel="Yes"></f:selectItem>
+										<f:selectItem itemValue="no" itemLabel="No"></f:selectItem>
+									</p:selectOneRadio>
+
+									<p:outputLabel style="font-weight:bold;"
+										value="Collection SMS Mob. No"></p:outputLabel>
+									<p:inputText value="#{schoolInfo.collectionNo}">
+										<p:keyFilter mask="num" />
+									</p:inputText>
+
+									<p:outputLabel style="font-weight:bold;"
+										value="Concession Request"></p:outputLabel>
+									<p:selectOneRadio value="#{schoolInfo.concessionRequest}">
+										<f:selectItem itemValue="yes" itemLabel="Yes"></f:selectItem>
+										<f:selectItem itemValue="no" itemLabel="No"></f:selectItem>
+									</p:selectOneRadio>
+
+									<p:outputLabel style="font-weight:bold;"
+										value="Permit Teacher(s) to Send Attendance Alerts to Parents?" />
+									<p:selectOneRadio value="#{schoolInfo.permitAttendance}">
+										<f:selectItem itemLabel="Yes" itemValue="yes"></f:selectItem>
+										<f:selectItem itemLabel="No" itemValue="no"></f:selectItem>
+									</p:selectOneRadio>
+
+									<p:outputLabel style="font-weight:bold;"
+										value="Permit Class Teacher(s) to Approve/Deny Student Leave Request?" />
+									<p:selectOneRadio value="#{schoolInfo.permitLeave}">
+										<f:selectItem itemLabel="Yes" itemValue="yes"></f:selectItem>
+										<f:selectItem itemLabel="No" itemValue="no"></f:selectItem>
+									</p:selectOneRadio>
+									
+									<p:outputLabel style="font-weight:bold;"
+										value="Do you want to approve the zoom meeting before forwarding to student?" />
+									<p:selectOneRadio value="#{schoolInfo.meetingApproval}">
+										<f:selectItem itemLabel="Yes" itemValue="Yes"></f:selectItem>
+										<f:selectItem itemLabel="No" itemValue="No"></f:selectItem>
+									</p:selectOneRadio>
+
+								</p:panelGrid>
+
+								<p:separator />
+								<p:outputLabel value="Fees Related Information"
+									style="font-weight:bold;font-size:14px;" />
+								<p:separator />
+
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel style="font-weight:bold;color:red;"
+										value="School Session * " />
+									<p:selectOneRadio value="#{schoolInfo.schoolSession}"
+										layout="grid" columns="1" disabled="true">
+										<f:selectItem itemLabel="April to March" itemValue="4-3"></f:selectItem>
+										<f:selectItem itemLabel="May to April" itemValue="5-4"></f:selectItem>
+									</p:selectOneRadio>
+
+                                    <p:outputLabel></p:outputLabel>
+									<p:outputLabel></p:outputLabel>
+									
+									<p:outputLabel rendered="false" style="font-weight:bold;color:red;"
+										value="Fees Start From * " />
+									<p:selectOneRadio rendered="false" value="#{schoolInfo.feeStart}" layout="grid"
+										columns="1" disabled="true">
+										<f:selectItem itemLabel="From Session Starting Date"
+											itemValue="session_date"></f:selectItem>
+										<f:selectItem itemLabel="From Admission Date"
+											itemValue="admission_date"></f:selectItem>
+									</p:selectOneRadio>
+
+									<p:outputLabel for="@next" style="font-weight:bold;color:red;"
+										value="Number of receipt Generated during fee collect"></p:outputLabel>
+									<p:inputText value="#{schoolInfo.reciept}" required="true"
+										requiredMessage="Please Enter No. of receipt ">
+										<p:keyFilter mask="pnum" />
+										<p:ajax listener="#{schoolInfo.recieptno}" update=":form"></p:ajax>
+									</p:inputText>
+									<p:panelGrid id="dd" columns="2"
+										style="border:0px none; background-color:transparent;">
+
+										<p:outputLabel style="font-weight:bold;"
+											rendered="#{schoolInfo.r1}" value="Reciept No. 1"></p:outputLabel>
+										<p:inputText rendered="#{schoolInfo.r1}"
+											value="#{schoolInfo.rname1}" style="width:150px;"></p:inputText>
+
+										<p:outputLabel style="font-weight:bold;"
+											rendered="#{schoolInfo.r2}" value="Reciept No. 2"></p:outputLabel>
+										<p:inputText rendered="#{schoolInfo.r2}"
+											value="#{schoolInfo.rname2}" style="width:150px;"></p:inputText>
+
+										<p:outputLabel style="font-weight:bold;"
+											rendered="#{schoolInfo.r3}" value="Reciept No. 3"></p:outputLabel>
+										<p:inputText rendered="#{schoolInfo.r3}"
+											value="#{schoolInfo.rname3}" style="width:150px;"></p:inputText>
+									</p:panelGrid>
+
+								</p:panelGrid>
+
+								<p:separator />
+								<center>
+									<p:commandButton styleClass="butwid" ajax="false"
+										update="form" icon="fa fa-save" action="#{schoolInfo.insert}" value="Submit"></p:commandButton>
+								</center>
+								<p:separator />
+
+						</h:form>
+
+						<h:form id="mainForm">
+							<p:dialog header="#{headerBean.type} Name For SMS (Hindi) "
+								widgetVar="hindiDlg" modal="true" showEffect="fade"
+								hideEffect="fade" resizable="false">
+								<div class="ui-g form-group">
+									<p:outputPanel id="snSms" style="text-align:center;">
+										<p:panelGrid columns="2" columnClasses="label,value"
+											styleClass="ui-panelgrid-blank form-group"
+											style="border:0px none; background-color:transparent;">
+
+											<p:outputLabel for="@next"
+												value="#{headerBean.type} Name For SMS (Hindi)"></p:outputLabel>
+											<p:inputText value="#{schoolInfo.hindiName}" required="true"
+												requiredMessage="Please #{headerBean.type} Name For SMS (Hindi)"
+												id="transliterateDiv" onkeypress="onLoad();">
+											</p:inputText>
+
+											<p:commandButton update="mainForm,form" value="Update"
+												action="#{schoolInfo.updateHindi}"></p:commandButton>
+										</p:panelGrid>
+									</p:outputPanel>
+								</div>
+							</p:dialog>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

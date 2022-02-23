@@ -1,0 +1,191 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/masterTemplate.xhtml">
+
+	<ui:define name="title">Add Executive</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+
+							<p:panel header="Add Service Executive">
+
+								<p:messages closable="true">
+									<p:autoUpdate />
+								</p:messages>
+								<p:growl>
+									<p:autoUpdate />
+								</p:growl>
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel for="@next" style="color:red" value="Name: "></p:outputLabel>
+									<p:inputText value="#{addServiceExecutive.name}"
+										required="true" requiredMessage="Please Enter Name" id="snm"
+										onchange="trimFunc(this.value,'Please Enter Name',this.id)" validatorMessage="Please Enter Correct value">
+									 <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+									</p:inputText>	
+
+									<p:outputLabel for="@next" style="color:red"  value="Mobile No.: "></p:outputLabel>
+									<p:inputText value="#{addServiceExecutive.mobile}"
+										required="true" requiredMessage="Please Enter Mobile No."
+										id="smb"
+										onchange="trimFunc(this.value,'Please Enter Mobile No.',this.id)"
+										maxlength="10"
+										validatorMessage="Please Enter 10 digit mobile no.">
+										<p:keyFilter mask="num"></p:keyFilter>
+										<f:validateLength minimum="10" />
+									</p:inputText>
+
+									<p:outputLabel for="@next" style="color:red" value="Username (Should be unique) : "></p:outputLabel>
+									<p:outputPanel>
+										<div class="ui-inputgroup">
+											<p:inputText value="#{addServiceExecutive.username}"
+												required="true" requiredMessage="Please Enter Username"
+												id="sunm"
+												onchange="trimFunc(this.value,'Please Enter Usernname',this.id)" validatorMessage="Please Enter Correct value">
+												<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+											</p:inputText>	
+											<span class="ui-inputgroup-addon">-service@chalkbox</span>
+										</div>
+									</p:outputPanel>
+
+
+									<p:outputLabel value="Password : "></p:outputLabel>
+									<p:outputLabel
+										value="Password Will be Auto Generated After Submission"></p:outputLabel>
+								</p:panelGrid>
+								<br />
+								<br />
+								<center>
+									<p:commandButton style="width: 150px;" update="form,form1"
+										action="#{addServiceExecutive.submit}" value="Add Executive"
+										icon="ui-icon-plus"></p:commandButton>
+								</center>
+
+							</p:panel>
+						</h:form>
+						<br />
+						<h:form id="form1">
+							<p:panel header="Service Executive List">
+								<p:dataTable value="#{addServiceExecutive.empList}" var="var"
+									reflow="true" rowIndexVar="index">
+
+									<p:column headerText="S.No.">
+										<p:outputLabel value="#{index+1}"></p:outputLabel>
+									</p:column>
+
+									<p:column filterBy="#{var.name}" filterMatchMode="contains"
+										headerText="Name">
+										<p:outputLabel value="#{var.name}"
+											style=" word-break: break-all;"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Mobile No.">
+										<p:outputLabel value="#{var.mobile}"></p:outputLabel>
+									</p:column>
+
+									<p:column filterBy="#{var.uname}" filterMatchMode="contains"
+										headerText="Username">
+										<p:outputLabel value="#{var.uname}"
+											style=" word-break: break-all;"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Password">
+										<p:outputLabel value="#{var.password}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Edit">
+										<p:commandButton icon="ui-icon-pencil" update=":form3"
+											oncomplete="PF('edit').show()" value="Edit">
+											<f:setPropertyActionListener
+												target="#{addServiceExecutive.selected}" value="#{var}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+
+									<p:column headerText="Block">
+										<p:commandButton icon="ui-icon-cancel" update=":form1"
+											action="#{addServiceExecutive.delete}" value="Block"
+											disabled="#{var.status eq 'block'}">
+											<f:setPropertyActionListener
+												target="#{addServiceExecutive.selected}" value="#{var}"></f:setPropertyActionListener>
+											<p:confirm header="Confirmation"
+												message="Are You Sure To Delete This Executive ?"
+												icon="ui-icon-alert" />
+										</p:commandButton>
+									</p:column>
+
+									<p:column headerText="Re-Active">
+										<p:commandButton icon="fa fa-fw fa-refresh" update=":form1"
+											action="#{addServiceExecutive.reactive}" value="Activate"
+											disabled="#{var.status eq 'active'}">
+											<f:setPropertyActionListener
+												target="#{addServiceExecutive.selected}" value="#{var}"></f:setPropertyActionListener>
+											<p:confirm header="Confirmation"
+												message="Are You Sure To Re-active This Executive ?"
+												icon="ui-icon-alert" />
+										</p:commandButton>
+									</p:column>
+								</p:dataTable>
+							</p:panel>
+
+						</h:form>
+
+						<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+							<p:commandButton value="Yes" styleClass="ui-confirmdialog-yes"
+								icon="ui-icon-check" />
+							<p:commandButton value="No" styleClass="ui-confirmdialog-no"
+								icon="ui-icon-close" />
+						</p:confirmDialog>
+
+						<h:form id="form3">
+							<p:dialog header="Executive Details" widgetVar="edit"
+								modal="true" showEffect="fade" hideEffect="fade"
+								resizable="false">
+								<div class="ui-g form-group">
+									<p:outputPanel id="EditTable" style="text-align:center;">
+										<p:panelGrid columns="2" columnClasses="label,value">
+
+											<p:outputLabel for="@next" style="color:red" value="Name: "></p:outputLabel>
+											<p:inputText value="#{addServiceExecutive.selected.name}"
+												required="true" requiredMessage="Please Enter Name"
+												id="snmm"
+												onchange="trimFunc(this.value,'Please Enter Name',this.id)" validatorMessage="Please Enter Correct value">
+										     <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+											</p:inputText>	
+
+											<p:outputLabel for="@next" style="color:red" value="Mobile No. : "></p:outputLabel>
+											<p:inputText value="#{addServiceExecutive.selected.mobile}"
+												required="true" requiredMessage="Please Enter Mobile No."
+												id="smbb"
+												onchange="trimFunc(this.value,'Please Enter Mobile No.',this.id)"
+												maxlength="10"
+												validatorMessage="Please Enter 10 digit mobile no.">
+												<p:keyFilter mask="num"></p:keyFilter>
+												<f:validateLength minimum="10" />
+											</p:inputText>
+
+											<p:commandButton update=":form :form1 :form3" value="Update"
+												action="#{addServiceExecutive.edit}"></p:commandButton>
+										</p:panelGrid>
+									</p:outputPanel>
+								</div>
+							</p:dialog>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

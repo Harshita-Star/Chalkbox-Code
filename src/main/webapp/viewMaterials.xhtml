@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+<f:view contentType="text/html">
+	<h:head>
+		<title>Material</title>
+		<f:facet name="first">
+			<meta content='text/html; charset=UTF-8' http-equiv="Content-Type" />
+			<meta http-equiv="X-UA-Compatible" content="EmulateIE8" />
+		</f:facet>
+	</h:head>
+	<h:body style="font-size:10px">
+		<p:layout fullPage="true">
+
+			<p:layoutUnit position="north" size="50" >
+				<ui:include src="header.xhtml"></ui:include>
+			</p:layoutUnit>
+
+			<p:layoutUnit position="south" size="50" >
+				<h:outputText value="This is Footer" />
+			</p:layoutUnit>
+
+			<p:layoutUnit position="west" size="250" >
+				<ui:include src="sideMenu.xhtml"></ui:include>
+			</p:layoutUnit>
+
+			<p:layoutUnit position="center">
+   			      <ui:include src="menu.xhtml"></ui:include>
+				<h:form id="form">
+					<p:growl showDetail="true"   autoUpdate="true" ></p:growl>
+					
+					<p:panel header="View/Delete Material" >
+					
+					<p:panelGrid columns="5">
+						
+						<p:outputLabel value="Select Search Basis"></p:outputLabel>
+						<p:selectOneMenu value="#{viewMaterial.basis}" >
+							<f:selectItem itemLabel="All" itemValue="all"></f:selectItem>
+							<f:selectItem itemLabel="Token Id/Material Name" itemValue="token"></f:selectItem>
+							<!-- <f:selectItem itemLabel="Bill No" itemValue="bill"></f:selectItem> -->
+							<p:ajax listener="#{viewMaterial.checkBasis}" update=":form"></p:ajax>
+						</p:selectOneMenu>
+						
+						<p:outputLabel for="@next" style="color:red"  rendered="#{viewMaterial.show}" value="Enter Token Id/Material Name*"></p:outputLabel>
+						<p:inputText rendered="#{viewMaterial.show}" value="#{viewMaterial.name}" required="true" requiredMessage="Please Enter TokenId/Material Name">
+						</p:inputText>
+						
+						<p:commandButton update=":form" actionListener="#{viewMaterial.searchMaterial}" value="Search"></p:commandButton>
+						
+					</p:panelGrid>
+					
+					<p:dataTable var="var" value="#{viewMaterial.mList}" paginator="true" rows="10" rowsPerPageTemplate="10,20,30">
+					
+					<p:column style="width:20px" headerText="S.No">
+					    <p:outputLabel value="#{var.sNo}"></p:outputLabel>
+					</p:column>
+					
+					<p:column style="width:20px" headerText="Token ID">
+					    <p:outputLabel value="#{var.token_id}"></p:outputLabel>
+					</p:column>
+					
+					<p:column headerText="Date">
+					   <p:outputLabel value="#{var.strDate}"></p:outputLabel>
+					</p:column>
+					
+					<p:column headerText="Material" filterBy="#{var.name}"> 
+					   <p:outputLabel value="#{var.name}"></p:outputLabel>
+					</p:column>
+					
+					<p:column headerText="Guarnatee/ Warranty Expiry">
+					   <p:outputLabel value="#{var.strExpiryDate}"></p:outputLabel>
+					</p:column>
+					
+					<p:column headerText="Purchase From">
+					   <p:outputLabel value="#{var.purchase_from}"></p:outputLabel>
+					</p:column>
+					 
+					 <p:column headerText="Bill No">
+					   <p:outputLabel value="#{var.bill_no}"></p:outputLabel>
+					</p:column>
+					 
+					<p:column headerText="Assigned To" filterBy="#{var.assigned}">
+					   <p:outputLabel value="#{var.assigned}"></p:outputLabel>
+					</p:column>
+					  
+					  <p:column style="width:30px" headerText="View Bill">
+							<p:commandButton update=":form1" oncomplete="PF('viewDialog').show();" icon="ui-icon-search">
+								<f:setPropertyActionListener value="#{var}" target="#{viewMaterial.selectedMaterial}"></f:setPropertyActionListener>
+							</p:commandButton>
+						</p:column>
+						
+						<p:column style="width:30px" headerText="Edit">
+							<p:commandButton update=":form2" icon="ui-icon-pencil" oncomplete="PF('editDialog').show();" action="#{viewMaterial.editSelectedMaterial}">
+								<f:setPropertyActionListener value="#{var}" target="#{viewMaterial.selectedMaterial}"></f:setPropertyActionListener>
+							</p:commandButton>
+						</p:column>
+						
+						<p:column style="width:30px" headerText="Assign">
+							<p:commandButton disabled="#{var.disable2}" update=":form3" icon="ui-icon-check" oncomplete="PF('assignDialog').show();">
+								<f:setPropertyActionListener value="#{var}" target="#{viewMaterial.selectedMaterial}"></f:setPropertyActionListener>
+							</p:commandButton>
+						</p:column>
+						
+						<p:column style="width:30px" headerText="Deassign">
+							<p:commandButton disabled="#{var.disable1}" update=":form" icon="ui-icon-close" action="#{viewMaterial.deassignSelectedMaterial}">
+								<f:setPropertyActionListener value="#{var}" target="#{viewMaterial.selectedMaterial}"></f:setPropertyActionListener>
+							</p:commandButton>
+						</p:column>
+						
+						<p:column style="width:30px" headerText="Transfer">
+							<p:commandButton disabled="#{var.disable1}" update=":form3" icon="ui-icon-check" oncomplete="PF('assignDialog').show();">
+								<f:setPropertyActionListener value="#{var}" target="#{viewMaterial.selectedMaterial}"></f:setPropertyActionListener>
+							</p:commandButton>
+						</p:column>
+						
+						 <p:column rendered="false" style="width:30px" headerText="Delete">
+							<p:commandButton update=":form" icon="ui-icon-trash" action="#{viewMaterial.deleteSelectedMaterial}">
+								<f:setPropertyActionListener value="#{var}" target="#{viewMaterial.selectedMaterial}"></f:setPropertyActionListener>
+							     <p:confirm header="Confirmation" message="Are You Sure To Delete...?" icon="ui-icon-alert" />
+							</p:commandButton>
+						</p:column> 
+						
+					<!-- 
+				      <p:column style="width:30px" headerText="Delete">
+							<p:commandButton update=":form" icon="ui-icon-trash" action="#{viewMaterial.deleteSelectedIncome}">
+								<f:setPropertyActionListener value="#{var}" target="#{viewMaterial.selectedIncome}"></f:setPropertyActionListener>
+							     <p:confirm header="Confirmation" message="Are you sure?" icon="ui-icon-alert" />
+							</p:commandButton>
+						</p:column> -->
+				
+					</p:dataTable>
+					
+					</p:panel>
+					
+				
+				</h:form>
+				
+				
+
+  			</p:layoutUnit>
+
+		</p:layout>
+		<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+           <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+           <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+         </p:confirmDialog>
+		
+		<h:form id="form1" enctype="multipart/form-data" >
+			<p:dialog resizable="false" modal="true" widgetVar="viewDialog" header="Bill" closeOnEscape="true">
+				<p:panelGrid style="margin:auto" columns="1">
+					<p:graphicImage height="400px" width="300px" value="#{viewMaterial.selectedMaterial.bill_photo}"></p:graphicImage>
+				</p:panelGrid>	
+			</p:dialog>
+		</h:form>
+        
+        <h:form id="form2" enctype="multipart/form-data" >
+			<p:dialog resizable="false" modal="true" widgetVar="editDialog" header="Edit Material (Allowed file type are :- jpg,jpeg,png)" closeOnEscape="true">
+					<p:panelGrid style="margin:auto" columns="2">	 	
+						 	<p:outputLabel for="@next" style="color:red"  value="Date"></p:outputLabel>
+							<p:calendar navigator="true" pattern="dd/MM/yyyy" yearRange="c-10:c+10" required="true" requiredMessage="Please enter date" value="#{viewMaterial.date}">
+							</p:calendar>		
+						
+						  	<p:outputLabel for="@next" style="color:red"  value="Material Name"></p:outputLabel>
+							<p:inputText value="#{viewMaterial.mName}" required="true" requiredMessage="Please Enter Material name">
+							</p:inputText>
+							
+						    <p:outputLabel  for="@next" style="color:red" value="Guarantee/Warranty Expiry Date"></p:outputLabel>
+							<p:calendar navigator="true" pattern="dd/MM/yyyy" yearRange="c-10:c+10" required="true" requiredMessage="Please expiry date" value="#{viewMaterial.expiryDate}">
+							</p:calendar>
+							
+						  	<p:outputLabel for="@next" style="color:red"  value="Purchased From"></p:outputLabel>
+							<p:inputText value="#{viewMaterial.purchaseFrom}" required="true" requiredMessage="Please Enter purchase from">
+							</p:inputText>
+						    
+   						  	<p:outputLabel for="@next" style="color:red"  value="Bill No"></p:outputLabel>
+							<p:inputText value="#{viewMaterial.billNo}" required="true" requiredMessage="Please Enter bill no">
+							</p:inputText>
+							
+							<p:outputLabel value="Bill Image"></p:outputLabel>
+							<p:graphicImage height="200px" width="150px" value="#{viewMaterial.billPhotoPath}"></p:graphicImage>
+							
+							
+						    <p:outputLabel value="Upload Bill"></p:outputLabel>
+							<p:fileUpload allowTypes="/(\.|\/)(gif|jpe?g|png)$/" mode="simple" skinSimple="true" value="#{viewMaterial.bill_photo}"></p:fileUpload>
+						    
+						    <p:outputLabel value="Description"></p:outputLabel>
+							<p:inputTextarea value="#{viewMaterial.description}" rows="3" cols="50">
+							</p:inputTextarea>
+						    
+							<p:outputLabel></p:outputLabel>
+							
+					</p:panelGrid>		
+					<p:commandButton ajax="false" update=":form,form2" actionListener="#{viewMaterial.updateMaterial}" style="float:right" value="Update Now">
+							</p:commandButton>
+			</p:dialog>
+		</h:form>
+		
+		<h:form id="form3" enctype="multipart/form-data" >
+			<p:dialog resizable="false" modal="true" widgetVar="assignDialog" header="Assign Material" closeOnEscape="true">
+				<p:panelGrid style="margin:auto" columns="3">
+						<p:outputLabel value="Select Employee"  for="@next" style="color:red" ></p:outputLabel>
+						<p:selectOneMenu value="#{viewMaterial.employee}" required="true" requiredMessage="Please select employee.">
+							<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+							<f:selectItems value="#{viewMaterial.empList}"></f:selectItems>
+						</p:selectOneMenu>
+						<p:commandButton update=":form" actionListener="#{viewMaterial.assignMaterial}" style="float:right" value="Assign">
+						</p:commandButton>
+				</p:panelGrid>	
+			</p:dialog>
+		</h:form>
+		
+	</h:body>
+</f:view>
+
+
+</html>

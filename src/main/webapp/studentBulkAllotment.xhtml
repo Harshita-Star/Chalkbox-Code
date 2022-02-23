@@ -1,0 +1,146 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<script>
+			
+			function handleChange(input) 
+			{
+				var ot = document.getElementById("form1:stopFee");
+				if (input.value > parseInt(ot.textContent))
+					input.value = 0;
+			}
+		</script>
+	<ui:define name="title">Bulk Transport Route</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form1">
+							<h1>Manage Student Transport Details</h1>
+
+							<p:messages closable="true" autoUpdate="true"></p:messages>
+
+							<p:panel header="Bulk Transport Route Allocation">
+								<p:commandLink
+									style="float: right;margin-left: 15px;color: blue;font-size:15px;"
+									immediate="true" value="Bulk Allotment Class Wise"
+									action="bulkTransport.xhtml?faces-redirect=true"></p:commandLink>        &#160;&#160;&#160;
+               		 		
+               		 		<p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel  for="@next" style="color:red" value="Select Route"></p:outputLabel>
+									<p:selectOneMenu value="#{studentBulkAllotment.routeName}"
+										required="true" requiredMessage="Select Route first">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{studentBulkAllotment.routeList}"></f:selectItems>
+										<p:ajax listener="#{studentBulkAllotment.updatestop}"
+											update="transportStop"></p:ajax>
+									</p:selectOneMenu>
+
+
+									<p:outputLabel  for="@next" style="color:red" value="Select Stop"></p:outputLabel>
+									<p:selectOneMenu id="transportStop"
+										value="#{studentBulkAllotment.stopName}" required="true"
+										requiredMessage="Select Stop first">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{studentBulkAllotment.stopList}"></f:selectItems>
+									</p:selectOneMenu>
+
+									
+								</p:panelGrid>
+								
+								<br />
+								<p:separator />
+								<center>
+									<p:commandButton value="Done" styleClass="butwid" icon="fa fa-check-circle"
+										actionListener="#{studentBulkAllotment.showstudent}"
+										update=":form1"></p:commandButton>
+								</center>
+								<p:separator />
+								<br />
+								
+								
+								<br></br>
+								<p:panelGrid columns="2">
+									<p:outputLabel value="Stop Fees : "></p:outputLabel>
+									<p:outputLabel value="#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'} #{studentBulkAllotment.fee}" id="stopFee" />
+								</p:panelGrid>
+								<br></br>
+								<p:tabView rendered="#{studentBulkAllotment.showtable}"
+									value="#{studentBulkAllotment.classSection}" var="var">
+									<p:tab title="#{var.className}">
+										<p:tabView value="#{var.categoryList}" var="var1">
+											<p:tab title="#{var1.category}">
+												<p:dataTable reflow="true" value="#{var1.list}" var="stu" rowKey="#{stu.addNumber}" rowIndexVar="rowId">
+													<p:column headerText="Select Student"
+														style="text-align:center;">
+														<p:selectBooleanCheckbox value="#{stu.sendmessage}"></p:selectBooleanCheckbox>
+													</p:column>
+
+													<p:column headerText="Sr.No." >
+														<p:outputLabel value="#{stu.srNo}"
+															style="font-size:12px !important;"></p:outputLabel>
+													</p:column>
+
+													<p:column sortBy="#{stu.fullName}"
+														headerText="Student Name" >
+														<p:outputLabel value="#{stu.fullName}"
+															style="font-size:12px !important;"></p:outputLabel>
+													</p:column>
+
+
+													<p:column headerText="Fathers Name" >
+														<p:outputLabel value="#{stu.fname}"
+															style="font-size:12px !important;"></p:outputLabel>
+													</p:column>
+
+
+													<p:column headerText="Father's Phone no" >
+														<p:outputLabel value="#{stu.fathersPhone}"
+															style="font-size:12px !important;"></p:outputLabel>
+													</p:column>
+
+
+													<p:column headerText="Discount (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})" >
+														<p:inputText value="#{stu.discountFees}"
+															onfocus="this.select()" onchange="handleChange(this);">
+															<p:keyFilter mask="pnum"/>
+															<f:attribute name="serialNo" value="#{var.addNumber}"></f:attribute>
+														</p:inputText>
+													</p:column>
+
+
+												</p:dataTable>
+											</p:tab>
+										</p:tabView>
+									</p:tab>
+								</p:tabView>
+								
+								<p:outputPanel rendered="#{studentBulkAllotment.showtable}">
+									<br />
+								<p:separator />
+								<center>
+									<p:commandButton rendered="#{studentBulkAllotment.showtable}" styleClass="butwid" icon="fa fa-check-circle"
+									value="Done" action="#{studentBulkAllotment.name}"></p:commandButton>
+								</center>
+								<p:separator />
+								<br />
+								</p:outputPanel>
+							
+							
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

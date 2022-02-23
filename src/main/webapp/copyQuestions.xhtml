@@ -1,0 +1,114 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Copy Questions From</ui:define>
+
+	<ui:define name="content">
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form" enctype="multipart/form-data">
+							<p:panel header="Copy Questions From">
+								<p:messages closable="true" autoUpdate="true"></p:messages>
+
+								<p:panelGrid columns="2"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel for="@next" style="color:red"
+										value="Select Class"></p:outputLabel>
+									<p:selectOneMenu id="classId"
+										value="#{copyQue.selectedClass}" filter="true"
+										required="true"
+										requiredMessage="#{addExamVar.selectClassValidation}">
+										<f:selectItem itemLabel="#{addExamVar.selectHereLabel}"
+											itemValue=""></f:selectItem>
+										<f:selectItems value="#{copyQue.classList}"></f:selectItems>
+										<p:ajax event="itemSelect"
+											listener="#{copyQue.getSubjects}" update="subjectId"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel for="@next" style="color:red"
+										value="Select Subject"></p:outputLabel>
+									<p:selectOneMenu id="subjectId" required="true"
+										value="#{copyQue.selectedSubject}"
+										requiredMessage="Subject selection is required">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{copyQue.subjectList}"></f:selectItems>
+										<p:ajax event="itemSelect"
+											listener="#{copyQue.getExams}" update="examId,:form2"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel for="@next" style="color:red"
+										value="Select Exam"></p:outputLabel>
+									<p:selectOneMenu id="examId" required="true"
+										value="#{copyQue.examNamefoeExam}"
+										requiredMessage="Exam selection is required">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{copyQue.examList}"></f:selectItems>
+									</p:selectOneMenu>
+									
+									<p:commandButton action="#{copyQue.check}" value="Select"></p:commandButton>
+								</p:panelGrid>
+							</p:panel>
+							</h:form>
+							</div>
+							<div class="card card-w-title">
+							<h:form id="form2">
+							<p:panel header="Copy Questions To">
+								<p:panelGrid columns="2"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel for="@next" style="color:red"
+										value="Select Class"></p:outputLabel>
+									<p:selectOneMenu id="class2Id"
+										value="#{copyQue.copyselectedClass}" filter="true"
+										required="true"
+										requiredMessage="#{addExamVar.selectClassValidation}">
+										<f:selectItem itemLabel="#{addExamVar.selectHereLabel}"
+											itemValue=""></f:selectItem>
+										<f:selectItems value="#{copyQue.copyclassList}"></f:selectItems>
+										<p:ajax event="itemSelect"
+											listener="#{copyQue.getcopySubjects}" update="subject2Id"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel for="@next" style="color:red"
+										value="Select Subject"></p:outputLabel>
+									<p:selectOneMenu id="subject2Id" required="true"
+										value="#{copyQue.copyselectedSubject}"
+										requiredMessage="Subject selection is required">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{copyQue.copysubjectList}"></f:selectItems>
+										<p:ajax event="itemSelect"
+											listener="#{copyQue.getcopyExams}" update="exam2Id"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel for="@next" style="color:red"
+										value="Select Exam"></p:outputLabel>
+									<p:selectOneMenu id="exam2Id" required="true"
+										value="#{copyQue.copyexamName}"
+										requiredMessage="Exam selection is required">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{copyQue.copyexamList}"></f:selectItems>
+										<p:ajax event="itemSelect" listener="#{copyQue.compare}" update="btn,:form"></p:ajax>
+									</p:selectOneMenu>
+								</p:panelGrid>
+								<p:commandButton id="btn" style="width:14%" value="Copy" 
+									action="#{copyQue.copy}" update=":form,:form2"></p:commandButton>
+							</p:panel>
+							</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

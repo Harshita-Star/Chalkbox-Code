@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<f:loadBundle var="searchStudentVar" basename="myProperties" />
+<f:view contentType="text/html">
+	<h:head>
+		<title>Report</title>
+		<f:facet name="first">
+			<meta content='text/html; charset=UTF-8' http-equiv="Content-Type" />
+			<meta http-equiv="X-UA-Compatible" content="EmulateIE8" />
+		<title>Report</title>
+		</f:facet>
+
+      	    <link rel="stylesheet" type="text/css" href="css/style.css"/>				
+<script>
+  		function printwin() 
+  		{
+  			document.getElementById('test').style.display="none";	
+  			window.print();
+  			document.getElementById('test').style.display="block";
+  			document.URL="";
+  		}
+  	</script>
+      	    
+	</h:head>
+
+	<h:body>
+			<h:panelGrid columns="2">
+				<p:commandButton id="test" value="Print" onclick="printwin()"></p:commandButton>
+			</h:panelGrid>
+		<h:form id="form2">	
+				<center><table>
+					<tr><td>#{printOverallPerReport.schoolName}</td></tr>
+					<tr><td>CONSOLIDATED RESULT SHEET</td></tr>
+					<tr><td>#{printOverallPerReport.examName} </td></tr>
+					<tr><td>CLASS/SECTION :#{printOverallPerReport.className}</td></tr>
+					<tr><td>SESSION :#{printOverallPerReport.session}</td></tr>
+				</table></center> 
+				<table style="width:100%;">
+				  
+				  <tr><td style="width:70%">      </td>
+				  <td style="width:30%">DATE OF RESULT DISCUSSION : </td>
+				  </tr>
+				  
+				</table>	
+     			<p:dataTable style="font-size: 7.5px !important;" rowIndexVar="index" var="var" value="#{printOverallPerReport.studentList}">
+     				
+   		  			<p:columnGroup type="header">
+			            <p:row>
+			            	 <p:column style="width:20px" rowspan="1" headerText="S.No." />
+			                 <p:column style="width:110px" rowspan="1" headerText="Student Name" />
+			                 <ui:repeat value="#{printOverallPerReport.termList}" var="term">
+		                    	<p:column colspan="#{term.subjectList.size()}" headerText="#{term.termName}" />
+		               	 	 </ui:repeat>
+			            </p:row>
+			            <p:row>
+			            	<p:column rowspan="1" headerText="" />
+			            	<p:column rowspan="1" headerText="" />
+			            	<ui:repeat value="#{printOverallPerReport.termList}" var="term">
+				                <ui:repeat value="#{term.subjectList}" var="subject">
+				                    <p:column headerText="#{subject.subjectName}" />
+				                </ui:repeat>
+			                </ui:repeat>
+			            </p:row>
+			        </p:columnGroup>
+			        
+			        <p:column >
+   		  				<p:outputLabel value="#{index+1}"></p:outputLabel>
+   		  			</p:column>
+			        
+   		  			
+   		  			<p:column sortBy="#{var.fname}">
+   		  				<p:outputLabel value="#{var.fname}"></p:outputLabel>
+   		  			</p:column>
+
+   		  			<p:columns value="#{printOverallPerReport.scholasticColumnsList}" var="ll">
+		          		<center><p:outputLabel value="#{var.marksMap[ll]}" /></center>
+		          	</p:columns>
+	  			</p:dataTable>
+	  			
+	  			<br></br>
+	  			<br></br>
+	  			<br></br>
+	  			<br></br>
+	  			
+	  			<table style="width:100%;">
+	  			 <tr>
+	  			<td style="width:20%">#{printOverallPerReport.resultPreparedby}</td>
+         		<td style="width:20%">#{printOverallPerReport.resultCheckedBy}</td>
+         		<td style="width:20%">#{printOverallPerReport.coordinator}</td>
+         		<td style="width:20%">#{printOverallPerReport.principle}</td>
+	  			<td style="width:20%">#{printOverallPerReport.director}</td>
+	  			</tr>
+	  			
+	  			 <tr>
+	  			<td style="width:20%">CLASS TEACHER</td>
+         		<td style="width:20%"></td>
+         		<td style="width:20%"></td>
+         		<td style="width:20%"></td>
+	  			<td style="width:20%"></td>
+	  			</tr>
+	  			
+	  			
+	  			
+	  			</table>
+	  			
+	  			
+			</h:form>
+	</h:body>
+</f:view>
+</html>

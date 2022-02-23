@@ -1,0 +1,251 @@
+	<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+					xmlns:ui="http://java.sun.com/jsf/facelets"
+					xmlns:h="http://java.sun.com/jsf/html"
+					xmlns:f="http://java.sun.com/jsf/core"
+					xmlns:p="http://primefaces.org/ui"
+					xmlns:pe="http://primefaces.org/ui/extensions"
+					template="/WEB-INF/schoolMasterTemplate.xhtml">
+
+		<ui:define name="title">Due Fee Report Installment Wise</ui:define>
+
+		<ui:define name="content">
+		   
+				<div class="ui-fluid">
+					<div class="ui-g">
+						<div class="ui-g-12">
+							<div class="card card-w-title">
+							               <h:form id="form1" >
+					 
+					 <h1>Due Fee Report Installment Wise</h1>
+            			<p:messages closable="true" autoUpdate="true"></p:messages>     		    		 	
+               		 		<p:panel rendered="false" header="Search Student by Name/Sr. No">
+               		 		<p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+               		 	
+               		 			<p:outputLabel value="Student Name/Sr.No" for="@next" style="color:red" ></p:outputLabel>      
+               		 			<p:autoComplete value="#{MasterMainNewDueFeeReportBean.name}" minQueryLength="3" completeMethod="#{MasterMainNewDueFeeReportBean.autoCompleteStudentInfo}" required="true" requiredMessage="#{dueFeeReportVar.dueFeeReportStudentNameValidation}">
+               		 			</p:autoComplete>     
+               		 			
+               		 			<p:outputLabel value="Till Date" for="@next" style="color:red" ></p:outputLabel>
+               		 			<p:calendar value="#{MasterMainNewDueFeeReportBean.date}" required="true" requiredMessage="Please enter date" pattern="dd/MM/yyyy" navigator="true"></p:calendar>
+               		 			
+               		 			<p:commandButton update=":form3:up,:form1" actionListener="#{MasterMainNewDueFeeReportBean.searchStudent}" value="#{dueFeeReportVar.dueFeeReportSearchNowButton}"></p:commandButton>  
+								
+               	     
+               		 		
+               		 		
+               		 			
+               		 		</p:panelGrid> 
+            		 		</p:panel>
+               		 		
+               		 	</h:form>
+               		 	</div>
+               		 	<div class="card card-w-title">
+               		 		
+             		  	<h:form id="form2">	 		
+               		 		
+               		 		<p:panel header="Search Student by Class-section">
+               		 			
+               		 		<p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+               		 		
+               		 		<p:outputLabel value="Select School" for="@next" style="color:red" ></p:outputLabel>
+							<p:selectOneMenu value="#{MasterMainNewDueFeeReportBean.schid}"
+								required="true" requiredMessage="Please select a school">
+								<f:selectItem itemLabel="All" itemValue="-1"></f:selectItem>
+								<f:selectItems value="#{MasterMainNewDueFeeReportBean.branchList}"></f:selectItems>
+	
+								<p:ajax listener="#{MasterMainNewDueFeeReportBean.branchWiseWork}"
+									update="form2"></p:ajax>
+							</p:selectOneMenu>
+							
+							<p:outputLabel    for="@next" style="color:red" value="Late Fees"></p:outputLabel>      
+               		 		<p:selectOneRadio style="width:250px" value="#{MasterMainNewDueFeeReportBean.lateFeeCheck}" required="true" requiredMessage="Please select a class">
+               		 			<f:selectItem itemLabel="Include" itemValue="yes"></f:selectItem>
+               		 			<f:selectItem itemLabel="Not Include" itemValue="no"></f:selectItem>
+               		 		</p:selectOneRadio>
+               		 		
+               		 		<p:outputLabel rendered="#{MasterMainNewDueFeeReportBean.showClass}"  value="#{dueFeeReportVar.dueFeeReportClassLabel}" for="@next" style="color:red" ></p:outputLabel>      
+               		 		<p:selectOneMenu rendered="#{MasterMainNewDueFeeReportBean.showClass}" style="width:250px" value="#{MasterMainNewDueFeeReportBean.selectedCLassSection}" required="true" requiredMessage="Please select a class">
+               		 			<f:selectItem itemLabel="All" itemValue="-1"></f:selectItem>
+               		 			<f:selectItems value="#{MasterMainNewDueFeeReportBean.classSection}"></f:selectItems>
+               		 			<p:ajax update="sectionid" listener="#{MasterMainNewDueFeeReportBean.allSections}"></p:ajax>
+               		 		</p:selectOneMenu>    
+               		 		
+               		 		<p:outputLabel rendered="#{MasterMainNewDueFeeReportBean.showClass}" value="Section" for="@next" style="color:red" ></p:outputLabel>
+               		 		<p:selectOneMenu rendered="#{MasterMainNewDueFeeReportBean.showClass}" id="sectionid" value="#{MasterMainNewDueFeeReportBean.selectedSection}" required="true" requiredMessage="Please select a section"> 
+               		 			<f:selectItem itemLabel="All" itemValue="-1"></f:selectItem>
+               		 			<f:selectItems value="#{MasterMainNewDueFeeReportBean.sectionList}"></f:selectItems>
+               		 		</p:selectOneMenu>
+               		 		
+               		 		<p:outputLabel value="Select Installment" for="@next" style="color:red" ></p:outputLabel>
+               		 		 <p:selectCheckboxMenu  multiple="true"
+												value="#{MasterMainNewDueFeeReportBean.checkMonthSelected}" required="true"
+												requiredMessage="Please Select Installment">
+												<f:selectItems value="#{MasterMainNewDueFeeReportBean.installmentList}"></f:selectItems>
+											</p:selectCheckboxMenu>
+											
+               		 		<p:outputLabel value="Till Date" for="@next" style="color:red" ></p:outputLabel>
+               		 		<p:calendar value="#{MasterMainNewDueFeeReportBean.date}" navigator="true" required="true" requiredMessage="Please enter date" pattern="dd/MM/yyyy"></p:calendar>
+               		 		
+               		 		<p:commandButton update=":form3:up,:form2" actionListener="#{MasterMainNewDueFeeReportBean.showReport}" value="#{dueFeeReportVar.dueFeeReportSearchNowButton}"></p:commandButton>  
+               		 		<p:commandButton value="Print" rendered="#{MasterMainNewDueFeeReportBean.show}">
+               	       		<p:printer target="form3"></p:printer>
+               	       </p:commandButton>
+               		 		 
+               		 		
+               		 	  <h:commandLink >
+                                        <p:graphicImage name="images/excellogo.png"
+                                            library="avalon-layout" width="100" height="40"></p:graphicImage>
+                                        <pe:exporter type="xlsx" target=":form3:table"
+                                            fileName="DUE_FEE.xlsx"></pe:exporter>
+                                    </h:commandLink>
+                                
+                                                                                                  <p:commandButton value="pdf" ajax="false" process="@this" actionListener="#{MasterMainNewDueFeeReportBean.exportDueFeeHeadPdf}">
+                    
+          <p:fileDownload value="#{MasterMainNewDueFeeReportBean.file}" />
+         </p:commandButton>
+               		 		
+               		 		
+               		 		</p:panelGrid>  
+               		 		
+               		 		</p:panel>		 
+               		 
+               		 </h:form>
+               		 </div>
+               		 <div class="card card-w-title">
+               	<h:form id="form3">	 
+               		 
+               		 <p:panel header="Defaulter Fee Report" id="up"  >
+               		 
+               		 	<p:outputPanel rendered="#{MasterMainNewDueFeeReportBean.show}">
+               		 	<center>
+						<p style="font-family: initial;font-style: oblique;font-size: 25px !important;font-weight:bold;margin:0px;">#{MasterMainNewDueFeeReportBean.schname}</p>
+						<p style="font-family: initial;font-style: oblique;font-size: 15px !important;font-weight:bold;margin:0px;">#{MasterMainNewDueFeeReportBean.affiliationNo}</p>
+						<p style="font-family: initial;font-style: oblique;font-size: 15px !important;font-weight:bold;margin:0px;">#{MasterMainNewDueFeeReportBean.finalAddress}</p>
+						<p style="font-family: initial;font-style: oblique;font-size: 15px !important;font-weight:bold;margin:0px;">#{MasterMainNewDueFeeReportBean.phoneno}</p>
+						
+						<p style="margin:0px;font-size: 25px !important;font-weight:bold;">Due Fee Report For Month</p>
+						</center>
+						<br></br>
+				
+					<p:panelGrid columns="5" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+					
+						
+						<p:panelGrid columns="2">
+							<p:outputLabel value="Total Amount:-"></p:outputLabel>
+							<h:outputText value="#{MasterMainNewDueFeeReportBean.totalamountString}"></h:outputText>
+						</p:panelGrid>
+						
+					</p:panelGrid>	
+               		  		<p:dataTable reflow="true"  id="table"  var="var" value="#{MasterMainNewDueFeeReportBean.list}"> 
+               		  		      
+               		  		        
+               		  		         <f:facet name="header">
+		    	  			<p:outputLabel value=""></p:outputLabel>
+		    	  
+		    	  			</f:facet>
+		    	  			
+		    	  			<p:column headerText="S.No." >
+               		  			 <f:facet name="header">
+										<p:outputLabel value="S.No."></p:outputLabel>
+									</f:facet>
+               		  		     
+               		  				<p:outputLabel value="#{var.sNo}"></p:outputLabel>
+               		  			</p:column>
+		    	  			  
+		    	  					 
+               		  		     <p:column headerText="SR.No." >
+               		  		     <f:facet name="header">
+										<p:outputLabel value="SR.No."></p:outputLabel>
+									</f:facet>
+               		  		     
+               		  				<p:outputLabel value="#{var.srNo}"></p:outputLabel>
+               		  			</p:column>
+               		  			<p:column  sortBy="#{var.fname}" headerText="#{dueFeeReportVar.dueFeeReportFirstNameLabel}">
+               		  			 <f:facet name="header">
+										<p:outputLabel value="#{dueFeeReportVar.dueFeeReportFirstNameLabel}"></p:outputLabel>
+									</f:facet>
+               		  				<p:outputLabel value="#{var.fname}"></p:outputLabel>
+               		  			</p:column>
+               		  			
+               		  			<p:column headerText="Father's Name">
+               		  			 <f:facet name="header">
+										<p:outputLabel value="Father's Name"></p:outputLabel>
+									</f:facet>
+               		  				<p:outputLabel value="#{var.fathersName}"></p:outputLabel>
+               		  			</p:column>
+               		  			
+               		  			<p:column headerText="Contact No." >
+               		  			 <f:facet name="header">
+										<p:outputLabel value="Contact No."></p:outputLabel>
+									</f:facet>
+               		  				<p:outputLabel value="#{var.contactNo}"></p:outputLabel>
+               		  			</p:column>
+               		  			
+               		  			<p:column  headerText="Class" >
+               		  			 <f:facet name="header">
+										<p:outputLabel value="Class"></p:outputLabel>
+									</f:facet>
+               		  				<p:outputLabel value="#{var.className}-#{var.sectionName}"></p:outputLabel>
+               		  			</p:column>
+               		  			
+               		  			<p:column rendered="#{MasterMainNewDueFeeReportBean.showSchool}" headerText="School" >
+               		  				<p:outputLabel value="#{var.schname}"></p:outputLabel>
+               		  			</p:column>
+               		  			
+               		  		
+               		  		
+               		  		<p:columns value="#{MasterMainNewDueFeeReportBean.selectedInstallList}" var="column" columnIndexVar="colIndex">
+
+									<f:facet name="header">
+										<p:outputLabel value="#{column.value}"></p:outputLabel>
+									</f:facet>
+
+									<p:outputLabel value="#{var.feesMap[column.value]}"></p:outputLabel>
+								</p:columns>
+               		  		
+               		  		
+               		  		
+	               		  		<p:column headerText="Total Left Amount" >
+	               		  		 <f:facet name="header">
+										<p:outputLabel value="Total Left Amount"></p:outputLabel>
+									</f:facet>
+	           		  				<p:outputLabel value="#{var.totalFee}"></p:outputLabel>
+	           		  			</p:column>
+                		  			
+               		  			
+               		  			     		  		
+               		  		</p:dataTable>
+               		  	               		  
+               		  </p:outputPanel>         
+               		 	
+               		 </p:panel>
+               		  	
+				</h:form>
+		
+                
+          
+ 				<h:form id="messageForm">
+					<p:dialog resizable="false" widgetVar="messageDialog" header="Enter your Message" showEffect="fade" hideEffect="explode" modal="true">
+						<div class="ui-g form-group">
+						<p:panelGrid columns="2" styleClass="ui-panelgrid-blank form-group"
+                                        style="border:0px none; background-color:transparent;">
+               			
+               				<p:outputLabel value="Message" for="@next" style="color:red" ></p:outputLabel>
+               				<p:inputTextarea value="#{MasterMainNewDueFeeReportBean.message}" required="true" requiredMessage="Please Enter Message"></p:inputTextarea>
+               				
+               				<p:commandButton update=":form1,:form2,:form3,:messageForm" actionListener="#{MasterMainNewDueFeeReportBean.sendMessageToSelectedStudentsCustome}" value="Send Now" />
+               				            				
+               			</p:panelGrid>
+               			</div>
+					</p:dialog>
+				</h:form>
+				
+							     
+							</div>
+						</div>
+					</div>
+				</div>
+		   
+		</ui:define>
+
+	</ui:composition>

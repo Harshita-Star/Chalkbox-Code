@@ -1,0 +1,88 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+	<ui:define name="title">Account Ledger</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form" style="overflow:hidden">
+						<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+							<p:panel header="View Account Ledger">
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+
+									<p:outputLabel value="Select Account"></p:outputLabel>
+									<p:autoComplete placeholder="Select Account" scrollHeight="250"
+										value="#{showAccountLedger.accountName}" forceSelection="true"
+										completeMethod="#{showAccountLedger.completeText}">
+										<p:ajax event="query" global="false"></p:ajax>
+									</p:autoComplete>
+
+									<p:commandButton value="Search"
+										actionListener="#{showAccountLedger.search}"
+										update=":form:dt,pl2"></p:commandButton>
+								</p:panelGrid>
+							</p:panel>
+							
+							<br/>
+
+							<p:panel id="pl2">
+								<p:dataTable reflow="true" value="#{showAccountLedger.statementListAll}"
+									var="var" id="dt">
+
+									<p:column headerText="S. No.">
+										<h:outputText value="#{var.sno}"></h:outputText>
+									</p:column>
+
+									<p:column headerText="Date" style="text-align:center">
+										<h:outputText value="#{var.strDate}"></h:outputText>
+									</p:column>
+
+									<p:column headerText="Type" style="text-align:right">
+										<h:outputText value="#{var.status}"></h:outputText>
+									</p:column>
+
+									<p:column headerText="Description" style="text-align:right">
+										<h:outputText value="#{var.description}"></h:outputText>
+									</p:column>
+
+									<p:column headerText="Cr Amount" style="text-align:right">
+										<h:outputText value="#{var.creditAmt}"></h:outputText>
+										<f:facet name="footer">
+											<p:outputLabel value="#{showAccountLedger.tCredit}"></p:outputLabel>
+										</f:facet>
+									</p:column>
+
+									<p:column headerText="Dr Amount" style="text-align:right">
+										<h:outputText value="#{var.debitAmt}"></h:outputText>
+										<f:facet name="footer">
+											<p:outputLabel value="#{showAccountLedger.tDebit}"></p:outputLabel>
+										</f:facet>
+									</p:column>
+
+
+
+								</p:dataTable>
+							</p:panel>
+
+
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

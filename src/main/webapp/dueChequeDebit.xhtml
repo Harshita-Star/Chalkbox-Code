@@ -1,0 +1,113 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Due Cheque</ui:define>
+
+    <ui:define name="content">
+       
+            <div class="ui-fluid">
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <div class="card card-w-title">
+                          <h:form id="form" style="overflow:hidden">
+					<p:growl showDetail="true"  autoUpdate="true" ></p:growl>
+						<p:panel header="Debit : Due Cheque Notification">
+							<p:dataTable  value="#{dueDebit.expenseList}" reflow="true" var="var" paginator="true" rows="5" rowsPerPageTemplate="5,10,15">
+							    
+							    <p:column headerText="Type">
+							       <p:outputLabel value="#{var.type}"></p:outputLabel>
+							    </p:column>
+							    
+							    <p:column headerText="Transaction Name">
+							       <p:outputLabel value="#{var.item_loan_fdr}"></p:outputLabel>
+							    </p:column>
+							    
+							    <p:column headerText="Amount (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})">
+							       <p:outputLabel value="#{var.amount}"></p:outputLabel>
+							    </p:column>
+							    
+							   <p:column headerText="Bank">
+							       <p:outputLabel value="#{var.bankName}"></p:outputLabel>
+							    </p:column>
+							    
+							    <p:column headerText="Acc.No.">
+							       <p:outputLabel value="#{var.accNo}"></p:outputLabel>
+							    </p:column>
+							    
+							    <p:column headerText="Cheque No.">
+							       <p:outputLabel value="#{var.chequeNo}"></p:outputLabel>
+							    </p:column>
+							    
+							    <p:column headerText="Cheque Date">
+							       <p:outputLabel value="#{var.strChequeDate}"></p:outputLabel>
+							    </p:column>
+							    
+							    <p:column headerText="Approve" >
+							      <p:commandButton disabled="#{var.disable}" icon="ui-icon-check" oncomplete="PF('approveDialog').show()" update=":approveForm">
+							          <f:setPropertyActionListener target="#{dueDebit.selectedNotification}" value="#{var}"></f:setPropertyActionListener>
+							       </p:commandButton>
+							    </p:column>
+							   
+							    <p:column headerText="Deny" >
+							        <p:commandButton icon="ui-icon-close" oncomplete="PF('denyDialog').show()" update=":denyForm">
+							          <f:setPropertyActionListener target="#{dueDebit.selectedNotification}" value="#{var}"></f:setPropertyActionListener>
+							       </p:commandButton>
+							    </p:column>
+							</p:dataTable> 
+						</p:panel>
+					</h:form>
+					
+						<h:form id="approveForm" style="overflow:hidden">
+						<p:dialog widgetVar="approveDialog" modal="true" resizable="false" draggable="false" header="Are You Sure To Approve ???">
+						<div class="ui-g form-group">
+							<p:panelGrid columns="2"  styleClass="ui-panelgrid-blank form-group"
+                                        style="border:0px none; background-color:transparent;">
+								<p:outputLabel  for="@next" style="color:red" value="Cheque Clear Date:"></p:outputLabel>
+								<p:calendar pattern="dd/MM/yyyy" value="#{dueDebit.chqClearDate}" navigator="true" required="true" requiredMessage="Please select Cheque retun date"></p:calendar>
+								
+								<p:commandButton value="Yes" update=":approveForm,:form" action="#{dueDebit.approveCheque}"></p:commandButton>
+								<p:commandButton value="No" update=":approveForm,:form"></p:commandButton>
+							</p:panelGrid>
+							</div>
+						</p:dialog>
+					</h:form>
+					
+					
+					<h:form id="denyForm" style="overflow:hidden">
+						<p:dialog widgetVar="denyDialog" modal="true" resizable="false" draggable="false" header="Are You Sure To Deny ???">
+							<div class="ui-g form-group">
+							<p:panelGrid columns="2"  styleClass="ui-panelgrid-blank form-group"
+                                        style="border:0px none; background-color:transparent;">
+							<p:outputLabel  for="@next" style="color:red" value="Cheque Bounce Date:"></p:outputLabel>
+								<p:calendar pattern="dd/MM/yyyy" value="#{dueDebit.chqReturnDate}" navigator="true" required="true" requiredMessage="Please select Cheque retun date"></p:calendar>
+								
+								<p:outputLabel value="Cheque Bounce Charge"></p:outputLabel>
+								<p:inputText onfocus="this.select();" value="#{dueDebit.amount}">
+									<p:keyFilter mask="pnum"></p:keyFilter>
+								</p:inputText>
+								
+								<p:outputLabel value="Reason"></p:outputLabel>
+								<p:inputTextarea value="#{dueDebit.reason}" rows="3" cols="20" validatorMessage="Please Enter Correct value">
+								  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+								</p:inputTextarea>
+								
+								
+								<p:commandButton value="Yes" update=":denyForm,:form" action="#{dueDebit.denyCheque}"></p:commandButton>
+								<p:commandButton value="No" update=":denyForm,:form"></p:commandButton>
+							</p:panelGrid>
+							</div>
+						</p:dialog>
+					</h:form>
+					
+                        </div>
+                    </div>
+                </div>
+            </div>
+       
+    </ui:define>
+
+</ui:composition>

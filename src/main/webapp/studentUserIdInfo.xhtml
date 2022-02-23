@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+     <h:head>
+        <f:facet name="first">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+            <meta name="apple-mobile-web-app-capable" content="yes" />
+        </f:facet>
+        <title>PrimeFaces Avalon</title>
+        <h:outputScript name="js/layout.js" library="avalon-layout" />
+    </h:head>
+    <h:body styleClass="login-body">
+        <div class="login-image"></div>
+        <div class="card login-panel ui-fluid">
+            <div class="login-panel-content">
+                <div class="ui-g">
+                <h:form id="form">
+                    <div class="ui-g-12 ui-sm-6 ui-md-6" style="text-align:left;">
+                        <p:graphicImage name="images/login/icon-login.svg" library="avalon-layout" />
+                    </div>
+                    <div class="ui-g-12 ui-sm-6 ui-md-6" style="text-align:right;">
+                        <h2 class="welcome-text">Welcome Guest</h2>
+                        <span class="guest-sign-in">Sign in to Avalon Network</span>
+                    </div>
+                    <div class="ui-g-12" style="text-align:left;">
+                        <h:panelGroup>
+                            <label class="login-label">Enter Mobile No</label>
+                            <div class="login-input">
+                                <p:inputText id="loginid" value="#{studentUserIdInfo.mobileNo}" required="true" requiredMessage="Please Enter Mobile No" ></p:inputText>
+                                <p:commandButton value="Get Information" update=":form" actionListener="#{studentUserIdInfo.getInformation}"></p:commandButton>
+                            </div>
+                            
+                        </h:panelGroup>
+                    </div>
+                    <div class="ui-g-12" style="text-align:left;">
+                        <h:panelGroup rendered="#{studentUserIdInfo.show}">
+                            <label class="login-label">Select Id</label>
+                            <div class="login-input">
+                                <p:selectOneMenu  id="password" value="#{studentUserIdInfo.selectedId}" required="true" requiredMessage="Please Select Id">
+                                	<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+                                	<f:selectItems value="#{studentUserIdInfo.userIdlist}"></f:selectItems>
+                                </p:selectOneMenu>
+                                <p:commandButton value="Submit" actionListener="#{studentUserIdInfo.getUserId}"></p:commandButton>
+                            </div>
+                        </h:panelGroup>
+                    </div>
+                    </h:form>
+                </div>
+            </div>
+        </div>
+        
+        <h:outputStylesheet name="css/layout-#{guestPreferences.theme}.css" library="avalon-layout" />
+    </h:body>
+
+</html>

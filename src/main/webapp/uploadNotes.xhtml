@@ -1,0 +1,126 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Manual/Notes</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form enctype="multipart/form-data" id="form">
+							<h1>Upload Manual/Notes</h1>
+							<p:growl>
+								<p:autoUpdate />
+							</p:growl>
+							<p:panel
+								header="Allowed file type are :- jpg,jpeg,png,pdf,doc,docx">
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel value="Select Class"></p:outputLabel>
+									<p:selectOneMenu value="#{uploadNotes.selectedCLassSection}"
+										required="true" requiredMessage="Please select a class"
+										filter="true">
+										<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+										<f:selectItems value="#{uploadNotes.classSection}"></f:selectItems>
+										<p:ajax update="sectionid"
+											listener="#{uploadNotes.allSections}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Select Section"></p:outputLabel>
+									<p:selectOneMenu id="sectionid"
+										value="#{uploadNotes.selectedSection}" required="true"
+										requiredMessage="Please select a section" filter="true">
+										<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+										<f:selectItems value="#{uploadNotes.sectionList}"></f:selectItems>
+										<p:ajax update="subjectid"
+											listener="#{uploadNotes.allSubjects}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Select Subject"></p:outputLabel>
+									<p:selectOneMenu id="subjectid" value="#{uploadNotes.subject}"
+										required="true" requiredMessage="Please select a Subject"
+										filter="true">
+										<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+										<f:selectItem itemLabel="All" itemValue="All"></f:selectItem>
+										<f:selectItems value="#{uploadNotes.subjectList}"></f:selectItems>
+									</p:selectOneMenu>
+
+									<p:outputLabel rendered="false" value="Type:"></p:outputLabel>
+									<p:selectOneMenu rendered="false" value="#{uploadNotes.type}"
+										required="true" requiredMessage="Please select a Type">
+										<f:selectItem itemLabel="Homework" itemValue="homework"></f:selectItem>
+										<f:selectItem itemLabel="Notes" itemValue="notes"></f:selectItem>
+										<p:ajax update="tp" listener="#{uploadNotes.checkType}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Description:"></p:outputLabel>
+									<p:inputTextarea value="#{uploadNotes.des}" rows="3" cols="20"
+										required="true" requiredMessage="Please enter description"></p:inputTextarea>
+
+									<p:outputLabel value="Date:" rendered="false"></p:outputLabel>
+									<p:calendar rendered="false" value="#{uploadNotes.assShowDate}"
+										navigator="true" pattern="dd/MM/yyyy" required="true"
+										requiredMessage="Please Select Date"></p:calendar>
+
+									<p:outputLabel id="tp" value="Manual/Notes Name"></p:outputLabel>
+									<p:inputText value="#{uploadNotes.assignmentName}"
+										required="true" requiredMessage="Please Enter Notes Name"></p:inputText>
+
+									<p:outputLabel value="Choose File1 :"></p:outputLabel>
+									<p:fileUpload mode="simple" skinSimple="true"
+										value="#{uploadNotes.assignmentPhoto1}"
+										allowTypes="/(\.|\/)(gif|jpe?g|png|pdf|doc|docx)$/"
+										validatorMessage="Please choose valid file type"></p:fileUpload>
+
+									<p:outputLabel value="Choose File2 :" />
+									<p:fileUpload
+										allowTypes="/(\.|\/)(gif|jpe?g|png|pdf|doc|docx)$/"
+										mode="simple" skinSimple="true"
+										value="#{uploadAssignment.assignmentPhoto2}" />
+
+									<p:outputLabel value="Choose File3 :" />
+									<p:fileUpload
+										allowTypes="/(\.|\/)(gif|jpe?g|png|pdf|doc|docx)$/"
+										mode="simple" skinSimple="true"
+										value="#{uploadAssignment.assignmentPhoto3}" />
+
+									<p:outputLabel value="Choose File4 :" />
+									<p:fileUpload
+										allowTypes="/(\.|\/)(gif|jpe?g|png|pdf|doc|docx)$/"
+										mode="simple" skinSimple="true"
+										value="#{uploadAssignment.assignmentPhoto4}" />
+
+									<p:outputLabel value="Choose File5 :" />
+									<p:fileUpload
+										allowTypes="/(\.|\/)(gif|jpe?g|png|pdf|doc|docx)$/"
+										mode="simple" skinSimple="true"
+										value="#{uploadAssignment.assignmentPhoto5}" />
+
+									<p:outputLabel value="Want to send Notification ?"></p:outputLabel>
+									<p:selectOneRadio value="#{uploadNotes.notification}">
+										<f:selectItem itemLabel="Yes" itemValue="yes"></f:selectItem>
+										<f:selectItem itemLabel="No" itemValue="no"></f:selectItem>
+									</p:selectOneRadio>
+
+									<p:commandButton value="Upload"
+										title="Click On to Upload Notes" ajax="false" update=":form"
+										action="#{uploadNotes.upload}"></p:commandButton>
+								</p:panelGrid>
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

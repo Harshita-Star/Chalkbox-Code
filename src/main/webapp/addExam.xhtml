@@ -1,0 +1,242 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Add Exam</ui:define>
+	
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+
+							<h1>#{addExamVar.addExamTitle}</h1>
+
+							<p:panel header="Add Exam">
+								<p:messages closable="true" autoUpdate="true"></p:messages>
+
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel for="@next" style="color:red"
+										value="Select Class"></p:outputLabel>
+									<p:selectOneMenu id="classId" value="#{addExam.selectedClass}"
+										filter="true" required="true"
+										requiredMessage="#{addExamVar.selectClassValidation}">
+										<f:selectItem itemLabel="#{addExamVar.selectHereLabel}"
+											itemValue=""></f:selectItem>
+										<f:selectItems value="#{addExam.classList}"></f:selectItems>
+
+										<p:ajax update="semesterId,classId"
+											listener="#{addExam.showSemester}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel for="@next" style="color:red"
+										value="#{addExamVar.selectSemesterLabel}"></p:outputLabel>
+									<p:selectOneMenu id="semesterId" filter="true"
+										value="#{addExam.selectedSemester}" required="true"
+										requiredMessage="#{addExamVar.selectSemesterValidation}">
+										<f:selectItem itemLabel="#{addExamVar.selectHereLabel}"
+											itemValue=""></f:selectItem>
+										<f:selectItems value="#{addExam.termList}"></f:selectItems>
+										<p:ajax global="false"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel for="@next" style="color:red"
+										value="Type of Exam"></p:outputLabel>
+									<p:selectOneMenu value="#{addExam.examType}" required="true"
+										requiredMessage="Please Select Exam Type" filter="true">
+										<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+										<f:selectItem itemLabel="Periodic Test"
+											itemValue="periodicTest"></f:selectItem>
+										<f:selectItem itemLabel="Other" itemValue="other"></f:selectItem>
+										<p:ajax listener="#{addExam.clearArea}" update=":form"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel for="@next" style="color:red"
+										value="Type of Area"></p:outputLabel>
+									<p:selectOneMenu value="#{addExam.selectedType}" filter="true"
+										required="true" requiredMessage="Please Select Type Of Area">
+										<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+										<f:selectItems value="#{addExam.subjectTypeList}"></f:selectItems>
+
+										<p:ajax update=":form" listener="#{addExam.showSubjects}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel for="@next" style="color:red"
+										value="Include In Final Marksheet"></p:outputLabel>
+									<p:selectOneRadio required="true"
+										requiredMessage="Please Select Includation In Final Marksheet"
+										value="#{addExam.includeOrNot}">
+										<f:selectItem itemLabel="Yes" itemValue="Yes"></f:selectItem>
+										<f:selectItem itemLabel="No" itemValue="No"></f:selectItem>
+										<p:ajax global="false"></p:ajax>
+									</p:selectOneRadio>
+
+									<p:outputLabel for="@next" style="color:red"
+										value="Include In Result Evaluation"></p:outputLabel>
+									<p:selectOneRadio disabled="#{addExam.includeInResult}"
+										required="true"
+										requiredMessage="Please Select Includation In Result Evaluation"
+										value="#{addExam.includeOrNot}">
+										<f:selectItem itemLabel="Yes" itemValue="Yes"></f:selectItem>
+										<f:selectItem itemLabel="No" itemValue="No"></f:selectItem>
+										<p:ajax global="false"></p:ajax>
+									</p:selectOneRadio>
+
+									<p:outputLabel for="@next" style="color:red"
+										value="Want To Add Sub Exam"></p:outputLabel>
+									<p:selectOneRadio value="#{addExam.subExam}" required="true"
+										requiredMessage="Please Select Add Sxam">
+										<f:selectItem itemLabel="Yes" itemValue="Yes"></f:selectItem>
+										<f:selectItem itemLabel="No" itemValue="No"></f:selectItem>
+										<p:ajax listener="#{addExam.checkSubExam}" update=":form"></p:ajax>
+									</p:selectOneRadio>
+
+									<p:outputLabel for="@next" style="color:red"
+										rendered="#{addExam.showExamList}" value="Select Exam Name"></p:outputLabel>
+									<p:selectOneMenu rendered="#{addExam.showExamList}"
+										value="#{addExam.examName}" required="true"
+										requiredMessage="Please Select Exam Name">
+										<f:selectItems value="#{addExam.examList}"></f:selectItems>
+										<p:ajax global="false"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel rendered="#{addExam.showExam}" for="@next"
+										style="color:red" id="showexamlabelid"
+										value="#{addExamVar.examNameLabel}"></p:outputLabel>
+									<p:inputText rendered="#{addExam.showExam}" id="showexamtextid"
+										value="#{addExam.examName}" required="true"
+										requiredMessage="#{addExamVar.examNameValidation}"
+										onchange="trimFunc(this.value,'Please Section Name',this.id)"
+										validatorMessage="Please Enter Correct value">
+										<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:inputText>
+								</p:panelGrid>
+								<p:panelGrid columns="1"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+
+									<p:outputLabel rendered="#{addExam.showFor12}"
+										value="Enter Subject Details"></p:outputLabel>
+									<p:dataTable reflow="true" rendered="#{addExam.showFor12}"
+										style="width:600px" id="subjectid2"
+										value="#{addExam.subjectList}" var="var">
+										<p:column headerText="S.No.">
+											<p:outputLabel value="#{var.serialNumber}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Subject Name">
+											<p:outputLabel value="#{var.subjectName}"></p:outputLabel>
+										</p:column>
+
+										<p:column style="color:red" headerText="Max. marks*">
+									<p:inputNumber style="width:100px !important" required="true"
+											requiredMessage="Please Enter Max Marks"
+											onfocus="this.select();" value="#{var.marks}" decimalPlaces="2">
+											
+										</p:inputNumber>
+											
+										</p:column>
+									</p:dataTable>
+
+									<p:outputLabel rendered="#{addExam.showSubExam}"
+										value="Enter Sub Exam Details"></p:outputLabel>
+									<p:dataTable reflow="true" rendered="#{addExam.showSubExam}"
+										style="width:600px" value="#{addExam.subExamList}" var="var">
+										<p:column headerText="S.No.">
+											<p:outputLabel value="#{var.sNo}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Exam Name">
+											<p:inputText value="#{var.subExamName}" id="exmnm#{var.sNo}"
+												onchange="trimFunc(this.value,'Please Section Name',this.id)"
+												validatorMessage="Please Enter Correct value">
+												<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+											</p:inputText>
+										</p:column>
+
+										<p:column headerText="Check Seperatly For Pass / Fail">
+											<p:selectOneRadio value="#{var.checkForResult}">
+												<f:selectItem itemLabel="Yes" itemValue="Yes"></f:selectItem>
+												<f:selectItem itemLabel="No" itemValue="No"></f:selectItem>
+											</p:selectOneRadio>
+										</p:column>
+
+										<p:column headerText="Enter Detail">
+											<p:commandButton icon="ui-icon-plus"
+												oncomplete="PF('subjectDialog').show()"
+												update=":form,:addForm">
+												<f:setPropertyActionListener
+													target="#{addExam.selectedExam}" value="#{var}"></f:setPropertyActionListener>
+											</p:commandButton>
+										</p:column>
+									</p:dataTable>
+
+
+								</p:panelGrid>
+
+								<br />
+								<p:separator />
+								<center>
+									<p:commandButton update="form" action="#{addExam.addNow}"
+										styleClass="butwid" icon="fa fa-upload"
+										value="#{addExamVar.addExamNowButton}"></p:commandButton>
+
+								</center>
+								<p:separator />
+								<br />
+
+							</p:panel>
+						</h:form>
+
+						<h:form id="addForm">
+							<p:dialog widgetVar="subjectDialog" modal="true"
+								draggable="false" header="Enter Subject Marks">
+
+								<p:dataTable reflow="true" style="width:600px" id="subjectid"
+									value="#{addExam.subjectList}" var="var">
+									<p:column headerText="S.No.">
+										<p:outputLabel value="#{var.serialNumber}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Subject Name">
+										<p:outputLabel value="#{var.subjectName}"></p:outputLabel>
+									</p:column>
+
+									<p:column style="color:red" headerText="Max. marks*">
+									<p:inputNumber style="width:100px !important" required="true" decimalPlaces="2"
+											requiredMessage="Please Enter Max Marks"
+											onfocus="this.select();" value="#{var.marks}">
+											
+										</p:inputNumber>
+									</p:column>
+
+									<f:facet name="footer">
+										<center>
+											<p:commandButton value="Submit Details" styleClass="butwid"
+												icon="fa fa-check-circle" update=":addForm,:form"
+												actionListener="#{addExam.addSubjectInfoToSubExam}"></p:commandButton>
+										</center>
+									</f:facet>
+								</p:dataTable>
+
+
+							</p:dialog>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,93 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/masterTemplate.xhtml">
+
+	<ui:define name="title">Allot Schools</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+
+							<p:panel header="Allot Schools to Service Executive">
+
+								<p:messages closable="true">
+									<p:autoUpdate />
+								</p:messages>
+								<p:panelGrid columns="2"
+									styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel  for="@next" style="color:red" value="Service Executive *"></p:outputLabel>
+									<p:selectOneMenu filter="true"
+										value="#{allotExecutiveSchool.executive}" required="true"
+										requiredMessage="Please Select Service Executive">
+										<f:selectItem itemLabel="Select Executive" itemValue=""></f:selectItem>
+										<f:selectItems value="#{allotExecutiveSchool.empList}"
+											var="var" itemLabel="#{var.name}" itemValue="#{var.uname}"></f:selectItems>
+									</p:selectOneMenu>
+
+								</p:panelGrid>
+								<br />
+								<br />
+								<center>
+									<p:commandButton style="width: 150px;" update="form,form1"
+										action="#{allotExecutiveSchool.search}" value="Proceed >>>"></p:commandButton>
+								</center>
+
+							</p:panel>
+						</h:form>
+						<br />
+						<h:form id="form1">
+							<p:panel header="School List"
+								rendered="#{allotExecutiveSchool.show}">
+								<center>
+									<p:pickList showSourceFilter="true" showTargetFilter="true"
+										filterMatchMode="contains" itemLabel="#{var}"
+										itemValue="#{var}" id="pickList"
+										value="#{allotExecutiveSchool.finallist}" responsive="true"
+										var="var" showCheckbox="true">
+										<f:facet name="sourceCaption">Schools Not Assigned</f:facet>
+										<f:facet name="targetCaption">Schools Assigned</f:facet>
+									</p:pickList>
+								</center>
+								<br />
+								<br />
+								<center>
+									<p:commandButton update="form,form1"
+										action="#{allotExecutiveSchool.submit}" value="UPDATE"
+										style="margin-top:5px;width: 150px;">
+										<p:confirm header="Confirmation"
+											message="Are You Sure To Update The Record ?"
+											icon="ui-icon-alert" />
+									</p:commandButton>
+								</center>
+								<br />
+								<center>
+									<p:commandButton update="form1"
+										action="#{allotExecutiveSchool.cancel}" value="CANCEL"
+										style="margin-top:5px;width: 150px;" />
+								</center>
+							</p:panel>
+						</h:form>
+
+						<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+							<p:commandButton value="Yes" styleClass="ui-confirmdialog-yes"
+								icon="ui-icon-check" />
+							<p:commandButton value="No" styleClass="ui-confirmdialog-no"
+								icon="ui-icon-close" />
+						</p:confirmDialog>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

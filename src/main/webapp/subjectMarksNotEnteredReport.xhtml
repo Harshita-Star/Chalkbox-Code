@@ -1,0 +1,82 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	<f:loadBundle var="addClassVar" basename="myProperties"/>
+
+		<ui:define name="title">Report</ui:define>
+
+		<ui:define name="content">
+
+			<div class="ui-fluid">
+				<div class="ui-g">
+					<div class="ui-g-12">
+						<div class="card card-w-title">
+							<h:form id="form">
+								<p:panel header="Search">
+									<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+									<p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+										<p:outputLabel value="Select Class" for="@next" style="color:red" ></p:outputLabel>
+										<p:selectOneMenu value="#{subMarksReport.selectedClass}" filter="true" required="true" requiredMessage="#{addExamVar.selectClassValidation}">
+											<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+											<f:selectItems value="#{subMarksReport.classList}"></f:selectItems>
+	
+											<p:ajax update="semesterId,showSection" listener="#{subMarksReport.showSemester}"></p:ajax>
+										</p:selectOneMenu>
+	
+										<p:outputLabel value="Select Section" for="@next" style="color:red" ></p:outputLabel>
+										<p:selectOneMenu id="showSection" value="#{subMarksReport.selectedSection}" filter="true" required="true" requiredMessage="Please select a section">
+											<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+											<f:selectItems value="#{subMarksReport.sectionList}"></f:selectItems>
+											<p:ajax></p:ajax>
+										</p:selectOneMenu>
+	
+										<p:outputLabel value="Select Term" for="@next" style="color:red" ></p:outputLabel>
+										<p:selectOneMenu id="semesterId" value="#{subMarksReport.selectedSemester}" filter="true" required="true" requiredMessage="#{addExamVar.selectSemesterValidation}">
+											<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+											<f:selectItems value="#{subMarksReport.termList}"></f:selectItems>
+											<p:ajax></p:ajax>
+										</p:selectOneMenu>
+										
+										<p:outputLabel value="Type of Area" for="@next" style="color:red" ></p:outputLabel>
+										<p:selectOneMenu required="true" filter="true"
+											requiredMessage="Please select type of area"
+											value="#{subMarksReport.selectedType}">
+											<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+											<f:selectItems value="#{subMarksReport.subjectTypeList}"></f:selectItems>
+										</p:selectOneMenu>
+										
+									</p:panelGrid >
+									
+									
+								<br />
+								<p:separator />
+								<center>
+								<p:commandButton styleClass="butwid" icon="fa fa-search" value="Search" update=":form" actionListener="#{subMarksReport.searchReport}"></p:commandButton>
+								</center>
+								<p:separator />
+								<br />
+										<p:dataTable var="var" value="#{subMarksReport.subjectNotList}">
+											<p:column headerText="S.No.">
+												<p:outputLabel value="#{var.sno}"></p:outputLabel>
+											</p:column>
+											
+											<p:column rendered="#{subMarksReport.selectedType eq 'scholastic' || subMarksReport.selectedType eq 'additional'}" headerText="Exam Name">
+												<p:outputLabel value="#{var.examName}"></p:outputLabel>
+											</p:column>
+											
+											<p:column headerText="Subject Name">
+												<p:outputLabel value="#{var.subjectName}"></p:outputLabel>
+											</p:column>
+										</p:dataTable>
+								</p:panel>
+							</h:form>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</ui:define>
+</ui:composition>

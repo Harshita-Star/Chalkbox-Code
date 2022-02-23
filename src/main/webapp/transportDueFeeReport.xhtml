@@ -1,0 +1,105 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:p="http://primefaces.org/ui"
+				template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Route Wise Report</ui:define>
+
+		<ui:define name="content">
+			   
+			<div class="ui-fluid">
+				<div class="ui-g">
+					<div class="ui-g-12">
+						<div class="card card-w-title">
+						     <h:form id="form" >
+						     	<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+								<h1>Transport Route Wise Student Report</h1>
+					           	<p:panel header="Select a Route">   
+               						<p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+				               	       	<p:outputLabel value="Select a Route"></p:outputLabel>
+				               	       	<p:selectOneMenu value="#{transportDueFeeReportBean.selectedRoute}">
+											<f:selectItem itemLabel="Select One" itemValue="select"></f:selectItem> 
+				               	          	<f:selectItems value="#{transportDueFeeReportBean.routeNameList}"></f:selectItems>
+               	       					</p:selectOneMenu>
+                        
+			                         	<p:commandButton value="Search" actionListener="#{transportDueFeeReportBean.getStudentRoute}" update=":form"></p:commandButton>
+									</p:panelGrid>
+               						<br/>
+               						<p:outputPanel  id="dataTable" rendered="#{transportDueFeeReportBean.show}">   
+               							<p:outputPanel  style="width:100%" styleClass="test test2"> 
+					               		<center>
+											<p style="font-size: 25px !important;font-weight:bold;margin:0px;">#{headerBean.name}</p>
+											<p style="font-size: 15px !important;font-weight:bold;margin:0px;">#{headerBean.affiliationNo}</p>
+											<p style="font-size: 15px !important;font-weight:bold;margin:0px;">#{headerBean.finalAddress}</p>
+											<p style="font-size: 15px !important;font-weight:bold;margin:0px;">#{headerBean.phoneno}</p>
+											
+											<p style="margin:0px;font-size: 25px !important;font-weight:bold;">Transport Route Wise Student Report</p>
+										</center>
+											
+               	       						<p:dataTable id="up" reflow="true"  border="1" style="width:100%;border-collapse:collapse" value="#{transportDueFeeReportBean.studentList}" var="var" >
+                         
+				                         		<p:column headerText="Sno." >
+					               	           		<f:facet name="header"> 
+					           			  			     <p:outputLabel value="Sno."></p:outputLabel>
+					         					    </f:facet>
+				               	      				 <p:outputLabel value="#{var.sno}"></p:outputLabel> 
+				               	           		</p:column>
+                         	
+					               	           <p:column  headerText="Add No." >
+					               	           		<f:facet name="header"> 
+					           			  			     <p:outputLabel value="SR.No."></p:outputLabel>
+					         					    </f:facet>
+													<p:outputLabel value="#{var.srNo}"></p:outputLabel> 
+					               	           </p:column>
+               	           
+					               	           <p:column headerText="Student Name" >
+					               	           		<f:facet name="header"> 
+					           			  			     <p:outputLabel value="Student Name"></p:outputLabel>
+					         					    </f:facet>
+					               	                <p:outputLabel value="#{var.fullName}"></p:outputLabel>
+					               	           </p:column>
+					               	           
+												<p:column  headerText="Class" >
+					               	           		<f:facet name="header"> 
+					           			  			     <p:outputLabel value="Class"></p:outputLabel>
+					         					    </f:facet>
+					               	               <p:outputLabel value="#{var.className}-#{var.sectionName}" ></p:outputLabel> 
+					               	           </p:column>
+               	           
+												<p:column headerText="Father's Name" >
+					               	           		<f:facet name="header"> 
+					           			  			     <p:outputLabel value="Fahter's Name"></p:outputLabel>
+					         					    </f:facet>
+					               	                <p:outputLabel value="#{var.fathersName}"></p:outputLabel>
+					               	           </p:column>
+               	           
+					               	           <p:column  headerText="Stop" >
+					               	           		<f:facet name="header"> 
+					           			  			     <p:outputLabel value="Stop"></p:outputLabel>
+					         					    </f:facet>
+					               	                <p:outputLabel value="#{var.routeStop}" ></p:outputLabel>
+					               	           </p:column>
+					               	           
+					               	           <p:column  headerText="Due Amount" >
+					               	           		<f:facet name="header"> 
+					           			  			     <p:outputLabel value="Due Amount"></p:outputLabel>
+					         					    </f:facet>
+					               	                <p:outputLabel value="#{var.transportFeeDueAmount}" ></p:outputLabel>
+					               	           </p:column>
+               	       						</p:dataTable>
+	               	       
+    				           	       </p:outputPanel>
+                					</p:outputPanel>  
+                				</p:panel>
+							</h:form>
+								    
+						</div>
+					</div>
+				</div>
+			</div>
+			   
+	</ui:define>
+
+</ui:composition>

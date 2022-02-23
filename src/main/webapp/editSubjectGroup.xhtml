@@ -1,0 +1,113 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">All Subject Group</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<p:panel header="All Subject Group">
+								<p:dataTable value="#{editSubGroup.allSubjectGroupList}" rowIndexVar="index" var="var" >
+									<p:column headerText="S.No.">
+										<p:outputLabel value="#{index+1}"></p:outputLabel>
+									</p:column>
+									
+									<p:column headerText="Class">
+										<p:outputLabel value="#{var.classSection}"></p:outputLabel>
+									</p:column>
+									
+									<p:column headerText="Subject Type">
+										<p:outputLabel value="#{var.subjectType}"></p:outputLabel>
+									</p:column>
+									
+									<p:column headerText="Group Name">
+										<p:outputLabel value="#{var.grade}"></p:outputLabel>
+									</p:column>
+									
+									<p:column headerText="Subjects" style="width:400px">
+										<p:outputLabel value="#{var.subjectName}"></p:outputLabel>
+									</p:column>
+									
+									<p:column headerText="Edit">
+										<p:commandButton update=":editForm" oncomplete="PF('editDialog').show();" icon="ui-icon-pencil" action="#{editSubGroup.editDetails}">
+											<f:setPropertyActionListener target="#{editSubGroup.selSubGroup}" value="#{var}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+									<p:column headerText="Delete">
+										<p:commandButton update=":form" styleClass="redButt" action="#{editSubGroup.deleteSubjectGroup}" icon="ui-icon-trash">
+											<p:confirm header="Confirmation" message="Are You Sure To Delete this Subject Group ?" icon="ui-icon-alert" />
+											<f:setPropertyActionListener value="#{var}" target="#{editSubGroup.selSubGroup}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+
+								</p:dataTable>
+							</p:panel>
+						</h:form>
+					
+						<h:form id="editForm" enctype="multipart/form-data">
+							<p:dialog resizable="false" widgetVar="editDialog" header="Edit Details" showEffect="fade" hideEffect="explode" modal="true">
+								<div class="ui-g form-group">
+								<p:panel header="Edit Subject Group">
+									<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+									<p:panelGrid columns="2"  columnClasses="ui-grid-col-2,ui-grid-col-10"
+										layout="grid" styleClass="ui-panelgrid-blank form-group" style="width:100%;border:0px none; background-color:transparent;">
+	
+										<p:outputLabel value="Select Group Name" for="@next" style="color:red" ></p:outputLabel>
+										<p:inputText value="#{editSubGroup.groupName}" required="true" requiredMessage="Please Enter Group Name" id="secnm" onchange="trimFunc(this.value,'Please Section Name',this.id)"></p:inputText>
+	
+										<p:outputLabel  value="Type of Area" for="@next" style="color:red" ></p:outputLabel>
+										<p:selectOneRadio disabled="true" value="#{editSubGroup.selectedType}" required="true" requiredMessage="Please Select Type Area">
+											<f:selectItems value="#{editSubGroup.subjectTypeList}"></f:selectItems>
+											<p:ajax></p:ajax>
+										</p:selectOneRadio>
+	
+										<p:outputLabel  value="Select Class" for="@next" style="color:red" ></p:outputLabel>
+										<p:selectOneMenu disabled="true" value="#{editSubGroup.classId}" required="true" requiredMessage="Please Select CLass" styleClass="form-group">
+											<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+											<f:selectItems value="#{editSubGroup.classList}"></f:selectItems>
+										</p:selectOneMenu>
+										
+										<p:outputLabel  value="Select Subject" for="@next" style="color:red" ></p:outputLabel>
+										<p:selectManyCheckbox id="subjectId" value="#{editSubGroup.selectedSubList}" required="true" requiredMessage="Please Select Subject" styleClass="form-group"  layout="responsive" columns="6">
+											<f:selectItems value="#{editSubGroup.subjectList}"></f:selectItems>
+										</p:selectManyCheckbox>
+										
+										
+									<p:outputLabel for="@next" style="color:red" value="Add Rank"></p:outputLabel>
+									<p:inputText value="#{editSubGroup.rank}"></p:inputText>
+										
+									</p:panelGrid>
+									</p:panel>
+								</div>
+									<br />
+								<p:separator />
+								<center>
+									<p:commandButton value="Submit" update=":editForm,form" styleClass="butwid" icon="fa fa-upload" actionListener="#{editSubGroup.update}"></p:commandButton>
+
+								</center>
+								<p:separator />
+								<br />
+							</p:dialog>
+						</h:form>
+						
+						<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+							<p:commandButton value="Yes" styleClass="ui-confirmdialog-yes greenButt"
+								icon="ui-icon-check" />
+							<p:commandButton value="No"  styleClass="ui-confirmdialog-no redButt"
+								icon="ui-icon-close" />
+						</p:confirmDialog>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,141 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" 
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Edit Class Teacher</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<p:panel header="Edit Class Teacher">
+								<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+								<p:messages closable="true" autoUpdate="true"></p:messages>
+
+								<center>
+									<h:commandLink>
+										<p:graphicImage name="images/excellogo.png"
+											library="avalon-layout" width="100" height="40"></p:graphicImage>
+										<pe:exporter type="xlsx" target=":form:data"
+											fileName="ClassTeacherReport"></pe:exporter>
+									</h:commandLink>
+								</center>
+								<br></br>
+								<p:dataTable id="data"
+									value="#{editClassTeacher.classteacherlist}" reflow="true"
+									var="var">
+
+									<p:column headerText="S.No" style="width:60px">
+										<f:facet name="header">
+											<p:outputLabel value="S.No."></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.sno}"></p:outputLabel>
+									</p:column>
+
+	                                <p:column headerText="Teacher" filterBy="#{var.teachername.split('-')[0]}">
+										<f:facet name="header">
+											<p:outputLabel value="Teacher"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.teachername.split('-')[0]}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Class " filterBy="#{var.classname}">
+										<f:facet name="header">
+											<p:outputLabel value="Class"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.classname}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Section " filterBy="#{var.section}">
+										<f:facet name="header">
+											<p:outputLabel value="Section"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.section}"></p:outputLabel>
+									</p:column>
+
+
+								
+
+									<p:column headerText="Edit" exportable="false">
+										<p:commandButton update=":editForm"
+											oncomplete="PF('editDialog').show();" icon="ui-icon-pencil" styleClass="butwid"
+											action="#{editClassTeacher.editBookDetail}">
+											<f:setPropertyActionListener
+												target="#{editClassTeacher.selectedteacher}" value="#{var}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+									<p:column headerText="Delete" exportable="false">
+										<p:commandButton update=":form" icon="ui-icon-trash" styleClass="butwid redButt"
+											action="#{editClassTeacher.delete}">
+											<f:setPropertyActionListener
+												target="#{editClassTeacher.selectedteacher}" value="#{var}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+								</p:dataTable>
+							</p:panel>
+						</h:form>
+
+
+						<h:form id="editForm">
+							<p:dialog resizable="false" widgetVar="editDialog"
+								header="Update Class Teacher" showEffect="fade"
+								hideEffect="explode" modal="true">
+								<div class="ui-g form-group">
+									<p:panelGrid columns="2"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+										<p:outputLabel value="Teacher Name"></p:outputLabel>
+										<p:outputLabel
+											value="#{editClassTeacher.selectedteacher.teachername}"></p:outputLabel>
+
+										<p:outputLabel value="Class" for="@next" style="color:red" ></p:outputLabel>
+										<p:selectOneMenu value="#{editClassTeacher.selectedClass}"
+											required="true" requiredMessage="Select class from list">
+											<f:selectItem itemLabel="select" itemValue=""></f:selectItem>
+											<f:selectItems value="#{editClassTeacher.classList}"></f:selectItems>
+											<p:ajax update="ip"
+												listener="#{editClassTeacher.sectionname}"></p:ajax>
+										</p:selectOneMenu>
+
+										<p:outputLabel value="Section" for="@next" style="color:red" ></p:outputLabel>
+										<p:selectOneMenu id="ip"
+											value="#{editClassTeacher.selectedsection}" required="true"
+											requiredMessage="Select class from list">
+											<f:selectItem itemLabel="select" itemValue=""></f:selectItem>
+											<f:selectItems value="#{editClassTeacher.sectionList}"></f:selectItems>
+										</p:selectOneMenu>
+
+
+
+										
+
+
+									</p:panelGrid>
+									
+								</div>
+								<br />
+								<p:separator />
+								<center>
+									<p:commandButton value="Update Now" styleClass="butwid" icon="fa fa-upload"
+											action="#{editClassTeacher.updatetacher}"
+											update=":form:data,:editForm"></p:commandButton>
+								</center>
+								<p:separator />
+								<br />
+							</p:dialog>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

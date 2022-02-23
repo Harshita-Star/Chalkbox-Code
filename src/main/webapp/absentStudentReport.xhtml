@@ -1,0 +1,286 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	<f:loadBundle var="addClassVar" basename="myProperties" />
+
+	<ui:define name="title">Absent Student Report</ui:define>
+
+	<ui:define name="content">
+
+		<style>
+.ui-datatable .ui-datatable-scrollable-body,
+	.ui-datatable-scrollable-header {
+	width: 100% !important;
+}
+
+.ui-datatable-scrollable .ui-datatable-scrollable-header,
+	.ui-datatable-scrollable .ui-datatable-scrollable-footer {
+	position: sticky !important;
+	top: 60px !important;
+}
+
+body .ui-datatable thead th, body .ui-datatable tbody td {
+	width: var(--w) !important;
+}
+</style>
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+
+						<h:form id="form">
+							<p:growl showDetail="true"></p:growl>
+
+							<h1>Absent Student Report</h1>
+
+							<p:panel header="Absent Students">
+								<p:panelGrid columns="6" layout="grid"
+									styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel value="Select Date"></p:outputLabel>
+									<p:calendar value="#{absetStudentReport.date}" navigator="true"
+										pattern="dd/MM/yyyy" rendered="true"
+										requiredMessage="Please Select Date">
+
+										<p:ajax listener="#{absetStudentReport.check}" update=":form"
+											event="dateSelect"></p:ajax>
+
+									</p:calendar>
+
+									<p:outputLabel for="@next" style="color:red"
+										value="Select a Class"></p:outputLabel>
+									<p:selectOneMenu value="#{absetStudentReport.selectedClass}"
+										required="true" requiredMessage="Please select a class">
+
+										<f:selectItem itemLabel="Select Class" itemValue=""></f:selectItem>
+										<f:selectItems value="#{absetStudentReport.classList}"></f:selectItems>
+
+										<p:ajax update=":form"
+											listener="#{absetStudentReport.allSections}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Select Section"></p:outputLabel>
+									<p:selectOneMenu id="sectionid"
+										value="#{absetStudentReport.selectedSection}">
+										<f:selectItem itemLabel="Select Section" itemValue=""></f:selectItem>
+										<f:selectItems value="#{absetStudentReport.sectionList}"></f:selectItems>
+
+										<p:ajax></p:ajax>
+									</p:selectOneMenu>
+
+								</p:panelGrid>
+								
+								<br />
+								<p:separator />
+								<center>
+									<p:panelGrid
+										columns="#{absetStudentReport.studentList.size() gt 0 ? '4' : '1'}"
+										layout="grid" styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+										
+									<p:commandButton value="Search" update=":form" styleClass="butwid" icon = "fa fa-search"
+										action="#{absetStudentReport.searchData}"></p:commandButton>
+
+									<p:commandButton value="Print" styleClass="butwid" icon = "fa fa-print"
+										rendered="#{absetStudentReport.studentList.size() gt 0}" target="_blank"
+										action="#{absetStudentReport.print}">
+									</p:commandButton>
+
+									<p:commandButton update=":form" value="Send Alert" styleClass="butwid" icon = "fa fa-bell"
+										rendered="#{absetStudentReport.studentList.size() gt 0}"
+										action="#{absetStudentReport.sendAbsentMessage}">
+									</p:commandButton>
+
+									<p:commandButton rendered="#{absetStudentReport.studentList.size() gt 0}" value="PDF" ajax="false" styleClass="butwid" icon = "fa fa-file-pdf-o"
+										process="@this"
+										actionListener="#{absetStudentReport.exportAbsentStudentPdf}">
+
+										<p:fileDownload value="#{absetStudentReport.file}" />
+									</p:commandButton>
+									</p:panelGrid>
+								</center>
+								<p:separator />
+								<br />
+								
+							</p:panel>
+
+							<p:panel id="dataTable" rendered="#{absetStudentReport.b}">
+								<center>
+									<p
+										style="font-size: 25px !important; font-weight: bold; margin: 0px;">#{headerBean.name}</p>
+									<p
+										style="font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.affiliationNo}</p>
+									<p
+										style="font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.finalAddress}</p>
+									<p
+										style="font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.phoneno}</p>
+
+									<p
+										style="margin: 0px; font-size: 25px !important; font-weight: bold;">Absent
+										Student Report #{absetStudentReport.strDate}</p>
+								</center>
+								<p:panelGrid columns="2"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:outputLabel value="Total:-"></p:outputLabel>
+									<h:outputText value="#{absetStudentReport.total}"></h:outputText>
+								</p:panelGrid>
+
+
+								<p:dataTable scrollable="true" scrollWidth="100%" reflow="true"
+									style="border-collapse:collapse" border="1"
+									value="#{absetStudentReport.studentList}" var="var"
+									rowStyleClass="#{(var.attendance eq 'L' || var.attendance eq 'ML' || var.attendance eq 'PL' || var.attendance eq 'H') ? 'blueColored':'blackColored'}">
+
+									<p:column headerText="Add. No." style="--w:110px"
+										filterBy="#{var.srNo}" filterMatchMode="contains">
+
+										<f:facet name="header">
+											<p:outputLabel value="Sr.No."></p:outputLabel>
+										</f:facet>
+										<center>
+											<p:outputLabel value="#{var.srNo}"></p:outputLabel>
+										</center>
+									</p:column>
+
+									<p:column style="--w:80px" headerText="Class"
+										filterBy="#{var.className}" filterMatchMode="contains">
+
+										<f:facet name="header">
+											<p:outputLabel value="Class"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.className}"></p:outputLabel>
+									</p:column>
+
+
+									<p:column style="--w:100px" filterBy="#{var.fullName}"
+										filterMatchMode="contains" headerText="Student Name">
+
+										<f:facet name="header">
+											<p:outputLabel value="Student Name"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.fullName}"></p:outputLabel>
+									</p:column>
+
+									<p:column style="--w:100px" headerText="Father's Name">
+
+										<f:facet name="header">
+											<p:outputLabel value="Father's Name"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.fathersName}"></p:outputLabel>
+									</p:column>
+
+									<p:column style="--w:60px" filterBy="#{var.attendance}"
+										filterMatchMode="contains" headerText="Attendance Status">
+
+										<f:facet name="header">
+											<p:outputLabel value="Attendance Status"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.attendance}"></p:outputLabel>
+									</p:column>
+
+
+									<p:column style="--w:80px" headerText="Phone No"
+										filterBy="#{var.fathersPhone}" filterMatchMode="contains">
+
+										<f:facet name="header">
+											<p:outputLabel value="Phone No"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.fathersPhone}"></p:outputLabel>
+									</p:column>
+
+									<p:column style="--w:80px" headerText="Message Sent?"
+										filterBy="#{var.messagesend}" filterMatchMode="contains">
+
+										<f:facet name="header">
+											<p:outputLabel value="Message Sent?"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.messagesend}"></p:outputLabel>
+									</p:column>
+
+								</p:dataTable>
+							</p:panel>
+						</h:form>
+
+						<h:form id="MsgLimitForm" style="overflow:hidden">
+							<p:dialog header="Low SMS Balance" width="500"
+								widgetVar="MsgLmtDlg" modal="true" showEffect="fade"
+								hideEffect="fade" resizable="false">
+								<center>
+									<p:outputLabel value="#{absetStudentReport.balMsg}"
+										style="font-size:14px;font-weight: bold;" />
+								</center>
+								<br></br>
+								<br></br>
+								<center>
+									<p:commandButton value="Skip"
+										action="#{absetStudentReport.sendMsg}"
+										update="MsgLimitForm,form" />
+									<br /> <br />
+									<p:commandButton value="Message Logs"
+										action="messageSchoolHistory.xhtml?faces-redirect=true"
+										update="MsgLimitForm" />
+									<br /> <br />
+									<p:commandButton value="Recharge Now"
+										action="purchaseMsgPack.xhtml?faces-redirect=true"
+										update="MsgLimitForm" />
+								</center>
+								<br></br>
+							</p:dialog>
+						</h:form>
+
+						<h:form id="MsgOverForm" style="overflow:hidden">
+							<p:dialog header="SMS Limit Over" width="500"
+								widgetVar="MsgOvrDlg" modal="true" showEffect="fade"
+								hideEffect="fade" resizable="false">
+								<center>
+									<p:outputLabel value="#{absetStudentReport.balMsg}"
+										style="font-size:14px;font-weight: bold;" />
+								</center>
+								<br></br>
+								<br></br>
+								<center>
+									<p:commandButton value="Message Logs"
+										action="messageSchoolHistory.xhtml?faces-redirect=true"
+										update="MsgOverForm" />
+									<br /> <br />
+									<p:commandButton value="Recharge Now"
+										action="purchaseMsgPack.xhtml?faces-redirect=true"
+										update="MsgOverForm" />
+								</center>
+								<br></br>
+							</p:dialog>
+						</h:form>
+
+						<h:form id="MsgOtherForm" style="overflow:hidden">
+							<p:dialog header="SMS Limit Over" width="500"
+								widgetVar="MsgOthDlg" modal="true" showEffect="fade"
+								hideEffect="fade" resizable="false">
+								<center>
+									<p:outputLabel value="#{absetStudentReport.balMsg}"
+										style="font-size:14px;font-weight: bold;" />
+								</center>
+								<br></br>
+								<br></br>
+								<center>
+									<p:commandButton value="OK"
+										action="absentStudentReport.xhtml?faces-redirect=true"
+										update="MsgOtherForm" />
+								</center>
+							</p:dialog>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+	</ui:define>
+
+</ui:composition>

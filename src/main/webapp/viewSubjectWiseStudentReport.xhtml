@@ -1,0 +1,271 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Subject Wise Student</ui:define>
+
+	<ui:define name="content">
+
+		<style>
+.ui-datatable .ui-datatable-scrollable-body,
+	.ui-datatable-scrollable-header, .ui-datatable-footer,
+	.ui-datatable-header {
+	width: 100% !important;
+}
+
+body .ui-datatable thead th, body .ui-datatable tbody td {
+	width: var(--w) !important;
+}
+
+body .ui-datatable  .ui-datatable-header {
+	position: sticky !important;
+	top: 60px !important;
+	width: 100% !important;
+}
+
+.ui-datatable-scrollable .ui-datatable-scrollable-header,
+	.ui-datatable-scrollable .ui-datatable-scrollable-footer {
+	position: sticky !important;
+	top: 96px !important;
+}
+</style>
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<p:messages closable="true" autoUpdate="true"></p:messages>
+							<h1>Subject Wise Student Report</h1>
+
+							<p:panel header="Select a Class">
+
+								<p:panelGrid columns="5"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:outputLabel for="@next" style="color:red"
+										value="Select a Class"></p:outputLabel>
+									<p:selectOneMenu
+										value="#{viewSubjectWiseStudentReport.selectedClass}"
+										required="true" requiredMessage="Please select a class">
+										<f:selectItem itemLabel="Select One" itemValue="select"></f:selectItem>
+										<f:selectItems
+											value="#{viewSubjectWiseStudentReport.classList}"></f:selectItems>
+
+										<p:ajax update="subjectid"
+											listener="#{viewSubjectWiseStudentReport.allSubjects}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel for="@next" style="color:red"
+										value="Select Subject"></p:outputLabel>
+									<p:selectOneMenu id="subjectid"
+										value="#{viewSubjectWiseStudentReport.selectedSubject}"
+										required="true" requiredMessage="Please select a subject">
+										<f:selectItem itemLabel="Select One" itemValue=""></f:selectItem>
+										<f:selectItems
+											value="#{viewSubjectWiseStudentReport.subjectList}"></f:selectItems>
+
+									</p:selectOneMenu>
+								</p:panelGrid>
+
+								<br />
+								<p:separator />
+								<center>
+									<p:panelGrid
+										columns="#{viewSubjectWiseStudentReport.studentList.size() gt 0 ? '3' : '1'}"
+										layout="grid" styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+
+										<p:commandButton update=":form" value="Search" styleClass="butwid" icon="fa fa-search"
+											actionListener="#{viewSubjectWiseStudentReport.getStudentReport}"></p:commandButton>
+
+										<p:commandButton rendered="#{viewSubjectWiseStudentReport.b}"  styleClass="butwid" icon="fa fa-file-pdf-o"
+											value="PDf"  ajax="false" process="@this"
+											actionListener="#{viewSubjectWiseStudentReport.exportSubjWisePdf}">
+											<p:fileDownload value="#{viewSubjectWiseStudentReport.file}" />
+										</p:commandButton>
+
+										<h:commandLink rendered="#{viewSubjectWiseStudentReport.b}">
+											<p:graphicImage name="images/excellogo.png"
+												library="avalon-layout" width="100" height="40"></p:graphicImage>
+											<pe:exporter type="xlsx" target="up"
+												fileName="class_#{viewSubjectWiseStudentReport.className}_#{viewSubjectWiseStudentReport.subjectName}_Subjectwise_student_report"></pe:exporter>
+										</h:commandLink>
+
+									</p:panelGrid>
+								</center>
+								<p:separator />
+
+								<br />
+
+								<p:panel id="dataTable">
+
+									<p:panelGrid rendered="#{viewSubjectWiseStudentReport.b}"
+										columns="3" style="width:100%">
+
+										<p:panelGrid columns="2">
+											<p:outputLabel value="Class:-"></p:outputLabel>
+											<h:outputText
+												value="#{viewSubjectWiseStudentReport.className}"></h:outputText>
+										</p:panelGrid>
+
+										<p:panelGrid columns="2">
+											<p:outputLabel value="Subject:-"></p:outputLabel>
+											<h:outputText
+												value="#{viewSubjectWiseStudentReport.subjectName}"></h:outputText>
+										</p:panelGrid>
+
+										<p:panelGrid columns="2">
+											<p:outputLabel value="Total:-"></p:outputLabel>
+											<h:outputText value="#{viewSubjectWiseStudentReport.total}"></h:outputText>
+										</p:panelGrid>
+
+									</p:panelGrid>
+
+									<p:dataTable scrollable="true" scrollWidth="100%"
+										rendered="#{viewSubjectWiseStudentReport.b}" reflow="true"
+										id="up" style="width:100%;border-collapse:collapse" border="1"
+										value="#{viewSubjectWiseStudentReport.studentList}" var="var">
+
+										<f:facet name="header">
+
+											<p:outputLabel
+												style="margin:0px;font-size: 15px !important;font-weight:bold;"
+												value="Subject Wise Student Report"></p:outputLabel>
+
+										</f:facet>
+
+										<p:column headerText="S.No." style="text-align:center">
+
+											<f:facet name="header">
+												<p:outputLabel value="SNo."></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.sno}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Adm. No." style="text-align:center">
+
+											<f:facet name="header">
+												<p:outputLabel value="Adm. No."></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.srNo}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Class" style="text-align:center">
+
+											<f:facet name="header">
+												<p:outputLabel value="Class"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.className} - #{var.sectionName}"></p:outputLabel>
+										</p:column>
+
+										<p:column style="text-align:center" sortBy="#{var.fullName}"
+											headerText="Student Name">
+
+											<f:facet name="header">
+												<p:outputLabel value="Student Name"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.fullName}"></p:outputLabel>
+										</p:column>
+
+										<p:column style="text-align:center" headerText="Father's Name">
+
+											<f:facet name="header">
+												<p:outputLabel value="Father's Name"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.fathersName}"></p:outputLabel>
+										</p:column>
+
+
+
+										<p:column style="text-align:center" headerText="Phone No">
+
+											<f:facet name="header">
+												<p:outputLabel value="Phone No"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.fathersPhone}"></p:outputLabel>
+										</p:column>
+
+									</p:dataTable>
+
+									<p:dataTable rendered="false" reflow="true" id="upp"
+										style="width:100%;border-collapse:collapse" border="1"
+										value="#{viewSubjectWiseStudentReport.studentList}" var="var">
+
+										<f:facet name="header">
+
+											<p:outputLabel
+												style="margin:0px;font-size: 15px !important;font-weight:bold;"
+												value="Subject Wise Student Report"></p:outputLabel>
+
+										</f:facet>
+
+										<p:column headerText="S.No." style="text-align:center">
+
+											<f:facet name="header">
+												<p:outputLabel value="S.No."></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.sno}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Adm. No." style="text-align:center">
+
+											<f:facet name="header">
+												<p:outputLabel value="Adm. No."></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.srNo}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Class" style="text-align:center">
+
+											<f:facet name="header">
+												<p:outputLabel value="Class"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.className} - #{var.sectionName}"></p:outputLabel>
+										</p:column>
+
+										<p:column style="text-align:center" sortBy="#{var.fullName}"
+											headerText="Student Name">
+
+											<f:facet name="header">
+												<p:outputLabel value="Student Name"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.fullName}"></p:outputLabel>
+										</p:column>
+
+										<p:column style="text-align:center" headerText="Father's Name">
+
+											<f:facet name="header">
+												<p:outputLabel value="Father's Name"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.fathersName}"></p:outputLabel>
+										</p:column>
+
+
+
+										<p:column style="text-align:center" headerText="Phone No">
+
+											<f:facet name="header">
+												<p:outputLabel value="Phone No"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.fathersPhone}"></p:outputLabel>
+										</p:column>
+
+									</p:dataTable>
+								</p:panel>
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

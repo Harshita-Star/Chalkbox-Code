@@ -1,0 +1,160 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/masterTemplate.xhtml">
+
+	<ui:define name="title">Dlt Template</ui:define>
+	<ui:define name="content">
+		<!-- <style>
+	.ui-selectcheckboxmenu-header {
+    display: none !important;
+}
+	</style> -->
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<p:messages></p:messages>
+							<p:panel header="Add Dlt Template">
+
+								<p:panelGrid columns="3"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent; width: 60%;">
+
+
+									<p:outputLabel style="color:red;" for="@next"
+										value="Select School Type"></p:outputLabel>
+									<p:selectOneButton id="sch-type" widgetVar="sch"
+										style="width: 300px;" value="#{addDltTemp.schType}">
+										<f:selectItem itemLabel="All Schools" itemValue="-1" />
+										<f:selectItem itemLabel="Custom Schools" itemValue="1" />
+										<p:ajax listener="#{addDltTemp.renderSchools}"
+											update="school-tag"></p:ajax>
+									</p:selectOneButton>
+									<p:outputLabel></p:outputLabel>
+								</p:panelGrid>
+								<p:panelGrid id="school-tag" columns="3"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;width: 60%;">
+
+									<p:outputLabel rendered="#{addDltTemp.showCheck}" for="@next"
+										style="color:red;" value="Select School"></p:outputLabel>
+
+									<p:selectCheckboxMenu style="width:150%;min-width: 15rem" filter="true"
+										filterMatchMode="startsWith" panelStyle="width: 21rem"
+										scrollHeight="250" rendered="#{addDltTemp.showCheck}"
+										required="true" multiple="true"
+										requiredMessage="Please select atleast one school"
+										value="#{addDltTemp.selectedSchools}">
+										<f:selectItems value="#{addDltTemp.allSchools}"></f:selectItems>
+									</p:selectCheckboxMenu>
+								</p:panelGrid>
+
+								<p:panelGrid columns="3"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;width: 60%;">
+
+									<p:outputLabel style="color:red;" for="@next"
+										value="Select Keyword"></p:outputLabel>
+									<p:selectOneMenu required="true"
+										requiredMessage="Please select keyword"
+										value="#{addDltTemp.keyword}">
+										<f:selectItem itemLabel="--SELECT--" itemValue="-1"></f:selectItem>
+										<f:selectItems value="#{addDltTemp.allKeywords}"></f:selectItems>
+									</p:selectOneMenu>
+
+									<p:commandButton icon="fa fa-plus"
+										oncomplete="PF('addKeyword').show();"></p:commandButton>
+
+								</p:panelGrid>
+								<p:panelGrid columns="3"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;width: 60%;">
+
+									<p:outputLabel style="color:red;" for="@next"
+										value="Select Language"></p:outputLabel>
+									<p:selectOneRadio required="true"
+										requiredMessage="Please select Language"
+										value="#{addDltTemp.language}">
+										<f:selectItem itemValue="english" itemLabel="English"></f:selectItem>
+										<f:selectItem itemValue="hindi" itemLabel="Hindi"></f:selectItem>
+									</p:selectOneRadio>
+
+									<p:outputLabel></p:outputLabel>
+
+									<p:outputLabel style="color:red;" for="@next"
+										value="Select Type"></p:outputLabel>
+									<p:selectOneRadio required="true"
+										requiredMessage="Please select type"
+										value="#{addDltTemp.type}">
+										<f:selectItem itemValue="dynamic" itemLabel="Dynamic"></f:selectItem>
+										<f:selectItem itemValue="static" itemLabel="Static"></f:selectItem>
+									</p:selectOneRadio>
+									<p:outputLabel></p:outputLabel>
+
+
+									<p:outputLabel style="color:red;" for="@next"
+										value="Enter Content"></p:outputLabel>
+
+									<p:inputTextarea required="true"
+										requiredMessage="Content is missing" rows="7" cols="30"
+										maxlength="765" value="#{addDltTemp.content}"
+										counterTemplate="{0} characters remaining." autoResize="false"
+										style="width:400px !important;">
+									</p:inputTextarea>
+
+
+									<p:outputLabel></p:outputLabel>
+								</p:panelGrid>
+								<br />
+								<center>
+									<p:separator />
+									<p:commandButton value="Save" style="width: 40%;"
+										actionListener="#{addDltTemp.saveTemp}" styleClass="butwid"
+										icon="fa fa-floppy-o" update=":form,:addKeyForm"></p:commandButton>
+									<p:separator />
+								</center>
+
+							</p:panel>
+						</h:form>
+
+
+
+						<h:form id="addKeyForm">
+							<p:dialog resizable="false" widgetVar="addKeyword"
+								header="Add Keyword" showEffect="fade" hideEffect="explode"
+								modal="true">
+								<p:panelGrid columns="3" layout="grid"
+									styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel value="Enter Keyword"></p:outputLabel>
+									<p:inputText style="width:200%;"
+										value="#{addDltTemp.addKeyword}"></p:inputText>
+								</p:panelGrid>
+
+								<br />
+								<center>
+									<p:separator />
+									<p:commandButton value="Save" style="width: 40%;"
+										actionListener="#{addDltTemp.addKeywordMethod}"
+										styleClass="butwid" icon="fa fa-floppy-o" update=":form"></p:commandButton>
+									<p:separator />
+								</center>
+
+							</p:dialog>
+
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</ui:define>
+</ui:composition>

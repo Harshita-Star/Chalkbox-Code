@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+<f:view contentType="text/html">
+	<h:head>
+		<title>#{sideMenuBean.companyName} | Certificate</title>
+		<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css"></link>
+		<link rel="stylesheet"
+			href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"></link>
+		<link rel="stylesheet"
+			href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css"></link>
+		<link rel="stylesheet" type="text/css" href="css/style.css" />
+		<link rel="stylesheet" href="dist/css/AdminLTE.min.css"></link>
+		<link rel="stylesheet" href="dist/css/skins/all-skins.min.css"></link>
+	</h:head>
+	<body>
+
+		<div class="content-wrapper">
+			<div class="main_contain">
+				<div class="main">
+
+					<div class="login_div">
+						<h:form id="form">
+
+							<p:commandButton value="Print" icon="ui-icon-print"
+								style="width:10%">
+								<p:printer target=":form:panel2"></p:printer>
+							</p:commandButton>
+							<center>
+								<p:outputPanel id="panel2" layout="block"
+									style="widht:100%;border:2px solid #666666;margin-bottom:30px">
+									<!-- <p:outputLabel style="margin-left:50px;font-size:15px!important;" value="S. No. #{printRbscCC.ccNumber}"></p:outputLabel> -->
+
+									<!-- 	<center>
+			
+			
+   		
+		
+		
+			   <p:outputLabel style="font-size:12px !important;float:right;margin-right:10px;" value="#{headerBean.regno}"></p:outputLabel>
+			<p:outputLabel value="" style="float:right;width:100%;" >
+			
+	</p:outputLabel>	
+				<p:outputLabel style="font-size:25px !important" value="#{headerBean.name}"></p:outputLabel><br></br>
+				<p:outputLabel style="font-size:15px !important" value="#{headerBean.address1}"></p:outputLabel>
+				<p:outputLabel style="font-size:26px !important" value="#{headerBean.address2}"></p:outputLabel>
+				<p:outputLabel style="font-size:24px !important" value="#{headerBean.address3}"></p:outputLabel><br></br>
+				<p:outputLabel style="font-size:22px !important" value="#{headerBean.address4}"></p:outputLabel>
+				<p:outputLabel style="font-size:15px !important" value=",Mobile:-#{headerBean.mobileno}"></p:outputLabel><br></br>
+				<p:outputLabel style="font-size:20px !important;text-decoration:underline" value="Character Certificate"></p:outputLabel>
+				</center> -->
+
+                            <p:outputPanel rendered="#{printRbscCC.headerPresent}">
+			                  <p:graphicImage width="100%" height="120px"
+											value="#{printRbscCC.headerImage}"></p:graphicImage>
+								<br></br>			
+			                  </p:outputPanel>
+			                  
+			                 <p:outputPanel rendered="#{printRbscCC.headerAbsent}">
+									<table width="100%;">
+										<tr>
+											<td style="width: 15%" rowspan="1"></td>
+											<td style="width: 15%"><p
+													style="margin-right: 40px !important; font-weight: bold; text-align: right; font-size: 10px;">School
+													Code:#{headerBean.regno}</p></td>
+										</tr>
+
+										<tr>
+											<td style="width: 15%" rowspan="5"><p:graphicImage
+													style="height:80px;width:100px;float:right"
+													value="#{headerBean.logo}" /></td>
+
+										</tr>
+										<tr>
+											<td style="width: 85%"><center>
+													<p
+														style="margin-left: auto; text-align: inherit; font-size: 20px !important;"><b>#{headerBean.name}</b></p>
+												</center></td>
+										</tr>
+										<tr>
+
+											<td style="width: 85%"><center>
+													<p
+														style="text-align: inherit; margin: 0px; font-size: 12px !important">#{headerBean.address1},Mobile-#{headerBean.mobileno}</p>
+												</center></td>
+
+										</tr>
+
+										<tr>
+											<td style="width: 85%"><center>
+													<p style="text-align: inherit; margin: 0px">
+														<p:outputLabel
+															style="font-size:18px !important;text-decoration:underline"
+															value="Character Certificate"></p:outputLabel>
+													</p>
+												</center></td>
+										</tr>
+
+
+									</table>
+									<p:spacer height="53px;" width="0px;"></p:spacer>
+									</p:outputPanel>
+									<p:panelGrid columns="2" style="width:100%">
+										<p:outputLabel
+											style="margin-left:35px!important;font-size:13px!important;width:80%;font-weight: bold;"
+											value="Certified that Mr. / Miss."></p:outputLabel>
+										<p:outputLabel
+											style="width:100%;background-color: transparent;border-style: solid; border-width: 0px 0px 1px 0px; border-color:black;margin:5px!important;font-size:15px!important;font-weight:bold;"
+											value="#{printRbscCC.studentName}"></p:outputLabel>
+
+										<p:outputLabel
+											style="margin-left:35px!important;font-size:13px!important;font-family: initial;"
+											value="S/o. D/o. W/o. Sh."></p:outputLabel>
+										<p:outputLabel
+											style="margin:5px!important;font-size:15px!important;font-weight:bold;width:100%;background-color: transparent;border-style: solid; border-width: 0px 0px 1px 0px; border-color:black;"
+											value="#{printRbscCC.fatherName}"></p:outputLabel>
+
+										<p:outputLabel
+											style="margin-left:35px!important;font-size:13px!important;font-family: initial;"
+											value="Mother's Name Smt."></p:outputLabel>
+										<p:outputLabel
+											style="margin:5px!important;font-size:15px!important;font-weight:bold;width:100%;background-color: transparent;border-style: solid; border-width: 0px 0px 1px 0px; border-color:black;"
+											value="#{printRbscCC.motherName}"></p:outputLabel>
+
+										<p:outputLabel
+											style="margin-left:35px!important;font-size:13px!important;font-family: initial;"
+											value="Student's S.R. No."></p:outputLabel>
+										<p:outputLabel
+											style="margin:5px!important;font-size:15px!important;font-weight:bold;width:100%;background-color: transparent;border-style: solid; border-width: 0px 0px 1px 0px; border-color:black;"
+											value="#{printRbscCC.ccList.srNo}"></p:outputLabel> 
+
+										<p:outputLabel
+											style="margin-left:35px!important;font-size:13px!important;font-family: initial;"
+											value="Date of Birth is"></p:outputLabel>
+										<p:outputLabel
+											style="margin:5px!important;font-size:15px!important;font-weight:bold;width:100%;background-color: transparent;border-style: solid; border-width: 0px 0px 1px 0px; border-color:black;"
+											value="#{printRbscCC.dobString}"></p:outputLabel>
+
+										<p:outputLabel
+											style="margin-left:35px!important;font-size:13px!important;font-family: initial;"
+											value="In Word's"></p:outputLabel>
+										<p:outputLabel
+											style="margin:5px!important;font-size:15px!important;font-weight:bold;width:100%;background-color: transparent;border-style: solid; border-width: 0px 0px 1px 0px; border-color:black;"
+											value="#{printRbscCC.dobInWord} ."></p:outputLabel>
+									</p:panelGrid>
+
+									<table
+										style="width: 100%; margin-left: 6%; margin-top: 5px; margin-bottom: 5px;">
+										<tr>
+											<td
+												style="font-size: 15px !important; font-family: initial; width: 35%;">The
+												Student studied in this school from</td>
+											<td
+												style="float: left; font-size: 15px !important; font-weight: bold; width: 70%; background-color: transparent; border-style: solid; border-width: 0px 0px 1px 0px; border-color: black;">#{printRbscCC.admissionDate}</td>
+											<td
+												style="margin-left: 5px; margin-right: 20px; font-size: 15px !important; font-family: initial; width: 40px;">to</td>
+											<td
+												style="margin-left: 30px; font-size: 15px !important; font-weight: bold; width: 40%; background-color: transparent; border-style: solid; border-width: 0px 0px 1px 0px; border-color: black;">#{printRbscCC.struckOffDate}.</td>
+										</tr>
+									</table>
+									<p:panelGrid columns="3" style="width:100%">
+										<p:outputLabel
+											style="margin-left:35px!important;font-size:13px!important;font-family: initial;"
+											value="During this, his/her conduct was "></p:outputLabel>
+										<p:outputLabel
+											style="margin:5px!important;font-size:15px!important;width:70%;background-color: transparent;border-style: solid; border-width: 0px 0px 1px 0px; border-color:black;"
+											value="">
+											<center>#{printRbscCC.character}</center>
+										</p:outputLabel>
+										<p:outputLabel
+											style="margin:5px!important;font-size:13px!important;font-style: italic;"
+											value=". The Student #{printRbscCC.status}"></p:outputLabel>
+
+										<p:outputLabel
+											style="margin-left:35px!important;font-size:15px!important;width:80%;background-color: transparent;border-style: solid; border-width: 0px 0px 1px 0px; border-color:black;"
+											value="">
+											<center>#{printRbscCC.className}</center>
+										</p:outputLabel>
+										<p:outputLabel
+											style="margin:5px!important;font-size:13px!important;font-family: initial;"
+											value="class examination in"></p:outputLabel>
+										<p:outputLabel
+											style="margin:5px!important;font-size:15px!important;width:100%;background-color: transparent;border-style: solid; border-width: 0px 0px 1px 0px; border-color:black;"
+											value="">
+											<center>#{printRbscCC.session}</center>
+										</p:outputLabel>
+									</p:panelGrid>
+
+
+									<p:panelGrid columns="2" style="width:70%;">
+										<p:outputLabel
+											style="margin-left:35px!important;font-size:13px!important;font-style: italic;"
+											value="In my knowledge his / her character is"></p:outputLabel>
+										<p:outputLabel
+											style="margin:5px!important;font-size:15px!important;width:100%;background-color: transparent;border-style: solid; border-width: 0px 0px 1px 0px; border-color:black;"
+											value="#{printRbscCC.character}  ."></p:outputLabel>
+
+									</p:panelGrid>
+									<!-- <table style="width:90%">
+				<tr>
+					<td style="margin-left:25px!important;font-size:15px!important;"> In my knowledge his / her character is  </td>
+					<td style="width:60%;font-size:15px!important;font-weight: bold;" ><u> #{printRbscCC.character}</u></td>
+				</tr>
+			</table> -->
+
+									<p:panelGrid columns="1" style="width:100%">
+										<p:outputLabel
+											style="margin-left:35px!important;font-size:13px!important;text-decoration:underline;font-family: initial;"
+											value="The Student participated in following activities:-"></p:outputLabel>
+									</p:panelGrid>
+									<br></br>
+									<!-- <p:panelGrid columns="4" style="width:50%">
+										<p:outputLabel
+											style="margin-left:20px!important;font-size:15px!important;width:60%!important;"
+											value="( i )."></p:outputLabel>
+										<p:outputLabel
+											style="margin-left:-35px!important;font-size:15px!important;width:100%;background-color: transparent;border-style: solid; border-width: 0px 0px 1px 0px; border-color:black;"
+											value="#{printRbscCC.activity1}">
+										</p:outputLabel>
+										<p:outputLabel
+											style="width:40%!important;margin-left:20px!important;font-size:15px!important;"
+											value="( ii )."></p:outputLabel>
+										<p:outputLabel
+											style="margin-left:-20px!important;font-size:15px!important;width:100%;background-color: transparent;border-style: solid; border-width: 0px 0px 1px 0px; border-color:black;"
+											value="">
+											<center>#{printRbscCC.activity2}</center>
+										</p:outputLabel>
+									</p:panelGrid> -->
+									
+									<table style="width:90%">
+									   <tr>
+									      <td><P style="font-size:15px!important;width:40%;">( i ).  <u><b>       #{printRbscCC.activity1}      </b> </u></P>
+										</td>
+									   <td><P style="font-size:15px!important;width:40%;">( ii ).  <u>  <b>      #{printRbscCC.activity2} </b>     </u></P>
+										</td>
+									   </tr>
+									
+									</table>
+									<br></br>
+									<p:panelGrid columns="1" style="width:100%">
+										<p:outputLabel
+											style="margin-left:35px!important;font-size:13px!important;font-family: initial;"
+											value="I wish for his / her bright future."></p:outputLabel>
+									</p:panelGrid>
+									<br></br>
+									<br></br>
+									<!-- <p:panelGrid columns="1" style="width:100%">
+			<p:outputLabel style="margin-left:35px;font-size:13px!important;" value="Date : "></p:outputLabel>
+			</p:panelGrid>
+			<p:outputLabel style="float:right;margin-right:50px;font-size:15px!important;" value="Sign.of Principal"></p:outputLabel>
+			 -->
+									<table
+										style="width: 100%; margin-left: 40px; margin-bottom: 20px;">
+										<tr>
+											<td style="font-weight: bold; font-style: italic;">
+												Date:-</td>
+											<td
+												style="float: right; font-weight: bold; font-style: italic; width: 50%;">Signature
+												of head of the institute</td>
+										</tr>
+									</table>
+								</p:outputPanel>
+							</center>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</f:view>
+</html>

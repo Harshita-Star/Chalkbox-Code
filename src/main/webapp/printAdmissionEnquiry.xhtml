@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<f:loadBundle var="addSectionVar" basename="myProperties" />
+<f:view contentType="text/html">
+	<h:head>
+		<title>Admission Enquiry</title>
+		<f:facet name="first">
+			<meta content='text/html; charset=UTF-8' http-equiv="Content-Type" />
+			<meta http-equiv="X-UA-Compatible" content="EmulateIE8" />
+		</f:facet>
+
+      	    <link rel="stylesheet" type="text/css" href="css/style.css"/>				
+
+	</h:head>
+	
+	<h:body>
+		
+		<p:commandButton value="Print">
+               	       		<p:printer target="form:show"></p:printer>
+               	       		</p:commandButton>
+		
+		
+			<h:form id="form" >
+
+				<p:panel id="show" >
+					<center>
+						<p style="font-family: initial;font-style: oblique;font-size: 25px !important;font-weight:bold;margin:0px;">#{headerBean.name}</p>
+						<p style="font-family: initial;font-style: oblique;font-size: 15px !important;font-weight:bold;margin:0px;">#{headerBean.affiliationNo}</p>
+						<p style="font-family: initial;font-style: oblique;font-size: 15px !important;font-weight:bold;margin:0px;">#{headerBean.finalAddress}</p>
+						<p style="font-family: initial;font-style: oblique;font-size: 15px !important;font-weight:bold;margin:0px;">#{headerBean.phoneno}</p>
+					<br/><br/>
+						<p style="font-family: initial;font-style: oblique;font-size: 25px !important;font-weight:bold;margin:0px;">Admission Enquiry Details</p>
+
+						<br/><br/>
+					</center>
+					<p:panelGrid columns="4" style="width:100%;">
+					
+						
+							
+							
+								<p:outputLabel  value="Visiting Date" style="font-size:14px !important;"></p:outputLabel>
+								<p:outputLabel value="#{printAdmissionEnquiry.admDate}" style="font-size:14px !important;"></p:outputLabel>
+
+								<p:outputLabel value="Admission sought for session" style="font-size:14px !important;"></p:outputLabel>
+								<p:outputLabel value="#{printAdmissionEnquiry.sessionn}" style="font-size:14px !important;"></p:outputLabel>
+									
+
+								<p:outputLabel  value="Admission  sought  for Class" style="font-size:14px !important;"></p:outputLabel>
+								<p:outputLabel value="#{printAdmissionEnquiry.admissionClass}" style="font-size:14px !important;"></p:outputLabel>
+									
+
+
+							    <p:outputLabel value="Student Name" style="font-size:14px !important;"></p:outputLabel>
+								<p:outputLabel value="#{printAdmissionEnquiry.student}" style="font-size:14px !important;"></p:outputLabel>
+
+
+								<p:outputLabel  value="Father's Name" style="font-size:14px !important;"></p:outputLabel>
+								<p:outputLabel value="#{printAdmissionEnquiry.father}" style="font-size:14px !important;"></p:outputLabel>
+									
+
+								<p:outputLabel value="Mother's Name " style="font-size:14px !important;"></p:outputLabel>
+							    <p:outputLabel value="#{printAdmissionEnquiry.mother}" style="font-size:14px !important;"></p:outputLabel>
+
+								<p:outputLabel  value="Gender " style="font-size:14px !important;"></p:outputLabel>
+								<p:outputLabel value="#{printAdmissionEnquiry.gender}" style="font-size:14px !important;"></p:outputLabel>
+
+
+
+								<p:outputLabel  value="DOB " style="font-size:14px !important;"></p:outputLabel>
+								<p:outputLabel value="#{printAdmissionEnquiry.dob}" style="font-size:14px !important;"></p:outputLabel>
+									
+
+								<p:outputLabel  value="Address " style="font-size:14px !important;"></p:outputLabel>
+						        <p:outputLabel value="#{printAdmissionEnquiry.address}" style="font-size:14px !important;"></p:outputLabel>
+
+
+								<p:outputLabel value="Father's Mob No." style="font-size:14px !important;"></p:outputLabel>
+								<p:outputLabel value="#{printAdmissionEnquiry.mobno}" style="font-size:14px !important;"></p:outputLabel>
+									
+
+								<p:outputLabel  value="Mother's Mob No." style="font-size:14px !important;"></p:outputLabel>
+								<p:outputLabel value="#{printAdmissionEnquiry.motherMobNo}" style="font-size:14px !important;"></p:outputLabel>
+								
+
+								<p:outputLabel  value="E-mail" style="font-size:14px !important;"></p:outputLabel>
+								<p:outputLabel value="#{printAdmissionEnquiry.email}" style="font-size:14px !important;"></p:outputLabel>
+
+								<p:outputLabel   
+										rendered="#{printAdmissionEnquiry.info.branch_id ne '22' &amp;&amp; printAdmissionEnquiry.info.branch_id ne '27'}"
+										value="How you know about us ?" style="font-size:14px !important;"></p:outputLabel>
+									<p:outputPanel 
+										rendered="#{printAdmissionEnquiry.info.branch_id ne '22' &amp;&amp; printAdmissionEnquiry.info.branch_id ne '27'}">
+									<p:outputLabel value="#{printAdmissionEnquiry.category}" style="font-size:14px !important;"></p:outputLabel>
+									
+
+									</p:outputPanel>
+
+
+									<p:outputLabel
+										rendered="#{printAdmissionEnquiry.info.branch_id ne '22' &amp;&amp; printAdmissionEnquiry.info.branch_id ne '27'}"
+										value="Remark" style="font-size:14px !important;"></p:outputLabel>
+									<p:outputLabel
+										rendered="#{printAdmissionEnquiry.info.branch_id ne '22' &amp;&amp; printAdmissionEnquiry.info.branch_id ne '27'}"
+										 value="#{printAdmissionEnquiry.description}" style="font-size:14px !important;"></p:outputLabel>
+							
+							
+						
+						
+					</p:panelGrid>		
+					
+					
+            		
+					
+				</p:panel>
+
+</h:form>
+			
+			
+	</h:body>
+</f:view>
+</html>

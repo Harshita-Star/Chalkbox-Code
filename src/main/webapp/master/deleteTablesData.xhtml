@@ -1,0 +1,108 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/masterTemplate.xhtml">
+
+	<ui:define name="title">All Schools</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<p:messages autoUpdate="true" closable="true"></p:messages>
+						<h:form id="form" style="overflow:hidden">
+							
+							<p:panel header="Delete School Data">
+							 		<p:dataTable style="word-break: break-all;" reflow="true"
+									value="#{deleteTablesData.schooList}" var="var" rows="25"
+									paginator="true"
+									paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+									rowsPerPageTemplate="25,50,100">
+
+									<p:column headerText="S.No.">
+										<p:outputLabel value="#{var.sNo}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="School Id" filterBy="#{var.id}"
+										filterMatchMode="contains">
+										<p:outputLabel value="#{var.id}"
+											style=" word-break: break-all;"></p:outputLabel>
+									</p:column>
+
+									<p:column filterBy="#{var.schoolName}"
+										filterMatchMode="contains" headerText="School Name">
+										<p:outputLabel value="#{var.schoolName}"
+											style=" word-break: break-all;"></p:outputLabel>
+									</p:column>
+
+									<p:column filterBy="#{var.aliasName}"
+										filterMatchMode="contains" headerText="Alias Name">
+										<p:outputLabel value="#{var.aliasName}"
+											style=" word-break: break-all;"></p:outputLabel>
+									</p:column>
+
+									<p:column filterBy="#{var.contactName}" rendered="false"
+										headerText="Contact Person">
+										<p:outputLabel value="#{var.contactName}"></p:outputLabel>
+									</p:column>
+
+									<p:column filterBy="#{var.contactNo}"
+										filterMatchMode="contains" headerText="Contact No.">
+										<p:outputLabel value="#{var.contactNo}"
+											style=" word-break: break-all;"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Exp. Date">
+										<p:outputLabel value="#{var.expireDateStr}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Last Login">
+										<p:outputLabel value="#{var.lastLogin}"></p:outputLabel>
+									</p:column>
+
+
+									<p:column headerText="U.Name / Password">
+										<p:outputLabel value="U- #{var.username}"></p:outputLabel>
+										<br></br>
+										<p:outputLabel value="P- #{var.password}"></p:outputLabel>
+									</p:column>
+
+                                     <p:column headerText="Delete School Data">
+										<center><p:commandButton update=":form"
+											action="#{deleteTablesData.delete}" icon="ui-icon-trash" style="width:50px;">
+											<p:confirm header="Confirmation"
+												message="Are You Sure To Delete this School Data?"
+												icon="ui-icon-alert" />
+											<f:setPropertyActionListener value="#{var}"
+												target="#{deleteTablesData.selectedRow}"></f:setPropertyActionListener>
+										</p:commandButton>
+										</center>
+									</p:column>
+							
+								</p:dataTable>
+							</p:panel>
+						
+
+
+                           
+						     
+						</h:form>
+<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+							<p:commandButton value="Yes" styleClass="ui-confirmdialog-yes"
+								icon="ui-icon-check" />
+							<p:commandButton value="No" styleClass="ui-confirmdialog-no"
+								icon="ui-icon-close" />
+						</p:confirmDialog>
+						
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

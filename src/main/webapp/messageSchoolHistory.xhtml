@@ -1,0 +1,111 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" 
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">SMS Ledger</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+
+
+							<p:panel header="View Message History">
+								<p:panelGrid columns="3">
+									<p:commandButton value="Print" icon="fa fa-print" styleClass="butwid">
+										<p:printer target=":form:msgLgr"></p:printer>
+									</p:commandButton>
+									<h:commandLink>
+											<p:graphicImage name="images/excellogo.png"
+												library="avalon-layout" width="100" height="40"></p:graphicImage>
+											<pe:exporter type="xlsx" target=":form:id" 
+												fileName="SchoolSMSLedger"></pe:exporter>
+									</h:commandLink>
+									<p:commandButton value="PDF" icon="fa fa-file-pdf-o" styleClass="butwid" ajax="false" process="@this" actionListener="#{MessageHistorySchoolWise.exportSmsPdf}">
+                    
+          <p:fileDownload value="#{MessageHistorySchoolWise.file}" />
+         </p:commandButton>
+								</p:panelGrid>
+								<br/>
+								<p:outputPanel id="msgLgr">
+								<p:dataTable value="#{MessageHistorySchoolWise.allDetails}"
+									id="id" var="var" reflow="true" style="text-align:center;">
+
+                                    <f:facet name="header">
+										<p:outputLabel value="View Message History"></p:outputLabel>
+									</f:facet>   
+
+									<p:column headerText="S. No.">
+									<f:facet name="header">
+										<p:outputLabel value="S.No."></p:outputLabel>
+									</f:facet>
+										<p:outputLabel value="#{var.sno}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Date">
+									<f:facet name="header">
+										<p:outputLabel value="Date"></p:outputLabel>
+									</f:facet>
+										<p:outputLabel value="#{var.strDate}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Description">
+									<f:facet name="header">
+										<p:outputLabel value="Description"></p:outputLabel>
+									</f:facet>
+										<p:outputLabel value="#{var.description}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Credit">
+									<f:facet name="header">
+										<p:outputLabel value="Credit"></p:outputLabel>
+									</f:facet>
+										<p:outputLabel value="#{var.credit}"></p:outputLabel>
+										<f:facet name="footer" >
+											<p:panelGrid columns="1">
+												<p:outputLabel
+													value="Total Credit : #{MessageHistorySchoolWise.credit}" ></p:outputLabel>
+												<p:outputLabel value="Balance Left "></p:outputLabel>
+
+											</p:panelGrid>
+										</f:facet>
+									</p:column>
+
+
+									<p:column headerText="Debit">
+									<f:facet name="header">
+										<p:outputLabel value="Debit"></p:outputLabel>
+									</f:facet>
+										<p:outputLabel value="#{var.debit}"></p:outputLabel>
+										<f:facet name="footer">
+											<p:panelGrid columns="1" >
+												<p:outputLabel
+													value="Total Debit: #{MessageHistorySchoolWise.debit}"></p:outputLabel>
+												<p:outputLabel
+													value="#{MessageHistorySchoolWise.sumaryBalance}"></p:outputLabel>
+											</p:panelGrid>
+										</f:facet>
+									</p:column>
+
+
+								</p:dataTable>
+								</p:outputPanel>
+
+
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

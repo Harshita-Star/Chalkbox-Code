@@ -1,0 +1,68 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Add Subject Group</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<p:panel header="Add Subject Group">
+
+								<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+								<p:panelGrid columns="2" id="panel" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel  for="@next" style="color:red" value="Select Group Name"></p:outputLabel>
+									<p:inputText value="#{addSubGroup.groupName}" required="true" requiredMessage="Please Enter Group Name" id="secnm" onchange="trimFunc(this.value,'Please Section Name',this.id)" validatorMessage="Please Enter Correct value">
+									  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:inputText>
+
+									<p:outputLabel   for="@next" style="color:red" value="Type of Area"></p:outputLabel>
+									<p:selectOneRadio value="#{addSubGroup.selectedType}" required="true" requiredMessage="Please Select Type Area">
+										<f:selectItems value="#{addSubGroup.subjectTypeList}"></f:selectItems>
+										<p:ajax></p:ajax>
+									</p:selectOneRadio>
+
+									<p:outputLabel   for="@next" style="color:red" value="Select Class"></p:outputLabel>
+									<p:selectOneMenu value="#{addSubGroup.classId}" required="true" requiredMessage="Please Select CLass" styleClass="form-group">
+										<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+										<f:selectItems value="#{addSubGroup.classList}"></f:selectItems>
+										<p:ajax listener="#{addSubGroup.allSubjectList}" update=":form:subjectId"></p:ajax>
+									</p:selectOneMenu>
+									
+									<p:outputLabel   for="@next" style="color:red" value="Select Subject"></p:outputLabel>
+									<p:selectManyCheckbox id="subjectId" value="#{addSubGroup.selectedSubList}" required="true" requiredMessage="Please Select Subject" styleClass="form-group"  layout="responsive" columns="3">
+										<f:selectItems value="#{addSubGroup.subjectList}"></f:selectItems>
+									</p:selectManyCheckbox>
+									
+									<p:outputLabel for="@next" style="color:red" value="Add Rank"></p:outputLabel>
+									<p:inputText id="inp" value="#{addSubGroup.rank}" onkeypress="if (event.keyCode == 32 || event.keyCode == 45 || event.keyCode == 46|| event.keyCode == 48 ) return false;"></p:inputText>
+									
+									
+								</p:panelGrid>
+								<br />
+								<p:separator />
+								<center>
+									<p:commandButton value="Submit" icon="fa fa-upload" styleClass="butwid" update=":form" actionListener="#{addSubGroup.submit}"></p:commandButton>
+								</center>
+								<p:separator />
+								<br />
+								
+								
+								</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

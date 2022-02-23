@@ -1,0 +1,86 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Print Tc</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+						<h1>Print Tc </h1>
+							<p:panel header="Print Tc For All">
+								<p:messages closable="true" autoUpdate="true"></p:messages>
+						<p:panelGrid columns="3"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+						
+							<p:outputLabel style="color:red;" for="@next" value="Enter Tc Number/ Student Name"></p:outputLabel>
+							<p:inputText id="tcno" value="#{printTcForAll.tcNumber}"></p:inputText>
+							
+							<p:commandButton value="Search Tc" action="#{printTcForAll.search}"  styleClass="butwid" icon="fa fa-search" update=":form3"></p:commandButton>
+							
+						</p:panelGrid>
+							</p:panel>
+							</h:form>
+						
+						<h:form id="form3">
+               		 	<p:panel rendered="#{printTcForAll.table}" header="Student List">
+               		 				
+               		 		 <p:outputPanel id="up">
+               		  
+               		  		<p:dataTable var="var" value="#{printTcForAll.tcList}" rows="20" paginator="true" rowsPerPageTemplate="20,50,100" reflow="true"> 
+               		  		
+               		  			<p:column headerText="SR.NO.">
+               		  				<p:outputLabel value="#{var.sNo}"></p:outputLabel>
+               		  			</p:column>
+               		  			
+               		  		
+               		  			<p:column headerText="Admission Number">
+               		  				<p:outputLabel value="#{var.addNumber}"></p:outputLabel>
+               		  			</p:column>
+               		  			
+               		  			<p:column headerText="Student Name" filterBy="#{var.studentName}" filterMatchMode="contains">
+               		  				<p:outputLabel value="#{var.studentName}"></p:outputLabel>
+               		  			</p:column>
+               		  			
+               		  			<p:column headerText="Father's Name">
+               		  				<p:outputLabel value="#{var.fatherName}"></p:outputLabel>
+               		  			</p:column>
+               		  			
+               		  			<p:column headerText="Reason">
+               		  				<p:outputLabel value="#{var.reason}"></p:outputLabel>
+               		  			</p:column>
+               		  			
+               		  			
+               		  			<p:column headerText="Last Class">
+               		  				<p:outputLabel value="#{var.lastClass}"></p:outputLabel>
+               		  			</p:column>
+               		  		
+               		  			
+								<p:column headerText="Print Tc">
+									<p:commandButton update=":form3" icon="ui-icon-print" action="#{printTcForAll.print}">
+										<f:setPropertyActionListener value="#{var}" target="#{printTcForAll.selectedStudent}"></f:setPropertyActionListener>
+									</p:commandButton>
+								</p:column> 
+               		  		
+               		  		</p:dataTable>
+               		  	
+               		  </p:outputPanel>
+               		 	
+               		 	</p:panel>
+       
+					</h:form>
+						
+					</div>
+				</div>
+			</div>
+		</div>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,247 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Struck Off Student</ui:define>
+	<ui:define name="content">
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form1">
+							<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+							
+							<p:panel header="Search Student by Name/Sr. No">
+
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel value="Student Name/Sr. No"></p:outputLabel>
+									<p:autoComplete id="acSimple" value="#{struckOffStudent.name}"
+										completeMethod="#{struckOffStudent.autoCompleteStudentInfo}" validatorMessage="Please Enter Correct value">
+									  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+									</p:autoComplete>
+
+									<p:commandButton value="Search Now" update=":form3" styleClass="butwid" icon="fa fa-search"
+										actionListener="#{struckOffStudent.searchStudentByName}"></p:commandButton>
+								</p:panelGrid>
+							</p:panel>
+						</h:form>
+					</div>
+					<div class="card card-w-title">
+						<h:form id="form2">
+							<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+							<p:panel header="Search Student by Class-Section">
+
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:outputLabel value="Select Class" for="@next" style="color:red" ></p:outputLabel>
+									<p:selectOneMenu style="width:250px"
+										value="#{struckOffStudent.selectedClass}" required="true"
+										requiredMessage="Please select a class">
+										<f:selectItem itemLabel="Select Class" itemValue=""></f:selectItem>
+										<f:selectItems value="#{struckOffStudent.classSection}"></f:selectItems>
+
+										<p:ajax update="sectionid"
+											listener="#{struckOffStudent.allSections}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Select Section" for="@next" style="color:red" ></p:outputLabel>
+									<p:selectOneMenu id="sectionid"
+										value="#{struckOffStudent.selectedSection}" required="true"
+										requiredMessage="Please select a section">
+										<f:selectItem itemLabel="Select Section" itemValue=""></f:selectItem>
+										<f:selectItems value="#{struckOffStudent.sectionList}"></f:selectItems>
+
+									</p:selectOneMenu>
+
+									
+
+								</p:panelGrid>
+								
+								<br />
+								<p:separator />
+								<center>
+									<p:commandButton value="Search" styleClass="butwid" icon="fa fa-search"
+										action="#{struckOffStudent.searchStudentByClassSection}"
+										update=":form3" />
+								</center>
+								<p:separator />
+								<br />
+								
+							</p:panel>
+						</h:form>
+					</div>
+					<div class="card card-w-title">
+						<h:form id="form3">
+							<p:panel rendered="#{struckOffStudent.show}"
+								header="Student Details">
+								<p:panelGrid columns="6"
+									columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:outputLabel value="Admission Number:- "></p:outputLabel>
+									<p:outputLabel value="#{struckOffStudent.selectedStudent.srNo}"></p:outputLabel>
+
+									<p:outputLabel value="Student Name:- "></p:outputLabel>
+									<p:outputLabel
+										value="#{struckOffStudent.selectedStudent.fname}"></p:outputLabel>
+
+									<p:outputLabel value="Father's Name:- "></p:outputLabel>
+									<p:outputLabel
+										value="#{struckOffStudent.selectedStudent.fathersName}"></p:outputLabel>
+
+									<p:outputLabel value="Class:- "></p:outputLabel>
+									<p:outputLabel
+										value="#{struckOffStudent.selectedStudent.className}"></p:outputLabel>
+
+									<p:outputLabel value="Section:- "></p:outputLabel>
+									<p:outputLabel
+										value="#{struckOffStudent.selectedStudent.sectionName}"></p:outputLabel>
+								</p:panelGrid>
+							</p:panel>
+							<p:panel rendered="#{struckOffStudent.show}"
+								header="Enter Details">
+								<p:panelGrid columns="2"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel value="Reason" for="@next" style="color:red" ></p:outputLabel>
+									<p:selectOneMenu required="true"
+										requiredMessage="Please select the reason"
+										value="#{struckOffStudent.reason}">
+										<f:selectItem itemLabel="Select Reason" itemValue=""></f:selectItem>
+										<f:selectItems value="#{struckOffStudent.getReasons()}"></f:selectItems>
+
+										<p:ajax update=":form3"
+											listener="#{struckOffStudent.checkReason}"></p:ajax>
+									</p:selectOneMenu>
+									<p:outputLabel  for="@next" style="color:red" rendered="#{struckOffStudent.showTextBox}"
+										value="Other Reason"></p:outputLabel>
+									<p:inputText rendered="#{struckOffStudent.showTextBox}"
+										required="true"
+										requiredMessage="Please enter the other reason"
+										value="#{struckOffStudent.text}" validatorMessage="Please Enter Correct value">
+									  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+									</p:inputText>
+
+									<p:outputLabel  for="@next" style="color:red" value="Date of Struck Off"></p:outputLabel>
+									<p:calendar required="true" pattern="dd/MM/yyyy"
+										requiredMessage="Please enter the date of name struck off"
+										value="#{struckOffStudent.date2}"></p:calendar>
+
+									<p:outputLabel value="Last Class From School"></p:outputLabel>
+									<p:inputText value="#{struckOffStudent.lastClass}"
+										disabled="true"></p:inputText>
+
+									<p:outputLabel for="@next" style="color:red"  value="General Conduct"></p:outputLabel>
+									<p:inputText value="#{struckOffStudent.perform}"
+										required="true"
+										requiredMessage="Please enter the general conduct" validatorMessage="Please Enter Correct value">
+									  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+									</p:inputText>
+
+								
+								</p:panelGrid>
+								
+								<br />
+								<p:separator />
+								<center>
+										<p:commandButton update=":form3,:form1,:form2" styleClass="butwid" icon="fa fa-ban"
+										value="Struck Off"
+										action="#{struckOffStudent.struckOffStudent}"></p:commandButton>
+								</center>
+								<p:separator />
+								<br />
+								
+							</p:panel>
+							<p:panel rendered="#{struckOffStudent.showMultiple}"
+								header="Struck Off Details">
+
+								<p:dataTable value="#{struckOffStudent.list}" var="var"
+									selection="#{struckOffStudent.selectedList}" reflow="true"
+									id="tbl" rowKey="#{var.addNumber}" rowSelectMode="checkbox"
+									rowIndexVar="index">
+
+									<f:facet name="header">
+										<center>
+											<p:commandButton  styleClass="butwid-2" icon="fa fa-ban"
+												value="Struck Off Selected Students"
+												update=":form3,:form2,:form1" action="#{struckOffStudent.struckOffMultiple}"></p:commandButton>
+										</center>
+									</f:facet>
+									
+									<f:facet name="footer">
+										<center>
+											<p:commandButton styleClass="butwid-2" icon="fa fa-ban"
+												value="Struck Off Selected Students"
+												update=":form3,:form2,:form1" action="#{struckOffStudent.struckOffMultiple}"></p:commandButton>
+										</center>
+									</f:facet>
+
+									<p:column selectionMode="multiple" style="width:60px;"></p:column>
+
+									<p:column headerText="S.No.">
+										<p:outputLabel value="#{index+1}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Sr.No.">
+										<p:outputLabel value="#{var.srNo}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Name">
+										<p:outputLabel value="#{var.fullName}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Father's Name">
+										<p:outputLabel value="#{var.fathersName}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Class">
+										<p:outputLabel value="#{var.className}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Reason*">
+										<p:selectOneMenu value="#{var.reason}">
+											<f:selectItem itemLabel="Select Reason" itemValue=""></f:selectItem>
+											<f:selectItems value="#{struckOffStudent.getReasons()}"></f:selectItems>
+
+										</p:selectOneMenu>
+									</p:column>
+
+									<p:column headerText="Other Reason">
+										<p:inputText value="#{var.otherReason}" validatorMessage="Please Enter Correct value">
+										   <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+										</p:inputText>
+									</p:column>
+
+									<p:column headerText="Struck Off Date*">
+										<p:calendar navigator="true" pattern="dd/MM/yyyy"
+											yearRange="c-10:c+10" value="#{var.leavingDate}"></p:calendar>
+									</p:column>
+
+									<p:column headerText="General Conduct*">
+										<p:inputText value="#{var.performance}" validatorMessage="Please Enter Correct value">
+										  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+										</p:inputText>
+									</p:column>
+
+								</p:dataTable>
+
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

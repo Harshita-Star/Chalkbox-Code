@@ -1,0 +1,112 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+	<ui:define name="title">Add Group</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<p:growl showDetail="true"  id="growl" autoUpdate="true"></p:growl>
+							<p:panel header="Add Child Head">
+
+								<p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+									<p:outputLabel value="Enter Child Head Name " />
+
+									<p:inputText value="#{OpdTest.catename}" validatorMessage="Please Enter Correct value">
+                                       <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+										<p:ajax global="false"></p:ajax>
+									</p:inputText>
+
+
+									<p:outputLabel value="Select Parent Head" />
+									<p:selectOneMenu value="#{OpdTest.maincate}" id="ll1">
+										<f:selectItem itemValue="" itemLabel="Select Parent Head" />
+										<f:selectItems value="#{OpdTest.maincatelist}" />
+										<p:ajax global="false"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:commandButton actionListener="#{OpdTest.chko}"
+										value="Add Into Sub Head"
+										update=":form,:form1:dd,:form1:dd1,:form1:dd2,:form1:dd3">
+									</p:commandButton>
+								</p:panelGrid>
+							</p:panel>
+						</h:form>
+
+
+
+
+						<h:form id="form1" style="overflow:hidden">
+							<p:growl showDetail="true"  autoUpdate="true" />
+							<p:dialog header="Choose Category" widgetVar="dlg1" modal="true"
+								id="dd" width="50%" height="500px">
+								<p:tree value="#{OpdTest.root}" var="node"
+									style="width:100%;border:0px" selectionMode="single"
+									selection="#{OpdTest.val}">
+									<p:treeNode>
+										<h:outputText value="#{node}" />
+									</p:treeNode>
+								</p:tree>
+								<p:separator />
+								<p:commandButton value="submit"
+									actionListener="#{OpdTest.submit}" update=":form,:form1" />
+							</p:dialog>
+
+							<p:dialog header="Choose Category" widgetVar="dlg2" modal="true"
+								id="dd1" width="50%" height="500px">
+								<p:tree value="#{OpdTest.root1}" var="node"
+									style="width:100%;border:0px" selectionMode="single"
+									selection="#{OpdTest.val1}">
+									<p:treeNode>
+										<h:outputText value="#{node}" />
+									</p:treeNode>
+								</p:tree>
+
+								<p:commandButton value="submit"
+									actionListener="#{OpdTest.submit}" update=":form,:form1" />
+							</p:dialog>
+
+							<p:dialog header="Choose Category" widgetVar="dlg3" modal="true"
+								id="dd2" width="50%" height="500px">
+								<p:tree value="#{OpdTest.root2}" var="node"
+									style="width:100%;border:0px" selectionMode="single"
+									selection="#{OpdTest.val2}">
+									<p:treeNode>
+										<h:outputText value="#{node}" />
+									</p:treeNode>
+								</p:tree>
+								<p:separator />
+								<p:commandButton value="submit"
+									actionListener="#{OpdTest.submit}" update=":form,:form1" />
+							</p:dialog>
+
+							<p:dialog header="Choose Category" widgetVar="dlg4" modal="true"
+								id="dd3" width="50%" height="500px">
+								<p:tree value="#{OpdTest.root3}" var="node"
+									style="width:100%;border:0px" selectionMode="single"
+									selection="#{OpdTest.val3}">
+									<p:treeNode>
+										<h:outputText value="#{node}" />
+									</p:treeNode>
+								</p:tree>
+								<p:separator />
+								<p:commandButton value="submit"
+									actionListener="#{OpdTest.submit}" update=":form,:form1" />
+							</p:dialog>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

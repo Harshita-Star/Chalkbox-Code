@@ -1,0 +1,53 @@
+	<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+					xmlns:ui="http://java.sun.com/jsf/facelets"
+					xmlns:h="http://java.sun.com/jsf/html"
+					xmlns:f="http://java.sun.com/jsf/core"
+					xmlns:p="http://primefaces.org/ui"
+					template="/WEB-INF/template.xhtml">
+
+		<ui:define name="title">Print TIme Table</ui:define>
+
+		<ui:define name="content">
+		   
+				<div class="ui-fluid">
+					<div class="ui-g">
+						<div class="ui-g-12">
+							<div class="card card-w-title">
+							    	<h:form id="form" style="overflow:hidden">
+						<p:messages autoUpdate="true" closable="true"></p:messages>
+						<p:panel header="Last Updated Time Table">
+					
+							<p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+					
+								<p:outputLabel value="Class:" for="@next" style="color:red" ></p:outputLabel>
+								<p:selectOneMenu required="true" filter="true" requiredMessage="Please Select Class " value="#{printAnyTimeTable.selectedCourse}">
+									 <f:selectItem itemLabel="Select Class" itemValue=""></f:selectItem>  
+									<f:selectItems value="#{printAnyTimeTable.courseList}"></f:selectItems>
+									<p:ajax listener="#{printAnyTimeTable.checkSection}" update=":form"></p:ajax>
+								</p:selectOneMenu>
+								
+								<p:outputLabel value="Section:" for="@next" style="color:red" ></p:outputLabel>
+								<p:selectOneMenu  value="#{printAnyTimeTable.selectedSection}" filter="true" required="true" requiredMessage="Please Select Section">
+									<f:selectItem itemLabel="Select Section" itemValue=""></f:selectItem>
+									<f:selectItems value="#{printAnyTimeTable.sectionList}"></f:selectItems>
+									<p:ajax></p:ajax>
+								</p:selectOneMenu>
+								
+										<p:outputLabel value="Search Type :" for="@next" style="color:red" ></p:outputLabel>
+							
+								<p:selectOneRadio required="true" requiredMessage="Please Select Search Type" value="#{printAnyTimeTable.searchType}">
+									<f:selectItem itemLabel="Current Time-table" itemValue="current"></f:selectItem>
+									<f:selectItem itemLabel="New Time-table" itemValue="new"></f:selectItem>
+								</p:selectOneRadio>
+								<p:commandButton value="Get Time Table" action="#{printAnyTimeTable.checkSubject}"></p:commandButton>
+							</p:panelGrid>
+						</p:panel>
+					</h:form>
+							</div>
+						</div>
+					</div>
+				</div>
+		   
+		</ui:define>
+
+	</ui:composition>

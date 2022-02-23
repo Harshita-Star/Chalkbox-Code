@@ -1,0 +1,63 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/studentTemplate.xhtml">
+
+	<ui:define name="title">Online Leave</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title" style="background-color: rgb(162, 32, 45, 0.3); ">
+						<h:form id="form">
+							<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+							<p:panel header="Apply Leave">
+							<f:facet name="header">
+									<span>Apply Leave</span>
+									<span> <p:commandLink
+											style="float: right;margin-left: 15px;;color: blue;font-size:15px;"
+											immediate="true" value="My Leaves"
+											action="viewStudentLeave.xhtml?faces-redirect=true"></p:commandLink>
+									</span>
+								</f:facet>
+							 <p:panelGrid columns="2" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									
+									<p:outputLabel value="Start Date"></p:outputLabel>
+									<p:calendar value="#{applyLeaveStduentBean.startDate}" mindate="#{applyLeaveStduentBean.startminDate}" pattern="dd/MM/yyyy" navigator="true" yearRange="c-10:c+10">
+									  <p:ajax event="dateSelect" listener="#{applyLeaveStduentBean.changeDate}" update=":form"></p:ajax>
+									</p:calendar>
+									<p:outputLabel value="End Date"></p:outputLabel>
+									<p:calendar value="#{applyLeaveStduentBean.endDate}" mindate="#{applyLeaveStduentBean.endMinDate}"  pattern="dd/MM/yyyy"  navigator="true" yearRange="c-10:c+10">
+								      <p:ajax event="dateSelect"></p:ajax>	
+									</p:calendar>
+									
+									<p:outputLabel value="Description" for="@next" style="color:red" ></p:outputLabel>
+									<p:inputTextarea value="#{applyLeaveStduentBean.desc}" required="true" requiredMessage="Please Enter Description" validatorMessage="Please Enter Correct value">
+									  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:inputTextarea>
+									</p:panelGrid>
+									
+									<br />
+								<p:separator />
+								<center>
+									<p:commandButton value="Apply Leave" styleClass="butwid" icon="fa fa-check-circle" action="#{applyLeaveStduentBean.studentLeaveApply}" update=":form"></p:commandButton>
+								
+								</center>
+								<p:separator />
+								<br />
+									
+						</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

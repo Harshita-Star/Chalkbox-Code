@@ -1,0 +1,115 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/masterTemplate.xhtml">
+
+	<ui:define name="title">Notification</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form" enctype="multipart/form-data">
+
+							<p:panel header="Notification">
+
+								<p:messages closable="true" autoUpdate="true"></p:messages>
+
+								<p:panelGrid columns="2">
+
+									<p:outputLabel value="Send To *" for="@next" style="color:red"></p:outputLabel>
+									<p:selectOneRadio
+										value="#{notificationToAdminTeacherBean.type}">
+										<f:selectItem itemLabel="All Schools" itemValue="all"></f:selectItem>
+										<f:selectItem
+											itemLabel="Particular Schools (Who logged into Admin App as 'ADMIN')"
+											itemValue="particular"></f:selectItem>
+										<p:ajax update=":form"
+											listener="#{notificationToAdminTeacherBean.checkType}"></p:ajax>
+									</p:selectOneRadio>
+									<p:outputLabel rendered="#{notificationToAdminTeacherBean.showNotificationFor}" value="For" for="@next" style="color:red"></p:outputLabel>
+							      
+							        <p:selectOneRadio rendered="#{notificationToAdminTeacherBean.showNotificationFor}" value="#{notificationToAdminTeacherBean.notification_for}" required="true" requiredMessage="Please Select notification for">
+							            <f:selectItem itemLabel="Common" itemValue="Common"></f:selectItem>
+							            <f:selectItem itemLabel="Only Teacher" itemValue="Teacher"></f:selectItem>
+							        </p:selectOneRadio>
+
+									<p:outputLabel value="Title" for="@next" style="color:red" ></p:outputLabel>
+									<p:inputText value="#{notificationToAdminTeacherBean.title}"
+										required="true" requiredMessage="Enter Title">
+									</p:inputText>
+
+									<p:outputLabel value="Notification" for="@next" style="color:red" ></p:outputLabel>
+									<p:inputTextarea
+										value="#{notificationToAdminTeacherBean.notification}"
+										required="true" requiredMessage="Enter Notification">
+									</p:inputTextarea>
+
+									<p:outputLabel value="Image (If Any -Only PNG allowed)"></p:outputLabel>
+									<p:fileUpload value="#{notificationToAdminTeacherBean.image}"
+										mode="simple" allowTypes="/(\.|\/)(png)$/" />
+
+								</p:panelGrid>
+
+								<br />
+								<center>
+									<p:commandButton style="width: 150px;" ajax="false"
+										value="Submit"
+										action="#{notificationToAdminTeacherBean.sendNotification}"
+										update=":form"></p:commandButton>
+								</center>
+								<br />
+
+								<p:outputPanel id="dt">
+									<center>
+										<p:dataTable
+											rendered="#{notificationToAdminTeacherBean.showTable}"
+											reflow="true"
+											selection="#{notificationToAdminTeacherBean.selectedList}"
+											rowKey="#{var.id}"
+											value="#{notificationToAdminTeacherBean.schoolList}"
+											var="var" rowIndexVar="index" style="width: 50%"
+											rowSelectMode="add">
+
+											<p:column selectionMode="multiple"
+												style="width:16px;text-align:center"></p:column>
+
+											<p:column filterBy="#{var.schoolName}"
+												filterMatchMode="contains" style="width:100px"
+												headerText="School Name">
+												<p:outputLabel value="#{var.schoolName}"></p:outputLabel>
+											</p:column>
+
+											<p:column filterBy="#{var.aliasName}"
+												filterMatchMode="contains" style="width:100px"
+												headerText="Alias">
+												<p:outputLabel value="#{var.aliasName}"></p:outputLabel>
+											</p:column>
+
+										</p:dataTable>
+									</center>
+									<br />
+
+									<center>
+										<p:commandButton style="width: 150px;" ajax="false"
+											value="Submit"
+											action="#{notificationToAdminTeacherBean.sendNotification}"
+											update=":form"
+											rendered="#{notificationToAdminTeacherBean.showTable}"></p:commandButton>
+									</center>
+								</p:outputPanel>
+
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

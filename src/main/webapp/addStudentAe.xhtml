@@ -1,0 +1,1581 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Admission Form</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form" enctype="multipart/form-data">
+							<p:messages closable="true" autoUpdate="true"></p:messages>
+							<p:panel header="Admission Form">
+
+								<p:tabView id="tabview">
+									<p:tab title="Student Details">
+										<!-- <p:tabView>
+											<p:tab title="General Details"> -->
+										<p:panelGrid columns="4"
+											columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+											layout="grid" styleClass="ui-panelgrid-blank form-group"
+											style="border:0px none; background-color:transparent;">
+
+											<p:outputLabel value="Admission No" for="@next" style="color:red" />
+											<p:inputText value="#{addStudentAe.addmissionNumber}"
+												required="true" requiredMessage="Please Enter Admission No."
+												disabled="#{addStudentAe.disableSrNo}">
+											</p:inputText>
+
+											<p:outputLabel value="Date of Admission" for="@next" style="color:red" />
+											<p:calendar yearRange="c-50:c+0" navigator="true"
+												value="#{addStudentAe.info.apply_date}" pattern="dd/MM/yyyy"
+												style="width: 280px !important;height:30px !important;margin-bottom: 12px !important;"
+												required="true"
+												requiredMessage="Please Select Date of Admission"></p:calendar>
+
+											<p:outputLabel value="Class" for="@next" style="color:red" />
+											<p:selectOneMenu filter="true"
+												value="#{addStudentAe.info.classid}" required="true"
+												requiredMessage="Please Select a Class">
+												<f:selectItem itemLabel="--Select--" itemValue=""></f:selectItem>
+												<f:selectItems value="#{addStudentAe.classList}"></f:selectItems>
+												<p:ajax update="secpnl" global="false"
+													listener="#{addStudentAe.allSections}"></p:ajax>
+											</p:selectOneMenu>
+
+											<p:outputLabel value="Section" for="@next" style="color:red"  />
+											<p:outputPanel id="secpnl">
+												<p:selectOneMenu filter="true"
+													value="#{addStudentAe.selectedSection}" required="true"
+													requiredMessage="Please Select a Section">
+													<f:selectItem itemLabel="--Select--"></f:selectItem>
+													<f:selectItems value="#{addStudentAe.sectionList}"></f:selectItems>
+												</p:selectOneMenu>
+											</p:outputPanel>
+
+
+											<p:outputLabel value="Student Name as in Passport" for="@next" style="color:red" />
+											<p:inputText value="#{addStudentAe.info.st_name}"
+												required="true" requiredMessage="Please enter Student Name"
+												onchange="this.value=toTitleCase(this.value)"
+												onkeyup="this.value=toTitleCase(this.value)"></p:inputText>
+
+											<p:outputLabel value="Gender" for="@next" style="color:red" />
+											<p:selectOneRadio value="#{addStudentAe.info.gender}"
+												required="true" requiredMessage="Please Select Gender">
+												<f:selectItem itemLabel="Male" itemValue="Male"></f:selectItem>
+												<f:selectItem itemLabel="Female" itemValue="Female"></f:selectItem>
+											</p:selectOneRadio>
+
+											<p:outputLabel value="Date of Birth" for="@next" style="color:red" />
+											<p:calendar yearRange="c-50:c+0" navigator="true"
+												value="#{addStudentAe.info.dob}" required="true"
+												requiredMessage="Please Select Date of Birth"
+												pattern="dd/MM/yyyy"
+												style="width: 280px !important;height:30px !important;margin-bottom: 12px !important;"></p:calendar>
+
+
+											<p:outputLabel value="Place of Birth" />
+											<p:inputText value="#{addStudentAe.info.birth_place}"></p:inputText>
+
+											<p:outputLabel value="Last School Attended" />
+											<p:inputText value="#{addStudentAe.info.last_school}"
+												placeholder="If No, Write 'NA'"></p:inputText>
+
+											<p:outputLabel value="Nationality" for="@next" style="color:red" />
+											<p:selectOneMenu filter="true"
+												value="#{addStudentAe.info.nationality}" required="true"
+												requiredMessage="Please Select Nationality">
+												<f:selectItem itemLabel="--Select--" itemValue=""></f:selectItem>
+												<f:selectItems value="#{addStudentAe.nationalityList}"></f:selectItems>
+												<p:ajax update="stvisan,stvisad,stvisap" global="false"></p:ajax>
+											</p:selectOneMenu>
+
+											<p:outputLabel value="Religion" />
+											<p:selectOneMenu filter="true"
+												value="#{addStudentAe.info.religion}" editable="true"
+												placeholder="Select Religion / Specify for 'Others'">
+												<f:selectItem itemLabel="--Select--" itemValue=""></f:selectItem>
+												<f:selectItems value="#{addStudentAe.religionList}"></f:selectItems>
+											</p:selectOneMenu>
+
+											<p:outputLabel value="Home Language" />
+											<p:inputText value="#{addStudentAe.info.lang}"></p:inputText>
+
+											<p:outputLabel value="Veg or Non Veg?" />
+											<p:selectOneRadio value="#{addStudentAe.info.food_type}">
+												<f:selectItem itemLabel="Veg" itemValue="Veg"></f:selectItem>
+												<f:selectItem itemLabel="Non Veg" itemValue="Non Veg"></f:selectItem>
+											</p:selectOneRadio>
+
+											<p:outputLabel value="Passport No." for="@next" style="color:red" />
+											<p:inputText required="true"
+												requiredMessage="Please Enter Passport No."
+												value="#{addStudentAe.info.ppt_no}"></p:inputText>
+
+											<p:outputLabel value="Passport Issue Date" for="@next" style="color:red" />
+											<p:calendar required="true"
+												requiredMessage="Please Enter Passport Issue Date."
+												yearRange="c-50:c+50" navigator="true"
+												value="#{addStudentAe.info.ppt_issue_date}"
+												pattern="dd/MM/yyyy"
+												style="width: 280px !important;height:30px !important;margin-bottom: 12px !important;"></p:calendar>
+
+
+											<p:outputLabel value="Passport Expiry Date" for="@next" style="color:red" />
+											<p:calendar required="true"
+												requiredMessage="Please Enter Passport Expiry Date"
+												yearRange="c-50:c+50" navigator="true"
+												value="#{addStudentAe.info.ppt_exp_date}"
+												pattern="dd/MM/yyyy"
+												style="width: 280px !important;height:30px !important;margin-bottom: 12px !important;"></p:calendar>
+
+
+											<p:outputLabel value="Place of Issue Passport" for="@next" style="color:red" />
+											<p:inputText required="true"
+												requiredMessage="Please Enter Place of Issue Passport"
+												value="#{addStudentAe.info.ppt_place}"></p:inputText>
+
+											<p:outputLabel value="VISA No." for="@next" style="color:red" />
+											<p:outputPanel id="stvisan">
+												<p:inputText value="#{addStudentAe.info.visa_no}"
+													required="#{addStudentAe.info.nationality ne 'UNITED ARAB EMIRATES'}"
+													requiredMessage="Please Enter VISA No." />
+											</p:outputPanel>
+
+											<p:outputLabel value="VISA Valid upto Date" for="@next" style="color:red" />
+											<p:outputPanel id="stvisad">
+												<p:calendar
+													required="#{addStudentAe.info.nationality ne 'UNITED ARAB EMIRATES'}"
+													requiredMessage="Please Enter VISA Valid upto Date"
+													yearRange="c-50:c+50" navigator="true"
+													value="#{addStudentAe.info.visa_exp_date}"
+													pattern="dd/MM/yyyy"
+													style="width: 280px !important;height:30px !important;margin-bottom: 12px !important;"></p:calendar>
+											</p:outputPanel>
+
+											<p:outputLabel value="VISA Issue Date" for="@next" style="color:red" />
+											<p:outputPanel id="stvisap">
+												<p:calendar
+													required="#{addStudentAe.info.nationality ne 'UNITED ARAB EMIRATES'}"
+													requiredMessage="Please Enter VISA Issue Date"
+													yearRange="c-50:c+50" navigator="true"
+													value="#{addStudentAe.info.visa_issue_date}"
+													pattern="dd/MM/yyyy"
+													style="width: 280px !important;height:30px !important;margin-bottom: 12px !important;"></p:calendar>
+											</p:outputPanel>
+
+											<p:outputLabel value="Other Languages Spoken" />
+											<p:inputText value="#{addStudentAe.info.other_lang}"></p:inputText>
+
+											<p:outputLabel value="Address in UAE (Including PO Box)" for="@next" style="color:red" />
+											<p:inputTextarea value="#{addStudentAe.info.address}"
+												requiredMessage="Please Enter Address" required="true"
+												rows="5" cols="26">
+											</p:inputTextarea>
+
+											<p:outputLabel rendered="false" value="Ethnicity" />
+											<p:selectOneMenu rendered="false" filter="true"
+												value="#{addStudentAe.info.ethnicity}">
+												<f:selectItem itemLabel="--Select--" itemValue=""></f:selectItem>
+												<f:selectItem itemLabel="Arab-UAE" itemValue="Arab-UAE"></f:selectItem>
+												<f:selectItem itemLabel="Other Arab" itemValue="Other Arab"></f:selectItem>
+												<f:selectItem itemLabel="Other Ethnic Group"
+													itemValue="Other Ethnic Group"></f:selectItem>
+											</p:selectOneMenu>
+
+											<p:outputLabel value="Student Emirates ID" for="@next" style="color:red" />
+											<p:inputMask value="#{addStudentAe.info.emid}"
+												required="true"
+												requiredMessage="Please Enter Student Emirates ID"
+												mask="999-9999-9999999-9" />
+										</p:panelGrid>
+										<!-- </p:tab> -->
+
+
+										<!-- </p:tabView> -->
+									</p:tab>
+
+									<p:tab title="Sibling Details">
+										<p:dataTable value="#{addStudentAe.completeList}"
+											reflow="true" var="var">
+
+											<p:column headerText="S.No.">
+												<p:outputLabel value="#{var.sno}"></p:outputLabel>
+											</p:column>
+
+											<p:column headerText="Name">
+												<p:inputText value="#{var.name}"></p:inputText>
+											</p:column>
+
+											<p:column headerText="Class">
+												<p:selectOneMenu filter="true" value="#{var.class_id}">
+													<f:selectItem itemLabel="--Select--"></f:selectItem>
+													<f:selectItems value="#{addStudentAe.classList}"></f:selectItems>
+												</p:selectOneMenu>
+											</p:column>
+
+										</p:dataTable>
+									</p:tab>
+
+									<p:tab title="Details of Legal Guardian">
+										<p:panelGrid columns="2"
+											columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+											layout="grid" styleClass="ui-panelgrid-blank form-group"
+											style="border:0px none; background-color:transparent;">
+											<p:outputLabel value="Parent Type" style="font-weight:bold;" />
+											<p:selectOneRadio value="#{addStudentAe.info.parent_type}">
+												<f:selectItem itemLabel="Existing Parents"
+													itemValue="Existing Parents"></f:selectItem>
+												<f:selectItem itemLabel="New Parents"
+													itemValue="New Parents"></f:selectItem>
+												<p:ajax update="prt" global="false" event="change"
+													listener="#{addStudentAe.checkParent}"></p:ajax>
+											</p:selectOneRadio>
+										</p:panelGrid>
+
+										<p:outputPanel id="prt">
+											<p:outputPanel id="pid"
+												rendered="#{addStudentAe.showParentEx}">
+												<p:panelGrid columns="2"
+													columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+													layout="grid" styleClass="ui-panelgrid-blank form-group"
+													style="border:0px none; background-color:transparent;">
+
+													<p:outputLabel value="Parent ID" for="@next" style="color:red" />
+													<p:inputText value="#{addStudentAe.info.parent_id}"
+														required="true" requiredMessage="Please Enter Parent ID"></p:inputText>
+
+												</p:panelGrid>
+											</p:outputPanel>
+
+											<p:outputPanel id="pdtl"
+												rendered="#{addStudentAe.showParentNew}">
+												<p:panelGrid columns="4"
+													columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+													layout="grid" styleClass="ui-panelgrid-blank form-group"
+													style="border:0px none; background-color:transparent;">
+
+													<p:outputLabel for="@next" style="color:red" value="Name of person walk in for admission" />
+													<p:inputText value="#{addStudentAe.info.applicant_name}"
+														required="true"
+														requiredMessage="Please Enter Walk in Person Name"
+														onchange="this.value=toTitleCase(this.value)"
+														onkeyup="this.value=toTitleCase(this.value)" />
+
+													<p:outputLabel
+														value="Relation to child: If other,Please State Relationship" />
+													<p:selectOneRadio
+														value="#{addStudentAe.info.applicant_relation}">
+														<f:selectItem itemLabel="Father" itemValue="Father"></f:selectItem>
+														<f:selectItem itemLabel="Mother" itemValue="Mother"></f:selectItem>
+														<f:selectItem itemLabel="Legal Guardian"
+															itemValue="Legal Guardian"></f:selectItem>
+														<f:selectItem itemLabel="Other" itemValue="Other"></f:selectItem>
+														<p:ajax
+															update="otherrel,gnm,gmob,geml,gemid,gadr,gntl,grel"
+															global="false" event="change"
+															listener="#{addStudentAe.checkRel}"></p:ajax>
+													</p:selectOneRadio>
+
+													<p:outputLabel />
+													<p:outputLabel />
+													<p:outputLabel />
+													<p:inputText id="otherrel"
+														disabled="#{addStudentAe.disableRel}"
+														value="#{addStudentAe.info.other_rel}"
+														placeholder="Relationship" />
+												</p:panelGrid>
+												<p:separator />
+												<p:outputLabel value="Father Details"
+													style="font-weight:bold;font-size:14px;" />
+												<p:separator />
+
+												<p:panelGrid columns="4"
+													columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+													layout="grid" styleClass="ui-panelgrid-blank form-group"
+													style="border:0px none; background-color:transparent;">
+
+													<p:outputLabel value="Name" for="@next" style="color:red" />
+													<p:inputText value="#{addStudentAe.info.f_name}"
+														required="true" requiredMessage="Please Enter Father Name"
+														onchange="this.value=toTitleCase(this.value)"
+														onkeyup="this.value=toTitleCase(this.value)" />
+
+													<p:outputLabel value="Mobile" for="@next" style="color:red" />
+													<p:outputPanel>
+														<div class="ui-inputgroup">
+															<span class="ui-inputgroup-addon">+971</span>
+															<p:inputText value="#{addStudentAe.info.f_mob}"
+																required="true"
+																requiredMessage="Please Enter Father Mobile"
+																maxlength="9" placeholder="Eg.545615783"
+																validatorMessage="Please Enter 9 Digit Father's Mobile No.">
+																<p:keyFilter mask="num" />
+																<f:validateLength minimum="9"></f:validateLength>
+															</p:inputText>
+														</div>
+													</p:outputPanel>
+
+													<p:outputLabel value="Email address" for="@next" style="color:red" />
+													<p:inputText value="#{addStudentAe.info.f_email}"
+														required="true"
+														requiredMessage="Please Enter Father Email"
+														placeholder="Primary Email for Correspondence" />
+
+													<p:outputLabel value="Emirates ID" for="@next" style="color:red" />
+													<p:inputMask value="#{addStudentAe.info.f_emid}"
+														required="true"
+														requiredMessage="Please Enter Father Emirates ID"
+														mask="999-9999-9999999-9" />
+
+													<p:outputLabel value="Occupation" />
+													<p:inputText value="#{addStudentAe.info.f_occupation}" />
+
+													<p:outputLabel value="Employer" />
+													<p:inputText value="#{addStudentAe.info.f_employer}" />
+
+													<p:outputLabel value="Work No." />
+													<p:inputText value="#{addStudentAe.info.f_work}" />
+
+													<p:outputLabel value="Address" />
+													<p:inputTextarea value="#{addStudentAe.info.f_address}"
+														rows="5" cols="26">
+													</p:inputTextarea>
+
+
+												</p:panelGrid>
+												<p:separator />
+												<p:outputLabel value="Mother Details"
+													style="font-weight:bold;font-size:14px;" />
+												<p:separator />
+
+												<p:panelGrid columns="4"
+													columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+													layout="grid" styleClass="ui-panelgrid-blank form-group"
+													style="border:0px none; background-color:transparent;">
+
+													<p:outputLabel value="Name" for="@next" style="color:red"  />
+													<p:inputText value="#{addStudentAe.info.m_name}"
+														required="true" requiredMessage="Please Enter Mother Name"
+														onchange="this.value=toTitleCase(this.value)"
+														onkeyup="this.value=toTitleCase(this.value)" />
+
+													<p:outputLabel value="Mobile" for="@next" style="color:red" />
+													<p:outputPanel>
+														<div class="ui-inputgroup">
+															<span class="ui-inputgroup-addon">+971</span>
+															<p:inputText value="#{addStudentAe.info.m_mob}"
+																required="true"
+																requiredMessage="Please Enter Mother Mobile"
+																maxlength="9" placeholder="Eg.545615783"
+																validatorMessage="Please Enter 9 Digit Mother's Mobile No.">
+																<p:keyFilter mask="num" />
+																<f:validateLength minimum="9"></f:validateLength>
+															</p:inputText>
+														</div>
+													</p:outputPanel>
+
+													<p:outputLabel value="Email address" for="@next" style="color:red" />
+													<p:inputText value="#{addStudentAe.info.m_email}"
+														required="true"
+														requiredMessage="Please Enter Mother Email"
+														placeholder="Primary Email for Correspondence" />
+
+													<p:outputLabel value="Emirates ID" for="@next" style="color:red" />
+													<p:inputMask value="#{addStudentAe.info.m_emid}"
+														required="true"
+														requiredMessage="Please Enter Mother Emirates ID"
+														mask="999-9999-9999999-9" />
+
+													<p:outputLabel value="Occupation" />
+													<p:inputText value="#{addStudentAe.info.m_occupation}" />
+
+													<p:outputLabel value="Employer" />
+													<p:inputText value="#{addStudentAe.info.m_employer}" />
+
+													<p:outputLabel value="Work No." />
+													<p:inputText value="#{addStudentAe.info.m_work}" />
+
+													<p:outputLabel value="Address" />
+													<p:inputTextarea value="#{addStudentAe.info.m_address}"
+														rows="5" cols="26">
+													</p:inputTextarea>
+
+												</p:panelGrid>
+												<p:separator />
+												<p:outputLabel value="Guardian Details"
+													style="font-weight:bold;font-size:14px;" />
+												<p:separator />
+
+												<p:panelGrid columns="4"
+													columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+													layout="grid" styleClass="ui-panelgrid-blank form-group"
+													style="border:0px none; background-color:transparent;">
+
+													<p:outputLabel value="Name" for="@next" style="color:red" />
+													<p:outputPanel id="gnm">
+														<p:inputText required="#{addStudentAe.gReq}"
+															value="#{addStudentAe.info.g_name}"
+															requiredMessage="Please Enter Guardian Name"
+															onchange="this.value=toTitleCase(this.value)"
+															onkeyup="this.value=toTitleCase(this.value)" />
+													</p:outputPanel>
+
+													<p:outputLabel value="Mobile" for="@next" style="color:red" />
+													<p:outputPanel id="gmob">
+														<div class="ui-inputgroup">
+															<span class="ui-inputgroup-addon">+971</span>
+															<p:inputText required="#{addStudentAe.gReq}"
+																value="#{addStudentAe.info.g_mob}"
+																requiredMessage="Please Enter Guardian Mobile"
+																maxlength="9" placeholder="Eg.545615783"
+																validatorMessage="Please Enter 9 Digit Guardian's Mobile No.">
+																<p:keyFilter mask="num" />
+																<f:validateLength minimum="9"></f:validateLength>
+															</p:inputText>
+														</div>
+													</p:outputPanel>
+
+													<p:outputLabel value="Email address" for="@next" style="color:red" />
+													<p:outputPanel id="geml">
+														<p:inputText required="#{addStudentAe.gReq}"
+															value="#{addStudentAe.info.g_email}"
+															requiredMessage="Please Enter Guardian Email"
+															placeholder="Primary Email for Correspondence" />
+													</p:outputPanel>
+
+													<p:outputLabel value="Emirates ID" for="@next" style="color:red" />
+													<p:outputPanel id="gemid">
+														<p:inputMask required="#{addStudentAe.gReq}"
+															value="#{addStudentAe.info.g_emid}"
+															requiredMessage="Please Enter Guardian Emirates ID"
+															mask="999-9999-9999999-9" />
+													</p:outputPanel>
+
+													<p:outputLabel value="Occupation" />
+													<p:inputText value="#{addStudentAe.info.g_occupation}" />
+
+													<p:outputLabel value="Employer" />
+													<p:inputText value="#{addStudentAe.info.g_employer}" />
+
+													<p:outputLabel value="Work No." />
+													<p:inputText value="#{addStudentAe.info.g_work}" />
+
+													<p:outputLabel value="Address" for="@next" style="color:red" />
+													<p:outputPanel id="gadr">
+														<p:inputTextarea required="#{addStudentAe.gReq}"
+															value="#{addStudentAe.info.g_address}"
+															requiredMessage="Please Enter Guardian Address" rows="5"
+															cols="26">
+														</p:inputTextarea>
+													</p:outputPanel>
+
+													<p:outputLabel value="Nationality" for="@next" style="color:red" />
+													<p:outputPanel id="gntl">
+														<p:selectOneMenu required="#{addStudentAe.gReq}"
+															filter="true" value="#{addStudentAe.info.g_nation}"
+															requiredMessage="Please Select Guardian Nationality">
+															<f:selectItem itemLabel="--Select--" itemValue=""></f:selectItem>
+															<f:selectItems value="#{addStudentAe.nationalityList}"></f:selectItems>
+															<p:ajax update="grVisaFl" global="false"
+																listener="#{addStudentAe.checkGnation}"></p:ajax>
+														</p:selectOneMenu>
+													</p:outputPanel>
+
+													<p:outputLabel value="Relation" for="@next" style="color:red" />
+													<p:outputPanel id="grel">
+														<p:selectOneMenu required="#{addStudentAe.gReq}"
+															requiredMessage="Please Select Guardian Relation"
+															filter="true" value="#{addStudentAe.info.g_rel}"
+															editable="true"
+															placeholder="Select Relation / Specify for 'Others'">
+															<f:selectItem itemLabel="--Select--" itemValue=""></f:selectItem>
+															<f:selectItem itemLabel="Grand Father"
+																itemValue="Grand Father"></f:selectItem>
+															<f:selectItem itemLabel="Grand Mother"
+																itemValue="Grand Mother"></f:selectItem>
+															<f:selectItem itemLabel="Uncle" itemValue="Uncle"></f:selectItem>
+															<f:selectItem itemLabel="Aunty" itemValue="Aunty"></f:selectItem>
+														</p:selectOneMenu>
+													</p:outputPanel>
+
+												</p:panelGrid>
+												<p:separator />
+												<p:outputLabel value="Correspondence &amp; School Fees"
+													style="font-weight:bold;font-size:14px;" />
+												<p:separator />
+
+												<p:panelGrid columns="4"
+													columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+													layout="grid" styleClass="ui-panelgrid-blank form-group"
+													style="border:0px none; background-color:transparent;">
+
+													<p:outputLabel
+														value="Who should receive regular e-mail correspondence from the school?" />
+													<p:selectOneRadio value="#{addStudentAe.info.receipient}">
+														<f:selectItem itemLabel="Father" itemValue="Father"></f:selectItem>
+														<f:selectItem itemLabel="Mother" itemValue="Mother"></f:selectItem>
+														<f:selectItem itemLabel="Both" itemValue="Both"></f:selectItem>
+													</p:selectOneRadio>
+
+													<p:outputLabel
+														value="Who is responsible for the payment of school fees?" />
+													<p:selectOneRadio value="#{addStudentAe.info.fee_payee}">
+														<f:selectItem itemLabel="Company" itemValue="Company"></f:selectItem>
+														<f:selectItem itemLabel="Parents" itemValue="Parents"></f:selectItem>
+														<f:selectItem itemLabel="Both" itemValue="Both"></f:selectItem>
+														<p:ajax update="compnm,compadr,compphn,compeml"
+															global="false"></p:ajax>
+													</p:selectOneRadio>
+
+													<p:outputLabel value="Name of Company" for="@next" style="color:red" />
+													<p:outputPanel id="compnm">
+														<p:inputText value="#{addStudentAe.info.company}"
+															required="#{addStudentAe.info.fee_payee ne 'Parents'}"
+															requiredMessage="Please Enter Name of Company" />
+													</p:outputPanel>
+
+
+													<p:outputLabel value="Billing Address" for="@next" style="color:red" />
+													<p:outputPanel id="compadr">
+														<p:inputText value="#{addStudentAe.info.bill_address}"
+															required="#{addStudentAe.info.fee_payee ne 'Parents'}"
+															requiredMessage="Please Enter Billing Address" />
+													</p:outputPanel>
+
+
+													<p:outputLabel value="Telephone" for="@next" style="color:red" />
+													<p:outputPanel id="compphn">
+														<p:inputText value="#{addStudentAe.info.comp_phone}"
+															required="#{addStudentAe.info.fee_payee ne 'Parents'}"
+															requiredMessage="Please Enter Company Telephone No." />
+													</p:outputPanel>
+
+													<p:outputLabel value="Email" for="@next" style="color:red" />
+													<p:outputPanel id="compeml">
+														<p:inputText value="#{addStudentAe.info.comp_email}"
+															required="#{addStudentAe.info.fee_payee ne 'Parents'}"
+															requiredMessage="Please Enter Company Email"
+															placeholder="Primary Email for Correspondence" />
+													</p:outputPanel>
+
+												</p:panelGrid>
+												<p:separator />
+												<p:outputLabel
+													value="Emergency contact name and number other than Parent or Guardian"
+													style="font-weight:bold;font-size:14px;" />
+												<p:separator />
+
+												<p:panelGrid columns="4"
+													columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+													layout="grid" styleClass="ui-panelgrid-blank form-group"
+													style="border:0px none; background-color:transparent;">
+
+													<p:outputLabel value="Name 1" />
+													<p:inputText value="#{addStudentAe.info.e1_name}"
+														onchange="this.value=toTitleCase(this.value)"
+														onkeyup="this.value=toTitleCase(this.value)" />
+
+													<p:outputLabel value="Name 2" />
+													<p:inputText value="#{addStudentAe.info.e2_name}"
+														onchange="this.value=toTitleCase(this.value)"
+														onkeyup="this.value=toTitleCase(this.value)" />
+
+													<p:outputLabel value="Mobile 1" />
+													<p:outputPanel>
+														<div class="ui-inputgroup">
+															<span class="ui-inputgroup-addon">+971</span>
+															<p:inputText value="#{addStudentAe.info.e1_mob}"
+																maxlength="9" placeholder="Eg.545615783"
+																validatorMessage="Please Enter 9 Digit Mobile No. in Emergency Contact 1">
+																<p:keyFilter mask="num" />
+																<f:validateLength minimum="9"></f:validateLength>
+															</p:inputText>
+														</div>
+													</p:outputPanel>
+
+													<p:outputLabel value="Mobile 2" />
+													<p:outputPanel>
+														<div class="ui-inputgroup">
+															<span class="ui-inputgroup-addon">+971</span>
+															<p:inputText value="#{addStudentAe.info.e2_mob}"
+																maxlength="9" placeholder="Eg.545615783"
+																validatorMessage="Please Enter 9 Digit Mobile No. in Emergency Contact 2">
+																<p:keyFilter mask="num" />
+																<f:validateLength minimum="9"></f:validateLength>
+															</p:inputText>
+														</div>
+													</p:outputPanel>
+
+													<p:outputLabel value="Relationship 1" />
+													<p:inputText value="#{addStudentAe.info.e1_rel}" />
+
+													<p:outputLabel value="Relationship 2" />
+													<p:inputText value="#{addStudentAe.info.e2_rel}" />
+
+												</p:panelGrid>
+												<p:separator />
+												<p:outputLabel value="Transport Service"
+													style="font-weight:bold;font-size:14px;" />
+												<p:separator />
+
+												<p:panelGrid columns="2"
+													styleClass="ui-panelgrid-blank form-group"
+													style="border:0px none; background-color:transparent; width:100%;">
+
+													<p:outputLabel
+														value="Would the child be interested in using our Bus Service?
+(This service is subject to availability)" />
+													<p:selectOneRadio value="#{addStudentAe.info.bus_service}">
+														<f:selectItem itemLabel="Yes" itemValue="Yes"></f:selectItem>
+														<f:selectItem itemLabel="No" itemValue="No"></f:selectItem>
+														<f:selectItem itemLabel="Maybe" itemValue="Maybe"></f:selectItem>
+													</p:selectOneRadio>
+
+													<p:outputLabel
+														value="Who is authorised to collect children from school?" />
+													<p:selectManyCheckbox
+														value="#{addStudentAe.info.pickupList}"
+														requiredMessage="Please Mention Who is authorised to collect children from school">
+														<f:selectItem itemLabel="Father" itemValue="Father"></f:selectItem>
+														<f:selectItem itemLabel="Mother" itemValue="Mother"></f:selectItem>
+														<f:selectItem itemLabel="Legal Guardian"
+															itemValue="Legal Guardian"></f:selectItem>
+													</p:selectManyCheckbox>
+
+												</p:panelGrid>
+											</p:outputPanel>
+										</p:outputPanel>
+									</p:tab>
+
+									<p:tab id="tab2" title="Academic Information">
+										<p:separator />
+										<p:outputLabel
+											value="Please circle the level of English proficiency which best describes your child."
+											style="font-weight:bold;font-size:14px;" />
+										<p:separator />
+										<p:panelGrid columns="1"
+											styleClass="ui-panelgrid-blank form-group"
+											style="border:0px none; background-color:transparent;">
+											<p:selectOneRadio value="#{addStudentAe.info.eng_prof}">
+												<f:selectItem itemLabel="Beginner" itemValue="Beginner"></f:selectItem>
+												<f:selectItem itemLabel="Gaining confidence"
+													itemValue="Gaining confidence"></f:selectItem>
+												<f:selectItem itemLabel="Confident" itemValue="Confident"></f:selectItem>
+												<f:selectItem itemLabel="Fluent" itemValue="Fluent"></f:selectItem>
+												<f:selectItem itemLabel="Native" itemValue="Native"></f:selectItem>
+											</p:selectOneRadio>
+
+										</p:panelGrid>
+										<p:separator />
+										<p:outputLabel
+											value="How would you best describe your child in the following areas (please tick): "
+											style="font-weight:bold;font-size:14px;" />
+										<p:separator />
+
+										<p:panelGrid columns="2"
+											styleClass="ui-panelgrid-blank form-group"
+											style="border:0px none; background-color:transparent;">
+
+											<p:outputLabel value="Independence and organizational skills" />
+											<p:selectOneRadio value="#{addStudentAe.info.independence}">
+												<f:selectItem itemLabel="Need Support"
+													itemValue="Need Support"></f:selectItem>
+												<f:selectItem itemLabel="Satisfactory"
+													itemValue="Satisfactory"></f:selectItem>
+												<f:selectItem itemLabel="Good" itemValue="Good"></f:selectItem>
+												<f:selectItem itemLabel="Excellent" itemValue="Excellent"></f:selectItem>
+											</p:selectOneRadio>
+
+											<p:outputLabel
+												value="Personal relationships and social interactions" />
+											<p:selectOneRadio value="#{addStudentAe.info.personal}">
+												<f:selectItem itemLabel="Need Support"
+													itemValue="Need Support"></f:selectItem>
+												<f:selectItem itemLabel="Satisfactory"
+													itemValue="Satisfactory"></f:selectItem>
+												<f:selectItem itemLabel="Good" itemValue="Good"></f:selectItem>
+												<f:selectItem itemLabel="Excellent" itemValue="Excellent"></f:selectItem>
+											</p:selectOneRadio>
+
+											<p:outputLabel value="General Academic standards" />
+											<p:selectOneRadio value="#{addStudentAe.info.general}">
+												<f:selectItem itemLabel="Need Support"
+													itemValue="Need Support"></f:selectItem>
+												<f:selectItem itemLabel="Satisfactory"
+													itemValue="Satisfactory"></f:selectItem>
+												<f:selectItem itemLabel="Good" itemValue="Good"></f:selectItem>
+												<f:selectItem itemLabel="Excellent" itemValue="Excellent"></f:selectItem>
+											</p:selectOneRadio>
+
+											<p:outputLabel rendered="false" value="Demotion" />
+											<p:selectOneRadio rendered="false" value="#{addStudentAe.info.demotion}">
+												<f:selectItem itemLabel="Yes" itemValue="Yes"></f:selectItem>
+												<f:selectItem itemLabel="No" itemValue="No"></f:selectItem>
+											</p:selectOneRadio>
+
+											<p:outputLabel
+												value="Does your child have Special Education Need (SEN)?" />
+											<p:selectOneRadio value="#{addStudentAe.info.sen}">
+												<f:selectItem itemLabel="Yes" itemValue="Yes"></f:selectItem>
+												<f:selectItem itemLabel="No" itemValue="No"></f:selectItem>
+												<p:ajax update="senlbl,senfl" global="false"></p:ajax>
+											</p:selectOneRadio>
+											<p:outputPanel id="senlbl">
+												<p:outputLabel rendered="#{addStudentAe.info.sen eq 'Yes'}"
+													value="Upload SEN Report* (File Type - JPG,JPEG,PNG,PDF)"></p:outputLabel>
+											</p:outputPanel>
+											<p:outputPanel id="senfl">
+												<p:panelGrid columns="2"
+													styleClass="ui-panelgrid-blank form-group"
+													style="border:0px none; background-color:transparent;">
+													<p:fileUpload rendered="#{addStudentAe.info.sen eq 'Yes'}"
+														value="#{addStudentAe.senImage}" required="false"
+														mode="advanced" uploadLabel="" cancelLabel=""
+														style="width:-moz-min-content" sizeLimit="1000000"
+														fileLimit="1" allowTypes="/(\.|\/)(gif|jpe?g|png|pdf)$/"
+														requiredMessage="Please Upload SEN Report"
+														listener="#{addStudentAe.senUpload}" auto="true"
+														update="senfl" />
+													<p:commandLink
+														action="#{addStudentAe.viewFile(addStudentAe.info.sen_file)}"
+														value="View SEN Report"
+														rendered="#{addStudentAe.info.sen_file ne '' &amp;&amp; addStudentAe.info.sen eq 'Yes'}"
+														immediate="true" />
+												</p:panelGrid>
+											</p:outputPanel>
+
+											<p:outputLabel value="Any areas of exceptional ability?" />
+											<p:selectOneRadio value="#{addStudentAe.info.exceptional}">
+												<f:selectItem itemLabel="Yes" itemValue="Yes"></f:selectItem>
+												<f:selectItem itemLabel="No" itemValue="No"></f:selectItem>
+												<p:ajax update="excrem" global="false"></p:ajax>
+											</p:selectOneRadio>
+
+											<p:outputLabel />
+											<p:outputPanel id="excrem">
+												<p:inputText
+													rendered="#{addStudentAe.info.exceptional eq 'Yes'}"
+													required="true"
+													requiredMessage="Please Enter Exceptional Ability Remark"
+													placeholder="Remark"
+													value="#{addStudentAe.info.exceptional_rem}" />
+											</p:outputPanel>
+
+										</p:panelGrid>
+										<p:separator />
+										<p:outputLabel
+											value="Has your Child ever been classed as having any of the following?"
+											style="font-weight:bold;font-size:14px;" />
+										<p:separator />
+
+										<p:panelGrid columns="2"
+											styleClass="ui-panelgrid-blank form-group"
+											style="border:0px none; background-color:transparent;">
+
+											<p:outputLabel value="Attention Deficit Disorder" />
+											<p:selectOneRadio value="#{addStudentAe.info.attention}">
+												<f:selectItem itemLabel="Yes" itemValue="Yes"></f:selectItem>
+												<f:selectItem itemLabel="No" itemValue="No"></f:selectItem>
+											</p:selectOneRadio>
+
+											<p:outputLabel value="Behavioural Problem" />
+											<p:selectOneRadio value="#{addStudentAe.info.behaviour}">
+												<f:selectItem itemLabel="Yes" itemValue="Yes"></f:selectItem>
+												<f:selectItem itemLabel="No" itemValue="No"></f:selectItem>
+											</p:selectOneRadio>
+
+											<p:outputLabel value="Learning Disability" />
+											<p:selectOneRadio value="#{addStudentAe.info.learning}">
+												<f:selectItem itemLabel="Yes" itemValue="Yes"></f:selectItem>
+												<f:selectItem itemLabel="No" itemValue="No"></f:selectItem>
+											</p:selectOneRadio>
+
+											<p:outputLabel value="Physical Disability" />
+											<p:selectOneRadio value="#{addStudentAe.info.physical}">
+												<f:selectItem itemLabel="Yes" itemValue="Yes"></f:selectItem>
+												<f:selectItem itemLabel="No" itemValue="No"></f:selectItem>
+											</p:selectOneRadio>
+										</p:panelGrid>
+									</p:tab>
+
+									<p:tab title="Medical Record">
+
+										<p:separator />
+										<p:outputLabel
+											value="Does your child suffer from any of the following (if yes please provide details below)"
+											style="font-weight:bold;font-size:14px;" />
+										<p:separator />
+										<p:panelGrid columns="3"
+											styleClass="ui-panelgrid-blank form-group"
+											style="border:0px none; background-color:transparent;">
+
+											<p:outputLabel value="Asthma/Respiratory Problems" />
+											<p:selectOneRadio value="#{addStudentAe.info.medinfo.asthma}">
+												<f:selectItem itemLabel="Yes" itemValue="Yes"></f:selectItem>
+												<f:selectItem itemLabel="No" itemValue="No"></f:selectItem>
+												<p:ajax update="asthma" global="false"></p:ajax>
+											</p:selectOneRadio>
+
+											<p:outputPanel id="asthma">
+												<p:outputLabel for="@next" style="color:red" 
+													rendered="#{addStudentAe.info.medinfo.asthma eq 'No'}" />
+												<p:inputText
+													rendered="#{addStudentAe.info.medinfo.asthma eq 'Yes'}"
+													required="true"
+													requiredMessage="Please Mention Asthma/Respiratory Problems"
+													placeholder="Remark"
+													value="#{addStudentAe.info.medinfo.asthma_rem}" />
+											</p:outputPanel>
+
+											<p:outputLabel value="Diabetes" />
+											<p:selectOneRadio
+												value="#{addStudentAe.info.medinfo.diabetes}">
+												<f:selectItem itemLabel="Yes" itemValue="Yes"></f:selectItem>
+												<f:selectItem itemLabel="No" itemValue="No"></f:selectItem>
+												<p:ajax update="diab" global="false"></p:ajax>
+											</p:selectOneRadio>
+
+											<p:outputPanel id="diab">
+												<p:outputLabel for="@next" style="color:red" 
+													rendered="#{addStudentAe.info.medinfo.diabetes eq 'No'}" />
+												<p:inputText
+													rendered="#{addStudentAe.info.medinfo.diabetes eq 'Yes'}"
+													required="true"
+													requiredMessage="Please Mention Diabetes Remark"
+													placeholder="Remark"
+													value="#{addStudentAe.info.medinfo.diabetes_rem}" />
+											</p:outputPanel>
+
+											<p:outputLabel
+												value="Does your child have any know allergies and/or dietary requirements?" />
+											<p:selectOneRadio
+												value="#{addStudentAe.info.medinfo.allergies}">
+												<f:selectItem itemLabel="Yes" itemValue="Yes"></f:selectItem>
+												<f:selectItem itemLabel="No" itemValue="No"></f:selectItem>
+												<p:ajax update="allr" global="false"></p:ajax>
+											</p:selectOneRadio>
+
+											<p:outputPanel id="allr">
+												<p:outputLabel for="@next" style="color:red" 
+													rendered="#{addStudentAe.info.medinfo.allergies eq 'No'}" />
+												<p:inputText
+													rendered="#{addStudentAe.info.medinfo.allergies eq 'Yes'}"
+													required="true"
+													requiredMessage="Please Mention Allergies and/or Dietary Requirements"
+													placeholder="Remark"
+													value="#{addStudentAe.info.medinfo.allergies_rem}" />
+											</p:outputPanel>
+
+											<p:outputLabel value="Epilepsy" />
+											<p:selectOneRadio
+												value="#{addStudentAe.info.medinfo.epilepsy}">
+												<f:selectItem itemLabel="Yes" itemValue="Yes"></f:selectItem>
+												<f:selectItem itemLabel="No" itemValue="No"></f:selectItem>
+												<p:ajax update="epil" global="false"></p:ajax>
+											</p:selectOneRadio>
+
+											<p:outputPanel id="epil">
+												<p:outputLabel for="@next" style="color:red" 
+													rendered="#{addStudentAe.info.medinfo.epilepsy eq 'No'}" />
+												<p:inputText
+													rendered="#{addStudentAe.info.medinfo.epilepsy eq 'Yes'}"
+													required="true"
+													requiredMessage="Please Mention Epilepsy Remark"
+													placeholder="Remark"
+													value="#{addStudentAe.info.medinfo.epilepsy_rem}" />
+											</p:outputPanel>
+
+											<p:outputLabel value="Eyesight Problems" />
+											<p:selectOneRadio
+												value="#{addStudentAe.info.medinfo.eyesight}">
+												<f:selectItem itemLabel="Yes" itemValue="Yes"></f:selectItem>
+												<f:selectItem itemLabel="No" itemValue="No"></f:selectItem>
+												<p:ajax update="eyes" global="false"></p:ajax>
+											</p:selectOneRadio>
+
+											<p:outputPanel id="eyes">
+												<p:outputLabel for="@next" style="color:red" 
+													rendered="#{addStudentAe.info.medinfo.eyesight eq 'No'}" />
+												<p:inputText
+													rendered="#{addStudentAe.info.medinfo.eyesight eq 'Yes'}"
+													required="true"
+													requiredMessage="Please Mention Eyesight Problems"
+													placeholder="Remark"
+													value="#{addStudentAe.info.medinfo.eyesight_rem}" />
+											</p:outputPanel>
+
+											<p:outputLabel
+												value="Has your child had any surgical procedures?" />
+											<p:selectOneRadio
+												value="#{addStudentAe.info.medinfo.surgery}">
+												<f:selectItem itemLabel="Yes" itemValue="Yes"></f:selectItem>
+												<f:selectItem itemLabel="No" itemValue="No"></f:selectItem>
+												<p:ajax update="surg" global="false"></p:ajax>
+											</p:selectOneRadio>
+
+											<p:outputPanel id="surg">
+												<p:outputLabel for="@next" style="color:red" 
+													rendered="#{addStudentAe.info.medinfo.surgery eq 'No'}" />
+												<p:inputText
+													rendered="#{addStudentAe.info.medinfo.surgery eq 'Yes'}"
+													required="true"
+													requiredMessage="Please Mention Surgical Procedures"
+													placeholder="Remark"
+													value="#{addStudentAe.info.medinfo.surgery_rem}" />
+											</p:outputPanel>
+
+											<p:outputLabel value="Hay fever" />
+											<p:selectOneRadio value="#{addStudentAe.info.medinfo.fever}">
+												<f:selectItem itemLabel="Yes" itemValue="Yes"></f:selectItem>
+												<f:selectItem itemLabel="No" itemValue="No"></f:selectItem>
+												<p:ajax update="fever" global="false"></p:ajax>
+											</p:selectOneRadio>
+
+											<p:outputPanel id="fever">
+												<p:outputLabel for="@next" style="color:red" 
+													rendered="#{addStudentAe.info.medinfo.fever eq 'No'}" />
+												<p:inputText
+													rendered="#{addStudentAe.info.medinfo.fever eq 'Yes'}"
+													required="true"
+													requiredMessage="Please Mention Surgical Procedures"
+													placeholder="Remark"
+													value="#{addStudentAe.info.medinfo.fever_rem}" />
+											</p:outputPanel>
+
+											<p:outputLabel value="Hearing Problems" />
+											<p:selectOneRadio
+												value="#{addStudentAe.info.medinfo.hearing}">
+												<f:selectItem itemLabel="Yes" itemValue="Yes"></f:selectItem>
+												<f:selectItem itemLabel="No" itemValue="No"></f:selectItem>
+												<p:ajax update="hear" global="false"></p:ajax>
+											</p:selectOneRadio>
+
+											<p:outputPanel id="hear">
+												<p:outputLabel for="@next" style="color:red" 
+													rendered="#{addStudentAe.info.medinfo.hearing eq 'No'}" />
+												<p:inputText
+													rendered="#{addStudentAe.info.medinfo.hearing eq 'Yes'}"
+													required="true"
+													requiredMessage="Please Mention Hearing Problems"
+													placeholder="Remark"
+													value="#{addStudentAe.info.medinfo.hearing_rem}" />
+											</p:outputPanel>
+
+											<p:outputLabel value="Other" />
+											<p:selectOneRadio value="#{addStudentAe.info.medinfo.other}">
+												<f:selectItem itemLabel="Yes" itemValue="Yes"></f:selectItem>
+												<f:selectItem itemLabel="No" itemValue="No"></f:selectItem>
+												<p:ajax update="othr" global="false"></p:ajax>
+											</p:selectOneRadio>
+
+											<p:outputPanel id="othr">
+												<p:outputLabel for="@next" style="color:red" 
+													rendered="#{addStudentAe.info.medinfo.other eq 'No'}" />
+												<p:inputText
+													rendered="#{addStudentAe.info.medinfo.other eq 'Yes'}"
+													required="true"
+													requiredMessage="Please Mention Other Remark"
+													placeholder="Remark"
+													value="#{addStudentAe.info.medinfo.other_rem}" />
+											</p:outputPanel>
+
+											<p:outputLabel value="Skin Condition" />
+											<p:selectOneRadio value="#{addStudentAe.info.medinfo.skin}">
+												<f:selectItem itemLabel="Yes" itemValue="Yes"></f:selectItem>
+												<f:selectItem itemLabel="No" itemValue="No"></f:selectItem>
+												<p:ajax update="skin" global="false"></p:ajax>
+											</p:selectOneRadio>
+
+											<p:outputPanel id="skin">
+												<p:outputLabel for="@next" style="color:red" 
+													rendered="#{addStudentAe.info.medinfo.skin eq 'No'}" />
+												<p:inputText
+													rendered="#{addStudentAe.info.medinfo.skin eq 'Yes'}"
+													required="true"
+													requiredMessage="Please Mention Skin Conditions"
+													placeholder="Remark"
+													value="#{addStudentAe.info.medinfo.skin_rem}" />
+											</p:outputPanel>
+
+											<p:outputLabel value="Blood Group*"></p:outputLabel>
+											<p:selectOneMenu
+												value="#{addStudentAe.info.medinfo.blood_group}">
+												<f:selectItem itemLabel="--Select--" itemValue=""></f:selectItem>
+												<f:selectItem itemLabel="A+" itemValue="A+"></f:selectItem>
+												<f:selectItem itemLabel="A-" itemValue="A-"></f:selectItem>
+												<f:selectItem itemLabel="AB+" itemValue="AB+"></f:selectItem>
+												<f:selectItem itemLabel="AB-" itemValue="AB-"></f:selectItem>
+												<f:selectItem itemLabel="B+" itemValue="B+"></f:selectItem>
+												<f:selectItem itemLabel="B-" itemValue="B-"></f:selectItem>
+												<f:selectItem itemLabel="O+" itemValue="O+"></f:selectItem>
+												<f:selectItem itemLabel="O-" itemValue="O-"></f:selectItem>
+											</p:selectOneMenu>
+											<p:outputLabel></p:outputLabel>
+
+										</p:panelGrid>
+									</p:tab>
+
+									<p:tab title="Vaccinations">
+										<p:separator />
+										<p:outputLabel
+											value="Please attach copy of vaccination report in supporting document section"
+											style="font-weight:bold;font-size:14px;" />
+										<p:separator />
+
+										<p:panelGrid columns="2"
+											styleClass="ui-panelgrid-blank form-group"
+											style="border:0px none; background-color:transparent;">
+
+											<p:outputLabel value="Chicken Pox" />
+											<p:selectOneRadio
+												value="#{addStudentAe.info.vacinfo.chicken_pox}">
+												<f:selectItem itemLabel="Yes" itemValue="Yes"></f:selectItem>
+												<f:selectItem itemLabel="No" itemValue="No"></f:selectItem>
+											</p:selectOneRadio>
+
+											<p:outputLabel value="Diphtheria/Tetanus/Pertussis(DTP)" />
+											<p:selectOneRadio value="#{addStudentAe.info.vacinfo.dtp}">
+												<f:selectItem itemLabel="Yes" itemValue="Yes"></f:selectItem>
+												<f:selectItem itemLabel="No" itemValue="No"></f:selectItem>
+											</p:selectOneRadio>
+
+											<p:outputLabel value="Hepatitis" />
+											<p:selectOneRadio
+												value="#{addStudentAe.info.vacinfo.hepatitis}">
+												<f:selectItem itemLabel="Yes" itemValue="Yes"></f:selectItem>
+												<f:selectItem itemLabel="No" itemValue="No"></f:selectItem>
+											</p:selectOneRadio>
+
+											<p:outputLabel value="Hib" />
+											<p:selectOneRadio value="#{addStudentAe.info.vacinfo.hib}">
+												<f:selectItem itemLabel="Yes" itemValue="Yes"></f:selectItem>
+												<f:selectItem itemLabel="No" itemValue="No"></f:selectItem>
+											</p:selectOneRadio>
+
+											<p:outputLabel value="Measles/Mumps/Rubella(MMR)" />
+											<p:selectOneRadio value="#{addStudentAe.info.vacinfo.mmr}">
+												<f:selectItem itemLabel="Yes" itemValue="Yes"></f:selectItem>
+												<f:selectItem itemLabel="No" itemValue="No"></f:selectItem>
+											</p:selectOneRadio>
+
+											<p:outputLabel value="Meningitis" />
+											<p:selectOneRadio
+												value="#{addStudentAe.info.vacinfo.meningitis}">
+												<f:selectItem itemLabel="Yes" itemValue="Yes"></f:selectItem>
+												<f:selectItem itemLabel="No" itemValue="No"></f:selectItem>
+											</p:selectOneRadio>
+
+											<p:outputLabel value="Polio" />
+											<p:selectOneRadio value="#{addStudentAe.info.vacinfo.polio}">
+												<f:selectItem itemLabel="Yes" itemValue="Yes"></f:selectItem>
+												<f:selectItem itemLabel="No" itemValue="No"></f:selectItem>
+											</p:selectOneRadio>
+
+											<p:outputLabel value="Rabies" />
+											<p:selectOneRadio value="#{addStudentAe.info.vacinfo.rabies}">
+												<f:selectItem itemLabel="Yes" itemValue="Yes"></f:selectItem>
+												<f:selectItem itemLabel="No" itemValue="No"></f:selectItem>
+											</p:selectOneRadio>
+
+											<p:outputLabel value="Tuberculosis BCG" />
+											<p:selectOneRadio value="#{addStudentAe.info.vacinfo.tb_bcg}">
+												<f:selectItem itemLabel="Yes" itemValue="Yes"></f:selectItem>
+												<f:selectItem itemLabel="No" itemValue="No"></f:selectItem>
+											</p:selectOneRadio>
+
+											<p:outputLabel value="Typhoid" />
+											<p:selectOneRadio
+												value="#{addStudentAe.info.vacinfo.typhoid}">
+												<f:selectItem itemLabel="Yes" itemValue="Yes"></f:selectItem>
+												<f:selectItem itemLabel="No" itemValue="No"></f:selectItem>
+											</p:selectOneRadio>
+
+										</p:panelGrid>
+
+									</p:tab>
+
+									<p:tab id="tabdoc" title="Supporting Documents">
+										<p:separator />
+										<p:outputLabel value="Documents Upload"
+											style="font-weight:bold;font-size:14px;" />
+										<p:separator />
+
+										<p:panelGrid columns="3"
+											styleClass="ui-panelgrid-blank form-group"
+											style="border:0px none; background-color:transparent; width:100%">
+
+											<f:facet name="header">
+												Allowed File Type Are - JPG,JPEG,PNG (Document Size Must be
+											&lt;= 1MB)
+											</f:facet>
+
+											<p:outputLabel value="CHILD'S PHOTO" ></p:outputLabel>
+											<p:outputPanel id="stpicFl">
+												<p:fileUpload value="#{addStudentAe.studentImage}"
+													required="false" mode="advanced" uploadLabel=""
+													cancelLabel="" style="width:-moz-min-content"
+													sizeLimit="1000000" fileLimit="1"
+													allowTypes="/(\.|\/)(gif|jpe?g|png)$/"
+													requiredMessage="Please Upload Child's Photo"
+													update="stpicDoc,stpicFl" auto="true"
+													listener="#{addStudentAe.studentUpload}" />
+											</p:outputPanel>
+ 
+											<p:outputPanel id="stpicDoc">
+												<p:outputLabel rendered="false" />
+												<p:graphicImage height="100px" width="100px"
+													value="#{addStudentAe.info.st_image eq '' ? 'noimage.png' : addStudentAe.info.st_image}" />
+											</p:outputPanel>
+
+											<p:outputLabel value="FATHER'S PHOTO"></p:outputLabel>
+											<p:outputPanel id="fathDocFL">
+												<p:fileUpload value="#{addStudentAe.fatherImage}"
+													required="false" mode="advanced" uploadLabel=""
+													cancelLabel="" style="width:-moz-min-content"
+													sizeLimit="1000000" fileLimit="1"
+													allowTypes="/(\.|\/)(gif|jpe?g|png)$/"
+													requiredMessage="Please Upload Father's Photo"
+													update="fathDoc,fathDocFL" auto="true"
+													listener="#{addStudentAe.fatherUpload}" />
+											</p:outputPanel>
+
+											<p:outputPanel id="fathDoc">
+												<p:outputLabel rendered="false" />
+												<p:graphicImage height="100px" width="100px"
+													value="#{addStudentAe.info.f_image eq '' ? 'noimage.png' : addStudentAe.info.f_image}" />
+											</p:outputPanel>
+
+											<p:outputLabel value="MOTHER'S PHOTO"></p:outputLabel>
+											<p:outputPanel id="mothDocFL">
+												<p:fileUpload value="#{addStudentAe.motherImage}"
+													required="false" mode="advanced" uploadLabel=""
+													cancelLabel="" style="width:-moz-min-content"
+													sizeLimit="1000000" fileLimit="1"
+													allowTypes="/(\.|\/)(gif|jpe?g|png)$/"
+													requiredMessage="Please Upload Mother's Photo"
+													update="mothDoc,mothDocFL" auto="true"
+													listener="#{addStudentAe.motherUpload}" />
+											</p:outputPanel>
+
+											<p:outputPanel id="mothDoc">
+												<p:outputLabel rendered="false" />
+												<p:graphicImage height="100px" width="100px"
+													value="#{addStudentAe.info.m_image eq '' ? 'noimage.png' : addStudentAe.info.m_image}" />
+											</p:outputPanel>
+
+											<p:outputLabel value="GUARDIAN'S PHOTO"></p:outputLabel>
+											<p:outputPanel id="grdDocFL">
+												<p:fileUpload value="#{addStudentAe.grImage}"
+													required="false" mode="advanced" uploadLabel=""
+													cancelLabel="" style="width:-moz-min-content"
+													sizeLimit="1000000" fileLimit="1"
+													allowTypes="/(\.|\/)(gif|jpe?g|png)$/"
+													requiredMessage="Please Upload Guardian's Photo"
+													update="grdDoc,grdDocFL" auto="true"
+													listener="#{addStudentAe.grUpload}" />
+											</p:outputPanel>
+
+											<p:outputPanel id="grdDoc">
+												<p:outputLabel rendered="false" />
+												<p:graphicImage height="100px" width="100px"
+													value="#{addStudentAe.info.g_image eq '' ? 'noimage.png' : addStudentAe.info.g_image}" />
+											</p:outputPanel>
+
+										</p:panelGrid>
+
+										<br />
+
+										<p:panelGrid columns="3"
+											styleClass="ui-panelgrid-blank form-group"
+											style="border:0px none; background-color:transparent; width:100%">
+
+											<f:facet name="header">
+												Allowed File Type Are - JPG,JPEG,PNG,PDF (Document Size Must be
+											&lt;= 1MB)
+											</f:facet>
+
+											<p:outputLabel value="FATHER'S PASSPORT"></p:outputLabel>
+											<p:outputPanel id="fpptDocFL">
+												<p:fileUpload value="#{addStudentAe.f_ppt}" required="false"
+													mode="advanced" uploadLabel="" cancelLabel=""
+													style="width:-moz-min-content" sizeLimit="1000000"
+													fileLimit="1" allowTypes="/(\.|\/)(gif|jpe?g|png|pdf)$/"
+													requiredMessage="Please Upload Father's Passport"
+													listener="#{addStudentAe.fpptUpload}" auto="true"
+													update="fpptDoc,fpptDocFL" />
+											</p:outputPanel>
+
+											<p:outputPanel id="fpptDoc">
+												<p:outputLabel
+													rendered="#{addStudentAe.info.docinfo.parent_ppt eq ''}" />
+												<p:commandLink
+													action="#{addStudentAe.viewFile(addStudentAe.info.docinfo.parent_ppt)}"
+													value="View Father's Passport"
+													rendered="#{addStudentAe.info.docinfo.parent_ppt ne ''}"
+													immediate="true" />
+											</p:outputPanel>
+
+											<p:outputLabel value="FATHER'S UAE RESIDENCY VISA"></p:outputLabel>
+											<p:outputPanel id="fvisaDocFL">
+												<p:fileUpload value="#{addStudentAe.f_visa}"
+													required="false" mode="advanced" uploadLabel=""
+													cancelLabel="" style="width:-moz-min-content"
+													sizeLimit="1000000" fileLimit="1"
+													allowTypes="/(\.|\/)(gif|jpe?g|png|pdf)$/"
+													requiredMessage="Please Upload Father's VISA"
+													listener="#{addStudentAe.fvisaUpload}"
+													auto="true" update="fvisaDoc,fvisaDocFL" />
+											</p:outputPanel>
+
+											<p:outputPanel id="fvisaDoc">
+												<p:outputLabel
+													rendered="#{addStudentAe.info.docinfo.parent_visa eq ''}" />
+												<p:commandLink
+													action="#{addStudentAe.viewFile(addStudentAe.info.docinfo.parent_visa)}"
+													value="View Father's Visa"
+													rendered="#{addStudentAe.info.docinfo.parent_visa ne ''}"
+													immediate="true" />
+											</p:outputPanel>
+
+											<p:outputLabel value="FATHER'S EMIRATES ID"></p:outputLabel>
+											<p:outputPanel id="femidDocFL">
+												<p:fileUpload value="#{addStudentAe.f_emid}"
+													required="false" mode="advanced" uploadLabel=""
+													cancelLabel="" style="width:-moz-min-content"
+													sizeLimit="1000000" fileLimit="1"
+													allowTypes="/(\.|\/)(gif|jpe?g|png|pdf)$/"
+													requiredMessage="Please Upload Father's Emirates ID"
+													listener="#{addStudentAe.femidUpload}"
+													auto="true" update="femidDoc,femidDocFL" />
+											</p:outputPanel>
+
+											<p:outputPanel id="femidDoc">
+												<p:outputLabel
+													rendered="#{addStudentAe.info.docinfo.parent_emid eq ''}" />
+												<p:commandLink
+													action="#{addStudentAe.viewFile(addStudentAe.info.docinfo.parent_emid)}"
+													value="View Father's Emirates ID"
+													rendered="#{addStudentAe.info.docinfo.parent_emid ne ''}"
+													immediate="true" />
+											</p:outputPanel>
+
+											<p:outputLabel value="MOTHER'S PASSPORT"></p:outputLabel>
+											<p:outputPanel id="mpptDocFL">
+												<p:fileUpload value="#{addStudentAe.m_ppt}" required="false"
+													mode="advanced" uploadLabel="" cancelLabel=""
+													style="width:-moz-min-content" sizeLimit="1000000"
+													fileLimit="1" allowTypes="/(\.|\/)(gif|jpe?g|png|pdf)$/"
+													requiredMessage="Please Upload Mother's Passport"
+													listener="#{addStudentAe.mpptUpload}" auto="true"
+													update="mpptDoc,mpptDocFL" />
+											</p:outputPanel>
+
+											<p:outputPanel id="mpptDoc">
+												<p:outputLabel
+													rendered="#{addStudentAe.info.docinfo.mother_ppt eq ''}" />
+												<p:commandLink
+													action="#{addStudentAe.viewFile(addStudentAe.info.docinfo.mother_ppt)}"
+													value="View Mother's Passport"
+													rendered="#{addStudentAe.info.docinfo.mother_ppt ne ''}"
+													immediate="true" />
+											</p:outputPanel>
+
+											<p:outputLabel value="MOTHER'S UAE RESIDENCY VISA"></p:outputLabel>
+											<p:outputPanel id="mvisaDocFL">
+												<p:fileUpload value="#{addStudentAe.m_visa}"
+													required="false" mode="advanced" uploadLabel=""
+													cancelLabel="" style="width:-moz-min-content"
+													sizeLimit="1000000" fileLimit="1"
+													allowTypes="/(\.|\/)(gif|jpe?g|png|pdf)$/"
+													requiredMessage="Please Upload Mother's VISA"
+													listener="#{addStudentAe.mvisaUpload}"
+													auto="true" update="mvisaDoc,mvisaDocFL" />
+											</p:outputPanel>
+
+											<p:outputPanel id="mvisaDoc">
+												<p:outputLabel
+													rendered="#{addStudentAe.info.docinfo.mother_visa eq ''}" />
+												<p:commandLink
+													action="#{addStudentAe.viewFile(addStudentAe.info.docinfo.mother_visa)}"
+													value="View Mother's Visa"
+													rendered="#{addStudentAe.info.docinfo.mother_visa ne ''}"
+													immediate="true" />
+											</p:outputPanel>
+
+											<p:outputLabel value="MOTHER'S EMIRATES ID"></p:outputLabel>
+											<p:outputPanel id="memidDocFL">
+												<p:fileUpload value="#{addStudentAe.m_emid}"
+													required="false" mode="advanced" uploadLabel=""
+													cancelLabel="" style="width:-moz-min-content"
+													sizeLimit="1000000" fileLimit="1"
+													allowTypes="/(\.|\/)(gif|jpe?g|png|pdf)$/"
+													requiredMessage="Please Upload Mother's Emirates ID"
+													listener="#{addStudentAe.memidUpload}"
+													auto="true" update="memidDoc,memidDocFL" />
+											</p:outputPanel>
+
+											<p:outputPanel id="memidDoc">
+												<p:outputLabel
+													rendered="#{addStudentAe.info.docinfo.mother_emid eq ''}" />
+												<p:commandLink
+													action="#{addStudentAe.viewFile(addStudentAe.info.docinfo.mother_emid)}"
+													value="View Mother's Emirates ID"
+													rendered="#{addStudentAe.info.docinfo.mother_emid ne ''}"
+													immediate="true" />
+											</p:outputPanel>
+
+											<p:outputLabel value="STUDENT'S PASSPORT"></p:outputLabel>
+											<p:outputPanel id="stpptDocFL">
+												<p:fileUpload value="#{addStudentAe.st_ppt}"
+													required="false" mode="advanced" uploadLabel=""
+													cancelLabel="" style="width:-moz-min-content"
+													sizeLimit="1000000" fileLimit="1"
+													allowTypes="/(\.|\/)(gif|jpe?g|png|pdf)$/"
+													requiredMessage="Please Upload Student's Passport"
+													listener="#{addStudentAe.stpptUpload}"
+													auto="true" update="stpptDoc,stpptDocFL" />
+											</p:outputPanel>
+
+											<p:outputPanel id="stpptDoc">
+												<p:outputLabel
+													rendered="#{addStudentAe.info.docinfo.student_ppt eq ''}" />
+												<p:commandLink
+													action="#{addStudentAe.viewFile(addStudentAe.info.docinfo.student_ppt)}"
+													value="View Student's Passport"
+													rendered="#{addStudentAe.info.docinfo.student_ppt ne ''}"
+													immediate="true" />
+											</p:outputPanel>
+
+											<p:outputLabel value="STUDENT'S UAE RESIDENCY VISA"></p:outputLabel>
+											<p:outputPanel id="stvisaDocFL">
+												<p:fileUpload value="#{addStudentAe.st_visa}"
+													required="false" mode="advanced" uploadLabel=""
+													cancelLabel="" style="width:-moz-min-content"
+													sizeLimit="1000000" fileLimit="1"
+													allowTypes="/(\.|\/)(gif|jpe?g|png|pdf)$/"
+													requiredMessage="Please Upload Student's VISA"
+													listener="#{addStudentAe.stvisaUpload}"
+													auto="true" update="stvisaDoc,stvisaDocFL" />
+											</p:outputPanel>
+
+											<p:outputPanel id="stvisaDoc">
+												<p:outputLabel
+													rendered="#{addStudentAe.info.docinfo.student_visa eq ''}" />
+												<p:commandLink
+													action="#{addStudentAe.viewFile(addStudentAe.info.docinfo.student_visa)}"
+													value="View Student's Visa"
+													rendered="#{addStudentAe.info.docinfo.student_visa ne ''}"
+													immediate="true" />
+											</p:outputPanel>
+
+											<p:outputLabel value="STUDENT'S EMIRATES ID"></p:outputLabel>
+											<p:outputPanel id="stemidDocFL">
+												<p:fileUpload value="#{addStudentAe.st_emid}"
+													required="false" mode="advanced" uploadLabel=""
+													cancelLabel="" style="width:-moz-min-content"
+													sizeLimit="1000000" fileLimit="1"
+													allowTypes="/(\.|\/)(gif|jpe?g|png|pdf)$/"
+													requiredMessage="Please Upload Student's Emirates ID"
+													listener="#{addStudentAe.stemidUpload}"
+													auto="true" update="stemidDoc,stemidDocFL" />
+											</p:outputPanel>
+
+											<p:outputPanel id="stemidDoc">
+												<p:outputLabel
+													rendered="#{addStudentAe.info.docinfo.student_emid eq ''}" />
+												<p:commandLink
+													action="#{addStudentAe.viewFile(addStudentAe.info.docinfo.student_emid)}"
+													value="View Student's Emirates ID"
+													rendered="#{addStudentAe.info.docinfo.student_emid ne ''}"
+													immediate="true" />
+											</p:outputPanel>
+
+											<p:outputLabel value="GUARDIAN'S PASSPORT"></p:outputLabel>
+											<p:outputPanel id="grpptDocFL">
+												<p:fileUpload value="#{addStudentAe.gr_ppt}"
+													required="false" mode="advanced" uploadLabel=""
+													cancelLabel="" style="width:-moz-min-content"
+													sizeLimit="1000000" fileLimit="1"
+													allowTypes="/(\.|\/)(gif|jpe?g|png|pdf)$/"
+													requiredMessage="Please Upload Guardian's Passport"
+													listener="#{addStudentAe.grpptUpload}"
+													auto="true" update="grpptDoc,grpptDocFL" />
+											</p:outputPanel>
+
+											<p:outputPanel id="grpptDoc">
+												<p:outputLabel
+													rendered="#{addStudentAe.info.docinfo.g_ppt eq ''}" />
+												<p:commandLink
+													action="#{addStudentAe.viewFile(addStudentAe.info.docinfo.g_ppt)}"
+													value="View Guardian's Passport"
+													rendered="#{addStudentAe.info.docinfo.g_ppt ne ''}"
+													immediate="true" />
+											</p:outputPanel>
+
+											<p:outputLabel value="GUARDIAN'S UAE RESIDENCY VISA"></p:outputLabel>
+											<p:outputPanel id="grVisaFl">
+												<p:fileUpload value="#{addStudentAe.gr_visa}"
+													required="false" mode="advanced" uploadLabel=""
+													cancelLabel="" style="width:-moz-min-content"
+													sizeLimit="1000000" fileLimit="1"
+													allowTypes="/(\.|\/)(gif|jpe?g|png|pdf)$/"
+													requiredMessage="Please Upload Guardian's VISA"
+													listener="#{addStudentAe.grvisaUpload}"
+													auto="true" update="grvisaDoc,grVisaFl" />
+											</p:outputPanel>
+
+											<p:outputPanel id="grvisaDoc">
+												<p:outputLabel
+													rendered="#{addStudentAe.info.docinfo.g_visa eq ''}" />
+												<p:commandLink
+													action="#{addStudentAe.viewFile(addStudentAe.info.docinfo.g_visa)}"
+													value="View Guardian's Visa"
+													rendered="#{addStudentAe.info.docinfo.g_visa ne ''}"
+													immediate="true" />
+											</p:outputPanel>
+
+											<p:outputLabel value="GUARDIAN'S EMIRATES ID"></p:outputLabel>
+											<p:outputPanel id="gremidDocFL">
+												<p:fileUpload value="#{addStudentAe.gr_emid}"
+													required="false" mode="advanced" uploadLabel=""
+													cancelLabel="" style="width:-moz-min-content"
+													sizeLimit="1000000" fileLimit="1"
+													allowTypes="/(\.|\/)(gif|jpe?g|png|pdf)$/"
+													requiredMessage="Please Upload Guardian's Emirates ID"
+													listener="#{addStudentAe.gremidUpload}"
+													auto="true" update="gremidDoc,gremidDocFL" />
+											</p:outputPanel>
+
+											<p:outputPanel id="gremidDoc">
+												<p:outputLabel
+													rendered="#{addStudentAe.info.docinfo.g_emid eq ''}" />
+												<p:commandLink
+													action="#{addStudentAe.viewFile(addStudentAe.info.docinfo.g_emid)}"
+													value="View Guardian's Emirates ID"
+													rendered="#{addStudentAe.info.docinfo.g_emid ne ''}"
+													immediate="true" />
+											</p:outputPanel>
+
+											<p:outputLabel value="BIRTH CERTIFICATE"></p:outputLabel>
+											<p:outputPanel id="birthDocFL">
+												<p:fileUpload value="#{addStudentAe.birth_cert}"
+													required="false" mode="advanced" uploadLabel=""
+													cancelLabel="" style="width:-moz-min-content"
+													sizeLimit="1000000" fileLimit="1"
+													allowTypes="/(\.|\/)(gif|jpe?g|png|pdf)$/"
+													requiredMessage="Please Upload Birth Certificate"
+													listener="#{addStudentAe.birthUpload}"
+													auto="true" update="birthDoc,birthDocFL" />
+											</p:outputPanel>
+
+											<p:outputPanel id="birthDoc">
+												<p:outputLabel
+													rendered="#{addStudentAe.info.docinfo.birth_cert eq ''}" />
+												<p:commandLink
+													action="#{addStudentAe.viewFile(addStudentAe.info.docinfo.birth_cert)}"
+													value="View Birth Certificate"
+													rendered="#{addStudentAe.info.docinfo.birth_cert ne ''}"
+													immediate="true" />
+											</p:outputPanel>
+
+											<p:outputLabel value="VACCINATION REPORT"></p:outputLabel>
+											<p:outputPanel id="vaccrepDocFL">
+												<p:fileUpload value="#{addStudentAe.vac_report}"
+													required="false" mode="advanced" uploadLabel=""
+													cancelLabel="" style="width:-moz-min-content"
+													sizeLimit="1000000" fileLimit="1"
+													allowTypes="/(\.|\/)(gif|jpe?g|png|pdf)$/"
+													requiredMessage="Please Upload Vaccination Report"
+													listener="#{addStudentAe.vaccrepUpload}"
+													auto="true" update="vaccrepDoc,vaccrepDocFL" />
+											</p:outputPanel>
+
+											<p:outputPanel id="vaccrepDoc">
+												<p:outputLabel
+													rendered="#{addStudentAe.info.docinfo.vaccination eq ''}" />
+												<p:commandLink
+													action="#{addStudentAe.viewFile(addStudentAe.info.docinfo.vaccination)}"
+													value="View Vaccination Report"
+													rendered="#{addStudentAe.info.docinfo.vaccination ne ''}"
+													immediate="true" />
+											</p:outputPanel>
+
+											<p:outputLabel value="FAMILY BOOK FOR UAE NATIONALS"></p:outputLabel>
+											<p:outputPanel id="fambookDocFL">
+												<p:fileUpload value="#{addStudentAe.fam_book}"
+													required="false" mode="advanced" uploadLabel=""
+													cancelLabel="" style="width:-moz-min-content"
+													sizeLimit="1000000" fileLimit="1"
+													allowTypes="/(\.|\/)(gif|jpe?g|png|pdf)$/"
+													requiredMessage="Please Upload Family Book"
+													listener="#{addStudentAe.fambookUpload}"
+													auto="true" update="fambookDoc,fambookDocFL" />
+											</p:outputPanel>
+
+											<p:outputPanel id="fambookDoc">
+												<p:outputLabel
+													rendered="#{addStudentAe.info.docinfo.family_book eq ''}" />
+												<p:commandLink
+													action="#{addStudentAe.viewFile(addStudentAe.info.docinfo.family_book)}"
+													value="View Family Book"
+													rendered="#{addStudentAe.info.docinfo.family_book ne ''}"
+													immediate="true" />
+											</p:outputPanel>
+
+
+										</p:panelGrid>
+										<br />
+
+										<p:panelGrid columns="2"
+											columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+											layout="grid" styleClass="ui-panelgrid-blank form-group"
+											style="border:0px none; background-color:transparent;">
+											<p:commandButton update="form" ajax="false" value="Submit"
+												action="#{addStudentAe.submit}"></p:commandButton>
+										</p:panelGrid>
+
+										<p:separator />
+										<p:outputLabel
+											value="All documents must be in English or Arabic, any other language must be translated in the UAE by an approved legal translation office. A copy of both (original and translation) must be provided. Original documents are required before the start of school. "
+											style="font-weight:bold;font-size:12px;" />
+										<p:separator />
+									</p:tab>
+
+								</p:tabView>
+
+							</p:panel>
+							<br></br>
+							<p:panel>
+								<p:outputLabel value="Note:- * fields are mandatory"></p:outputLabel>
+							</p:panel>
+						</h:form>
+
+						<h:form id="confirmForm">
+							<p:dialog header="Admission Accepted" widgetVar="enqDlg"
+								resizable="false" closable="false" closeOnEscape="false"
+								modal="true" showEffect="fade" hideEffect="fade">
+								<p:outputLabel style="font-weight:bold;font-size:15px;"
+									value="Admission Accepted Successfully!"></p:outputLabel>
+								<br></br>
+								<br></br>
+								<p:commandButton action="addStudentAe.xhtml?faces-redirect=true"
+									value="OK" style="margin-top:10px" />
+							</p:dialog>
+						</h:form>
+
+						<!-- </div> -->
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

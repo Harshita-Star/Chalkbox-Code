@@ -1,0 +1,145 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Monthly Attendance</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<h1>Monthly Biometric Attendance Record</h1>
+
+							<p:messages closable="true" autoUpdate="true"></p:messages>
+
+							<p:panel header="Monthly Biometric Attendance Record">
+
+								<p:panelGrid columns="5"
+									styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none;width:100%; background-color:transparent;">
+
+									<p:outputLabel value="Month" for="@next" style="color:red" ></p:outputLabel>
+									<p:selectOneMenu id="showMonth"
+										value="#{monthlyBiometricRecord.selectedMonth}"
+										required="true" requiredMessage="Please select a Month">
+										<f:selectItem itemLabel="Select Month" itemValue=""></f:selectItem>
+										<f:selectItems value="#{monthlyBiometricRecord.monthList}"></f:selectItems>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Year" for="@next" style="color:red" ></p:outputLabel>
+									<p:selectOneMenu id="year"
+										value="#{monthlyBiometricRecord.selectedYear}" required="true"
+										requiredMessage="Please select an Year">
+										<f:selectItem itemLabel="Select Year" itemValue=""></f:selectItem>
+										<f:selectItems value="#{monthlyBiometricRecord.yearList}"></f:selectItems>
+									</p:selectOneMenu>
+									<p:commandButton update=":form" value="Search"
+										actionListener="#{monthlyBiometricRecord.show}"></p:commandButton>
+
+									<h:commandLink
+										rendered="#{monthlyBiometricRecord.teacherDetails.size() gt 0}">
+										<p:graphicImage name="images/excellogo.png"
+											library="avalon-layout" width="100" height="40"></p:graphicImage>
+										<pe:exporter type="xlsx" target=":form:up"
+											fileName="StaffBiometricRecord_#{monthlyBiometricRecord.monthYear}"></pe:exporter>
+									</h:commandLink>
+
+									<p:commandButton value="PDF" style="width:100px;" ajax="false"
+										process="@this"
+										actionListener="#{monthlyBiometricRecord.exportPdf}"
+										rendered="#{monthlyBiometricRecord.teacherDetails.size() gt 0}">
+										<p:fileDownload value="#{monthlyBiometricRecord.file}" />
+									</p:commandButton>
+								</p:panelGrid>
+							</p:panel>
+
+							<p:dataTable id="up"
+								value="#{monthlyBiometricRecord.teacherDetails}" var="info"
+								rowIndexVar="rowId">
+
+								<p:column headerText="S.No.">
+									<f:facet name="header">
+								S.No.
+								</f:facet>
+									<p:outputLabel value="#{rowId+1}"></p:outputLabel>
+								</p:column>
+
+								<p:column headerText="Name">
+									<f:facet name="header">
+								Name
+								</f:facet>
+									<p:outputLabel value="#{info.name}"></p:outputLabel>
+								</p:column>
+
+								<p:column headerText="Category">
+									<f:facet name="header">
+								Category
+								</f:facet>
+									<p:outputLabel value="#{info.category}"></p:outputLabel>
+								</p:column>
+
+								<p:column headerText="Sub Category">
+									<f:facet name="header">
+								Sub Category
+								</f:facet>
+									<p:outputLabel value="#{info.subCateg}"></p:outputLabel>
+								</p:column>
+
+								<p:column headerText="Total Days">
+									<f:facet name="header">
+								Total Days
+								</f:facet>
+									<p:outputLabel value="#{info.monthDays}"></p:outputLabel>
+								</p:column>
+
+								<p:column headerText="Total Sundays">
+									<f:facet name="header">
+								Total Sundays
+								</f:facet>
+									<p:outputLabel value="#{info.sundays}"></p:outputLabel>
+								</p:column>
+
+								<p:column headerText="Total Other Holidays">
+									<f:facet name="header">
+								Total Other Holidays
+								</f:facet>
+									<p:outputLabel value="#{info.holidays}"></p:outputLabel>
+								</p:column>
+
+								<p:column headerText="Total Working Days">
+									<f:facet name="header">
+								Total Working Days
+								</f:facet>
+									<p:outputLabel value="#{info.workingDays}"></p:outputLabel>
+								</p:column>
+
+								<p:column headerText="Total Present">
+									<f:facet name="header">
+								Total Present
+								</f:facet>
+									<p:outputLabel value="#{info.present}"></p:outputLabel>
+								</p:column>
+
+								<p:column rendered="false" headerText="Total Absent">
+									<f:facet name="header">
+								Total Absent
+								</f:facet>
+									<p:outputLabel value="#{info.absent}"></p:outputLabel>
+								</p:column>
+							</p:dataTable>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

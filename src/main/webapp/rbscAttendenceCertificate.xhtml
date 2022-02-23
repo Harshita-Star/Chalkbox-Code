@@ -1,0 +1,67 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Attendance Certificate</ui:define>
+
+    <ui:define name="content">
+       
+            <div class="ui-fluid">
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <div class="card card-w-title">
+                           <h:form  id="form">
+	 
+		 <h1>Attendance Certificate</h1>
+     
+            			
+            <p:messages autoUpdate="true" closable="true"></p:messages>
+            
+            <p:panel  header="Person Details" >
+  						<p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+  							
+  							
+                        	<p:outputLabel value="Person Name" for="@next" style="color:red" ></p:outputLabel>
+                            <p:inputText value="#{rbscAttendanceCertificate.name}" required="true" requiredMessage="Please Enter Person Name" validatorMessage="Please Enter Correct value">
+                              <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+                            </p:inputText>
+                                           
+                            <p:outputLabel value="Designation" for="@next" style="color:red" ></p:outputLabel>
+                            <p:inputText value="#{rbscAttendanceCertificate.designation}" required="true" requiredMessage="Please Enter Designation" validatorMessage="Please Enter Correct value">
+                              <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+                            </p:inputText>
+                                           
+                                          
+                            <p:outputLabel value="From Date" for="@next" style="color:red" ></p:outputLabel>
+                            <p:calendar value="#{rbscAttendanceCertificate.fromDate}"  navigator="true" pattern="dd/MM/yyyy" yearRange="c-10:c+10" required="true" requiredMessage="Please Select From Date">
+			                 </p:calendar>
+			                 
+			                 <p:outputLabel value="To Date" for="@next" style="color:red" ></p:outputLabel>
+                            <p:calendar value="#{rbscAttendanceCertificate.toDate}"  navigator="true" pattern="dd/MM/yyyy" yearRange="c-10:c+10" required="true" requiredMessage="Please Select To Date">
+			                 </p:calendar>
+                                           
+                           	<p:outputLabel value="Description" for="@next" style="color:red" ></p:outputLabel>
+                            <p:inputTextarea value="#{rbscAttendanceCertificate.description}" required="true" requiredMessage="Please Enter Description" validatorMessage="Please Enter Correct value">
+                              <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+                            </p:inputTextarea>
+                            
+                         <p:commandButton  value="Submit" action="#{rbscAttendanceCertificate.submit}" update=":form"></p:commandButton>
+            			   			
+                                             
+                        </p:panelGrid>              
+                           <br></br>           
+										
+               </p:panel>	   
+               	 
+	</h:form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+       
+    </ui:define>
+
+</ui:composition>

@@ -1,0 +1,54 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/masterTemplate.xhtml"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+	<ui:define name="title">Particular Activies</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+						<p:panelGrid columns="1" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+						
+						
+						<p:selectOneMenu filter="true" value="#{particularActivitySchoolReport.schId}">
+						<f:selectItem itemLabel="Select School" itemValue=""></f:selectItem>
+						<f:selectItems value="#{particularActivitySchoolReport.schoolList}"></f:selectItems>
+						</p:selectOneMenu>
+						
+						<p:commandButton action="#{particularActivitySchoolReport.search}" value="Search" update=":form"></p:commandButton>
+						</p:panelGrid>
+						<br/><br/>	
+							<p:dataTable rowKey="#{info.particular}" reflow="true" value="#{particularActivitySchoolReport.activityList}" var="info">
+							
+							
+							<p:column headerText="Parameters" style="width:100px;">
+							<p:outputLabel value="#{info.particular}"></p:outputLabel>
+							</p:column>
+							
+							<p:columns style="width:100px;" value="#{particularActivitySchoolReport.dateList}" var="column" columnIndexVar="colIndexVar">
+							
+							<f:facet name="header">
+
+								<p:outputLabel value="#{column}"></p:outputLabel>
+							</f:facet>
+							<p:graphicImage value="#{info.activityMap[column]}" height='15' width='15'></p:graphicImage>
+							</p:columns>
+							</p:dataTable>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,347 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Employee Registration</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<p:focus context=":form:regpnl" />
+						<h:form id="form" enctype="multipart/form-data">
+							<p:panel header="Employee Registration" id="regpnl">
+								<h1>Employee Registration</h1>
+
+								<p:messages closable="true" autoUpdate="true"></p:messages>
+
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel
+										value="#{employeeAddmissionVar.employeeAddmissionFullNameLabel}"
+										for="@next" style="color:red"></p:outputLabel>
+									<p:inputText value="#{employeeAddmissionBean.name}"
+										required="true"
+										requiredMessage="#{employeeAddmissionVar.employeeAddmissionFullNameValidation}">
+										<p:keyFilter regEx="/[a-zA-Z ]/i"></p:keyFilter>
+									</p:inputText>
+
+									<p:outputLabel
+										value="#{employeeAddmissionVar.employeeAddmissionFatherNameLabel}"></p:outputLabel>
+									<p:inputText value="#{employeeAddmissionBean.fname}">
+										<p:keyFilter regEx="/[a-zA-Z ]/i"></p:keyFilter>
+									</p:inputText>
+
+
+
+									<p:outputLabel value="Employee User Name" for="@next"
+										style="color:red"></p:outputLabel>
+									<p:inputText value="#{employeeAddmissionBean.empusername}"
+										required="true"
+										requiredMessage="Please Enter Employee User Name">
+										<p:keyFilter regEx="/[a-z0-9_]/i"></p:keyFilter>
+									</p:inputText>
+
+									<p:outputLabel value="Employee Unique Id"></p:outputLabel>
+									<p:inputText value="#{employeeAddmissionBean.employeeUniqueId}" />
+
+
+									<p:outputLabel value="Password " for="@next" style="color:red"></p:outputLabel>
+									<p:inputText value="#{employeeAddmissionBean.password}"
+										required="true" requiredMessage="Please Enter Password"></p:inputText>
+
+									<p:outputLabel value="Access Platform" for="@next"
+										style="color:red"></p:outputLabel>
+									<p:selectOneMenu value="#{employeeAddmissionBean.platform}"
+										filter="true" required="true"
+										requiredMessage="Please select Access Platform">
+										<f:selectItem itemLabel="Select Platform" itemValue=""></f:selectItem>
+										<f:selectItem itemLabel="WEB" itemValue="web"></f:selectItem>
+										<f:selectItem itemLabel="MOBILE APP" itemValue="app"></f:selectItem>
+										<f:selectItem itemLabel="BOTH WEB &amp; APP" itemValue="both"></f:selectItem>
+										<f:selectItem itemLabel="NONE" itemValue="none"></f:selectItem>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="DOB" for="@next" style="color:red"></p:outputLabel>
+									<p:calendar focusOnSelect="true" navigator="true"
+										value="#{employeeAddmissionBean.dob}" yearRange="c-100:c+0"
+										pattern="dd/MM/yyyy" required="true"
+										requiredMessage="Please enter DOB"></p:calendar>
+
+									<p:outputLabel
+										value="#{employeeAddmissionVar.employeeAddmissionGenderLabel}"></p:outputLabel>
+									<p:selectOneRadio value="#{employeeAddmissionBean.gender}">
+										<f:selectItem itemLabel="Male" itemValue="Male"></f:selectItem>
+										<f:selectItem itemLabel="Female" itemValue="Female"></f:selectItem>
+										<f:selectItem itemLabel="Transgender" itemValue="Transgender"></f:selectItem>
+									</p:selectOneRadio>
+
+									<p:outputLabel value="Department" for="@next" style="color:red"></p:outputLabel>
+									<p:selectOneMenu value="#{employeeAddmissionBean.category}"
+										filter="true" required="true"
+										requiredMessage="Please select Category">
+										<f:selectItem
+											itemLabel="#{employeeAddmissionVar.selectHereLabel}"
+											itemValue=""></f:selectItem>
+										<f:selectItems value="#{employeeAddmissionBean.categoryList}"></f:selectItems>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Designation" for="@next"
+										style="color:red"></p:outputLabel>
+									<p:inputText value="#{employeeAddmissionBean.subCateg}"
+										required="true" requiredMessage="Please enter sub category">
+									</p:inputText>
+
+									<p:outputLabel value="Salary(Per Month)"></p:outputLabel>
+									<p:inputText value="#{employeeAddmissionBean.salary}">
+										<p:keyFilter mask="pnum"></p:keyFilter>
+									</p:inputText>
+
+									<p:outputLabel value="Leave Allowed(Per Month)"></p:outputLabel>
+									<p:inputText onfocus="this.select()"
+										value="#{employeeAddmissionBean.leave}">
+										<p:keyFilter mask="pnum"></p:keyFilter>
+									</p:inputText>
+
+									<p:outputLabel value="DA Amount"></p:outputLabel>
+									<p:inputText onfocus="this.select()"
+										value="#{employeeAddmissionBean.daamt}">
+										<p:keyFilter mask="pnum"></p:keyFilter>
+									</p:inputText>
+
+									<p:outputLabel value="HRA Amount"></p:outputLabel>
+									<p:inputText onfocus="this.select()"
+										value="#{employeeAddmissionBean.hraamt}">
+										<p:keyFilter mask="pnum"></p:keyFilter>
+									</p:inputText>
+
+
+									<p:outputLabel value="D/L No.(* for driver)"></p:outputLabel>
+									<p:inputText value="#{employeeAddmissionBean.dlNo}"></p:inputText>
+
+
+									<p:outputLabel
+										value="#{employeeAddmissionVar.employeeAddmissionQualificationLabel}"></p:outputLabel>
+									<p:inputText value="#{employeeAddmissionBean.qualification}"></p:inputText>
+
+									<p:outputLabel
+										value="#{employeeAddmissionVar.employeeAddmissionJoiningDateLabel}"
+										for="@next" style="color:red"></p:outputLabel>
+									<p:calendar navigator="true"
+										value="#{employeeAddmissionBean.joiningDate}"
+										pattern="dd/MM/yyyy" required="true" yearRange="c-100:c+0"
+										requiredMessage="Please enter joining date"></p:calendar>
+
+									<p:outputLabel value="Leaving Date"></p:outputLabel>
+									<p:calendar navigator="true"
+										value="#{employeeAddmissionBean.leavingDate}"
+										pattern="dd/MM/yyyy"></p:calendar>
+
+									<p:outputLabel value="Mobile Number 1" for="@next"
+										style="color:red"></p:outputLabel>
+									<p:inputText id="mobil1"
+										value="#{employeeAddmissionBean.mobile}"
+										validatorMessage="Mobile no. must be of #{employeeAddmissionBean.mobDigit} digits."
+										maxlength="#{employeeAddmissionBean.mobDigit}" required="true"
+										requiredMessage="Please Enter Mobile No"
+										onkeypress="return AvoidSpace(event)"
+										onkeyup="checkNumberValid2('form:mobil1')">
+										<f:validateLength minimum="#{employeeAddmissionBean.mobDigit}"></f:validateLength>
+
+									</p:inputText>
+
+									<p:outputLabel value="Mobile Number 2"></p:outputLabel>
+									<p:inputText id="mobil2"
+										value="#{employeeAddmissionBean.mobile2}"
+										maxlength="#{employeeAddmissionBean.mobDigit}"
+										validatorMessage="Mobile no. must be of #{employeeAddmissionBean.mobDigit} digits."
+										onkeypress="return AvoidSpace(event)"
+										onkeyup="checkNumberValid2('form:mobil2')">
+										<f:validateLength minimum="#{employeeAddmissionBean.mobDigit}"></f:validateLength>
+									</p:inputText>
+
+									<p:outputLabel value="Email ID / Zoom Email ID"></p:outputLabel>
+									<p:inputText value="#{employeeAddmissionBean.email}" id="email"
+										validatorMessage="Invalid email format">
+										<f:validateRegex
+											pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+									</p:inputText>
+
+
+									<p:outputLabel
+										value="#{employeeAddmissionVar.employeeAddmissionAddressLabel}"></p:outputLabel>
+									<p:inputTextarea value="#{employeeAddmissionBean.address}"></p:inputTextarea>
+
+									<p:outputLabel
+										value="#{employeeAddmissionVar.employeeAddmissionOtherCommentsLabel}"></p:outputLabel>
+									<p:inputTextarea value="#{employeeAddmissionBean.comment}"></p:inputTextarea>
+
+									<p:outputLabel
+										value="#{employeeAddmissionVar.employeeAddmissionMaritalStateLabel}"></p:outputLabel>
+									<p:selectOneRadio value="#{employeeAddmissionBean.marital}">
+										<f:selectItem itemLabel="Married" itemValue="Married"></f:selectItem>
+										<f:selectItem itemLabel="Unmarried" itemValue="Unmarried"></f:selectItem>
+										<p:ajax
+											update=":form:name :form:value,:form:name1 :form:value1"
+											listener="#{employeeAddmissionBean.showSpouseMethod}"></p:ajax>
+									</p:selectOneRadio>
+
+									<p:outputLabel value="PAN No."></p:outputLabel>
+									<p:inputText value="#{employeeAddmissionBean.panNo}"></p:inputText>
+
+									<p:outputLabel value="Aadhar No."></p:outputLabel>
+									<p:inputText value="#{employeeAddmissionBean.aadhaarNo}"></p:inputText>
+
+									<p:outputLabel value="Bank Account No."></p:outputLabel>
+									<p:inputText value="#{employeeAddmissionBean.bankAccountNo}"></p:inputText>
+
+									<p:outputLabel value="Bank Name"></p:outputLabel>
+									<p:inputText value="#{employeeAddmissionBean.bankName}"></p:inputText>
+
+									<p:outputLabel value="Bank Branch Name"></p:outputLabel>
+									<p:inputText value="#{employeeAddmissionBean.bankBranch}"></p:inputText>
+
+									<p:outputLabel value="IFSC CODE"></p:outputLabel>
+									<p:inputText value="#{employeeAddmissionBean.ifscCode}"></p:inputText>
+
+									<p:outputLabel value="EPF UAN No."></p:outputLabel>
+									<p:inputText value="#{employeeAddmissionBean.epfUanNo}"></p:inputText>
+
+									<p:outputLabel value="ESI No."></p:outputLabel>
+									<p:inputText value="#{employeeAddmissionBean.esiNo}"></p:inputText>
+
+
+
+									<p:outputPanel id="name">
+										<p:outputLabel rendered="#{employeeAddmissionBean.showSpouse}"
+											value="Spouse Name"></p:outputLabel>
+									</p:outputPanel>
+
+									<p:outputPanel id="value">
+										<p:inputText rendered="#{employeeAddmissionBean.showSpouse}"
+											value="#{employeeAddmissionBean.spouseName}"></p:inputText>
+									</p:outputPanel>
+
+									<p:outputPanel id="name1">
+										<p:outputLabel rendered="#{employeeAddmissionBean.showSpouse}"
+											value="Anniversary Date"></p:outputLabel>
+									</p:outputPanel>
+
+									<p:outputPanel id="value1">
+										<p:calendar navigator="true"
+											value="#{employeeAddmissionBean.annDate}"
+											pattern="dd/MM/yyyy"
+											rendered="#{employeeAddmissionBean.showSpouse}"></p:calendar>
+									</p:outputPanel>
+								</p:panelGrid>
+
+							</p:panel>
+
+							<p:panel
+								header="Upload Documents (Allowed file type : png, jpg, jpeg only)">
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:outputLabel value="Profile Photo"></p:outputLabel>
+									<p:fileUpload value="#{employeeAddmissionBean.empImage}"
+										mode="simple" allowTypes="/(\.|\/)(gif|jpeg|png)$/" />
+
+									<p:outputLabel
+										value="#{sideMenuBean.list.country.toLowerCase() eq 'uae' ? 'Emirates ID' : 'Aadhar Card'}"></p:outputLabel>
+									<p:fileUpload value="#{employeeAddmissionBean.aadharImage}"
+										mode="simple" allowTypes="/(\.|\/)(gif|jpeg|png)$/" />
+
+									<p:outputLabel value="PAN Card"></p:outputLabel>
+									<p:fileUpload value="#{employeeAddmissionBean.panImage}"
+										mode="simple" allowTypes="/(\.|\/)(gif|jpeg|png)$/" />
+
+									<p:outputLabel value="Voter ID"
+										rendered="#{sideMenuBean.list.country.toLowerCase() ne 'uae'}"></p:outputLabel>
+									<p:fileUpload value="#{employeeAddmissionBean.voteridImage}"
+										rendered="#{sideMenuBean.list.country.toLowerCase() ne 'uae'}"
+										mode="simple" allowTypes="/(\.|\/)(gif|jpeg|png)$/" />
+
+									<p:outputLabel value="D/L"></p:outputLabel>
+									<p:fileUpload value="#{employeeAddmissionBean.dlImage}"
+										mode="simple" allowTypes="/(\.|\/)(gif|jpeg|png)$/" />
+
+									<p:outputLabel value="UG Cert./Marksheet"></p:outputLabel>
+									<p:fileUpload value="#{employeeAddmissionBean.ugImage}"
+										mode="simple" allowTypes="/(\.|\/)(gif|jpeg|png)$/" />
+
+									<p:outputLabel value="PG Cert./Marksheet"></p:outputLabel>
+									<p:fileUpload value="#{employeeAddmissionBean.pgImage}"
+										mode="simple" allowTypes="/(\.|\/)(gif|jpeg|png)$/" />
+
+									<p:outputLabel
+										value="#{sideMenuBean.list.country.toLowerCase() eq 'uae' ? 'PGCE/B.Ed.' : 'B.Ed.'} Cert./Marksheet"></p:outputLabel>
+									<p:fileUpload value="#{employeeAddmissionBean.bedImage}"
+										mode="simple" allowTypes="/(\.|\/)(gif|jpeg|png)$/" />
+
+									<p:outputLabel value="Police Verification"></p:outputLabel>
+									<p:fileUpload value="#{employeeAddmissionBean.policeImage}"
+										mode="simple" allowTypes="/(\.|\/)(gif|jpeg|png)$/" />
+
+									<p:outputLabel value="Experience Cert."></p:outputLabel>
+									<p:fileUpload value="#{employeeAddmissionBean.expImage}"
+										mode="simple" allowTypes="/(\.|\/)(gif|jpeg|png)$/" />
+
+									<p:outputLabel value="Other Doc."></p:outputLabel>
+									<p:fileUpload value="#{employeeAddmissionBean.otherImage}"
+										mode="simple" allowTypes="/(\.|\/)(gif|jpeg|png)$/" />
+
+								</p:panelGrid>
+								<br />
+								<p:separator />
+								<center>
+									<p:commandButton ajax="false" update="form" styleClass="butwid"
+										icon="fa fa-floppy-o"
+										action="#{employeeAddmissionBean.registerNow}"
+										value="#{employeeAddmissionVar.employeeAddmissionSaveButtonLabel}"
+										oncomplete="employeeAddmission.xhtml?faces-redirect=true"></p:commandButton>
+
+								</center>
+								<p:separator />
+								<br />
+							</p:panel>
+							<br></br>
+							<br></br>
+						</h:form>
+
+						<h:form id="msgForm" style="overflow:hidden">
+							<p:dialog header="Registration Successfull" width="500"
+								widgetVar="MsgOthDlg" modal="true" showEffect="fade"
+								hideEffect="fade" resizable="false" closable="false"
+								closeOnEscape="false">
+								<br></br>
+								<br></br>
+								<center>
+									<p:outputLabel value="#{employeeAddmissionBean.balMsg}"
+										style="font-size:14px;font-weight: bold;" />
+								</center>
+								<br></br>
+								<br></br>
+								<center>
+									<p:commandButton value="OK" oncomplete="PF('MsgOthDlg').hide()"
+										update="msgForm"
+										action="employeeAddmission.xhtml?faces-redirect=true" />
+								</center>
+							</p:dialog>
+						</h:form>
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

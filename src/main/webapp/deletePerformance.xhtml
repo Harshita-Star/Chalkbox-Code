@@ -1,0 +1,280 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Delete Exam Performance</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+							<p:panel header="Delete Exam Performance">
+								<f:facet name="header">
+									<span>Delete Exam Performance</span>
+									<span> <p:commandLink
+											style="float: right;margin-left: 15px;;color: blue;font-size:15px;"
+											immediate="true" value="Quick Delete Student Performance"
+											oncomplete="PF('qDlg').show();" update=":form3" />
+									</span>
+								</f:facet>
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel value="Select Class" for="@next"
+										style="color:red"></p:outputLabel>
+									<p:selectOneMenu required="true" filter="true"
+										requiredMessage="Please select a class"
+										value="#{deletePerformance.selectedClass}">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{deletePerformance.classList}"></f:selectItems>
+										<p:ajax update=":form" listener="#{deletePerformance.allTerm}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Select Section" for="@next"
+										style="color:red"></p:outputLabel>
+									<p:selectOneMenu required="true" filter="true"
+										requiredMessage="Please select a section"
+										value="#{deletePerformance.selectedSection}">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{deletePerformance.sectionList}"></f:selectItems>
+										<p:ajax></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Select Term" for="@next"
+										style="color:red"></p:outputLabel>
+									<p:selectOneMenu required="true" filter="true"
+										requiredMessage="Please select a term" id="showTerm"
+										value="#{deletePerformance.selectedTerm}">
+										<f:selectItem itemLabel="Select Term" itemValue=""></f:selectItem>
+										<f:selectItems value="#{deletePerformance.termList}"></f:selectItems>
+										<p:ajax></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel for="@next" style="color:red"
+										value="Select Subject Type"></p:outputLabel>
+									<p:selectOneMenu value="#{deletePerformance.subjectType}"
+										required="true" requiredMessage="Please Select Subject Type">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItem itemLabel="All" itemValue="all"></f:selectItem>
+										<f:selectItems value="#{deletePerformance.subjectTypeList}"></f:selectItems>
+										<p:ajax listener="#{deletePerformance.checkSubjectType}"
+											update=":form"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel rendered="#{deletePerformance.showExam}"
+										value="Select Exam" for="@next" style="color:red"></p:outputLabel>
+									<p:selectOneMenu rendered="#{deletePerformance.showExam}"
+										required="true" requiredMessage="Please select exam"
+										value="#{deletePerformance.selectExam}" filter="true">
+										<f:selectItem itemLabel="Select Exam" itemValue=""></f:selectItem>
+										<f:selectItems value="#{deletePerformance.examTypeList}"></f:selectItems>
+										<p:ajax update=":form"
+											listener="#{deletePerformance.subExamMethod}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel rendered="#{deletePerformance.showSubExam}"
+										value="Select Sub Exam" for="@next" style="color:red"></p:outputLabel>
+									<p:selectOneMenu rendered="#{deletePerformance.showSubExam}"
+										required="true" requiredMessage="Please select sub exam"
+										value="#{deletePerformance.selectSubExam}" filter="true">
+										<f:selectItem itemLabel="Select Sub Exam" itemValue=""></f:selectItem>
+										<f:selectItems value="#{deletePerformance.subExamTypeList}"></f:selectItems>
+									</p:selectOneMenu>
+								</p:panelGrid>
+
+								<br />
+								<p:separator />
+								<center>
+									<p:commandButton value="Search" styleClass="butwid"
+										icon="fa fa-search"
+										actionListener="#{deletePerformance.subjectDetail}"
+										update=":form3" />
+								</center>
+								<p:separator />
+								<br />
+
+							</p:panel>
+						</h:form>
+
+						<h:form id="form3">
+							<p:panel rendered="#{deletePerformance.showExamDetails}"
+								header="Subject Details" id="panel">
+
+								<p:messages closable="true" autoUpdate="true"></p:messages>
+								<center>
+									<p:dataTable reflow="true"
+										selection="#{deletePerformance.selExamList}"
+										rowKey="#{var.id}" value="#{deletePerformance.examList}"
+										var="var" rowSelectMode="add" style="width: 55%;">
+
+										<p:column headerText="Select" selectionMode="multiple"
+											style="width:80px;"></p:column>
+
+										<p:column headerText="Subject">
+											<p:outputLabel value="#{var.subjectName}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Exam Name"
+											rendered="#{deletePerformance.subjectType eq 'scholastic' || editExam.subjectType eq 'additional'}">
+											<p:outputLabel value="#{var.examName}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Delete Performance">
+											<center>
+												<p:commandButton styleClass="butwid redButt" update=":form3"
+													oncomplete="PF('dlg').show();"
+													action="#{deletePerformance.check}" icon="ui-icon-trash">
+													<f:setPropertyActionListener
+														target="#{deletePerformance.selectedExam}" value="#{var}"></f:setPropertyActionListener>
+												</p:commandButton>
+											</center>
+										</p:column>
+
+										<f:facet name="footer">
+											<p:commandButton styleClass="butwid redButt" update=":form3"
+												action="#{deletePerformance.checkDelete}"
+												value="Delete Performance" icon="ui-icon-trash"></p:commandButton>
+										</f:facet>
+
+									</p:dataTable>
+								</center>
+							</p:panel>
+
+							<p:dialog resizable="false" widgetVar="dlg"
+								header="Select Student(s) Whose Performance Needs To Be Deleted"
+								showEffect="fade" hideEffect="explode" modal="true"
+								fitViewport="true" responsive="true">
+
+								<p:dataTable reflow="true" id="table"
+									value="#{deletePerformance.studentList}" var="var"
+									rowIndexVar="index" rowSelectMode="add"
+									selection="#{deletePerformance.selStudentList}"
+									rowKey="#{var.addNumber}">
+
+									<p:column style="width: 40px;" headerText="Select"
+										selectionMode="multiple"></p:column>
+
+									<p:column headerText="S.No">
+										<f:facet name="header">
+											<p:outputLabel value="S.No"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{index+1}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Sr.No." filterBy="#{var.srNo}"
+										filterMatchMode="contains">
+										<f:facet name="header">
+											<p:outputLabel value="Sr.No."></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.srNo}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="CB No." filterBy="#{var.addNumber}"
+										filterMatchMode="contains">
+										<f:facet name="header">
+											<p:outputLabel value="CB No."></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.addNumber}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Student Name" filterBy="#{var.fullName}"
+										filterMatchMode="contains">
+										<f:facet name="header">
+											<p:outputLabel value="Student Name"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.fullName}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Father's Name">
+										<f:facet name="header">
+											<p:outputLabel value="Father's Name"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.fathersName}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Class">
+										<f:facet name="header">
+											<p:outputLabel value="Class"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.className}"></p:outputLabel>
+									</p:column>
+
+									<f:facet name="footer">
+										<center>
+											<p:commandButton styleClass="butwid redButt"
+												icon="ui-icon-trash" update=":form,:form3"
+												value="Delete Performance Now"
+												action="#{deletePerformance.saveData}">
+												<p:confirm header="Confirmation"
+													message="Are You Sure To Delete The Performance of 
+													Selected Student of Selected Exam and Subject?"
+													icon="ui-icon-alert" />
+											</p:commandButton>
+										</center>
+									</f:facet>
+								</p:dataTable>
+
+							</p:dialog>
+
+							<p:dialog resizable="false" widgetVar="qDlg"
+								header="Search Student" showEffect="fade" hideEffect="explode"
+								modal="true">
+								<p:panelGrid columns="2"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent; width: 100%;">
+
+									<p:outputLabel value="Student Name/Sr. No"></p:outputLabel>
+									<p:autoComplete id="acSimple" value="#{deletePerformance.name}"
+										minQueryLength="3"
+										completeMethod="#{deletePerformance.autoCompleteStudentInfo}"
+										validatorMessage="Please Enter Correct value">
+										<f:validateRegex pattern="#{regexVar.regex}" />
+										<p:ajax event="query" global="false" />
+									</p:autoComplete>
+
+								</p:panelGrid>
+
+								<br />
+								<br />
+								<p:separator />
+								<center>
+									<p:commandButton value="Delete All Performance"
+										update=":form,:form3" styleClass="butwid redButt"
+										icon="ui-icon-trash"
+										action="#{deletePerformance.singleStudentDelete}">
+										<p:confirm header="Confirmation"
+											message="Are You Sure To Delete The Performance of 
+													Selected Student of Selected Exam and Subject?"
+											icon="ui-icon-alert" />
+									</p:commandButton>
+								</center>
+								<p:separator />
+								<br />
+							</p:dialog>
+
+							<p:confirmDialog global="true" showEffect="fade"
+								hideEffect="fade">
+								<p:commandButton style="margin-left:50px" value="Yes"
+									type="button" styleClass="ui-confirmdialog-yes greenButt"
+									icon="ui-icon-check" />
+								<p:commandButton style="margin-left:50px" value="No"
+									type="button" styleClass="ui-confirmdialog-no redButt"
+									icon="ui-icon-close" />
+							</p:confirmDialog>
+						</h:form>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</ui:define>
+</ui:composition>

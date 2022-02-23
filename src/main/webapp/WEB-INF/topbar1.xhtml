@@ -1,0 +1,183 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:pu="http://primefaces.org/avalon">
+
+    <div class="topbar clearfix">
+    <h:form>
+        <div class="topbar-left">            
+           <h:commandLink action="#{topbar.navigate}">
+            <p:graphicImage name="images/logo.png" library="avalon-layout" styleClass="topbar-logo"/>
+            </h:commandLink>
+        </div>
+        
+        <div class="topbar-right">
+            <a id="menu-button" href="#">
+                <i class="fa fa-angle-left"></i>
+            </a>
+            
+            <a id="topbar-menu-button" href="#">
+                <i class="fa fa-bars"></i>
+            </a>
+           
+            <ul class="topbar-items fadeInDown animated">
+                <ui:fragment rendered="#{guestPreferences.profileMode == 'overlay'||guestPreferences.menuLayout == 'menu-layout-static menu-layout-horizontal'}">
+                    <li class="profile-item">
+                        <a href="#">                            
+                            <p:graphicImage name="images/avatar.png" library="avalon-layout" styleClass="profile-image" style="border: 0 none"/>
+                            <span class="topbar-item-name">Demo Public School</span>
+                            <span class="topbar-item-role">Admin</span>
+                        </a>
+                        
+                        <ul class="layout-menu animated">
+                            <li role="menuitem">
+                                <a href="#">
+                                    <i class="fa fa-fw fa-user"></i>
+                                    <span>Profile</span>
+                                </a>
+                            </li>
+                            <li role="menuitem">
+                                <a href="#">
+                                    <i class="fa fa-fw fa-user-secret"></i>
+                                    <span>Privacy</span>
+                                </a>
+                            </li>
+                            <li role="menuitem">
+                                <a href="#">
+                                    <i class="fa fa-fw fa-cog"></i>
+                                    <span>Settings</span>
+                                </a>
+                            </li>
+                            <li role="menuitem">
+                                <a href="#">
+                                    <i class="fa fa-fw fa-sign-out"></i>
+                                    <span>Logout</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ui:fragment>
+                
+                <li>
+                    <a href="#">
+                        <i class="topbar-icon fa fa-fw fa-cog"></i>
+                        <span class="topbar-item-name">Settings</span>
+                    </a>
+                    <ul class="layout-menu animated">
+                    		
+                        
+                        <li role="menuitem">
+                       		 <h:commandLink action="#{topbar.changeSession}">
+                                <i class="fa fa-fw fa-star-o"></i>
+                                <span>Session : #{sideMenuBean.session}</span>
+                             </h:commandLink>
+                        </li>
+                        <p:outputPanel rendered="#{sideMenuBean.showBackToMaster}">
+                            <li role="menuitem">
+                                <a href="madminPageDynamic.xhtml">
+                                    <i class="fa fa-fw fa-sign-out"></i>
+                                    <span>Back To Master</span>
+                                </a>
+                            </li>
+                        </p:outputPanel>
+                        
+                        
+                        <p:outputPanel rendered="#{sideMenuBean.showAdmin}">
+                            <li role="menuitem">
+                                <a href="timeline.xhtml">
+                                    <i class="fa fa-fw fa-sign-out"></i>
+                                    <span>Timeline</span>
+                                </a>
+                            </li>
+                        </p:outputPanel>
+                        <p:outputPanel rendered="#{sideMenuBean.showAdmin}">
+                    		<li role="menuitem">
+                            <a href="messageSchoolHistory.xhtml">
+                                <i class="fa fa-fw fa-star-o"></i>
+                                <span>Message Balance-: #{sideMenuBean.messageBalanace}
+									</span>
+                            </a>
+                        </li>
+                        </p:outputPanel>
+                        
+                        <p:outputPanel rendered="#{sideMenuBean.manageTracking}">
+	                        <li role="menuitem">
+	                            <h:commandLink action="#{sideMenuBean.tracking}">
+	                                <i class="fa fa-fw fa-bus"></i>
+	                                <span>Track Buses</span>
+	                            </h:commandLink>
+	                        </li>
+                        </p:outputPanel>
+                        
+                        <p:outputPanel rendered="#{sideMenuBean.list.schid eq '304' &amp;&amp; sideMenuBean.userType.toLowerCase() eq 'admin'}">
+	                        <li role="menuitem">
+	                            <h:commandLink action="trackBlackboxGPS.xhtml?faces-redirect=true">
+	                                <i class="fa fa-fw fa-bus"></i>
+	                                <span>Track Buses</span>
+	                            </h:commandLink>
+	                        </li>
+                        </p:outputPanel>
+                       
+                        <li role="menuitem">
+                            <a href="changePassWord.xhtml">
+                                <i class="fa fa-fw fa-lock"></i>
+                                <span>Change Password</span>
+                            </a>
+                        </li>
+                        
+                        <p:outputPanel rendered="#{sideMenuBean.logoutchalkbox}">
+	                        <li role="menuitem">
+	                            <a href="ChalkboxLogin.xhtml">
+	                                <i class="fa fa-fw fa-sign-out"></i>
+	                                <span>Logout</span>
+	                            </a>
+	                        </li>
+                        </p:outputPanel>
+                        
+                        <p:outputPanel rendered="#{sideMenuBean.master}">
+	                        <li role="menuitem">
+	                            <h:commandLink action="#{sideMenuBean.backToMaster}">
+	                                <i class="fa fa-fw fa-sign-out"></i>
+	                                <span>Back To Master</span>
+	                            </h:commandLink>
+	                        </li>
+                        </p:outputPanel>
+                        
+                    </ul>
+                </li>
+                
+                    <li class="search-item">
+                    <div class="topbar-search">
+                        <p:outputLabel style="color: #ffffff;font-size: 20px;margin-right: 5px;font-weight: bold;" value="#{sideMenuBean.name}"></p:outputLabel>
+                    </div>
+                </li>
+                <li class="search-item">
+                    <div class="topbar-search">
+                      <p:graphicImage value="#{sideMenuBean.imagepath}" width="35px" height="35px" style="border: 0 none;margin-right: -5px;margin-top: -5px;background: white;"/>
+                 </div>
+                </li>
+                   
+               
+            </ul>
+        </div>
+        
+       
+        </h:form>
+        
+        <h:form>
+         <p:idleMonitor timeout="600000">
+         <p:ajax event="active" listener="#{sideMenuBean.showDia()}"  />
+     </p:idleMonitor>
+ 
+ <p:dialog header="Clear" widgetVar="d1r" closable="false" draggable="false" modal="true" resizable="false">
+ <p:outputLabel value="your session is expired .click on the button to go to login page">       </p:outputLabel>
+    <p:commandButton value="clickme" action="#{sideMenuBean.tim()}"></p:commandButton>
+ </p:dialog>
+        
+        </h:form>
+    </div>
+
+</ui:composition>

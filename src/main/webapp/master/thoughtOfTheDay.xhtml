@@ -1,0 +1,46 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/masterTemplate.xhtml">
+
+	<ui:define name="title">Today's Thought</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+					<h:form id="form" style="overflow:hidden" enctype="multipart/form-data">
+						   <p:growl showDetail="true"  autoUpdate="true"></p:growl>
+					<p:messages closable="true" autoUpdate="true"></p:messages>	
+						<p:panel header="Today's Thought">
+							<p:panelGrid columns="2">
+							
+							  <p:outputLabel value="For" for="@next" style="color:red"></p:outputLabel>
+							  <p:selectOneRadio value="#{thoughtOfTheDay.thoughtFor}" required="true" requiredMessage="Please Select thought for">
+							   <f:selectItem itemLabel="Both" itemValue="Both"></f:selectItem>
+							   <f:selectItem itemLabel="Admin" itemValue="Admin"></f:selectItem>
+							   <f:selectItem itemLabel="Student" itemValue="Student"></f:selectItem>
+							  </p:selectOneRadio>
+							 
+							  <p:outputLabel value="Image(PNG Only)" for="@next" style="color:red"></p:outputLabel>
+							  <p:fileUpload value="#{thoughtOfTheDay.image}" mode="simple" allowTypes="/(\.|\/)(png)$/" required="true" requiredMessage="Please Select a Image"/>
+							  
+							  <p:outputLabel value="Validate Date" for="@next" style="color:red" ></p:outputLabel>
+							  <p:calendar required="true" pattern="dd/MM/yyyy" requiredMessage="Please Enter Validate Date" value="#{thoughtOfTheDay.validdate}"></p:calendar>
+							
+						      <p:commandButton value="Submit" actionListener="#{thoughtOfTheDay.submit}" ajax="false"></p:commandButton>
+							</p:panelGrid>
+						</p:panel>
+						
+					</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

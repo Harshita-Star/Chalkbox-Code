@@ -1,0 +1,114 @@
+.exception-body {
+    background-size: cover;
+    background-repeat: no-repeat;
+    
+    .exception-topbar {
+        height: 72px;
+        box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.08);
+        background-color: #f8fafc;
+        @include flex();
+        @include flex-align-center();
+        padding: 0 10%;
+    }
+
+    .exception-wrapper {
+        width: 100%;
+        height: calc(100vh - 72px);
+        @include flex();
+        @include flex-align-center();
+        @include flex-justify-center();
+        overflow: auto;
+
+        .exception-content {
+            border-radius: 6px;
+            background-color: rgba(37, 39, 41, 0.97);
+            @include flex();
+            @include flex-align-center();
+            @include flex-justify-center();
+            flex-direction: column;
+            width: 80%;
+            padding: 128px 50px;
+            text-align: center;
+    
+            > span {
+                font-size: 16px;
+                font-weight: 500;
+                letter-spacing: 0.08px;
+                color: #ffffff;
+                display: block;
+                margin-top: 24px;
+            }
+    
+            > button {
+                margin-top: 50px;
+                border-radius: 2px;
+                padding: 7px 8px;
+                background-color: #f3a841;
+                @include transition(background-color $transitionDuration);
+                border: none;
+    
+                > span {
+                    font-size: 13px;
+                    font-weight: 500;
+                    color: #191a1c;
+                }
+    
+                &:hover {
+                    background-color: #f1b868;
+                }
+            }
+        }
+    }
+
+    &.notfound {
+        background-image: url("\#{resource['pandora-layout:images/pages/bg-page-404.jpg']}");
+    }
+    &.access {
+        background-image: url("\#{resource['pandora-layout:images/pages/bg-page-access.jpg']}");
+        .exception-wrapper{
+            .exception-content {
+                border-radius: 6px;
+                background-color: rgba(255, 255, 255, 0.97);
+
+                span {
+                    color: #191a1c;
+                }
+            }
+        }
+    }
+    &.error {
+        background-image: url("\#{resource['pandora-layout:images/pages/bg-page-error.jpg']}");
+        .exception-wrapper{
+            .exception-content {
+                border-radius: 6px;
+                background-color: rgba(255, 255, 255, 0.97);
+
+                span {
+                    color: #191a1c;
+                }
+            }
+        }
+    }
+   
+}
+
+@media(max-width:992px) {
+    .exception-body {
+        .exception-topbar {
+            padding: 0 30px;
+        }
+        .exception-wrapper {
+            .exception-content {
+                height: 100%;
+                width: 100%;
+                padding: 30px;
+                border-radius: 0;
+
+                img {
+                    width: 100%;
+                    max-height: 175px;
+                }
+            }
+        }
+    }
+}

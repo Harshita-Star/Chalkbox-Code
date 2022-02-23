@@ -1,0 +1,85 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Add Exam</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+
+							<h1>#{addExamVar.addExamTitle}</h1>
+
+							<p:panel header="Add Exam">
+								<p:messages closable="true" autoUpdate="true"></p:messages>
+
+						<p:commandLink
+						style="float: right;margin-left: 15px;color: blue;font-size:15px;"
+						immediate="true" value="All Exam Report"
+						action="examReportModule.xhtml?faces-redirect=true"></p:commandLink>
+						<br/>
+						<br/>
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel for="@next" style="color:red"  value="Select Class"></p:outputLabel>
+									<p:selectOneMenu id="classId" value="#{addExamSubject.selectedClass}"
+										filter="true" required="true"
+										requiredMessage="#{addExamVar.selectClassValidation}">
+										<f:selectItem itemLabel="#{addExamVar.selectHereLabel}"
+											itemValue=""></f:selectItem>
+										<f:selectItems value="#{addExamSubject.classList}"></f:selectItems>
+									</p:selectOneMenu>
+									
+									<p:outputLabel for="@next" style="color:red"  value="Select Language"></p:outputLabel>
+									<p:selectOneMenu id="languageId"
+										 required="true" value="#{addExamSubject.selectedLanguage}"
+										requiredMessage="Select Language for adding exam.">
+										<f:selectItem itemLabel="Select Language" itemValue=""></f:selectItem>
+										<f:selectItem itemLabel="Hindi" itemValue="hindi"></f:selectItem>
+										<f:selectItem itemLabel="English" itemValue="english" ></f:selectItem>
+										<f:selectItem itemLabel="Both" itemValue="both" ></f:selectItem>
+									</p:selectOneMenu>
+									
+									
+									<p:outputLabel for="@next" style="color:red"  value="Exam Name"></p:outputLabel>
+									<p:inputText required="true" value="#{addExamSubject.examName}" requiredMessage="Exam name needed for add exam"></p:inputText>
+									
+									<p:outputLabel for="@next" style="color:red"  value="Time (In Minutes)"></p:outputLabel>
+									<p:inputNumber  required="true" value="#{addExamSubject.time}" requiredMessage="Time for Exam is required" minValue="0" maxValue="999"></p:inputNumber>
+									
+									<p:outputLabel for="@next" style="color:red"  value="Positive Marks(Per Question)"></p:outputLabel>
+									<p:inputNumber  required="true" value="#{addExamSubject.posiMarks}" requiredMessage="Positive marks is required" minValue="0" maxValue="999"></p:inputNumber>
+									
+									<p:outputLabel for="@next" style="color:red"  value="Negative Marks(Per Question)"></p:outputLabel>
+									<p:inputNumber required="true" value="#{addExamSubject.negMarks}" requiredMessage="Negative marks is required" minValue="0" maxValue="999"></p:inputNumber>
+									
+									<p:outputLabel for="@next" style="color:red"  value="Exam Date"></p:outputLabel>
+									<p:calendar  navigator="true" value="#{addExamSubject.examDate}" mindate="new Date()"
+										pattern="dd/MM/yyyy" rendered="true" required="true"
+										requiredMessage="Please Select Date"></p:calendar>
+									
+									<p:outputLabel for="@next" style="color:red"  value="Exam Time"></p:outputLabel>
+									<p:calendar id="time" required="true" value="#{addExamSubject.examStartingTime}" requiredMessage="Time for exam is required!" pattern="HH:mm" timeOnly="true"/>
+									
+									<p:commandButton update="form" action="#{addExamSubject.addNow}"
+										value="#{addExamVar.addExamNowButton}" ></p:commandButton>
+									</p:panelGrid> 
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,65 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Search Employee</ui:define>
+
+    <ui:define name="content">
+       
+            <div class="ui-fluid">
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <div class="card card-w-title">
+                         
+		<h:form id="form3">
+			<p:outputPanel>
+			<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+				<p:dataTable reflow="true"  var="var" value="#{allEmpList.employeeList}" rows="50"
+					 paginator="true" rowsPerPageTemplate="50,100,200">
+
+					<p:column sortBy="#{var.fname}" headerText="Name" filterBy="#{var.fname}" filterMatchMode="contains">
+						<p:outputLabel value="#{var.fname}"></p:outputLabel>
+					</p:column>
+
+					<p:column headerText="Category" filterBy="#{var.category}" filterMatchMode="contains">
+						<p:outputLabel value="#{var.category}"></p:outputLabel>
+					</p:column>
+					
+					<p:column headerText="Sub Categ." filterBy="#{var.subCateg}" filterMatchMode="contains">
+						<p:outputLabel value="#{var.subCateg}"></p:outputLabel>
+					</p:column>
+
+					<p:column headerText="Contact No">
+						<p:outputLabel value="#{var.mobile}"></p:outputLabel>
+					</p:column>
+					<p:column headerText="Block">
+						<p:commandButton update=":form3" action="#{allEmpList.blockUser}" icon="ui-icon-close" >
+							<f:setPropertyActionListener target="#{allEmpList.selectedEmployee}" value="#{var}"></f:setPropertyActionListener>
+							<p:confirm header="Confirmation" message="Are You Sure To Block User...???" icon="ui-icon-alert" />
+						</p:commandButton>
+					</p:column>
+				</p:dataTable>
+			</p:outputPanel>
+		</h:form>
+		<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+							<p:commandButton value="Yes" type="button"
+								styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+							<p:commandButton value="No" style="margin-left:50px"
+								type="button" styleClass="ui-confirmdialog-no"
+								icon="ui-icon-close" />
+						</p:confirmDialog>
+			
+          
+                        
+                           
+                        </div>
+                    </div>
+                </div>
+            </div>
+       
+    </ui:define>
+
+</ui:composition>

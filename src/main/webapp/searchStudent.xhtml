@@ -1,0 +1,179 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Search Student</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form1">
+							<h1>Search Student</h1>
+
+							<p:messages closable="true" autoUpdate="true"></p:messages>
+
+							<p:panel header="Search Student by Name/Sr. No">
+
+								<p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel value="Student Name/Sr. No"></p:outputLabel>
+									<p:autoComplete id="acSimple" value="#{searchStudent.name}"
+										minQueryLength="3"
+										completeMethod="#{searchStudent.autoCompleteStudentInfo}" validatorMessage="Please Enter Correct value">
+										<p:ajax event="query" global="false" />
+										<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:autoComplete>
+
+									<p:commandButton value="Search" update=":form3:up"
+										actionListener="#{searchStudent.searchStudentByName}"></p:commandButton>
+
+								</p:panelGrid>
+
+							</p:panel>
+						</h:form>
+						</div>
+						<div class="card card-w-title">
+						<h:form id="form2">
+
+							<p:panel header="Search Student by Class-Section">
+
+								<p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel  for="@next" style="color:red" value="Select Class"></p:outputLabel>
+									<p:selectOneMenu style="width:250px" filter="true"
+										value="#{searchStudent.selectedCLassSection}" required="true"
+										requiredMessage="Please select a class">
+										<f:selectItem itemLabel="#{searchStudentVar.selectHereLabel}"
+											itemValue=""></f:selectItem>
+										<f:selectItems value="#{searchStudent.classSection}"></f:selectItems>
+
+										<p:ajax update="sectionid"
+											listener="#{searchStudent.allSections}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel  for="@next" style="color:red" value="Select Section"></p:outputLabel>
+									<p:selectOneMenu id="sectionid" filter="true"
+										value="#{searchStudent.selectedSection}" required="true"
+										requiredMessage="Please select a section">
+										<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+										<f:selectItems value="#{searchStudent.sectionList}"></f:selectItems>
+										<p:ajax update=":form3:up"
+											listener="#{searchStudent.searchStudentByClassSection}"></p:ajax>
+									</p:selectOneMenu>
+
+								</p:panelGrid>
+
+							</p:panel>
+
+						</h:form>
+						</div>
+						<div class="card card-w-title">
+						<h:form id="form3">
+
+							<p:panel header="Student Details">
+
+								<p:outputPanel id="up">
+
+									<p:dataTable reflow="true" selection="#{searchStudent.selectedStudent}"
+										rowKey="#{var.id}" rendered="#{searchStudent.show}" var="var"
+										value="#{searchStudent.studentList}" rows="5" paginator="true"
+										rowsPerPageTemplate="5,10,15">
+
+										<p:column style="width:100px" headerText="Select Here"
+											selectionMode="single"></p:column>
+
+										<p:column
+											headerText="#{searchStudentVar.searchStudentAdmissionNumberLabel}">
+											<p:outputLabel value="#{var.srNo}"></p:outputLabel>
+										</p:column>
+
+										<p:column sortBy="#{var.fname}"
+											headerText="#{searchStudentVar.seacrhStudentFirstNameLabel}">
+											<p:outputLabel value="#{var.fname}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Father's Name">
+											<p:outputLabel value="#{var.fathersName}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Class">
+											<p:outputLabel value="#{var.className}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Section">
+											<p:outputLabel value="#{var.sectionName}"></p:outputLabel>
+										</p:column>
+
+
+
+
+										<p:column headerText="View">
+											<p:commandButton ajax="false" onclick="target='_blank'"
+												action="#{searchStudent.viewDetails}" icon="ui-icon-search">
+												<f:setPropertyActionListener
+													target="#{searchStudent.selectedStudent}" value="#{var}"></f:setPropertyActionListener>
+											</p:commandButton>
+										</p:column>
+
+										<p:column headerText="Inactive">
+											<p:commandButton update=":form3"
+												oncomplete="PF('dlg1').show();" icon="ui-icon-trash">
+												<f:setPropertyActionListener
+													target="#{searchStudent.selectedStudent}" value="#{var}"></f:setPropertyActionListener>
+											</p:commandButton>
+										</p:column>
+
+										<f:facet name="footer">
+											<p:commandButton rendered="#{searchStudent.show}"
+												actionListener="#{searchStudent.editNow}"
+												value="#{searchStudentVar.searchStudentEditStudentDetailsButtonLabel}"></p:commandButton>
+										</f:facet>
+
+									</p:dataTable>
+
+								</p:outputPanel>
+
+								<p:dialog resizable="false" widgetVar="dlg"
+									header="Do you really want to View this student details"
+									showEffect="fade" hideEffect="explode" modal="true">
+									<p:panelGrid columns="2">
+										<p:commandButton update=":form3"
+											actionListener="#{searchStudent.viewDetails}" value="Yes"></p:commandButton>
+										<p:commandButton value="No" update=":form3"
+											oncomplete="PF('dlg').hide();"></p:commandButton>
+									</p:panelGrid>
+								</p:dialog>
+
+								<p:dialog resizable="false" widgetVar="dlg1"
+									header="Do you really want this student to be inactive?"
+									showEffect="fade" hideEffect="explode" modal="true">
+									<p:panelGrid columns="2">
+										<p:commandButton update=":form3,:form2,:form1"
+											actionListener="#{searchStudent.deleteStudent}" value="Yes"></p:commandButton>
+										<p:commandButton value="No" update=":form3"
+											oncomplete="PF('dlg1').hide();"></p:commandButton>
+									</p:panelGrid>
+								</p:dialog>
+
+								<p:dialog draggable="false" closable="false" resizable="false"
+									widgetVar="dlg2" header="Please Wait........" modal="true"
+									showEffect="fade" hideEffect="explode">
+									<p:graphicImage url="image/loading-bar.gif"></p:graphicImage>
+								</p:dialog>
+
+							</p:panel>
+
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

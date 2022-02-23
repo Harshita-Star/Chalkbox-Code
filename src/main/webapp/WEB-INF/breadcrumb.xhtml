@@ -1,0 +1,34 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+
+    <div class="layout-breadcrumb">
+        <div class="breadcrumb">
+            <div class="breadcrumb-icon">
+                <i class="pi pi-sitemap"/>
+            </div>
+            <div class="route-bar-breadcrumb">
+                <ui:insert name="viewname" />
+            </div>
+        </div>
+        <div class="status">
+            <span>System Status</span>
+            <div class="status-circle">
+                <i class="pi pi-circle-on"/>
+                <span class="tooltip tooltip-1">CPU</span>
+            </div>
+            <div class="status-circle">
+                <i class="pi pi-circle-on"/>
+                <span class="tooltip tooltip-2">GPU</span>
+            </div>
+            <div class="status-circle">
+                <i class="pi pi-circle-on"/>
+                <span class="tooltip tooltip-3">SSD</span>
+            </div>
+        </div>
+    </div>
+
+</ui:composition>

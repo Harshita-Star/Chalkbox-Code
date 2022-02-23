@@ -1,0 +1,134 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Leave Request</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+				<h:form id="form">
+					<p:growl showDetail="true"   autoUpdate="true" ></p:growl>
+					<p:panel header="Search">
+						<p:panelGrid columns="3" columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-2" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+							<p:commandButton update="dt" value="Pending"  icon="fa fa-clock-o" actionListener="#{stdLeaveRequest.pendingLeave}"></p:commandButton>
+							<p:commandButton update="dt" value="Approved" styleClass="greenButt" icon="fa fa-check-circle" actionListener="#{stdLeaveRequest.approveLeave}"></p:commandButton>
+							<p:commandButton update="dt" value="Rejected" styleClass="redButt" icon="fa fa-ban" actionListener="#{stdLeaveRequest.denyLeave}"></p:commandButton>
+						
+						</p:panelGrid>
+					</p:panel>
+					<p:panel style="width:100%" header="#{stdLeaveRequest.type}">
+						<p:dataTable id="dt" value="#{stdLeaveRequest.leaveInfo}" reflow="true" var="var"> 
+							<p:column headerText="S.No." style="width:50px">
+								<p:outputLabel value="#{var.sno}"></p:outputLabel>
+							</p:column>
+							
+							<p:column headerText="Student Name">
+								<p:outputLabel value="#{var.fname}"></p:outputLabel>
+							</p:column>
+							
+							<p:column headerText="Father Name">
+								<p:outputLabel value="#{var.fatherName}"></p:outputLabel>
+							</p:column>
+							
+							<p:column headerText="Class" style="width:50px">
+								<p:outputLabel value="#{var.className}-#{var.sectionName}"></p:outputLabel>
+							</p:column>
+						
+							<p:column headerText="Apply Date">
+								<p:outputLabel value="#{var.strAdmitDate}"></p:outputLabel>
+							</p:column>
+							
+							<p:column headerText="From">
+								<p:outputLabel value="#{var.startDate}"></p:outputLabel>
+							</p:column>
+							
+							<p:column headerText="To">
+								<p:outputLabel value="#{var.endDate}"></p:outputLabel>
+							</p:column>
+							
+							<p:column headerText="Reason">
+								<p:outputLabel value="#{var.reason}"></p:outputLabel>
+							</p:column>
+												
+							<p:column rendered="false" headerText="Comment">
+								<p:inputTextarea style="width:100px !important" autoResize="false" value="#{var.remark}"/>
+							</p:column>
+							
+							<p:column  headerText="Comment">
+								<p:outputLabel value="#{var.remark}"/>
+							</p:column>
+							
+							<p:column rendered="#{stdLeaveRequest.show1}" headerText="Action By">
+								<p:outputLabel value="#{var.actionBy}"/>
+							</p:column>
+							
+							<p:column rendered="#{stdLeaveRequest.show}" headerText="Approve" style="width:80px">
+								<p:commandButton icon="ui-icon-check" update=":form" action="#{stdLeaveRequest.approveRequest}" styleClass="greenButt">
+									<p:confirm header="Confirmation" message="Are You Sure To Approve Leave...???" icon="ui-icon-alert" />
+									<f:setPropertyActionListener target="#{stdLeaveRequest.selectedItem}" value="#{var}"></f:setPropertyActionListener>
+								</p:commandButton>
+							</p:column>
+							
+							<p:column rendered="#{stdLeaveRequest.show}" headerText="Reject" style="width:80px">
+								<p:commandButton icon="ui-icon-close" styleClass="redButt"  oncomplete="PF('rejectLeave').show();" update=":cancleform" >
+									<f:setPropertyActionListener target="#{stdLeaveRequest.selectedItem}" value="#{var}"></f:setPropertyActionListener>
+								</p:commandButton>
+							</p:column>
+						</p:dataTable>
+					</p:panel>
+				</h:form>
+				<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+			<p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes greenButt" icon="ui-icon-check" />
+			<p:commandButton value="No" style="margin-left:50px" type="button" styleClass="ui-confirmdialog-no redButt" icon="ui-icon-close" />
+		</p:confirmDialog>
+				
+	
+</div>
+
+<h:form id="cancleform">
+				
+				<p:dialog header="Reject Leave Request" widgetVar="rejectLeave" modal="true">
+					<br/>
+					<br/>
+					<div class="ui-g form-group">
+	
+					
+					<p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group"
+                                        style="border:0px none; background-color:transparent;">
+                                    
+						<p:outputLabel value="Remark" for="@next" style="color:red" ></p:outputLabel>
+						<p:inputTextarea value="#{stdLeaveRequest.remark}"
+							required="true" requiredMessage="Please enter  Remark" validatorMessage="Please Enter Correct value">
+							<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex> 
+						</p:inputTextarea>
+
+					</p:panelGrid>
+					
+					</div>
+					<br/>
+					<p:commandButton value="yes" styleClass="greenButt"
+							actionListener="#{stdLeaveRequest.denyRequest}"
+							update=":form :cancleform"></p:commandButton>
+							<br/><br/>
+						<p:commandButton value="No" styleClass="redButt" onclick="PF('rejectLeave').hide();"
+							update=":cancleform"></p:commandButton>
+				</p:dialog>
+				
+				
+				</h:form>
+	</div>
+			</div>
+		</div>
+		
+		
+				
+
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,160 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Sample</ui:define>
+
+    <ui:define name="content">
+       
+            <div class="ui-fluid">
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <div class="card card-w-title">
+                          <h:form  id="form">
+	 
+		<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+     
+          
+            <p:panel  header="Experience Certificate Detail :">
+            <f:facet name="header">
+			<span>Experience Certificate Report</span>
+			<span> <p:commandLink
+					style="float: right;margin-left: 15px;color: blue;font-size:15px;"
+					immediate="true" value="Experience Certificate Report"
+					action="rbscExperienceCertificate.xhtml?faces-redirect=true"></p:commandLink>
+			</span>
+		</f:facet>
+  			<p:dataTable value="#{experienceCertificateReport.employeeList}" var="info">
+  			
+  			<p:column headerText="S No">
+  			<p:outputLabel value="#{info.sno}"></p:outputLabel>
+  			</p:column>
+  			
+  			<p:column headerText="Name">
+  			<p:outputLabel value="#{info.name}"></p:outputLabel>
+  			</p:column>
+  			
+  			<p:column headerText="Father Name">
+  			<p:outputLabel value="#{info.fname}"></p:outputLabel>
+  			</p:column>
+  			
+  			<p:column headerText="Village Name">
+  			<p:outputLabel value="#{info.villageName}"></p:outputLabel>
+  			</p:column>
+  			
+  			<p:column headerText="District Name">
+  			<p:outputLabel value="#{info.districtName}"></p:outputLabel>
+  			</p:column>
+  			
+  			<p:column headerText="State Name">
+  			<p:outputLabel value="#{info.stateName}"></p:outputLabel>
+  			</p:column>
+  			
+  			<p:column headerText="Designation">
+  			<p:outputLabel value="#{info.designation}"></p:outputLabel>
+  			</p:column>
+  			
+  			<p:column headerText="Department No">
+  			<p:outputLabel value="#{info.deptNo}"></p:outputLabel>
+  			</p:column>
+  			
+  			<p:column headerText="From Date">
+  			<p:outputLabel value="#{info.strfromDate}"></p:outputLabel>
+  			</p:column>
+  			
+  			<p:column headerText="To Date">
+  			<p:outputLabel value="#{info.strtoDate}"></p:outputLabel>
+  			</p:column>
+  			
+  			<p:column headerText="Issue Date">
+  			<p:outputLabel value="#{info.strissueDate}"></p:outputLabel>
+  			</p:column>
+  			
+  			<p:column headerText="Print">
+  			<p:commandButton update=":form" action="#{experienceCertificateReport.print}" icon="ui-icon-print">
+  			<f:setPropertyActionListener value="#{info}" target="#{experienceCertificateReport.selected}"></f:setPropertyActionListener>
+  			</p:commandButton>
+  			</p:column>
+  			
+  			<p:column headerText="Delete">
+  			<p:commandButton update=":form :form1" action="#{experienceCertificateReport.delete}" icon="ui-icon-trash">
+  			<f:setPropertyActionListener value="#{info}" target="#{experienceCertificateReport.selected}"></f:setPropertyActionListener>
+  			<p:confirm header="Confirmation" message="Are You Sure To Delete...?" icon="ui-icon-alert" />
+			</p:commandButton>
+  			</p:column>
+  			
+  			<p:column headerText="Edit">
+  			<p:commandButton update=":form1 :form" action="#{experienceCertificateReport.edit}" oncomplete="PF('dialog1').show()" icon="ui-icon-pencil">
+  			<f:setPropertyActionListener value="#{info}" target="#{experienceCertificateReport.selected}"></f:setPropertyActionListener>
+  			</p:commandButton>
+  			</p:column>
+  			
+  			</p:dataTable>			           
+										
+               </p:panel>	   
+               	 
+			</h:form>
+			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+					    <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+			           <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+			         </p:confirmDialog>
+			         
+			           <h:form id="form1" enctype="multipart/form-data" >
+			      <p:dialog resizable="false" modal="true" widgetVar="dialog1" header="Edit Certificate Details :" closeOnEscape="true">
+					<p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+  							
+  							<p:outputLabel value="Dept No." for="@next" style="color:red" ></p:outputLabel>
+                            <p:inputText value="#{experienceCertificateReport.deptNo}" required="true" requiredMessage="Please Enter Department No"></p:inputText>
+                             
+                             <p:outputLabel value="Certificate Issued Date" for="@next" style="color:red" ></p:outputLabel>
+                            <p:calendar value="#{experienceCertificateReport.issuedDate}"  navigator="true" pattern="dd/MM/yyyy" yearRange="c-10:c+10" required="true" requiredMessage="Please Select Issued Date">
+			                </p:calendar> 
+  							
+                        	<p:outputLabel value="Person Name" for="@next" style="color:red" ></p:outputLabel>
+                            <p:inputText value="#{experienceCertificateReport.name}" required="true" requiredMessage="Please Enter Person Name"></p:inputText>
+                             
+                            <p:outputLabel value="Father's Name" for="@next" style="color:red" ></p:outputLabel>
+                            <p:inputText value="#{experienceCertificateReport.fatherName}" required="true" requiredMessage="Please Enter Father Name"></p:inputText>
+                             
+                             <p:outputLabel value="Address"  for="@next" style="color:red" rendered="#{rbscExperienceCertificate.showAddress}"></p:outputLabel>
+                            <p:outputLabel value="#{experienceCertificateReport.address}" rendered="#{rbscExperienceCertificate.showAddress}" required="true" requiredMessage="Please Enter Father Name"></p:outputLabel>
+                             
+                            <p:outputLabel value="Village Name" for="@next" style="color:red" ></p:outputLabel>
+                            <p:inputText value="#{experienceCertificateReport.villageName}" required="true" requiredMessage="Please Enter Village Name"></p:inputText>
+                             
+                            <p:outputLabel value="District Name" for="@next" style="color:red" ></p:outputLabel>
+                            <p:inputText value="#{experienceCertificateReport.districtName}" required="true" requiredMessage="Please Enter District Name"></p:inputText>
+                             
+                            <p:outputLabel value="State Name" for="@next" style="color:red" ></p:outputLabel>
+                            <p:inputText value="#{experienceCertificateReport.stateName}" required="true" requiredMessage="Please Enter State Name"></p:inputText>
+                              
+                                           
+                            <p:outputLabel value="Designation" for="@next" style="color:red" ></p:outputLabel>
+                            <p:inputText value="#{experienceCertificateReport.designation}" required="true" requiredMessage="Please Enter Designation"></p:inputText>
+                                           
+                                          
+                            <p:outputLabel value="From Date" for="@next" style="color:red" ></p:outputLabel>
+                            <p:calendar value="#{experienceCertificateReport.fromDate}"  navigator="true" pattern="dd/MM/yyyy" yearRange="c-10:c+10" required="true" requiredMessage="Please Select From Date">
+			                 </p:calendar>
+			                 
+			                 <p:outputLabel value="To Date" for="@next" style="color:red" ></p:outputLabel>
+                            <p:calendar value="#{experienceCertificateReport.toDate}"  navigator="true" pattern="dd/MM/yyyy" yearRange="c-10:c+10" required="true" requiredMessage="Please Select To Date">
+			                 </p:calendar>
+                           
+			               			
+                         <p:commandButton  value="Submit" action="#{experienceCertificateReport.submit}" update=":form :form1"></p:commandButton>
+            			                    
+                        </p:panelGrid>    
+			</p:dialog>
+		</h:form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+       
+    </ui:define>
+
+</ui:composition>

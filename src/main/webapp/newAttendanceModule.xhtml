@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+<f:loadBundle var="addClassVar" basename="myProperties" />
+<f:view contentType="text/html">
+	<h:head>
+		<title>#{sideMenuBean.companyName} | Attendance Module</title>
+		<f:facet name="first">
+			<meta content='text/html; charset=UTF-8' http-equiv="Content-Type" />
+			<meta http-equiv="X-UA-Compatible" content="EmulateIE8" />
+			
+		</f:facet>
+
+  <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css"></link>
+    		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"></link>
+    	<link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css"></link>
+   <link rel="stylesheet" href="dist/css/AdminLTE.min.css"></link>
+    <link rel="stylesheet" href="dist/css/skins/all-skins.min.css"></link>
+    <link rel="stylesheet" type="text/css" href="css/style.css"/>	
+    
+      <script type="text/javascript">
+        
+        	  
+
+        	 function changeColor(rowIndex, disabledCheck){
+        		
+        	        if(disabledCheck=="A"){
+        	            $('.ui-datatable-data tr').eq(rowIndex).children('td,th').css( "color", "#E62117" );
+        	        }
+        	        else if(disabledCheck=="L"){
+        	            $('.ui-datatable-data tr').eq(rowIndex).children('td,th').css( "color", "#FFF000" );
+        	        }
+        	        else{
+        	            $('.ui-datatable-data tr').eq(rowIndex).children('td,th').css( "color", "#000000" );
+        	        }
+        	 }
+
+     </script>
+    
+
+	</h:head>
+
+	<h:body>
+       
+      <ui:include src="sideMenu.xhtml"></ui:include> 
+   <style type="text/css">
+					.redColored
+					{
+					color: red;
+					}
+					.greenColored
+					{
+					color: #00b100;
+					}
+	
+	.linhaDestacada { background: red !important;}		
+				</style>    
+      <div class="content-wrapper">
+    
+          	
+          <h:form id="form" >
+		    
+            	<p:panel header="Attendance">
+            	
+				<p:messages closable="true" autoUpdate="true"></p:messages>
+		                	
+		                <p:tabView value="#{attndance.classSection}" var="var" >
+        <p:tab title="#{var.className}">
+              <p:tabView value="#{var.categoryList}" var="var1">
+        <p:tab title="#{var1.category}">
+            <p:dataTable value="#{var1.list}" var="stu"  rowIndexVar="rowId">
+                
+                <p:column  headerText="Add Number" style="width:50px" filterBy="#{stu.addNumber}">
+            					
+            					<p:outputLabel value="#{stu.addNumber}"></p:outputLabel>
+            					           					
+            				</p:column>
+            				
+            		 <p:column  headerText="Roll No" style="width:50px" filterBy="#{var.rollNo}">
+            					
+            					<p:outputLabel value="#{stu.rollNo}"></p:outputLabel>
+            					           					
+            				</p:column>
+            				
+                
+                
+               <p:column sortBy="#{stu.fullName}" headerText="Student Name" style="width:50px" filterBy="#{var.fullName}">
+            					
+            					<p:outputLabel value="#{stu.fullName}"></p:outputLabel>
+            					           					
+            				</p:column>
+            				
+            				
+            	       				 
+                <p:column  headerText="Father's Name" style="width:50px" >
+            					
+            					<p:outputLabel value="#{stu.fname}"></p:outputLabel>
+            					           					
+            				</p:column>
+            				
+            				<p:column style="width:50px;text-align:center;" headerText="Attendance">
+            				 <p:selectOneButton value="#{stu.attendance}" unselectable="false" onchange="changeColor(rowId)">
+                                   <f:selectItem itemLabel="A" itemValue="A" ></f:selectItem>
+	  								<f:selectItem itemLabel="P" itemValue="P"></f:selectItem>
+	  								<f:selectItem itemLabel="L" itemValue="L"></f:selectItem>
+                    
+                    </p:selectOneButton>
+            				   
+            				</p:column>
+            				<f:facet name="footer" >
+            				  	<p:commandButton  value="Submit" oncomplete="PF('confirmDialog').show()" update="cnfrmdi" action="#{attndance.chckforstudentatndnce}" ></p:commandButton>
+            			   </f:facet>
+             </p:dataTable>
+        </p:tab>
+    </p:tabView>
+        </p:tab> 
+    </p:tabView>
+		                
+		                
+		                
+		                
+		                
+			   </p:panel>   
+			         
+			</h:form>     
+			
+			<h:form id="cnfrmdi">
+			<p:panel>
+			<p:dialog resizable="false" widgetVar="confirmDialog"
+							header="Do you surely want to Continue?"
+							showEffect="fade" hideEffect="explode" modal="true">
+							<p:panelGrid columns="2">
+								<p:panelGrid columns="1">
+									<p:outputLabel value="Total Absent Student(s) : #{attndance.i}" style="font-size: 15px !important;"/>
+									<p:outputLabel value="Total Present Student(s) : #{attndance.j}" style="font-size: 15px !important;"/>
+									<p:outputLabel value="Total Student(s) on Leave : #{attndance.k}" style="font-size: 15px !important;"/>
+								</p:panelGrid>
+								<p:outputLabel/>
+								
+								<center><p:commandButton immediate="true" update=":cnfrmdi,form"
+									action="#{attndance.saveNow}" value="Yes"></p:commandButton></center>
+								<p:commandButton value="No" update=":cnfrmdi"
+									oncomplete="PF('confrimDialog').hide();"></p:commandButton>
+							</p:panelGrid>
+						</p:dialog>
+			</p:panel>
+			</h:form> 
+          
+          
+      </div>
+   
+	
+	
+	</h:body>
+</f:view>
+</html>

@@ -1,0 +1,200 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/masterTemplate.xhtml">
+
+	<ui:define name="title">Dlt Template</ui:define>
+	<ui:define name="content">
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<p:messages></p:messages>
+							<p:panel header="Add Dlt Template">
+						
+							
+								<p:panelGrid columns="2"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;width: 60%;">
+									
+									<p:outputLabel  for="@next" style="color:red;" value="Select School"></p:outputLabel>
+								
+									<p:selectOneMenu style="width: 230%;"  required="true" requiredMessage="Please select atleast one school" value="#{updateDltStatus.selectedSchool}">
+										<f:selectItem itemLabel="All School" itemValue="-1"></f:selectItem>
+										<f:selectItems value="#{updateDltStatus.allSchools}"></f:selectItems>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Select Language"></p:outputLabel>
+									<p:selectOneRadio value="#{updateDltStatus.lang}">
+										<f:selectItem itemLabel="English" itemValue="english"></f:selectItem>
+										<f:selectItem itemLabel="Hindi" itemValue="hindi"></f:selectItem>
+										<p:ajax listener="#{updateDltStatus.chooseLang}" update="key"></p:ajax>
+									</p:selectOneRadio>
+
+									<p:outputLabel />
+									<p:outputLabel />
+
+									<p:outputLabel value="Select Keyword"></p:outputLabel>
+									<p:selectOneMenu id="key" value="#{updateDltStatus.keyword}">
+										<f:selectItem itemLabel="ALL" itemValue="-1"></f:selectItem>
+										<f:selectItems value="#{updateDltStatus.allKeywords}"></f:selectItems>
+									</p:selectOneMenu>
+
+
+								</p:panelGrid>
+
+								<br />
+								<br />
+
+
+								<p:panelGrid columns="4" layout="grid"
+									styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;width:50%;">
+									<p:outputLabel value="Select Status Type"></p:outputLabel>
+									<p:commandButton value="Approved" styleClass="greenButt"
+										icon="fa fa-check" actionListener="#{updateDltStatus.getTemps('Approved')}" update="templateEle,panel"></p:commandButton>
+									<p:commandButton value="Pending" icon="fa fa-clock-o" actionListener="#{updateDltStatus.getTemps('Pending')}" update="templateEle,panel"></p:commandButton>
+
+								</p:panelGrid>
+							</p:panel>
+
+							<p:panel header="ALl Templates">
+
+								<p:dataTable id="templateEle"
+									value="#{updateDltStatus.allTemps}" var="var" rowKey="#{var.srNo}" selection="#{updateDltStatus.selectedTemp}">
+									
+									<p:column rendered="#{updateDltStatus.showInput}" selectionMode="multiple" ></p:column>
+
+									<p:column headerText="S.No.">
+										<p:outputLabel value="#{var.srNo}"></p:outputLabel>
+									</p:column>
+									
+									
+									<p:column headerText="DLT Id">
+										<p:inputText rendered="#{updateDltStatus.showInput}" value="#{var.dltId}"></p:inputText>
+										<p:outputLabel rendered="#{updateDltStatus.showLable}" value="#{var.dltId}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="content">
+										<p:outputLabel value="#{var.content}"></p:outputLabel>
+									</p:column>
+									
+									<p:column headerText="School Name">
+										<p:outputLabel value="#{var.schoolName}"></p:outputLabel>
+									</p:column>
+									
+									<p:column headerText="Edit/Delete">
+										<center>
+
+											<p:panelGrid columns="2"
+												styleClass="ui-panelgrid-blank form-group">
+
+												<p:commandButton value="Edit" icon="fa fa-pencil"
+													action="#{updateDltStatus.editDltTemplateDetails}"
+													oncomplete="PF('editDialog').show()" update=":editForm">
+													<f:setPropertyActionListener
+														target="#{updateDltStatus.selectedTemplets}" value="#{var}"></f:setPropertyActionListener>
+												</p:commandButton>
+												<p:commandButton value="Delete" icon="fa fa-trash"
+													styleClass="redButt" update=":delForm" oncomplete="PF('dlg2').show()">
+													<f:setPropertyActionListener
+														target="#{updateDltStatus.selectedTemplets}" value="#{var}"></f:setPropertyActionListener>
+												</p:commandButton>
+											</p:panelGrid>
+										</center>
+									</p:column>
+									
+									
+								</p:dataTable>
+								
+								<p:outputPanel id="panel">
+								<p:outputPanel rendered="#{updateDltStatus.showInput}">
+								<br />
+								<center>
+									<p:separator />
+									<p:commandButton value="Save" style="width: 40%;" actionListener="#{updateDltStatus.updateTemp}"
+										styleClass="butwid" icon="fa fa-floppy-o" update=":form"></p:commandButton>
+									<p:separator />
+								</center>
+								</p:outputPanel>
+								</p:outputPanel>
+								
+								
+							</p:panel>
+						</h:form>
+						<h:form id="delForm">
+						<p:dialog resizable="false" widgetVar="dlg2"
+									header="Do you really want to Delete"
+									showEffect="fade" hideEffect="explode" modal="true">
+									<div class="ui-g form-group">
+										<p:panelGrid columns="2"
+											styleClass="ui-panelgrid-blank form-group"
+											style="border:0px none; background-color:transparent;">
+											<p:commandButton update=":form" styleClass="greenButt"
+												actionListener="#{updateDltStatus.delete}" 
+												value="Yes"></p:commandButton>
+											<p:commandButton value="No" update=":form" styleClass="redButt"
+												oncomplete="PF('dlg2').hide();"></p:commandButton>
+										</p:panelGrid>
+									</div>
+								</p:dialog>
+						</h:form>
+						<h:form id="editForm">
+							<p:dialog resizable="false" widgetVar="editDialog" header="EDIT"
+								showEffect="fade" hideEffect="explode" modal="true">
+								<div class="ui-g form-group">
+									<p:panelGrid columns="2"
+										columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+										layout="grid" styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+
+										<p:outputLabel value="Keyword"></p:outputLabel>
+										<p:selectOneMenu id="key" value="#{updateDltStatus.selkeyword}">
+											<f:selectItem itemLabel="--SELECT--" itemValue="-1"></f:selectItem>
+											<f:selectItems value="#{updateDltStatus.allKeywords}"></f:selectItems>
+										</p:selectOneMenu>
+
+										<p:outputLabel value="Language"></p:outputLabel>
+										<p:selectOneRadio 
+											value="#{updateDltStatus.language}">
+											<f:selectItem itemValue="english" itemLabel="English"></f:selectItem>
+											<f:selectItem itemValue="hindi" itemLabel="Hindi"></f:selectItem>
+										</p:selectOneRadio>
+
+										<p:outputLabel for="@next" value="Select Type"></p:outputLabel>
+										<p:selectOneRadio value="#{updateDltStatus.type}">
+											<f:selectItem itemValue="dynamic" itemLabel="Dynamic"></f:selectItem>
+											<f:selectItem itemValue="static" itemLabel="Static"></f:selectItem>
+										</p:selectOneRadio>
+
+										<p:outputLabel for="@next"
+											value="Content"></p:outputLabel>
+
+										<p:inputTextarea 
+											 rows="7" cols="30"
+											maxlength="765" value="#{updateDltStatus.content}"
+											counterTemplate="{0} characters remaining."
+											autoResize="false" style="width:400px !important;">
+										</p:inputTextarea>
+
+									</p:panelGrid>
+								</div>
+								<br />
+								<center>
+									<p:separator />
+									<p:commandButton value="Update" style="width: 40%;" actionListener="#{updateDltStatus.update}"
+										styleClass="butwid" icon="fa fa-floppy-o" update=":form,:editForm"></p:commandButton>
+									<p:separator />
+								</center>
+							</p:dialog>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</ui:define>
+</ui:composition>

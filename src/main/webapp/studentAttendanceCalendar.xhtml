@@ -1,0 +1,140 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/studentTemplate.xhtml">
+
+	<ui:define name="title">Attendance</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title" style="background-color: rgb(162, 32, 45, 0.3); ">
+						<h:form id="form1">
+
+
+
+							<p:messages closable="true" autoUpdate="true"></p:messages>
+
+							<p:panel header="Attendance">
+								<center>
+									<p:dataTable var="var"
+										value="#{studentAttendanceCalendar.weeks}" id="dataGrid"
+										style="width:80%;">
+										<f:facet name="header">
+											<p:panelGrid columns="3">
+												<p:commandButton ajax="false" update=":form1"
+													icon="fa fa-fw fa-backward"
+													action="#{studentAttendanceCalendar.backward}">
+												</p:commandButton>
+												<p:outputLabel
+													value="#{studentAttendanceCalendar.month}"></p:outputLabel>
+												<p:commandButton update=":form1" ajax="false"
+													icon="fa fa-fw fa-forward"
+													action="#{studentAttendanceCalendar.forward}">
+												</p:commandButton>
+											</p:panelGrid>
+										</f:facet>
+
+										<p:column headerText="SUN">
+											<div style="background-color: #{var.sundayStatusColor}">
+												<center>
+													<p:outputLabel value="#{var.sunday}"></p:outputLabel>
+												</center>
+											</div>
+										</p:column>
+
+										<p:column headerText="MON">
+											<div style="background-color: #{var.mondayStatusColor}">
+												<center>
+													<p:outputLabel value="#{var.monday}"></p:outputLabel>
+												</center>
+											</div>
+										</p:column>
+
+										<p:column headerText="TUE">
+											<div style="background-color: #{var.tuesdayStatusColor}">
+												<center>
+													<p:outputLabel value="#{var.tuesday}"></p:outputLabel>
+												</center>
+											</div>
+										</p:column>
+
+										<p:column headerText="WED">
+											<div style="background-color: #{var.wesnesdayStatusColor}">
+												<center>
+													<p:outputLabel value="#{var.wesnesday}"></p:outputLabel>
+												</center>
+											</div>
+										</p:column>
+
+										<p:column headerText="THU">
+											<div style="background-color: #{var.thusdayStatusColor}">
+												<center>
+													<p:outputLabel value="#{var.thusday}"></p:outputLabel>
+												</center>
+											</div>
+										</p:column>
+
+										<p:column headerText="FRI">
+											<div style="background-color: #{var.fridayStatusColor}">
+												<center>
+													<p:outputLabel value="#{var.friday}"></p:outputLabel>
+												</center>
+											</div>
+										</p:column>
+
+										<p:column headerText="SAT">
+											<div style="background-color: #{var.saturdayStatusColor}">
+												<center>
+													<p:outputLabel value="#{var.saturday}"></p:outputLabel>
+												</center>
+											</div>
+										</p:column>
+
+
+
+
+									</p:dataTable>
+								</center>
+<br/>
+
+										<table style="width: 100%">
+								
+								<tr align="center">
+									<td style="font-size: 15px; font-weight: bold; color: #93F2A3;">Present : #{studentAttendanceCalendar.present}</td>
+								</tr>
+								<tr align="center">
+									<td style="font-size: 15px; font-weight: bold; color: #F79BA3;">Absent : #{studentAttendanceCalendar.absent}</td>
+								</tr>
+								<tr align="center">
+									<td style="font-size: 15px; font-weight: bold; color: #FFBF79;">Leave : #{studentAttendanceCalendar.leave}</td>
+								</tr>
+								<tr align="center">
+									<td style="font-size: 15px; font-weight: bold; color: #FFFF5722;">Medical Leave : #{studentAttendanceCalendar.medical}</td>
+								</tr>
+								<tr align="center">
+									<td style="font-size: 15px; font-weight: bold; color: #FF0097A7;">PreparationLeave : #{studentAttendanceCalendar.prepleave}</td>
+								</tr>
+								<tr align="center">
+									<td style="font-size: 15px;font-weight: bold;color:#8DC8FF;">Unmarked : #{studentAttendanceCalendar.notMarked}</td>
+								</tr>
+								
+								<tr align="center">
+									<td style="font-size: 15px;font-weight: bold;color: #FF512DA8;">Holiday : #{studentAttendanceCalendar.holiday}</td>
+								</tr>
+							</table>
+
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

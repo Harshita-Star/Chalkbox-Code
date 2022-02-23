@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+<f:loadBundle var="addClassVar" basename="myProperties" />
+<f:view contentType="text/html">
+	<h:head>
+		<title>#{sideMenuBean.companyName} | Certificate Printing</title>
+		<f:facet name="first">
+			<meta content='text/html; charset=UTF-8' http-equiv="Content-Type" />
+			<meta http-equiv="X-UA-Compatible" content="EmulateIE8" />
+
+		</f:facet>
+
+		<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css"></link>
+		<link rel="stylesheet"
+			href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"></link>
+		<link rel="stylesheet"
+			href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css"></link>
+		<link rel="stylesheet" href="dist/css/AdminLTE.min.css"></link>
+		<link rel="stylesheet" href="dist/css/skins/all-skins.min.css"></link>
+		<link rel="stylesheet" type="text/css" href="css/style.css" />
+
+	</h:head>
+
+	<h:body>
+
+		<div class="content-wrapper">
+
+
+
+			<h:form id="form12">
+				<p:commandButton style="width:50px;" value="Print" type="button">
+					<p:printer target=":forms"></p:printer>
+				</p:commandButton>
+			</h:form>
+			<br />
+			<h:form id="forms">
+			<ui:repeat var="mainvar"
+				value="#{dueFeeReport.noticeStudentList}">
+				<p:outputPanel
+					style="width:48%;text-align:center;border-collapse:collapse;float:left;border: solid 2px black;min-height: 400px;">
+					<center>
+						<p
+							style="font-size: 20px !important; font-weight: bold; margin: 6px;"><u>#{headerBean.name.toUpperCase()}</u></p>
+						<p style="font-size: 10px !important; margin: 6px;"><u>#{headerBean.finalAddress.toUpperCase()}</u></p>
+						<p style="margin: 0px; font-size: 15px !important;"><u>NOTICE</u></p>
+					</center>
+					<br></br>
+					<table style="width: 100%; margin: 10px">
+						<tr>
+							<td align="left" style="font-size: 12px;">Dear
+								Parent/ Guardians,</td>
+						</tr>
+					</table>
+					<table style="margin: 10px">
+						<tr>
+							<td
+								style="font-size: 12px; line-height: 20px; text-align: justify;">
+								Kindly deposit the pending fee of your ward Ma./Ku. <u><b>&nbsp;&nbsp;#{mainvar.fname}&nbsp;&nbsp;</b></u>
+								of class <u><b>&nbsp;&nbsp;#{mainvar.className} - #{mainvar.sectionName}&nbsp;&nbsp;</b></u> 
+								amounting #{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'} <u><b>&nbsp;&nbsp;#{mainvar.totalFees}&nbsp;&nbsp;</b></u> 
+								upto the month of <u><b>&nbsp;&nbsp;#{dueFeeReport.month}&nbsp;&nbsp;</b></u>
+								#{(sideMenuBean.list.branch_id eq '22' || sideMenuBean.list.branch_id eq '27') ? ', with late fee of Rs.100 per month at Uttarakhand Gramin Bank, Branch - Motahaldu.' : '.'}
+								<br></br> <br></br> 
+								Contact to school office if the amount is showing due after payment through Cheque, Cash or Mobile application or send copy of receipt through WhatsApp.
+								<br></br> <br></br> <br></br> 
+								Regards
+								<br></br>
+								#{headerBean.name.toUpperCase()}
+							</td>
+						</tr>
+					</table>
+				</p:outputPanel>
+
+				<p:outputPanel
+					style="width:48%;text-align:center;border-collapse:collapse;float:right;border: solid 2px black;min-height: 400px;" rendered="#{mainvar.totalDiscount ne ''}">
+					<center>
+						<p
+							style="font-size: 20px !important; font-weight: bold; margin: 6px;"><u>#{headerBean.name.toUpperCase()}</u></p>
+						<p style="font-size: 10px !important; margin: 6px;"><u>#{headerBean.finalAddress.toUpperCase()}</u></p>
+						<p style="margin: 0px; font-size: 15px !important;"><u>NOTICE</u></p>
+					</center>
+					<br></br>
+					<table style="width: 100%; margin: 10px">
+						<tr>
+							<td align="left" style="font-size: 12px;">Dear
+								Parent/ Guardians,</td>
+						</tr>
+					</table>
+					<table style="margin: 10px">
+						<tr>
+							<td
+								style="font-size: 12px; line-height: 20px; text-align: justify;">
+								Kindly deposit the pending fee of your ward Ma./Ku. <u><b>&nbsp;&nbsp;#{mainvar.fname1}&nbsp;&nbsp;</b></u>
+								of class <u><b>&nbsp;&nbsp;#{mainvar.classToName} - #{mainvar.sectionTo}&nbsp;&nbsp;</b></u> 
+								amounting #{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'} <u><b>&nbsp;&nbsp;#{mainvar.totalDiscount}&nbsp;&nbsp;</b></u> 
+								upto the month of <u><b>&nbsp;&nbsp;#{dueFeeReport.month}&nbsp;&nbsp;</b></u>
+								#{(sideMenuBean.list.branch_id eq '22' || sideMenuBean.list.branch_id eq '27') ? ', with late fee of Rs.100 per month at Uttarakhand Gramin Bank, Branch - Motahaldu.' : '.'}
+								<br></br> <br></br> 
+								Contact to school office if the amount is showing due after payment through Cheque, Cash or Mobile application or send copy of receipt through WhatsApp.
+								<br></br> <br></br> <br></br> 
+								Regards
+								<br></br>
+								#{headerBean.name.toUpperCase()}
+							</td>
+						</tr>
+					</table>
+				</p:outputPanel>
+				<br></br>
+				<p:outputPanel style="height:30px !important ;width: 100% !important;float:left;"></p:outputPanel>
+				<br></br>
+				<!-- <p:outputPanel
+					style="width:48%;text-align:center;border-collapse:collapse;float:left;border: solid 2px black;min-height: 400px;">
+					<center>
+						<p
+							style="font-size: 20px !important; font-weight: bold; margin: 6px;"><u>#{headerBean.name.toUpperCase()}</u></p>
+						<p style="font-size: 10px !important; margin: 6px;"><u>#{headerBean.finalAddress.toUpperCase()}</u></p>
+						<p style="margin: 0px; font-size: 15px !important;"><u>NOTICE</u></p>
+					</center>
+					<br></br>
+					<table style="width: 100%; margin: 10px">
+						<tr>
+							<td align="left" style="font-size: 12px;">Dear
+								Parent/ Guardians,</td>
+						</tr>
+					</table>
+					<table style="margin: 10px">
+						<tr>
+							<td
+								style="font-size: 12px; line-height: 20px; text-align: justify;">
+								Kindly deposit the pending fee of your ward Ma./Ku. <u><b>&nbsp;&nbsp;Piyush Singh Naruka&nbsp;&nbsp;</b></u>
+								of class <u><b>&nbsp;&nbsp;XII-D&nbsp;&nbsp;</b></u> 
+								amounting #{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'} <u><b>&nbsp;&nbsp;15000&nbsp;&nbsp;</b></u> 
+								upto the month of <u><b>&nbsp;&nbsp;October&nbsp;&nbsp;</b></u>.
+								<br></br> <br></br> 
+								Contact to school office if amount is due when paid through Cheque/ Mobile Application.
+								<br></br> <br></br>
+								Ignore if paid earlier.
+								<br></br> <br></br> <br></br> <br></br>
+								#{headerBean.name.toUpperCase()}
+							</td>
+						</tr>
+					</table>
+				</p:outputPanel>
+
+				<p:outputPanel
+					style="width:48%;text-align:center;border-collapse:collapse;float:right;border: solid 2px black;min-height: 400px;">
+					<center>
+						<p
+							style="font-size: 20px !important; font-weight: bold; margin: 6px;"><u>#{headerBean.name.toUpperCase()}</u></p>
+						<p style="font-size: 10px !important; margin: 6px;"><u>#{headerBean.finalAddress.toUpperCase()}</u></p>
+						<p style="margin: 0px; font-size: 15px !important;"><u>NOTICE</u></p>
+					</center>
+					<br></br>
+					<table style="width: 100%; margin: 10px">
+						<tr>
+							<td align="left" style="font-size: 12px;">Dear
+								Parent/ Guardians,</td>
+						</tr>
+					</table>
+					<table style="margin: 10px">
+						<tr>
+							<td
+								style="font-size: 12px; line-height: 20px; text-align: justify;">
+								Kindly deposit the pending fee of your ward Ma./Ku. <u><b>&nbsp;&nbsp;Piyush Singh Naruka Piyush Singh Naruka Piyush Singh Naruka&nbsp;&nbsp;</b></u>
+								of class <u><b>&nbsp;&nbsp;Twelfth - D&nbsp;&nbsp;</b></u> 
+								amounting #{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'} <u><b>&nbsp;&nbsp;15000&nbsp;&nbsp;</b></u> 
+								upto the month of <u><b>&nbsp;&nbsp;October&nbsp;&nbsp;</b></u>.
+								<br></br> <br></br> 
+								Contact to school office if amount is due when paid through Cheque/ Mobile Application.
+								<br></br> <br></br>
+								Ignore if paid earlier.
+								<br></br> <br></br> <br></br> <br></br>
+								#{headerBean.name.toUpperCase()}
+							</td>
+						</tr>
+					</table>
+				</p:outputPanel>
+				<br></br>
+				<p:outputPanel style="height:30px !important ;width: 100% !important;float:left;"></p:outputPanel>
+				<br></br>
+				<p:outputPanel
+					style="width:48%;text-align:center;border-collapse:collapse;float:left;border: solid 2px black;min-height: 400px;">
+					<center>
+						<p
+							style="font-size: 20px !important; font-weight: bold; margin: 6px;"><u>#{headerBean.name.toUpperCase()}</u></p>
+						<p style="font-size: 10px !important; margin: 6px;"><u>#{headerBean.finalAddress.toUpperCase()}</u></p>
+						<p style="margin: 0px; font-size: 15px !important;"><u>NOTICE</u></p>
+					</center>
+					<br></br>
+					<table style="width: 100%; margin: 10px">
+						<tr>
+							<td align="left" style="font-size: 12px;">Dear
+								Parent/ Guardians,</td>
+						</tr>
+					</table>
+					<table style="margin: 10px">
+						<tr>
+							<td
+								style="font-size: 12px; line-height: 20px; text-align: justify;">
+								Kindly deposit the pending fee of your ward Ma./Ku. <u><b>&nbsp;&nbsp;Piyush Singh Naruka&nbsp;&nbsp;</b></u>
+								of class <u><b>&nbsp;&nbsp;XII-D&nbsp;&nbsp;</b></u> 
+								amounting #{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'} <u><b>&nbsp;&nbsp;15000&nbsp;&nbsp;</b></u> 
+								upto the month of <u><b>&nbsp;&nbsp;October&nbsp;&nbsp;</b></u>.
+								<br></br> <br></br> 
+								Contact to school office if amount is due when paid through Cheque/ Mobile Application.
+								<br></br> <br></br>
+								Ignore if paid earlier.
+								<br></br> <br></br> <br></br> <br></br>
+								#{headerBean.name.toUpperCase()}
+							</td>
+						</tr>
+					</table>
+				</p:outputPanel>
+
+				<p:outputPanel
+					style="width:48%;text-align:center;border-collapse:collapse;float:right;border: solid 2px black;min-height: 400px;">
+					<center>
+						<p
+							style="font-size: 20px !important; font-weight: bold; margin: 6px;"><u>#{headerBean.name.toUpperCase()}</u></p>
+						<p style="font-size: 10px !important; margin: 6px;"><u>#{headerBean.finalAddress.toUpperCase()}</u></p>
+						<p style="margin: 0px; font-size: 15px !important;"><u>NOTICE</u></p>
+					</center>
+					<br></br>
+					<table style="width: 100%; margin: 10px">
+						<tr>
+							<td align="left" style="font-size: 12px;">Dear
+								Parent/ Guardians,</td>
+						</tr>
+					</table>
+					<table style="margin: 10px">
+						<tr>
+							<td
+								style="font-size: 12px; line-height: 20px; text-align: justify;">
+								Kindly deposit the pending fee of your ward Ma./Ku. <u><b>&nbsp;&nbsp;Piyush Singh Naruka Piyush Singh Naruka Piyush Singh Naruka&nbsp;&nbsp;</b></u>
+								of class <u><b>&nbsp;&nbsp;Twelfth - D&nbsp;&nbsp;</b></u> 
+								amounting #{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'} <u><b>&nbsp;&nbsp;15000&nbsp;&nbsp;</b></u> 
+								upto the month of <u><b>&nbsp;&nbsp;October&nbsp;&nbsp;</b></u>.
+								<br></br> <br></br> 
+								Contact to school office if amount is due when paid through Cheque/ Mobile Application.
+								<br></br> <br></br>
+								Ignore if paid earlier.
+								<br></br> <br></br> <br></br> <br></br>
+								#{headerBean.name.toUpperCase()}
+							</td>
+						</tr>
+					</table>
+				</p:outputPanel> -->
+			</ui:repeat>	
+			</h:form>
+		</div>
+	</h:body>
+</f:view>
+</html>

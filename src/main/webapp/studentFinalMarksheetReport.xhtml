@@ -1,0 +1,149 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+               	xmlns:c="http://java.sun.com/jsp/jstl/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Subject Wise Marks Report</ui:define>
+
+    <ui:define name="content">
+       
+            <div class="ui-fluid">
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <div class="card card-w-title">
+                       		<h:form id="form2">
+       			<h1>Subject Wise Marks Report</h1>
+   		 		<p:panel header="Search Student">
+       		 	<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+       		 		<p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+       		 		
+       		 		<p:outputLabel for="@next" style="color:red"  value="Select Class"></p:outputLabel>      
+       		 		<p:selectOneMenu  value="#{finalMarksheetReport.selectedClassSection}" filter="true" required="true" requiredMessage="#{searchStudentVar.searchStudentSelectClassValidation}" >
+       		 			<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+       		 			<f:selectItems value="#{finalMarksheetReport.classSection}"></f:selectItems>
+       		 			
+       		 			<p:ajax update="sectionid,termid" listener="#{finalMarksheetReport.allSections}"></p:ajax>
+       		 		</p:selectOneMenu>    
+
+       		 		<p:outputLabel value="Select Section" for="@next" style="color:red" ></p:outputLabel>
+       		 		<p:selectOneMenu id="sectionid" value="#{finalMarksheetReport.selectedSection}" filter="true" required="true" requiredMessage="Please select a section"> 
+       		 			<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+       		 			<f:selectItems value="#{finalMarksheetReport.sectionList}"></f:selectItems>
+       		 		</p:selectOneMenu>
+       		 		
+       		 		<p:outputLabel value="Type of Area" for="@next" style="color:red" ></p:outputLabel>      
+					<p:selectOneMenu required="true" requiredMessage="Please select type of area" filter="true"  value="#{finalMarksheetReport.subjectType}">
+						<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+						<f:selectItems value="#{finalMarksheetReport.subjectTypeList}"></f:selectItems>
+						<p:ajax update="subject" listener="#{finalMarksheetReport.allSubject}" ></p:ajax>
+					</p:selectOneMenu>
+       		 		
+       		 		
+       		 		<p:outputLabel value="Select Subject" for="@next" style="color:red" ></p:outputLabel>
+       		 		<p:selectOneMenu disabled="#{finalMarksheetReport.disableSubject}" filter="true" id="subject" value="#{finalMarksheetReport.selectedSubject}" required="true" requiredMessage="Please select a Subject"> 
+       		 			<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+       		 			<f:selectItems value="#{finalMarksheetReport.subjectList}"></f:selectItems>
+       		 		</p:selectOneMenu>
+       		 		
+       		 		<p:outputLabel  for="@next" style="color:red" value="Select Term"></p:outputLabel>
+      		 		<p:selectManyCheckbox id="termid" value="#{finalMarksheetReport.selectedTerm}" layout="responsive" columns="3" required="true"
+						requiredMessage="Please Select Term" styleClass="form-group">
+						<f:selectItems value="#{finalMarksheetReport.termNewList}"></f:selectItems>
+					</p:selectManyCheckbox>
+	               		 		
+       		 		  
+       		 		<p:commandButton value="Search" style="width:150px;" update=":form3" actionListener="#{finalMarksheetReport.searchReport}"></p:commandButton>  
+      		 		</p:panelGrid>  		 
+       		 
+       		 		</p:panel>
+       		 
+       		 </h:form>
+       		 </div>
+       		 <div class="card card-w-title">
+       		<h:form id="form3">
+       			<p:panel header="  ">
+       			
+     			<p:dataTable rendered="#{finalMarksheetReport.show}" rowIndexVar="index" reflow="true" var="var" value="#{finalMarksheetReport.studentList}">
+     				<f:facet name="header">
+     					<p:panelGrid columns="3">
+     						<p:outputLabel value="Class :- #{finalMarksheetReport.className}"></p:outputLabel>
+     						<p:outputLabel value="Section :- #{finalMarksheetReport.sectionName}"></p:outputLabel>
+     						<p:outputLabel value="Subject :- #{finalMarksheetReport.subjectName}"></p:outputLabel>
+     					</p:panelGrid>
+     				</f:facet> 
+   		  			<p:columnGroup type="header">
+								<p:row>
+									<p:column style="width:20px" rowspan="#{finalMarksheetReport.showSubExamRow eq 'true' ? 4 :3}" headerText="S.No." />
+									<p:column style="width:110px" rowspan="3" headerText="Student Name" />
+									<p:column style="width:100px" rowspan="3" headerText="Father Name" />
+									<ui:repeat value="#{finalMarksheetReport.termList}" var="term">
+										<p:column style="#{((finalMarksheetReport.subjectType eq 'scholastic' || finalMarksheetReport.subjectType eq 'additional') &amp;&amp; term.termId gt '0') ? 'width:350px': (term.termId lt '0' ?  'width:80px':'width:300px')}" colspan="#{term.examInfoList.size()*term.subjectList.size()}" headerText="#{term.termName}" />
+									</ui:repeat>
+								</p:row>
+								<p:row rendered="#{finalMarksheetReport.subjectType eq 'scholastic' || finalMarksheetReport.subjectType eq 'additional'}">
+
+										<c:forEach items="#{finalMarksheetReport.termList}" var="term">
+											<c:forEach items="#{term.examInfoList}" var="exam">
+												<p:column 
+													colspan="#{exam.subExamList.size()*term.subjectList.size()}"
+													headerText="#{exam.examName}" />
+											</c:forEach>
+										</c:forEach>
+									</p:row>
+
+									<p:row rendered="#{finalMarksheetReport.showSubExamRow}">
+
+										<c:forEach items="#{finalMarksheetReport.termList}" var="term">
+											<c:forEach items="#{term.examInfoList}" var="exam">
+												<c:forEach items="#{exam.subExamList}" var="subExam">
+													<p:column colspan="1" headerText="#{subExam.subExamUpperCase}" />
+												</c:forEach>
+											</c:forEach>
+										</c:forEach>
+									</p:row>
+									
+									<p:row rendered="#{finalMarksheetReport.subjectType eq 'coscholastic' || finalMarksheetReport.subjectType eq 'other'}">
+										<c:forEach items="#{finalMarksheetReport.termList}" var="term">
+											<c:forEach items="#{term.examInfoList}" var="exam">
+												<c:forEach items="#{exam.subExamList}" var="subExam">
+													<c:forEach items="#{term.subjectList}" var="subject">
+														<p:column style="width:120px" colspan="1"
+															headerText="#{subject.subjectName}" />
+													</c:forEach>
+												</c:forEach>
+											</c:forEach>
+										</c:forEach>
+									</p:row>
+									
+							</p:columnGroup>
+
+							<p:column>
+								<p:outputLabel value="#{index+1}"></p:outputLabel>
+							</p:column>
+			        
+   		  			
+   		  			<p:column sortBy="#{var.fname}">
+   		  				<p:outputLabel value="#{var.fname}"></p:outputLabel>
+   		  			</p:column>
+   		  			
+   		  			<p:column >
+   		  				<p:outputLabel value="#{var.fathersName}"></p:outputLabel>
+   		  			</p:column>
+   		  			
+   		  			<p:columns value="#{finalMarksheetReport.scholasticColumnsList}" var="ll">
+		          		<center><p:outputLabel value="#{var.marksMap[ll]}" /></center>
+		          	</p:columns>
+	  			</p:dataTable>
+	  			</p:panel>
+			</h:form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+       
+    </ui:define>
+
+</ui:composition>

@@ -1,0 +1,239 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">All Students</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					
+					<div class="card card-w-title">
+						<h:form id="form1">
+
+							<p:messages closable="true" autoUpdate="true"></p:messages>
+
+							<p:panel>
+								<f:facet name="header">
+									<span>Search Student by Name/Sr.No.</span>
+									
+								</f:facet>
+
+								<p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel value="Student Name/Sr. No"></p:outputLabel>
+									<p:autoComplete id="acSimple" value="#{allStudentListBLM.name}"
+										minQueryLength="3"
+										completeMethod="#{allStudentListBLM.autoCompleteStudentInfo}" validatorMessage="Please Enter Correct value">
+										<p:ajax event="query" global="false" />
+									</p:autoComplete>
+
+									<p:commandButton value="Search" update=":form"
+										actionListener="#{allStudentListBLM.searchStudentByName}"></p:commandButton>
+
+								</p:panelGrid>
+
+							</p:panel>
+						</h:form>
+					</div>
+					
+					<div class="card card-w-title">
+						<h:form id="form2">
+
+							<p:panel header="Search Student by Class-Section">
+
+								<p:panelGrid columns="5" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel  for="@next" style="color:red" value="Select Class"></p:outputLabel>
+									<p:selectOneMenu style="width:250px"
+										value="#{allStudentListBLM.selectedCLassSection}" required="true"
+										requiredMessage="Please select a class">
+										<f:selectItem itemLabel="#{searchStudentVar.selectHereLabel}"
+											itemValue=""></f:selectItem>
+											<f:selectItem itemLabel="All"
+											itemValue="-1"></f:selectItem>
+										<f:selectItems value="#{allStudentListBLM.classSection}"></f:selectItems>
+
+										<p:ajax update="sectionid"
+											listener="#{allStudentListBLM.allSections}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel  for="@next" style="color:red" value="Select Section"></p:outputLabel>
+									<p:selectOneMenu id="sectionid"
+										value="#{allStudentListBLM.selectedSection}" required="true"
+										requiredMessage="Please select a section">
+										<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+										<f:selectItem itemLabel="All"
+											itemValue="-1"></f:selectItem>
+										<f:selectItems value="#{allStudentListBLM.sectionList}"></f:selectItems>
+										
+									</p:selectOneMenu>
+									
+									<p:commandButton value="Search" action="#{allStudentListBLM.searchStudentByClassSection}" update=":form"/>
+
+								</p:panelGrid>
+
+							</p:panel>
+
+						</h:form>
+						</div>
+					
+					<div class="card card-w-title">
+					
+					
+					<h:form id="initializePageDataForm">
+							<p:remoteCommand name="initializePageDataCommand" autoRun="false"
+								action="#{allStudentListBLM.init()}" update=" :form" />
+						</h:form>
+						<h:form id="form">
+							<p:panel id="dataTable" rendered="#{allStudentListBLM.b}">
+								<p:commandButton style="width: 100px;" value="Print"
+									rendered="#{allStudentListBLM.b}"
+									action="#{allStudentListBLM.printAll}">
+								</p:commandButton>
+
+								<center>
+									<p
+										style=" font-size: 25px !important; font-weight: bold; margin: 0px;">#{headerBean.name}</p>
+									<p
+										style="  font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.affiliationNo}</p>
+									<p
+										style="  font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.finalAddress}</p>
+									<p
+										style="font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.phoneno}</p>
+
+									<p
+										style="margin: 0px; font-size: 25px !important; font-weight: bold;">All
+										Student Report</p>
+								</center>
+								<p:panelGrid columns="3" style="width:100%">
+
+
+
+									<p:panelGrid columns="2">
+										<p:outputLabel value="Total:-"></p:outputLabel>
+										<h:outputText value="#{allStudentListBLM.total}"></h:outputText>
+									</p:panelGrid>
+
+								</p:panelGrid>
+
+								<p:dataTable id="up" style="width:100%;border-collapse:collapse" selection="#{allStudentListBLM.selStdList}"
+										rowKey="#{var.sno}"
+									border="1" value="#{allStudentListBLM.list}" var="var">
+									
+									<p:column rendered="#{sideMenuBean.renderInSession}" style="width:40px" headerText="Select"
+											selectionMode="multiple"></p:column>
+
+									<p:column headerText="Roll No"
+										style="width:40px;text-align:center" sortBy="#{var.rollNo}">
+
+										<p:outputLabel value="#{var.rollNo}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="S.No."
+										style="width:40px;text-align:center">
+
+										<f:facet name="header">
+											<p:outputLabel value="SNo."></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.sno}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Adm. No."
+										style="width:80px;text-align:center" filterBy="#{var.srNo}" >
+
+										<f:facet name="header">
+											<p:outputLabel value="Add No."></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.srNo}"></p:outputLabel>
+									</p:column>
+
+									<p:column style="width:70px;text-align:center"
+										headerText="Student Name" filterBy="#{var.fname}">
+
+										<f:facet name="header">
+											<p:outputLabel value="Student Name"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.fname}"></p:outputLabel>
+									</p:column>
+
+									<p:column style="width:70px;text-align:center"
+										headerText="Father's Name" filterBy="#{var.fathersName}"
+										filterMatchMode="contains">
+
+										<f:facet name="header">
+											<p:outputLabel value="Father's Name"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.fathersName}"></p:outputLabel>
+									</p:column>
+									<p:column style="width:60px;text-align:center"
+										headerText="Class" sortBy="#{var.classStrName}"
+										filterBy="#{var.classStrName}">
+
+										<f:facet name="header" style="width:60px;text-align:center">
+											<p:outputLabel value="Class"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.classStrName}"></p:outputLabel>
+									</p:column>
+
+									<p:column style="width:40px;text-align:center"
+										headerText="Section" filterBy="#{var.sectionName}">
+
+										<f:facet name="header" style="width:40px;text-align:center">
+											<p:outputLabel value="Section"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.sectionName}"></p:outputLabel>
+									</p:column>
+									<p:column style="width:80px;text-align:center"
+										headerText="Phone No" filterBy="#{var.fathersPhone}">
+
+										<f:facet name="header">
+											<p:outputLabel value="Phone No"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.fathersPhone}"></p:outputLabel>
+									</p:column>
+									<p:column rendered="#{sideMenuBean.disableInSession}" style="width:80px;text-align:center"
+										headerText="Promotion Status" filterBy="#{var.promotionStatus}">
+
+										<f:facet name="header">
+											<p:outputLabel value="Promotion Status"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.promotionStatus}"></p:outputLabel>
+									</p:column>
+
+									<p:column exportable="false"
+										headerText="View"
+										style="width:100px;text-align:center">
+										<p:panelGrid columns="2"
+											styleClass="ui-panelgrid-blank form-group">
+											<p:commandButton ajax="false" onclick="target='_blank'"
+												action="#{allStudentListBLM.viewDetails}" value="View">
+												<f:setPropertyActionListener
+													target="#{allStudentListBLM.selectedStudent}" value="#{var}"></f:setPropertyActionListener>
+											</p:commandButton>
+
+											
+											
+												
+										</p:panelGrid>
+
+									</p:column>
+									
+
+								</p:dataTable>
+
+
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,272 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Subject Allocation Report</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<h1>Subject Allocation Report</h1>
+
+							<p:panel>
+
+
+								<br />
+								<p:separator />
+								<center>
+									<p:panelGrid
+										columns="2"
+										layout="grid" styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+										<p:commandButton value="Print" styleClass="butwid" icon="fa fa-print"
+											rendered="#{subjectAllocationReport.b}">
+											<p:printer target="dataTable"></p:printer>
+										</p:commandButton>
+										<h:commandLink rendered="#{subjectAllocationReport.b}">
+											<p:graphicImage name="images/excellogo.png"
+												library="avalon-layout" width="100" height="40"></p:graphicImage>
+											<pe:exporter type="xlsx" target=":form:upp"
+												fileName="AllocationReport"></pe:exporter>
+										</h:commandLink>
+
+									</p:panelGrid>
+								</center>
+								<p:separator />
+								<br />
+
+								<p:panel id="dataTable" rendered="#{subjectAllocationReport.b}">
+									<center>
+										<p
+											style="font-family: initial; font-style: oblique; font-size: 25px !important; font-weight: bold; margin: 0px;">#{headerBean.name}</p>
+										<p
+											style="font-family: initial; font-style: oblique; font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.affiliationNo}</p>
+										<p
+											style="font-family: initial; font-style: oblique; font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.finalAddress}</p>
+										<p
+											style="font-family: initial; font-style: oblique; font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.phoneno}</p>
+
+										<p
+											style="margin: 0px; font-size: 25px !important; font-weight: bold;">Subject
+											Allocation Report</p>
+									</center>
+
+									<p:dataTable id="up"
+										style="width:100%;border-collapse:collapse;" reflow="true"
+										border="1" value="#{subjectAllocationReport.list}" var="var">
+
+
+										<p:column headerText="S.No." style="text-align:center">
+
+											<f:facet name="header">
+												<p:outputLabel value="S.No."></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.sno}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Teacher Name"
+											sortBy="#{var.teachername}" filterBy="#{var.teachername}"
+											style="text-align:center">
+
+											<f:facet name="header">
+												<p:outputLabel value="Teacher Name"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.teachername}"></p:outputLabel>
+										</p:column>
+
+										<p:column style="text-align:center" headerText="Class"
+											sortBy="#{var.classname}" filterBy="#{var.classname}">
+
+											<f:facet name="header">
+												<p:outputLabel value="Class"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.classname}"></p:outputLabel>
+										</p:column>
+
+										<p:column style="text-align:center" headerText="Section">
+
+											<f:facet name="header">
+												<p:outputLabel value="Section"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.section}"></p:outputLabel>
+										</p:column>
+
+
+										<p:column style="text-align:center" headerText="Subjects"
+											filterBy="#{var.subjectName}">
+
+											<f:facet name="header">
+												<p:outputLabel value="Subjects"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel
+												value="#{var.subjectName.replaceAll(',',', ')}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Deallocate" exportable="false">
+											<center>
+												<p:commandButton style="width:25%" styleClass="redButt"
+													disabled="#{var.disableDeallocate}"
+													action="#{subjectAllocationReport.preDeallocate}"
+													icon="ui-icon-minus">
+													<f:setPropertyActionListener value="#{var}"
+														target="#{subjectAllocationReport.selectedRow}"></f:setPropertyActionListener>
+												</p:commandButton>
+											</center>
+										</p:column>
+
+										<p:column headerText="Transfer" exportable="false">
+											<center>
+												<p:commandButton style="width:25%"
+													disabled="#{var.disableDeallocate}" styleClass="greenButt"
+													action="#{subjectAllocationReport.preTransfer}"
+													icon="ui-icon-transfer-e-w">
+													<f:setPropertyActionListener value="#{var}"
+														target="#{subjectAllocationReport.selectedRow}"></f:setPropertyActionListener>
+												</p:commandButton>
+											</center>
+										</p:column>
+
+									</p:dataTable>
+									
+									
+									<p:dataTable id="upp"
+										style="width:100%;border-collapse:collapse;display:none;" reflow="true"
+										border="1" value="#{subjectAllocationReport.list}" var="var">
+
+
+										<p:column headerText="S.No." style="text-align:center">
+
+											<f:facet name="header">
+												<p:outputLabel value="S.No."></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.sno}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Teacher Name"
+											sortBy="#{var.teachername}" filterBy="#{var.teachername}"
+											style="text-align:center">
+
+											<f:facet name="header">
+												<p:outputLabel value="Teacher Name"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.teachername}"></p:outputLabel>
+										</p:column>
+
+										<p:column style="text-align:center" headerText="Class"
+											sortBy="#{var.classname}" filterBy="#{var.classname}">
+
+											<f:facet name="header">
+												<p:outputLabel value="Class"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.classname}"></p:outputLabel>
+										</p:column>
+
+										<p:column style="text-align:center" headerText="Section">
+
+											<f:facet name="header">
+												<p:outputLabel value="Section"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.section}"></p:outputLabel>
+										</p:column>
+
+
+										<p:column style="text-align:center" headerText="Subjects"
+											filterBy="#{var.subjectName}">
+
+											<f:facet name="header">
+												<p:outputLabel value="Subjects"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel
+												value="#{var.subjectName}"></p:outputLabel>
+										</p:column>
+
+									</p:dataTable>
+								</p:panel>
+							</p:panel>
+						</h:form>
+
+						<h:form id="viewForm">
+							<p:dialog resizable="false" modal="true" widgetVar="viewDialog"
+								header="Select Subject(s) to Deallocate" closeOnEscape="true">
+								<div class="ui-g form-group">
+									<p:panelGrid columns="2"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+
+										<p:outputLabel value="Select Subject"></p:outputLabel>
+										<p:selectManyMenu
+											value="#{subjectAllocationReport.selectedSubjectList}"
+											id="subject" showCheckbox="true">
+											<f:selectItems value="#{subjectAllocationReport.subjectList}"></f:selectItems>
+										</p:selectManyMenu>
+										<p:outputLabel />
+									</p:panelGrid>
+								</div>
+								<br />
+								<p:separator />
+								<center>
+									<p:commandButton update=":form,:viewForm" icon="fa fa-minus" styleClass="redButt butwid"
+											action="#{subjectAllocationReport.deallocateSubject}"
+											value="Deallocate"></p:commandButton>
+								</center>
+								<p:separator />
+								<br />
+							</p:dialog>
+						</h:form>
+
+						<h:form id="trnForm">
+							<p:dialog resizable="false" modal="true" widgetVar="trnDialog"
+								header="Transfer Subjects" closeOnEscape="true">
+								<div class="ui-g form-group">
+									<p:panelGrid columns="2"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+
+										<p:outputLabel
+											rendered="#{subjectAllocationReport.showSubject}"
+											value="Select Subject" />
+										<p:selectManyMenu
+											rendered="#{subjectAllocationReport.showSubject}"
+											value="#{subjectAllocationReport.selectedSubjectList}"
+											id="subject" showCheckbox="true">
+											<f:selectItems value="#{subjectAllocationReport.subjectList}"></f:selectItems>
+										</p:selectManyMenu>
+
+										<p:outputLabel value="Select Teacher" for="@next"
+											style="color:red" />
+										<p:selectOneMenu
+											value="#{subjectAllocationReport.selectedteacher}"
+											required="true" requiredMessage="Select teaacher">
+											<f:selectItem itemLabel="select" itemValue=""></f:selectItem>
+											<f:selectItems value="#{subjectAllocationReport.teacherlist}"></f:selectItems>
+										</p:selectOneMenu>
+									</p:panelGrid>
+								</div>
+								<br />
+								<p:separator />
+								<center>
+									<p:commandButton update=":form,:trnForm" styleClass="butwid greenButt" icon="fa fa-exchange"
+											action="#{subjectAllocationReport.transferSubject}"
+											value="Transfer"></p:commandButton>
+								</center>
+								<p:separator />
+								<br />
+							</p:dialog>
+						</h:form>
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

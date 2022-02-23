@@ -1,0 +1,651 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:p="http://primefaces.org/ui">
+	
+	<f:view contentType="text/html">
+	
+	<h:head>
+		<title>Chalkbox | Fee Receipt</title>
+		<f:facet name="first">
+			<meta content='text/html; charset=UTF-8' http-equiv="Content-Type" />
+			<meta http-equiv="X-UA-Compatible" content="EmulateIE8" />
+		</f:facet>
+		
+		<script>
+		
+			function printwin() 
+			{
+				document.getElementById('test').style.display="none";	
+				document.getElementById('test1').style.display="none";
+				window.print();
+				document.getElementById('test').style.display="block";
+				document.getElementById('test1').style.display="block";
+
+				document.URL="";
+			}
+	
+		</script>
+	</h:head>
+		
+		<h:body>
+		<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+		<p:commandButton rendered="false" onclick="printwin()" id="test" value="Print" icon="ui-icon-print"></p:commandButton>				
+			<h:form  id="form2" >
+						
+				<style>
+			          .ui-widget .ui-widget {
+					    font-size: #{masterFeeReceiptBean.fontSize};
+						}
+					.test .ui-panelgrid-cell{
+						width:10%;
+						border:none;
+					}
+					.test .ui-panelgrid .ui-panelgrid-cell .ui-widget-content
+					{
+						border-style:hidden;
+						border: 0px !important;
+					}
+					.rightSide .ui-panelgrid-cell
+					{
+						text-align: right;
+					}
+										
+					.aa .ui-widget-content 
+					{
+						border:0px !important;
+						text-align:left;
+						
+					}
+					
+
+				</style>
+						
+						<p:outputPanel styleClass="aa" style="height: auto;
+float: left;
+font-size: 7px;
+border: 1px solid black;
+margin-right: 0%; width: #{masterFeeReceiptBean.width};" >
+					
+							<p:outputPanel> 
+							
+								<table width="100%;">
+			 						<tr>
+										<td style="width:20%"><p style="margin:0px;text-align:left;font-size: 7px;">#{masterFeeReceiptBean.regNo}</p></td>
+										
+										<td style="width:80%"><h2 style="margin:0px;text-align:right">#{masterFeeReceiptBean.a}</h2></td>
+									</tr>
+									<tr>
+										<td style="width:20%" rowspan="1"><p style="margin:0px;text-align:left;font-size: 7px;">#{masterFeeReceiptBean.schRegNo}</p></td>
+										
+										<td style="width:80%"><p style="margin:0px;text-align:right;font-size: 7px;">#{masterFeeReceiptBean.add4}</p></td>
+									</tr>
+								
+									<tr>
+										<td style="width:15%"><p style="text-align:left;margin:0px;font-size: 6.7px;'"></p></td>
+									</tr>
+								  <tr>
+										<td style="width:15%" rowspan="7"><p:graphicImage style="height:80px;width:100px;" value="#{masterFeeReceiptBean.imagePath}"/> </td>
+									</tr>
+			
+			                       	<tr>
+										<td style="width:85%"><h1 style="margin:0px;text-align:left;margin-left:10px;">#{masterFeeReceiptBean.schoolName}</h1></td>
+									</tr>
+									<tr>
+										<td style="width:85%"><p style="text-align:left;margin:0px;margin-left:10px;">#{masterFeeReceiptBean.add1}</p></td>
+									</tr>
+									<tr>
+										<td style="width:85%"><p style="text-align:left;margin:0px;margin-left:10px;">#{masterFeeReceiptBean.add2}</p></td>
+									</tr><tr>
+										<td style="width:85%"><p style="text-align:left;margin:0px;margin-left:10px;">#{masterFeeReceiptBean.add3}</p></td>
+									</tr>
+									
+									<tr>
+										<td style="width:85%"><p style="text-align:left;margin:0px;margin-left:10px;">Ph.No.-#{masterFeeReceiptBean.phoneNo}</p></td>
+									</tr>
+									
+									<tr>
+										<td style="width:85%"><p style="text-align:left;margin:0px;margin-left:10px;">#{masterFeeReceiptBean.emailId}     #{masterFeeReceiptBean.website}</p></td>
+									</tr>
+								</table>
+								
+							</p:outputPanel>
+							
+							<p:outputPanel style="width:100%;float-left;border-top: 1px solid black;float:left;">
+								
+								<p:outputPanel style="width:60%;float:left;">
+									
+									<p:outputPanel style="width:90%;float:left">
+										<p:panelGrid styleClass="test" columns="1">
+											<p:outputLabel value="Receipt No.- #{masterFeeReceiptBean.sno}"></p:outputLabel>
+											<p:outputLabel value="Student Name:- #{masterFeeReceiptBean.studentname}"></p:outputLabel>
+											<p:outputLabel value="Father's Name:- #{masterFeeReceiptBean.fathername}" ></p:outputLabel>
+											<p:outputLabel value="Fees Upto:- #{masterFeeReceiptBean.feeUpto}" ></p:outputLabel>
+										</p:panelGrid>
+									</p:outputPanel>
+								
+									<!-- <p:outputPanel style="width:50%;float:right">
+											
+											<p:panelGrid columns="1" styleClass="test">
+												
+												<p:outputLabel value="Session - #{masterFeeReceiptBean.session}"></p:outputLabel>
+											</p:panelGrid>
+									
+									</p:outputPanel>
+									 -->
+								</p:outputPanel>
+								
+								<p:outputPanel style="width:40%;float:right">
+									
+										<p:outputPanel style="width:80%;float:right">
+											<p:panelGrid styleClass="test" columns="1">
+												<p:outputLabel value="Date:- #{masterFeeReceiptBean.date}"></p:outputLabel>
+												<p:outputLabel value="Class:- #{masterFeeReceiptBean.studentclass}"></p:outputLabel>
+												<p:outputLabel value="SR.No.:- #{masterFeeReceiptBean.srNo}"></p:outputLabel>
+											</p:panelGrid>
+										</p:outputPanel>
+										
+								</p:outputPanel>
+							
+							</p:outputPanel>
+							
+							<p:outputPanel style="width:100%;min-height:180px;">
+								
+								<hr style="margin:0px"></hr>
+								
+								<h:dataTable value="#{masterFeeReceiptBean.selectedFees}" var="var" style="width:100%;border-collapse:collapse; border-right: none; border-left: none;" border="1">
+               				
+               				<f:facet name="header">
+               					Fee Details
+               				</f:facet>
+               				
+               				<p:column headerText="Stationary Fee Tpye">
+               				<f:facet name="header">Fee type</f:facet>
+               					<p:outputLabel value="#{var.feeName}"></p:outputLabel>
+               				</p:column>
+               				
+               				<p:column headerText="Amount ">
+               				<f:facet name="header">Amount (Rs.)</f:facet>
+               					<p:outputLabel style="float:right;margin-right:50px;" value="#{var.dueamount}"></p:outputLabel>
+               				</p:column>
+               				
+               				<p:column headerText="Discount " rendered="#{masterFeeReceiptBean.showDiscount}">
+               				<f:facet name="header">Discount (Rs.)</f:facet>
+               					<p:outputLabel style="float:right;margin-right:50px;" value="#{var.payDiscount}"></p:outputLabel>
+               				</p:column>
+               				
+               				<p:column headerText="Paid Amount ">
+               				<f:facet name="header">Paid (Rs.)</f:facet>
+               					<p:outputLabel style="float:right;margin-right:50px;" value="#{var.payAmount}"></p:outputLabel>
+               				</p:column>
+               				
+               				
+               			</h:dataTable>
+							
+
+						</p:outputPanel>
+							
+							<p:outputPanel style="border: 1px solid black;margin-top: #{masterFeeReceiptBean.marginTop}; border-right: none; border-left: none;">
+								
+								<p:panelGrid styleClass="test" style="width:100%" columns="3">
+									<p:outputLabel rendered="#{masterFeeReceiptBean.showDiscount}" value="Total Fees : Rs.#{masterFeeReceiptBean.totalDue}"  style="float:left;"></p:outputLabel>
+									<p:outputLabel rendered="#{masterFeeReceiptBean.showDiscount}" value="Discount : Rs.#{masterFeeReceiptBean.totalDiscount}"  style="margin-left: #{masterFeeReceiptBean.discountMargin}"></p:outputLabel>
+									<p:outputLabel value="Payable Fees: Rs.#{masterFeeReceiptBean.payableAmt}" style="float:right;"></p:outputLabel>
+								</p:panelGrid>
+								
+								<hr style="margin:0px"></hr>
+								
+								<p:panelGrid styleClass="test" style="width:100%" columns="2">
+									<p:outputLabel rendered="#{masterFeeReceiptBean.showDiscount}" value="Total Dues In This Receipt : Rs.#{masterFeeReceiptBean.dueInReceipt}"></p:outputLabel>
+									<p:outputLabel value="Paid Fees : Rs.#{masterFeeReceiptBean.total}" style="float:right;"></p:outputLabel>
+								</p:panelGrid>
+								<p:panelGrid styleClass="test" style="width:100%" columns="1">
+									<p:outputLabel value="Amount In Words : #{masterFeeReceiptBean.totalAmountInWords}" ></p:outputLabel>
+								</p:panelGrid>
+								
+								<hr style="margin:0px"></hr>
+							
+								<p:panelGrid styleClass="test" style="width:100%" columns="4">
+								<p:outputLabel value="Payment Mode "></p:outputLabel>
+									<p:outputLabel value="#{masterFeeReceiptBean.checqustatus}"></p:outputLabel>
+									<p:outputLabel value="#{masterFeeReceiptBean.bankStatus}"></p:outputLabel>
+									<p:outputLabel value="#{masterFeeReceiptBean.cheueDateStatus}" style="padding-top:10px"></p:outputLabel>
+									<p:outputLabel value="#{masterFeeReceiptBean.paymentmode}"></p:outputLabel>
+									<p:outputLabel value="#{masterFeeReceiptBean.chequeno} "></p:outputLabel>
+									<p:outputLabel value="#{masterFeeReceiptBean.bankName}"></p:outputLabel>
+									<p:outputLabel value="#{masterFeeReceiptBean.chequeDate}" style="padding-top:10px"></p:outputLabel>
+						
+								</p:panelGrid>
+								
+								<hr style="margin:0px"></hr>
+								
+								
+								<hr style="margin:0px"></hr>
+								
+									<p:outputLabel rendered="false" style="margin-left:2%"  value="Amount In Words:- #{masterFeeReceiptBean.totalAmountInWords}"></p:outputLabel>
+								
+									<br></br><br></br>
+									<br></br>
+									<!-- <br></br>
+									<br></br><br></br>
+									<br></br><br></br>
+									<br></br><br></br>
+								 -->
+								<p:panelGrid styleClass="test" style="width:100%" columns="2">
+									
+									<p:outputLabel value="Remark : #{masterFeeReceiptBean.remark}"></p:outputLabel>
+									<p:outputLabel value="Authorised Signature" style="float:right;"></p:outputLabel>
+								</p:panelGrid>
+								
+								
+								
+							</p:outputPanel>
+							
+						</p:outputPanel>
+						
+						<!-- <hr style="margin:20px"></hr> -->
+						
+						<p:outputPanel rendered="#{masterFeeReceiptBean.r1}"  styleClass="aa" style="height: auto;
+
+float: left;
+font-size: 7px;
+border: 1px solid black;
+margin-left: #{masterFeeReceiptBean.marginBetween};
+width: #{masterFeeReceiptBean.width};" >
+						
+							<p:outputPanel> 
+							
+								<table width="100%;">
+									 <tr>
+										<td style="width:20%"><p style="margin:0px;text-align:left;font-size: 7px;">#{masterFeeReceiptBean.regNo}</p></td>
+										
+										<td style="width:80%"><h2 style="margin:0px;text-align:right">#{masterFeeReceiptBean.b}</h2></td>
+									</tr>
+									<tr>
+										<td style="width:20%" rowspan="1"><p style="margin:0px;text-align:left;font-size: 7px;">#{masterFeeReceiptBean.schRegNo}</p></td>
+										
+										<td style="width:80%"><p style="margin:0px;text-align:right;font-size: 7px;">#{masterFeeReceiptBean.add4}</p></td>
+									</tr>
+									
+									<tr>
+										<td style="width:15%"><p style="text-align:left;margin:0px;font-size: 6.7px;'"></p></td>
+									</tr>
+								
+								
+									<tr>
+										<td style="width:15%" rowspan="7"><p:graphicImage style="height:80px;width:100px;" value="#{masterFeeReceiptBean.imagePath}"/> </td>
+									</tr>
+			
+			                       	<tr>
+										<td style="width:85%"><h1 style="margin:0px;text-align:left;margin-left:10px;">#{masterFeeReceiptBean.schoolName}</h1></td>
+									</tr>
+									
+									
+									<tr>
+										<td style="width:85%"><p style="text-align:left;margin:0px;margin-left:10px;">#{masterFeeReceiptBean.add1}</p></td>
+									</tr>
+									<tr>
+										<td style="width:85%"><p style="text-align:left;margin:0px;margin-left:10px;">#{masterFeeReceiptBean.add2}</p></td>
+									</tr><tr>
+										<td style="width:85%"><p style="text-align:left;margin:0px;margin-left:10px;">#{masterFeeReceiptBean.add3}</p></td>
+									</tr>
+									
+									<tr>
+										<td style="width:85%"><p style="text-align:left;margin:0px;margin-left:10px;">Ph.No.-#{masterFeeReceiptBean.phoneNo}</p></td>
+									</tr>
+									
+									<tr>
+										<td style="width:85%"><p style="text-align:left;margin:0px;margin-left:10px;">#{masterFeeReceiptBean.emailId}     #{masterFeeReceiptBean.website}</p></td>
+									</tr>
+								</table>
+								
+								
+								
+								
+							</p:outputPanel>
+							
+							<p:outputPanel style="width:100%;float-left;border-top: 1px solid black;float:left;">
+								
+								<p:outputPanel style="width:60%;float:left;">
+									
+									<p:outputPanel style="width:90%;float:left">
+										<p:panelGrid styleClass="test" columns="1">
+											<p:outputLabel value="Receipt No.- #{masterFeeReceiptBean.sno}"></p:outputLabel>
+											<p:outputLabel value="Student Name:- #{masterFeeReceiptBean.studentname}"></p:outputLabel>
+											<p:outputLabel value="Father's Name:- #{masterFeeReceiptBean.fathername}" ></p:outputLabel>
+											<p:outputLabel value="Fees Upto:- #{masterFeeReceiptBean.feeUpto}" ></p:outputLabel>
+										</p:panelGrid>
+									</p:outputPanel>
+								
+									<!-- <p:outputPanel style="width:50%;float:right">
+											
+											<p:panelGrid columns="1" styleClass="test">
+												
+												<p:outputLabel value="Session - #{masterFeeReceiptBean.session}"></p:outputLabel>
+											</p:panelGrid>
+									
+									</p:outputPanel>
+									 -->
+								</p:outputPanel>
+								
+								<p:outputPanel style="width:40%;float:right">
+									
+										<p:outputPanel style="width:80%;float:right">
+											<p:panelGrid styleClass="test" columns="1">
+												<p:outputLabel value="Date:- #{masterFeeReceiptBean.date}"></p:outputLabel>
+												<p:outputLabel value="Class:- #{masterFeeReceiptBean.studentclass}"></p:outputLabel>
+												<p:outputLabel value="SR.No.:- #{masterFeeReceiptBean.srNo}"></p:outputLabel>
+											</p:panelGrid>
+										</p:outputPanel>
+							</p:outputPanel>
+							</p:outputPanel>
+							
+							<p:outputPanel style="width:100%;min-height:180px;">
+								
+								<hr style="margin:0px"></hr>
+								
+								<h:dataTable value="#{masterFeeReceiptBean.selectedFees}" var="var" style="width:100%;border-collapse:collapse; border-right: none; border-left: none;" border="1">
+               				
+               				<f:facet name="header">
+               					Fee Details
+               				</f:facet>
+               				
+               				
+               				<p:column headerText="Stationary Fee Tpye">
+               				<f:facet name="header">Fee type</f:facet>
+               					<p:outputLabel value="#{var.feeName}"></p:outputLabel>
+               				</p:column>
+               				
+               				<p:column headerText="Date" rendered="false">
+               				<f:facet name="header">Period</f:facet>
+               					<p:outputLabel value="#{var.feeDateStr}"></p:outputLabel>
+               				</p:column>
+               				
+               				
+               				<p:column headerText="Amount ">
+               				<f:facet name="header">Amount (Rs.)</f:facet>
+               					<p:outputLabel style="float:right;margin-right:50px;" value="#{var.dueamount}"></p:outputLabel>
+               				</p:column>
+               				
+               				<p:column headerText="Discount " rendered="#{masterFeeReceiptBean.showDiscount}">
+               				<f:facet name="header">Discount (Rs.)</f:facet>
+               					<p:outputLabel style="float:right;margin-right:50px;" value="#{var.payDiscount}"></p:outputLabel>
+               				</p:column>
+               				
+               				<p:column headerText="Paid Amount ">
+               				<f:facet name="header">Paid (Rs.)</f:facet>
+               					<p:outputLabel style="float:right;margin-right:50px;" value="#{var.payAmount}"></p:outputLabel>
+               				</p:column>
+               				
+               				
+               			</h:dataTable>
+								
+
+							</p:outputPanel>
+							
+							<p:outputPanel style="border: 1px solid black;margin-top: #{masterFeeReceiptBean.marginTop}; border-right: none; border-left: none;">
+								
+								<p:panelGrid styleClass="test" style="width:100%" columns="3">
+									<p:outputLabel rendered="#{masterFeeReceiptBean.showDiscount}" value="Total Fees : Rs.#{masterFeeReceiptBean.totalDue}"  style="float:left;"></p:outputLabel>
+									<p:outputLabel rendered="#{masterFeeReceiptBean.showDiscount}" value="Discount : Rs.#{masterFeeReceiptBean.totalDiscount}"  style="margin-left: #{masterFeeReceiptBean.discountMargin};"></p:outputLabel>
+									<p:outputLabel value="Payable Fees: Rs.#{masterFeeReceiptBean.payableAmt}" style="float:right;"></p:outputLabel>
+								</p:panelGrid>
+								
+								<hr style="margin:0px"></hr>
+								
+								<p:panelGrid styleClass="test" style="width:100%" columns="2">
+									<p:outputLabel rendered="#{masterFeeReceiptBean.showDiscount}" value="Total Dues In This Receipt : Rs.#{masterFeeReceiptBean.dueInReceipt}" ></p:outputLabel>
+									<p:outputLabel value="Paid Fees : Rs.#{masterFeeReceiptBean.total}" style="float:right;"></p:outputLabel>
+								</p:panelGrid>
+								<p:panelGrid styleClass="test" style="width:100%" columns="1">
+									<p:outputLabel value="Amount In Words : #{masterFeeReceiptBean.totalAmountInWords}" ></p:outputLabel>
+								</p:panelGrid>
+								
+								<hr style="margin:0px"></hr>
+								
+								<p:panelGrid styleClass="test" style="width:100%" columns="4">
+									<p:outputLabel value="Payment Mode "></p:outputLabel>
+									<p:outputLabel value="#{masterFeeReceiptBean.checqustatus}"></p:outputLabel>
+									<p:outputLabel value="#{masterFeeReceiptBean.bankStatus}"></p:outputLabel>
+									<p:outputLabel value="#{masterFeeReceiptBean.cheueDateStatus}" style="padding-top:10px"></p:outputLabel>
+									<p:outputLabel value="#{masterFeeReceiptBean.paymentmode}"></p:outputLabel>
+									<p:outputLabel value="#{masterFeeReceiptBean.chequeno} "></p:outputLabel>
+									<p:outputLabel value="#{masterFeeReceiptBean.bankName}"></p:outputLabel>
+									<p:outputLabel value="#{masterFeeReceiptBean.chequeDate}" style="padding-top:10px"></p:outputLabel>
+						
+								</p:panelGrid>
+							
+								
+								<hr style="margin:0px"></hr>
+								
+								
+								<hr style="margin:0px"></hr>
+								
+									<p:outputLabel rendered="false" style="margin-left:2%"  value="Amount In Words:- #{masterFeeReceiptBean.totalAmountInWords}"></p:outputLabel>
+									<br></br><br></br>
+									<br></br>
+									<!-- <br></br>
+									<br></br><br></br>
+									<br></br><br></br>
+									<br></br><br></br> -->
+								<p:panelGrid styleClass="test" style="width:100%" columns="2">
+									
+									<p:outputLabel value="Remark : #{masterFeeReceiptBean.remark}"></p:outputLabel>
+									<p:outputLabel value="Authorised Signature" style="float:right;"></p:outputLabel>
+								</p:panelGrid>
+								
+								
+							</p:outputPanel>
+							
+						
+						</p:outputPanel>
+	
+	
+		<p:outputPanel rendered="#{masterFeeReceiptBean.r2}"  styleClass="aa" style="height: auto;
+float: left;
+font-size: 7px;
+border: 1px solid black;
+margin-left: #{masterFeeReceiptBean.marginBetween};
+width: #{masterFeeReceiptBean.width};" >
+						
+							<p:outputPanel> 
+							
+								<table width="100%;">
+			 						<tr>
+										<td style="width:20%"><p style="margin:0px;text-align:left;font-size: 7px;">#{masterFeeReceiptBean.regNo}</p></td>
+										
+										<td style="width:80%"><h2 style="margin:0px;text-align:right">#{masterFeeReceiptBean.c}</h2></td>
+									</tr>
+									<tr>
+										<td style="width:20%" rowspan="1"><p style="margin:0px;text-align:left;font-size: 7px;">#{masterFeeReceiptBean.schRegNo}</p></td>
+										
+										<td style="width:80%"><p style="margin:0px;text-align:right;font-size: 7px;">#{masterFeeReceiptBean.add4}</p></td>
+									</tr>
+									
+									<tr>
+										<td style="width:15%"><p style="text-align:left;margin:0px;font-size: 6.7px;'"></p></td>
+									</tr>
+								
+									<tr>
+										<td style="width:15%" rowspan="7"><p:graphicImage style="height:80px;width:100px;" value="#{masterFeeReceiptBean.imagePath}"/> </td>
+									</tr>
+			
+			                       	<tr>
+										<td style="width:85%"><h1 style="margin:0px;text-align:left;margin-left:10px;">#{masterFeeReceiptBean.schoolName}</h1></td>
+									</tr>
+									
+									
+									<tr>
+										<td style="width:85%"><p  style="text-align:left;margin:0px;margin-left:10px;">#{masterFeeReceiptBean.add1}</p></td>
+									</tr>
+									<tr>
+										<td style="width:85%"><p style="text-align:left;margin:0px;margin-left:10px;">#{masterFeeReceiptBean.add2}</p></td>
+									</tr><tr>
+										<td style="width:85%"><p style="text-align:left;margin:0px;margin-left:10px;">#{masterFeeReceiptBean.add3}</p></td>
+									</tr>
+									
+									<tr>
+										<td style="width:85%"><p style="text-align:left;margin:0px;margin-left:10px;">Ph.No.-#{masterFeeReceiptBean.phoneNo}</p></td>
+									</tr>
+									
+									<tr>
+										<td style="width:85%"><p style="text-align:left;margin:0px;margin-left:10px;">#{masterFeeReceiptBean.emailId}     #{masterFeeReceiptBean.website}</p></td>
+									</tr>
+								</table>
+								
+								
+							</p:outputPanel>
+							
+							<p:outputPanel style="width:100%;float-left;border-top: 1px solid black;float:left;">
+								
+								<p:outputPanel style="width:60%;float:left;">
+									
+									<p:outputPanel style="width:90%;float:left">
+										<p:panelGrid styleClass="test" columns="1">
+											<p:outputLabel value="Receipt No.- #{masterFeeReceiptBean.sno}"></p:outputLabel>
+											<p:outputLabel value="Student Name:- #{masterFeeReceiptBean.studentname}"></p:outputLabel>
+											<p:outputLabel value="Father's Name:- #{masterFeeReceiptBean.fathername}" ></p:outputLabel>
+											<p:outputLabel value="Fees Upto:- #{masterFeeReceiptBean.feeUpto}" ></p:outputLabel>
+										</p:panelGrid>
+									</p:outputPanel>
+								
+									<!-- <p:outputPanel style="width:50%;float:right">
+											
+											<p:panelGrid columns="1" styleClass="test">
+												
+												<p:outputLabel value="Session - #{masterFeeReceiptBean.session}"></p:outputLabel>
+											</p:panelGrid>
+									
+									</p:outputPanel>
+									 -->
+								</p:outputPanel>
+								
+								<p:outputPanel style="width:40%;float:right">
+									
+										<p:outputPanel style="width:80%;float:right">
+											<p:panelGrid styleClass="test" columns="1">
+												<p:outputLabel value="Date:- #{masterFeeReceiptBean.date}"></p:outputLabel>
+												<p:outputLabel value="Class:- #{masterFeeReceiptBean.studentclass}"></p:outputLabel>
+												<p:outputLabel value="SR.No.:- #{masterFeeReceiptBean.srNo}"></p:outputLabel>
+											</p:panelGrid>
+										</p:outputPanel>
+										</p:outputPanel>
+							</p:outputPanel>
+							
+							<p:outputPanel style="width:100%;min-height:180px;">
+								
+								<hr style="margin:0px"></hr>
+								
+								<h:dataTable value="#{masterFeeReceiptBean.selectedFees}" var="var" style="width:100%;border-collapse:collapse; border-right: none; border-left: none;" border="1">
+               				
+               				<f:facet name="header">
+               					Fee Details
+               				</f:facet>
+               				
+               				<p:column headerText="Stationary Fee Tpye">
+               				<f:facet name="header">Fee type</f:facet>
+               					<p:outputLabel value="#{var.feeName}"></p:outputLabel>
+               				</p:column>
+               				
+               				<p:column headerText="Date" rendered="false">
+               				<f:facet name="header">Period</f:facet>
+               					<p:outputLabel value="#{var.feeDateStr}"></p:outputLabel>
+               				</p:column>
+               				
+               				
+               				<p:column headerText="Amount ">
+               				<f:facet name="header">Amount (Rs.)</f:facet>
+               					<p:outputLabel style="float:right;margin-right:50px;" value="#{var.dueamount}"></p:outputLabel>
+               				</p:column>
+               				
+               				<p:column headerText="Discount " rendered="#{masterFeeReceiptBean.showDiscount}">
+               				<f:facet name="header">Discount (Rs.)</f:facet>
+               					<p:outputLabel style="float:right;margin-right:50px;" value="#{var.payDiscount}"></p:outputLabel>
+               				</p:column>
+               				
+               				<p:column headerText="Paid Amount ">
+               				<f:facet name="header">Paid (Rs.)</f:facet>
+               					<p:outputLabel style="float:right;margin-right:50px;" value="#{var.payAmount}"></p:outputLabel>
+               				</p:column>
+               				
+               				
+               			</h:dataTable>
+								
+
+							</p:outputPanel>
+							
+							<p:outputPanel style="border: 1px solid black;margin-top: #{masterFeeReceiptBean.marginTop}; border-right: none; border-left: none;">
+								
+								<p:panelGrid styleClass="test" style="width:100%" columns="3">
+									<p:outputLabel rendered="#{masterFeeReceiptBean.showDiscount}" value="Total Fees : Rs.#{masterFeeReceiptBean.totalDue}"  style="float:left;"/>
+									<p:outputLabel rendered="#{masterFeeReceiptBean.showDiscount}" value="Discount : Rs.#{masterFeeReceiptBean.totalDiscount}" style="margin-left: #{masterFeeReceiptBean.discountMargin};"/>
+									<p:outputLabel value="Payable Fees: Rs.#{masterFeeReceiptBean.payableAmt}" style="float:right;"/>
+								</p:panelGrid>
+								
+								<hr style="margin:0px"></hr>
+								
+								<p:panelGrid styleClass="test" style="width:100%" columns="2">
+									<p:outputLabel rendered="#{masterFeeReceiptBean.showDiscount}" value="Total Dues In This Receipt : Rs.#{masterFeeReceiptBean.dueInReceipt}" ></p:outputLabel>
+									<p:outputLabel value="Paid Fees : Rs.#{masterFeeReceiptBean.total}" style="float:right;"></p:outputLabel>
+								</p:panelGrid>
+								<p:panelGrid styleClass="test" style="width:100%" columns="1">
+									<p:outputLabel value="Amount In Words : #{masterFeeReceiptBean.totalAmountInWords}" ></p:outputLabel>
+								</p:panelGrid>
+								
+								<hr style="margin:0px"></hr>
+								
+								<p:panelGrid styleClass="test" style="width:100%" columns="4">
+							<p:outputLabel value="Payment Mode "></p:outputLabel>
+									<p:outputLabel value="#{masterFeeReceiptBean.checqustatus}"></p:outputLabel>
+									<p:outputLabel value="#{masterFeeReceiptBean.bankStatus}"></p:outputLabel>
+									<p:outputLabel value="#{masterFeeReceiptBean.cheueDateStatus}" style="padding-top:10px"></p:outputLabel>
+									<p:outputLabel value="#{masterFeeReceiptBean.paymentmode}"></p:outputLabel>
+									<p:outputLabel value="#{masterFeeReceiptBean.chequeno} "></p:outputLabel>
+									<p:outputLabel value="#{masterFeeReceiptBean.bankName}"></p:outputLabel>
+									<p:outputLabel value="#{masterFeeReceiptBean.chequeDate}" style="padding-top:10px"></p:outputLabel>
+						
+								</p:panelGrid>
+							
+								
+								<hr style="margin:0px"></hr>
+								
+								
+								<hr style="margin:0px"></hr>
+									<p:outputLabel rendered="false" style="margin-left:2%"  value="Amount In Words:- #{masterFeeReceiptBean.totalAmountInWords}"></p:outputLabel>
+										<br></br><br></br>
+									<br></br>
+									<!-- <br></br>
+									<br></br><br></br>
+									<br></br><br></br>
+									<br></br><br></br> -->
+								<p:panelGrid styleClass="test" style="width:100%" columns="2">
+									
+									<p:outputLabel value="Remark : #{masterFeeReceiptBean.remark}"></p:outputLabel>
+									<p:outputLabel value="Authorised Signature" style="float:right;"></p:outputLabel>
+								</p:panelGrid>
+								
+								
+							</p:outputPanel>
+							
+						
+						</p:outputPanel>
+	
+			</h:form>	
+			
+		<p:ajaxStatus style="height:24px;width:30px" onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+ <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+    <p:graphicImage value="images/ar.gif" />
+</p:dialog>
+<script src="js.1/jquery.min.js"></script>
+<script src="js.1/bootstrap.min.js"></script>
+		</h:body>
+	
+	</f:view>
+</html>
+	
+	

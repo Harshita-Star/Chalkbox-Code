@@ -1,0 +1,192 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Bulk Transport</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<h1>Bulk Transport</h1>
+
+							<p:panel header="Select a Class">
+								<p:messages closable="true" autoUpdate="true"></p:messages>
+								<p:panelGrid columns="6"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:outputLabel for="@next" style="color:red"
+										value="Select a Class"></p:outputLabel>
+									<p:selectOneMenu value="#{bulkTransporthBean.selectedClass}"
+										filter="true" required="true"
+										requiredMessage="Please select a class">
+										<f:selectItem itemLabel="Select Class" itemValue="select"></f:selectItem>
+
+										<f:selectItems value="#{bulkTransporthBean.classList}"></f:selectItems>
+
+										<p:ajax update="sectionid"
+											listener="#{bulkTransporthBean.allSections}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel for="@next" style="color:red"
+										value="Select Section"></p:outputLabel>
+									<p:selectOneMenu id="sectionid" filter="true"
+										value="#{bulkTransporthBean.selectedSection}" required="true"
+										requiredMessage="Please select a section">
+										<f:selectItem itemLabel="Select Section" itemValue=""></f:selectItem>
+										<f:selectItem itemLabel="All" itemValue="-1"></f:selectItem>
+										<f:selectItems value="#{bulkTransporthBean.sectionList}"></f:selectItems>
+
+										<p:ajax></p:ajax>
+									</p:selectOneMenu>
+
+
+									
+
+
+								</p:panelGrid>
+								<br />
+								<p:separator />
+								<center>
+								<p:commandButton value="Search" styleClass="butwid" icon="fa fa-search"
+										actionListener="#{bulkTransporthBean.getStudentStrength}"
+										update=":form">
+									</p:commandButton>
+
+								</center>
+								<p:separator />
+								<br />
+
+								<br />
+								<p:panel header="Student Details" id="dataTable"
+									rendered="#{bulkTransporthBean.b}">
+
+
+
+									<p:dataTable reflow="true" id="up"
+										style="border-collapse:collapse" border="1"
+										value="#{bulkTransporthBean.studentList}" var="var"
+										rowKey="#{var.addNumber}"
+										selection="#{bulkTransporthBean.multipleStudentList}">
+
+										<f:facet name="header">
+										<center>
+											<p:commandButton action="#{bulkTransporthBean.addFees}" styleClass="butwid" icon="fa fa-inr"
+												value="Add Fees" update=":form"></p:commandButton>
+										</center>
+										
+										</f:facet>
+										<p:column selectionMode="multiple"
+											style="width:20px;text-align:center" />
+										<p:column headerText="SNo."
+											style="width:30px;text-align:center">
+											<f:facet name="header">
+												<p:outputLabel value="S.No."></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.sno}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Add. No." sortBy="#{var.srNo}"
+											filterBy="#{var.srNo}" filterMatchMode="contains"
+											style="width:50px;text-align:center">
+											<f:facet name="header">
+												<p:outputLabel value="SR. No."></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.srNo}"></p:outputLabel>
+										</p:column>
+
+										<p:column style="width:70px;text-align:center"
+											sortBy="#{var.fullName}" filterBy="#{var.fullName}"
+											filterMatchMode="contains" headerText="Student Name">
+
+											<f:facet name="header">
+												<p:outputLabel value="Student Name"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.fullName}"></p:outputLabel>
+										</p:column>
+
+										<p:column style="width:70px;text-align:center"
+											headerText="Father's Name" filterBy="#{var.fathersName}"
+											filterMatchMode="contains">
+
+											<f:facet name="header">
+												<p:outputLabel value="Father's Name"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.fathersName}"></p:outputLabel>
+										</p:column>
+
+										<p:column style="width:70px;text-align:center"
+											headerText="Current Bus Stop">
+											<p:outputLabel value="#{var.currentRoute}"></p:outputLabel>
+
+										</p:column>
+
+										<p:column style="width:80px;text-align:center"
+											headerText="New Bus Stop">
+											<p:selectOneMenu value="#{var.newRoute}" filter="true"
+												filterMatchMode="contains">
+												<f:selectItem itemLabel="Select Route" itemValue=""></f:selectItem>
+												<f:selectItems value="#{var.newRouteList}"></f:selectItems>
+												<f:attribute name="serialNo" value="#{var.sno}"></f:attribute>
+												<p:ajax
+													listener="#{bulkTransporthBean.calculateTransportFee}"
+													update=":form:up:tFee  :form:up:totFee">
+												</p:ajax>
+
+											</p:selectOneMenu>
+										</p:column>
+
+
+										<p:column style="width:50px;text-align:center"
+											headerText="Transport Fee (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})">
+
+											<p:outputLabel value="#{var.tranportFee}" id="tFee"></p:outputLabel>
+										</p:column>
+
+										<p:column style="width:50px;text-align:center"
+											headerText="Discount (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})">
+
+											<p:inputText value="#{var.discountFees}"
+												onfocus="this.select()">
+												<p:keyFilter mask="pnum" />
+												<f:attribute name="serialNo" value="#{var.sno}"></f:attribute>
+												<p:ajax
+													listener="#{bulkTransporthBean.calculateDiscountFee}"
+													update=":form:up:totFee">
+												</p:ajax>
+											</p:inputText>
+										</p:column>
+
+										<p:column style="width:50px;text-align:center"
+											headerText="Total Fee (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})">
+
+											<p:outputLabel value="#{var.totalFee}" id="totFee"></p:outputLabel>
+										</p:column>
+
+										<f:facet name="footer">
+										<center>
+										<p:commandButton action="#{bulkTransporthBean.addFees}" styleClass="butwid" icon="fa fa-inr"
+												value="Add Fees" update=":form"></p:commandButton>
+										</center>
+											
+										</f:facet>
+									</p:dataTable>
+
+
+								</p:panel>
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,861 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/studentTemplate.xhtml">
+
+	<ui:define name="title">Student Profile</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form" style="font-size:9px">
+
+							<center>
+								<p:outputLabel style="font-size:30px;" value="Student Details"></p:outputLabel>
+							</center>
+							<hr></hr>
+							<h:panelGrid style="width:100%" columns="2">
+								<h:panelGrid columns="4"
+									style="border-collapse:collapse;width:100%;font-size:13px">
+
+									<p:outputLabel value="Roll No:-"></p:outputLabel>
+									<p:outputLabel value="#{viewStudent.studentList.rollNo}"></p:outputLabel>
+
+									<p:outputLabel value="Name:-"></p:outputLabel>
+									<p:outputLabel value="#{viewStudent.fname}"></p:outputLabel>
+
+									<p:outputLabel
+										value="#{searchStudentVar.viewStudentFathersNameLabel}:-"></p:outputLabel>
+									<p:outputLabel value="#{viewStudent.fathersName}"></p:outputLabel>
+
+									<p:outputLabel
+										value="#{searchStudentVar.viewStudentMothersNameLabel}:-"></p:outputLabel>
+									<p:outputLabel value="#{viewStudent.motherName}"></p:outputLabel>
+
+									<p:outputLabel
+										value="#{searchStudentVar.viewStudentAdmissionNumberLabel}:-"></p:outputLabel>
+									<p:outputLabel value="#{viewStudent.studentList.srNo}"></p:outputLabel>
+
+									<p:outputLabel
+										value="#{searchStudentVar.viewStudentClassLabel}:-"></p:outputLabel>
+									<p:outputLabel value="#{viewStudent.className}"></p:outputLabel>
+
+									<p:outputLabel
+										value="#{searchStudentVar.viewStudentDOBLabel}:-"></p:outputLabel>
+									<p:outputLabel value="#{viewStudent.d}"></p:outputLabel>
+
+								</h:panelGrid>
+								<h:panelGrid style="float:right" columns="1" border="1">
+									<p:graphicImage value="#{viewStudent.studentImage}"
+										height="100px" width="100px"></p:graphicImage>
+								</h:panelGrid>
+							</h:panelGrid>
+							<hr></hr>
+							<table border="1" cellpadding="5" cellspacing="0"
+								style="width: 100%; margin-top: 12px; font-size: 15px">
+								<tr>
+									<td style="width: 12.5%;">Admission Date :-</td>
+									<td style="width: 12.5%;" colspan="5"><h:outputLabel
+											value="#{viewStudent.sDate}" /></td>
+									<td style="width: 12.5%;">Admit Class:-</td>
+									<td style="width: 12.5%;"><h:outputLabel
+											value="#{viewStudent.admitClass}" /></td>
+
+								</tr>
+								<tr>
+									<td style="width: 12.5%;">Religion :-</td>
+									<td style="width: 12.5%;" colspan="5"><h:outputLabel
+											value="#{viewStudent.religion}" /></td>
+									<td style="width: 12.5%;">Disability:-</td>
+									<td style="width: 12.5%;"><h:outputLabel
+											value="#{viewStudent.handicap}" /></td>
+
+								</tr>
+								<tr>
+									<td style="width: 12.5%;"><h:outputLabel value="Gender :-" /></td>
+									<td style="width: 12.5%;" colspan="5"><h:outputLabel
+											value="#{viewStudent.gender}" /></td>
+									<td style="width: 12.5%;">Category:-</td>
+									<td style="width: 12.5%;"><h:outputLabel
+											value="#{viewStudent.category}" /></td>
+
+								</tr>
+
+								<tr>
+									<td style="width: 12.5%;"><h:outputLabel
+											value="Permanent Address  :-" /></td>
+									<td style="width: 12.5%;" colspan="5"><h:outputLabel
+											value="#{viewStudent.permanentAddress}" /></td>
+									<td style="width: 12.5%;">Fathers Occupation:-</td>
+									<td style="width: 12.5%;"><h:outputLabel
+											value="#{viewStudent.fathersOccupation}" /></td>
+
+								</tr>
+
+								<tr>
+									<td style="width: 12.5%;">BPL Card No.</td>
+									<td style="width: 12.5%;" colspan="5"><h:outputLabel
+											value="#{viewStudent.bplCardNo}" /></td>
+									<td style="width: 12.5%;">Single Child:-</td>
+									<td style="width: 12.5%;"><h:outputLabel
+											value="#{viewStudent.singleChild}" /></td>
+
+								</tr>
+
+								<tr>
+									<td style="width: 12.5%;">Single Parent :-</td>
+									<td style="width: 12.5%;" colspan="5"><h:outputLabel
+											value="#{viewStudent.singleParent}" /></td>
+									<td style="width: 12.5%;">Mothers Email:-</td>
+									<td style="width: 12.5%;"><h:outputLabel
+											value="#{viewStudent.motherEmail}" /></td>
+
+								</tr>
+
+
+								<tr>
+									<td style="width: 12.5%;">Admit Class :-</td>
+									<td style="width: 12.5%;" colspan="5"><h:outputLabel
+											value="#{viewStudent.admitClass}" /></td>
+									<td style="width: 12.5%;">Nationality:-</td>
+									<td style="width: 12.5%;"><h:outputLabel
+											value="#{viewStudent.nationality}" /></td>
+
+								</tr>
+
+
+								<tr>
+									<td style="width: 12.5%;">Country:-</td>
+									<td style="width: 12.5%;" colspan="5"><h:outputLabel
+											value="#{viewStudent.country}" /></td>
+									<td style="width: 12.5%;">Father's Mobile Number:-</td>
+									<td style="width: 12.5%;"><h:outputLabel
+											value="#{viewStudent.fathersPhone}" /></td>
+
+								</tr>
+
+
+								<tr>
+									<td style="width: 12.5%;">Residence Mobile No:-</td>
+									<td style="width: 12.5%;" colspan="5"><h:outputLabel
+											value="#{viewStudent.residencePhone}" /></td>
+									<td style="width: 12.5%;">Concession:-</td>
+									<td style="width: 12.5%;"><h:outputLabel
+											value="#{viewStudent.concession}" /></td>
+
+								</tr>
+
+
+
+								<tr>
+									<td style="width: 12.5%;">Blood Group:-</td>
+									<td style="width: 12.5%;" colspan="5"><h:outputLabel
+											value="#{viewStudent.bloodGroup}" /></td>
+									<td style="width: 12.5%;">Living With:-</td>
+									<td style="width: 12.5%;"><h:outputLabel
+											value="#{viewStudent.livingWith}" /></td>
+
+								</tr>
+
+
+
+								<tr>
+									<td style="width: 12.5%;">Transport Route:-</td>
+									<td style="width: 12.5%;" colspan="5"><h:outputLabel
+											value="#{viewStudent.transportRoute}" /></td>
+									<td style="width: 12.5%;">Pin Code:-</td>
+									<td style="width: 12.5%;"><h:outputLabel
+											value="#{viewStudent.pincode}" /></td>
+
+								</tr>
+
+
+
+								<tr>
+									<td style="width: 12.5%;">Current Address:-</td>
+									<td style="width: 12.5%;" colspan="5"><h:outputLabel
+											value="#{viewStudent.currentAddress}" /></td>
+									<td style="width: 12.5%;">Mother's Mobile No.:-</td>
+									<td style="width: 12.5%;"><h:outputLabel
+											value="#{viewStudent.mothersPhone}" /></td>
+
+								</tr>
+
+
+								<tr>
+									<td style="width: 12.5%;">Whether BPL ? :-</td>
+									<td style="width: 12.5%;" colspan="5"><h:outputLabel
+											value="#{viewStudent.bpl}" /></td>
+									<td style="width: 12.5%;">Caste:-</td>
+									<td style="width: 12.5%;"><h:outputLabel
+											value="#{viewStudent.caste}" /></td>
+
+								</tr>
+
+
+								<tr>
+									<td style="width: 12.5%;">Child's Aadhaar No:-</td>
+									<td style="width: 12.5%;" colspan="5"><h:outputLabel
+											value="#{viewStudent.aadharNo}" /></td>
+									<td style="width: 12.5%;">Father's Email:-</td>
+									<td style="width: 12.5%;"><h:outputLabel
+											value="#{viewStudent.fatherEmail}" /></td>
+
+								</tr>
+
+							</table>
+
+							<p:outputPanel>
+
+								<p:outputPanel
+									style="width:100%;text-align:center;border-collapse:collapse;font-size:10px;float:left;margin-top:12px">
+									<p:outputLabel
+										style="font-size:15px!important;font-weight:bold;text-decoration:underline"
+										value="Previous School Details"></p:outputLabel>
+									<p:outputLabel></p:outputLabel>
+									<table border="1" cellpadding="5" cellspacing="0"
+										style="width: 100%; margin-top: 12px; font-size: 12px">
+										<tr>
+											<td style="width: 12.5%;">Last School Name:-</td>
+											<td style="width: 12.5%;" colspan="5"><h:outputLabel
+													value="#{viewStudent.lastSchoolName}" /></td>
+											<td style="width: 12.5%;">Passed Class:-</td>
+											<td style="width: 12.5%;"><h:outputLabel
+													value="#{viewStudent.passedClass}" /></td>
+
+										</tr>
+
+										<tr>
+											<td style="width: 12.5%;">Medium:-</td>
+											<td style="width: 12.5%;" colspan="5"><h:outputLabel
+													value="#{viewStudent.medium}" /></td>
+											<td style="width: 12.5%;">Result:-</td>
+											<td style="width: 12.5%;"><h:outputLabel
+													value="#{viewStudent.pResult}" /></td>
+
+										</tr>
+
+										<tr>
+											<td style="width: 12.5%;">% Age:-</td>
+											<td style="width: 12.5%;" colspan="5"><h:outputLabel
+													value="#{viewStudent.p_percent}" /></td>
+											<td style="width: 12.5%;">Tc Date:-</td>
+											<td style="width: 12.5%;"><h:outputLabel
+													value="#{viewStudent.tcDate}" /></td>
+
+										</tr>
+
+										<tr>
+											<td style="width: 12.5%;">Reason To Leave:-</td>
+											<td style="width: 12.5%;" colspan="7"><h:outputLabel
+													value="#{viewStudent.pReason}" /></td>
+
+										</tr>
+
+									</table>
+								</p:outputPanel>
+								<table border="0" cellpadding="5" cellspacing="0"
+									style="width: 100%; margin-top: 22px; font-size: 15px">
+									<tr>
+										<td style="width: 12.5%;"></td>
+										<td style="width: 12.5%;" colspan="5"></td>
+										<td style="width: 12.5%;"></td>
+										<td style="width: 12.5%;"></td>
+
+									</tr>
+
+									<tr>
+										<td style="width: 12.5%;"><h:outputLabel value="" /></td>
+										<td style="width: 12.5%;" colspan="5"></td>
+										<td style="width: 12.5%;"></td>
+										<td style="width: 12.5%;"></td>
+
+									</tr>
+								</table>
+								<table border="0" cellpadding="5" cellspacing="0"
+									style="width: 100%; margin-top: 22px; font-size: 15px">
+									<tr>
+										<td style="width: 12.5%;"></td>
+										<td style="width: 12.5%;" colspan="5"></td>
+										<td style="width: 12.5%;"></td>
+										<td style="width: 12.5%;"></td>
+
+									</tr>
+
+									<tr>
+										<td style="width: 12.5%;"><h:outputLabel value="" /></td>
+										<td style="width: 12.5%;" colspan="5"></td>
+										<td style="width: 12.5%;"></td>
+										<td style="width: 12.5%;"></td>
+
+									</tr>
+								</table>
+
+								<hr style="border-top: dotted 2px;"></hr>
+
+								<p:outputPanel
+									style="width:45%;text-align:center;border-collapse:collapse;font-size:10px;float:left;margin-top:0.5cm;background-color:white;">
+									<p:outputLabel
+										style="margin-left:80px!important;font-size:15px!important;font-weight:bold;"
+										value="Guardian Details 1"></p:outputLabel>
+									<p:outputLabel></p:outputLabel>
+									<table border="1" cellpadding="5" cellspacing="0"
+										style="width: 100%; margin-top: 12px; font-size: 10px">
+										<tr>
+											<td style="width: 12.5%;">Name of Guardian:-</td>
+											<td style="width: 12.5%;" colspan="5"><h:outputLabel
+													value="#{viewStudent.fname1}" /></td>
+
+
+										</tr>
+
+										<tr>
+											<td style="width: 12.5%;">Relation:-</td>
+											<td style="width: 12.5%;" colspan="5"><h:outputLabel
+													value="#{viewStudent.relation}" /></td>
+											<td style="width: 12.5%;">Occupation:-</td>
+											<td style="width: 12.5%;"><h:outputLabel
+													value="#{viewStudent.occupation}" /></td>
+
+										</tr>
+
+										<tr>
+											<td style="width: 12.5%;">Contact Number:-</td>
+											<td style="width: 12.5%;" colspan="5"><h:outputLabel
+													value="#{viewStudent.phone}" /></td>
+											<td style="width: 12.5%;">Address:-</td>
+											<td style="width: 12.5%;"><h:outputLabel
+													value="#{viewStudent.address}" /></td>
+
+										</tr>
+
+									</table>
+
+								</p:outputPanel>
+
+								<p:outputPanel
+									style="width:45%;text-align:center;border-collapse:collapse;font-size:10px;float:right;margin-top:0.5cm;background-color:white;">
+									<p:outputLabel
+										style="font-size:15px!important;font-weight:bold;"
+										value="Guardian Details 2"></p:outputLabel>
+									<table border="1" cellpadding="5" cellspacing="0"
+										style="width: 100%; margin-top: 12px; font-size: 10px">
+										<tr>
+											<td style="width: 12.5%;">Name of Guardian:-</td>
+											<td style="width: 12.5%;" colspan="5"><h:outputLabel
+													value="#{viewStudent.fname2}" /></td>
+
+
+										</tr>
+
+										<tr>
+											<td style="width: 12.5%;">Relation:-</td>
+											<td style="width: 12.5%;" colspan="5"><h:outputLabel
+													value="#{viewStudent.relation2}" /></td>
+											<td style="width: 12.5%;">Occupation:-</td>
+											<td style="width: 12.5%;"><h:outputLabel
+													value="#{viewStudent.occupation2}" /></td>
+
+										</tr>
+
+										<tr>
+											<td style="width: 12.5%;">Contact Number:-</td>
+											<td style="width: 12.5%;" colspan="5"><h:outputLabel
+													value="#{viewStudent.phone2}" /></td>
+											<td style="width: 12.5%;">Address:-</td>
+											<td style="width: 12.5%;"><h:outputLabel
+													value="#{viewStudent.address2}" /></td>
+
+										</tr>
+
+									</table>
+								</p:outputPanel>
+								<p:outputLabel></p:outputLabel>
+
+								<p:outputLabel></p:outputLabel>
+								<p:outputPanel
+									style="width:45%;text-align:center;border-collapse:collapse;font-size:10px;float:left;margin-top:12px;background-color:white;">
+									<p:outputLabel
+										style="margin-left:80px!important;font-size:15px!important;font-weight:bold;"
+										value="Father Details"></p:outputLabel>
+									<p:outputLabel></p:outputLabel>
+									<table border="1" cellpadding="5" cellspacing="0"
+										style="width: 100%; margin-top: 12px; font-size: 10px">
+										<tr>
+											<td style="width: 12.5%;">Qualification:-</td>
+											<td style="width: 12.5%;" colspan="5"><h:outputLabel
+													value="#{viewStudent.fatherQualification}" /></td>
+											<td style="width: 12.5%;">Designation:-</td>
+											<td style="width: 12.5%;"><h:outputLabel
+													value="#{viewStudent.fatherDesignation}" /></td>
+
+										</tr>
+
+										<tr>
+											<td style="width: 12.5%;">Office Contact:-</td>
+											<td style="width: 12.5%;" colspan="5"><h:outputLabel
+													value="#{viewStudent.fatherOrganization}" /></td>
+											<td style="width: 12.5%;">Occupation:-</td>
+											<td style="width: 12.5%;"><h:outputLabel
+													value="#{viewStudent.fathersOccupation}" /></td>
+
+										</tr>
+
+										<tr>
+											<td style="width: 12.5%;">Office Address:-</td>
+											<td style="width: 12.5%;" colspan="5"><h:outputLabel
+													value="#{viewStudent.fatherOfficeAdd}" /></td>
+											<td style="width: 12.5%;">Annul Income:-</td>
+											<td style="width: 12.5%;"><h:outputLabel
+													value="#{viewStudent.fatherIncome}" /></td>
+
+										</tr>
+
+										<tr>
+											<td style="width: 12.5%;">Aadhaar No.:-</td>
+											<td style="width: 12.5%;" colspan="5"><h:outputLabel
+													value="#{viewStudent.fatherAadhaar}" /></td>
+											<td style="width: 12.5%;">Is School Employee ?:-</td>
+											<td style="width: 12.5%;"><h:outputLabel
+													value="#{viewStudent.motherSchoolEmp}" /></td>
+
+										</tr>
+
+									</table>
+								</p:outputPanel>
+								<p:outputPanel
+									style="width:45%;text-align:center;border-collapse:collapse;font-size:10px;float:right;margin-top:12px;background-color:white;">
+									<p:outputLabel
+										style="font-size:15px!important;font-weight:bold;"
+										value="Mother Details"></p:outputLabel>
+									<table border="1" cellpadding="5" cellspacing="0"
+										style="width: 100%; margin-top: 12px; font-size: 10px">
+										<tr>
+											<td style="width: 12.5%;">Qualification:-</td>
+											<td style="width: 12.5%;" colspan="5"><h:outputLabel
+													value="#{viewStudent.motherQualification}" /></td>
+											<td style="width: 12.5%;">Designation:-</td>
+											<td style="width: 12.5%;"><h:outputLabel
+													value="#{viewStudent.motherDesignation}" /></td>
+
+										</tr>
+
+										<tr>
+											<td style="width: 12.5%;">Office Contact:-</td>
+											<td style="width: 12.5%;" colspan="5"><h:outputLabel
+													value="#{viewStudent.motherOrganization}" /></td>
+											<td style="width: 12.5%;">Occupation:-</td>
+											<td style="width: 12.5%;"><h:outputLabel
+													value="#{viewStudent.motherOccupation}" /></td>
+
+										</tr>
+
+
+										<tr>
+											<td style="width: 12.5%;">Office Address:-</td>
+											<td style="width: 12.5%;" colspan="5"><h:outputLabel
+													value="#{viewStudent.motherOfficeAdd}" /></td>
+											<td style="width: 12.5%;">Annul Income:-</td>
+											<td style="width: 12.5%;"><h:outputLabel
+													value="#{viewStudent.motherIncome}" /></td>
+
+										</tr>
+
+										<tr>
+											<td style="width: 12.5%;">Aadhaar No.:-</td>
+											<td style="width: 12.5%;" colspan="5"><h:outputLabel
+													value="#{viewStudent.motherAadhaar}" /></td>
+											<td style="width: 12.5%;">Is School Employee ?:-</td>
+											<td style="width: 12.5%;"><h:outputLabel
+													value="#{viewStudent.motherSchoolEmp}" /></td>
+
+										</tr>
+
+									</table>
+								</p:outputPanel>
+
+								<p:outputPanel
+									style="width:100%;text-align:center;border-collapse:collapse;font-size:10px;float:left;margin-top:12px;background-color:white;">
+									<p:outputLabel
+										style="font-size:15px!important;font-weight:bold;text-decoration:underline"
+										value="Fee Details"></p:outputLabel>
+									<p:outputLabel></p:outputLabel>
+									<h:dataTable var="var" value="#{viewStudent.feelist}"
+										style="width:100%;text-align:center;border-collapse:collapse;font-size:13px;margin-top:12px"
+										border="2">
+
+
+
+										<p:column>
+											<center>
+												<f:facet name="header">Fee Type</f:facet>
+											</center>
+											<center>#{var.feeName}</center>
+										</p:column>
+
+
+										<p:column>
+											<center>
+												<f:facet name="header">Fee Amount</f:facet>
+											</center>
+											<center>#{var.feeAmount}</center>
+										</p:column>
+									</h:dataTable>
+								</p:outputPanel>
+								<p:outputPanel
+									style="width:45%;text-align:center;border-collapse:collapse;font-size:10px;float:left;margin-top:12px;background-color:white;">
+									<p:outputLabel
+										style="margin-left:80px!important;font-size:15px!important;font-weight:bold;"
+										value="Personality and Health Details"></p:outputLabel>
+									<p:outputLabel></p:outputLabel>
+									<table border="1" cellpadding="5" cellspacing="0"
+										style="width: 100%; margin-top: 12px; font-size: 10px">
+										<tr>
+											<td style="width: 12.5%;">Height:-</td>
+											<td style="width: 12.5%;" colspan="5"><h:outputLabel
+													value="#{viewStudent.height}" /></td>
+											<td style="width: 12.5%;">Weight:-</td>
+											<td style="width: 12.5%;"><h:outputLabel
+													value="#{viewStudent.weight}" /></td>
+
+										</tr>
+
+										<tr>
+											<td style="width: 12.5%;">Eyes:-</td>
+											<td style="width: 12.5%;" colspan="7"><h:outputLabel
+													value="#{viewStudent.eyes}" /></td>
+
+
+										</tr>
+
+
+
+									</table>
+								</p:outputPanel>
+								<p:outputPanel
+									style="width:45%;text-align:center;border-collapse:collapse;font-size:10px;float:right;margin-top:12px;background-color:white;">
+									<p:outputLabel
+										style="font-size:15px!important;font-weight:bold;"
+										value="Sibling Details"></p:outputLabel>
+									<table border="1" cellpadding="5" cellspacing="0"
+										style="width: 100%; margin-top: 12px; font-size: 10px">
+										<tr>
+											<td style="width: 12.5%;">1) Name:-</td>
+											<td style="width: 12.5%;" colspan="5"><h:outputLabel
+													value="#{viewStudent.sname1}" /></td>
+											<td style="width: 12.5%;">Class:-</td>
+											<td style="width: 12.5%;"><h:outputLabel
+													value="#{viewStudent.sclassName1}" /></td>
+
+										</tr>
+
+										<tr>
+											<td style="width: 12.5%;">2) Name:-</td>
+											<td style="width: 12.5%;" colspan="5"><h:outputLabel
+													value="#{viewStudent.sname2}" /></td>
+											<td style="width: 12.5%;">Class:-</td>
+											<td style="width: 12.5%;"><h:outputLabel
+													value="#{viewStudent.sclassName2}" /></td>
+
+										</tr>
+
+
+
+									</table>
+								</p:outputPanel>
+							</p:outputPanel>
+
+							<p:outputPanel
+								style="width:100%;text-align:center;border-collapse:collapse;font-size:10px;float:left;margin-top:10px;margin-bottom:2cm;background-color:white;">
+								<p:outputLabel
+									style="font-size:15px!important;font-weight:bold;text-decoration:underline"
+									value="Transport Details"></p:outputLabel>
+								<p:outputLabel></p:outputLabel>
+								<h:dataTable var="var" value="#{viewStudent.transportfeeStatus}"
+									style="width:100%;text-align:center;border-collapse:collapse;font-size:13px;margin-top:12px"
+									border="2">
+									<p:column>
+										<center>
+											<f:facet name="header">Month</f:facet>
+										</center>
+										<center>#{var.month}</center>
+									</p:column>
+
+									<p:column>
+										<center>
+											<f:facet name="header">Route</f:facet>
+										</center>
+										<center>#{var.transportRouteName}</center>
+									</p:column>
+
+									<p:column>
+										<center>
+											<f:facet name="header">Transport Fee</f:facet>
+										</center>
+										<center>#{var.transportFee}</center>
+									</p:column>
+
+
+								</h:dataTable>
+								<br></br>
+								<p:outputLabel
+									style="font-size:15px!important;font-weight:bold;text-decoration:underline"
+									value="Class Test Details"></p:outputLabel>
+								<p:outputLabel></p:outputLabel>
+								<h:dataTable var="var" value="#{viewStudent.list}"
+									style="width:100%;text-align:center;border-collapse:collapse;font-size:13px;margin-top:12px"
+									border="2">
+									<p:column>
+										<center>
+											<f:facet name="header">S.No</f:facet>
+										</center>
+										<center>#{var.sno}</center>
+									</p:column>
+
+									<p:column>
+										<center>
+											<f:facet name="header">Date</f:facet>
+										</center>
+										<center>#{var.dt}</center>
+									</p:column>
+
+									<p:column>
+										<center>
+											<f:facet name="header">Subject</f:facet>
+										</center>
+										<center>#{var.subject}</center>
+									</p:column>
+
+									<p:column>
+										<center>
+											<f:facet name="header">Test Name</f:facet>
+										</center>
+										<center>#{var.testName}</center>
+									</p:column>
+
+									<p:column>
+										<center>
+											<f:facet name="header">Test Marks</f:facet>
+										</center>
+										<center>#{var.testMarks}</center>
+									</p:column>
+								</h:dataTable>
+								<br></br>
+
+								<p:outputLabel
+									style="font-size:15px!important;font-weight:bold;text-decoration:underline"
+									value="Student Behaviour Details"></p:outputLabel>
+								<p:outputLabel></p:outputLabel>
+								<h:dataTable var="var" value="#{viewStudent.complaintList}"
+									style="width:100%;text-align:center;border-collapse:collapse;font-size:13px;margin-top:12px"
+									border="2">
+									<p:column>
+										<center>
+											<f:facet name="header">S.No</f:facet>
+										</center>
+										<center>#{var.sno}</center>
+									</p:column>
+
+									<p:column>
+										<center>
+											<f:facet name="header">Type</f:facet>
+										</center>
+										<p:graphicImage
+											value="#{var.type eq 'complaint' ? 'red.png' : var.type eq 'appreciation' ? 'green.png' : 'blue.png'}"
+											style="width:30px; height:40px;"></p:graphicImage>
+
+									</p:column>
+
+									<p:column>
+										<center>
+											<f:facet name="header">Date</f:facet>
+										</center>
+										<center>#{var.strDate}</center>
+									</p:column>
+
+									<p:column>
+										<center>
+											<f:facet name="header">Description</f:facet>
+										</center>
+										<center>#{var.description}</center>
+									</p:column>
+
+									<p:column>
+										<center>
+											<f:facet name="header">Posted By</f:facet>
+										</center>
+										<center>#{var.complaintBy}</center>
+									</p:column>
+
+									<f:facet name="footer">
+										<p:panelGrid columns="6" style="width: 100%">
+											<p:graphicImage value="red.png"
+												style="width:30px; height:40px;"></p:graphicImage>
+											<p:outputLabel value="#{viewStudent.redCount}"
+												style="font-size:15px; font-weight:bold;"></p:outputLabel>
+											<p:graphicImage value="green.png"
+												style="width:30px; height:40px;"></p:graphicImage>
+											<p:outputLabel value="#{viewStudent.greenCount}"
+												style="font-size:15px; font-weight:bold;"></p:outputLabel>
+											<p:graphicImage value="blue.png"
+												style="width:30px; height:40px;"></p:graphicImage>
+											<p:outputLabel value="#{viewStudent.blueCount}"
+												style="font-size:15px; font-weight:bold;"></p:outputLabel>
+										</p:panelGrid>
+									</f:facet>
+
+									<f:facet name="header">
+										<center>
+											<h:panelGrid columns="7"
+												style="border:0px none; background-color:transparent;">
+												<div class="ui-inputgroup">
+													<p:graphicImage value="red.png"
+														style="width:20px; height:20px;"></p:graphicImage>
+													<p:outputLabel value="Complaint / Bad"
+														style="font-size:15;"></p:outputLabel>
+
+													<p:graphicImage value="green.png"
+														style="width:20px; height:20px;"></p:graphicImage>
+													<p:outputLabel value="Appreciation / Good"
+														style="font-size:15;"></p:outputLabel>
+
+													<p:graphicImage value="blue.png"
+														style="width:20px; height:20px;"></p:graphicImage>
+													<p:outputLabel value="Neutral" style="font-size:15;"></p:outputLabel>
+												</div>
+											</h:panelGrid>
+										</center>
+									</f:facet>
+
+								</h:dataTable>
+
+								<br></br>
+								<p:panel rendered="false" header="Attendance">
+									<center>
+										<p:dataTable var="var" value="#{viewStudent.weeks}"
+											id="dataGrid" style="width:80%;">
+											<f:facet name="header">
+												<p:panelGrid columns="3">
+													<p:commandButton ajax="false" update=":form"
+														icon="fa fa-fw fa-backward"
+														action="#{viewStudent.backward}">
+													</p:commandButton>
+													<p:outputLabel value="#{viewStudent.month}"></p:outputLabel>
+													<p:commandButton update=":form" ajax="false"
+														icon="fa fa-fw fa-forward" action="#{viewStudent.forward}">
+													</p:commandButton>
+												</p:panelGrid>
+											</f:facet>
+
+											<p:column headerText="SUN">
+												<div style="background-color: #{var.sundayStatusColor}">
+													<center>
+														<p:outputLabel value="#{var.sunday}"></p:outputLabel>
+													</center>
+												</div>
+											</p:column>
+
+											<p:column headerText="MON">
+												<div style="background-color: #{var.mondayStatusColor}">
+													<center>
+														<p:outputLabel value="#{var.monday}"></p:outputLabel>
+													</center>
+												</div>
+											</p:column>
+
+											<p:column headerText="TUE">
+												<div style="background-color: #{var.tuesdayStatusColor}">
+													<center>
+														<p:outputLabel value="#{var.tuesday}"></p:outputLabel>
+													</center>
+												</div>
+											</p:column>
+
+											<p:column headerText="WED">
+												<div style="background-color: #{var.wesnesdayStatusColor}">
+													<center>
+														<p:outputLabel value="#{var.wesnesday}"></p:outputLabel>
+													</center>
+												</div>
+											</p:column>
+
+											<p:column headerText="THU">
+												<div style="background-color: #{var.thusdayStatusColor}">
+													<center>
+														<p:outputLabel value="#{var.thusday}"></p:outputLabel>
+													</center>
+												</div>
+											</p:column>
+
+											<p:column headerText="FRI">
+												<div style="background-color: #{var.fridayStatusColor}">
+													<center>
+														<p:outputLabel value="#{var.friday}"></p:outputLabel>
+													</center>
+												</div>
+											</p:column>
+
+											<p:column headerText="SAT">
+												<div style="background-color: #{var.saturdayStatusColor}">
+													<center>
+														<p:outputLabel value="#{var.saturday}"></p:outputLabel>
+													</center>
+												</div>
+											</p:column>
+
+
+
+
+										</p:dataTable>
+									</center>
+									<br></br>
+									<table style="width: 100%">
+
+										<tr align="center">
+											<td style="font-size: 15px; font-weight: bold; color: green;">Present
+												: #{viewStudent.present}</td>
+										</tr>
+
+										<tr align="center">
+											<td style="font-size: 15px; font-weight: bold; color: red;">Absent
+												: #{viewStudent.absent}</td>
+										</tr>
+										<tr align="center">
+											<td
+												style="font-size: 15px; font-weight: bold; color: #FFDF00;">Leave
+												: #{viewStudent.leave}</td>
+										</tr>
+
+										<tr align="center">
+											<td
+												style="font-size: 15px; font-weight: bold; color: #ffac33;">Unmarked
+												: #{viewStudent.notMarked}</td>
+										</tr>
+
+										<tr align="center">
+											<td style="font-size: 15px; font-weight: bold; color: cyan;">Holiday
+												: #{viewStudent.holiday}</td>
+										</tr>
+									</table>
+								</p:panel>
+								<p:panel header="Attendance Chart">
+									<p:chart type="pie" id="pie" model="#{viewStudent.pieModel1}"
+										responsive="true"
+										style="background-color: white !important; height: 324px !important; font-size: 14px;" />
+
+								</p:panel>
+							</p:outputPanel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

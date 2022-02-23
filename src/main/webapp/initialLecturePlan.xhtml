@@ -1,0 +1,92 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+	<ui:define name="title">Initial Lesson Plan</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form" enctype="multipart/form-data">
+							<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+							<p:panel
+								header="Lesson Plan: Note:- Download Sample Lesson Plan and upload after filling it (without leaving any row or column empty) of excel sheet.Please do not change any format">
+
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel value="Class" for="@next" style="color:red"></p:outputLabel>
+									<p:selectOneMenu value="#{initialLecturePlan.selectedClass}"
+										required="true" filter="true"
+										requiredMessage="Please Select A Class">
+										<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+										<f:selectItems value="#{initialLecturePlan.classList}"></f:selectItems>
+										<p:ajax update="showSection"
+											listener="#{initialLecturePlan.allSection}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Section " for="@next" style="color:red"></p:outputLabel>
+									<p:selectOneMenu id="showSection" filter="true"
+										value="#{initialLecturePlan.selectedSection}" required="true"
+										requiredMessage="Please select a section">
+										<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+										<f:selectItems value="#{initialLecturePlan.sectionList}"></f:selectItems>
+										<p:ajax listener="#{initialLecturePlan.allSubjects}"
+											update="subjectId"></p:ajax>
+									</p:selectOneMenu>
+
+
+									<p:outputLabel value="Subject: " for="@next" style="color:red"></p:outputLabel>
+									<p:selectOneMenu id="subjectId" filter="true"
+										value="#{initialLecturePlan.subject}" required="true"
+										requiredMessage="Please select subject.">
+										<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+										<f:selectItems value="#{initialLecturePlan.subjectList}"></f:selectItems>
+										<p:ajax listener="#{initialLecturePlan.check}" update=":form"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Choose file to upload (file type :- xls,xlsx) :" for="@next"
+										style="color:red"></p:outputLabel>
+									<p:fileUpload required="true"
+										requiredMessage="Please select your lesson plan excel file"
+										allowTypes="/(\.|\/)(xls|xlsx)$/" mode="simple"
+										skinSimple="true" value="#{initialLecturePlan.excelFile}"></p:fileUpload>
+
+
+								</p:panelGrid>
+								<br />
+								<center>
+									<p:commandButton ajax="false" value="Upload"
+										actionListener="#{initialLecturePlan.importFromExcel}"
+										style="width: 150px;" update=":form"
+										title="Click on to upload Initial Lesson Plan"></p:commandButton>
+
+								</center>
+
+							</p:panel>
+						</h:form>
+						<h:form>
+							<center>
+								<p:commandButton process="@this"
+									style="font-size:12px;width: 250px;"
+									value="Download Sample Excel Sheet" ajax="false"
+									icon="ui-icon-arrowthick-1-s"
+									title="Click on to download sample format of Initial Lesson Plan.">
+									<p:fileDownload value="#{fileDownloadView.file}" />
+								</p:commandButton>
+							</center>
+						</h:form>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</ui:define>
+
+</ui:composition>

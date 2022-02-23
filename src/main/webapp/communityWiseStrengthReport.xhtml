@@ -1,0 +1,123 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Community Wise Student Report</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form enctype="multipart/form-data" id="form1">
+							<h1>Community Wise Student Report</h1>
+							<p:panel header="Community Wise Student Report" id="myPanel">
+
+								<p:dataTable reflow="true" id="attend" var="var"
+									value="#{communityWiseStrengthReport.studentList}"
+									paginator="true">
+
+									<f:facet name="header">
+										<p:panelGrid columns="3">
+											<p:commandButton value="Print" icon="fa fa-print" styleClass="butwid">
+												<p:printer target=":form1:myPanel"></p:printer>
+											</p:commandButton>
+											<h:commandLink title="Import To Excel Format">
+												<p:graphicImage style="height:30px;width:60px;"
+													value="/image/excel-logo.png" width="24" />
+												<p:dataExporter type="xls" target="attend"
+													fileName="Community Wise Student Report" />
+											</h:commandLink>
+
+											<p:commandButton value="PDF" icon="fa fa-file-pdf-o" styleClass="butwid" ajax="false"
+												process="@this"
+												actionListener="#{communityWiseStrengthReport.exportCommPdf}">
+
+												<p:fileDownload value="#{communityWiseStrengthReport.file}" />
+											</p:commandButton>
+										</p:panelGrid>
+									</f:facet>
+
+									<p:columnGroup type="header">
+										<p:row>
+											<p:column style="width:100px" rowspan="1" headerText="Class" />
+											<ui:repeat
+												value="#{communityWiseStrengthReport.religionList}"
+												var="category">
+												<p:column colspan="2" headerText="#{category.label}" />
+											</ui:repeat>
+											<p:column colspan="2" headerText=" Total" />
+											<p:column rowspan="2" headerText="Grand Total" />
+										</p:row>
+										<p:row>
+											<p:column rowspan="1" headerText="" />
+											<c:forEach
+												items="#{communityWiseStrengthReport.religionList}"
+												var="category">
+												<ui:repeat value="#{communityWiseStrengthReport.genderList}"
+													var="gender">
+													<p:column headerText="#{gender}" />
+												</ui:repeat>
+											</c:forEach>
+											<p:column headerText="Boys"></p:column>
+											<p:column headerText="Girls"></p:column>
+										</p:row>
+									</p:columnGroup>
+
+									<p:column>
+										<p:outputLabel value="#{var.className}"></p:outputLabel>
+										<f:facet name="footer">
+											<p:outputLabel value="Total Students "></p:outputLabel>
+										</f:facet>
+									</p:column>
+
+									<p:columns value="#{communityWiseStrengthReport.columnsList}"
+										var="ll">
+										<center>
+											<p:outputLabel value="#{var.attendanceMap[ll]}"
+												style="text-align:center" />
+										</center>
+									</p:columns>
+									<p:column headerText="Boys">
+										<p:outputLabel value="#{var.boysTotal}"></p:outputLabel>
+										<f:facet name="footer">
+											<p:outputLabel
+												value="#{communityWiseStrengthReport.grandTotaloFBoys}"></p:outputLabel>
+
+										</f:facet>
+									</p:column>
+
+									<p:column headerText="Girls">
+										<p:outputLabel value="#{var.girlTotal}"></p:outputLabel>
+										<f:facet name="footer">
+											<p:outputLabel
+												value="#{communityWiseStrengthReport.grandTotalOfGirls}"></p:outputLabel>
+
+										</f:facet>
+									</p:column>
+
+									<p:column headerText="grand Total">
+										<p:outputLabel value="#{var.grandTotalBoysAndGirls}"></p:outputLabel>
+										<f:facet name="footer">
+											<p:outputLabel
+												value="#{communityWiseStrengthReport.grandTotalNumberOfStudent}"></p:outputLabel>
+
+										</f:facet>
+									</p:column>
+								</p:dataTable>
+							</p:panel>
+
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

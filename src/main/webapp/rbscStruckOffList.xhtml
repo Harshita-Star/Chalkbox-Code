@@ -1,0 +1,79 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Struck Off Students</ui:define>
+
+    <ui:define name="content">
+       
+            <div class="ui-fluid">
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <div class="card card-w-title">
+                       <p:messages closable="true" autoUpdate="true"></p:messages>
+               		 		
+               		<h:form id="form3">
+               		 	
+               		 <p:panel header="Struck Off Student List">
+               		  				
+               		  	<p:outputPanel id="up">
+               		    
+               		  		<p:dataTable reflow="true" var="var" value="#{rbscStruckOffListBean.studentList}" rows="5" paginator="true" rowsPerPageTemplate="5,10,15"> 
+               		  		
+               		  			<p:column headerText="S.No." >
+               		  				<p:outputLabel value="#{var.sno}"></p:outputLabel>
+               		  			</p:column>
+               		  			<p:column headerText="Adm. No." filterBy="#{var.srNo}" filterMatchMode="contains">
+               		  				<p:outputLabel value="#{var.srNo}"></p:outputLabel>
+               		  			</p:column>
+               		  			
+               		  			<p:column sortBy="#{var.fullName}" headerText="Student Name" filterBy="#{var.fullName}" filterMatchMode="contains">
+               		  				<p:outputLabel value="#{var.fullName}"></p:outputLabel>
+               		  			</p:column>
+               		  			
+               		  			<p:column headerText="Reason">
+               		  				<p:outputLabel value="#{var.reason}"></p:outputLabel>
+               		  			</p:column>
+               		  			
+               		  			<p:column headerText="Last Class">
+               		  				<p:outputLabel value="#{var.classId}"></p:outputLabel>
+               		  			</p:column>
+               		  			
+               		  			<p:column headerText="Grade">
+               		  				<p:outputLabel value="#{var.grade}"></p:outputLabel>
+               		  			</p:column>
+               		  			
+               		  			<p:column headerText="Status" rendered="false">
+               		  				<p:outputLabel value="#{var.transferStatus}"></p:outputLabel>
+               		  			</p:column>
+               		  			
+               		  				<p:column headerText="Re-Active">
+									<p:commandButton update=":form3" icon="ui-icon-refresh" action="#{rbscStruckOffListBean.reactive}">
+										<f:setPropertyActionListener value="#{var}" target="#{rbscStruckOffListBean.selectedStudent}"></f:setPropertyActionListener>
+									     <p:confirm header="Confirmation" message="Are You Sure To Re-Active This Student...?" icon="ui-icon-alert" />
+									</p:commandButton>
+								</p:column>
+               		  			
+               		  		</p:dataTable>
+               		  	
+               		    </p:outputPanel>
+               		  
+               		 </p:panel>
+               		 
+               		 	<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+			           <p:commandButton style="margin-left:30px" value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+			           <p:commandButton style="margin-left:50px" value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+			         </p:confirmDialog>
+       
+			</h:form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+       
+    </ui:define>
+
+</ui:composition>

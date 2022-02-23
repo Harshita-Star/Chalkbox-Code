@@ -1,0 +1,154 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Concession Details</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form" style="overflow:hidden">
+							<h1>Add Concession Detail</h1>
+
+							<p:panel header="Select a Class">
+								<p:messages closable="true" autoUpdate="true"></p:messages>
+								<p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+									<p:outputLabel  for="@next" style="color:red" value="Select a Class"></p:outputLabel>
+									<p:selectOneMenu value="#{addMultipleConcession.selectedClass}" filter="true"
+										required="true" requiredMessage="Please select a class">
+										<f:selectItem itemLabel="Select Class" itemValue="select"></f:selectItem>
+
+										<f:selectItems value="#{addMultipleConcession.classList}"></f:selectItems>
+
+										<p:ajax update="sectionid"
+											listener="#{addMultipleConcession.allSections}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel  for="@next" style="color:red" value="Select Section"></p:outputLabel>
+									<p:selectOneMenu id="sectionid" filter="true"
+										value="#{addMultipleConcession.selectedSection}"
+										required="true" requiredMessage="Please select a section">
+										<f:selectItem itemLabel="Select Section" itemValue=""></f:selectItem>
+										<f:selectItem itemLabel="All" itemValue="-1"></f:selectItem>
+
+										<f:selectItems value="#{addMultipleConcession.sectionList}"></f:selectItems>
+
+										<p:ajax></p:ajax>
+									</p:selectOneMenu>
+
+
+
+								</p:panelGrid>
+								
+								<br />
+								<p:separator />
+								<center>
+										<p:commandButton value="Search" styleClass="butwid" icon="fa fa-search"
+										actionListener="#{addMultipleConcession.getStudentStrength}"
+										update=":form">
+									</p:commandButton>
+								</center>
+								<p:separator />
+								<br />
+
+								<br></br>	
+								<p:panel header="Student List" id="dataTable" rendered="#{addMultipleConcession.b}">
+
+
+
+									<p:dataTable reflow="true" id="up"
+										style="width:100%;border-collapse:collapse" border="1"
+										value="#{addMultipleConcession.studentList}" var="var"
+										rowKey="#{var.addNumber}"
+										selection="#{addMultipleConcession.multipleStudentList}">
+
+										<f:facet name="header">
+												<center>
+											<p:commandButton
+												action="#{addMultipleConcession.addConcession}" styleClass="butwid" icon="fa fa-plus"
+												value="Add Concession " update=":form"></p:commandButton>
+										</center>
+										</f:facet>
+										<p:column selectionMode="multiple"
+											style="width:20px;text-align:center" />
+										<p:column headerText="SNo."
+											style="width:30px;text-align:center">
+											<f:facet name="header">
+												<p:outputLabel value="S.No."></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.sno}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Add. No." sortBy="#{var.srNo}"
+											filterBy="#{var.srNo}" filterMatchMode="contains"
+											style="width:50px;text-align:center">
+											<f:facet name="header">
+												<p:outputLabel value="SR. No."></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.srNo}"></p:outputLabel>
+										</p:column>
+
+										<p:column style="width:70px;text-align:center"
+											sortBy="#{var.fullName}" filterBy="#{var.fullName}"
+											filterMatchMode="contains" headerText="Student Name">
+
+											<f:facet name="header">
+												<p:outputLabel value="Student Name"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.fullName}"></p:outputLabel>
+										</p:column>
+
+										<p:column style="width:70px;text-align:center"
+											headerText="Father's Name" filterBy="#{var.fathersName}"
+											filterMatchMode="contains">
+
+											<f:facet name="header">
+												<p:outputLabel value="Father's Name"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.fathersName}"></p:outputLabel>
+										</p:column>
+
+										<p:column style="width:70px;text-align:center"
+											headerText="Current Concession Assign">
+											<p:outputLabel value="#{var.currentConcessionAssign}"></p:outputLabel>
+
+										</p:column>
+
+										<p:column style="width:80px;text-align:center"
+											headerText="New Concession Assign">
+											<p:selectOneMenu value="#{var.newConcessionAssign}"
+												filter="true" filterMatchMode="contains">
+												<f:selectItem itemLabel="Select Concession Here "
+													itemValue=""></f:selectItem>
+												<f:selectItems value="#{var.concessionList}"></f:selectItems>
+											</p:selectOneMenu>
+										</p:column>
+
+
+										<f:facet name="footer">
+										<center>
+											<p:commandButton
+												action="#{addMultipleConcession.addConcession}" styleClass="butwid" icon="fa fa-plus"
+												value="Add Concession " update=":form"></p:commandButton>
+										</center>
+										
+										</f:facet>
+									</p:dataTable>
+
+
+								</p:panel>
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

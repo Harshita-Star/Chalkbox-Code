@@ -1,0 +1,129 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Sample</ui:define>
+
+    <ui:define name="content">
+       
+            <div class="ui-fluid">
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <div class="card card-w-title">
+                             <h:form id="form2">
+               			 <h1>Generate Rank and Promotion</h1>	 	
+               			
+               		 		<p:panel header="Search Student by Class Section">
+               		 	
+               		 		<p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+               		 		
+	               		 		<p:outputLabel value="Select Class" for="@next" style="color:red" ></p:outputLabel>      
+	               		 		<p:selectOneMenu style="width:250px" filter="true" value="#{generateClassRank.selectedClassSection}" required="true" requiredMessage="Please Select Class" >
+	               		 			<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+	               		 			<f:selectItems value="#{generateClassRank.classSection}"></f:selectItems>
+	               		 			
+	               		 			<p:ajax update="sectionid,termid" listener="#{generateClassRank.allSections}"></p:ajax>
+	               		 		</p:selectOneMenu>    
+	
+	               		 		<p:outputLabel value="Select Section" for="@next" style="color:red" ></p:outputLabel>
+	               		 		<p:selectOneMenu id="sectionid" filter="true" value="#{generateClassRank.selectedSection}" required="true" requiredMessage="Please Select A Section"> 
+	               		 			<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+	               		 			<f:selectItems value="#{generateClassRank.sectionList}"></f:selectItems>
+	               		 		</p:selectOneMenu>
+	               		 		
+	               		 		<p:outputLabel  for="@next" style="color:red" value="Select Term (Only For Rank Generation)"></p:outputLabel>
+	               		 		<p:selectManyCheckbox id="termid" value="#{generateClassRank.selectedTerm}" layout="responsive" columns="3" required="true"
+										requiredMessage="Please Select Term" styleClass="form-group">
+									<f:selectItems value="#{generateClassRank.termList}"></f:selectItems>
+								</p:selectManyCheckbox>
+               		 		</p:panelGrid>  		 
+               		 
+               		 		
+								<br />
+								<p:separator />
+								<center>
+									<p:panelGrid
+										columns="2"
+										layout="grid" styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+
+										<p:commandButton update=":form3:up" value="Generate Rank" icon="fa fa-percent" styleClass="butwid-1" actionListener="#{generateClassRank.generateClassRank}"></p:commandButton>
+               		 		  
+               		 		  			<p:commandButton update=":form3:up" value="Promotion Entry" styleClass="butwid-1" icon="fa fa-bullhorn" actionListener="#{generateClassRank.generatePromotion}"></p:commandButton>
+  
+  
+									</p:panelGrid>
+								</center>
+								<p:separator />
+								<br />
+               		 
+               		 		</p:panel>
+               		 
+               		 </h:form>
+               		 </div>
+               		 <div class="card card-w-title">
+               		<h:form id="form3">
+               		 	  
+               		 	<p:panel header="Student Details">
+               		 	<center>			      
+               	       <p:commandButton value="Print" styleClass="butwid" icon="fa fa-print">
+               	       		<p:printer target="up"></p:printer>
+               	       </p:commandButton></center>
+               		 		 <p:outputPanel id="up">
+               		  
+               		  		<p:dataTable rendered="#{generateClassRank.show}" reflow="true" var="var" value="#{generateClassRank.studentList}"> 
+               		  			
+               		  			<p:column headerText="Add Number" style="width:100px">
+               		  				<p:outputLabel value="#{var.srNo}"></p:outputLabel>
+               		  			</p:column>
+               		  			
+               		  			<p:column sortBy="#{var.fname}" headerText="Student Name">
+               		  				<p:outputLabel value="#{var.fname}"></p:outputLabel>
+               		  			</p:column>
+               		  			
+               		  			<p:column headerText="Father's Name">
+               		  				<p:outputLabel value="#{var.fathersName}"></p:outputLabel>
+               		  			</p:column>
+               		  			
+               		  			<p:column headerText="Marks">
+               		  				<p:outputLabel value="#{var.marks}"></p:outputLabel>
+               		  			</p:column>
+               		  			
+               		  			<p:column headerText="Result">
+               		  				<p:outputLabel value="#{var.examResult}"></p:outputLabel>
+               		  			</p:column>
+               		  			
+               		  			<p:column headerText="Rank" style="width:100px">
+               		  				<p:outputLabel value="#{var.rank}"></p:outputLabel>
+               		  			</p:column>
+               		  			
+               		  			<p:column rendered="false" headerText="Percent" >
+               		  				<p:outputLabel value="#{var.percentage}"></p:outputLabel>
+               		  			</p:column>
+               		  			
+               		  			
+               		  			<p:column rendered="#{generateClassRank.showPromotion}" headerText="Promoted To">
+               		  				<p:inputText value="#{var.promotedClass}" validatorMessage="Please Enter Correct value">
+               		  				  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+               		  				</p:inputText>
+               		  			</p:column>
+               		  			
+               		  			<f:facet name="footer">
+               		  				<p:commandButton update=":form3,:form2" styleClass="butwid" icon="fa fa-upload" rendered="#{generateClassRank.showPromotion}" value="Submit" actionListener="#{generateClassRank.savePromotion}"></p:commandButton>
+               		  			</f:facet>
+               		  			
+               		  		</p:dataTable>
+               		  </p:outputPanel>
+               		</p:panel>
+				</h:form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+       
+    </ui:define>
+
+</ui:composition>

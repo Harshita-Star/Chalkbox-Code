@@ -1,0 +1,328 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">VIewMeeting</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<p:growl>
+								<p:autoUpdate />
+							</p:growl>
+							<p:panel header="View/Edit/Delete Meeting">
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel value="Start Date" for="@next" style="color:red"></p:outputLabel>
+									<p:calendar value="#{viewEditDeleteMeeting.startDate}"
+										pattern="dd/MM/yyyy" navigator="true" yearRange="c-10:c+10"
+										required="true" requiredMessage="Please select start date" />
+
+									<p:outputLabel value="End Date " for="@next" style="color:red"></p:outputLabel>
+									<p:calendar value="#{viewEditDeleteMeeting.endDate}"
+										pattern="dd/MM/yyyy" navigator="true" yearRange="c-10:c+10"
+										required="true" requiredMessage="Please select end date" />
+
+									<p:outputLabel value="Select Class" for="@next"
+										style="color:red"
+										rendered="#{viewEditDeleteMeeting.showAdmin}"></p:outputLabel>
+									<p:selectOneMenu
+										value="#{viewEditDeleteMeeting.selectedCLassSection}"
+										required="true" requiredMessage="Please select a class"
+										rendered="#{viewEditDeleteMeeting.showAdmin}">
+										<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+										<f:selectItem itemLabel="All" itemValue="all"></f:selectItem>
+										<f:selectItems value="#{viewEditDeleteMeeting.classSection}"></f:selectItems>
+									</p:selectOneMenu>
+								</p:panelGrid>
+
+
+								<br />
+								<p:separator />
+								<center>
+									<p:panelGrid
+										columns="#{viewEditDeleteMeeting.showAdmin eq true ? '3' : '1'}"
+										layout="grid" styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+
+										<p:commandButton value="Search" update=":form,:form2"
+											styleClass="butwid" icon="fa fa-search"
+											action="#{viewEditDeleteMeeting.search}"></p:commandButton>
+
+										<h:commandLink rendered="#{viewEditDeleteMeeting.showAdmin}">
+											<p:graphicImage name="images/excellogo.png"
+												library="avalon-layout" width="100" height="40"></p:graphicImage>
+											<pe:exporter type="xlsx" target=":form2:up"
+												fileName="Meeting_Report"></pe:exporter>
+										</h:commandLink>
+
+										<h:commandLink rendered="#{viewEditDeleteMeeting.showAdmin}">
+											<p:graphicImage name="images/pdfLogo.png"
+												library="avalon-layout" width="100" height="40"></p:graphicImage>
+											<pe:exporter type="pdf" target=":form2:up"
+												fileName="Meeting_Report"></pe:exporter>
+										</h:commandLink>
+
+									</p:panelGrid>
+								</center>
+								<p:separator />
+								<br />
+
+							</p:panel>
+						</h:form>
+					</div>
+					<div class="card card-w-title">
+						<h:form id="form2">
+
+							<p:panel header="Meeting List"
+								rendered="#{viewEditDeleteMeeting.show}">
+
+								<f:facet name="header">
+									<center>
+										<p:commandButton value="Delete Multiple Meetings"
+											action="#{viewEditDeleteMeeting.deleteMultiple}"
+											update=":form2" styleClass="butwid-1 redButt"
+											icon="fa fa-trash" />
+									</center>
+								</f:facet>
+
+								<f:facet name="footer">
+									<center>
+										<p:commandButton value="Delete Multiple Meetings"
+											action="#{viewEditDeleteMeeting.deleteMultiple}"
+											update=":form2" styleClass="butwid-1 redButt"
+											icon="fa fa-trash" />
+									</center>
+								</f:facet>
+
+								<p:dataTable value="#{viewEditDeleteMeeting.list}" var="var"
+									reflow="true" selection="#{viewEditDeleteMeeting.selectedList}"
+									rowKey="#{var.id}" id="up" rowIndexVar="index"
+									rowStyleClass="#{var.msg eq 'Ended' ? 'ABSENT' : ''} #{var.msg eq 'Join' ? 'PRESENT' : ''} #{var.msg eq 'Waiting' ? 'LEAVE' : ''}">
+
+									<p:column selectionMode="multiple" exportable="false"
+										style="width:50px;">
+									</p:column>
+
+									<p:column headerText="S.No.">
+										<f:facet name="header">
+											<p:outputLabel value="S.No."></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{index+1}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Add Date" filterBy="#{var.addDateStr}">
+										<f:facet name="header">
+											<p:outputLabel value="Add Date"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.addDateStr}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Class">
+										<f:facet name="header">
+											<p:outputLabel value="Class"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.className}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Section">
+										<f:facet name="header">
+											<p:outputLabel value="Section"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.sectionName}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Subject">
+										<f:facet name="header">
+											<p:outputLabel value="Subject"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.subjectName}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Start Time">
+										<f:facet name="header">
+											<p:outputLabel value="Start Time"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.startTimeStr}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="End Time">
+										<f:facet name="header">
+											<p:outputLabel value="End Time"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.endTimeStr}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Show to Student">
+										<f:facet name="header">
+											<p:outputLabel value="Show to Student"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.studentVisibleStatus}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Add-On Teacher">
+										<f:facet name="header">
+											<p:outputLabel value="Add-On Teacher"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.addTeacherName}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Zoom Link" rendered="false"
+										exportable="false">
+										<f:facet name="header">
+											<p:outputLabel value="Zoom Link"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.zoomId}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="View Zoom Link" exportable="false">
+										<p:commandButton update=":form2"
+											oncomplete="PF('dlg1').show();" icon="ui-icon-zoomin">
+											<f:setPropertyActionListener
+												target="#{viewEditDeleteMeeting.selectedMeeting}"
+												value="#{var}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+
+
+									<p:column headerText="Zoom" exportable="false">
+										<p:button href="#{var.zoomId}" target="_blank"
+											value="#{var.msg}" disabled="#{var.meetingShowStatus}"></p:button>
+									</p:column>
+
+									<p:column headerText="Delete" exportable="false">
+										<p:commandButton update=":form2"
+											oncomplete="PF('dlg').show();" icon="ui-icon-trash"
+											styleClass="redButt" disabled="#{var.disableDelete}">
+											<f:setPropertyActionListener
+												target="#{viewEditDeleteMeeting.selectedMeeting}"
+												value="#{var}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+
+									<p:column headerText="Edit" exportable="false">
+										<p:commandButton process=":form2" update=":formEdit"
+											oncomplete="PF('dlg2').show();" icon="ui-icon-pencil"
+											disabled="#{var.disableEdit}">
+											<f:setPropertyActionListener
+												target="#{viewEditDeleteMeeting.selectedMeeting}"
+												value="#{var}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+
+								</p:dataTable>
+
+								<p:dialog resizable="false" widgetVar="dlg"
+									header="Do you surely want to delete this meeting"
+									showEffect="fade" hideEffect="explode" modal="true">
+									<div class="ui-g form-group">
+										<p:panelGrid columns="2"
+											styleClass="ui-panelgrid-blank form-group"
+											style="border:0px none; background-color:transparent;">
+											<p:commandButton update=":form2,:form" styleClass="greenButt"
+												action="#{viewEditDeleteMeeting.deleteNow}" value="Yes"></p:commandButton>
+											<p:commandButton value="No" update=":form2"
+												styleClass="redButt" oncomplete="PF('dlg').hide();"></p:commandButton>
+										</p:panelGrid>
+									</div>
+								</p:dialog>
+
+								<p:dialog resizable="false" widgetVar="dlg1"
+									header="Zoom Meeting link" showEffect="fade"
+									hideEffect="explode" modal="true">
+									<div class="ui-g form-group">
+										<p:panelGrid columns="2"
+											styleClass="ui-panelgrid-blank form-group"
+											style="border:0px none; background-color:transparent;">
+											<p:outputLabel
+												value="#{viewEditDeleteMeeting.selectedMeeting.zoomId}"></p:outputLabel>
+										</p:panelGrid>
+									</div>
+								</p:dialog>
+							</p:panel>
+						</h:form>
+
+						<h:form id="formEdit">
+							<p:dialog resizable="false" widgetVar="dlg2"
+								header="Edit Meeting" showEffect="fade" hideEffect="explode"
+								modal="true">
+								<div class="ui-g form-group">
+									<p:panelGrid columns="2"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+
+
+										<p:outputLabel for="@next" style="color:red"
+											value="Start Time:"></p:outputLabel>
+										<p:calendar
+											value="#{viewEditDeleteMeeting.selectedMeeting.startTime}"
+											pattern="HH:mm" timeOnly="true" required="true"
+											requiredMessage="Please Enter Start TIme"></p:calendar>
+
+										<p:outputLabel for="@next" style="color:red" value="End Time:"></p:outputLabel>
+										<p:calendar
+											value="#{viewEditDeleteMeeting.selectedMeeting.endTime}"
+											pattern="HH:mm" timeOnly="true" required="true"
+											requiredMessage="Please Enter End TIme"></p:calendar>
+
+										<p:outputLabel value="Want any other Teacher to 'JOIN' ?" />
+										<p:selectOneMenu
+											value="#{viewEditDeleteMeeting.selectedMeeting.addTeacherId}"
+											filter="true">
+											<f:selectItem itemLabel="Select Teacher" itemValue=""></f:selectItem>
+											<f:selectItems value="#{viewEditDeleteMeeting.teacherList}" />
+										</p:selectOneMenu>
+
+										<p:outputLabel rendered="false" for="@next" style="color:red"
+											value="Zoom Id:"></p:outputLabel>
+										<p:inputText
+											value="#{viewEditDeleteMeeting.selectedMeeting.zoomId}"
+											required="true" requiredMessage="Please Enter Zoom ID"
+											rendered="false" />
+
+										<p:outputLabel value="Show To Student" for="@next"
+											style="color:red"
+											rendered="#{viewEditDeleteMeeting.renderStudentVisiblityInEdit}"></p:outputLabel>
+										<p:selectOneRadio
+											value="#{viewEditDeleteMeeting.selectedMeeting.studentVisibleStatus}"
+											required="true"
+											rendered="#{viewEditDeleteMeeting.renderStudentVisiblityInEdit}"
+											requiredMessage="Please select show to student" filter="true"
+											disabled="#{viewEditDeleteMeeting.selectedMeeting.studentVisibleStatus eq 'yes'}">
+											<f:selectItem itemLabel="No" itemValue="no"></f:selectItem>
+											<f:selectItem itemLabel="Yes" itemValue="yes"></f:selectItem>
+
+										</p:selectOneRadio>
+
+									</p:panelGrid>
+								</div>
+								<br />
+								<p:separator />
+								<center>
+									<p:commandButton value="Update " update=":form2,:form"
+										styleClass="butwid" icon="fa fa-upload"
+										action="#{viewEditDeleteMeeting.update}"></p:commandButton>
+								</center>
+								<p:separator />
+								<br />
+							</p:dialog>
+						</h:form>
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

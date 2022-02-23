@@ -1,0 +1,91 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+	<f:loadBundle var="addClassVar" basename="myProperties" />
+	<ui:define name="title">Teacher Wise Assignment</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form" enctype="multipart/form-data">
+			<h1>View Assignment</h1>
+            <p:growl showDetail="true"  autoUpdate="true"></p:growl>
+               		 <p:panel header="Search Assignment">			
+               		 	<p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+               		 		
+               		 		<p:outputLabel value="Select Teacher"></p:outputLabel>
+               		 		<p:selectOneMenu  value="#{teacherWiseHomeworkReport.selectedTeacher}" > 
+               		 			<f:selectItem itemLabel="All" itemValue="All"></f:selectItem>
+               		 			<f:selectItems value="#{teacherWiseHomeworkReport.employeeList}"></f:selectItems>
+               		 		</p:selectOneMenu>
+               		 		
+               		 		<p:outputLabel value="Date" for="@next" style="color:red" ></p:outputLabel>
+							<p:calendar value="#{teacherWiseHomeworkReport.selecteddate}"
+							pattern="dd/MM/yyyy" navigator="true" yearRange="c-10:c+10" required="true" requiredMessage="Please Select Date"/>
+               		 		
+               		 		<p:commandButton value="Search" update=":form2" action="#{teacherWiseHomeworkReport.search}"></p:commandButton>
+               		 		
+						</p:panelGrid>  
+          			 </p:panel>               		 		
+				</h:form>
+				<h:form id="form2" >
+			       <p:panel header="Assignment List" rendered="#{teacherWiseHomeworkReport.show}">
+            		<p:dataTable reflow="true" value="#{teacherWiseHomeworkReport.list}" var="var" style="width:75%;">
+			        
+			        	<p:column headerText="S.No." style="width:10%;">
+			        		<p:outputLabel value="#{var.sNo}"></p:outputLabel>
+			        	</p:column>
+			        	
+			        	<p:column headerText="Teacher Name" style="width:20%;">
+			        		<p:outputLabel value="#{var.teacherName}"></p:outputLabel>
+			        	</p:column>
+			        	
+			        	<p:column headerText="Class" style="width:20%;">
+			        		<p:outputLabel value="#{var.className}"></p:outputLabel>
+			        	</p:column>
+			        	
+			        	<p:column headerText="Section" style="width:20%;">
+			        		<p:outputLabel value="#{var.sectionName}"></p:outputLabel>
+			        	</p:column>
+			        	
+			        	<p:column headerText="Subject" style="width:20%;">
+			        		<p:outputLabel value="#{var.subjectName}"></p:outputLabel>
+			        	</p:column>
+			        	
+			        	<p:column headerText="Type" style="width:20%;">
+			        		<p:outputLabel value="#{var.type}"></p:outputLabel>
+			        	</p:column>
+			        	
+			        	<p:column headerText="Description" style="width:20%;">
+			        		<p:outputLabel value="#{var.description}"></p:outputLabel>
+			        	</p:column>
+			        	
+			        	<p:column headerText="Name" style="width:20%;">
+			        		<p:outputLabel value="#{var.assignmentName}"></p:outputLabel>
+			        	</p:column>
+			        	
+			        	<p:column headerText="Date" style="width:20%;">
+			        		<p:outputLabel value="#{var.openingDateStr}"></p:outputLabel>
+			        	</p:column>
+			        	
+			        	<p:column headerText="Image" style="width:50%;">
+			        		<p:graphicImage url="#{var.assignment_photo1}" height="150px" width="150px"></p:graphicImage>
+			        	</p:column>
+			        
+			        </p:dataTable>
+			        
+			   </p:panel> 
+		 </h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

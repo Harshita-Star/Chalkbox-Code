@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+<f:view contentType="text/html">
+	<h:head>
+		<title>Student Registration Form</title>
+		<f:facet name="First">
+			<meta content='text/html; charset=UTF-8' http-equiv="Content-Type" />
+			<meta http-equiv="X-UA-Compatible" content="EmulateIE8" />
+			<title>MainPage</title>
+		</f:facet>
+
+	</h:head>
+
+	<style>
+input[type="checkbox"] {
+	width: 22px; /*Desired width*/
+	height: 20px; /*Desired height*/
+	margin: 0px;
+	-webkit-appearance: none;
+	appearance: none;
+	border: 1px solid;
+}
+</style>
+
+	<h:body>
+
+
+		<h:form id="form1">
+			<ui:repeat var="mainVar"
+				value="#{printAjmaniStdFormat.listOfStudent}">
+				<table style="width: 100%; font-size: 11px">
+					<tr>
+						<td><p:graphicImage width="100%" height="120px"
+								value="#{sideMenuBean.headerImage}"></p:graphicImage></td>
+					</tr>
+				</table>
+				<hr style="border-top: solid 1px;" />
+				<center>
+					<p:outputLabel
+						value="DECLARATION FORM CLASS #{mainVar.className}"
+						style="font-family: timesRoman;font-size: 14px;font-weight: bold;text-decoration:underline;"></p:outputLabel>
+					<br></br>
+					<br></br>
+					<p:outputLabel
+						value="FORM FOR MANDATORY
+						FILLING OF DETAILS OF CANDIDATE DULY SIGNED BY CANDIDATE &amp; HIS/
+						HER PARENTS"
+						style="font-family: timesRoman;font-size: 10px;"></p:outputLabel>
+				</center>
+
+				<table border="1" cellpadding="5" cellspacing="0"
+					style="width: 100%; font-size: 12px; font-family: timesRoman;">
+					<tr>
+						<td style="width: 12.5%;">Admission No.</td>
+						<td style="width: 12.5%;" colspan="5"><h:outputLabel
+								value="#{mainVar.srNo}" /></td>
+						<td style="width: 12.5%;">Date of Admission</td>
+						<td style="width: 12.5%;"><h:outputLabel
+								value="#{mainVar.strAdmitDate}" /></td>
+					</tr>
+				</table>
+
+				<table border="1" cellpadding="5" cellspacing="0"
+					style="width: 100%; margin-top: 12px; font-size: 12px">
+					<tr>
+						<td style="width: 12.5%;"></td>
+						<td style="width: 12.5%;" colspan="5">(In English)</td>
+						<td style="width: 12.5%;">(In Hindi)</td>
+						<td style="width: 12.5%;">(In Regional Language)</td>
+					</tr>
+
+					<tr>
+						<td style="width: 12.5%;">Candidate's Name</td>
+						<td style="width: 12.5%;" colspan="5"><h:outputLabel
+								value="#{mainVar.fullName.toUpperCase()}" /></td>
+						<td style="width: 12.5%;"><h:outputLabel value="" /></td>
+						<td style="width: 12.5%;"><h:outputLabel value="" /></td>
+					</tr>
+
+					<tr>
+						<td style="width: 12.5%;">Father's Name</td>
+						<td style="width: 12.5%;" colspan="5"><h:outputLabel
+								value="#{mainVar.fathersName.toUpperCase()}" /></td>
+						<td style="width: 12.5%;"><h:outputLabel value="" /></td>
+						<td style="width: 12.5%;"><h:outputLabel value="" /></td>
+					</tr>
+
+					<tr>
+						<td style="width: 12.5%;">Mother's Name</td>
+						<td style="width: 12.5%;" colspan="5"><h:outputLabel
+								value="#{mainVar.motherName.toUpperCase()}" /></td>
+						<td style="width: 12.5%;"><h:outputLabel value="" /></td>
+						<td style="width: 12.5%;"><h:outputLabel value="" /></td>
+					</tr>
+				</table>
+
+				<table border="1" cellpadding="5" cellspacing="0"
+					style="width: 100%; margin-top: 12px; font-size: 12px; font-family: timesRoman;">
+					<tr>
+						<td style="width: 12.5%;">Date of Birth</td>
+						<td style="width: 12.5%;" colspan="5"><h:outputLabel
+								value="#{mainVar.dobStr}" /></td>
+						<td style="width: 12.5%;">Aadhar No.</td>
+						<td style="width: 12.5%;"><h:outputLabel
+								value="#{mainVar.aadharNo}" /></td>
+					</tr>
+
+					<tr>
+						<td style="width: 12.5%;">Gender</td>
+						<td style="width: 12.5%;" colspan="5"><h:outputLabel
+								value="#{mainVar.gender}" /></td>
+						<td style="width: 12.5%;">Caste/ Category</td>
+						<td style="width: 12.5%;"><h:outputLabel
+								value="#{mainVar.category}" /></td>
+					</tr>
+
+					<tr>
+						<td style="width: 12.5%;">Disability (If Any)</td>
+						<td style="width: 12.5%;" colspan="5"><h:outputLabel
+								value="#{mainVar.disability}" /></td>
+						<td style="width: 12.5%;">Religion</td>
+						<td style="width: 12.5%;"><h:outputLabel
+								value="#{mainVar.religion}" /></td>
+					</tr>
+				</table>
+
+				<p:outputPanel
+					style="width:55%;border-collapse:collapse;font-size:10px;float:left;margin-top:12px;min-height: 166px;">
+					<h:dataTable var="var"
+						style="width:100%;text-align:center;border-collapse:collapse;font-size:12px;;font-family: timesRoman;"
+						border="1" value="#{mainVar.subjectList}">
+
+						<p:column>
+							<center>
+								<f:facet name="header">Subject Code</f:facet>
+							</center>
+							<center>#{var.subjectCode}</center>
+						</p:column>
+
+
+						<p:column>
+							<center>
+								<f:facet name="header">Subject Name</f:facet>
+							</center>
+							<center>#{var.subName}</center>
+						</p:column>
+
+						<p:column>
+							<center>
+								<f:facet name="header">Medium</f:facet>
+							</center>
+							<center>#{var.medium}</center>
+						</p:column>
+					</h:dataTable>
+				</p:outputPanel>
+
+				<p:outputPanel
+					style="width:35%; text-align: center;border-collapse:collapse;font-size:10px;float:right;margin-top:12px;min-height: 166px;">
+
+					<table border="1" cellpadding="5" cellspacing="0"
+						style="width: 100%; font-size: 12px; font-family: timesRoman;">
+						<tr>
+							<td style="width: 12.5%;">Annual Income</td>
+						</tr>
+
+						<tr>
+							<td style="width: 12.5%;">&nbsp;&nbsp;</td>
+						</tr>
+
+						<tr>
+							<td style="width: 12.5%;">Only Child</td>
+						</tr>
+
+						<tr>
+							<td style="width: 12.5%;">&nbsp;&nbsp;</td>
+						</tr>
+
+						<tr>
+							<td style="width: 12.5%;">Belongs to Minorities</td>
+						</tr>
+
+						<tr>
+							<td style="width: 12.5%;">&nbsp;&nbsp;</td>
+						</tr>
+					</table>
+				</p:outputPanel>
+
+				<br></br>
+				<br></br>
+				<div style="width: 100%; margin-top: 10px; float: left">
+					<center>
+						<p:outputLabel value="UNDERTAKING"
+							style="font-family: timesRoman;font-size: 14px;font-weight: bold;text-decoration:underline;"></p:outputLabel>
+					</center>
+				</div>
+
+				<table style="width: 100%; margin: auto; text-align: justify;">
+					<tr>
+						<td
+							style="text-align: justify; font-size: 14px; font-family: timesRoman;">I
+							have thoroughly checked all the details as above filled in for
+							registration of class #{mainVar.previousClass}
+							examination in respect of my ward. I have filled details required
+							in Hindi/ Regional Language. I would not request for any change
+							in the details filled in the examination form of my ward such as
+							Date of Birth/ Candidate's Name/ Mother's Name/ Father's Name
+							etc. If any mistake in student credential is detected after
+							declaration of result, I will solely be held responsible for the
+							same.</td>
+					</tr>
+				</table>
+				<br></br>
+				<p:outputLabel value="Signatures:- "
+					style="float: left;font-family: timesRoman;font-size: 14px;"></p:outputLabel>
+				<br></br>
+				<br></br>
+				<br></br>
+				<div
+					style="border-radius: 25px; width: 100%; height: auto; margin: auto;">
+					<table style="width: 100%; margin: auto">
+						<tr>
+							<td style="width: 12.5%;">Father</td>
+							<td style="width: 12.5%;">Mother</td>
+							<td style="width: 12.5%;">Student</td>
+							<td style="width: 12.5%;">Class Teacher</td>
+						</tr>
+					</table>
+					<br></br>
+					<br></br>
+					<table style="width: 100%; margin: auto">
+						<tr>
+							<td style="width: 12.5%;">Principal</td>
+							<td style="width: 12.5%;"></td>
+							<td style="width: 12.5%;"></td>
+							<td style="width: 12.5%;">Seal of school bearing Address
+								&amp; Affiliation No.</td>
+						</tr>
+					</table>
+				</div>
+				<br></br>
+				<br></br>
+				<center>
+					<p:outputLabel
+						value="This form is to be preserved by the school for the purpose of verification by board at any stage."
+						style="font-family: timesRoman;font-size: 14px;"></p:outputLabel>
+				</center>
+ <p style="page-break-after: always;"></p>
+			</ui:repeat>
+		</h:form>
+	</h:body>
+</f:view>
+</html>

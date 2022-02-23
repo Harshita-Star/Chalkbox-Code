@@ -1,0 +1,1422 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">I-Card Print</ui:define>
+
+	<ui:define name="content">
+		<style>
+body .ui-panelgrid .ui-panelgrid-cell {
+	width: 50% !important;
+}
+</style>
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+
+						<h:form id="form1">
+							<h1>#{searchStudentVar.searchStudentTitle} For I-Card
+								Printing</h1>
+
+							<p:messages closable="true" autoUpdate="true"></p:messages>
+
+							<p:panel header="Search Student by class Name">
+
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel
+										value="#{searchStudentVar.searchStudentByNameLabel}"></p:outputLabel>
+									<p:autoComplete maxResults="5" id="acSimple"
+										value="#{icardPrinting.name}"
+										completeMethod="#{icardPrinting.autoCompleteStudentInfo}"
+										validatorMessage="Please Enter Correct value">
+										<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:autoComplete>
+
+									<p:commandButton value="Search" update=":form1,:form3:up" icon="fa fa-search" styleClass="butwid"
+										actionListener="#{icardPrinting.searchStudentByName}"></p:commandButton>
+
+								</p:panelGrid>
+
+							</p:panel>
+						</h:form>
+
+					</div>
+					<div class="card card-w-title">
+						<h:form id="form2">
+
+							<p:panel header="Search Student by Class Section">
+
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel value="Select Class" for="@next"
+										style="color:red"></p:outputLabel>
+									<p:selectOneMenu style="width:250px" filter="true"
+										value="#{icardPrinting.selectedCLassSection}" required="true"
+										requiredMessage="Please select a class">
+										<f:selectItem itemLabel="#{searchStudentVar.selectHereLabel}"
+											itemValue=""></f:selectItem>
+										<f:selectItems value="#{icardPrinting.classSection}"></f:selectItems>
+
+										<p:ajax update="sectionid"
+											listener="#{icardPrinting.allSections}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Select Section" for="@next"
+										style="color:red"></p:outputLabel>
+									<p:selectOneMenu id="sectionid" filter="true"
+										value="#{icardPrinting.selectedSection}" required="true"
+										requiredMessage="Please select a section">
+										<f:selectItem itemLabel="#{searchStudentVar.selectHereLabel}"
+											itemValue=""></f:selectItem>
+										<f:selectItems value="#{icardPrinting.sectionList}"></f:selectItems>
+
+										<p:ajax update=":form3:up"
+											listener="#{icardPrinting.searchStudentByClassSection}"></p:ajax>
+									</p:selectOneMenu>
+
+								</p:panelGrid>
+
+							</p:panel>
+
+						</h:form>
+					</div>
+					<div class="card card-w-title">
+						<h:form id="form3">
+
+							<p:panel header="Student Details">
+
+								<p:outputPanel id="up">
+
+									<p:dataTable reflow="true" rowKey="#{var.id}"
+										selection="#{icardPrinting.selectedStudentList}"
+										rendered="#{icardPrinting.show}" var="var"
+										value="#{icardPrinting.studentList}" rows="9" paginator="true">
+
+										<p:column headerText="Select Here" selectionMode="multiple"></p:column>
+
+										<p:column
+											headerText="#{searchStudentVar.searchStudentAdmissionNumberLabel}">
+											<p:outputLabel value="#{var.srNo}"></p:outputLabel>
+										</p:column>
+
+										<p:column sortBy="#{var.fname}"
+											headerText="#{searchStudentVar.seacrhStudentFirstNameLabel}">
+											<p:outputLabel value="#{var.fname}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Father's Name">
+											<p:outputLabel value="#{var.fathersName}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Class">
+											<p:outputLabel value="#{var.className}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Section">
+											<p:outputLabel value="#{var.sectionName}"></p:outputLabel>
+										</p:column>
+
+										<f:facet name="footer">
+											<p:commandButton update=":form3,:form3:pn" icon="fa fa-print" styleClass="butwid"
+												rendered="#{icardPrinting.show}"
+												actionListener="#{icardPrinting.editNow}"
+												value="Print I-Card"></p:commandButton>
+										</f:facet>
+
+									</p:dataTable>
+
+									<p:panel rendered="#{icardPrinting.showforoak}" header="I-Card printing" id="pn">
+
+										<p:commandButton value="Print Now" icon="fa fa-print" styleClass="butwid">
+											<p:printer target="restrictPanel"></p:printer>
+										</p:commandButton>
+
+										<p:outputPanel id="restrictPanel"
+											style="width:100%;margin-bottom:30px;">
+
+											<p:panelGrid columns="2" style="width:100%">
+
+												<p:outputPanel id="pnl1" rendered="#{icardPrinting.show1}"
+													layout="block"
+													style="border:2px solid #666666;width:70%;height:410px!important;margin-top:15px;font-weight: bold;">
+													<p:outputPanel style="width:100%">
+														<center>
+															<p:outputLabel
+																style="text-align:center;font-size:10px !important;"
+																value="#{headerBean.name}"></p:outputLabel>
+														</center>
+														<p:outputPanel>
+															<center>
+																<p:outputLabel value="#{icardPrinting.header}"></p:outputLabel>
+															</center>
+														</p:outputPanel>
+														<p:outputPanel>
+															<center>
+																<p:outputLabel  value="#{icardPrinting.session}"></p:outputLabel>
+															</center>
+														</p:outputPanel>
+														<p:outputPanel >
+															<center>
+																<p:outputLabel  value="#{icardPrinting.examTerm}"></p:outputLabel>
+														
+															</center>
+														</p:outputPanel>
+
+														<p:panelGrid columns="1" style="width:100%">
+															<center>
+																<p:graphicImage
+																	style="margin-right:25%;margin-left:40%;"
+																	rendered="#{icardPrinting.showImage1}"
+																	value="#{icardPrinting.studentImage1}" height="60px"
+																	width="60px"></p:graphicImage>
+															</center>
+														</p:panelGrid>
+
+														<p:panelGrid columns="2" style="width:100%">
+														
+														<p:outputLabel style="font-size:9px" value="SR.No. "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.srNo1}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px" value="Name:- "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.fname1}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px" value="Class:- "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.className1}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px"
+																value="Father's Name:- "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.fathersName1}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px" value="Address:- "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.currentAddress1}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px" value="Contact No.-"></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.fathersPhone1}"></p:outputLabel>
+
+														</p:panelGrid>
+														<p:outputLabel
+															style="float:left;margin-top:30px !important;" 
+															value="#{icardPrinting.border}"></p:outputLabel>
+														<p:outputLabel
+															style="float:right;margin-right:5px !important;margin-top:30px !important;"
+															value="Principal"></p:outputLabel>
+
+													</p:outputPanel>
+
+												</p:outputPanel>
+
+												<p:outputPanel id="pnl2" rendered="#{icardPrinting.show2}"
+													layout="block"
+													style="border:2px solid #666666;width:70%;height:410px!important;margin-top:15px;font-weight: bold;">
+													<p:outputPanel style="width:100%">
+
+														<center>
+															<p:outputLabel
+																style="text-align:center;font-size:10px !important;"
+																value="#{headerBean.name}"></p:outputLabel>
+														</center>
+														<p:outputPanel>
+															<center>
+																<p:outputLabel value="#{icardPrinting.header}"></p:outputLabel>
+															</center>
+														</p:outputPanel>
+														<p:outputPanel >
+															<center>
+																<p:outputLabel  value="#{icardPrinting.session}"></p:outputLabel>
+															</center>
+														</p:outputPanel>
+														<p:outputPanel >
+															<center>
+																<p:outputLabel  value="#{icardPrinting.examTerm}"></p:outputLabel>
+														
+															</center>
+														</p:outputPanel>
+
+														<p:panelGrid columns="1" style="width:100%">
+															<center>
+																<p:graphicImage
+																	style="margin-right:25%;margin-left:40%;"
+																	rendered="#{icardPrinting.showImage2}"
+																	value="#{icardPrinting.studentImage2}" height="60px"
+																	width="60px"></p:graphicImage>
+															</center>
+														</p:panelGrid>
+
+														<p:panelGrid columns="2" style="width:100%">
+															<p:outputLabel style="font-size:9px" value="SR.No. "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.srNo2}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px" value="Name:- "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.fname2}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px" value="Class:- "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.className2}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px"
+																value="Father's Name:- "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.fathersName2}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px" value="Address:- "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.currentAddress2}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px" value="Contact No.-"></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.fathersPhone2}"></p:outputLabel>
+
+														</p:panelGrid>
+														<p:outputLabel
+															style="float:left;margin-top:30px !important;" 
+															value="#{icardPrinting.border}"></p:outputLabel>
+														<p:outputLabel
+															style="float:right;margin-right:5px !important;margin-top:30px !important;"
+															value="Principal"></p:outputLabel>
+													</p:outputPanel>
+
+												</p:outputPanel>
+
+												<p:outputPanel id="pnl3" rendered="#{icardPrinting.show3}"
+													layout="block"
+													style="border:2px solid #666666;width:70%;height:410px!important;margin-top:15px;font-weight: bold;">
+													<p:outputPanel style="width:100%">
+
+														<center>
+															<p:outputLabel
+																style="text-align:center;font-size:10px !important;"
+																value="#{headerBean.name}"></p:outputLabel>
+														</center>
+														<p:outputPanel>
+															<center>
+																<p:outputLabel value="#{icardPrinting.header}"></p:outputLabel>
+															</center>
+														</p:outputPanel>
+														<p:outputPanel >
+															<center>
+																<p:outputLabel  value="#{icardPrinting.session}"></p:outputLabel>
+															</center>
+														</p:outputPanel>
+														<p:outputPanel >
+															<center>
+																<p:outputLabel  value="#{icardPrinting.examTerm}"></p:outputLabel>
+														
+															</center>
+														</p:outputPanel>
+
+														<p:panelGrid columns="1" style="width:100%">
+															<center>
+																<p:graphicImage
+																	style="margin-right:25%;margin-left:40%;"
+																	rendered="#{icardPrinting.showImage3}"
+																	value="#{icardPrinting.studentImage3}" height="60px"
+																	width="60px"></p:graphicImage>
+															</center>
+														</p:panelGrid>
+
+														<p:panelGrid columns="2" style="width:100%">
+														
+															<p:outputLabel style="font-size:9px" value="SR.No. "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.srNo3}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px" value="Name:- "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.fname3}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px" value="Class:- "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.className3}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px"
+																value="Father's Name:- "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.fathersName3}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px" value="Address:- "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.currentAddress3}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px" value="Contact No.-"></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.fathersPhone3}"></p:outputLabel>
+
+														</p:panelGrid>
+														<p:outputLabel
+															style="float:left;margin-top:30px !important;" 
+															value="#{icardPrinting.border}"></p:outputLabel>
+														<p:outputLabel
+															style="float:right;margin-right:5px !important; margin-top:30px !important;"
+															value="Principal"></p:outputLabel>
+
+													</p:outputPanel>
+												</p:outputPanel>
+
+
+
+												<p:outputPanel id="pnl4" rendered="#{icardPrinting.show4}"
+													layout="block"
+													style="border:2px solid #666666;width:70%;height:410px!important;margin-top:15px;font-weight: bold;">
+													<p:outputPanel style="width:100%">
+
+														<center>
+															<p:outputLabel
+																style="text-align:center;font-size:10px !important;"
+																value="#{headerBean.name}"></p:outputLabel>
+														</center>
+														<p:outputPanel>
+															<center>
+																<p:outputLabel value="#{icardPrinting.header}"></p:outputLabel>
+															</center>
+														</p:outputPanel>
+														<p:outputPanel >
+															<center>
+																<p:outputLabel  value="#{icardPrinting.session}"></p:outputLabel>
+															</center>
+														</p:outputPanel>
+														<p:outputPanel >
+															<center>
+																<p:outputLabel  value="#{icardPrinting.examTerm}"></p:outputLabel>
+														
+															</center>
+														</p:outputPanel>
+
+														<p:panelGrid columns="1" style="width:100%">
+															<center>
+																<p:graphicImage
+																	style="margin-right:25%;margin-left:40%;"
+																	rendered="#{icardPrinting.showImage4}"
+																	value="#{icardPrinting.studentImage4}" height="60px"
+																	width="60px"></p:graphicImage>
+															</center>
+														</p:panelGrid>
+
+														<p:panelGrid columns="2" style="width:100%">
+															<p:outputLabel style="font-size:9px" value="SR.No. "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.srNo4}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px" value="Name:- "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.fname4}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px" value="Class:- "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.className4}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px"
+																value="Father's Name:- "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.fathersName4}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px" value="Address:- "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.currentAddress4}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px" value="Contact No.-"></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.fathersPhone4}"></p:outputLabel>
+
+														</p:panelGrid>
+														<p:outputLabel
+															style="float:left;margin-top:30px !important;" 
+															value="#{icardPrinting.border}"></p:outputLabel>
+														<p:outputLabel
+															style="float:right;margin-right:5px !important;margin-top:30px !important;"
+															value="Principal"></p:outputLabel>
+													</p:outputPanel>
+												</p:outputPanel>
+
+
+
+												<p:outputPanel id="pnl5" rendered="#{icardPrinting.show5}"
+													layout="block"
+													style="border:2px solid #666666;width:70%;height:410px!important;margin-top:15px;font-weight: bold;">
+													<p:outputPanel style="width:100%">
+
+														<center>
+															<p:outputLabel
+																style="text-align:center;font-size:10px !important;"
+																value="#{headerBean.name}"></p:outputLabel>
+														</center>
+														<p:outputPanel>
+															<center>
+																<p:outputLabel value="#{icardPrinting.header}"></p:outputLabel>
+															</center>
+														</p:outputPanel>
+														<p:outputPanel >
+															<center>
+																<p:outputLabel  value="#{icardPrinting.session}"></p:outputLabel>
+															</center>
+														</p:outputPanel>
+														<p:outputPanel >
+															<center>
+																<p:outputLabel  value="#{icardPrinting.examTerm}"></p:outputLabel>
+														
+															</center>
+														</p:outputPanel>
+														<p:panelGrid columns="1" style="width:100%">
+															<center>
+																<p:graphicImage
+																	style="margin-right:25%;margin-left:40%;"
+																	rendered="#{icardPrinting.showImage5}"
+																	value="#{icardPrinting.studentImage5}" height="60px"
+																	width="60px"></p:graphicImage>
+															</center>
+														</p:panelGrid>
+
+														<p:panelGrid columns="2" style="width:100%">
+															<p:outputLabel style="font-size:9px" value="SR.No. "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.srNo5}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px" value="Name:- "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.fname5}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px" value="Class:- "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.className5}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px"
+																value="Father's Name:- "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.fathersName5}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px" value="Address:- "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.currentAddress5}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px" value="Contact No.-"></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.fathersPhone5}"></p:outputLabel>
+
+														</p:panelGrid>
+														<p:outputLabel
+															style="float:left;margin-top:30px !important;" 
+															value="#{icardPrinting.border}"></p:outputLabel>
+														<p:outputLabel
+															style="float:right;margin-right:5px !important;margin-top:30px !important;"
+															value="Principal"></p:outputLabel>
+													</p:outputPanel>
+												</p:outputPanel>
+
+
+												<p:outputPanel id="pnl6" rendered="#{icardPrinting.show6}"
+													layout="block"
+													style="border:2px solid #666666;width:70%;height:410px!important;margin-top:15px;font-weight: bold;">
+													<p:outputPanel style="width:100%">
+
+														<center>
+															<p:outputLabel
+																style="text-align:center;font-size:10px !important;"
+																value="#{headerBean.name}"></p:outputLabel>
+														</center>
+														<p:outputPanel>
+															<center>
+																<p:outputLabel value="#{icardPrinting.header}"></p:outputLabel>
+															</center>
+														</p:outputPanel>
+														<p:outputPanel >
+															<center>
+																<p:outputLabel  value="#{icardPrinting.session}"></p:outputLabel>
+															</center>
+														</p:outputPanel>
+														<p:outputPanel >
+															<center>
+																<p:outputLabel  value="#{icardPrinting.examTerm}"></p:outputLabel>
+														
+															</center>
+														</p:outputPanel>
+														<p:panelGrid columns="1" style="width:100%">
+															<center>
+																<p:graphicImage
+																	style="margin-right:25%;margin-left:40%;"
+																	rendered="#{icardPrinting.showImage6}"
+																	value="#{icardPrinting.studentImage6}" height="60px"
+																	width="60px"></p:graphicImage>
+															</center>
+														</p:panelGrid>
+
+														<p:panelGrid columns="2" style="width:100%">
+															<p:outputLabel style="font-size:9px" value="SR.No. "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.srNo6}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px" value="Name:- "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.fname6}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px" value="Class:- "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.className6}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px"
+																value="Father's Name:- "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.fathersName6}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px" value="Address:- "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.currentAddress6}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px" value="Contact No.-"></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.fathersPhone6}"></p:outputLabel>
+
+														</p:panelGrid>
+														<p:outputLabel
+															style="float:left;margin-top:30px !important;" 
+															value="#{icardPrinting.border}"></p:outputLabel>
+														<p:outputLabel
+															style="float:right;margin-right:5px !important;margin-top:30px !important;"
+															value="Principal"></p:outputLabel>
+													</p:outputPanel>
+												</p:outputPanel>
+
+
+
+
+												<p:outputPanel id="pnl7" rendered="#{icardPrinting.show7}"
+													layout="block"
+													style="border:2px solid #666666;width:70%;height:410px!important;margin-top:15px;font-weight: bold;">
+													<p:outputPanel style="width:100%">
+
+														<center>
+															<p:outputLabel
+																style="text-align:center;font-size:10px !important;"
+																value="#{headerBean.name}"></p:outputLabel>
+														</center>
+														<p:outputPanel>
+															<center>
+																<p:outputLabel value="#{icardPrinting.header}"></p:outputLabel>
+															</center>
+														</p:outputPanel>
+														<p:outputPanel >
+															<center>
+																<p:outputLabel  value="#{icardPrinting.session}"></p:outputLabel>
+															</center>
+														</p:outputPanel>
+														<p:outputPanel >
+															<center>
+																<p:outputLabel  value="#{icardPrinting.examTerm}"></p:outputLabel>
+														
+															</center>
+														</p:outputPanel>
+
+														<p:panelGrid columns="1" style="width:100%">
+															<center>
+																<p:graphicImage
+																	style="margin-right:25%;margin-left:40%;"
+																	rendered="#{icardPrinting.showImage7}"
+																	value="#{icardPrinting.studentImage7}" height="60px"
+																	width="60px"></p:graphicImage>
+															</center>
+														</p:panelGrid>
+
+														<p:panelGrid columns="2" style="width:100%">
+															<p:outputLabel style="font-size:9px" value="SR.No. "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.srNo7}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px" value="Name:- "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.fname7}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px" value="Class:- "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.className7}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px"
+																value="Father's Name:- "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.fathersName7}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px" value="Address:- "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.currentAddress7}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px" value="Contact No.-"></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.fathersPhone7}"></p:outputLabel>
+
+														</p:panelGrid>
+														<p:outputLabel
+															style="float:left;margin-top:30px !important;" 
+															value="#{icardPrinting.border}"></p:outputLabel>
+														<p:outputLabel
+															style="float:right;margin-right:5px !important;margin-top:30px !important;"
+															value="Principal"></p:outputLabel>
+													</p:outputPanel>
+												</p:outputPanel>
+
+												<p:outputPanel id="pnl8" rendered="#{icardPrinting.show8}"
+													layout="block"
+													style="border:2px solid #666666;width:70%;height:410px!important;margin-top:15px;font-weight: bold;">
+													<p:outputPanel style="width:100%">
+
+														<center>
+															<p:outputLabel
+																style="text-align:center;font-size:10px !important;"
+																value="#{headerBean.name}"></p:outputLabel>
+														</center>
+														<p:outputPanel>
+															<center>
+																<p:outputLabel value="#{icardPrinting.header}"></p:outputLabel>
+															</center>
+														</p:outputPanel>
+														<p:outputPanel >
+															<center>
+																<p:outputLabel  value="#{icardPrinting.session}"></p:outputLabel>
+															</center>
+														</p:outputPanel>
+														<p:outputPanel >
+															<center>
+																<p:outputLabel  value="#{icardPrinting.examTerm}"></p:outputLabel>
+														
+															</center>
+														</p:outputPanel>
+
+														<p:panelGrid columns="1" style="width:100%">
+															<center>
+																<p:graphicImage
+																	style="margin-right:25%;margin-left:40%;"
+																	rendered="#{icardPrinting.showImage8}"
+																	value="#{icardPrinting.studentImage8}" height="60px"
+																	width="60px"></p:graphicImage>
+															</center>
+														</p:panelGrid>
+
+														<p:panelGrid columns="2" style="width:100%">
+															<p:outputLabel style="font-size:9px" value="SR.No. "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.srNo8}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px" value="Name:- "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.fname8}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px" value="Class:- "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.className8}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px"
+																value="Father's Name:- "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.fathersName8}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px" value="Address:- "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.currentAddress8}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px" value="Contact No.-"></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.fathersPhone8}"></p:outputLabel>
+
+														</p:panelGrid>
+														<p:outputLabel
+															style="float:left;margin-top:30px !important;" 
+															value="#{icardPrinting.border}"></p:outputLabel>
+														<p:outputLabel
+															style="float:right;margin-right:5px !important;margin-top:30px !important;"
+															value="Principal"></p:outputLabel>
+													</p:outputPanel>
+												</p:outputPanel>
+
+												<p:outputPanel id="pnl9" rendered="#{icardPrinting.show9}"
+													layout="block"
+													style="border:2px solid #666666;width:70%;height:410px!important;margin-top:15px;font-weight: bold;">
+													<p:outputPanel style="width:100%">
+
+														<center>
+															<p:outputLabel
+																style="text-align:center;font-size:10px !important;"
+																value="#{headerBean.name}"></p:outputLabel>
+														</center>
+														<p:outputPanel>
+															<center>
+																<p:outputLabel value="#{icardPrinting.header}"></p:outputLabel>
+															</center>
+														</p:outputPanel>
+														<p:outputPanel >
+															<center>
+																<p:outputLabel  value="#{icardPrinting.session}"></p:outputLabel>
+															</center>
+														</p:outputPanel>
+														<p:outputPanel >
+															<center>
+																<p:outputLabel  value="#{icardPrinting.examTerm}"></p:outputLabel>
+														
+															</center>
+														</p:outputPanel>
+
+														<p:panelGrid columns="1" style="width:100%">
+															<center>
+																<p:graphicImage
+																	style="margin-right:25%;margin-left:40%;"
+																	rendered="#{icardPrinting.showImage9}"
+																	value="#{icardPrinting.studentImage9}" height="60px"
+																	width="60px"></p:graphicImage>
+															</center>
+														</p:panelGrid>
+
+														<p:panelGrid columns="2" style="width:100%">
+															<p:outputLabel style="font-size:9px" value="SR.No. "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.srNo9}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px" value="Name:- "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.fname9}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px" value="Class:- "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.className9}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px"
+																value="Father's Name:- "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.fathersName9}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px" value="Address:- "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.currentAddress9}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px" value="Contact No.-"></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.fathersPhone9}"></p:outputLabel>
+
+														</p:panelGrid>
+														<p:outputLabel
+															style="float:left;margin-top:30px !important;" 
+															value="#{icardPrinting.border}"></p:outputLabel>
+														<p:outputLabel
+															style="float:right;margin-right:5px !important;margin-top:30px !important;"
+															value="Principal"></p:outputLabel>
+													</p:outputPanel>
+												</p:outputPanel>
+											</p:panelGrid>
+										</p:outputPanel>
+
+
+									</p:panel>
+
+									<p:panel rendered="#{icardPrinting.normal}" header="I-Card printing" id="pn1">
+
+										<p:commandButton value="Print Now" icon="fa fa-print" styleClass="butwid">
+											<p:printer target="restrictPanel1"></p:printer>
+										</p:commandButton>
+
+										<p:outputPanel id="restrictPanel1"
+											style="width:100%;margin-bottom:30px;">
+
+											<p:panelGrid columns="2" style="width:100%">
+
+												<p:outputPanel id="pnl11" rendered="#{icardPrinting.show1}"
+													layout="block"
+													style="border:2px solid #666666;width:70%;height:380px!important;margin-top:15px;">
+													<p:outputPanel style="width:100%">
+														<center>
+															<p:outputLabel
+																style="text-align:center;font-size:10px !important;"
+																value="#{headerBean.name}"></p:outputLabel>
+														</center>
+														<p:outputPanel>
+															<center>
+																<p:outputLabel value="#{icardPrinting.header}"></p:outputLabel>
+															</center>
+														</p:outputPanel>
+
+														<p:panelGrid columns="1" style="width:100%">
+															<center>
+																<p:graphicImage
+																	style="margin-right:25%;margin-left:40%;"
+																	rendered="#{icardPrinting.showImage1}"
+																	value="#{icardPrinting.studentImage1}" height="60px"
+																	width="60px"></p:graphicImage>
+															</center>
+														</p:panelGrid>
+
+														<p:panelGrid columns="2" style="width:100%">
+														
+														<p:outputLabel style="font-size:9px" value="SR.No. "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.srNo1}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px" value="Name:- "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.fname1}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px" value="Class:- "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.className1}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px"
+																value="Father's Name:- "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.fathersName1}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px" value="Address:- "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.currentAddress1}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px" value="Contact No.-"></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.fathersPhone1}"></p:outputLabel>
+
+														</p:panelGrid>
+														<p:outputLabel
+															style="float:right;margin-right:5px !important;margin-top:30px !important;"
+															value="Principal"></p:outputLabel>
+
+													</p:outputPanel>
+
+												</p:outputPanel>
+
+												<p:outputPanel id="pnl12" rendered="#{icardPrinting.show2}"
+													layout="block"
+													style="border:2px solid #666666;width:70%;height:380px!important;margin-top:15px;">
+													<p:outputPanel style="width:100%">
+
+														<center>
+															<p:outputLabel
+																style="text-align:center;font-size:10px !important;"
+																value="#{headerBean.name}"></p:outputLabel>
+														</center>
+														<p:outputPanel>
+															<center>
+																<p:outputLabel value="#{icardPrinting.header}"></p:outputLabel>
+															</center>
+														</p:outputPanel>
+
+														<p:panelGrid columns="1" style="width:100%">
+															<center>
+																<p:graphicImage
+																	style="margin-right:25%;margin-left:40%;"
+																	rendered="#{icardPrinting.showImage2}"
+																	value="#{icardPrinting.studentImage2}" height="60px"
+																	width="60px"></p:graphicImage>
+															</center>
+														</p:panelGrid>
+
+														<p:panelGrid columns="2" style="width:100%">
+															<p:outputLabel style="font-size:9px" value="SR.No. "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.srNo2}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px" value="Name:- "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.fname2}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px" value="Class:- "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.className2}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px"
+																value="Father's Name:- "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.fathersName2}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px" value="Address:- "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.currentAddress2}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px" value="Contact No.-"></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.fathersPhone2}"></p:outputLabel>
+
+														</p:panelGrid>
+														<p:outputLabel
+															style="float:right;margin-right:5px !important;margin-top:30px !important;"
+															value="Principal"></p:outputLabel>
+													</p:outputPanel>
+
+												</p:outputPanel>
+
+												<p:outputPanel id="pnl13" rendered="#{icardPrinting.show3}"
+													layout="block"
+													style="border:2px solid #666666;width:70%;height:380px!important;margin-top:15px;">
+													<p:outputPanel style="width:100%">
+
+														<center>
+															<p:outputLabel
+																style="text-align:center;font-size:10px !important;"
+																value="#{headerBean.name}"></p:outputLabel>
+														</center>
+														<p:outputPanel>
+															<center>
+																<p:outputLabel value="#{icardPrinting.header}"></p:outputLabel>
+															</center>
+														</p:outputPanel>
+
+														<p:panelGrid columns="1" style="width:100%">
+															<center>
+																<p:graphicImage
+																	style="margin-right:25%;margin-left:40%;"
+																	rendered="#{icardPrinting.showImage3}"
+																	value="#{icardPrinting.studentImage3}" height="60px"
+																	width="60px"></p:graphicImage>
+															</center>
+														</p:panelGrid>
+
+														<p:panelGrid columns="2" style="width:100%">
+														
+															<p:outputLabel style="font-size:9px" value="SR.No. "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.srNo3}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px" value="Name:- "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.fname3}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px" value="Class:- "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.className3}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px"
+																value="Father's Name:- "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.fathersName3}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px" value="Address:- "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.currentAddress3}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px" value="Contact No.-"></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.fathersPhone3}"></p:outputLabel>
+
+														</p:panelGrid>
+														<p:outputLabel
+															style="float:right;margin-right:5px !important; margin-top:30px !important;"
+															value="Principal"></p:outputLabel>
+
+													</p:outputPanel>
+												</p:outputPanel>
+
+
+
+												<p:outputPanel id="pnl14" rendered="#{icardPrinting.show4}"
+													layout="block"
+													style="border:2px solid #666666;width:70%;height:380px!important;margin-top:15px;">
+													<p:outputPanel style="width:100%">
+
+														<center>
+															<p:outputLabel
+																style="text-align:center;font-size:10px !important;"
+																value="#{headerBean.name}"></p:outputLabel>
+														</center>
+														<p:outputPanel>
+															<center>
+																<p:outputLabel value="#{icardPrinting.header}"></p:outputLabel>
+															</center>
+														</p:outputPanel>
+
+														<p:panelGrid columns="1" style="width:100%">
+															<center>
+																<p:graphicImage
+																	style="margin-right:25%;margin-left:40%;"
+																	rendered="#{icardPrinting.showImage4}"
+																	value="#{icardPrinting.studentImage4}" height="60px"
+																	width="60px"></p:graphicImage>
+															</center>
+														</p:panelGrid>
+
+														<p:panelGrid columns="2" style="width:100%">
+															<p:outputLabel style="font-size:9px" value="SR.No. "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.srNo4}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px" value="Name:- "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.fname4}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px" value="Class:- "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.className4}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px"
+																value="Father's Name:- "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.fathersName4}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px" value="Address:- "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.currentAddress4}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px" value="Contact No.-"></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.fathersPhone4}"></p:outputLabel>
+
+														</p:panelGrid>
+														<p:outputLabel
+															style="float:right;margin-right:5px !important;margin-top:30px !important;"
+															value="Principal"></p:outputLabel>
+													</p:outputPanel>
+												</p:outputPanel>
+
+
+
+												<p:outputPanel id="pnl15" rendered="#{icardPrinting.show5}"
+													layout="block"
+													style="border:2px solid #666666;width:70%;height:380px!important;margin-top:15px;">
+													<p:outputPanel style="width:100%">
+
+														<center>
+															<p:outputLabel
+																style="text-align:center;font-size:10px !important;"
+																value="#{headerBean.name}"></p:outputLabel>
+														</center>
+														<p:outputPanel>
+															<center>
+																<p:outputLabel value="#{icardPrinting.header}"></p:outputLabel>
+															</center>
+														</p:outputPanel>
+
+														<p:panelGrid columns="1" style="width:100%">
+															<center>
+																<p:graphicImage
+																	style="margin-right:25%;margin-left:40%;"
+																	rendered="#{icardPrinting.showImage5}"
+																	value="#{icardPrinting.studentImage5}" height="60px"
+																	width="60px"></p:graphicImage>
+															</center>
+														</p:panelGrid>
+
+														<p:panelGrid columns="2" style="width:100%">
+															<p:outputLabel style="font-size:9px" value="SR.No. "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.srNo5}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px" value="Name:- "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.fname5}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px" value="Class:- "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.className5}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px"
+																value="Father's Name:- "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.fathersName5}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px" value="Address:- "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.currentAddress5}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px" value="Contact No.-"></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.fathersPhone5}"></p:outputLabel>
+
+														</p:panelGrid>
+														<p:outputLabel
+															style="float:right;margin-right:5px !important;margin-top:30px !important;"
+															value="Principal"></p:outputLabel>
+													</p:outputPanel>
+												</p:outputPanel>
+
+
+												<p:outputPanel id="pnl16" rendered="#{icardPrinting.show6}"
+													layout="block"
+													style="border:2px solid #666666;width:70%;height:380px!important;margin-top:15px;">
+													<p:outputPanel style="width:100%">
+
+														<center>
+															<p:outputLabel
+																style="text-align:center;font-size:10px !important;"
+																value="#{headerBean.name}"></p:outputLabel>
+														</center>
+														<p:outputPanel>
+															<center>
+																<p:outputLabel value="#{icardPrinting.header}"></p:outputLabel>
+															</center>
+														</p:outputPanel>
+
+														<p:panelGrid columns="1" style="width:100%">
+															<center>
+																<p:graphicImage
+																	style="margin-right:25%;margin-left:40%;"
+																	rendered="#{icardPrinting.showImage6}"
+																	value="#{icardPrinting.studentImage6}" height="60px"
+																	width="60px"></p:graphicImage>
+															</center>
+														</p:panelGrid>
+
+														<p:panelGrid columns="2" style="width:100%">
+															<p:outputLabel style="font-size:9px" value="SR.No. "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.srNo6}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px" value="Name:- "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.fname6}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px" value="Class:- "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.className6}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px"
+																value="Father's Name:- "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.fathersName6}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px" value="Address:- "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.currentAddress6}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px" value="Contact No.-"></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.fathersPhone6}"></p:outputLabel>
+
+														</p:panelGrid>
+														<p:outputLabel
+															style="float:right;margin-right:5px !important;margin-top:30px !important;"
+															value="Principal"></p:outputLabel>
+													</p:outputPanel>
+												</p:outputPanel>
+
+
+
+
+												<p:outputPanel id="pnl17" rendered="#{icardPrinting.show7}"
+													layout="block"
+													style="border:2px solid #666666;width:70%;height:380px!important;margin-top:15px;">
+													<p:outputPanel style="width:100%">
+
+														<center>
+															<p:outputLabel
+																style="text-align:center;font-size:10px !important;"
+																value="#{headerBean.name}"></p:outputLabel>
+														</center>
+														<p:outputPanel>
+															<center>
+																<p:outputLabel value="#{icardPrinting.header}"></p:outputLabel>
+															</center>
+														</p:outputPanel>
+
+														<p:panelGrid columns="1" style="width:100%">
+															<center>
+																<p:graphicImage
+																	style="margin-right:25%;margin-left:40%;"
+																	rendered="#{icardPrinting.showImage7}"
+																	value="#{icardPrinting.studentImage7}" height="60px"
+																	width="60px"></p:graphicImage>
+															</center>
+														</p:panelGrid>
+
+														<p:panelGrid columns="2" style="width:100%">
+															<p:outputLabel style="font-size:9px" value="SR.No. "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.srNo7}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px" value="Name:- "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.fname7}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px" value="Class:- "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.className7}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px"
+																value="Father's Name:- "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.fathersName7}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px" value="Address:- "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.currentAddress7}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px" value="Contact No.-"></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.fathersPhone7}"></p:outputLabel>
+
+														</p:panelGrid>
+														<p:outputLabel
+															style="float:right;margin-right:5px !important;margin-top:30px !important;"
+															value="Principal"></p:outputLabel>
+													</p:outputPanel>
+												</p:outputPanel>
+
+												<p:outputPanel id="pnl18" rendered="#{icardPrinting.show8}"
+													layout="block"
+													style="border:2px solid #666666;width:70%;height:380px!important;margin-top:15px;">
+													<p:outputPanel style="width:100%">
+
+														<center>
+															<p:outputLabel
+																style="text-align:center;font-size:10px !important;"
+																value="#{headerBean.name}"></p:outputLabel>
+														</center>
+														<p:outputPanel>
+															<center>
+																<p:outputLabel value="#{icardPrinting.header}"></p:outputLabel>
+															</center>
+														</p:outputPanel>
+
+														<p:panelGrid columns="1" style="width:100%">
+															<center>
+																<p:graphicImage
+																	style="margin-right:25%;margin-left:40%;"
+																	rendered="#{icardPrinting.showImage8}"
+																	value="#{icardPrinting.studentImage8}" height="60px"
+																	width="60px"></p:graphicImage>
+															</center>
+														</p:panelGrid>
+
+														<p:panelGrid columns="2" style="width:100%">
+															<p:outputLabel style="font-size:9px" value="SR.No. "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.srNo8}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px" value="Name:- "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.fname8}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px" value="Class:- "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.className8}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px"
+																value="Father's Name:- "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.fathersName8}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px" value="Address:- "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.currentAddress8}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px" value="Contact No.-"></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.fathersPhone8}"></p:outputLabel>
+
+														</p:panelGrid>
+														<p:outputLabel
+															style="float:right;margin-right:5px !important;margin-top:30px !important;"
+															value="Principal"></p:outputLabel>
+													</p:outputPanel>
+												</p:outputPanel>
+
+												<p:outputPanel id="pnl19" rendered="#{icardPrinting.show9}"
+													layout="block"
+													style="border:2px solid #666666;width:70%;height:380px!important;margin-top:15px;">
+													<p:outputPanel style="width:100%">
+
+														<center>
+															<p:outputLabel
+																style="text-align:center;font-size:10px !important;"
+																value="#{headerBean.name}"></p:outputLabel>
+														</center>
+														<p:outputPanel>
+															<center>
+																<p:outputLabel value="#{icardPrinting.header}"></p:outputLabel>
+															</center>
+														</p:outputPanel>
+
+														<p:panelGrid columns="1" style="width:100%">
+															<center>
+																<p:graphicImage
+																	style="margin-right:25%;margin-left:40%;"
+																	rendered="#{icardPrinting.showImage9}"
+																	value="#{icardPrinting.studentImage9}" height="60px"
+																	width="60px"></p:graphicImage>
+															</center>
+														</p:panelGrid>
+
+														<p:panelGrid columns="2" style="width:100%">
+															<p:outputLabel style="font-size:9px" value="SR.No. "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.srNo9}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px" value="Name:- "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.fname9}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px" value="Class:- "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.className9}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px"
+																value="Father's Name:- "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.fathersName9}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px" value="Address:- "></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.currentAddress9}"></p:outputLabel>
+
+															<p:outputLabel style="font-size:9px" value="Contact No.-"></p:outputLabel>
+															<p:outputLabel style="font-size:9px"
+																value="#{icardPrinting.fathersPhone9}"></p:outputLabel>
+
+														</p:panelGrid>
+														<p:outputLabel
+															style="float:right;margin-right:5px !important;margin-top:30px !important;"
+															value="Principal"></p:outputLabel>
+													</p:outputPanel>
+												</p:outputPanel>
+											</p:panelGrid>
+										</p:outputPanel>
+										
+
+
+									</p:panel>
+
+
+								</p:outputPanel>
+
+								<p:dialog resizable="false" widgetVar="dlg"
+									header="Do you really want to View this class"
+									showEffect="fade" hideEffect="explode" modal="true">
+									<div class="ui-g form-group">
+										<p:panelGrid columns="2"
+											styleClass="ui-panelgrid-blank form-group"
+											style="border:0px none; background-color:transparent;">
+
+											<p:commandButton update=":form3"
+												actionListener="#{icardPrinting.viewDetails}" value="Yes"></p:commandButton>
+											<p:commandButton value="No" update=":form3"
+												oncomplete="PF('dlg').hide();"></p:commandButton>
+										</p:panelGrid>
+									</div>
+								</p:dialog>
+
+								<p:dialog draggable="false" closable="false" resizable="false"
+									widgetVar="dlg2" header="Please wait........" modal="true"
+									showEffect="fade" hideEffect="explode">
+
+									<p:graphicImage url="image/loading-bar.gif"></p:graphicImage>
+
+								</p:dialog>
+
+							</p:panel>
+
+						</h:form>
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

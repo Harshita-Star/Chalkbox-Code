@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html 
+    xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" 
+	xmlns:p="http://primefaces.org/ui">
+<f:loadBundle var="regexVar" basename="myProperties" />
+<h:head> 
+	<f:facet name="first">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<meta name="viewport"
+			content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+	</f:facet>
+	<title>Welcome to Chalkbox</title>
+	 <h:outputScript name="js/layout.js" library="pandora-layout" /> 
+	 
+	<script>
+    function  checkLoginSpaces() {
+
+         var stopp=document.getElementById("form:loginid").value;
+         stopp=stopp.trim();
+         document.getElementById("form:loginid").value=stopp;
+		
+  }
+	</script>
+</h:head>
+<h:body styleClass="login-body">
+	   <div class="login-topbar">
+	 
+            <h:link>
+                <p:graphicImage name="imagess/cblogo.png" library="pandora-layout" />
+            </h:link>
+          
+        </div>
+        <h:form id="form">
+				<p:growl showDetail="true"></p:growl>
+        <div class="login-wrapper">
+            <div class="login-panel">
+                <div class="login-title">
+                    <h1>Login to Chalkbox</h1>
+                    <span>
+                        Welcome, please use the form to Log-in Chalkbox network
+                    </span>
+                </div>
+                <div class="login-forms-wrapper">
+                    <div class="form-tabs">
+                        <div class="tab tab-1 active-tab">LOGIN</div>
+                    </div>
+                    <div class="login-forms">
+                        <div class="login-form login">
+                            <div class="form-group">
+                                <span>USERNAME</span>
+                               <p:inputText id="loginid" value="#{loginBean.id}"
+									required="true" requiredMessage="Please Enter UserName." onkeyup="checkLoginSpaces()">
+									<p:keyFilter regEx="/[a-z0-9_-.]/i"></p:keyFilter>
+								</p:inputText>
+                            </div>
+                            <div class="form-group">
+                                 <span>PASSWORD</span>
+                                <p:password id="password" value="#{loginBean.pswd}"
+									required="true" requiredMessage="Please Enter Password.">
+								</p:password>	
+                            </div>
+                            <div class="form-footer">
+                                <p:commandButton rendered="true" value="Login" update=":form" icon="fa fa-sign-in"
+							action="#{loginBean.check}" />
+							<p:commandButton rendered="false" value="Login" update=":update" 
+							oncomplete="PF('upDlg').show();"/>
+                                <div class="ui-g-12 ui-sm-6 ui-md-6">
+                                  By logging in, you agree with our <a style="color: blue;" href="http://www.chalkbox.in/Terms-condition.html" target="_blank">T&amp;C</a> and <a style="color: blue;" href="http://www.chalkbox.in/privacy-policy.html" target="_blank">Privacy Policy</a>
+					
+                                </div>
+                            </div>
+                            
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            <div class = "login-image">
+             <p:graphicImage name="imagess/login/login3new.png" library="pandora-layout" />
+            </div>
+        </div>
+        
+        </h:form>
+        <h:form id="billForm" style="overflow:hidden">
+				<p:dialog header="Due Bills" width="500"
+					widgetVar="billDlg" modal="true" showEffect="fade"
+					hideEffect="fade" resizable="false" closable="false" closeOnEscape="false">
+					<center>
+					<p:outputLabel value="#{loginBean.billMsg}"
+						style="font-size:14px;font-weight: bold;" />
+					</center>
+					<br></br>
+					<br></br> 
+					<center>
+						<p:commandButton value="  My Bills" action="mySchoolBillsLogout.xhtml?faces-redirect=true" update="billForm" style="width: 150px;"/>
+						<br/>
+						<br/>
+						<p:commandButton value="Close" action="#{loginBean.skip}" update="billForm" style="width: 150px;"/>
+					</center>
+					<br></br>
+				</p:dialog>
+			</h:form>
+			
+			<h:form id="schForm" style="overflow:hidden">
+					<p:dialog header="Select School" width="500" widgetVar="schDlg"
+						modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+						<center>
+							<br></br>
+							<p:selectOneMenu id="school" filter="true"
+								value="#{loginBean.schoolId}" required="true"
+								requiredMessage="Please Select School">
+								<f:selectItem itemLabel="Select School" itemValue=""></f:selectItem>
+								<f:selectItems value="#{loginBean.list}" var="var"
+									itemLabel="#{var.aliasName}" itemValue="#{var.schid}"></f:selectItems>
+							</p:selectOneMenu>
+						</center>
+						<br></br>
+						<br></br>
+						<center>
+							<p:commandButton style="width: 250px;"
+								value="Proceed To Dashboard >>>" update="schForm"
+								action="#{loginBean.serviceGo}" />
+							<br />
+							<br />
+							<p:commandButton style="width: 250px;"
+								value="Check Activity Report >>>" update="schForm"
+								action="#{loginBean.serviceReport}" />
+							<br />
+						</center>
+						<br></br>
+					</p:dialog>
+				</h:form>
+			
+			<h:form id="update" style="overflow:hidden">
+				<p:dialog header="ERP Maintainance" width="500"
+					widgetVar="upDlg" modal="true" showEffect="fade"
+					hideEffect="fade" resizable="false">
+					<center>
+					<br></br>
+					<p:outputLabel value="Dear User, Chalkbox ERP is currently on maintainance due to some updates, Please wait till 9th April 2019 06:00 AM. Sorry for the inconvenience caused."
+						style="font-size:18px;font-weight: bold;" />
+					</center>
+					<br></br>
+					<br></br> 
+					<center>
+						<p:commandButton style="width: 50px;" value="OK" update="update"/>
+						<br/>
+					</center>
+					<br></br>
+				</p:dialog>
+			</h:form>
+
+	<p:ajaxStatus onstart="PF('statusDialog').show()"
+		onsuccess="PF('statusDialog').hide()" />
+	<p:dialog modal="true" widgetVar="statusDialog" resizable="false"
+		showHeader="false">
+		<center>
+			<!-- <i class="fa fa-circle-o-notch fa-5x fa-spin ajax-loader"></i> -->
+			<p:graphicImage value="loader2.gif" height="100" width="100"/> 
+		</center>
+		<!-- <center>
+			<h3>Please Wait...</h3>
+		</center> -->
+	</p:dialog>
+	<h:outputStylesheet name="css/layout-#{guestPreferences.layoutPrimaryColor}.css" library="pandora-layout" />
+  
+</h:body>
+
+</html>

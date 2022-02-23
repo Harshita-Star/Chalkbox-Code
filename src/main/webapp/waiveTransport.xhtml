@@ -1,0 +1,102 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Transport Fee Setting</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+
+							<p:messages closable="true" autoUpdate="true"></p:messages>
+
+							<p:panel header="Transport Fee Setting">
+
+								<p:panelGrid columns="2"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel value="Select Class" for="@next"
+										style="color:red"></p:outputLabel>
+									<p:selectOneMenu value="#{waiveTransport.selectedClass}"
+										required="true" requiredMessage="Please select a class"
+										filter="true">
+										<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+										<!-- <f:selectItem itemLabel="All Classes" itemValue="all"></f:selectItem> -->
+										<f:selectItems value="#{waiveTransport.classList}"></f:selectItems>
+										<p:ajax update="form"
+											listener="#{waiveTransport.proceed}"></p:ajax>
+									</p:selectOneMenu>
+
+								</p:panelGrid>
+
+								<br /><br />	
+
+								<p:dataTable var="var" value="#{waiveTransport.list}"
+									reflow="true" rowIndexVar="index">
+
+
+									<p:column headerText="Sr.No">
+										<p:outputLabel value="#{index+1}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Month">
+										<p:outputLabel value="#{var.label}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Year">
+										<p:outputLabel
+											value="#{var.value gt (sideMenuBean.startSessionMonth-1) ? sideMenuBean.startSession : sideMenuBean.endSession}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Want To Take Transport Fee?">
+										<p:selectOneRadio value="#{var.description}">
+											<f:selectItem itemLabel="Yes" itemValue="Yes"></f:selectItem>
+											<f:selectItem itemLabel="No" itemValue="No"></f:selectItem>
+										</p:selectOneRadio>
+									</p:column>
+
+									<f:facet name="footer">
+										<center>
+											<p:commandButton value="Update" styleClass="butwid"
+												icon="fa fa-upload" action="#{waiveTransport.update}"
+												update=":form">
+
+												<p:confirm header="Confirmation"
+													message="Are You Sure To Update Transport Fee Settings...?"
+													icon="ui-icon-alert" />
+
+											</p:commandButton>
+										</center>
+									</f:facet>
+
+								</p:dataTable>
+
+							</p:panel>
+
+						</h:form>
+
+						<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+							<p:commandButton style="margin-left:30px" value="Yes"
+								type="button" styleClass="ui-confirmdialog-yes greenButt"
+								icon="ui-icon-check" />
+							<p:commandButton style="margin-left:50px" value="No"
+								type="button" styleClass="ui-confirmdialog-no redButt"
+								icon="ui-icon-close" />
+						</p:confirmDialog>
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

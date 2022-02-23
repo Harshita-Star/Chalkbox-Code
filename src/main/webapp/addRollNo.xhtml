@@ -1,0 +1,139 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	 template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Add Roll No</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+							<h1>Fill Student Roll No</h1>
+
+							<p:panel header="Fill Student RollNo">
+								<p:messages closable="true" autoUpdate="true"></p:messages>
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel  for="@next" style="color:red" value="Select Class"></p:outputLabel>
+									<p:selectOneMenu value="#{addRollNoBean.selectedClass}" filter="true"
+										required="true" requiredMessage="Please Select Class">
+										<f:selectItem itemLabel="Select Class" itemValue=""></f:selectItem>
+										<f:selectItems value="#{addRollNoBean.classList}"></f:selectItems>
+
+										<p:ajax update="sectionid"
+											listener="#{addRollNoBean.showSemester}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel  for="@next" style="color:red" value="Section"></p:outputLabel>
+									<p:selectOneMenu id="sectionid" filter="true"
+										value="#{addRollNoBean.selectedSection}" required="true"
+										requiredMessage="Please Select Section">
+										<f:selectItem itemLabel="Select Section" itemValue=""></f:selectItem>
+										<f:selectItems value="#{addRollNoBean.sectionList}"></f:selectItems>
+										<p:ajax></p:ajax>
+									</p:selectOneMenu>
+									
+									
+										<p:outputLabel  for="@next" style="color:red" value="Fill Type"></p:outputLabel>
+									<p:selectOneRadio 
+										value="#{addRollNoBean.fillType}" required="true"
+										requiredMessage="Please Select Fill Type">
+										<f:selectItem itemLabel="Auto" itemValue="Auto"></f:selectItem>
+										<f:selectItem itemLabel="Manual" itemValue="Manual"></f:selectItem>
+										<p:ajax listener="#{addRollNoBean.changeFillType}" update=":form"></p:ajax>
+									</p:selectOneRadio>
+									
+									<p:outputLabel  for="@next" style="color:red" value="Starting Roll No" rendered="#{addRollNoBean.showRollNo}"></p:outputLabel>
+									<p:inputText value="#{addRollNoBean.startRollNo}" required="true"  maxlength="5"  requiredMessage="Please Fill Starting Roll No(Integers Only)"  rendered="#{addRollNoBean.showRollNo}">
+									   <p:keyFilter  regEx="/[0-9.]/i" />
+									</p:inputText>
+								</p:panelGrid>
+								
+								<br />
+								<p:separator />
+								<center>
+								
+									<p:commandButton update=":form:tableId" value="Search" styleClass="butwid" icon="fa fa-search"
+										actionListener="#{addRollNoBean.searchStudent}"></p:commandButton>
+								</center>
+								<p:separator />
+								<br />
+								
+								<br></br>
+								<p:outputPanel id="tableId">
+									<p:dataTable reflow="true"
+										rendered="#{addRollNoBean.showTable}"
+										value="#{addRollNoBean.studentList}" var="var">
+
+										<f:facet name="header">
+											<p:panelGrid columns="1" layout="grid"
+												styleClass="ui-panelgrid-blank form-group"
+												style="border:0px none; background-color:transparent;">
+
+												<p:commandButton update=":form:tableId" value="Auto Fill"
+													actionListener="#{addRollNoBean.autoFillMeathod}" rendered="false"></p:commandButton>
+												<p:commandButton update=":form" value="Submit" styleClass="butwid" icon="fa fa-upload"
+													actionListener="#{addRollNoBean.submitValue}"></p:commandButton>
+											</p:panelGrid>
+										</f:facet>
+
+										<p:column headerText="S.No." style="width:60px">
+											<p:outputLabel value="#{var.sNo}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Student Name">
+											<p:outputLabel value="#{var.studentName}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Addmission Number">
+											<p:outputLabel value="#{var.srNo}"></p:outputLabel>
+										</p:column>
+
+
+										<p:column headerText="New RollNo">
+											<p:inputText value="#{var.rollNo}" disabled="#{addRollNoBean.disableRollNo}">
+												<p:keyFilter  regEx="/[0-9.]/i" />
+                                            </p:inputText>
+										</p:column>
+										
+										<p:column headerText="Current RollNo">
+											<p:outputLabel value="#{var.currentRollNo}">
+												
+                                            </p:outputLabel>
+										</p:column>
+
+										<f:facet name="footer">
+											<p:panelGrid columns="1" layout="grid"
+												styleClass="ui-panelgrid-blank form-group"
+												style="border:0px none; background-color:transparent;">
+
+												<p:commandButton update=":form:tableId" value="Auto Fill"
+													actionListener="#{addRollNoBean.autoFillMeathod}" rendered="false"></p:commandButton>
+
+												<p:commandButton update=":form" value="Submit" styleClass="butwid" icon="fa fa-upload"
+													actionListener="#{addRollNoBean.submitValue}"></p:commandButton>
+											</p:panelGrid>
+										</f:facet>
+									</p:dataTable>
+								</p:outputPanel>
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,299 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Add Enquiry</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<p:focus context="panel" />
+							<p:messages autoUpdate="true"></p:messages>
+							<p:panel id="panel" header="Enquiry Page">
+								<p:panelGrid columns="2"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+
+									<p:outputLabel for="@next" style="color:red;"
+										value="Visiting Date"></p:outputLabel>
+									<p:calendar navigator="true" effect="fold" pattern="dd/MM/yyyy"
+										yearRange="c-30:c+30" value="#{studentForm.admissionDate}"
+										required="true" requiredMessage="Please Enter Date"
+										focusOnSelect="true" readonlyInput="true"></p:calendar>
+
+									<p:outputLabel for="@next" style="color:red;"
+										value="Admission sought for session"></p:outputLabel>
+									<p:selectOneMenu value="#{studentForm.selectedSession}"
+										required="true" requiredMessage="Please select session">
+										<f:selectItems value="#{studentForm.sessionList}"></f:selectItems>
+									</p:selectOneMenu>
+
+									<p:outputLabel for="@next" style="color:red;"
+										value="Admission  sought  for Class"></p:outputLabel>
+									<p:selectOneMenu required="true"
+										requiredMessage="Please select a class"
+										value="#{studentForm.addmissionclass}">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{studentForm.classList}"></f:selectItems>
+									</p:selectOneMenu>
+
+
+									<p:outputLabel for="@next" style="color:red;"
+										value="Student Name"></p:outputLabel>
+									<p:inputText required="true"
+										requiredMessage="Please Enter Student Name"
+										value="#{studentForm.studentName}"
+										validatorMessage="Please Enter Correct value">
+										<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:inputText>
+
+									<p:outputLabel for="@next" style="color:red;"
+										value="Father's Name"></p:outputLabel>
+									<p:inputText required="true"
+										requiredMessage="Please Enter Father's Name"
+										value="#{studentForm.fatherName}"
+										validatorMessage="Please Enter Correct value">
+										<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:inputText>
+
+									<p:outputLabel for="@next" value="Mother's Name "></p:outputLabel>
+									<p:inputText value="#{studentForm.motherName}"
+										validatorMessage="Please Enter Correct value">
+										<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:inputText>
+
+									<p:outputLabel for="@next" value="Gender "></p:outputLabel>
+									<p:selectOneRadio value="#{studentForm.gender}">
+										<f:selectItem itemLabel="Male" itemValue="Male"></f:selectItem>
+										<f:selectItem itemLabel="Female" itemValue="Female"></f:selectItem>
+										<f:selectItem itemLabel="Transgender" itemValue="Transgender"></f:selectItem>
+									</p:selectOneRadio>
+
+									<p:outputLabel for="@next" style="color:red;"
+										value="Category (certificate needed if belongs to category other than General) "
+										rendered="#{studentForm.info.branch_id eq '22' || studentForm.info.branch_id eq '27'}"></p:outputLabel>
+									<p:selectOneMenu value="#{studentForm.stCategory}"
+										required="true" requiredMessage="Please Select Category"
+										rendered="#{studentForm.info.branch_id eq '22' || studentForm.info.branch_id eq '27'}">
+										<f:selectItem itemLabel="Select Category" itemValue=""></f:selectItem>
+										<f:selectItems value="#{studentForm.stCategoryList}"></f:selectItems>
+									</p:selectOneMenu>
+
+									<p:outputLabel for="@next" style="color:red;" value="DOB "></p:outputLabel>
+									<p:calendar navigator="true" effect="fold" pattern="dd/MM/yyyy"
+										yearRange="c-30:c+30" value="#{studentForm.dob}"
+										focusOnSelect="true" required="true"
+										requiredMessage="Please enter DOB" readonlyInput="true">
+
+									</p:calendar>
+
+									<p:outputLabel for="@next" value="Address "></p:outputLabel>
+									<p:inputTextarea rows="3" cols="20" maxlength="70"
+										counter="display" counterTemplate="{0} characters remaining."
+										value="#{studentForm.address}"
+										validatorMessage="Please Enter Correct value">
+										<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:inputTextarea>
+									<h:outputText />
+									<h:outputText id="display" />
+
+									<p:outputLabel for="@next" style="color:red;"
+										value="Father's Mob No."></p:outputLabel>
+									<p:inputText required="true"
+										requiredMessage="Please Enter Father's Mob.no" maxlength="10"
+										value="#{studentForm.mobno}"
+										validatorMessage="Father's mobile no. must be of 10 digits">
+										<f:validateLength minimum="10"></f:validateLength>
+										<p:keyFilter mask="num"></p:keyFilter>
+									</p:inputText>
+
+									<p:outputLabel for="@next" value="Mother's Mob No."></p:outputLabel>
+									<p:inputText maxlength="10" value="#{studentForm.mothmobno}"
+										validatorMessage="Mother's mobile no. must be of 10 digits">
+										<f:validateLength minimum="10"></f:validateLength>
+										<p:keyFilter mask="num"></p:keyFilter>
+									</p:inputText>
+
+									<p:outputLabel for="@next" value="E-mail"></p:outputLabel>
+									<p:inputText value="#{studentForm.email}"
+										validatorMessage="Please Enter Correct value">
+										<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:inputText>
+
+									<p:outputLabel for="@next" style="color:red;"
+										value="Last School"
+										rendered="#{studentForm.info.branch_id eq '22' || studentForm.info.branch_id eq '27'}"></p:outputLabel>
+									<p:inputText required="true"
+										requiredMessage="Please Enter Last School Name"
+										value="#{studentForm.lastSchool}"
+										validatorMessage="Please Enter Correct value"
+										rendered="#{studentForm.info.branch_id eq '22' || studentForm.info.branch_id eq '27'}">
+										<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:inputText>
+
+									<p:outputLabel for="@next" value="Referred By"
+										rendered="#{studentForm.info.branch_id eq '22' || studentForm.info.branch_id eq '27'}"></p:outputLabel>
+									<p:inputText value="#{studentForm.referedBy}"
+										validatorMessage="Please Enter Correct value"
+										rendered="#{studentForm.info.branch_id eq '22' || studentForm.info.branch_id eq '27'}">
+										<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:inputText>
+
+									<p:outputLabel for="@next" style="color:red"
+										rendered="#{studentForm.info.branch_id ne '22' &amp;&amp; studentForm.info.branch_id ne '27'}"
+										value="How you know about us ?"></p:outputLabel>
+									<p:outputPanel
+										rendered="#{studentForm.info.branch_id ne '22' &amp;&amp; studentForm.info.branch_id ne '27'}">
+										<p:selectOneRadio value="#{studentForm.category}"
+											required="true" requiredMessage="Please Select Reference">
+											<f:selectItems value="#{studentForm.categoryList}"></f:selectItems>
+										</p:selectOneRadio>
+
+									</p:outputPanel>
+
+
+									<p:outputLabel
+										rendered="#{studentForm.info.branch_id ne '22' &amp;&amp; studentForm.info.branch_id ne '27'}"
+										value="Remark" for="@next"></p:outputLabel>
+									<p:inputTextarea
+										rendered="#{studentForm.info.branch_id ne '22' &amp;&amp; studentForm.info.branch_id ne '27'}"
+										rows="3" cols="20" value="#{studentForm.description}"
+										validatorMessage="Please Enter Correct value">
+										<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:inputTextarea>
+
+									<p:outputLabel value="Follow Up Date " rendered="false"></p:outputLabel>
+									<p:calendar value="#{studentForm.followDate}" rendered="false"
+										mindate="#{studentForm.todayDate}" navigator="true"
+										effect="fold" pattern="dd/MM/yyyy" yearRange="c-30:c+30"
+										required="true" requiredMessage="Please Enter Follow Up Date"></p:calendar>
+
+									<p:outputLabel value="Select Status" rendered="false"
+										for="@next" style="color:red"></p:outputLabel>
+									<p:selectOneMenu value="#{studentForm.status}" required="true"
+										rendered="false" requiredMessage="Please Select Status">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItem itemLabel="Super Hot" itemValue="superhot"></f:selectItem>
+										<f:selectItem itemLabel="Hot" itemValue="hot"></f:selectItem>
+										<f:selectItem itemLabel="Warm" itemValue="warm"></f:selectItem>
+										<f:selectItem itemLabel="Cold" itemValue="cold"></f:selectItem>
+									</p:selectOneMenu>
+
+
+
+								</p:panelGrid>
+
+								<br />
+								<p:separator />
+								<center>
+									<p:commandButton value="Submit" 
+										styleClass="butwid" icon="fa fa-upload"
+										action="#{studentForm.registration}"></p:commandButton>
+								</center>
+								<p:separator />
+								<br />
+
+							</p:panel>
+						</h:form>
+
+						<h:form id="confirmForm">
+							<p:dialog header="Enquiry" widgetVar="enqDlg" resizable="false"
+								closable="false" closeOnEscape="false" modal="true"
+								showEffect="fade" hideEffect="fade">
+								<p:panel>
+									<p:outputLabel
+										value="Equiry Added Successfully. Please note the enquiry reference no. : #{studentForm.eno}"></p:outputLabel>
+									<br></br>
+									<br></br>
+									<center>
+										<p:commandButton style="width: 100px;" value="OK"
+											action="enquiryForm.xhtml?faces-redirect=true"
+											update="confirmForm,form" />
+									</center>
+								</p:panel>
+							</p:dialog>
+						</h:form>
+
+						<h:form id="MsgLimitForm" style="overflow:hidden">
+							<p:dialog header="Low SMS Balance" width="500"
+								widgetVar="MsgLmtDlg" modal="true" showEffect="fade"
+								hideEffect="fade" resizable="false">
+								<center>
+									<p:outputLabel value="#{studentForm.balMsg}"
+										style="font-size:14px;font-weight: bold;" />
+								</center>
+								<br></br>
+								<br></br>
+								<center>
+									<p:commandButton value="Skip" action="#{studentForm.sendMsg}"
+										update="MsgLimitForm" />
+									<br /> <br />
+									<p:commandButton value="Message Logs"
+										action="messageSchoolHistory.xhtml?faces-redirect=true"
+										update="MsgLimitForm" />
+									<br /> <br />
+									<p:commandButton value="Recharge Now"
+										action="purchaseMsgPack.xhtml?faces-redirect=true"
+										update="MsgLimitForm" />
+								</center>
+								<br></br>
+							</p:dialog>
+						</h:form>
+
+						<h:form id="MsgOverForm" style="overflow:hidden">
+							<p:dialog header="SMS Limit Over" width="500"
+								widgetVar="MsgOvrDlg" modal="true" showEffect="fade"
+								hideEffect="fade" resizable="false">
+								<center>
+									<p:outputLabel value="#{studentForm.balMsg}"
+										style="font-size:14px;font-weight: bold;" />
+								</center>
+								<br></br>
+								<br></br>
+								<center>
+									<p:commandButton value="Message Logs"
+										action="messageSchoolHistory.xhtml?faces-redirect=true"
+										update="MsgOverForm" />
+									<br /> <br />
+									<p:commandButton value="Recharge Now"
+										action="purchaseMsgPack.xhtml?faces-redirect=true"
+										update="MsgOverForm" />
+								</center>
+								<br></br>
+							</p:dialog>
+						</h:form>
+
+						<h:form id="MsgOtherForm" style="overflow:hidden">
+							<p:dialog header="SMS Limit Over" width="500"
+								widgetVar="MsgOthDlg" modal="true" showEffect="fade"
+								hideEffect="fade" resizable="false">
+								<center>
+									<p:outputLabel value="#{studentForm.balMsg}"
+										style="font-size:14px;font-weight: bold;" />
+								</center>
+								<br></br>
+								<br></br>
+								<center>
+									<p:commandButton value="OK"
+										action="enquiryForm.xhtml?faces-redirect=true"
+										update="MsgOtherForm" />
+								</center>
+							</p:dialog>
+						</h:form>
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

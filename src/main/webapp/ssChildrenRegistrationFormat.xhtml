@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	
+<f:view contentType="text/html">
+	<h:head>
+		<title>Student Registration Form</title>
+		<f:facet name="First">
+			<meta content='text/html; charset=UTF-8' http-equiv="Content-Type" />
+			<meta http-equiv="X-UA-Compatible" content="EmulateIE8" />
+		<title>MainPage</title>
+		</f:facet>
+		
+	</h:head>
+	<style>
+		input[type="checkbox"]{
+		  width: 22px; /*Desired width*/
+		  height: 20px; /*Desired height*/
+		  margin:0px;
+		  margin-left:-4px;
+		  -webkit-appearance: none;
+		  appearance: none;
+		  border: 1px solid;
+		}
+		
+		.checkbox
+		{
+			margin-left:0px !important;
+		}
+		
+		.checkbox1
+		{
+			margin-left:0px !important;
+			 width: 40px !important;
+		  height: 15px !important;
+		}
+		
+	</style>
+	
+	<style>
+	  .ui-datatable.borderless thead th,
+.ui-datatable.borderless tbody, 
+.ui-datatable.borderless tbody tr,
+.ui-datatable.borderless tbody td {
+    border-style: none;
+}
+	</style>
+	
+
+	<h:body>
+	
+   <h:form id="form1234" rendered="#{ssChildrenRegistrationFormat.classNineRender}">
+							<center>
+								<h:commandLink>
+									<p:graphicImage name="images/printLogo.png"
+										library="avalon-layout" width="100" height="80"></p:graphicImage>
+									<p:printer target=":form1"></p:printer>
+								</h:commandLink>
+							</center>
+						</h:form>
+   
+	
+	
+
+	<h:form id="form1" rendered="#{ssChildrenRegistrationFormat.classNineRender}">
+		<ui:repeat var="mainVar" value="#{ssChildrenRegistrationFormat.listOfStudent}">
+			
+		
+		<div style="width:80%;float:left;height:auto;margin:auto;font-size:17px">
+		<br></br>
+		<br></br>
+		
+			<center><h3 style="margin-left: 100px;">PARTICULARS FOR REGISTRATION (CLASS #{mainVar.className})</h3></center>
+		<br></br>
+			<table style="width:97%;margin:auto;margin-left:25px;" cellpadding="5">
+				<tr>
+					<td style="width:70%;"> Candidate's Name :- <u>#{mainVar.fullName}</u></td>
+					<td> S.R.No. : - <u>#{mainVar.srNo}</u></td>
+				</tr>
+				</table>
+				<table style="width:97%;margin:auto;margin-left:25px;" cellpadding="5">
+				
+				<tr>
+					<td>Aadhar No :- #{mainVar.aadharNo}<u></u></td>
+					<td></td>
+				</tr>
+				
+				<tr>
+					<td>Mother's Name :- <u>#{mainVar.motherName}</u></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>Father's Name :- <u>#{mainVar.fathersName}</u></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>Father's Annual Income :- <u>#{mainVar.fatherAnnIncome}</u></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>Date of Birth (in fig.) :- <u>#{mainVar.dobString}</u> <p:spacer height="0" width="20"></p:spacer>(in Words) :- <u>#{mainVar.dateToWord.toUpperCase()}</u></td>
+					<td></td>
+				</tr>
+				</table>
+				
+				<table style="width:97%;margin:auto;margin-left:25px;" cellpadding="5">
+				<tr>
+					<td style="width:90%;"><b>(As Mentioned in the TC submitted. No change in Date of Birth in Permissible)</b></td>
+					
+				</tr>
+			
+			</table>
+			
+			<table style="width:97%;margin:auto;margin-left:25px;" cellpadding="5">
+				<tr>
+					<td style="width:20%;">Sex :- <u>#{mainVar.gender}</u> </td>
+					<td>Category :- <u>#{mainVar.category}</u> </td>
+					<td>Minority :- <u>#{mainVar.minority}</u> </td>
+					<td>(Attach Certificate)</td>
+				</tr>
+				<tr>
+					<td style="width:20%;">Single Child :- #{mainVar.singleChild}<u></u> </td>
+					<td>(Attach Certificate)</td>
+				</tr>
+				</table>
+				<table style="width:110%;margin:auto;margin-left:25px;" cellpadding="5">
+				<tr>
+					<td>Address :- <u>#{mainVar.currentAddress}</u></td>	
+				</tr>
+				<tr>
+					<td>Telephone No. :- <u>#{mainVar.fathersPhone}</u></td>	
+				</tr>
+				<tr>
+					<td>3rd Language Studied in class VIII and year of passing (Sanskrit<input class="checkbox" type="checkbox" /> / Urdu<input class="checkbox" type="checkbox" /> / Punjabi<input class="checkbox" type="checkbox" />)<p:spacer height="0" width="100"></p:spacer>Year________________</td>	
+				</tr>
+				<tr>
+					<td>Reg No.(Class #{mainVar.className}) :- <u>#{mainVar.regNo_IX}</u></td>	
+				</tr>
+			</table>
+			
+			    <p style="margin-left:30px;">
+				I hereby certify that the above information is correct and in accordance with admission form filled at the time my ward's admission
+				in the school.
+				</p>
+				
+				 
+				
+				<table style="width:97%;margin:auto;margin-left:25px;">
+				<tr>
+					<td >Candidate's Full Sign _________________  <p:spacer width="200px" height="0px"></p:spacer>  Mother's Sign______________<p:spacer width="150px" height="0px"></p:spacer>  Father's Sign ________________</td>
+					
+					
+				</tr>
+				<tr>
+				   <td>_______________________________________________________________________________________________________</td>
+				</tr>
+				<tr></tr>
+				
+			</table>
+			<p:spacer height="25px;" width="0px;"></p:spacer>
+		</div>
+				
+			
+			
+		</ui:repeat>
+		
+	</h:form>
+	
+	<h:form id="formPrintEleven" rendered="#{ssChildrenRegistrationFormat.classElevenRender}">
+							<center>
+								<h:commandLink>
+									<p:graphicImage name="images/printLogo.png"
+										library="avalon-layout" width="100" height="80"></p:graphicImage>
+									<p:printer target=":form2"></p:printer>
+								</h:commandLink>
+							</center>
+						</h:form>
+   
+	
+	
+
+	<h:form id="form2" rendered="#{ssChildrenRegistrationFormat.classElevenRender}">
+		<ui:repeat var="mainVar" value="#{ssChildrenRegistrationFormat.listOfStudent}">
+			
+		
+		<div style="width:80%;float:left;height:auto;margin:auto;font-size:17px">
+		<br></br>
+		<br></br>
+		
+			<center><h3 style="margin-left: 100px;">PARTICULARS FOR REGISTRATION (CLASS #{mainVar.className})</h3></center>
+		<br></br>
+			<table style="width:97%;margin:auto;margin-left:25px;" cellpadding="5">
+				<tr>
+					<td style="width:70%;"> Candidate's Name :- <u>#{mainVar.fullName}</u></td>
+					<td> S.R.No. : - <u>#{mainVar.srNo}</u></td>
+				</tr>
+				</table>
+				<table style="width:97%;margin:auto;margin-left:25px;" cellpadding="5">
+				
+				<tr>
+					<td>Aadhar No :- #{mainVar.aadharNo}<u></u></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>Mother's Name :- <u>#{mainVar.motherName}</u></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>Father's Name :- <u>#{mainVar.fathersName}</u></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>Father's Annual Income :- <u>#{mainVar.fatherAnnIncome}</u></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>Date of Birth (in fig.) :- <u>#{mainVar.dobString}</u> <p:spacer height="0" width="20"></p:spacer>(in Words) :- <u>#{mainVar.dateToWord.toUpperCase()}</u></td>
+					<td></td>
+				</tr>
+				</table>
+				
+				<table style="width:97%;margin:auto;margin-left:25px;" cellpadding="5">
+				<tr>
+					<td style="width:90%;"><b>(As Mentioned in the TC submitted. No change in Date of Birth in Permissible)</b></td>
+					
+				</tr>
+			
+			</table>
+			
+			<table style="width:97%;margin:auto;margin-left:25px;" cellpadding="5">
+				<tr>
+					<td style="width:20%;">Sex :- <u>#{mainVar.gender}</u> </td>
+					<td>Category :- <u>#{mainVar.category}</u> </td>
+					<td>Minority :- <u>#{mainVar.minority}</u> </td>
+					<td>(Attach Certificate)</td>
+				</tr>
+				<tr>
+					<td style="width:20%;">Single Child :- #{mainVar.singleChild}<u></u> </td>
+					<td>(Attach Certificate)</td>
+				</tr>
+				</table>
+				<table style="width:110%;margin:auto;margin-left:25px;" cellpadding="5">
+				<tr>
+					<td>Address :- <u>#{mainVar.currentAddress}</u></td>	
+				</tr>
+				<tr>
+					<td>Telephone No. :- <u>#{mainVar.fathersPhone}</u></td>	
+				</tr>
+				<tr>
+					<td>Subject studied in class XI</td>	
+				</tr>
+				</table>
+				
+				
+				<h:dataTable style="margin-left:26px; font-size:15px;background-color:white;line-spacing:2;"  value="#{ssChildrenRegistrationFormat.fakeList}">
+                  <h:column style="word-break: break-word;">
+                   <ui:repeat var="item" value="#{mainVar.subjectsList}">
+                     
+                     <h:outputText value="#{item.serialNumber}."></h:outputText><u><h:outputText value="#{item.subjectName} "></h:outputText></u><p:spacer height="0px;" width="30px;"></p:spacer>
+                     
+                   </ui:repeat>
+                  </h:column>
+                </h:dataTable>
+				
+						
+				
+				<table style="width:97%;margin:auto;margin-left:25px;" cellpadding="5">
+				<tr>
+					<td>Reg No.(Class #{mainVar.className}) :- <u>#{mainVar.regNo_IX}</u></td>	
+				</tr>
+			</table>
+			<table style="width:110%;margin:auto;margin-left:25px;" cellpadding="5">
+			<tr>
+					<td>Year of passing Class X _________________ and Board (CBSE/ICSE/UP Board) __________________</td>	
+				</tr>
+				<tr>
+					<td>Roll  No. of class X ______________________________</td>	
+				</tr>
+			</table>
+			
+			    <p style="margin-left:30px;">
+				I hereby certify that the above information is correct and in accordance with admission form filled at the time my ward's admission
+				in the school.
+				</p>
+				
+				 
+				
+				<table style="width:97%;margin:auto;margin-left:25px;">
+				<tr>
+					<td >Candidate's Full Sign _________________  <p:spacer width="200px" height="0px"></p:spacer>  Mother's Sign______________<p:spacer width="150px" height="0px"></p:spacer>  Father's Sign ________________</td>
+					
+					
+				</tr>
+				<tr>
+				   <td>_______________________________________________________________________________________________________</td>
+				</tr>
+				<tr></tr>
+				
+			</table>
+			
+		</div>
+				
+			
+		<br></br>
+         <p style="page-break-after: always;">&nbsp;</p>	
+		</ui:repeat>
+		 
+	</h:form>
+</h:body>
+</f:view>
+</html>

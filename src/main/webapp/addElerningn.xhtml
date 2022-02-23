@@ -1,0 +1,235 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">E-Learning</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<script src="pramukhime.js"></script>
+						<script src="pramukhindic.js"></script>
+						<script src="pramukhime-common.js"></script>
+
+						<h1>Upload E-Learning</h1>
+						<p:panel
+							header="Allowed file types are :- jpg,jpeg,png,pdf,doc,docx . (For audio file:-mp3,ogg,aac,m4a,mp4,mpeg)">
+							<h:form id="form" enctype="multipart/form-data">
+						<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel for="@next" style="color:red"
+										value="Select Class"></p:outputLabel>
+									<p:selectOneMenu
+										value="#{addEleaningBean.selectedCLassSection}"
+										required="true" requiredMessage="Please select a class"
+										filter="true">
+										<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+										<f:selectItems value="#{addEleaningBean.classSection}"></f:selectItems>
+										<p:ajax update="sectionid"
+											listener="#{addEleaningBean.allSections}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel for="@next" style="color:red"
+										value="Select Section"></p:outputLabel>
+									<p:selectOneMenu id="sectionid"
+										value="#{addEleaningBean.selectedSection}" required="true"
+										requiredMessage="Please select a section" filter="true">
+										<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+										<f:selectItems value="#{addEleaningBean.sectionList}"></f:selectItems>
+										<p:ajax update="subjectid"
+											listener="#{addEleaningBean.allSubjects}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel for="@next" style="color:red"
+										value="Select Subject"></p:outputLabel>
+									<p:selectOneMenu id="subjectid"
+										value="#{addEleaningBean.subject}" required="true"
+										requiredMessage="Please select a Subject" filter="true">
+										<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+										<f:selectItem itemLabel="All" itemValue="All"></f:selectItem>
+										<f:selectItems value="#{addEleaningBean.subjectList}"></f:selectItems>
+										<p:ajax></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel for="@next" style="color:red"
+										value="Title/Topic:"></p:outputLabel>
+									<p:panelGrid columns="2">
+										<p:inputText id="message-body"
+											value="#{addEleaningBean.topic}" required="true"
+											requiredMessage="Please enter Title/Topic">
+											<p:ajax event="blur" listener="#{addEleaningBean.test}"></p:ajax>
+										</p:inputText>
+										<input type="checkbox" id="languagess" name=""
+											value="pramukhindic:hindi"
+											onclick="javascript:changeLanguage(this.checked)"></input>
+									</p:panelGrid>
+
+									<p:outputLabel value="Description:"></p:outputLabel>
+									<p:panelGrid columns="2">
+										<p:inputTextarea id="descripation"
+											value="#{addEleaningBean.des}" rows="3" maxlength="500"
+											cols="20">
+											<p:ajax event="blur" listener="#{addEleaningBean.test}"></p:ajax>
+										</p:inputTextarea>
+										<input type="checkbox" id="languagess" name=""
+											value="pramukhindic:hindi"
+											onclick="javascript:changeLanguage1(this.checked)"></input>
+									</p:panelGrid>
+
+									<p:outputLabel value="Youtube Link:"></p:outputLabel>
+									<p:inputText value="#{addEleaningBean.youtubeLink}">
+										<p:ajax></p:ajax>
+
+									</p:inputText>
+
+									<p:outputLabel for="@next" style="color:red" value="Date:"
+										rendered="false"></p:outputLabel>
+									<p:calendar rendered="false"
+										value="#{addEleaningBean.assShowDate}" navigator="true"
+										pattern="dd/MM/yyyy" required="true"
+										requiredMessage="Please Select Date"></p:calendar>
+
+									<p:outputLabel value="Choose File1(File) :"></p:outputLabel>
+									<p:fileUpload mode="simple" skinSimple="true"
+										value="#{addEleaningBean.assignmentPhoto1}"></p:fileUpload>
+
+									<p:outputLabel value="Choose File2(File) :"></p:outputLabel>
+									<p:fileUpload mode="simple" skinSimple="true"
+										value="#{addEleaningBean.assignmentPhoto3}"></p:fileUpload>
+
+
+									<p:outputLabel value="Choose File3(File) :"></p:outputLabel>
+									<p:fileUpload mode="simple" skinSimple="true"
+										value="#{addEleaningBean.assignmentPhoto4}"></p:fileUpload>
+
+
+									<p:outputLabel value="Choose File4(File) :"></p:outputLabel>
+									<p:fileUpload mode="simple" skinSimple="true"
+										value="#{addEleaningBean.assignmentPhoto5}"></p:fileUpload>
+
+
+									<p:outputLabel value="Choose File5(File) :"></p:outputLabel>
+									<p:fileUpload mode="simple" skinSimple="true"
+										value="#{addEleaningBean.assignmentPhoto6}"></p:fileUpload>
+
+
+
+
+									<p:outputLabel value="Choose File(Audio) :"></p:outputLabel>
+									<p:fileUpload mode="simple" skinSimple="true"
+										value="#{addEleaningBean.assignmentPhoto2}"></p:fileUpload>
+
+
+
+
+
+
+
+								</p:panelGrid>
+								
+								<br />
+								<p:separator />
+								<center>
+									
+									<p:commandButton value="Upload" ajax="false" styleClass="butwid" icon="fa fa-upload"
+										title="Click On to Upload Assignment" update=":form :form1"
+										action="#{addEleaningBean.upload}"></p:commandButton>
+								</center>
+								<p:separator />
+								<br />
+								
+							</h:form>
+							<h:form enctype="multipart/form-data" id="form1">
+
+								<p:panelGrid columns="4">
+
+								</p:panelGrid>
+
+							</h:form>
+						</p:panel>
+
+
+						<h:form id="MsgLimitForm" style="overflow:hidden">
+							<p:dialog header="Low SMS Balance" width="500"
+								widgetVar="MsgLmtDlg" modal="true" showEffect="fade"
+								hideEffect="fade" resizable="false">
+								<center>
+									<p:outputLabel value="#{addEleaningBean.balMsg}"
+										style="font-size:14px;font-weight: bold;" />
+								</center>
+								<br></br>
+								<br></br>
+								<center>
+									<p:commandButton value="Skip"
+										action="#{addEleaningBean.sendMsg}" update="MsgLimitForm" />
+									<br /> <br />
+									<p:commandButton value="Message Logs"
+										action="messageSchoolHistory.xhtml?faces-redirect=true"
+										update="MsgLimitForm" />
+									<br /> <br />
+									<p:commandButton value="Recharge Now"
+										action="purchaseMsgPack.xhtml?faces-redirect=true"
+										update="MsgLimitForm" />
+								</center>
+								<br></br>
+							</p:dialog>
+						</h:form>
+
+						<h:form id="MsgOverForm" style="overflow:hidden">
+							<p:dialog header="SMS Limit Over" width="500"
+								widgetVar="MsgOvrDlg" modal="true" showEffect="fade"
+								hideEffect="fade" resizable="false">
+								<center>
+									<p:outputLabel value="#{addEleaningBean.balMsg}"
+										style="font-size:14px;font-weight: bold;" />
+								</center>
+								<br></br>
+								<br></br>
+								<center>
+									<p:commandButton value="Message Logs"
+										action="messageSchoolHistory.xhtml?faces-redirect=true"
+										update="MsgOverForm" />
+									<br /> <br />
+									<p:commandButton value="Recharge Now"
+										action="purchaseMsgPack.xhtml?faces-redirect=true"
+										update="MsgOverForm" />
+								</center>
+								<br></br>
+							</p:dialog>
+						</h:form>
+
+						<h:form id="MsgOtherForm" style="overflow:hidden">
+							<p:dialog header="SMS Limit Over" width="500"
+								widgetVar="MsgOthDlg" modal="true" showEffect="fade"
+								hideEffect="fade" resizable="false">
+								<center>
+									<p:outputLabel value="#{addEleaningBean.balMsg}"
+										style="font-size:14px;font-weight: bold;" />
+								</center>
+								<br></br>
+								<br></br>
+								<center>
+									<p:commandButton value="OK"
+										action="addEleaningBean.xhtml?faces-redirect=true"
+										update="MsgOtherForm" />
+								</center>
+							</p:dialog>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

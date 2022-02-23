@@ -1,0 +1,128 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pe="http://primefaces.org/ui/extensions"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Show Attendance</ui:define>
+
+    <ui:define name="content">
+       
+            <div class="ui-fluid">
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <div class="card card-w-title">
+                            <h:form id="form" >
+					  <h1>Show Attendance Record</h1>
+            	
+            			<p:messages closable="true" autoUpdate="true"></p:messages>
+            	
+            			<p:panel header="Attedance Record">
+            				
+            				<p:panelGrid  columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+							
+							<p:outputLabel value="Select Employee" for="@next" style="color:red" ></p:outputLabel>
+							<p:selectOneMenu value="#{teacherAttendReport.selectedEmployee}" filter="true" required="true" requiredMessage="Please Select Employee">
+								<f:selectItem itemLabel="All" itemValue="all"></f:selectItem>
+								<f:selectItems value="#{teacherAttendReport.employeeList}"></f:selectItems>
+							</p:selectOneMenu>
+							
+							<p:outputLabel value="#{attendanceVar.attendanceSelectMonthLabel}" for="@next" style="color:red" ></p:outputLabel> 
+							<p:selectOneMenu id="showMonth" value="#{teacherAttendReport.selectedMonth}" filter="true" required="true" requiredMessage="#{attendanceVar.attendanceSelectMonthValidation}">
+							<f:selectItem itemLabel="#{attendanceVar.selectHereLabel}" itemValue=""></f:selectItem>
+							<f:selectItems value="#{teacherAttendReport.monthList}"></f:selectItems>
+							<p:ajax update="year" listener="#{teacherAttendReport.allYear}"></p:ajax>
+							</p:selectOneMenu>
+							
+							<p:outputLabel value="Select Year" for="@next" style="color:red" ></p:outputLabel>
+	           				<p:selectOneMenu id="year" value="#{teacherAttendReport.selectedYear}" filter="true" required="true" requiredMessage="Please select a section">
+	           					<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+	           					<f:selectItems value="#{teacherAttendReport.yearList}"></f:selectItems>
+							 </p:selectOneMenu>          				
+            				
+            			</p:panelGrid>
+            			
+            			
+								<br />
+								<p:separator />
+								<center>
+									<p:panelGrid
+										columns="2"
+										layout="grid" styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+
+<p:commandButton update=":form" value="Search" styleClass="butwid" icon="fa fa-search" actionListener="#{teacherAttendReport.studentDetail}"></p:commandButton>
+                           
+                          
+                             
+                              <h:commandLink rendered="#{teacherAttendReport.showStudentRecord}">
+										<p:graphicImage name="images/excellogo.png"
+											library="avalon-layout" width="100" height="40"></p:graphicImage>
+										<pe:exporter type="xlsx" target=":form:up"
+											fileName="#{teacherAttendReport.monthName} #{teacherAttendReport.selectedYear}"></pe:exporter>
+	</h:commandLink>
+										
+									</p:panelGrid>
+								</center>
+								<p:separator />
+								<br />
+            			
+            			</p:panel>
+            			
+            			<p:panel id="showTable" rendered="#{teacherAttendReport.showStudentRecord}">
+            				<center>
+            				<p style="font-family: initial;font-style: oblique;font-size: 25px !important;font-weight:bold;margin:0px;">#{headerBean.name}</p>
+								<p style="font-family: initial;font-style: oblique;font-size: 15px !important;font-weight:bold;margin:0px;">#{headerBean.affiliationNo}</p>
+								<p style="font-family: initial;font-style: oblique;font-size: 15px !important;font-weight:bold;margin:0px;">#{headerBean.finalAddress}</p>
+								<p style="font-family: initial;font-style: oblique;font-size: 15px !important;font-weight:bold;margin:0px;">#{headerBean.phoneno}</p>
+								
+								<p style="margin:0px;font-size: 25px !important;font-weight:bold;">Monthly Attendance Report - #{teacherAttendReport.monthName} #{teacherAttendReport.selectedYear}</p>
+            				</center>
+            				<p:outputPanel >
+            				
+            				<p:dataTable id="up" var="var"  value="#{teacherAttendReport.studentDetails}" reflow="true">
+            			
+            				<p:column headerText="S.No." style="width:50px">
+            					<p:outputLabel value="#{var.sno}"></p:outputLabel>
+            				</p:column>
+            				
+            				<p:column headerText="Category" style="width:100px" filterBy="#{var.category}">
+								<p:outputLabel value="#{var.category}"></p:outputLabel>
+							</p:column>
+							
+							<p:column headerText="Sub Categ." style="width:100px" filterBy="#{var.subCateg}">
+						<p:outputLabel value="#{var.subCateg}"></p:outputLabel>
+					</p:column>
+
+							<p:column headerText="Name" style="width:200px" filterBy="#{var.fname}">
+								<p:outputLabel value="#{var.fname}"></p:outputLabel>
+							</p:column>
+
+							<p:column headerText="User Name" style="width:100px">
+								<p:outputLabel value="#{var.uname}"></p:outputLabel>
+							</p:column>
+                				
+            				<p:columns style="width:40px" value="#{teacherAttendReport.days}" var="column" columnIndexVar="colIndex" >  
+	           				    <f:facet name="header"> 
+	           			  		     <p:outputLabel value="#{column.date}"></p:outputLabel>
+	         				    </f:facet>  	   							
+  								<p:outputLabel value="#{var.attendanceMap[column.date]}"></p:outputLabel>
+     					   </p:columns>
+            			</p:dataTable>
+            			 </p:outputPanel>
+            			
+            		          
+            			</p:panel>
+               		
+               	
+			</h:form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+       
+    </ui:define>
+
+</ui:composition>

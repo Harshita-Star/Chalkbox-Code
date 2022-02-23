@@ -1,0 +1,242 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Homework</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form" enctype="multipart/form-data">
+							<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+							<p:panel header="View/Delete HomeWork">
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel  for="@next" style="color:red" value="Select Class"></p:outputLabel>
+									<p:selectOneMenu
+										value="#{viewEditDeleteAssignment.selectedCLassSection}"
+										required="true" requiredMessage="Please select a class">
+										<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+										<f:selectItems
+											value="#{viewEditDeleteAssignment.classSection}"></f:selectItems>
+										<p:ajax update="sectionid"
+											listener="#{viewEditDeleteAssignment.allSections}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel for="@next" style="color:red"  value="Select Section"></p:outputLabel>
+									<p:selectOneMenu id="sectionid"
+										value="#{viewEditDeleteAssignment.selectedSection}"
+										required="true" requiredMessage="Please select a section">
+										<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+										<f:selectItems value="#{viewEditDeleteAssignment.sectionList}"></f:selectItems>
+										<p:ajax update="subjectid"
+											listener="#{viewEditDeleteAssignment.allSubjects}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel  for="@next" style="color:red" value="Select Subject"></p:outputLabel>
+									<p:selectOneMenu id="subjectid"
+										value="#{viewEditDeleteAssignment.subject}" required="true"
+										requiredMessage="Please select a Subject">
+										<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+										<f:selectItem itemLabel="All" itemValue="all"></f:selectItem>
+							            <f:selectItems value="#{viewEditDeleteAssignment.subjectList}"></f:selectItems>
+									</p:selectOneMenu>
+
+									<p:outputLabel for="@next" style="color:red"  value="Start Date"></p:outputLabel>
+									<p:calendar value="#{viewEditDeleteAssignment.hDate}"
+										pattern="dd/MM/yyyy" navigator="true" yearRange="c-10:c+10"
+										required="true" requiredMessage="Please select Start Date" />
+										
+									<p:outputLabel for="@next" style="color:red"  value="End Date"></p:outputLabel>
+									<p:calendar value="#{viewEditDeleteAssignment.endDate}"
+										pattern="dd/MM/yyyy" navigator="true" yearRange="c-10:c+10"
+										required="true" requiredMessage="Please select End Date" />	
+
+								</p:panelGrid>
+								
+								<br />
+								<p:separator />
+								<center>
+									<p:commandButton value="Search" update=":form2" styleClass="butwid" icon="fa fa-search"
+										action="#{viewEditDeleteAssignment.search}"></p:commandButton>
+								</center>
+								<p:separator />
+								<br />
+								
+							</p:panel>
+						</h:form>
+					</div>
+					<div class="card card-w-title">
+						<h:form id="form2" enctype="multipart/form-data">
+							<p:panel header="Assignment List"
+								rendered="#{viewEditDeleteAssignment.show}">
+								<p:dataTable value="#{viewEditDeleteAssignment.list}" var="var"
+									reflow="true" selection="#{viewEditDeleteAssignment.selectedList}" rowKey="#{var.sNo}">
+									
+									<f:facet name="header">
+									<center>
+									 <p:commandButton value="Delete Multiple Assignments" styleClass="butwid-2 redButt" icon="fa fa-trash" action="#{viewEditDeleteAssignment.deleteMultiple}" update=":form2" ></p:commandButton>
+									</center>
+									</f:facet>
+									
+									<f:facet name="footer">
+									<center>
+									 <p:commandButton value="Delete Multiple Assignments" styleClass="butwid-2 redButt" icon="fa fa-trash" action="#{viewEditDeleteAssignment.deleteMultiple}" update=":form2" ></p:commandButton>
+									</center>
+									</f:facet>
+
+                                   <p:column selectionMode="multiple" exportable="false" style="width:50px;">
+                                    
+                                   </p:column>
+
+									<p:column headerText="S.No.">
+										<p:outputLabel value="#{var.sNo}"></p:outputLabel>
+									</p:column>
+
+                              	<p:column headerText="Subject Name">
+										<p:outputLabel value="#{var.subjectName}"></p:outputLabel>
+									</p:column>
+                              
+
+									<p:column headerText="Description">
+										<p:outputLabel value="#{var.description}"></p:outputLabel>
+									</p:column>
+
+                  
+
+									<p:column headerText="Name">
+										<p:outputLabel value="#{var.assignmentName}"></p:outputLabel>
+									</p:column>
+									
+									<p:column headerText="Teacher Name">
+										<p:outputLabel value="#{var.teacherName}"></p:outputLabel>
+									</p:column>
+									
+									
+									
+									<p:column headerText="Class Name">
+										<p:outputLabel value="#{var.className}"></p:outputLabel>
+									</p:column>
+									<p:column headerText="Section" filterBy="#{var.sectionName}" filterMatchMode="contains">
+										<p:outputLabel value="#{var.sectionName}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Date">
+										<p:outputLabel value="#{var.openingDateStr}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Image">
+										<p:graphicImage url="#{var.assignment_photo1}" width="70" height="70"></p:graphicImage>
+									</p:column>
+
+									<p:column rendered="false" headerText="Edit">
+										<p:commandButton update=":editForm"
+											oncomplete="PF('editDialog').show();" icon="ui-icon-pencil"
+											action="#{viewEditDeleteAssignment.editActivityDetails}">
+											<f:setPropertyActionListener
+												target="#{viewEditDeleteAssignment.selectedActivity}"
+												value="#{var}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+									<p:column headerText="Delete">
+										<p:commandButton update=":form2" styleClass="redButt"
+											oncomplete="PF('dlg').show();" icon="ui-icon-trash">
+											<f:setPropertyActionListener
+												target="#{viewEditDeleteAssignment.selectedActivity}"
+												value="#{var}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+
+								</p:dataTable>
+
+								<p:dialog resizable="false" widgetVar="dlg"
+									header="Do you really want to delete this assignment"
+									showEffect="fade" hideEffect="explode" modal="true">
+									<div class="ui-g form-group">
+										<p:panelGrid columns="2"
+											styleClass="ui-panelgrid-blank form-group"
+											style="border:0px none; background-color:transparent;">
+											<p:commandButton update=":form2" styleClass="greenButt"
+												actionListener="#{viewEditDeleteAssignment.deleteNow}"
+												value="Yes"></p:commandButton>
+											<p:commandButton value="No" update=":form2" styleClass="redButt"
+												oncomplete="PF('dlg').hide();"></p:commandButton>
+										</p:panelGrid>
+									</div>
+								</p:dialog>
+
+							</p:panel>
+						</h:form>
+						<h:form id="editForm" enctype="multipart/form-data">
+							<p:dialog resizable="false"
+								widgetVar="editDialog" header="Edit Details (Allowed file type are :- jpg,jpeg,png,gif)" showEffect="fade"
+								hideEffect="explode" modal="true">
+								<div class="ui-g form-group">
+									<p:panelGrid columns="2"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+										<p:outputLabel  for="@next" style="color:red" value="Type:"></p:outputLabel>
+										<p:selectOneMenu value="#{viewEditDeleteAssignment.type}"
+											required="true" requiredMessage="Please select a Type">
+											<f:selectItem itemLabel="Homework" itemValue="homework"></f:selectItem>
+											<f:selectItem itemLabel="Notes" itemValue="notes"></f:selectItem>
+											<p:ajax update="tp"
+												listener="#{viewEditDeleteAssignment.checkType}"></p:ajax>
+										</p:selectOneMenu>
+
+										<p:outputLabel value="Description:"></p:outputLabel>
+										<p:inputTextarea value="#{viewEditDeleteAssignment.des}"
+											rows="3" cols="20"></p:inputTextarea>
+
+										<p:outputLabel  for="@next" style="color:red" value="Assignment Check Date:"></p:outputLabel>
+										<p:calendar value="#{viewEditDeleteAssignment.assShowDate}"
+											navigator="true" pattern="dd/MM/yyyy" required="true"
+											requiredMessage="Please Select Date"></p:calendar>
+
+										<p:outputLabel for="@next" style="color:red"  id="tp"
+											value="#{viewEditDeleteAssignment.label} Name"></p:outputLabel>
+										<p:inputText
+											value="#{viewEditDeleteAssignment.assignmentName}"
+											required="true"
+											requiredMessage="Please Enter #{viewEditDeleteAssignment.label} Name"></p:inputText>
+
+										<p:outputLabel value="Existing Image:"></p:outputLabel>
+										<p:graphicImage
+											url="#{viewEditDeleteAssignment.assignmentPhoto}"
+											height="150px" width="150px"></p:graphicImage>
+
+										<p:outputLabel value="Choose File1 :"></p:outputLabel>
+										<p:fileUpload allowTypes="/(\.|\/)(gif|jpe?g|png)$/"
+											mode="simple" skinSimple="true"
+											value="#{viewEditDeleteAssignment.assignmentPhoto1}"></p:fileUpload>
+									</p:panelGrid>
+								</div>
+								
+								<br />
+								<p:separator />
+								<center>
+									<p:commandButton ajax="false" update=":editForm,:form,:form2" styleClass="butwid" icon="fa fa-floppy-o"
+											actionListener="#{viewEditDeleteAssignment.editNow}"
+											value="Save Here"></p:commandButton>
+								</center>
+								<p:separator />
+								<br />
+								
+							</p:dialog>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

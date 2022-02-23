@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<f:loadBundle var="addSectionVar" basename="myProperties" />
+<f:view contentType="text/html">
+	<h:head>
+		<title>#{sideMenuBean.companyName} | Class Wise Due Fee Report</title>
+		<f:facet name="first">
+			<meta content='text/html; charset=UTF-8' http-equiv="Content-Type" />
+			<meta http-equiv="X-UA-Compatible" content="EmulateIE8" />
+		</f:facet>
+
+      	    <link rel="stylesheet" type="text/css" href="css/style.css"/>				
+
+	</h:head>
+	
+	<script>
+		
+			function printwin() {
+				document.getElementById('test').style.display="none";	
+				window.print();
+				document.getElementById('test').style.display="block";
+				document.URL="";
+			}
+	
+		</script>
+
+	<h:body>
+		
+		<p:commandButton onclick="printwin()" id="test" value="Print"></p:commandButton>
+		
+		
+				<h:form id="form3">	 
+               		 
+               		 	<p:outputPanel rendered="#{dueFeeReport.show}">
+               		 	<center>
+							<p style="font-family: initial;font-style: oblique;font-size: 30px !important;font-weight:bold;margin:0px;">#{headerBean.name}</p>
+							<p style="margin:0px;">#{headerBean.address4}</p>
+							<p style="margin:0px;">Due Fee Report For Month</p>
+						</center>
+				
+						<p:panelGrid columns="5" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+					
+						<p:panelGrid columns="2">
+							<p:outputLabel value="Class:-"></p:outputLabel>
+							<h:outputText value="#{dueFeeReport.className}"></h:outputText>
+						</p:panelGrid>
+						
+						<p:panelGrid columns="2">
+							<p:outputLabel value="Section:-"></p:outputLabel>
+							<h:outputText value="#{dueFeeReport.sectionName}"></h:outputText>
+						</p:panelGrid>
+			
+						<p:panelGrid columns="2">
+							<p:outputLabel value="Total Student:-"></p:outputLabel>
+							<h:outputText value="#{dueFeeReport.totalStudent}"></h:outputText>
+						</p:panelGrid>
+						<p:panelGrid columns="2">
+							<p:outputLabel value="Up to Month:-"></p:outputLabel>
+							<h:outputText value="#{dueFeeReport.month}"></h:outputText>
+						</p:panelGrid>
+						<p:panelGrid columns="2">
+							<p:outputLabel value="Total Amount : "></p:outputLabel>
+							<h:outputText value="#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'} #{dueFeeReport.totalDueAmount}"></h:outputText>
+						</p:panelGrid>
+						
+					</p:panelGrid>	
+               		  		<p:dataTable   id="table" rowKey="#{var.addNumber}"  var="var" value="#{dueFeeReport.studentList}"> 
+               		  		        		  			
+               		  		        		  			
+               		  			<p:column headerText="SR.No." >
+               		  				<p:outputLabel value="#{var.srNo}"></p:outputLabel>
+               		  			</p:column>
+               		  			<p:column  sortBy="#{var.fname}" headerText="#{dueFeeReportVar.dueFeeReportFirstNameLabel}">
+               		  				<p:outputLabel value="#{var.fname}"></p:outputLabel>
+               		  			</p:column>
+               		  			
+               		  			<p:column headerText="Father's Name">
+               		  				<p:outputLabel value="#{var.fathersName}"></p:outputLabel>
+               		  			</p:column>
+               		  			
+               		  			<p:column headerText="Contact No." >
+               		  				<p:outputLabel value="#{var.fathersPhone}"></p:outputLabel>
+               		  			</p:column>
+               		  			
+               		  			<p:column  headerText="Class" >
+               		  				<p:outputLabel value="#{var.className}"></p:outputLabel>
+               		  			</p:column>
+               		  			
+               		  			
+               		  			
+               		  			<p:columns  value="#{dueFeeReport.feelist}" var="column" columnIndexVar="colIndex" >  
+                 		      
+           				    <f:facet name="header"> 
+           			  		     <p:outputLabel value="#{column.feeName} (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})"></p:outputLabel>
+         				    </f:facet>  	   							
+  							  							
+  							<p:outputLabel value="#{var.feesMap[column.feeName]}"></p:outputLabel>
+  							  							         				  
+     					   </p:columns>
+     					   
+           		  			<p:column headerText="Total Left Amount (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})" >
+           		  				<p:outputLabel value="#{var.tutionFeeDueAmount}"></p:outputLabel>
+           		  			</p:column>
+                		  			
+               		  			
+               		  			     		  		
+               		  		</p:dataTable>
+               		  	               		  
+               		  </p:outputPanel>         
+               		 	
+               		  	
+				</h:form>
+			
+			
+	</h:body>
+</f:view>
+</html>

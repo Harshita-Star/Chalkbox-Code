@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<f:view contentType="text/html">
+	<h:head>
+		<title>#{sideMenuBean.companyName} | Diet Chart</title>
+		<f:facet name="first">
+			<meta content='text/html; charset=UTF-8' http-equiv="Content-Type" />
+			<meta http-equiv="X-UA-Compatible" content="EmulateIE8" />
+	
+		</f:facet>
+  	    <link rel="stylesheet" type="text/css" href="css/style.css"/>				
+	</h:head>
+
+	<h:body>
+		<div class="main_contain">
+			<div class="header">	
+				<ui:include src="header.xhtml"></ui:include>
+			</div>
+			<div class="main">
+				<div class="login_div">
+					<h:form>
+			
+						<p:tabMenu >
+							<p:menuitem styleClass="menu_bar" value="Home" action="#{navigation.adminHome}" ></p:menuitem>					
+							<p:menuitem rendered="#{menuTab.showStudent}" styleClass="menu_bar" value="Add Student" action="#{navigation.studentRegistration}" ></p:menuitem>
+							<p:menuitem rendered="#{menuTab.showFinance}" styleClass="menu_bar" value="Create Expense" action="#{navigation.addExpense}" ></p:menuitem>
+							<p:menuitem rendered="#{menuTab.showFinance}" styleClass="menu_bar" value="Fee Collection" action="#{navigation.feeCollection}" ></p:menuitem>
+							<p:menuitem rendered="#{menuTab.showMessage}" styleClass="menu_bar" value="Send SMS" action="#{navigation.sendMessage}" ></p:menuitem>
+							<p:menuitem styleClass="menu_bar" value="Change Session- #{selectSession.selectedSession}" action="#{navigation.changeSession}" ></p:menuitem>
+						</p:tabMenu>
+		
+						<p:commandButton value="Logout" action="#{navigation.logout}" styleClass="back_button" style="float:right"></p:commandButton>
+						<p:commandButton value="Back" action="#{navigation.backToManageClassDashboard}" styleClass="back_button" style="float:right;margin-right:80px"></p:commandButton>
+					
+					</h:form>
+				
+				
+				<h:form id="form">
+					<h1>Make Diet Chart</h1>
+            		<p:panel header="Diet Chart">
+            			<p:messages closable="true" autoUpdate="true"></p:messages>
+               			<p:panelGrid columns="2">
+               				
+               				<p:outputLabel value="Select Days" for="@next" style="color:red" ></p:outputLabel>
+         					<p:selectManyCheckbox value="#{dietChart.selectedDays}" required="true" requiredMessage="Please Select Days">
+         						<f:selectItems value="#{dietChart.weekDayList}"></f:selectItems>
+         					</p:selectManyCheckbox>
+               			
+          					<p:outputLabel value="Select Class" for="@next" style="color:red" ></p:outputLabel>
+         					<p:selectManyCheckbox value="#{dietChart.selectedClass}" required="true" requiredMessage="Please Select Class">
+         						<f:selectItems value="#{dietChart.classList}"></f:selectItems>
+         					</p:selectManyCheckbox>
+        					
+      						<p:outputLabel value="Diet" for="@next" style="color:red" ></p:outputLabel>
+      						<p:inputText value="#{dietChart.diet}" required="true" requiredMessage="Please Enter Diet" validatorMessage="Please Enter Correct value">
+      						  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+      						</p:inputText>
+      						
+      						<p:outputLabel value="Special Instruction"></p:outputLabel>
+      						<p:inputText value="#{dietChart.specialIns}"  validatorMessage="Please Enter Correct value">
+      						  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+      						</p:inputText>
+            						
+       						<p:commandButton update="form" action="#{dietChart.addNow}" value="Add"></p:commandButton>
+               					
+               			</p:panelGrid>
+               		</p:panel>
+				</h:form>
+			
+			</div>
+		</div>
+		<div class="footer">	
+			<ui:include src="footer.xhtml"></ui:include>
+		</div>
+	</div>
+	</h:body>
+</f:view>
+</html>

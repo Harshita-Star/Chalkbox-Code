@@ -1,0 +1,147 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Time Table</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form" style="overflow:hidden">
+							<p:messages autoUpdate="true" closable="true"></p:messages>
+							<p:panel header="Day Wise Time Table (Teacher)">
+
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel  for="@next" style="color:red" value="Select Day"></p:outputLabel>
+									<p:selectOneMenu required="true" filter="true"
+										requiredMessage="Please Select a Day "
+										value="#{dayTeacherWiseTimeTable.dayid}">
+										<f:selectItem itemLabel="Select Day" itemValue=""></f:selectItem>
+										<f:selectItem itemLabel="Monday" itemValue="1"></f:selectItem>
+										<f:selectItem itemLabel="Tuesday" itemValue="2"></f:selectItem>
+										<f:selectItem itemLabel="Wednesday" itemValue="3"></f:selectItem>
+										<f:selectItem itemLabel="Thursday" itemValue="4"></f:selectItem>
+										<f:selectItem itemLabel="Friday" itemValue="5"></f:selectItem>
+										<f:selectItem itemLabel="Saturday" itemValue="6"></f:selectItem>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Search Type:" for="@next" style="color:red" ></p:outputLabel>
+
+									<p:selectOneRadio required="true"
+										requiredMessage="Please Select Search Type"
+										value="#{dayTeacherWiseTimeTable.searchType}">
+										<f:selectItem itemLabel="Current Time-table"
+											itemValue="current"></f:selectItem>
+										<f:selectItem itemLabel="New Time-table" itemValue="new"></f:selectItem>
+									</p:selectOneRadio>
+
+								</p:panelGrid>
+								
+								<br></br>
+
+								<center>
+									<p:commandButton value="Get Time Table"
+										action="#{dayTeacherWiseTimeTable.search}" update=":form"
+										style="width: 200px;"></p:commandButton>
+										&#160;&#160;&#160;&#160;
+									<h:commandLink>
+										<p:graphicImage name="images/excellogo.png"
+											library="avalon-layout" width="100" height="40"></p:graphicImage>
+										<pe:exporter type="xlsx" target="up"
+											fileName="#{dayTeacherWiseTimeTable.dayname}_Time_Table"></pe:exporter>
+									</h:commandLink>	
+								</center>
+
+								<br></br>
+
+								<p:dataTable id="upp" var="var"
+									value="#{dayTeacherWiseTimeTable.classSectionList}" reflow="true">
+									
+									<f:facet name="header">
+										#{dayTeacherWiseTimeTable.dayname} Time Table
+									</f:facet>
+
+									<p:column
+										headerText="Teachers ↓ / #{sideMenuBean.list.lectureLabel}s →"
+										style="width:50px">
+										<f:facet name="header">
+											<p:outputLabel
+												value="Teachers ↓ / #{sideMenuBean.list.lectureLabel}s →"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.teacherName}"></p:outputLabel>
+
+									</p:column>
+
+									<p:columns style="width:60px"
+										value="#{dayTeacherWiseTimeTable.lectures}" var="column"
+										columnIndexVar="colIndex">
+
+										<f:facet name="header">
+											<p:outputLabel value="#{column}"></p:outputLabel>
+										</f:facet>
+										<center>
+										<p:panelGrid columns="1" styleClass="ui-panelgrid-blank form-group"
+											style="border:0px none;width:100%; background-color:transparent;">
+											<p:outputLabel value="#{var.teacherMap[column]}" style="width:100%;font-weight:bold;"></p:outputLabel>
+											<p:outputLabel value="#{var.subjectMap[column]}" style="width:100%;font-weight:bold;"></p:outputLabel>
+										</p:panelGrid>
+										</center>
+
+									</p:columns>
+								</p:dataTable>
+							
+							<p:dataTable rendered="false" id="up" var="var"
+									value="#{dayTeacherWiseTimeTable.classSectionList}" reflow="true">
+									
+									<f:facet name="header">
+										<p:outputLabel
+												value="#{dayTeacherWiseTimeTable.dayname} Time Table" />
+									</f:facet>
+
+									<p:column
+										headerText="Teachers ↓ / #{sideMenuBean.list.lectureLabel}s →"
+										style="width:50px">
+										<f:facet name="header">
+											<p:outputLabel
+												value="Teachers ↓ / #{sideMenuBean.list.lectureLabel}s →"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.teacherName}"></p:outputLabel>
+
+									</p:column>
+
+									<p:columns style="width:60px"
+										value="#{dayTeacherWiseTimeTable.lectures}" var="column"
+										columnIndexVar="colIndex">
+
+										<f:facet name="header">
+											<p:outputLabel value="#{column}"></p:outputLabel>
+										</f:facet>
+											<p:outputLabel value="#{var.teacherMap[column]} - #{var.subjectMap[column]}" style="width:100%;font-weight:bold;"></p:outputLabel>
+
+									</p:columns>
+								</p:dataTable>
+
+							</p:panel>
+
+
+
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

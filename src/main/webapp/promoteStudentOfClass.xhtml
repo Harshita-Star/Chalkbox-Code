@@ -1,0 +1,174 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Student Promotion</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<h1>Student Promotion</h1>
+							<p:panel header="Search by Class-Section">
+								<p:messages closable="true" autoUpdate="true"></p:messages>
+								<p:commandLink
+									rendered="false" style="float: right;margin-left: 15px;color: blue;font-size:15px !important;"
+									immediate="true" value="Student Demotion "
+									action="demoteStudent.xhtml?faces-redirect=true"></p:commandLink>        &#160;&#160;&#160;
+               	<br></br>
+								<br></br>
+								<p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel value="Select a Class" for="@next" style="color:red" ></p:outputLabel>
+									<p:selectOneMenu filter="true"
+										value="#{promoteClassStudentBean.selectedClass}"
+										required="true">
+										<f:selectItem itemLabel="Select Here" itemValue="select"></f:selectItem>
+										<f:selectItems value="#{promoteClassStudentBean.classList}"></f:selectItems>
+
+										<p:ajax update="sectionid"
+											listener="#{promoteClassStudentBean.allSections}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Select Section" for="@next" style="color:red" ></p:outputLabel>
+									<p:selectOneMenu id="sectionid"  filter="true"
+										value="#{promoteClassStudentBean.selectedSection}"
+										required="true" requiredMessage="Please select a section">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{promoteClassStudentBean.sectionList}"></f:selectItems>
+
+									</p:selectOneMenu>
+								</p:panelGrid>
+								
+								<br />
+								<p:separator />
+								<center>
+									<p:commandButton
+										actionListener="#{promoteClassStudentBean.getStudentStrength}" styleClass="butwid-1" icon="fa fa-eye"
+										value="Show Class Strength" update=":form"></p:commandButton>
+								</center>
+								<p:separator />
+								<br />
+								
+								<br/>
+								<p:panel id="dataTable"
+									rendered="#{promoteClassStudentBean.renderTable}" header="Student Details">
+									<p:dataTable reflow="true"
+										selection="#{promoteClassStudentBean.selectedStudentList}"
+										rowKey="#{var.addNumber}"
+										value="#{promoteClassStudentBean.studentList}" var="var">
+
+										<p:column style="width:50px !important;text-align:center"
+											selectionMode="multiple"></p:column>
+
+										<p:column headerText="S. No.">
+											<p:outputLabel value="#{var.sno}"></p:outputLabel>
+										</p:column>
+
+
+										<p:column headerText="Admission No.">
+											<p:outputLabel value="#{var.srNo}"></p:outputLabel>
+										</p:column>
+
+										<p:column sortBy="#{var.fullName}" headerText="Student Name">
+											<p:outputLabel value="#{var.fullName}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Father's Name">
+											<p:outputLabel value="#{var.fathersName}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Class">
+											<p:outputLabel value="#{var.className}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Section">
+											<p:outputLabel value="#{var.sectionName}"></p:outputLabel>
+										</p:column>
+
+										<f:facet name="footer">
+										<center>
+											<p:commandButton styleClass="butwid" icon="fa fa-stack-exchange"
+												actionListener="#{promoteClassStudentBean.selectAndShowPromotPanel}"
+												update=":form" value="Promote" ></p:commandButton>
+										</center>
+										</f:facet>
+									</p:dataTable>
+									<br/>
+									<p:panel id="promoteTo"
+										rendered="#{promoteClassStudentBean.renderPromotePanel}" header="Promotion Details">
+
+										<p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+											<p:outputLabel  for="@next" style="color:red" value="Select Class of Promotion"></p:outputLabel>
+											<p:selectOneMenu
+												value="#{promoteClassStudentBean.selectedPromoteToClass}"
+												required="true" requiredMessage="Please select class">
+												<f:selectItem itemLabel="Select One" itemValue=""></f:selectItem>
+												<f:selectItems value="#{promoteClassStudentBean.classlist2}"></f:selectItems>
+
+												<p:ajax update="sectionidd"
+													listener="#{promoteClassStudentBean.allSections2}"></p:ajax>
+											</p:selectOneMenu>
+
+											<p:outputLabel  for="@next" style="color:red" value="Select Section"></p:outputLabel>
+											<p:selectOneMenu id="sectionidd"
+												value="#{promoteClassStudentBean.selectedPromoteToSection}"
+												required="true" requiredMessage="Please select a section">
+												<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+												<f:selectItems
+													value="#{promoteClassStudentBean.sectionList2}"></f:selectItems>
+
+											</p:selectOneMenu>
+
+											<p:outputLabel value="Session" for="@next" style="color:red" ></p:outputLabel>
+											<p:outputLabel value="#{promoteClassStudentBean.session}"></p:outputLabel>
+											<p:selectOneMenu rendered="false"
+												value="#{promoteClassStudentBean.session}" required="true"
+												requiredMessage="Please select session">
+												<f:selectItem itemValue="" itemLabel="Select Here"></f:selectItem>
+												<f:selectItems
+													value="#{promoteClassStudentBean.sessionList}"></f:selectItems>
+											</p:selectOneMenu>
+
+											<p:outputLabel  for="@next" style="color:red" value="Date of Promotion"></p:outputLabel>
+											<p:calendar pattern="dd/MM/yyyy"
+												value="#{promoteClassStudentBean.postDate}" navigator="true"
+												required="true"
+												requiredMessage="Please enter promotion date"></p:calendar>
+
+											<p:outputLabel for="@next" style="color:red"  value="Carry Forward Previous Fee"></p:outputLabel>
+											<p:selectOneRadio required="true"
+												requiredMessage="Pleease Select Fee Carry Forward Option"
+												value="#{promoteClassStudentBean.carryForward}">
+												<f:selectItem itemLabel="Yes" itemValue="Yes"></f:selectItem>
+												<f:selectItem itemLabel="No" itemValue="No"></f:selectItem>
+											</p:selectOneRadio>
+
+										</p:panelGrid>
+										<br />
+								<p:separator />
+								<center>
+									<p:commandButton update=":form" styleClass="butwid" icon="fa fa-stack-exchange"
+												action="#{promoteClassStudentBean.promotion}"
+												value="Promote"></p:commandButton>
+								</center>
+								<p:separator />
+								<br />
+									</p:panel>
+
+								</p:panel>
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

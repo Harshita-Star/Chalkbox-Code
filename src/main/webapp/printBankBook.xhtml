@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+
+<f:view contentType="text/html">
+	<h:head>
+		<title>
+		  #{sideMenuBean.companyName} | Bank IN/OUT Report
+		</title>
+		<link rel="stylesheet" type="text/css" href="styles/style.css"></link>
+    </h:head>
+    <body>
+    <p:commandButton value="print">
+		   		<p:printer target=":form"></p:printer>
+	</p:commandButton>
+    <h:form id="form">  
+	   	<div style="width:100%;text-align:center">
+             <p:outputLabel style="width:100%;text-align:center;font-size:140%;" value="#{headerBean.name}"><br></br></p:outputLabel>
+           </div>
+           <div style="width:100%;text-align:center">
+            <p:outputLabel style="font-size:70%" value="#{headerBean.address1}"><br></br></p:outputLabel>
+           </div>
+           <div style="width:100%;text-align:center">
+            <p:outputLabel style="font-size:70%" value="#{headerBean.address2}"><br></br></p:outputLabel>
+           </div>
+           <div style="width:100%;text-align:center">
+            <p:outputLabel style="font-size:70%" value="#{headerBean.address3}"><br></br></p:outputLabel>
+           </div>
+           <div style="width:100%;text-align:center">
+            <p:outputLabel style="font-size:70%" value="#{headerBean.address4}"><br></br></p:outputLabel>
+           </div>
+          
+            <center><h3><u>Bank Statement Of #{bankBook.bankName}</u></h3></center>
+            <p:panelGrid columns="3">
+            	<h:outputText value="RECEIPTS : #{bankBook.date}" style="width:50%;text-align:center"></h:outputText>
+					<h:outputText value="PAYMENTS :  #{bankBook.date}" style="width:50%;text-align:center"></h:outputText>  
+        			<h:outputText value="Opening Balance :  #{bankBook.openingBalance}" style="width:50%;text-align:center"></h:outputText>  
+            </p:panelGrid>
+            <h:panelGrid columns="1" style="width:100%;">
+					
+					
+					 <h:dataTable var="var" value="#{bankBook.finalList}" style="width:100%;border-collapse:collapse;font-size:13px" border="1" >
+               		  			<f:facet name="header"> 
+								 <h:panelGrid columns="1" style="width:100%;"> 
+									<p:outputLabel value="Bank In Amount:- Rs. #{bankBook.bankIn}"></p:outputLabel>
+								 </h:panelGrid>								
+								</f:facet>
+								
+								<f:facet name="header">
+								<center>RECEIPTS</center>
+								</f:facet>
+               		  			
+               		  			<p:column>
+               		  				<f:facet name="header"> Date</f:facet>
+               		  					<center>#{var.entryDateStr}</center>
+               		  			</p:column>
+               		  			
+               		  			<p:column>
+               		  				<f:facet name="header"> Particular</f:facet>
+               		  				<div style="text-align:left;">
+               		  					#{var.status} </div>
+               		  			</p:column>
+               		  			
+               		  			<p:column rendered="false">
+               		  				<f:facet name="header"> Cash</f:facet>
+               		  				<div style="text-align:left;">
+               		  					 #{var.cashInAmount}</div>
+               		  			</p:column>
+               		  			
+               		  			<p:column>
+               		  				<f:facet name="header"> Bank In</f:facet>
+               		  				<div style="text-align:right;">
+               		  					 #{var.bankInAmount}</div>
+               		  					 <f:facet name="footer">
+               		  					 	#{bankBook.bankIn}
+               		  					 </f:facet>
+               		  			</p:column>
+               		  			
+               		  			<p:column>
+               		  				<f:facet name="header"> Bank Out</f:facet>
+               		  				<div style="text-align:right;">
+               		  					 #{var.bankOutAmount}</div>
+               		  					 	 <f:facet name="footer">
+               		  					 	#{bankBook.bankOut}
+               		  					 </f:facet>
+               		  			</p:column>
+               		  			
+               		  			<p:column>
+               		  				<f:facet name="header"> Closing Balance</f:facet>
+               		  				<div style="text-align:right;">
+               		  					 #{var.closingBalance}</div>
+               		  			</p:column>
+               		  		</h:dataTable>
+               		  		
+               		  		          	
+               		<!-- <h:dataTable var="var" value="#{bankBook.inList}" style="width:100%;border-collapse:collapse;font-size:13px" border="1" >
+               		  			<f:facet name="header"> 
+								 <h:panelGrid columns="1" style="width:100%;"> 
+									<p:outputLabel value="Bank In Amount:- Rs. #{bankBook.bankIn}"></p:outputLabel>
+								 </h:panelGrid>								
+								</f:facet>
+								
+								<f:facet name="header">
+								<center>RECEIPTS</center>
+								</f:facet>
+               		  			
+               		  			<p:column>
+               		  				<f:facet name="header"> Date</f:facet>
+               		  					<center>#{var.entryDateStr}</center>
+               		  			</p:column>
+               		  			
+               		  			<p:column>
+               		  				<f:facet name="header"> Particular</f:facet>
+               		  				<div style="text-align:left;">
+               		  					#{var.status} </div>
+               		  			</p:column>
+               		  			
+               		  			<p:column rendered="false">
+               		  				<f:facet name="header"> Cash</f:facet>
+               		  				<div style="text-align:left;">
+               		  					 #{var.cashInAmount}</div>
+               		  			</p:column>
+               		  			
+               		  			<p:column>
+               		  				<f:facet name="header"> Bank</f:facet>
+               		  				<div style="text-align:left;">
+               		  					 #{var.bankInAmount}</div>
+               		  			</p:column>
+               		  			
+               		  		</h:dataTable>
+               		  		
+  		               		<h:dataTable var="varr" value="#{bankBook.outList}" style="width:100%;border-collapse:collapse;font-size:13px;" border="1" >
+               		  			<f:facet name="header"> 
+								 <h:panelGrid columns="1" style="width:100%;"> 
+									<p:outputLabel value="Bank Out Amount:- Rs. #{bankBook.bankOut}"></p:outputLabel>
+								 </h:panelGrid>								
+								</f:facet>
+								
+								<f:facet name="header">
+								<center>PAYMENTS</center>
+								</f:facet>
+               		  			<p:column>
+               		  				<f:facet name="header"> Date</f:facet>
+               		  					<center>#{varr.entryDateStr}</center>
+               		  			</p:column>
+               		  			
+               		  			<p:column>
+               		  				<f:facet name="header"> Particular</f:facet>
+               		  				<div style="text-align:left;">
+               		  					#{varr.status} </div>
+               		  			</p:column>
+               		  			
+               		  			<p:column rendered="false">
+               		  				<f:facet name="header"> Cash</f:facet>
+               		  				<div style="text-align:left;">
+               		  					 #{varr.cashOutAmount}</div>
+               		  			</p:column>
+               		  			
+               		  			<p:column>
+               		  				<f:facet name="header"> Bank</f:facet>
+               		  				<div style="text-align:left;">
+               		  					 #{varr.bankOutAmount}</div>
+               		  			</p:column>
+
+               		  		</h:dataTable> -->
+               		</h:panelGrid>  	
+               		
+               		<p:outputPanel>
+               		  			<table style="float:right;width:30%;">
+               		  				<tr>
+               		  					<td><p:outputLabel value="#{bankBook.bankIn}"></p:outputLabel></td>
+               		  					<td><p:outputLabel value="#{bankBook.bankOut}"></p:outputLabel></td>
+               		  				</tr>
+               		  				<tr>
+               		  					<td><p:outputLabel value="Closing Balance"></p:outputLabel></td>
+               		  					<td><p:outputLabel value="#{bankBook.closingBalance}"></p:outputLabel></td>
+               		  				</tr>
+               		  				
+               		  				<tr>
+               		  					<td><p:outputLabel value="#{bankBook.openingBalance}"></p:outputLabel></td>
+               		  					<td><p:outputLabel value="#{bankBook.openingBalance}"></p:outputLabel></td>
+               		  				</tr>
+               		  			</table>
+               		  		</p:outputPanel>		
+    </h:form>
+    </body>
+</f:view>
+</html>    	
+       

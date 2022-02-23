@@ -1,0 +1,195 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">View Enquiry</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<p:messages autoUpdate="true" closable="true" />
+							<p:panel header="Enquiry Details">
+
+								<f:facet name="header">
+									<span>Enquiry Payment Report Details</span>
+									
+								</f:facet>
+
+							
+								<br />
+								<p:panelGrid columns="7">
+								
+								<p:outputLabel  for="@next" style="color:red"  value="Select Session "></p:outputLabel>
+									<p:selectOneMenu value="#{viewEnquiryForBlm.selectedSession}"
+										required="true" requiredMessage="Please select session">
+										<f:selectItems value="#{viewEnquiryForBlm.sessionList}"></f:selectItems>
+									</p:selectOneMenu>
+								<p:commandButton value="All Prospectus"
+										action="#{viewEnquiryForBlm.searchAllPropectus}"
+										update=":form:up" ></p:commandButton>
+
+                                <p:commandButton value=" All Registartion"
+										action="#{viewEnquiryForBlm.searchAllRegistration}" update=":form:up"
+										></p:commandButton>
+
+								<p:commandButton value="All Admission"
+										action="#{viewEnquiryForBlm.searchAllAdmission}" update=":form:up"
+										></p:commandButton>
+
+								
+								<h:commandLink >
+										<p:graphicImage name="images/excellogo.png"
+											library="avalon-layout" width="100" height="40"></p:graphicImage>
+										<pe:exporter type="xlsx" target=":form:dt"
+											fileName="#{viewEnquiryForBlm.searchType}_Fee"   ></pe:exporter>
+									</h:commandLink>
+								
+								
+								</p:panelGrid>
+								
+								<p:outputPanel id="up">
+									<p:dataTable id="dt" reflow="true"
+										value="#{viewEnquiryForBlm.list}" var="var"
+										emptyMessage="No student found "
+										rowKey="#{var.sno}" rowIndexVar="index">
+                                      
+                                      <p:column headerText="S.No">
+											<f:facet name="header">
+												<p:outputLabel value="S.No"></p:outputLabel>
+											</f:facet>
+											<h:outputText value="#{index+1}"></h:outputText>
+										</p:column>
+
+										<p:column headerText="Date"
+											filterBy="#{var.stringadmissionDate}"
+											sortBy="#{var.stringadmissionDate}">
+											<f:facet name="header">
+												<p:outputLabel value="Enquiry Date"></p:outputLabel>
+											</f:facet>
+											<h:outputText value="#{var.stringadmissionDate}"></h:outputText>
+										</p:column>
+
+										<p:column headerText="Ref. No." filterBy="#{var.refNo}"
+											filterMatchMode="contains">
+											<f:facet name="header">
+												<p:outputLabel value="Ref.No."></p:outputLabel>
+											</f:facet>
+											<h:outputText value="#{var.refNo}"></h:outputText>
+										</p:column>
+
+										<p:column headerText="Student Name"
+											filterBy="#{var.studentName}" filterMatchMode="contains">
+											<f:facet name="header">
+												<p:outputLabel value="Student Name"></p:outputLabel>
+											</f:facet>
+											<h:outputText value="#{var.studentName}"></h:outputText>
+										</p:column>
+
+										<p:column headerText="Sr.No." filterBy="#{var.admissionNo}"
+											filterMatchMode="contains">
+											<f:facet name="header">
+												<p:outputLabel value="Sr.No."></p:outputLabel>
+											</f:facet>
+											<h:outputText value="#{var.admissionNo}"></h:outputText>
+										</p:column>
+
+										<p:column headerText="Father's Name">
+											<f:facet name="header">
+												<p:outputLabel value="Father's Name"></p:outputLabel>
+											</f:facet>
+											<h:outputText value="#{var.fatherName}"></h:outputText>
+										</p:column>
+
+
+										<p:column headerText="F. Mob.No.">
+											<f:facet name="header">
+												<p:outputLabel value="F. Mob.No"></p:outputLabel>
+											</f:facet>
+											<h:outputText value="#{var.mobno}">
+											</h:outputText>
+										</p:column>
+										
+										<p:column headerText="M. Mob.No.">
+											<f:facet name="header">
+												<p:outputLabel value="M. Mob.No"></p:outputLabel>
+											</f:facet>
+											<h:outputText value="#{var.mothmobno}">
+											</h:outputText>
+										</p:column>
+
+										<p:column headerText="Addmission Sought for Class"
+											filterBy="#{var.admissionclass}"
+											sortBy="#{var.admissionclass}" filterMatchMode="contains">
+											<f:facet name="header">
+												<p:outputLabel value="Admission Sought for Class"></p:outputLabel>
+											</f:facet>
+											<h:outputText value="#{var.admissionclass}">
+											</h:outputText>
+										</p:column>
+
+										<p:column headerText="Session" filterBy="#{var.session}"
+											sortBy="#{var.session}" filterMatchMode="contains">
+											<f:facet name="header">
+												<p:outputLabel value="Session"></p:outputLabel>
+											</f:facet>
+											<h:outputText value="#{var.session}">
+											</h:outputText>
+										</p:column>
+
+										<p:column headerText="Added By">
+											<f:facet name="header">
+												<p:outputLabel value="Added By"></p:outputLabel>
+											</f:facet>
+											<h:outputText value="#{var.addedby}"></h:outputText>
+										</p:column>
+										
+										
+
+										<p:column headerText="Receipt Date">
+											<f:facet name="header">
+												<p:outputLabel value="Receipt Date"></p:outputLabel>
+											</f:facet>
+											<h:outputText value="#{var.strTestDate}"></h:outputText>
+										</p:column>
+										
+
+										<p:column headerText="Fees">
+											<f:facet name="header">
+												<p:outputLabel value="#{viewEnquiryForBlm.searchType} Fee"></p:outputLabel>
+											</f:facet>
+											<h:outputText value="#{var.amount}"></h:outputText>
+
+										<f:facet name="footer">
+												<p:outputLabel value="Total - : #{viewEnquiryForBlm.totalAmount}"></p:outputLabel>
+											</f:facet>
+										
+										
+										</p:column>
+									</p:dataTable>
+
+
+								</p:outputPanel>
+							</p:panel>
+
+
+						</h:form>
+
+					
+						
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

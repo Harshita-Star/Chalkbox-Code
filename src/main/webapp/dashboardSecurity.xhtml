@@ -1,0 +1,200 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">ADD VISITOR DASHBOARD</ui:define>
+ 
+     <ui:define name="head">
+        <script type="text/javascript">
+     
+        function skinPie() {
+            this.cfg.shadow = false;
+            this.cfg.title = '';
+            this.cfg.seriesColors = ['#337ab7', '#2ea59f', '#2d34a4', '#2ea563'];
+            this.cfg.grid = {
+                background: '#ffffff',
+                borderColor: '#ffffff',
+                gridLineColor: '#F5F5F5',
+                shadow: false
+            };
+            this.cfg.axesDefaults = {
+                rendererOptions: {
+                    textColor: '#292B2C',
+                }
+            };
+            this.cfg.seriesDefaults = {
+                renderer: $.jqplot.PieRenderer,
+                shadow: false,
+                lineWidth: 1,
+                markerOptions: {
+                    shadow: false,
+                    size: 7,
+                    style: 'circle'
+                }
+            }
+        
+
+        
+        }
+        </script>
+        <style type="text/css">
+            .jqplot-xaxis-label, .jqplot-yaxis-label, .jqplot-y2axis-label, .jqplot-x2axis-label {
+                color: #757575; 
+            }
+            
+            table.jqplot-table-legend {
+                background-color: #ffffff;
+                color: #757575;
+                border-color: #F5F5F5;
+            }
+        </style>
+    </ui:define>
+
+	<ui:define name="content">
+		
+		<div class="dashboard">
+			<h:form>
+				<div class="ui-g overview-boxes">
+
+					<div class="ui-g-12 ui-md-6 ui-lg-3">
+							<div class="ui-g overview-box overview-box-1">
+								<div class="overview-box-title">
+									<i class="fa fa-users" /> <span>All Visitor</span>
+								</div>
+								<div class="overview-box-count">#{dashboardAddVisitor.totalVisitor}</div>
+								<div class="overview-box-stats"></div>
+							</div>
+					</div>
+					
+					<div class="ui-g-12 ui-md-6 ui-lg-3">
+						<div class="ui-g overview-box overview-box-4">
+							<div class="overview-box-title">
+								<i class="fa fa-users"></i> <span>Todays Visitors</span>
+							</div>
+							<div class="overview-box-count">#{dashboardAddVisitor.todays}</div>
+							<div class="overview-box-stats"></div>
+						</div>
+					</div>
+
+					<div class="ui-g-12 ui-md-6 ui-lg-3">
+							<div class="ui-g overview-box overview-box-2">
+								<div class="overview-box-title">
+									<i class="fa fa-users" /> <span>Visitors In Last 7 days</span>
+								</div>
+								<div class="overview-box-count">#{dashboardAddVisitor.lastDays}</div>
+								<div class="overview-box-stats"></div>
+							</div>
+					</div>
+
+					<div class="ui-g-12 ui-md-6 ui-lg-3">
+							<div class="ui-g overview-box overview-box-3">
+								<div class="overview-box-title">
+									<i class="fa fa-users"/><span>Visitors In This Month</span>
+								</div>
+								<div class="overview-box-count">#{dashboardAddVisitor.lastMonth}</div>
+								<div class="overview-box-stats"></div>
+							</div>
+					</div>
+
+					
+					
+					
+				</div>
+			</h:form>
+
+			<div class="ui-g">
+				<div class="ui-g-12 ui-lg-12 chat">
+					<p:panel header="All Visitor List">
+						<h:form id="form2">
+					<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+							<p:panel>
+								<p:panelGrid columns="5" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:outputLabel  for="@next" style="color:red" value="From Date"></p:outputLabel>
+									<p:calendar value="#{addVisitor.startDate}" navigator="true"
+										pattern="dd/MM/yyyy" required="true"
+										requiredMessage="Please Enter From Date"></p:calendar>
+									 
+									<p:outputLabel for="@next" style="color:red"  value="To Date"></p:outputLabel>
+									<p:calendar value="#{addVisitor.endDate}" navigator="true"
+										pattern="dd/MM/yyyy" required="true"
+										requiredMessage="Please Enter End Date"></p:calendar>	
+								</p:panelGrid>
+								<br />
+								<p:separator />
+								<center>
+									<p:commandButton update=":form2"  styleClass="butwid" icon="fa fa-search"
+										action="#{addVisitor.allVisitorList}" value="Search"></p:commandButton>	
+								</center>
+								<p:separator />
+								<br />
+								<br/>
+								<p:dataTable reflow="true" value="#{addVisitor.visitorList}"
+									var="var" paginator="true" rowsPerPageTemplate="10,20,50"
+									rows="10">
+									<f:facet name="header">
+										<p:outputLabel
+											value="Total Visitor:- #{addVisitor.totalVisitor}"></p:outputLabel>
+									</f:facet>
+
+									<p:column headerText="S.No.">
+										<p:outputLabel value="#{var.sNo}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Date">
+										<p:outputLabel value="#{var.addDateStr}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Name" filterBy="#{var.name}" filterMatchMode="contains">
+										<p:outputLabel value="#{var.name}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Mobile No" filterBy="#{var.mobileNo}" filterMatchMode="contains">
+										<p:outputLabel value="#{var.mobileNo}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Address" filterBy="#{var.address}" filterMatchMode="contains">
+										<p:outputLabel value="#{var.address}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="To Meet">
+										<p:outputLabel value="#{var.meetType} : "></p:outputLabel>
+										<br/>
+										<p:outputLabel value="#{var.toMeet}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Purpose">
+										<p:outputLabel value="#{var.purpose}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Visitor Id">
+										<p:outputLabel value="#{var.visitorId}"></p:outputLabel>
+									</p:column>
+
+									<p:column rendered="false" headerText="Image">
+										<p:graphicImage style="height:100%;width:100%;" cache="false"
+											url="#{var.imagepath}.jpeg"></p:graphicImage>
+									</p:column>
+
+
+								</p:dataTable>
+							</p:panel>
+						</h:form>
+						
+					</p:panel>
+
+				</div>
+
+
+			</div>
+
+		</div>
+
+
+
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,155 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Attendant</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<p:focus context=":form:attPnl" />
+						<h:form id="form">
+							<p:messages closable="true" autoUpdate="true"></p:messages>
+
+							<p:panel header="Attendant Record" id="attPnl">
+
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-4,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel  for="@next" style="color:red" value="Select Date"></p:outputLabel>
+									<p:calendar value="#{routeWiseAttendantRecord.date}"
+										pattern="dd/MM/yyyy" navigator="true" required="true"
+										requiredMessage="Please Select Date" maxdate="new Date();"
+										mask="true" readonlyInput="true" id="temp"
+										focusOnSelect="true">
+									</p:calendar>
+
+									<p:outputLabel  for="@next" style="color:red" value="Select Route"></p:outputLabel>
+									<p:selectOneMenu filter="true"
+										value="#{routeWiseAttendantRecord.routeId}" required="true"
+										requiredMessage="Please Select Route">
+										<f:selectItem itemLabel="select" itemValue=""></f:selectItem>
+										<f:selectItems value="#{routeWiseAttendantRecord.routelist}"></f:selectItems>
+									</p:selectOneMenu>
+
+									<p:commandButton action="#{routeWiseAttendantRecord.search}"
+										value="Show" update=":form"></p:commandButton>
+
+								</p:panelGrid>
+							</p:panel>
+							<br/>
+
+							<p:dataTable var="var" value="#{routeWiseAttendantRecord.slist}">
+
+								<p:columnGroup type="header">
+									<p:row>
+										<p:column rowspan="2" headerText="Students" />
+										<p:column colspan="5" headerText="Status" />
+									</p:row>
+									<p:row>
+										<p:column headerText="Pick From Home" />
+										<p:column headerText="Drop To School" />
+										<p:column headerText="Pick From School" />
+										<p:column headerText="Drop To Home" />
+										<p:column headerText="Action By" />
+									</p:row>
+								</p:columnGroup>
+
+								<p:subTable var="stats" value="#{var.list}">
+									<f:facet name="header">
+										<h:outputText value="Stop Name - #{var.stopName}" />
+									</f:facet>
+									<p:column>
+										<p:panelGrid columns="1"
+											styleClass="ui-panelgrid-blank form-group"
+											style="border:0px none;width:100%; background-color:transparent;">
+											<h:outputText value="#{stats.fullName}" />
+											<h:outputText
+												value="#{stats.className} - #{stats.sectionName}" />
+										</p:panelGrid>
+									</p:column>
+									<p:column>
+											<p:panelGrid columns="1"
+												styleClass="ui-panelgrid-blank form-group"
+												style="border:0px none;width:100%;text-align:center; background-color:transparent;">
+												<p:graphicImage
+													value="#{stats.pickdropInfo.studentPick eq 'yes' ? 'tick.png' : 'cross.png' }"
+													height='15' width='15' />
+												<h:outputText rendered="false" style="font-weight:bold;"
+													value="#{stats.pickdropInfo.studentPick}" />
+												<h:outputText style="font-weight:bold;"
+													value="#{stats.pickdropInfo.pickTime}" />
+												<h:outputText style="font-weight:bold;"
+													value="#{stats.pickdropInfo.pickRemark}" />
+											</p:panelGrid>
+									</p:column>
+									<p:column>
+											<p:panelGrid columns="1"
+												styleClass="ui-panelgrid-blank form-group"
+												style="border:0px none;width:100%;text-align:center; background-color:transparent;">
+												<p:graphicImage
+													value="#{stats.pickdropInfo.schoolDrop eq 'yes' ? 'tick.png' : 'cross.png' }"
+													height='15' width='15' />
+												<h:outputText rendered="false" style="font-weight:bold;"
+													value="#{stats.pickdropInfo.schoolDrop}" />
+												<h:outputText style="font-weight:bold;"
+													value="#{stats.pickdropInfo.schoolDropTime}" />
+												<h:outputText style="font-weight:bold;"
+													value="#{stats.pickdropInfo.schoolDropRemark}" />
+											</p:panelGrid>
+									</p:column>
+									<p:column>
+											<p:panelGrid columns="1"
+												styleClass="ui-panelgrid-blank form-group"
+												style="border:0px none;width:100%;text-align:center; background-color:transparent;">
+												<p:graphicImage
+													value="#{stats.pickdropInfo.schoolPick eq 'yes' ? 'tick.png' : 'cross.png' }"
+													height='15' width='15' />
+												<h:outputText rendered="false" style="font-weight:bold;"
+													value="#{stats.pickdropInfo.schoolPick}" />
+												<h:outputText style="font-weight:bold;"
+													value="#{stats.pickdropInfo.schoolPickTime}" />
+												<h:outputText style="font-weight:bold;"
+													value="#{stats.pickdropInfo.schoolPickRemark}" />
+											</p:panelGrid>
+									</p:column>
+									<p:column>
+											<p:panelGrid columns="1"
+												styleClass="ui-panelgrid-blank form-group"
+												style="border:0px none;width:100%;text-align:center; background-color:transparent;">
+												<p:graphicImage
+													value="#{stats.pickdropInfo.studentDrop eq 'yes' ? 'tick.png' : 'cross.png' }"
+													height='15' width='15' />
+												<h:outputText rendered="false" style="font-weight:bold;"
+													value="#{stats.pickdropInfo.studentDrop}" />
+												<h:outputText style="font-weight:bold;"
+													value="#{stats.pickdropInfo.dropTime}" />
+												<h:outputText style="font-weight:bold;"
+													value="#{stats.pickdropInfo.dropRemark}" />
+											</p:panelGrid>
+									</p:column>
+
+									<p:column>
+										<h:outputText value="#{stats.pickdropInfo.actionBy}" />
+									</p:column>
+
+								</p:subTable>
+							</p:dataTable>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

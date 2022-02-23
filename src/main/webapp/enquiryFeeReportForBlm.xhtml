@@ -1,0 +1,91 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	<f:loadBundle var="addClassVar" basename="myProperties" />
+
+	<ui:define name="title">Enquiry Fee Report</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form" enctype="multipart/form-data">
+							<p:messages closable="true" autoUpdate="true"></p:messages>
+							<p:panel header="Enquiry Fee Report">
+								<p:panelGrid columns="5" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+									
+									<p:outputLabel value="Start Date" for="@next" style="color:red" ></p:outputLabel>
+									<p:calendar value="#{enquiryFeeReportForBlm.startDate}"  navigator="true" effect="fold" pattern="dd/MM/yyyy" yearRange="c-30:c+30" required="true" requiredMessage="Please Enter Start Date"></p:calendar>
+								
+									<p:outputLabel value="End Date" for="@next" style="color:red" ></p:outputLabel>
+									<p:calendar value="#{enquiryFeeReportForBlm.endDate}"  navigator="true" effect="fold" pattern="dd/MM/yyyy" yearRange="c-30:c+30" required="true" requiredMessage="Please Enter End Date"></p:calendar>
+								
+									<p:commandButton value="Search" update=":form" actionListener="#{enquiryFeeReportForBlm.search}"></p:commandButton>
+									</p:panelGrid>
+									<p:dataTable   value="#{enquiryFeeReportForBlm.list}" var="var"  emptyMessage="No student found "  rowKey="#{var.sno}" >
+		
+										<p:column headerText="S.No">
+											<h:outputText value="#{var.sno}"></h:outputText>
+										</p:column>
+										
+										<p:column headerText="Enquiry Date" filterBy="#{var.stringadmissionDate}" sortBy="#{var.stringadmissionDate}">
+										<h:outputText value="#{var.stringadmissionDate}"></h:outputText>	
+										</p:column>
+									
+									
+									   <p:column headerText ="Student Name" filterBy="#{var.studentName}">
+										<h:outputText value="#{var.studentName}" ></h:outputText>
+										</p:column>
+										 
+										<p:column headerText="Father's Name">
+										 <h:outputText  value="#{var.fatherName}" ></h:outputText>
+										</p:column>
+										
+										
+										<p:column headerText="MobNo.">
+										<h:outputText value="#{var.mobno}">
+										</h:outputText>
+										</p:column>
+										
+										<p:column headerText="Addmission Sought for Class" filterBy="#{var.admissionclass}" sortBy="#{var.admissionclass}">
+										<h:outputText value="#{var.admissionclass}">
+										</h:outputText>
+										</p:column>
+										
+										<p:column headerText="Fee Type">
+										<h:outputText value="#{var.feeType}">
+										</h:outputText>
+										</p:column>
+										
+										<p:column headerText="Amount">
+										<h:outputText value="#{var.fees}">
+										</h:outputText>
+										</p:column>
+										
+										<p:column headerText="Payment Mode">
+										<h:outputText value="#{var.paymentMode}">
+										</h:outputText>
+										</p:column>
+										
+										<p:column headerText="Receipt No">
+										<h:outputText value="#{var.receiptNo}">
+										</h:outputText>
+										</p:column>
+									</p:dataTable>
+								
+								
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

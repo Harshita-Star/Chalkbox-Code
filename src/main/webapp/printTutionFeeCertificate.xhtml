@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<f:view contentType="text/html">
+	<h:head>
+		<title>Tuition Fee Certificate</title>
+		<f:facet name="first">
+			<meta content='text/html; charset=UTF-8' http-equiv="Content-Type" />
+			<meta http-equiv="X-UA-Compatible" content="EmulateIE8" />
+
+
+		</f:facet>
+		<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css"></link>
+		<link rel="stylesheet"
+			href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"></link>
+		<link rel="stylesheet"
+			href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css"></link>
+		<link rel="stylesheet" type="text/css" href="css/style.css" />
+		<link rel="stylesheet" href="dist/css/AdminLTE.min.css"></link>
+		<link rel="stylesheet" href="dist/css/skins/all-skins.min.css"></link>
+	</h:head>
+
+	<h:body>
+	<style>
+	body .ui-widget, body .ui-widget .ui-widget {
+    font-family: Gill Sans, Helvetica, Arial, sans-serif;
+}
+	</style>
+
+			
+			<h:form id="form12">
+				<p:commandButton style="width: 100px;"
+					value="Print" type="button">
+					<p:printer target=":forms"></p:printer>
+				</p:commandButton>
+			</h:form>
+
+			<h:form id="forms" style="width: 90%;">
+				<p:panel
+					style="border: 3px solid !important;width: 100% !important;">
+					<p:panel
+						style="margin:-20px;border:1px solid !important;margin-left:-26px;margin-right:-26px">
+							<table width="100%;">
+			 							<tr>
+											<td><p:graphicImage width="100%" height="120px"
+													value="#{sideMenuBean.headerImage}"></p:graphicImage></td>
+										</tr>
+									
+								
+								<tr>
+											<td><h2 style="margin: 0px"><u>FEE CERTIFICATE</u></h2></td>
+										</tr>
+								
+								
+								</table>		
+						<!-- <h2 style="margin: 0px">#{headerBean.name}</h2>
+						<h4 style="margin: 2px">#{headerBean.finalAddress}</h4>
+						<h5 style="margin: 2px">Mobile-#{headerBean.mobileno}</h5>
+ -->
+						<table style="width: 100%">
+							<tr>
+								<td>SR.No. #{SCPBean.studentInfo.srNo}</td>
+							</tr>
+						</table>
+						
+
+						<br></br>
+						<center>
+							<table style="width: 85%">
+								<tr>
+									<td style="text-align: justify;">This is certified that <u> &nbsp;&nbsp;&nbsp; <b>
+												#{SCPBean.studentInfo.fname} </b>
+									</u> &nbsp;&nbsp;&nbsp; #{SCPBean.childOf} Shri 
+										<u><b>#{SCPBean.fatherName}
+										</b></u> and Smt. <u><b>
+												#{SCPBean.motherName}</b></u> is a
+										bonafide student of the School. #{SCPBean.gender}
+										is studying in Class <u><b>#{SCPBean.studentInfo.className}</b></u> during Session <u><b>#{SCPBean.session} 
+										#{SCPBean.sessionString} </b></u>
+									</td>
+								</tr>
+								<tr>
+									<td>Details of fee paid by parents for the Months:
+										 <u><b>#{SCPBean.monthName}</b></u></td>
+								</tr>
+							</table>
+						</center>
+						<br></br>
+
+						<center>
+							<p:dataTable style="width:100%;border: 0px solid !important"
+								value="#{SCPBean.feeDetailList}" var="var">
+								<p:column>
+									<f:facet style="font-size: 10px !important;" name="header">
+
+									</f:facet>
+									<h:outputText value="#{var.feeName}"></h:outputText>
+								</p:column>
+
+								<p:column>
+									<f:facet name="header">
+												<h:outputText style="font-size: 10px !important;" value="FEE"></h:outputText>
+											</f:facet>
+									<h:outputText value="#{var.feeAmount}"></h:outputText>
+								</p:column>
+
+								<p:column>
+									<f:facet name="header">
+												<h:outputText style="font-size: 10px !important;" value="MONTH/QUARTER"></h:outputText>
+											</f:facet>
+									<h:outputText value="#{var.feePeriod} #{var.schId eq '287' ? (var.feeName eq 'Tuition Fee' ? 'MONTHLY' : (var.feeName eq 'Transport' ? 'MONTHLY' : 'ANNUALY')):(var.feeName eq 'Tuition Fee' ? 'QUATERLY' : (var.feeName eq 'Transport' ? 'MONTHLY' : 'ANNUALY'))}"></h:outputText>
+									<f:facet name="footer">
+												<h:outputText style="font-size: 10px !important;" value="TOTAL"></h:outputText>
+											</f:facet>
+								</p:column>
+
+								<p:column style="text-align:right">
+									<f:facet name="header">
+												<h:outputText style="font-size: 10px !important;" value="TOTAL"></h:outputText>
+											</f:facet>
+									<h:outputText value="#{var.payAmount}" ></h:outputText>
+									
+									<f:facet name="footer">
+												#{SCPBean.totalAmount}
+											</f:facet>
+								</p:column>
+							</p:dataTable>
+
+							<!-- <hr></hr>
+							<table style="width: 52%">
+								<tr>
+									<td>TOTAL</td>
+									<td style="float: right">
+										#{SCPBean.totalAmount}</td>
+								</tr>
+							</table>
+							<hr></hr> -->
+
+							<br></br>
+							<br></br>
+							<center>
+								<table style="width: 80%">
+									<tr>
+										<td><u><b>Amount (In Words):
+													#{SCPBean.amountinWord}</b></u></td>
+									</tr>
+									<tr>
+										<td>Thanks</td>
+									</tr>
+								</table>
+							</center>
+							<br></br>
+							<table style="width: 100%">
+								<tr>
+									<td>Date:- #{SCPBean.currentDate}</td>
+									<td style="float: right">#{sideMenuBean.list.schid eq '287' ? 'ACCOUNT MANAGER' : 'PRINCIPAL'}</td>
+								</tr>
+							</table>
+							<br></br>
+							<br></br>
+
+						</center>
+					</p:panel>
+				</p:panel>
+
+
+			</h:form>
+
+	</h:body>
+</f:view>
+</html>

@@ -1,0 +1,160 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Modify Request</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<p:panel header="Select a Class">
+								<p:messages closable="true" autoUpdate="true"></p:messages>
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:outputLabel for="@next" style="color:red" value="Select a Class"></p:outputLabel>
+									<p:selectOneMenu value="#{modifyDocRequest.selectedClass}" required="true" requiredMessage="Please select a class" filter="true">
+										<f:selectItem itemLabel="Select Class" itemValue="select"></f:selectItem>
+										<f:selectItems value="#{modifyDocRequest.classList}"></f:selectItems>
+
+										<p:ajax update="sectionid" listener="#{modifyDocRequest.allSections}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel for="@next" style="color:red" value="Select Section"></p:outputLabel>
+									<p:selectOneMenu id="sectionid" value="#{modifyDocRequest.selectedSection}" required="true" requiredMessage="Please select a section" filter="true">
+										<f:selectItem itemLabel="Select Section" itemValue=""></f:selectItem>
+										<f:selectItems value="#{modifyDocRequest.sectionList}"></f:selectItems>
+										<p:ajax update=":form" listener="#{modifyDocRequest.findDocs}"></p:ajax>
+									</p:selectOneMenu>
+								</p:panelGrid>
+
+								<p:panel id="dataTable" header="Student List" rendered="#{modifyDocRequest.b}">
+
+									<p:dataTable reflow="true" id="up" style="width:100%;border-collapse:collapse" border="1" value="#{modifyDocRequest.studentList}" var="var">
+
+										<p:column headerText="S.No." style="width:50px;text-align:center">
+											<p:outputLabel value="#{var.sno}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Add. No." sortBy="#{var.addNumber}" style="width:50px;text-align:center">
+											<p:outputLabel value="#{var.srNo}"></p:outputLabel>
+										</p:column>
+
+										<p:column style="width:70px;text-align:center" sortBy="#{var.fullName}" headerText="Student Name">
+											<p:outputLabel value="#{var.fullName}"></p:outputLabel>
+										</p:column>
+
+										<p:column style="width:70px;text-align:center" headerText="Father's Name">
+											<p:outputLabel value="#{var.fathersName}"></p:outputLabel>
+										</p:column>
+
+										<p:column style="width:70px;text-align:center" headerText="Class">
+											<p:outputLabel value="#{var.className}-#{var.sectionName}"></p:outputLabel>
+										</p:column>
+										
+										<p:column style="width:70px;text-align:center" headerText="View Documents">
+											<p:commandButton icon="ui-icon-search" action="#{modifyDocRequest.viewDocDetails}" oncomplete="PF('viewDialog').show();" update=":viewForm">
+												<f:setPropertyActionListener value="#{var}" target="#{modifyDocRequest.selectedStudent}"></f:setPropertyActionListener>
+											</p:commandButton>
+										</p:column>
+										
+										<p:column style="width:70px;text-align:center" headerText="Close Request">
+											<p:commandButton icon="ui-icon-close" action="#{modifyDocRequest.closeRequest}">
+												<f:setPropertyActionListener value="#{var}" target="#{modifyDocRequest.selectedStudent}"></f:setPropertyActionListener>
+												<p:confirm header="Confirmation" message="Are you sure to close request." icon="ui-icon-alert" />
+											</p:commandButton>
+										</p:column>
+										
+									</p:dataTable>
+								</p:panel>
+							</p:panel>
+						</h:form>
+						
+						<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+							<p:commandButton value="Yes" type="button"
+								styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+							<p:commandButton value="No" style="margin-left:50px"
+								type="button" styleClass="ui-confirmdialog-no"
+								icon="ui-icon-close" />
+						</p:confirmDialog>
+						
+						<h:form id="msgForm" style="width:800px">
+							<p:dialog resizable="true" modal="true" widgetVar="msgDialog" header="Document Details" closeOnEscape="true" style="width:80%; !important">
+								<p:panel style="width:500px">
+									<p:panelGrid columns="1" columnClasses="ui-grid-col-12" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+										<p:outputLabel value="This is last document from request. If you remove this than this request will be deleted. Are you sure to continue ??"></p:outputLabel>
+									</p:panelGrid>
+									
+									<p:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+										<p:commandButton value="Yes" action="#{modifyDocRequest.deleteEntry}"/>
+										<p:commandButton value="No" update=":msgForm"/>
+									</p:panelGrid>
+								</p:panel>
+							</p:dialog>
+						</h:form>
+						
+						<h:form id="viewForm" style="width:800px">
+							<p:dialog resizable="true" modal="true" widgetVar="viewDialog" header="Document Details" closeOnEscape="true" style="width:80%; !important">
+								<p:panel style="width:1000px">
+								<p:dataTable value="#{modifyDocRequest.docList}" var="var">
+									<p:column headerText="S.No.">
+										<p:outputLabel value="#{var.sno}"></p:outputLabel>
+									</p:column>
+									
+									<p:column headerText="Document">
+										<p:outputLabel value="#{var.documentName}"></p:outputLabel>
+									</p:column>
+									
+									<p:column headerText="Status">
+										<p:outputLabel value="#{var.status}"></p:outputLabel>
+									</p:column>
+									
+									<p:column headerText="Image">
+										<p:graphicImage id="img" value="#{var.file1}" height="50px" width="50px"></p:graphicImage>
+									</p:column>
+									
+									<p:column headerText="Approve">
+										<p:commandButton disabled="#{var.disable}" icon="ui-icon-check" action="#{modifyDocRequest.approveRequest}">
+											<f:setPropertyActionListener value="#{var}" target="#{modifyDocRequest.selectedDoc}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+									
+									<p:column headerText="Deny">
+										<p:commandButton disabled="#{var.disable}" icon="ui-icon-close" action="#{modifyDocRequest.denyRequest}">
+											<f:setPropertyActionListener value="#{var}" target="#{modifyDocRequest.selectedDoc}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+									
+									<p:column headerText="Add">
+										<p:commandButton disabled="#{var.showActive}" icon="ui-icon-plus" action="#{modifyDocRequest.addDocument}">
+											<f:setPropertyActionListener value="#{var}" target="#{modifyDocRequest.selectedDoc}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+									
+									<p:column headerText="Remove">
+										<p:commandButton disabled="#{var.fileRender}" icon="ui-icon-close" action="#{modifyDocRequest.removeDocument}">
+											<f:setPropertyActionListener value="#{var}" target="#{modifyDocRequest.selectedDoc}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+									
+								</p:dataTable>
+								</p:panel>
+							</p:dialog>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

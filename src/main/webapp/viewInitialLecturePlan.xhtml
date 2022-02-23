@@ -1,0 +1,161 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+	<ui:define name="title">Initial Lesson Plan</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form" enctype="multipart/form-data">
+							<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+							<p:panel header="View / Edit / Delete Lesson Plan">
+
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel for="@next" style="color:red" value="Class :"></p:outputLabel>
+									<p:selectOneMenu value="#{viewInitLecPlan.selectedClass}"
+										required="true" filter="true"
+										requiredMessage="Please Select A Class">
+										<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+										<f:selectItems value="#{viewInitLecPlan.classList}"></f:selectItems>
+										<p:ajax update="showSection"
+											listener="#{viewInitLecPlan.allSection}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel for="@next" style="color:red" value="Section :"></p:outputLabel>
+									<p:selectOneMenu id="showSection" filter="true"
+										value="#{viewInitLecPlan.selectedSection}" required="true"
+										requiredMessage="Please select a section">
+										<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+										<f:selectItems value="#{viewInitLecPlan.sectionList}"></f:selectItems>
+										<p:ajax listener="#{viewInitLecPlan.allSubjects}"
+											update="subjectId"></p:ajax>
+									</p:selectOneMenu>
+
+
+									<p:outputLabel for="@next" style="color:red" value="Subject : "></p:outputLabel>
+									<p:selectOneMenu id="subjectId" filter="true"
+										value="#{viewInitLecPlan.subject}" required="true"
+										requiredMessage="Please select subject.">
+										<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+										<f:selectItems value="#{viewInitLecPlan.subjectList}"></f:selectItems>
+									</p:selectOneMenu>
+
+									<p:commandButton value="Search"
+										actionListener="#{viewInitLecPlan.searchData}" update=":form"></p:commandButton>
+								</p:panelGrid>
+							</p:panel>
+							<p:panel rendered="#{viewInitLecPlan.show}" header="Lesson Plan (Allowed file type are :- xls,xlsx)">
+								<p:dataTable value="#{viewInitLecPlan.planList}" var="var">
+									<f:facet name="header">
+										<p:panelGrid columns="3"
+											columnClasses="ui-grid-col-6,ui-grid-col-4,ui-grid-col-2"
+											layout="grid" styleClass="ui-panelgrid-blank form-group"
+											style="border:0px none; background-color:transparent;">
+											<p:outputLabel for="@next" style="color:red"
+												value="For Adding More Please Choose File &amp; Upload"></p:outputLabel>
+											<p:fileUpload required="true"
+												requiredMessage="Please select your lecture plan excel file"
+												allowTypes="/(\.|\/)(xls|xlsx)$/" mode="simple"
+												skinSimple="true" value="#{viewInitLecPlan.excelFile}"></p:fileUpload>
+											<p:commandButton ajax="false" value="Upload"
+												actionListener="#{viewInitLecPlan.importFromExcel}"
+												update=":form"
+												title="Click on to upload Initial Lecture Plan"></p:commandButton>
+										</p:panelGrid>
+
+									</f:facet>
+									<p:column headerText="Lecture No" style="width:80px">
+										<p:outputLabel value="#{var.lectureNo}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Lesson No" style="width:100px">
+										<p:outputLabel value="#{var.unitNo}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Lesson Name" style="width:200px">
+										<p:outputLabel value="#{var.unitName}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Description">
+										<p:outputLabel value="#{var.description}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Edit" style="width:80px">
+										<p:commandButton disabled="#{var.showEdit}" update=":editForm"
+											oncomplete="PF('editDialog').show();" icon="ui-icon-pencil"
+											action="#{viewInitLecPlan.editDetails}">
+											<f:setPropertyActionListener
+												target="#{viewInitLecPlan.selLecture}" value="#{var}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+
+									<f:facet name="footer">
+										<p:commandButton update=":form" value="Delete"
+											action="#{viewInitLecPlan.deleteLecturePlan}">
+											<p:confirm header="Confirmation"
+												message="Are You Sure To Delete...?" icon="ui-icon-alert" />
+										</p:commandButton>
+									</f:facet>
+								</p:dataTable>
+							</p:panel>
+						</h:form>
+
+						<h:form id="editForm" enctype="multipart/form-data">
+							<p:dialog resizable="false" widgetVar="editDialog"
+								header="Edit Details" showEffect="fade" hideEffect="explode"
+								modal="true">
+								<div class="ui-g form-group">
+									<p:panelGrid columns="2"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+
+										<p:outputLabel for="@next" style="color:red"
+											value="Lesson No."></p:outputLabel>
+										<p:inputText value="#{viewInitLecPlan.lessonNo}"
+											required="true" requiredMessage="Please Select Lesson No"></p:inputText>
+
+										<p:outputLabel for="@next" style="color:red"
+											value="Lesson Name"></p:outputLabel>
+										<p:inputText value="#{viewInitLecPlan.lessonName}"
+											required="true" requiredMessage="Please Select Lesson Name"></p:inputText>
+
+										<p:outputLabel for="@next" style="color:red"
+											value="Description"></p:outputLabel>
+										<p:column headerText="Description" style="width:230px;"
+											required="true" requiredMessage="Please Enter Description">
+											<p:inputTextarea id="des" rows="3" cols="50"
+												autoResize="false" value="#{viewInitLecPlan.description}"></p:inputTextarea>
+										</p:column>
+
+										<p:commandButton update=":editForm,:form"
+											actionListener="#{viewInitLecPlan.updateNow}" value="Update"></p:commandButton>
+									</p:panelGrid>
+								</div>
+							</p:dialog>
+						</h:form>
+
+						<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+							<p:commandButton style="margin-left:30px" value="Yes"
+								type="button" styleClass="ui-confirmdialog-yes"
+								icon="ui-icon-check" />
+							<p:commandButton style="margin-left:50px" value="No"
+								type="button" styleClass="ui-confirmdialog-no"
+								icon="ui-icon-close" />
+						</p:confirmDialog>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</ui:define>
+
+</ui:composition>

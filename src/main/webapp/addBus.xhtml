@@ -1,0 +1,351 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+	<f:loadBundle var="addClassVar" basename="myProperties" />
+	<ui:define name="title">Add Bus</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<p:panel header="Add Bus" id="mainPnl">
+								<p:messages closable="true" autoUpdate="true"></p:messages>
+								<p:panelGrid columns="5" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent; width: 100%">
+
+									<p:outputLabel for="@next" style="color:red"  value="Bus Name"></p:outputLabel>
+									<p:inputText value="#{addBus.busName}" required="true"
+										requiredMessage="Please Enter Bus Name" id="bnm"
+										onchange="trimFunc(this.value,'Please Section Name',this.id)" validatorMessage="Please Enter Correct value">
+									  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+									</p:inputText>
+
+									<p:outputLabel></p:outputLabel>
+
+									<p:outputLabel for="@next" style="color:red"  value="Bus No."></p:outputLabel>
+									<p:inputText value="#{addBus.busNo}" required="true"
+										requiredMessage="Please Enter Bus No" id="bno"
+										onchange="trimFunc(this.value,'Please Section Name',this.id)" validatorMessage="Please Enter Correct value">
+									  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+									</p:inputText>
+
+									<p:outputLabel for="@next" style="color:red"  value="Driver"></p:outputLabel>
+									<p:selectOneMenu filter="true" filterMatchMode="contains"
+										id="drinm" value="#{addBus.driver}" required="true"
+										requiredMessage="Select Driver first">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{addBus.driverList}"></f:selectItems>
+										<p:ajax listener="#{addBus.updateNo}" update="driverNO"></p:ajax>
+									</p:selectOneMenu>
+									<p:commandButton immediate="true" update=":addDriForm"
+										icon="ui-icon-plus" oncomplete="PF('addDialog').show();"></p:commandButton>
+
+									<p:outputLabel value="Driver Contact no"></p:outputLabel>
+									<p:inputText id="driverNO" disabled="true"
+										value="#{addBus.driverConNo}" validatorMessage="Please Enter Correct value">
+									 <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+									</p:inputText>
+
+									<p:outputLabel value="Conductor Name"></p:outputLabel>
+									<p:selectOneMenu filter="true" filterMatchMode="contains"
+										id="connm" value="#{addBus.conductor}">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{addBus.conductorList}"></f:selectItems>
+										<p:ajax listener="#{addBus.updateNo}" update="conNO"></p:ajax>
+									</p:selectOneMenu>
+									<p:commandButton immediate="true"
+										oncomplete="PF('addConDialog').show();" icon="ui-icon-plus"
+										update=":addConForm"></p:commandButton>
+
+									<p:outputLabel value="Conductor contact no"></p:outputLabel>
+									<p:inputText id="conNO" disabled="true"
+										value="#{addBus.conContactNo}" validatorMessage="Please Enter Correct value">
+								     <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:inputText>
+
+									<p:outputLabel for="@next" style="color:red"  value="Insurance Due Date"></p:outputLabel>
+									<p:calendar value="#{addBus.insuranceDate}"
+										pattern="dd/MM/yyyy" navigator="true" required="true"
+										requiredMessage="Please Select Insurance Due Date"></p:calendar>
+
+									<p:outputLabel></p:outputLabel>
+
+									<p:outputLabel for="@next" style="color:red"  value="Fitness Due Date"></p:outputLabel>
+									<p:calendar value="#{addBus.fitnessDate}" pattern="dd/MM/yyyy"
+										navigator="true" required="true"
+										requiredMessage="Please Select Fitness Due Date"></p:calendar>
+
+									<p:outputLabel value="Bal Vahini Due Date"></p:outputLabel>
+									<p:calendar value="#{addBus.balVahiniPermit}"
+										pattern="dd/MM/yyyy" navigator="true" ></p:calendar>
+
+									<p:outputLabel></p:outputLabel>
+
+									<p:outputLabel for="@next" style="color:red"  value="Pollution Due Date"></p:outputLabel>
+									<p:calendar value="#{addBus.pollutionDue}" pattern="dd/MM/yyyy"
+										navigator="true" required="true"
+										requiredMessage="Please Select Pollution Due Date"></p:calendar>
+										
+									<p:outputLabel for="@next" style="color:red"  value="Road Tax Due Date"></p:outputLabel>
+									<p:calendar value="#{addBus.roadTaxDate}" pattern="dd/MM/yyyy"
+										navigator="true" required="true"
+										requiredMessage="Please Select Road Tax Due Date"></p:calendar>
+										
+									<p:outputLabel></p:outputLabel>
+
+									<p:outputLabel rendered="#{addBus.showGPS}" value="GPS"></p:outputLabel>
+									<p:selectOneMenu rendered="#{addBus.showGPS}" filter="true"
+										value="#{addBus.gpsNo}">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{addBus.gpsList}"></f:selectItems>
+									</p:selectOneMenu>
+									
+									<p:outputLabel rendered="#{addBus.showRfid}" value="RFID Device"></p:outputLabel>
+									<p:selectOneMenu rendered="#{addBus.showRfid}" filter="true"
+										value="#{addBus.rfidno}">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{addBus.rfidList}" var="var" itemLabel="#{var.rfidName} / #{var.rfidImei}" itemValue="#{var.rfidDeviceId}"></f:selectItems>
+									</p:selectOneMenu>
+									
+								</p:panelGrid>
+								<br />
+								<p:separator />
+								<center>
+								<p:commandButton update=":form,:form1" value="Submit"
+										actionListener="#{addBus.saveData}" styleClass="butwid" icon="fa fa-floppy-o"></p:commandButton>
+								</center>
+								<p:separator />
+								<br />
+								
+							</p:panel>
+						</h:form>
+					</div>
+					<div class="card card-w-title">
+						<h:form id="form1">
+							<p:panel header="All Buses">
+								<p:dataTable var="var" value="#{addBus.busList}"
+									paginator="true" rowIndexVar="index"
+									rowsPerPageTemplate="20,50,100">
+									<f:facet name="header">
+										<p:outputLabel value="Total:- #{addBus.totalBus}"></p:outputLabel>
+									</f:facet>
+									<p:column headerText="S.No.">
+										<p:outputLabel value="#{index+1}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Bus Name" filterMatchMode="contains"
+										filterBy="#{var.busName}">
+										<p:outputLabel value="#{var.busName}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Bus No">
+										<p:outputLabel value="#{var.busNo}"></p:outputLabel>
+									</p:column>
+
+									<p:column rendered="#{addBus.showGPS}" headerText="GPS No">
+										<p:outputLabel value="#{var.gpsAlias}"></p:outputLabel>
+									</p:column>
+									
+									<p:column rendered="#{addBus.showRfid}" headerText="RFID Device">
+										<p:outputLabel value="#{var.rfidAlias}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Driver" filterMatchMode="contains"
+										filterBy="#{var.driverName}">
+										<p:outputLabel value="#{var.driverName}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Conductor" filterMatchMode="contains"
+										filterBy="#{var.conductorName}">
+										<p:outputLabel value="#{var.conductorName}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Insurance Due Date">
+										<p:outputLabel value="#{var.strInsDate}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Fitness Due Date">
+										<p:outputLabel value="#{var.strFitnessDate}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Vahini Due Date">
+										<p:outputLabel value="#{var.strVahiniDate}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Pollution Due Date">
+										<p:outputLabel value="#{var.strPollutionDate}"></p:outputLabel>
+									</p:column>
+									
+									<p:column headerText="Road Tax Due Date">
+										<p:outputLabel value="#{var.strRoadTaxDate}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Edit">
+									<center>
+									<p:commandButton icon="ui-icon-pencil" 
+											action="#{addBus.editDetails}" update=":form">
+											<f:setPropertyActionListener value="#{var}"
+												target="#{addBus.selectedBus}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</center>
+									</p:column>
+
+									<p:column rendered="false" headerText="Delete">
+										<p:commandButton icon="ui-icon-trash" styleClass="redButt"
+											action="#{addBus.deleteBus}" update=":form1">
+											<f:setPropertyActionListener value="#{var}"
+												target="#{addBus.selectedBus}"></f:setPropertyActionListener>
+											<p:confirm header="Confirmation"
+												message="Surely You Want To Delete This Bus ???"
+												icon="ui-icon-alert" />
+										</p:commandButton>
+									</p:column>
+
+								</p:dataTable>
+							</p:panel>
+						</h:form>
+
+						<h:form id="addDriForm">
+							<p:dialog header="Driver Registration" resizable="false"
+								widgetVar="addDialog" showEffect="fade" hideEffect="explode"
+								modal="true">
+								<p:panel>
+									<p:messages closable="true" autoUpdate="true"></p:messages>
+									<p:panelGrid columns="4" layout="grid"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+
+										<p:outputLabel for="@next" style="color:red"  value="Employee Name*"></p:outputLabel>
+										<p:inputText value="#{employeeAddmissionBean.name}"
+											required="true"
+											requiredMessage="#{employeeAddmissionVar.employeeAddmissionFullNameValidation}"
+											id="empnm"
+											onchange="trimFunc(this.value,'Please Section Name',this.id)" validatorMessage="Please Enter Correct value">
+										  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+										</p:inputText>
+
+										<p:outputLabel value="Gender"></p:outputLabel>
+										<p:selectOneRadio value="#{employeeAddmissionBean.gender}">
+											<f:selectItem itemLabel="Male" itemValue="Male"></f:selectItem>
+											<f:selectItem itemLabel="Female" itemValue="Female"></f:selectItem>
+										</p:selectOneRadio>
+
+										<p:outputLabel for="@next" style="color:red"  value="D/L No.(* for driver)"></p:outputLabel>
+										<p:inputText required="true"
+											requiredMessage="Please enter D/L No."
+											value="#{employeeAddmissionBean.dlNo}" id="dlno"
+											onchange="trimFunc(this.value,'Please Section Name',this.id)" validatorMessage="Please Enter Correct value">
+										  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+										</p:inputText>
+
+										<p:outputLabel for="@next" style="color:red"  value="Mobile Number*"></p:outputLabel>
+										<p:inputText value="#{employeeAddmissionBean.mobile}"
+											validatorMessage="Mobile no. must be of 10 digits."
+											maxlength="10" required="true"
+											requiredMessage="Please Enter Mobile No">
+											<f:validateLength minimum="10"></f:validateLength>
+											<p:keyFilter mask="num" />
+										</p:inputText>
+
+										<p:outputLabel value="Address"></p:outputLabel>
+										<p:inputTextarea value="#{employeeAddmissionBean.address}"
+											id="adrs"
+											onchange="trimFunc(this.value,'Please Section Name',this.id)" validatorMessage="Please Enter Correct value">
+										  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+										</p:inputTextarea>
+
+									</p:panelGrid>
+
+								</p:panel>
+								<br></br>
+								<br></br>
+								<p:commandButton update="form:drinm,form:driverNO,addDriForm"
+									actionListener="#{employeeAddmissionBean.driverRegister}" 
+									oncomplete="PF('addConDialog').hide();"
+									value="Save"></p:commandButton>
+							</p:dialog>
+						</h:form>
+
+
+						<h:form id="addConForm">
+							<p:dialog header="Conductor Registration" resizable="false"
+								widgetVar="addConDialog" showEffect="fade" hideEffect="explode"
+								modal="true">
+								<p:panel>
+									<p:messages closable="true" autoUpdate="true"></p:messages>
+
+									<p:panelGrid columns="4" layout="grid"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+
+										<p:outputLabel  for="@next" style="color:red" value="Employee Name*"></p:outputLabel>
+										<p:inputText value="#{employeeAddmissionBean.name}"
+											required="true"
+											requiredMessage="#{employeeAddmissionVar.employeeAddmissionFullNameValidation}"
+											id="empnm"
+											onchange="trimFunc(this.value,'Please Section Name',this.id)" validatorMessage="Please Enter Correct value">
+										 <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+										</p:inputText>
+
+										<p:outputLabel value="Gender"></p:outputLabel>
+										<p:selectOneRadio value="#{employeeAddmissionBean.gender}">
+											<f:selectItem itemLabel="Male" itemValue="Male"></f:selectItem>
+											<f:selectItem itemLabel="Female" itemValue="Female"></f:selectItem>
+										</p:selectOneRadio>
+
+										<p:outputLabel value="D/L No.( for driver)" for="@next" style="color:red"></p:outputLabel>
+										<p:inputText   required="true"
+											requiredMessage="Please enter D/L No."
+											value="#{employeeAddmissionBean.dlNo}" id="dlno"
+											onchange="trimFunc(this.value,'Please Section Name',this.id)" validatorMessage="Please Enter Correct value">
+										  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+										</p:inputText>
+
+										<p:outputLabel for="@next" style="color:red"  value="Mobile Number*"></p:outputLabel>
+										<p:inputText value="#{employeeAddmissionBean.mobile}"
+											validatorMessage="Mobile no. must be of 10 digits."
+											maxlength="10" required="true"
+											requiredMessage="Please Enter Mobile No">
+											<f:validateLength minimum="10"></f:validateLength>
+											<p:keyFilter mask="num" />
+										</p:inputText>
+
+										<p:outputLabel value="Address"></p:outputLabel>
+										<p:inputTextarea value="#{employeeAddmissionBean.address}"
+											id="adrs"
+											onchange="trimFunc(this.value,'Please Section Name',this.id)" validatorMessage="Please Enter Correct value">
+										  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>		
+										</p:inputTextarea>
+									</p:panelGrid>
+								</p:panel>
+								<br></br>
+								<br></br>
+								<p:commandButton update="form:connm,form:conNO,addConForm"
+									actionListener="#{employeeAddmissionBean.conductorRegister}"
+									oncomplete="PF('addConDialog').hide();"
+									value="Save"></p:commandButton>
+							</p:dialog>
+						</h:form>
+
+
+						<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+							<p:commandButton style="margin-left:50px" value="Yes"
+								type="button" styleClass="ui-confirmdialog-yes greenButt"
+								icon="ui-icon-check" />
+							<p:commandButton style="margin-left:50px" value="No"
+								type="button" styleClass="ui-confirmdialog-no redButt"
+								icon="ui-icon-close" />
+						</p:confirmDialog>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

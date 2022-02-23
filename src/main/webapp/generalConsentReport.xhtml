@@ -1,0 +1,179 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Consent Report</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form enctype="multipart/form-data" id="form">
+							<h1>Consent Report</h1>
+							<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+							<p:panel>
+							
+								<f:facet name="header">
+									<span>Search By Class-Section</span>
+									<span> <p:commandLink
+											style="float: right;margin-left: 15px;;color: blue;font-size:15px;"
+											immediate="true" value="Post Consent"
+											action="postConsent.xhtml?faces-redirect=true"></p:commandLink>
+									</span>
+								</f:facet>
+								
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel  for="@next" style="color:red" value="Select Class"></p:outputLabel>
+									<p:selectOneMenu value="#{postConsent.selectedClass}"
+										required="true" requiredMessage="Please select a class"
+										filter="true">
+										<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+										<f:selectItems value="#{postConsent.classSection}"></f:selectItems>
+										<p:ajax update="sectionid"
+											listener="#{postConsent.allSectionRep}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel  for="@next" style="color:red" value="Select Section"></p:outputLabel>
+									<p:selectOneMenu id="sectionid" value="#{postConsent.section}"
+										required="true" requiredMessage="Please select a section"
+										filter="true">
+										<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+										<f:selectItems value="#{postConsent.sectionList}"></f:selectItems>
+									</p:selectOneMenu>
+
+								</p:panelGrid>
+
+								<br />
+								<br />
+
+								<center>
+									<p:commandButton value="Search" icon="ui-icon-search"
+										update=":form1" action="#{postConsent.search}"
+										style="width: 150px;"></p:commandButton>
+								</center>
+							</p:panel>
+						</h:form>
+						<br />
+						<h:form id="form1">
+							<p:dataTable id="dt" var="var" value="#{postConsent.list}"
+								rowIndexVar="index">
+
+								<p:column headerText="S.No." style="width: 60px;">
+									<p:outputLabel value="#{index+1}"></p:outputLabel>
+								</p:column>
+
+								<p:column headerText="Consent For">
+									<p:outputLabel value="#{var.description}"></p:outputLabel>
+								</p:column>
+
+								<p:column headerText="Last Date">
+									<p:outputLabel value="#{var.lastDateStr}"></p:outputLabel>
+								</p:column>
+
+								<p:column headerText="Posted By">
+									<p:outputLabel value="#{var.addedBy}"></p:outputLabel>
+								</p:column>
+
+								<p:column headerText="Posted On">
+									<p:outputLabel value="#{var.addTimeStr}"></p:outputLabel>
+								</p:column>
+
+								<p:column headerText="Attachment">
+									<p:commandButton rendered="#{var.showFile}"
+										icon="fa fa-fw fa-paperclip" value="Attachment"
+										action="#{postConsent.view}">
+										<f:setPropertyActionListener target="#{postConsent.selected}"
+											value="#{var}"></f:setPropertyActionListener>
+									</p:commandButton>
+								</p:column>
+
+								<p:column headerText="View Report">
+									<p:commandButton update=":view" icon="ui-icon-search"
+										value="Report" action="#{postConsent.viewReport}"
+										oncomplete="PF('dlg1').show();">
+										<f:setPropertyActionListener target="#{postConsent.selected}"
+											value="#{var}"></f:setPropertyActionListener>
+									</p:commandButton>
+								</p:column>
+
+							</p:dataTable>
+						</h:form>
+
+						<h:form id="view">
+							<p:dialog header="Consent Report" id="docm" widgetVar="dlg1"
+								height="500" width="800" modal="true" showEffect="fade"
+								hideEffect="fade" resizable="false">
+
+								<div class="ui-g form-group">
+									<p:panelGrid columns="4"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+
+										<p:outputLabel value="Class : " style="font-weight: bold;"></p:outputLabel>
+										<p:outputLabel value="#{postConsent.selected.className}"></p:outputLabel>
+
+										<p:outputLabel value="Section : " style="font-weight: bold;"></p:outputLabel>
+										<p:outputLabel value="#{postConsent.selected.sectionName}"></p:outputLabel>
+
+										<p:outputLabel value="Consent For : "
+											style="font-weight: bold;"></p:outputLabel>
+										<p:outputLabel value="#{postConsent.selected.description}"></p:outputLabel>
+
+										<p:outputLabel value="Last Date : " style="font-weight: bold;"></p:outputLabel>
+										<p:outputLabel value="#{postConsent.selected.lastDateStr}"></p:outputLabel>
+
+									</p:panelGrid>
+									<br />
+									<p:dataTable value="#{postConsent.sList}" var="info"
+										rowIndexVar="index"
+										rowStyleClass="#{info.status.toLowerCase() eq 'pending' ? 'LEAVE' : (info.status.toLowerCase() eq 'agree' ? 'PAID' : 'ABSENT')}">
+
+										<p:column headerText="S.No." style="width: 60px;">
+											<p:outputLabel value="#{index+1}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Student Name">
+											<p:outputLabel value="#{info.fullName}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Father's Name">
+											<p:outputLabel value="#{info.fname}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Contact No. (F)">
+											<p:outputLabel value="#{info.fathersPhone}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Contact No. (M)">
+											<p:outputLabel value="#{info.mothersPhone}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Status">
+											<p:outputLabel value="#{info.status.toUpperCase()}" style="font-weight: bold;"></p:outputLabel>
+										</p:column>
+										
+										<p:column headerText="Remark">
+											<p:outputLabel value="#{info.remark}"></p:outputLabel>
+										</p:column>
+
+									</p:dataTable>
+								</div>
+
+							</p:dialog>
+
+						</h:form>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,58 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	<f:loadBundle var="addClassVar" basename="myProperties" />
+
+	<ui:define name="title">Fees Graph</ui:define>
+
+	<ui:define name="content">
+	<h:form id="form">
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						
+							<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+							<p:panel header="Student Fees Collection">
+                            <p:panelGrid columns="2">
+                            <p:outputLabel value="Report Type"></p:outputLabel>
+							<p:selectOneMenu value="#{studentFeesBar.days}" filter="true">
+							<f:selectItem itemLabel="Custom" itemValue="custom"></f:selectItem>
+							<f:selectItem itemLabel="Last 7 days" itemValue="lastweek"></f:selectItem>
+							<f:selectItem itemLabel="Last 30 days" itemValue="lastmonth"></f:selectItem>
+							<f:selectItem itemLabel="Monthly" itemValue="month"></f:selectItem>
+							<p:ajax update=":form" listener="#{studentFeesBar.custom}" event="itemSelect"></p:ajax>
+							</p:selectOneMenu>
+							
+							 <p:outputLabel value="startdate:"  for="@next" style="color:red" rendered="#{studentFeesBar.showCustom}" />
+                             <p:calendar value="#{studentFeesBar.stdate}" required="true" requiredMessage="Please select date!" locale="de" navigator="true" pattern="yyyy-MM-dd" rendered="#{studentFeesBar.showCustom}">
+                             </p:calendar>
+                             
+                              <p:outputLabel value="Enddate"  for="@next" style="color:red" rendered="#{studentFeesBar.showCustom}"/>
+                             <p:calendar value="#{studentFeesBar.endate}"  required="true" requiredMessage="Please select date!" locale="de" navigator="true" pattern="yyyy-MM-dd" rendered="#{studentFeesBar.showCustom}">
+                             </p:calendar>
+                             
+                             <p:outputLabel value="Select Year"  for="@next" style="color:red" rendered="#{studentFeesBar.showmonth}"></p:outputLabel>
+                             <p:selectOneMenu value="#{studentFeesBar.year}"  required="true" requiredMessage="Please select date!" rendered="#{studentFeesBar.showmonth}">
+							<f:selectItem itemLabel="Select Year" itemValue=""></f:selectItem>
+							<f:selectItems value="#{studentFeesBar.yearList}"></f:selectItems>
+							</p:selectOneMenu>
+                            
+                            <f:facet name="footer">
+                            <p:commandButton style="margin-left:25px;"  styleClass="butwid" icon="fa fa-eye" value="Show" update=":form" action="#{studentFeesBar.show}"></p:commandButton>
+                            </f:facet>
+                            </p:panelGrid>
+							<p:chart type="bar" style="height:300px" model="#{studentFeesBar.barmodl}"></p:chart>
+							</p:panel>
+					</div>
+				</div>
+			</div>
+		</div>
+		</h:form>
+
+	</ui:define>
+
+</ui:composition>

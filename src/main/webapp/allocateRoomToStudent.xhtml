@@ -1,0 +1,187 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Hostel</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+
+						<h:form id="form">
+							<p:panel header="Allocate Room To Student">
+								<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel value="Hostel Name"></p:outputLabel>
+									<p:selectOneMenu filter="true"
+										value="#{allocateRoom.hostelName}">
+										<f:selectItem itemLabel="Select Hostel Name" itemValue=""></f:selectItem>
+										<f:selectItems value="#{allocateRoom.hostelNameList}"></f:selectItems>
+										<p:ajax update=":form"
+											listener="#{allocateRoom.roomsDetails}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Allocation Date" for="@next" style="color:red" ></p:outputLabel>
+									<p:calendar value="#{allocateRoom.addDate}"
+										pattern="dd/MM/yyyy" navigator="true" required="true"
+										requiredMessage="Please Select Date"></p:calendar>
+
+									<p:outputLabel value="Select Room No"></p:outputLabel>
+									<p:selectOneMenu filter="true"
+										value="#{allocateRoom.selectedRoom}">
+										<f:selectItem itemLabel="Select Room No" itemValue=""></f:selectItem>
+										<f:selectItems value="#{allocateRoom.roomList}"></f:selectItems>
+									</p:selectOneMenu>
+
+									<p:autoComplete rendered="false"
+										value="#{allocateRoom.selectedRoom}"
+										completeMethod="#{allocateRoom.autoCompleteRooms}"
+										forceSelection="true" required="true"
+										requiredMessage="Please Select Room" validatorMessage="Please Enter Correct value">
+										<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+										<p:ajax event="query" global="false" />
+									</p:autoComplete>
+
+									<p:outputLabel  for="@next" style="color:red" value="Select Student"></p:outputLabel>
+									<p:autoComplete value="#{allocateRoom.selectedStudent}"
+										completeMethod="#{allocateRoom.autoCompleteStudent}"
+										forceSelection="true" required="true"
+										requiredMessage="Please Select Student" validatorMessage="Please Enter Correct value">
+										<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+										<p:ajax event="query" global="false" />
+									</p:autoComplete>
+									<p:commandButton value="Allocate Room Now"
+										actionListener="#{allocateRoom.allocateRoomNow}"
+										update=":form"></p:commandButton>
+
+								</p:panelGrid>
+							</p:panel>
+							<br />
+							<p:panel header="Deallocate Room">
+								<p:dataTable value="#{allocateRoom.allocatedRoomList}" var="var">
+									<f:facet name="header">
+										<p:outputLabel value="All Allocated Rooms"></p:outputLabel>
+									</f:facet>
+
+									<p:column headerText="S.No.">
+										<p:outputLabel value="#{var.sNo}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Room No" filterBy="#{var.roomNo}" filterMatchMode="contains">
+										<p:outputLabel value="#{var.roomNo}"></p:outputLabel>
+									</p:column>
+									
+									<p:column headerText="Hostel" filterBy="#{var.hostelName}" filterMatchMode="contains">
+										<p:outputLabel value="#{var.hostelName}"></p:outputLabel>
+									</p:column>
+									
+									<p:column headerText="Type" filterBy="#{var.noOfBed}" filterMatchMode="contains">
+										<p:outputLabel value="#{var.noOfBed} Beded"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Allocation Date">
+										<p:outputLabel value="#{var.allocationDateStr}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Student Name" filterBy="#{var.studentName}" filterMatchMode="contains">
+										<p:outputLabel value="#{var.studentName}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Deallocate">
+										<p:commandButton icon="ui-icon-close" immediate="true"
+											oncomplete="PF('dateDialog').show()" update=":dateForm">
+											<f:setPropertyActionListener
+												target="#{allocateRoom.selectedRow}" value="#{var}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+
+									<p:column headerText="Transfer">
+										<p:commandButton icon="ui-icon-close" immediate="true"
+											oncomplete="PF('transferDialog').show()"
+											update=":transferForm" action="#{allocateRoom.editTransfer}">
+											<f:setPropertyActionListener
+												target="#{allocateRoom.selectedRow}" value="#{var}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+								</p:dataTable>
+							</p:panel>
+						</h:form>
+
+						<h:form id="dateForm">
+							<p:dialog resizable="false" widgetVar="dateDialog"
+								header="Deallocation Date" showEffect="fade"
+								hideEffect="explode" modal="true">
+								<div class="ui-g form-group">
+									<p:panelGrid columns="3"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+
+										<p:outputLabel  for="@next" style="color:red" value="De-Allocation Date"></p:outputLabel>
+										<p:calendar value="#{allocateRoom.deallocationDate}"
+											pattern="dd/MM/yyyy" navigator="true" required="true"
+											requiredMessage="Please Select De-Allocation Date"></p:calendar>
+
+										<p:commandButton update=":dateForm,:form"
+											actionListener="#{allocateRoom.deallocateRoom}"
+											value="Deallocate Room" />
+
+									</p:panelGrid>
+								</div>
+							</p:dialog>
+						</h:form>
+
+						<h:form id="transferForm">
+							<p:dialog resizable="false" widgetVar="transferDialog"
+								header="Transfer Room" showEffect="fade" hideEffect="explode"
+								modal="true">
+								<div class="ui-g form-group">
+									<p:panelGrid columns="2"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+
+										<p:outputLabel value="Transfer Date"></p:outputLabel>
+										<p:calendar value="#{allocateRoom.transferDate}"
+											pattern="dd/MM/yyyy" navigator="true" required="true"
+											requiredMessage="Please Select Transfer Date"></p:calendar>
+
+
+										<p:outputLabel value="Select Room No"></p:outputLabel>
+										<p:selectOneMenu filter="true"
+											value="#{allocateRoom.transferRoomNo}">
+											<f:selectItem itemLabel="Select Room No" itemValue=""></f:selectItem>
+											<f:selectItems value="#{allocateRoom.newRoomList}"></f:selectItems>
+										</p:selectOneMenu>
+										
+										<p:autoComplete rendered="false" value="#{allocateRoom.transferRoomNo}"
+											completeMethod="#{allocateRoom.autoCompleteRooms}"
+											forceSelection="true" required="true"
+											requiredMessage="Please Select Transfer Room" validatorMessage="Please Enter Correct value">
+											<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+											<p:ajax event="query" global="false" />
+										</p:autoComplete>
+
+										<p:commandButton update=":transferForm,:form"
+											actionListener="#{allocateRoom.transferRoom}"
+											value="Transfer Room" />
+									</p:panelGrid>
+								</div>
+							</p:dialog>
+						</h:form>
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,59 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Hostel</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+
+						<h:form id="form" style="overflow:hidden">
+
+							<p:panel header="View Rooms">
+
+								<p:dataTable reflow="true" id="dt" value="#{roomAllocationReport.roomList}"
+									var="var">
+
+									<p:column headerText="S.No.">
+										<p:outputLabel value="#{var.sNo}"></p:outputLabel>
+									</p:column>
+
+									<p:column filterBy="#{var.hostelName}"
+										filterMatchMode="contains" headerText="Hostel Name">
+										<p:outputLabel value="#{var.hostelName}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Student Name"
+										filterBy="#{var.studentName}" filterMatchMode="contains">
+										<p:outputLabel value="#{var.studentName}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Room No">
+										<p:outputLabel value="#{var.roomNo}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Allocation Date">
+										<p:outputLabel value="#{var.allocationDateStr}"></p:outputLabel>
+									</p:column>
+
+
+
+
+								</p:dataTable>
+							</p:panel>
+						</h:form>
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

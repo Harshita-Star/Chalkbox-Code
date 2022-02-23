@@ -1,0 +1,72 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Pass Print</ui:define>
+
+    <ui:define name="content">
+       
+		<div class="ui-fluid">
+        	<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+               			<h:form id="form3">
+							<p:panel header="Visitor Pass Printing" id="pn">
+								<p:commandButton value="Print Now"  style="width:10%;">
+									<p:printer target="restrictPanel"></p:printer>
+								</p:commandButton>
+						
+								<p:outputPanel id="restrictPanel"  style="width:100%;margin-bottom:30px;">
+   							
+   								<p:panelGrid columns="3" >
+   							
+		   							<p:outputPanel id="pnl1" layout="block" style="border:2px solid #666666;width:250px;height:360px!important;">
+		   								<center><p:outputLabel style="text-align:center;font-size:10px !important;" value="#{headerBean.name}"></p:outputLabel></center>
+			   							<p:outputPanel>
+			   								<center><p:outputLabel value="Visitor Pass"></p:outputLabel></center>
+			   							</p:outputPanel>
+   							
+		   								<p:panelGrid columns="1">
+											<p:graphicImage style="margin-left:88px" value="#{printVisitorPass.image}" height="80px" width="100px" ></p:graphicImage>	
+										</p:panelGrid>
+								
+ 										<p:panelGrid columns="2">
+               		  		
+			               		  			<p:outputLabel value="Name:- "></p:outputLabel>
+			               		  			<p:outputLabel value="#{printVisitorPass.name}"></p:outputLabel>
+			               		  			
+			               		  			<p:outputLabel value="Address:- "></p:outputLabel>
+			               		  			<p:outputLabel value="#{printVisitorPass.address}"></p:outputLabel>
+			               		  			
+			               		  			<p:outputLabel value="Contact No.-"></p:outputLabel>
+			               		  			<p:outputLabel value="#{printVisitorPass.contactNo}"></p:outputLabel>
+			               		  			
+			               		  			<p:outputLabel value="In Time-"></p:outputLabel>
+			               		  			<p:outputLabel value="#{printVisitorPass.inDate}"></p:outputLabel>
+               		  			
+               		  					</p:panelGrid>
+               		  					<p:outputLabel style="float:right;margin-right:5px !important;" value="Principal"></p:outputLabel>
+               		  		
+		               		  			<center>
+		               		  				<p:outputLabel value="#{headerBean.address1} #{headerBean.address2} #{headerBean.address3}"  ></p:outputLabel>
+		   								</center>
+   									</p:outputPanel>
+   							
+   								</p:panelGrid>
+   								
+   								</p:outputPanel>
+						</p:panel>
+       
+			</h:form>
+			
+                        </div>
+                    </div>
+                </div>
+            </div>
+       
+    </ui:define>
+
+</ui:composition>

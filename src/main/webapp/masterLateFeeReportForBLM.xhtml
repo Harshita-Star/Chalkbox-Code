@@ -1,0 +1,90 @@
+	<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+					xmlns:ui="http://java.sun.com/jsf/facelets"
+					xmlns:h="http://java.sun.com/jsf/html"
+					xmlns:f="http://java.sun.com/jsf/core"
+					xmlns:p="http://primefaces.org/ui"
+					xmlns:pe="http://primefaces.org/ui/extensions"
+					template="/WEB-INF/schoolMasterTemplate.xhtml">
+
+		<ui:define name="title">Late Fee Report</ui:define>
+
+		<ui:define name="content">
+		   
+				<div class="ui-fluid">
+					<div class="ui-g">
+						<div class="ui-g-12">
+               		 	<div class="card card-w-title">
+             		  	<h:form id="form2">	 		
+               		 		<p:panel header="Search">
+               		 			
+               		 		<p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+               		 		
+               		 		<p:outputLabel  for="@next" style="color:red" value="Select School"></p:outputLabel>
+							<p:selectOneMenu value="#{masterLateDueFeeReport.schid}"
+								required="true" requiredMessage="Please select a school">
+								<f:selectItem itemLabel="All" itemValue="-1"></f:selectItem>
+								<f:selectItems value="#{masterLateDueFeeReport.branchList}"></f:selectItems>
+							</p:selectOneMenu>
+							
+							<p:outputLabel/><p:outputLabel/>
+               		 		
+               		 		<p:outputLabel value="Select Installment" for="@next" style="color:red" ></p:outputLabel>
+               		 		 <p:selectCheckboxMenu  multiple="true"
+												value="#{masterLateDueFeeReport.checkMonthSelected}" required="true"
+												requiredMessage="Please Select Installment">
+												<f:selectItems value="#{masterLateDueFeeReport.installmentList}"></f:selectItems>
+											</p:selectCheckboxMenu>
+											
+               		 		<p:commandButton update=":form3:up,:form2" actionListener="#{masterLateDueFeeReport.showReport}" value="#{dueFeeReportVar.dueFeeReportSearchNowButton}"></p:commandButton>  
+               		 		<p:commandButton value="Print" rendered="#{masterLateDueFeeReport.show}">
+               	       		<p:printer target="form3"></p:printer>
+               	       </p:commandButton>
+               		 		</p:panelGrid>  
+               		 		
+               		 		</p:panel>		 
+               		 
+               		 </h:form>
+               		 </div>
+               		 <div class="card card-w-title">
+               	<h:form id="form3">	 
+               		 
+               		 <p:panel header="Late Fee Report" id="up"  >
+               		 
+               		 	<p:outputPanel rendered="#{masterLateDueFeeReport.show}">
+               		 	<center>
+						<p style="font-family: initial;font-style: oblique;font-size: 25px !important;font-weight:bold;margin:0px;">#{masterLateDueFeeReport.schname}</p>
+						<p style="font-family: initial;font-style: oblique;font-size: 15px !important;font-weight:bold;margin:0px;">#{masterLateDueFeeReport.affiliationNo}</p>
+						<p style="font-family: initial;font-style: oblique;font-size: 15px !important;font-weight:bold;margin:0px;">#{masterLateDueFeeReport.finalAddress}</p>
+						<p style="font-family: initial;font-style: oblique;font-size: 15px !important;font-weight:bold;margin:0px;">#{masterLateDueFeeReport.phoneno}</p>
+						
+						<p style="margin:0px;font-size: 25px !important;font-weight:bold;">Late Fee Report</p>
+						</center>
+						<br></br>
+				
+					<p:panelGrid columns="2" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+						
+							<p:outputLabel value="Total Due Late Fee:-"></p:outputLabel>
+							<h:outputText value="#{masterLateDueFeeReport.dueLateFee}"></h:outputText>
+							
+							<p:outputLabel value="Total Late Fee Collection Amount:-"></p:outputLabel>
+							<h:outputText value="#{masterLateDueFeeReport.collectLateFee}"></h:outputText>
+						
+							<p:outputLabel value="Total Late Fee Discount Amount:-"></p:outputLabel>
+							<h:outputText value="#{masterLateDueFeeReport.discountLateFee}"></h:outputText>
+						
+						
+					</p:panelGrid>	
+               		  </p:outputPanel>         
+               		 	
+               		 </p:panel>
+               		  	
+				</h:form>
+							     
+							</div>
+						</div>
+					</div>
+				</div>
+		   
+		</ui:define>
+
+	</ui:composition>

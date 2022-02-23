@@ -1,0 +1,129 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Print MarkSheet</ui:define>
+
+    <ui:define name="content">
+       
+            <div class="ui-fluid">
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <div class="card card-w-title">
+                       
+                      
+                      <h:form id="form1" >
+				     <h1>Print MarkSheet</h1>
+            		
+               		 <p:messages closable="true" autoUpdate="true"></p:messages>
+               		 		
+               		 		<p:panel header="Search Student By Class Name">
+               		 		
+               		 		<p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+               		 	 		
+               		 	 		<p:outputLabel value="Select Session"></p:outputLabel>
+								<p:selectOneMenu value="#{previousFinalMarksheet.session}" filter="true">
+									<f:selectItems value="#{previousFinalMarksheet.sessionList}"></f:selectItems>
+									<p:ajax></p:ajax>
+								</p:selectOneMenu>
+               		 	 		
+               		 			<p:outputLabel value="Student Name"></p:outputLabel>      
+               		 			<p:autoComplete minQueryLength="3" id="acSimple" value="#{previousFinalMarksheet.name}" completeMethod="#{previousFinalMarksheet.autoCompleteStudentInfo}" validatorMessage="Please Enter Correct value">
+               		 			  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+               		 			</p:autoComplete>
+               		 			
+               		 		
+               		 			<p:commandButton update=":form3:up" value="Search" action="#{previousFinalMarksheet.searchStudentByName}"></p:commandButton>
+               		 		
+               		 		</p:panelGrid> 
+               		 		</p:panel>
+               		 </h:form>
+               	   </div>
+               		    <div class="card card-w-title">
+                     
+               		<h:form id="form3">
+               		 	
+               		 	<p:panel header="Student Details">
+               		 				
+               		 		<p:outputPanel id="up">
+               		  		<p:dataTable rendered="#{previousFinalMarksheet.show}" reflow="true" var="var" value="#{previousFinalMarksheet.studentList}"> 
+               		  			
+               		  			<p:column headerText="#{searchStudentVar.searchStudentAdmissionNumberLabel}">
+               		  				<p:outputLabel value="#{var.srNo}"></p:outputLabel>
+               		  			</p:column>
+               		  			
+               		  			<p:column sortBy="#{var.fname}" headerText="#{searchStudentVar.seacrhStudentFirstNameLabel}">
+               		  				<p:outputLabel value="#{var.fname}"></p:outputLabel>
+               		  			</p:column>
+               		  			
+               		  			<p:column headerText="Father's Name">
+               		  				<p:outputLabel value="#{var.fathersName}"></p:outputLabel>
+               		  			</p:column>
+               		  			
+               		  			<f:facet  name="footer">
+               		  				<p:panelGrid columns="4"> 
+	               		  				<p:outputLabel value="Select Date" for="@next" style="color:red" ></p:outputLabel>
+			               		  		<p:calendar value="#{previousFinalMarksheet.dateOfEntry}" navigator="true" pattern="dd/MM/yyyy" required="true" requiredMessage="Please Select Date">
+			               		  			<p:ajax></p:ajax>
+			               		  		</p:calendar>
+		               		  			
+		               		  			<p:commandButton rendered="#{previousFinalMarksheet.show}" value="Proceed to Print" update=":printForm" oncomplete="PF('printDialog').show()"/>
+		               		  			<p:commandButton rendered="#{previousFinalMarksheet.showCoButton}" value="Proceed For Co-Scholastic" update=":markFillForm" oncomplete="PF('markFillDialog').show()"></p:commandButton>
+	               		  			</p:panelGrid>
+               		  			</f:facet>  		  		
+               		  		
+               		  		</p:dataTable>
+               		  </p:outputPanel>
+               		  
+               		</p:panel>
+       
+			</h:form>
+			
+			<h:form id="markFillForm" style="width:600px !important" >
+				<p:dialog style="width:600px !important" resizable="false" modal="true" widgetVar="markFillDialog" header="Fill Marks" closeOnEscape="true">
+					<div class="ui-g form-group">
+					<p:panelGrid columns="1" styleClass="ui-panelgrid-blank form-group" style="width:600px;border:0px none; background-color:transparent;">
+						<p:dataTable style="width:600px;border-collapse:collapse;font-size:9px;" border="1" value="#{previousFinalMarksheet.markListCoscholastic}" var="var">
+				            <p:column headerText="Co-Scholastic Areas">
+				            	<center><p:outputLabel value="#{var.subjectName}" /></center>
+				            </p:column>
+				            
+				             <p:column headerText="Grade">
+				            	<center><p:inputText value="#{var.description}" validatorMessage="Please Enter Correct value">
+				            	          <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+				            	        </p:inputText>
+				            	</center>
+				            </p:column>
+				         </p:dataTable>
+						<p:commandButton value="Yes" update=":markFillForm" action="#{previousFinalMarksheet.proceedCo}"></p:commandButton>
+					</p:panelGrid>
+					</div>
+				</p:dialog>
+			</h:form>
+			
+			<h:form id="printForm">
+				<p:dialog resizable="false" modal="true" widgetVar="printDialog" header="Confirmation" closeOnEscape="true">
+					<p:panelGrid columns="4"   styleClass="ui-panelgrid-blank form-group"  style="border:0px none; background-color:transparent;">
+					
+						<p:outputLabel value="Select Term" for="@next" style="color:red" ></p:outputLabel>      
+						<p:selectManyCheckbox required="true" requiredMessage="Please Select A Term" id="showTerm" value="#{previousFinalMarksheet.selectedTerm}">
+							<f:selectItems value="#{previousFinalMarksheet.termList}"></f:selectItems>
+						</p:selectManyCheckbox>
+						
+						<p:commandButton value="Proceed" update=":form3" action="#{previousFinalMarksheet.proceed}"></p:commandButton>
+	
+					</p:panelGrid>
+				</p:dialog>
+			</h:form>
+                       
+                        </div>
+                    </div>
+                </div>
+            </div>
+       
+    </ui:define>
+
+</ui:composition>

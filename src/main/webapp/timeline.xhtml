@@ -1,0 +1,47 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+	<ui:define name="title">Timeline</ui:define>
+
+	<ui:define name="content">
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<p:messages closable="true" autoUpdate="true"></p:messages>
+							<p:panel header="Timeline" id="panel">
+								<p:dataScroller value="#{timelineBean.list}" var="var" chunkSize="10" mode="inline" scrollHeight="350">
+							        <f:facet name="header">
+							            Scroll Down to Load More Timeline
+							        </f:facet>
+ 
+       <h:panelGrid columns="2" style="width:100%" columnClasses="logo,detail" >
+							            <p:outputPanel>
+							                <p:panelGrid columns="7" cellpadding="6">							                
+							                   <h:outputText value="#{var.className}" style="font-weight: bold;"></h:outputText>
+							                   <h:outputText value="#{var.termName}" style="font-weight: bold;padding-left:12px;"/>
+							                   <h:outputText value="#{var.subType}" style="font-weight: bold;padding-left:12px;"/>
+							                    <h:outputText value="#{var.examName}" style="font-weight: bold;padding-left:12px;"></h:outputText>
+							                   <h:outputText value="#{var.subName}" style="font-weight: bold;padding-left:12px;"/>
+							                   <h:outputText value="#{var.teacherName}" style="font-weight: bold;padding-left:12px;"/>
+							                   <h:outputText value="#{var.date_time}" style="font-weight: bold;padding-left:12px;"/>
+							                </p:panelGrid>
+							            </p:outputPanel>
+							        </h:panelGrid>
+
+
+
+
+
+						        </p:dataScroller>
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</ui:define>
+</ui:composition>

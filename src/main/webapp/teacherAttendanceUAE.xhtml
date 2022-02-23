@@ -1,0 +1,134 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Staff Attendance</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<h1>Staff Attendance</h1>
+
+							<p:messages closable="true" autoUpdate="true"></p:messages>
+							<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+							<p:panel header="Attendance">
+
+								<p:panelGrid columns="3"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-4,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:outputLabel value="Select Day" for="@next" style="color:red" ></p:outputLabel>
+									<p:calendar value="#{teacherAttendanceUAE.selectedDay}"
+										pattern="dd/MM/yyyy" navigator="true" required="true"
+										requiredMessage="Please Select Day" maxdate="new Date();"
+										mask="true" readonlyInput="true"></p:calendar>
+
+									<p:commandButton update=":form" value="Mark Attendance Now"
+										actionListener="#{teacherAttendanceUAE.studentDetail}"></p:commandButton>
+
+								</p:panelGrid>
+
+							</p:panel>
+
+							<br />
+							<p:panel header="Attendance Section"
+								rendered="#{teacherAttendanceUAE.renderShowTable}">
+
+								<p:outputPanel>
+
+									<p:dataTable id="attendTable"
+										rendered="#{teacherAttendanceUAE.showStudentRecord}" var="var"
+										value="#{teacherAttendanceUAE.teacherDetails}" reflow="true"
+										rowIndexVar="rowId">
+
+										<f:facet name="header">
+											<p:panelGrid columns="2"
+												columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-4,ui-grid-col-4"
+												layout="grid" styleClass="ui-panelgrid-blank form-group"
+												style="border:0px none; background-color:transparent;">
+											</p:panelGrid>
+										</f:facet>
+
+										<p:column headerText="S.No.">
+											<p:outputLabel value="#{var.sno}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Category" filterBy="#{var.category}">
+											<p:outputLabel value="#{var.category}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Sub Category" filterBy="#{var.subCateg}">
+											<p:outputLabel value="#{var.subCateg}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Name" filterBy="#{var.fname}">
+											<p:outputLabel value="#{var.fname}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="User Name" rendered="false">
+											<p:outputLabel value="#{var.uname}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="In" style="text-align: center;">
+											<center>
+												<p:panelGrid columns="1" layout="grid"
+													styleClass="ui-panelgrid-blank form-group"
+													style="border:0px none;width:100%; background-color:transparent;">
+													<p:selectBooleanCheckbox value="#{var.insert}"></p:selectBooleanCheckbox>
+													<p:outputLabel value="#{var.inTime}"
+														style="font-weight: bold;"></p:outputLabel>
+												</p:panelGrid>
+											</center>
+										</p:column>
+
+										<p:column headerText="out" style="text-align: center;">
+											<center>
+												<p:panelGrid columns="1" layout="grid"
+													styleClass="ui-panelgrid-blank form-group"
+													style="border:0px none;width:100%; background-color:transparent;">
+													<p:selectBooleanCheckbox value="#{var.out}"></p:selectBooleanCheckbox>
+													<p:outputLabel value="#{var.outTime}"
+														style="font-weight: bold;"></p:outputLabel>
+												</p:panelGrid>
+											</center>
+										</p:column>
+
+										<f:facet name="footer">
+											<p:commandButton update=":form"
+												rendered="#{teacherAttendanceUAE.showStudentRecord}"
+												value="Submit"
+												action="#{teacherAttendanceUAE.chckforstudentatndnce}">
+												<p:confirm header="Confirmation"
+													message="Surely Want To Submit ?" icon="ui-icon-alert" />
+											</p:commandButton>
+										</f:facet>
+
+									</p:dataTable>
+								</p:outputPanel>
+
+							</p:panel>
+
+						</h:form>
+
+						<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+							<p:commandButton style="margin-left:30px" value="Yes"
+								type="button" styleClass="ui-confirmdialog-yes"
+								icon="ui-icon-check" />
+							<p:commandButton style="margin-left:50px" value="No"
+								type="button" styleClass="ui-confirmdialog-no"
+								icon="ui-icon-close" />
+						</p:confirmDialog>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

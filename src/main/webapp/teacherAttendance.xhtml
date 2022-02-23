@@ -1,0 +1,177 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Attendance</ui:define>
+
+	<ui:define name="content">
+
+		<style>
+body .ui-fluid .ui-buttonset {
+	display: flex !important;
+}
+</style>
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<h1>Mark Attendance</h1>
+
+							<p:messages closable="true" autoUpdate="true"></p:messages>
+
+							<p:panel header="Attendance">
+
+								<p:panelGrid columns="3"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-4,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:outputLabel value="Select Day" for="@next" style="color:red"></p:outputLabel>
+
+									<p:calendar value="#{teacherAttendBean.selectedDay}"
+										pattern="dd/MM/yyyy" navigator="true" required="true"
+										requiredMessage="Please Select Day" maxdate="new Date();"
+										beforeShowDay="disableSunday" mask="true" readonlyInput="true"></p:calendar>
+
+									<p:commandButton update=":form" styleClass="butwid-2"
+										icon="fa fa-thumb-tack" value="Mark Attendance Now"
+										actionListener="#{teacherAttendBean.studentDetail}"></p:commandButton>
+
+								</p:panelGrid>
+
+							</p:panel>
+
+							<br />
+							<p:panel header="Attendance Section"
+								rendered="#{teacherAttendBean.renderShowTable}">
+
+								<p:outputPanel>
+
+									<p:dataTable id="attendTable"
+										rendered="#{teacherAttendBean.showStudentRecord}" var="var"
+										value="#{teacherAttendBean.teacherDetails}" reflow="true"
+										rowIndexVar="rowId">
+
+										<f:facet name="header">
+											<p:panelGrid columns="2"
+												columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-4,ui-grid-col-4"
+												layout="grid" styleClass="ui-panelgrid-blank form-group"
+												style="border:0px none; background-color:transparent;">
+												<p:outputLabel value="Default Attendance: "></p:outputLabel>
+												<p:selectOneMenu value="#{teacherAttendBean.defaultAttend}">
+													<f:selectItem itemLabel="A" itemValue="A"></f:selectItem>
+													<f:selectItem itemLabel="P" itemValue="P"></f:selectItem>
+													<f:selectItem itemLabel="L" itemValue="L"></f:selectItem>
+													<f:selectItem itemLabel="P_H" itemValue="P_H"></f:selectItem>
+													<p:ajax
+														listener="#{teacherAttendBean.checkDefaultAttendance}"
+														update="attendTable"></p:ajax>
+												</p:selectOneMenu>
+											</p:panelGrid>
+										</f:facet>
+
+										<p:column headerText="S.No.">
+											<p:outputLabel value="#{var.sno}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Category" filterBy="#{var.category}">
+											<p:outputLabel value="#{var.category}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Sub Category" filterBy="#{var.subCateg}">
+											<p:outputLabel value="#{var.subCateg}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Name" filterBy="#{var.fname}">
+											<p:outputLabel value="#{var.fname}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="User Name" rendered="false">
+											<p:outputLabel value="#{var.uname}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Attendance" style="width:30%;">
+											<p:selectOneButton value="#{var.attendance}"
+												unselectable="false">
+												<f:selectItem itemLabel="A" itemValue="A"></f:selectItem>
+												<f:selectItem itemLabel="P" itemValue="P"></f:selectItem>
+												<f:selectItem itemLabel="L" itemValue="L"></f:selectItem>
+												<f:selectItem itemLabel="P_H" itemValue="P_H"></f:selectItem>
+												<f:selectItem itemLabel="QL" itemValue="QL"></f:selectItem>
+												<f:selectItem itemLabel="3/4L" itemValue="3/4L"></f:selectItem>
+												<f:selectItem itemLabel="DL" itemValue="DL"></f:selectItem>
+
+
+											</p:selectOneButton>
+										</p:column>
+										<f:facet name="footer">
+											<p:commandButton
+												rendered="#{teacherAttendBean.showStudentRecord}"
+												value="Submit" styleClass="butwid" icon="fa fa-upload"
+												oncomplete="PF('confirmDialog').show()" update="cnfrmdi"
+												action="#{teacherAttendBean.chckforstudentatndnce}"></p:commandButton>
+										</f:facet>
+
+									</p:dataTable>
+								</p:outputPanel>
+
+							</p:panel>
+
+						</h:form>
+
+						<h:form id="cnfrmdi">
+							<p:panel>
+								<p:dialog resizable="false" widgetVar="confirmDialog"
+									header="Do you surely want to Continue?" showEffect="fade"
+									hideEffect="explode" modal="true">
+									<div class="ui-g form-group">
+										<p:panelGrid columns="2"
+											styleClass="ui-panelgrid-blank form-group"
+											style="border:0px none; background-color:transparent;">
+											<p:panelGrid columns="1">
+												<p:outputLabel
+													value="Total Absent Employee(s) : #{teacherAttendBean.i}"
+													style="font-size: 15px !important;" />
+												<p:outputLabel
+													value="Total Present Employee(s) : #{teacherAttendBean.j}"
+													style="font-size: 15px !important;" />
+												<p:outputLabel
+													value="Total Employee(s) on Leave : #{teacherAttendBean.k}"
+													style="font-size: 15px !important;" />
+												<p:outputLabel
+													value="Total Employee(s) on Half Day : #{teacherAttendBean.l}"
+													style="font-size: 15px !important;" />
+												<p:outputLabel
+													value="Total Employee(s) on Quaterly Leave : #{teacherAttendBean.m}"
+													style="font-size: 15px !important;" />
+												<p:outputLabel
+													value="Total Employee(s) on 3/4 Leave : #{teacherAttendBean.n}"
+													style="font-size: 15px !important;" />
+												<p:outputLabel
+													value="Total Employee(s) on Duety Leave : #{teacherAttendBean.o}"
+													style="font-size: 15px !important;" />
+											</p:panelGrid>
+											<p:outputLabel />
+
+											<center>
+												<p:commandButton immediate="true" update=":cnfrmdi,form"
+													action="#{teacherAttendBean.saveNow}" value="Yes"></p:commandButton>
+											</center>
+											<p:commandButton value="No" update=":cnfrmdi"
+												oncomplete="PF('confrimDialog').hide();"></p:commandButton>
+										</p:panelGrid>
+									</div>
+								</p:dialog>
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

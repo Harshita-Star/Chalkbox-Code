@@ -1,0 +1,68 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Edit Stop</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<h1>All Stops</h1>
+
+
+							<p:panel header="All Stops" id="panel">
+								<p:commandButton value="PDF" styleClass="butwid"
+									icon="fa fa-file-pdf-o" ajax="false" process="@this"
+									actionListener="#{editRoute.exportAllStopPdf}">
+
+									<p:fileDownload value="#{editRoute.file}" />
+								</p:commandButton>
+
+								<p:messages closable="true" autoUpdate="true"></p:messages>
+
+								<p:panelGrid id="pGrid" columns="2" styleClass="form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:dataTable reflow="true" selection="#{editRoute.list}"
+										rowKey="#{var.id}" value="#{editRoute.routeStopList}"
+										var="var">
+										<f:facet name="header">
+										All Stops
+									</f:facet>
+										<p:column headerText="Serial Number">
+											<p:outputLabel value="#{var.serialNumber}"></p:outputLabel>
+										</p:column>
+										<p:column headerText="Route Name" filterBy="#{var.routeName}"
+											filterMatchMode="contains">
+											<p:outputLabel value="#{var.routeName}"></p:outputLabel>
+										</p:column>
+
+
+										<p:column sortBy="#{var.stopName}" filterBy="#{var.stopName}"
+											headerText="Stop" filterMatchMode="contains">
+											<p:outputLabel value="#{var.stopName}"></p:outputLabel>
+										</p:column>
+										<p:column sortBy="#{var.amount}" filterBy="#{var.amount}"
+											headerText="Amount">
+											<p:outputLabel value="#{var.amount}"></p:outputLabel>
+										</p:column>
+									</p:dataTable>
+								</p:panelGrid>
+
+							</p:panel>
+
+
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

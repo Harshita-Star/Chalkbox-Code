@@ -1,0 +1,104 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Teacher Meeting Request</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+
+					<div class="card card-w-title">
+						<h:form id="form">
+
+							<p:messages closable="true" autoUpdate="true"></p:messages>
+
+							<p:panel header="Search Student by Name/Sr. No">
+								<f:facet name="header">
+									<span>Search Student by Name/Sr. No</span>
+									<span> <p:commandLink
+											style="float: right;margin-left: 15px;color: blue;font-size:15px;"
+											immediate="true" value="View All Request"
+											action="viewAllAppointmentRequest.xhtml?faces-redirect=true"></p:commandLink>
+									</span>
+								</f:facet>
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel value="Student Name/Sr. No" for="@next" style="color:red" ></p:outputLabel>
+									<p:autoComplete id="acSimple"
+										value="#{teacherAppointmentRequest.name}" minQueryLength="3"
+										required="true" requiredMessage="Please enter student name!"
+										completeMethod="#{teacherAppointmentRequest.autoCompleteStudentInfo}" validatorMessage="Please Enter Correct value">
+										<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex> 
+										<p:ajax event="query" global="false" />
+									</p:autoComplete>
+
+									<p:commandButton value="Search" update=":form1" styleClass="butwid" icon="fa fa-search"
+										actionListener="#{teacherAppointmentRequest.searchStudentByName}"></p:commandButton>
+
+								</p:panelGrid>
+								
+								
+								
+							</p:panel>
+						</h:form>
+						<h:form id="form1">
+							<p:panel header="Meeting Request"
+								rendered="#{teacherAppointmentRequest.showStudent}">
+								<p:panelGrid columns="2">
+									<p:outputLabel value="Meeting Date" for="@next" style="color:red" ></p:outputLabel>
+									<p:calendar
+										value="#{teacherAppointmentRequest.appointmentDate}"
+										pattern="dd/MM/yyyy" navigator="true" yearRange="c-10:c+10"
+										required="true"
+										requiredMessage="please enter the meeting date!">
+									</p:calendar>
+
+									<p:outputLabel value="Meeting Time" for="@next" style="color:red" ></p:outputLabel>
+									<p:inputText
+										value="#{teacherAppointmentRequest.appointmentTime}"
+										required="true" requiredMessage="Please Enter Description" validatorMessage="Please Enter Correct value">
+									  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+									</p:inputText>
+
+									<p:outputLabel rendered="false" value="Type" for="@next" style="color:red" ></p:outputLabel>
+									<p:selectOneRadio
+										value="#{teacherAppointmentRequest.selectType}"
+										required="true" requiredMessage="Please Enter type" rendered="false">
+										<f:selectItem itemLabel="Consent" itemValue="Consent"></f:selectItem>
+										<f:selectItem itemLabel="Meeting Request" itemValue="Meeting"></f:selectItem>
+									</p:selectOneRadio>
+
+									<p:outputLabel value="Description" for="@next" style="color:red" ></p:outputLabel>
+									<p:inputText value="#{teacherAppointmentRequest.description}"
+										required="true" requiredMessage="Please Enter Description" validatorMessage="Please Enter Correct value">
+									  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+									</p:inputText>
+								</p:panelGrid>
+								<br />
+								<p:separator />
+								<center>
+									<p:commandButton value="Send Request" styleClass="butwid" icon="fa fa-paper-plane"
+										action="#{teacherAppointmentRequest.send}" update=":form1"></p:commandButton>
+								</center>
+								<p:separator />
+								<br />
+							</p:panel>
+						</h:form>
+					</div>
+
+
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

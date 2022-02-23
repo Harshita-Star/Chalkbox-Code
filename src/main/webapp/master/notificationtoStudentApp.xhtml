@@ -1,0 +1,109 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/masterTemplate.xhtml">
+
+	<ui:define name="title">Notification</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form" enctype="multipart/form-data">
+
+							<p:panel header="Notification">
+
+								<p:messages closable="true" autoUpdate="true"></p:messages>
+
+								<p:panelGrid columns="2"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel value="Send To *" for="@next" style="color:red"></p:outputLabel>
+									<p:selectOneRadio
+										value="#{notificationToStudentApp.type}">
+										<f:selectItem itemLabel="All Schools" itemValue="all"></f:selectItem>
+										<f:selectItem
+											itemLabel="Particular Schools"
+											itemValue="particular"></f:selectItem>
+										<p:ajax update=":form:dt"
+											listener="#{notificationToStudentApp.checkType}"></p:ajax>
+									</p:selectOneRadio>
+									
+
+									<p:outputLabel value="Title" for="@next" style="color:red" ></p:outputLabel>
+									<p:inputText value="#{notificationToStudentApp.title}"
+										required="true" requiredMessage="Enter Title">
+									</p:inputText>
+
+									<p:outputLabel value="Notification" for="@next" style="color:red" ></p:outputLabel>
+									<p:inputTextarea
+										value="#{notificationToStudentApp.notification}"
+										required="true" requiredMessage="Enter Notification">
+									</p:inputTextarea>
+									
+									<p:outputLabel value="Image (If Any - only PNG allowed)"></p:outputLabel>
+									<p:fileUpload value="#{notificationToStudentApp.image}"
+										mode="simple" allowTypes="/(\.|\/)(png)$/" />
+
+
+									<p:commandButton update="form"
+										action="#{notificationToStudentApp.sendnotification}"
+										value="Submit" ajax="false"></p:commandButton>
+
+								</p:panelGrid>
+								
+								<p:outputPanel id="dt">
+									<center>
+										<p:dataTable
+											rendered="#{notificationToStudentApp.showTable}"
+											reflow="true"
+											selection="#{notificationToStudentApp.selectedList}"
+											rowKey="#{var.id}"
+											value="#{notificationToStudentApp.schoolList}"
+											var="var" rowIndexVar="index" style="width: 50%"
+											rowSelectMode="add">
+
+											<p:column selectionMode="multiple"
+												style="width:16px;text-align:center"></p:column>
+
+											<p:column filterBy="#{var.schoolName}"
+												filterMatchMode="contains" style="width:100px"
+												headerText="School Name">
+												<p:outputLabel value="#{var.schoolName}"></p:outputLabel>
+											</p:column>
+
+											<p:column filterBy="#{var.aliasName}"
+												filterMatchMode="contains" style="width:100px"
+												headerText="Alias">
+												<p:outputLabel value="#{var.aliasName}"></p:outputLabel>
+											</p:column>
+
+										</p:dataTable>
+									</center>
+									<br />
+
+									<center>
+										<p:commandButton style="width: 150px;" ajax="false"
+											value="Submit"
+											action="#{notificationToStudentApp.sendnotification}"
+											update=":form"
+											rendered="#{notificationToStudentApp.showTable}"></p:commandButton>
+									</center>
+								</p:outputPanel>
+							</p:panel>
+
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,89 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	<f:loadBundle var="addClassVar" basename="myProperties" />
+
+	<ui:define name="title">Term Performance Graph</ui:define>
+
+	<ui:define name="content">
+		<h:form id="form">
+			<div class="ui-fluid">
+				<div class="ui-g">
+					<div class="ui-g-12">
+						<div class="card card-w-title">
+							<h:form id="form">
+								<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+								<p:panel header="Term Performance Comparison">
+									<p:panelGrid columns="4"
+										columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+										layout="grid" styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+										
+										<p:outputLabel value="Select Class"></p:outputLabel>
+										<p:selectOneMenu filter="true"
+											value="#{termExamPerformComparision.selectClass}">
+											<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+											<f:selectItems
+												value="#{termExamPerformComparision.classList}"></f:selectItems>
+											<p:ajax listener="#{termExamPerformComparision.allTerm}"
+												update=":form"></p:ajax>
+										</p:selectOneMenu>
+
+										<p:outputLabel value="Select Section"></p:outputLabel>
+										<p:selectOneMenu filter="true"
+											value="#{termExamPerformComparision.selectSection}">
+											<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+											<f:selectItems
+												value="#{termExamPerformComparision.sectionList}"></f:selectItems>
+										</p:selectOneMenu>
+
+										<p:outputLabel value="Select Term1"></p:outputLabel>
+										<p:selectOneMenu filter="true"
+											value="#{termExamPerformComparision.selectTerm1}">
+											<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+											<f:selectItems value="#{termExamPerformComparision.termList}"></f:selectItems>
+										</p:selectOneMenu>
+
+										<p:outputLabel value="Select Term2"></p:outputLabel>
+										<p:selectOneMenu filter="true"
+											value="#{termExamPerformComparision.selectTerm2}">
+											<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+											<f:selectItems value="#{termExamPerformComparision.termList}"></f:selectItems>
+										</p:selectOneMenu>
+
+										
+
+									</p:panelGrid>
+
+									<br />
+								<p:separator />
+								<center>
+								
+								<p:commandButton update=":form,marksChart" value="Compare"  styleClass="butwid" icon="fa fa-balance-scale"
+											action="#{termExamPerformComparision.search}" ></p:commandButton>
+								
+									
+								</center>
+								<p:separator />
+								<br />
+
+									<p:chart type="bar" id="marksChart" style="height:500px"
+										rendered="#{termExamPerformComparision.show}"
+										model="#{termExamPerformComparision.barmodel}" />
+
+								</p:panel>
+							</h:form>
+
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</h:form>
+
+	</ui:define>
+
+</ui:composition>

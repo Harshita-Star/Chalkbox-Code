@@ -1,0 +1,365 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+<f:loadBundle var="regexVar" basename="myProperties" />
+<f:loadBundle var="addClassVar" basename="myProperties" />
+<f:loadBundle var="addExamVar" basename="myProperties" />
+<f:loadBundle var="addSubjectsVar" basename="myProperties" />
+<f:loadBundle var="employeeAddmissionVar" basename="myProperties" />
+<f:loadBundle var="registrationVar" basename="myProperties" />
+<f:loadBundle var="registrationParentsVar" basename="myProperties" />
+<f:loadBundle var="addNewRouteVar" basename="myProperties" />
+<f:loadBundle var="addNewStopVar" basename="myProperties" />
+<f:loadBundle var="addSectionVar" basename="myProperties" />
+<f:loadBundle var="addSemesterVar" basename="myProperties" />
+<f:loadBundle var="searchStudentVar" basename="myProperties" />
+<f:loadBundle var="adminHomeVar" basename="myProperties" />
+<f:loadBundle var="addTestVar" basename="myProperties" />
+<f:loadBundle var="searchEmployeeVar" basename="myProperties" />
+<f:loadBundle var="editEmployeeVar" basename="myProperties" />
+<f:loadBundle var="employeeAddmissionVar" basename="myProperties" />
+<f:loadBundle var="attendanceVar" basename="myProperties" />
+<f:loadBundle var="printTestPerformanceClassWiseVar" basename="myProperties" />
+<f:loadBundle var="feeCollectionVar" basename="myProperties" />
+<f:loadBundle var="collectFeeVar" basename="myProperties" />
+<f:loadBundle var="dueFeeReportVar" basename="myProperties" />
+<f:loadBundle var="studentPerformanceVar" basename="myProperties" />
+<f:loadBundle var="showReportVar" basename="myProperties" />
+<h:head>
+        <f:facet name="first">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+            <meta name="apple-mobile-web-app-capable" content="yes" />
+            <meta name="theme-color" content="#{guestPreferences.themeColors[guestPreferences.theme]}" />
+        </f:facet>
+        <title><ui:insert name="title">PrimeFaces Avalon</ui:insert></title>
+        <h:outputScript name="js/nanoscroller.js" library="avalon-layout" />
+        <h:outputScript name="js/layout.js" library="avalon-layout" />
+        <h:outputStylesheet name="css/layout-#{guestPreferences.layout}.css" library="avalon-layout" />
+        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+       
+        <ui:insert name="head"/>
+        <link rel="stylesheet" type="text/css" href="tempcss/style.css"/>
+        <style type="text/css">
+                    .redColored
+                    {
+                    color: red;
+                    }
+                    .greenColored
+                    {
+                    color: #00b100;
+                    }
+                    .yellowColored
+                    {
+                    color: yellow;
+                    }
+                    
+                    .blueColored {
+	color: #0000ff;
+}
+
+.blackColored {
+	color: #000000;
+}
+            
+            .fc-time{
+    display:none !important;
+}
+                .firstmm{
+               
+                 width: 128px !important;
+                   }
+                   
+                   
+                   .PRESENT{
+background-color : green !important;
+}
+
+.NOT{
+background-color: red !important; 
+}
+
+.butwid {
+	width: 150px !important;
+}
+.redButt{
+	background-color: #9c2d38 !important;
+}
+
+.greenButt{
+    background-color: #266936 !important;
+}
+.butwid-1 {
+	width: 200px !important;
+}
+.butwid-2 {
+	width: 250px !important;
+}
+.ABSENT{
+background-color: yellow !important;
+}
+
+.HOLIDAY{
+background-color: white !important; 
+}
+    
+    .card {
+    border: 1px solid #333;
+    }
+    
+    body .ui-panel .ui-panel-titlebar {
+    border: 1px solid #333;
+     
+    border-bottom: 1px solid #333;
+    }
+    body .ui-panel .ui-panel-content {
+    border: 1px solid #333;
+     }
+                </style>
+                
+           
+ <script>
+ function skinPie() {
+     this.cfg.shadow = false;
+     //this.cfg.seriesColors = ['#337ab7', '#2ea59f', '#2d34a4', '#2ea563'];
+     this.cfg.grid = {
+         background: 'white',
+         borderColor: '#ffffff',
+         gridLineColor: '#F5F5F5',
+         shadow: false
+     };
+     /* this.cfg.axesDefaults = {
+         rendererOptions: {
+             textColor: '#292B2C',
+         }
+     };
+     this.cfg.seriesDefaults = {
+         renderer: $.jqplot.PieRenderer,
+         shadow: false,
+         lineWidth: 1,
+         markerOptions: {
+             shadow: false,
+             size: 7,
+             style: 'circle'
+         }
+     } */
+ 
+
+ 
+ }
+ 
+            function disableSunday(date)
+            {
+                var day = date.getDay();
+                return [day!=0,'']
+            }
+        </script>       
+         <script>
+            function handleChange(input)
+            {
+                var ot = document.getElementById("form1:stopFee");
+                if (input.value > parseInt(ot.textContent))
+                    input.value = 0;
+            }
+        </script>
+        <script>
+        		function totalDiscount()
+        		{
+        			var check = $('.discountClass').map(function() {return this.value;}).get().join(',')
+        			var tempArr = check.split(',');
+        			var finalDiscount=0;
+        			
+        			for(var i = 0; i &lt; tempArr.length; i++) 
+        			{
+        				if(tempArr[i]=="")
+        				{
+        					tempArr[i]="0"
+        				}
+        				  finalDiscount+= parseFloat((tempArr[i]));
+        			}
+        			
+        			document.getElementById("form:dt:discount").textContent="Discount Amount : "+finalDiscount;
+        		}
+        		
+        		function totalAmount()
+        		{
+        			var check = $('.payamtClass').map(function() {return this.value;}).get().join(',')
+        			var tempArr = check.split(',');
+        			var finalAmt=0;
+        			
+        			for(var i = 0; i &lt; tempArr.length; i++) 
+        			{
+        				var check = $('.check'+(i+1)+':checked').map(function() {return this.value;}).get().join(',');
+        				if(check=="on")
+        				{
+        					if(tempArr[i]=="")
+            				{
+            					tempArr[i]="0"
+            				}
+        					 finalAmt+= parseFloat((tempArr[i]));
+        				}
+        				
+        			}
+        			
+        			document.getElementById("form:dt:submit").textContent="Submit Amount : "+finalAmt;
+        		}
+        
+			function changeDiscount(sno,src) 
+			{
+				//alert(src);
+				var newsno = sno-1;
+				var check = $('.check'+sno+':checked').map(function() {return this.value;}).get().join(',');
+				
+				var dueAmount=document.getElementById("form:dt:"+newsno+":dueamt").textContent;
+				var feeName=document.getElementById("form:dt:"+newsno+":feeName").textContent;
+				
+				var discountAmount=document.getElementById("form:dt:"+newsno+":pdiscount").value;
+				var disc = discountAmount;
+				var payAmt = document.getElementById("form:dt:"+newsno+":pamt").value;
+				
+				if(discountAmount=="")
+				{
+					discountAmount="0";
+				}
+				
+				var submitAmount= parseFloat(dueAmount) - parseFloat(discountAmount);
+				
+				if(check=="on" &amp;&amp; feeName!="Late Fee" &amp;&amp; feeName!="Any Other Charges")
+				{
+					
+					if(discountAmount!= "" &amp;&amp; submitAmount>=0 &amp;&amp; dueAmount!="")
+					{
+						document.getElementById("form:dt:"+newsno+":pamt").value=submitAmount;
+					}
+					else
+					{
+						document.getElementById("form:dt:"+newsno+":pamt").value=parseFloat(dueAmount);
+						document.getElementById("form:dt:"+newsno+":pdiscount").value=0;
+					}
+				}
+				else if(check=="on" &amp;&amp; (feeName=="Late Fee" || feeName=="Any Other Charges"))
+				{
+					if(discountAmount== "")
+					{
+						document.getElementById("form:dt:"+newsno+":pdiscount").value=0;
+					}
+					
+					if(payAmt== "")
+					{
+						document.getElementById("form:dt:"+newsno+":pamt").value=0;
+					}
+				}
+				else
+				{
+					if(src=="discount" &amp;&amp; disc!="0")
+					{
+						swal("Oops!", "Please Select This Fee First!", "error")
+						//alert("Please Select This Fee First");
+					}
+					
+					
+					if(feeName=="Late Fee" || feeName=="Any Other Charges")
+					{
+						document.getElementById("form:dt:"+newsno+":pamt").value=0;
+					}
+					else
+					{
+						document.getElementById("form:dt:"+newsno+":pamt").value=parseFloat(dueAmount);
+					}
+					document.getElementById("form:dt:"+newsno+":pdiscount").value=0;
+					
+					/* 
+					
+					var disc=document.getElementById("form:dt:"+newsno+":pdiscount").value;
+					var pamnt = document.getElementById("form:dt:"+newsno+":pamt").value; */
+					
+				}
+				
+				
+				totalDiscount();
+				totalAmount();
+				
+				
+			}
+		</script>
+          <script type="text/javascript">
+			function changeColor(disabledCheck) {
+
+				var tag = document.getElementById("form:table1");
+				var tag1 = document.getElementById("form:table2");
+
+				var count = 0;
+				var charcount = disabledCheck.length;
+				if (charcount > 0) {
+					count = 1;
+				}
+
+				if (charcount >= 161) {
+					count = 2;
+				}
+
+				if (charcount > 306) {
+					count = 3;
+				}
+
+				if (charcount > 459) {
+					count = 4;
+				}
+
+				if (charcount >= 612) {
+					count = 5;
+				}
+
+				tag.innerHTML = count;
+				tag1.innerHTML = charcount;
+			}
+			
+		</script>
+    </h:head>
+
+    <h:body>
+        
+        <div class="layout-wrapper menu-layout-static menu-layout-horizontal">
+            <ui:include src="./studentTopbar.xhtml" />
+            <ui:include src="./studentMenu.xhtml" />
+            
+            <div class="layout-main">
+                <ui:insert name="content"/>
+            </div>
+            
+            <ui:include src="./footer.xhtml" />
+        </div>
+        
+        <p:ajaxStatus style="width:32px;height:32px;position:fixed;right:7px;bottom:7px">
+           <f:facet name="start">
+               <i class="fa fa-circle-o-notch fa-spin ajax-loader"></i>
+           </f:facet>
+
+           <f:facet name="complete">
+               <h:outputText value="" />
+           </f:facet>
+       </p:ajaxStatus>
+        <p:ajaxStatus onstart="PF('statusDialog').show()"
+			onsuccess="PF('statusDialog').hide()" />
+		<p:dialog modal="true" widgetVar="statusDialog" resizable="false"
+			showHeader="false">
+			<center>
+			<i class="fa fa-circle-o-notch fa-5x fa-spin ajax-loader"></i>
+			<p:graphicImage value="loader2.gif" height="100" width="100"/> 
+		</center>
+		<center>
+			<h3>Please Wait...</h3>
+		</center>
+		</p:dialog>
+
+        <h:outputStylesheet name="css/nanoscroller.css" library="avalon-layout" />
+        <h:outputStylesheet name="css/animate.css" library="avalon-layout" />
+        <h:outputStylesheet name="css/layout-#{guestPreferences.layout}.css" library="avalon-layout" />
+    </h:body>
+
+</html>

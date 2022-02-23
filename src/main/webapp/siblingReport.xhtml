@@ -1,0 +1,55 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pe="http://primefaces.org/ui/extensions"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Sibling Report</ui:define>
+
+    <ui:define name="content">
+            <div class="ui-fluid">
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <div class="card card-w-title">
+                          <h:form id="form" style="overflow:hidden">	
+							<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+											<h:commandLink>
+												<p:graphicImage name="images/excellogo.png"
+													library="avalon-layout" width="100" height="40"></p:graphicImage>
+												<pe:exporter type="xlsx" target=":form:dt"
+													fileName="Sibling_Report"></pe:exporter>
+											</h:commandLink>
+							<p:dataTable id="dt" var="var" value="#{siblingReport.stdList}" reflow="true" scrollWidth="100%" scrollable="true">
+							
+							<f:facet name="header">
+							
+							<p:outputLabel style="margin: 0px; font-size: 25px !important; font-weight: bold;" value="Sibling Report"></p:outputLabel>
+							
+							</f:facet>
+							
+								<p:column style="width:40px" headerText="S.No">
+								<f:facet name="header">
+									<p:outputLabel value="S.No"></p:outputLabel>
+								</f:facet>
+								    <p:outputLabel value="#{var.sno}"></p:outputLabel>
+								</p:column>
+								
+								<p:columns value="#{siblingReport.columnList}" var="column" columnIndexVar="colIndex">
+									<f:facet name="header">
+										<p:outputLabel value="#{column.value}"></p:outputLabel>
+									</f:facet>
+
+									<p:outputLabel value="#{var.feesMap[column.id]}"></p:outputLabel>
+								</p:columns>
+							</p:dataTable>
+					</h:form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+       
+    </ui:define>
+
+</ui:composition>

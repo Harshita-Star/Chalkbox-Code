@@ -1,0 +1,124 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Marks Average</ui:define>
+
+	<ui:define name="content">
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+						<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+							<p:panel header="Average Of Exam Marks">
+
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:outputLabel for="@next" style="color:red"
+										value="Select Class"></p:outputLabel>
+									<p:selectOneMenu required="true"
+										requiredMessage="Please Select A Class" filter="true"
+										value="#{averageMarks.selectedClass}">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{averageMarks.classList}"></f:selectItems>
+										<p:ajax update=":form" listener="#{averageMarks.allSection}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel for="@next" style="color:red"
+										value="Select Section"></p:outputLabel>
+									<p:selectOneMenu id="showSection"
+										value="#{averageMarks.selectedSection}" filter="true"
+										required="true" requiredMessage="Please select a section">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{averageMarks.sectionList}"></f:selectItems>
+									</p:selectOneMenu>
+
+									<p:outputLabel for="@next" style="color:red"
+										value="Select Subject"></p:outputLabel>
+									<p:selectOneMenu required="true"
+										requiredMessage="Please Select Subject" filter="true"
+										value="#{averageMarks.selectedSubject}">
+										<f:selectItem
+											itemLabel="#{studentPerformanceVar.studentPerformanceSelectHereLabel}"
+											itemValue=""></f:selectItem>
+										<f:selectItems value="#{averageMarks.allSubjectList}"></f:selectItems>
+									</p:selectOneMenu>
+
+								</p:panelGrid>
+								<p:panelGrid columns="2"
+									columnClasses="ui-grid-col-2,ui-grid-col-10" layout="grid"
+									styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:outputLabel value="Select Exams"></p:outputLabel>
+									<p:selectManyCheckbox layout="grid" columns="4"
+										value="#{averageMarks.selectedExamList}">
+										<f:selectItems value="#{averageMarks.allExamList}"></f:selectItems>
+									</p:selectManyCheckbox>
+
+
+								</p:panelGrid>
+
+
+								<br />
+								<p:separator />
+								<center>
+									<p:commandButton value="Search"
+										actionListener="#{averageMarks.searchStudent}"
+										icon="fa fa-search" styleClass="butwid" update=":form"></p:commandButton>
+								</center>
+								<p:separator />
+								<br />
+
+							</p:panel>
+
+							<br></br>
+							<p:panel header="Student Details">
+
+								<p:dataTable reflow="true"
+									rendered="#{averageMarks.showStudentRecord}"
+									value="#{averageMarks.studentDetails}" var="var">
+
+
+									<p:column
+										headerText="#{searchStudentVar.searchStudentAdmissionNumberLabel}">
+										<p:outputLabel value="#{var.srNo}"></p:outputLabel>
+									</p:column>
+
+									<p:column sortBy="#{var.fname}"
+										headerText="#{searchStudentVar.seacrhStudentFirstNameLabel}">
+										<p:outputLabel value="#{var.fname}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Father's Name">
+										<p:outputLabel value="#{var.fathersName}"></p:outputLabel>
+									</p:column>
+
+									<p:columns value="#{averageMarks.showExamList}" var="column"
+										columnIndexVar="colIndex">
+
+										<f:facet name="header">
+											<p:outputLabel value="#{column.label} "></p:outputLabel>
+										</f:facet>
+
+										<p:outputLabel style="width:30px !important"
+											value="#{var.marksMap[column.value]}"></p:outputLabel>
+
+									</p:columns>
+
+								</p:dataTable>
+
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

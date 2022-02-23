@@ -1,0 +1,145 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Fee Collection</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form1">
+							<h1>Fee Collection</h1>
+
+							<p:panel header="Search Student by FatherName/Contact No">
+
+								<p:messages closable="true" autoUpdate="true"></p:messages>
+
+								<p:panelGrid columns="3" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel  for="@next" style="color:red" value="Father Name/Contact No"></p:outputLabel>
+									<p:autoComplete value="#{parentWiseFeeCollection.name}"
+										completeMethod="#{parentWiseFeeCollection.completeParentName}"
+										required="true" minQueryLength="3"
+										requiredMessage="Please Select Name" validatorMessage="Please Enter Correct value">
+										<p:ajax event="query" global="false"></p:ajax>
+										<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:autoComplete>
+
+
+									<p:commandButton value="Search" update=":form2"
+										action="#{parentWiseFeeCollection.searchStudentByName}"></p:commandButton>
+
+
+								</p:panelGrid>
+
+							</p:panel>
+						</h:form>
+					</div>
+					<div class="card card-w-title">
+						<h:form id="form2">
+							<p:panel header="Due Fee ">
+								<p:panelGrid columns="5" style="width:100%">
+
+									<p:panelGrid columns="2">
+										<p:outputLabel value="Total Fee:-"></p:outputLabel>
+										<h:outputText value="#{parentWiseFeeCollection.totalFee}"></h:outputText>
+									</p:panelGrid>
+
+									<p:panelGrid columns="2">
+										<p:outputLabel value="Total Paid:-"></p:outputLabel>
+										<h:outputText value="#{parentWiseFeeCollection.totalPaid}"></h:outputText>
+									</p:panelGrid>
+
+									<p:panelGrid columns="2">
+										<p:outputLabel value="Total Discount:-"></p:outputLabel>
+										<h:outputText value="#{parentWiseFeeCollection.totalDiscount}"></h:outputText>
+									</p:panelGrid>
+									<p:panelGrid columns="2">
+										<p:outputLabel value="Total Left till Today:-"></p:outputLabel>
+										<h:outputText
+											value="#{parentWiseFeeCollection.totalDueAmount}"></h:outputText>
+									</p:panelGrid>
+
+									<p:panelGrid columns="2">
+										<p:outputLabel value="Total Left:-"></p:outputLabel>
+										<h:outputText value="#{parentWiseFeeCollection.totalLeft}"></h:outputText>
+									</p:panelGrid>
+
+
+								</p:panelGrid>
+								<p:outputPanel id="up">
+
+									<p:dataTable reflow="true" rendered="#{parentWiseFeeCollection.show}"
+										var="var" value="#{parentWiseFeeCollection.studentList}"
+										rows="20" paginator="true" rowsPerPageTemplate="20,30,50">
+
+										<p:column headerText="Add Number">
+											<p:outputLabel value="#{var.srNo}"></p:outputLabel>
+										</p:column>
+
+										<p:column sortBy="#{var.fname}" filterBy="#{var.fname}"
+											headerText="Student Name">
+											<p:outputLabel value="#{var.fname}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Class">
+											<p:outputLabel value="#{var.className}"></p:outputLabel>
+										</p:column>
+
+										<p:column style="font-size:10px !important"
+											headerText="Total Fee">
+											<h:outputText style="font-size:10px !important"
+												value="#{var.totalFee}" />
+										</p:column>
+
+										<p:column style="font-size:10px !important"
+											headerText="Total Paid">
+											<h:outputText style="font-size:10px !important"
+												value="#{var.paidFee}" />
+										</p:column>
+										<p:column style="font-size:10px !important"
+											headerText="Total Discount">
+											<h:outputText style="font-size:10px !important"
+												value="#{var.totalDiscount}" />
+										</p:column>
+
+										<p:column headerText="Left Amount Till Today">
+											<p:outputLabel value="#{var.tutionFeeDueAmount}"></p:outputLabel>
+										</p:column>
+										<p:column style="font-size:10px !important"
+											headerText="Total Left">
+											<h:outputText style="font-size:10px !important"
+												value="#{var.leftFee}" />
+										</p:column>
+										<p:column headerText="Pay">
+											<p:commandButton icon="ui-icon-check" update=":form2"
+												action="#{parentWiseFeeCollection.editNow}">
+												<f:setPropertyActionListener
+													target="#{parentWiseFeeCollection.selectedStudent}"
+													value="#{var}"></f:setPropertyActionListener>
+											</p:commandButton>
+										</p:column>
+
+
+
+
+									</p:dataTable>
+
+								</p:outputPanel>
+
+							</p:panel>
+
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

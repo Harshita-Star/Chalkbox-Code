@@ -1,0 +1,116 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Bonafide Certificate</ui:define>
+
+    <ui:define name="content">
+       
+            <div class="ui-fluid">
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <div class="card card-w-title">
+                           <h:form id="form">
+					<h1>Bonafide Certificate</h1>
+            		 <p:messages closable="true" autoUpdate="true"></p:messages>
+               		 	<p:panel header="Search Student by Name/Sr.No">
+               		 		
+               		 		<p:panelGrid columns="6" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+               		 			<p:outputLabel value="Student Name / SR.NO."></p:outputLabel>      
+               		 			<p:autoComplete value="#{bonafideCertificate.name}" minQueryLength="3" completeMethod="#{bonafideCertificate.autoCompleteStudentInfo}" validatorMessage="Please Enter Correct value">
+               		 			<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+       							<p:ajax event="query" global="false"/>
+       							</p:autoComplete>
+               		 	 		<p:commandButton  update=":form" value="Search" actionListener="#{bonafideCertificate.searchStudentByName}"></p:commandButton>
+               					</p:panelGrid>
+               				
+               		 			<p:outputLabel></p:outputLabel>
+               		 			<p:outputLabel value="OR" rendered="false"></p:outputLabel>
+               		 			<p:outputLabel rendered="false"></p:outputLabel>
+               		 				<p:panelGrid columns="4" rendered="false">
+               		 		
+               		 			<p:outputLabel value="Admission No:"></p:outputLabel>      
+               		 				<p:inputText value="#{bonafideCertificate.addNumber}" validatorMessage="Please Enter Correct value">
+               		 				   <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+               		 				</p:inputText>
+               		 			<p:commandButton value="Search" update=":form" actionListener="#{bonafideCertificate.searchStudentByAdmissionNo}" ></p:commandButton>
+               		 		
+               		 		</p:panelGrid>
+               							 		
+               		
+            	 		</p:panel>
+               		
+               		 	
+               		 	<p:panel header="Student Details">
+               		 				
+               		 		 <p:outputPanel id="up">
+               		  
+               		  		<p:dataTable selection="#{bonafideCertificate.selectedStudent}"  rowKey="#{var.id}" rendered="#{bonafideCertificate.show}" var="var" value="#{bonafideCertificate.list}" reflow="true" rows="5" paginator="true" rowsPerPageTemplate="5,10,15"> 
+               		  		
+               		  			<p:column style="width:100px" headerText="Select Here" selectionMode="single"></p:column>
+               		  			
+               		  			<p:column headerText="Addmission Number">
+               		  				<p:outputLabel value="#{var.srNo}"></p:outputLabel>
+               		  			</p:column>
+               		  			
+               		  			<p:column headerText="Student Name">
+               		  				<p:outputLabel value="#{var.fullName}"></p:outputLabel>
+               		  			</p:column>
+               		  			
+               		  			<p:column headerText="Class Name">
+               		  				<p:outputLabel value="#{var.className}"></p:outputLabel>
+               		  			</p:column>
+               		  			
+               		  			<p:column headerText="Section Name">
+               		  				<p:outputLabel value="#{var.sectionName}"></p:outputLabel>
+               		  			</p:column>
+               		  			
+               		  			<f:facet name="footer">
+	               		  			<p:commandButton style="width:15%" rendered="#{bonafideCertificate.show}"   oncomplete="PF('ccDlg').show();" value="Generate "></p:commandButton>
+               		  			</f:facet>               		  		
+               		  		
+               		  		</p:dataTable>
+               		  	
+               		  </p:outputPanel>
+               		 	
+               		</p:panel>
+               
+			</h:form>
+			
+			
+			<h:form id="form2">
+				<p:dialog modal="true" widgetVar="ccDlg" header="">
+					<p:panelGrid columns="2">
+					    
+					    <p:outputLabel value="Type Of Certificate:"></p:outputLabel>
+						<p:selectOneRadio  value="#{bonafideCertificate.typeofCir}">
+             	        <f:selectItem itemValue="DATE OF BIRTH CERTIFICATE" itemLabel="DOB"></f:selectItem>
+                	    <f:selectItem itemValue="READING CERTIFICATE" itemLabel="STUDYING"></f:selectItem>
+                       </p:selectOneRadio>
+                       
+                       
+					    <p:outputLabel value="Type Of Student:"></p:outputLabel>
+						<p:selectOneRadio  value="#{bonafideCertificate.tyepofstud}">
+             	        <f:selectItem itemValue="Current " itemLabel="Current"></f:selectItem>
+                	    <f:selectItem itemValue="Old" itemLabel="Old"></f:selectItem>
+                    
+                    </p:selectOneRadio>
+					
+						<p:outputLabel value="Issue Date:" for="@next" style="color:red" ></p:outputLabel>
+						<p:calendar value="#{bonafideCertificate.ccIssueDate}" navigator="true" pattern="dd/MM/yyyy" required="true" requiredMessage="Please select CC Issue Date"></p:calendar>
+					
+						<p:commandButton action="#{bonafideCertificate.issueCC}" value="Generate" update=":form,:form2"></p:commandButton>
+					</p:panelGrid>
+				</p:dialog>
+			</h:form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+       
+    </ui:define>
+
+</ui:composition>

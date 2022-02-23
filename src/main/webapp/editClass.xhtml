@@ -1,0 +1,73 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Class Fee Allocation</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="initializePageDataForm">
+							<p:remoteCommand name="initializePageDataCommand" autoRun="true"
+								action="#{editClass.init()}" update=":form"/>
+						</h:form>
+						<h:form id="form">
+
+
+							<p:panel header="Class Fee Allocation" id="panel">
+								<p:messages closable="true" autoUpdate="true"></p:messages>
+
+
+
+								<p:dataTable reflow="true" rows="15" paginator="true"
+									rowsPerPageTemplate="15,30,50" value="#{editClass.classList}"
+									var="var">
+
+									<p:column headerText="Serial Number">
+
+										<p:outputLabel value="#{var.serialNumber}"></p:outputLabel>
+
+									</p:column>
+
+									<p:column sortBy="#{var.className}" filterBy="#{var.className}"
+										headerText="Class">
+
+										<p:outputLabel value="#{var.className}"></p:outputLabel>
+
+									</p:column>
+
+									<p:column headerText="Fee Allocate/Edit">
+									<center>
+									<p:commandButton update=":form" icon="ui-icon-plus" styleClass="butwid"
+											action="#{editClass.editClassDetails}" value=" Allocate">
+											<f:setPropertyActionListener
+												target="#{editClass.selectedClass}" value="#{var}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</center>
+									</p:column>
+
+								</p:dataTable>
+
+							</p:panel>
+						</h:form>
+
+						<p:confirmDialog global="true"  showEffect="fade" hideEffect="fade">
+							<p:commandButton value="Yes" type="button" 
+								styleClass="ui-confirmdialog-yes greenButt" icon="ui-icon-check" />
+							<p:commandButton value="No" type="button" 
+								styleClass="ui-confirmdialog-no redButt" icon="ui-icon-close" />
+						</p:confirmDialog>
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

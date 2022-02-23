@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<f:loadBundle var="addSectionVar" basename="myProperties" />
+<f:view contentType="text/html">
+	<h:head>
+		<title>#{sideMenuBean.companyName} | All Student Report</title>
+		<f:facet name="first">
+			<meta content='text/html; charset=UTF-8' http-equiv="Content-Type" />
+			<meta http-equiv="X-UA-Compatible" content="EmulateIE8" />
+		</f:facet>
+
+		<link rel="stylesheet" type="text/css" href="css/style.css" />
+
+	</h:head>
+
+	<h:body>
+
+		<p:commandButton value="Print">
+			<p:printer target="form:show"></p:printer>
+		</p:commandButton>
+		<br></br>
+		
+		<h:form id="form">
+
+			<p:panel id="show">
+				<center>
+					<p
+						style="font-family: initial; font-style: oblique; font-size: 25px !important; font-weight: bold; margin: 0px;">#{headerBean.name}</p>
+					<p
+						style="font-family: initial; font-style: oblique; font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.affiliationNo}</p>
+					<p
+						style="font-family: initial; font-style: oblique; font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.finalAddress}</p>
+					<p
+						style="font-family: initial; font-style: oblique; font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.phoneno}</p>
+
+					<p
+						style="margin: 0px; font-size: 25px !important; font-weight: bold;">All
+						Student Report</p>
+				</center>
+				<p:panelGrid columns="3" style="width:100%">
+					<p:panelGrid columns="2">
+						<p:outputLabel value="Total:-"></p:outputLabel>
+						<h:outputText value="#{printAllStudentList.total}"></h:outputText>
+					</p:panelGrid>
+
+				</p:panelGrid>
+
+				<h:dataTable style="width:100%;border-collapse:collapse" border="1"
+					var="var" value="#{printAllStudentList.list}">
+
+					<p:column headerText="S.No." style="width:40px;text-align:center">
+
+						<f:facet name="header">
+							<p:outputLabel value="SNo."></p:outputLabel>
+						</f:facet>
+						<center><p:outputLabel value="#{var.sno}"></p:outputLabel></center>
+					</p:column>
+
+					<p:column headerText="Adm. No."
+						style="width:80px;text-align:center">
+
+						<f:facet name="header">
+							<p:outputLabel value="Add No."></p:outputLabel>
+						</f:facet>
+						<center><p:outputLabel value="#{var.srNo}"></p:outputLabel></center>
+					</p:column>
+
+
+					<p:column style="width:70px;text-align:center"
+						headerText="Student Name">
+
+						<f:facet name="header">
+							<p:outputLabel value="Student Name"></p:outputLabel>
+						</f:facet>
+						<center><p:outputLabel value="#{var.fname}"></p:outputLabel></center>
+					</p:column>
+
+					<p:column style="width:70px;text-align:center"
+						headerText="Father's Name">
+
+						<f:facet name="header">
+							<p:outputLabel value="Father's Name"></p:outputLabel>
+						</f:facet>
+						<center><p:outputLabel value="#{var.fathersName}"></p:outputLabel></center>
+					</p:column>
+					
+					<p:column style="width:60px;text-align:center" headerText="Class">
+
+						<f:facet name="header" style="width:60px;text-align:center">
+							<p:outputLabel value="Class"></p:outputLabel>
+						</f:facet>
+						<center><p:outputLabel value="#{var.className}"></p:outputLabel></center>
+					</p:column>
+
+					<p:column style="width:40px;text-align:center" headerText="Section">
+
+						<f:facet name="header" style="width:40px;text-align:center">
+							<p:outputLabel value="Section"></p:outputLabel>
+						</f:facet>
+						<center><p:outputLabel value="#{var.sectionName}"></p:outputLabel></center>
+					</p:column>
+					<p:column style="width:80px;text-align:center"
+						headerText="Phone No">
+
+						<f:facet name="header">
+							<p:outputLabel value="Phone No"></p:outputLabel>
+						</f:facet>
+						<center><p:outputLabel value="#{var.fathersPhone}"></p:outputLabel></center>
+					</p:column>
+
+				</h:dataTable>
+
+
+			</p:panel>
+
+		</h:form>
+
+
+	</h:body>
+</f:view>
+</html>

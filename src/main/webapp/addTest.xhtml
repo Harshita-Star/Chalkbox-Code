@@ -1,0 +1,344 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Add Test</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+
+							<p:messages closable="true" autoUpdate="true"></p:messages>
+							
+							<p:panel header="Select ClassWise/Class-Section Wise">
+							
+								<p:panelGrid columns="2"
+									styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:outputLabel value="Select Type  : " for="@next"
+										></p:outputLabel>
+									<p:selectOneRadio value="#{addTest.type}">
+										<f:selectItem itemLabel="Class Wise" itemValue="0"></f:selectItem>
+										<f:selectItem itemLabel="Class-Section Wise" itemValue="1"></f:selectItem>
+										<p:ajax listener="#{addTest.section}" update=":form2,showLab"></p:ajax>
+									</p:selectOneRadio>
+								</p:panelGrid>
+							
+							</p:panel>
+							
+							<p:outputLabel id = "showLab">
+							
+							<p:panel rendered="#{addTest.showType}" header="Add Class Test">
+
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel for="@next" style="color:red"
+										value="Select Class"></p:outputLabel>
+									<p:selectOneMenu value="#{addTest.selectedCLassSection}"
+										filter="true" required="true"
+										requiredMessage="Please Select Class">
+										<f:selectItem itemLabel="Select Class" itemValue=""></f:selectItem>
+										<f:selectItems value="#{addTest.classSection}"></f:selectItems>
+
+										<p:ajax update="sectionid" listener="#{addTest.allSections}"></p:ajax>
+
+									</p:selectOneMenu>
+
+									<p:outputLabel for="@next" style="color:red"
+										rendered="#{addTest.showSectionBut}" value="Select Section"></p:outputLabel>
+									<p:selectOneMenu rendered="#{addTest.showSectionBut}" 
+										filter="true" id="sectionid"
+										value="#{addTest.selectedSection}" required="true"
+										requiredMessage="Please Select Section">
+										<f:selectItem itemLabel="Select Section" itemValue=""></f:selectItem>
+										<f:selectItems value="#{addTest.sectionList}"></f:selectItems>
+										
+										<p:ajax update="subjecttable"
+											listener="#{addTest.allSubjects}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel for="@next" style="color:red" rendered="false"
+										value="Select Subject"></p:outputLabel>
+									<p:selectOneMenu rendered="false" id="subjectid" filter="true"
+										value="#{addTest.selectedSubject}" required="true"
+										requiredMessage="Please Select Subject">
+
+										<f:selectItems value="#{addTest.subjectList}"></f:selectItems>
+									</p:selectOneMenu>
+
+									<p:outputLabel for="@next" style="color:red" rendered="false"
+										value=" Test Id"></p:outputLabel>
+									<p:inputText rendered="false" disabled="true"
+										value="#{addTest.idTest}" required="true"
+										requiredMessage="Please Enter Test Name"
+										validatorMessage="Please Enter Correct value">
+										<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:inputText>
+
+									<p:outputLabel for="@next" style="color:red"
+										value="Enter Test Name"></p:outputLabel>
+									<p:inputText value="#{addTest.testName}" required="true"
+										requiredMessage="Please Enter Test Name"
+										validatorMessage="Please Enter Correct value">
+										<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:inputText>
+
+									<p:outputLabel for="@next" style="color:red" rendered="false"
+										value="Enter Test Marks"></p:outputLabel>
+									<p:inputText rendered="false" value="#{addTest.testMarks}"
+										required="true" requiredMessage="Please Enter Test Marks">
+										<p:keyFilter mask="pnum" />
+									</p:inputText>
+
+									<p:outputLabel for="@next" style="color:red" value="Test Date"></p:outputLabel>
+									<p:calendar value="#{addTest.selectedDay}" pattern="dd/MM/yyyy"
+										navigator="true" required="true"
+										requiredMessage="Please Select Date" readonlyInput="true"></p:calendar>
+
+									<p:outputLabel for="@next" style="color:red" value="No Of Test"></p:outputLabel>
+									<p:selectOneRadio value="#{addTest.noOfTest}" required="true"
+										requiredMessage="Please Enter No Of Test">
+										<f:selectItem itemLabel="1" itemValue="1"></f:selectItem>
+										<f:selectItem itemLabel="2" itemValue="2"></f:selectItem>
+										<p:ajax update="mainPanel" listener="#{addTest.checkNoOfTest}"></p:ajax>
+									</p:selectOneRadio>
+								</p:panelGrid>
+								<br></br>
+
+								<p:outputPanel id="mainPanel" style="width:100%">
+									<p:outputPanel rendered="#{addTest.showSub1}"
+										style="width:49%;float:left">
+										<p:panelGrid columns="2" layout="grid"
+											styleClass="ui-panelgrid-blank form-group"
+											style="width:100%;border:0px none; background-color:transparent;">
+											<p:outputLabel rendered="#{addTest.showName1}"
+												value="Enter Sub Test Name"></p:outputLabel>
+											<p:inputText rendered="#{addTest.showName1}"
+												value="#{addTest.subTest1}"
+												validatorMessage="Please Enter Correct value">
+												<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+											</p:inputText>
+										</p:panelGrid>
+										<br></br>
+										<p:dataTable reflow="true" id="subjecttable"
+											value="#{addTest.subjectList}" var="var">
+											<p:column headerText="Subject Name">
+												<p:outputLabel rendered="true" value="#{var.subjectName}"></p:outputLabel>
+											</p:column>
+
+											<p:column headerText="Max. marks">
+												<p:inputText onfocus="this.select();" value="#{var.marks}">
+													<p:keyFilter mask="num" />
+												</p:inputText>
+											</p:column>
+										</p:dataTable>
+
+									</p:outputPanel>
+									<p:outputPanel style="width:49%;float:right"
+										rendered="#{addTest.showSub2}">
+
+										<p:panelGrid columns="2" layout="grid"
+											styleClass="ui-panelgrid-blank form-group"
+											style="width:100%;border:0px none; background-color:transparent;">
+											<p:outputLabel value="Enter Sub Test Name"></p:outputLabel>
+											<p:inputText value="#{addTest.subTest2}"
+												validatorMessage="Please Enter Correct value">
+												<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+											</p:inputText>
+										</p:panelGrid>
+										<br></br>
+										<p:dataTable reflow="true" id="subjecttable2"
+											value="#{addTest.subjectList2}" var="var">
+											<p:column headerText="Subject Name">
+												<p:outputLabel rendered="true" value="#{var.subjectName}"></p:outputLabel>
+											</p:column>
+
+											<p:column headerText="Max. marks">
+												<p:inputText onfocus="this.select();" value="#{var.marks}">
+													<p:keyFilter mask="num" />
+												</p:inputText>
+											</p:column>
+										</p:dataTable>
+
+									</p:outputPanel>
+
+								</p:outputPanel>
+
+
+
+								<br />
+								<p:separator />
+								<center>
+									<p:commandButton update=":form,:form2" styleClass="butwid"
+										icon="fa fa-plus-circle" action="#{addTest.addTest}"
+										value="Add Test"></p:commandButton>
+								</center>
+								<p:separator />
+								<br />
+							</p:panel>
+							</p:outputLabel>
+						</h:form>
+					</div>
+
+					<div class="card card-w-title">
+						<h:form id="form2">
+							<p:panel header="View/Edit Test" rendered="#{addTest.showType}">
+
+								<p:dataTable reflow="true" value="#{addTest.list}" var="var">
+
+									<p:column headerText="S. No.">
+										<p:outputLabel value="#{var.sno}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Date">
+										<p:outputLabel value="#{var.dt}"></p:outputLabel>
+									</p:column>
+
+
+									<p:column headerText="Class Name" filterBy="#{var.className}"
+										filterMatchMode="contains">
+										<p:outputLabel value="#{var.className}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Section" filterBy="#{var.section}"
+										filterMatchMode="contains" rendered="#{addTest.sectionField}">
+										<p:outputLabel value="#{var.section}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Subject Name" filterBy="#{var.subject}"
+										filterMatchMode="contains">
+										<p:outputLabel value="#{var.subject}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Test Name" filterBy="#{var.testName}"
+										filterMatchMode="contains">
+										<p:outputLabel value="#{var.testName}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Test Marks">
+										<p:outputLabel value="#{var.testMarks}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Edit">
+										<p:commandButton update=":editForm" icon="ui-icon-pencil"
+											action="#{addTest.editTestDetails}">
+											<f:setPropertyActionListener target="#{addTest.selectedTest}"
+												value="#{var}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+
+									<p:column headerText="Delete">
+										<p:commandButton update=":form2"
+											disabled="#{var.disableDelete}" styleClass="redButt"
+											action="#{addTest.deleteTest}" icon="ui-icon-trash">
+											<p:confirm header="Confirmation"
+												message="Are You Sure To Delete this Test ?"
+												icon="ui-icon-alert" />
+											<f:setPropertyActionListener value="#{var}"
+												target="#{addTest.selectedTest}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+
+								</p:dataTable>
+
+							</p:panel>
+
+						</h:form>
+
+						<h:form id="editForm">
+
+							<p:dialog restyle="height:500px;" resizable="false"
+								widgetVar="editDialog" header="Edit Details" showEffect="fade"
+								hideEffect="explode" modal="true">
+								<div class="ui-g form-group">
+									<p:panelGrid columns="2"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+
+										<p:outputLabel value="Select Class" for="@next"
+											style="color:red"></p:outputLabel>
+										<p:selectOneMenu style="width:250px"
+											value="#{addTest.selectedCLassSection}" required="true"
+											requiredMessage="Please select a Class">
+											<f:selectItem itemLabel="select" itemValue=""></f:selectItem>
+											<f:selectItems value="#{addTest.classSection}"></f:selectItems>
+
+											<p:ajax update="sectionid" listener="#{addTest.allSections}"></p:ajax>
+											<p:ajax update="subjectid" listener="#{addTest.allSubjects}"></p:ajax>
+
+										</p:selectOneMenu>
+
+										<p:outputLabel value="Select Section" for="@next"
+											style="color:red" rendered="#{addTest.sectionField}"></p:outputLabel>
+										<p:selectOneMenu rendered="#{addTest.sectionField}"
+											id="sectionid" value="#{addTest.selectedSection}"
+											required="true" requiredMessage="Please select a Section">
+
+											<f:selectItems value="#{addTest.sectionList}"></f:selectItems>
+										</p:selectOneMenu>
+
+										<p:outputLabel value="Select Subject" for="@next"
+											style="color:red"></p:outputLabel>
+										<p:selectOneMenu id="subjectid"
+											value="#{addTest.selectedSubject}" required="true"
+											requiredMessage="Please select a Subject">
+
+											<f:selectItems value="#{addTest.subjectListt}"></f:selectItems>
+										</p:selectOneMenu>
+
+
+										<p:outputLabel value="Enter Test Name" for="@next"
+											style="color:red"></p:outputLabel>
+										<p:inputText value="#{addTest.testName}" required="true"
+											requiredMessage="Please enter a Test Name"
+											validatorMessage="Please Enter Correct value">
+											<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+										</p:inputText>
+
+										<p:outputLabel value="Enter Test Marks" for="@next"
+											style="color:red"></p:outputLabel>
+										<p:inputText value="#{addTest.testMarks}" required="true"
+											requiredMessage="Please enter a Test Marks"
+											validatorMessage="Please Enter Correct value">
+											<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+										</p:inputText>
+
+
+
+									</p:panelGrid>
+								</div>
+								<br />
+								<p:separator />
+								<center>
+									<p:commandButton update=":editForm,:form,:form2"
+										styleClass="butwid" icon="fa fa-floppy-o"
+										actionListener="#{addTest.editNow}" value="Save Here"></p:commandButton>
+
+								</center>
+								<p:separator />
+								<br />
+							</p:dialog>
+						</h:form>
+						<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+							<p:commandButton value="Yes"
+								styleClass="ui-confirmdialog-yes greenButt" icon="ui-icon-check" />
+							<p:commandButton value="No"
+								styleClass="ui-confirmdialog-no redButt" icon="ui-icon-close" />
+						</p:confirmDialog>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

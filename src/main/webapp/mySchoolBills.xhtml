@@ -1,0 +1,148 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">My Bills</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form" enctype="multipart/form-data">
+							<p:messages closable="true" autoUpdate="true"></p:messages>
+							<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+							<h1>My Bills</h1>
+
+							<p:commandButton value="PDF" ajax="false" styleClass="butwid" icon="fa fa-file-pdf-o" process="@this"
+								actionListener="#{myAllSchoolBills.exportMyBillPdf}"
+								style="width:50px">
+
+								<p:fileDownload value="#{myAllSchoolBills.filed}" />
+							</p:commandButton>
+
+							<p:panel header="My Bills">
+								<p:dataTable value="#{myAllSchoolBills.list}" var="var"
+									reflow="true">
+
+									<p:column headerText="S.No.">
+										<p:outputLabel value="#{var.sno}"></p:outputLabel>
+									</p:column>
+
+									<p:column filterBy="#{var.billNo}" filterMatchMode="contains"
+										headerText="Bill No.">
+										<p:outputLabel value="#{var.billNo}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Bill Date">
+										<p:outputLabel value="#{var.billDateStr}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Due Date">
+										<p:outputLabel value="#{var.dueDateStr}"></p:outputLabel>
+									</p:column>
+									
+									<p:column headerText="Amount">
+										<p:outputLabel value="#{var.amount}"></p:outputLabel>
+									</p:column>
+									
+									<p:column headerText="Status">
+										<p:outputLabel value="#{var.status.toUpperCase()}"></p:outputLabel>
+									</p:column>
+									
+									<p:column headerText="Paid Date">
+										<p:outputLabel value="#{var.strPaidDate}" style=" word-break: break-all;"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Paid By">
+										<p:outputLabel value="#{var.paidBy}" style=" word-break: break-all;"></p:outputLabel>
+									</p:column>
+									
+									<p:column headerText="Orderid">
+										<p:outputLabel value="#{var.orderid}" style=" word-break: break-all;"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Download">
+										<p:commandButton icon="fa fa-fw fa-download"
+											oncomplete="PF('dwnlad').show();" update=":form10">
+											<f:setPropertyActionListener
+												target="#{myAllSchoolBills.selectedBill}" value="#{var}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+
+									<p:column headerText="View Bill">
+										<p:commandButton icon="fa fa-fw fa-paperclip"
+											action="#{myAllSchoolBills.view}">
+											<f:setPropertyActionListener
+												target="#{myAllSchoolBills.selectedBill}" value="#{var}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+
+									
+
+                                  <f:facet name="footer">
+                                  	<p:commandButton icon="ui-icon-check"
+											action="#{myAllSchoolBills.purchase}" value="#{myAllSchoolBills.amount} Pay" rendered="#{myAllSchoolBills.showPayButton}">
+											<p:confirm header="Confirmation"
+												message="Are you sure to pay the due amount of Rs. #{myAllSchoolBills.amount} ?"
+												icon="ui-icon-alert" />
+										</p:commandButton>
+									
+                                    
+                                  </f:facet>
+
+								</p:dataTable>
+
+
+							</p:panel>
+						</h:form>
+
+						<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+							<p:commandButton value="Yes" styleClass="ui-confirmdialog-yes"
+								icon="ui-icon-check" />
+							<p:commandButton value="No" styleClass="ui-confirmdialog-no"
+								icon="ui-icon-close" />
+						</p:confirmDialog>
+
+						<h:form id="form10" enctype="multipart/form-data">
+							<p:dialog widgetVar="dwnlad" modal="true" header="Download Bill">
+								<div class="ui-g form-group">
+									<p:panelGrid columns="2"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+										<p:commandButton ajax="false" process="@this"
+											oncomplete="PF('dwnlad').hide();"
+											actionListener="#{myAllSchoolBills.Filedownload1}"
+											value="Yes" update=":form10">
+											<p:fileDownload value="#{myAllSchoolBills.filee}"></p:fileDownload>
+
+										</p:commandButton>
+										<p:commandButton value="No" oncomplete="PF('dwnlad').hide();"
+											update=":form10"></p:commandButton>
+									</p:panelGrid>
+								</div>
+							</p:dialog>
+						</h:form>
+
+						<h:form id="form2">
+							<p:dialog widgetVar="alrtDlg" showEffect="fade"
+								hideEffect="explode" resizable="true" closable="true"
+								closeOnEscape="true" header="Bill" modal="true" width="100%"
+								height="650px">
+								<object type="application/pdf"
+									data="#{myAllSchoolBills.file}?pfdrid_c=true" width="100%"
+									height="100%"> </object>
+
+							</p:dialog>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

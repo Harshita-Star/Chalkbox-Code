@@ -1,0 +1,163 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Allot Biometric Code</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<p:messages closable="true" autoUpdate="true"></p:messages>
+						<h:form id="form2">
+							<h2>Allot Staff Biometric Code</h2>
+							<p:panel id="mainPnl">
+								<f:facet name="header">
+									<span>Search Employee by Category</span>
+								</f:facet>
+
+
+								<p:panelGrid columns="2"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel  for="@next" style="color:red" value="Select a category"></p:outputLabel>
+									<p:selectOneMenu
+										value="#{allotBioCodeToStaff.selectedCategory}" filter="true"
+										required="true"
+										requiredMessage="Please select employee category">
+										<f:selectItem itemLabel="Select here" itemValue=""></f:selectItem>
+										<f:selectItem itemLabel="All" itemValue="All"></f:selectItem>
+										<f:selectItems value="#{allotBioCodeToStaff.categoryList}"></f:selectItems>
+
+									</p:selectOneMenu>
+
+								</p:panelGrid>
+
+								<br />
+
+								<center>
+									<p:commandButton style="width: 150px;" value="Search"
+										actionListener="#{allotBioCodeToStaff.searchByCategory}"
+										update=":form"></p:commandButton>
+								</center>
+
+							</p:panel>
+						</h:form>
+						<br />
+
+						<h:form id="form">
+							<p:panel header="Allot Staff Biometric Code"
+								rendered="#{allotBioCodeToStaff.show}" id="dtPnl">
+
+								<p:panelGrid columns="2"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel  for="@next" style="color:red" value="Select biometric device for which you want to allot staff biometric code"></p:outputLabel>
+									<p:selectOneMenu id="sectionid"
+										value="#{allotBioCodeToStaff.deviceCode}" required="true"
+										requiredMessage="Please select a biometric device"
+										filter="true">
+										<f:selectItem itemLabel="Select Device" itemValue=""></f:selectItem>
+										<f:selectItems value="#{allotBioCodeToStaff.bioDeviceList}"></f:selectItems>
+									</p:selectOneMenu>
+								</p:panelGrid>
+								<br/>
+
+								<p:dataTable reflow="true" id="upPic"
+									value="#{allotBioCodeToStaff.employeeList}" var="var"
+									selection="#{allotBioCodeToStaff.selectEmp}" rowKey="#{var.id}"
+									rowIndexVar="index">
+
+									<p:column exportable="false" selectionMode="multiple"
+										style="width:35px;"></p:column>
+
+									<p:column headerText="S.No." style="width:50px;">
+										<f:facet name="header">
+											<p:outputLabel value="S.No."></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{index+1}"></p:outputLabel>
+									</p:column>
+
+									<p:column rendered="false" headerText="Chalkbox UID">
+										<f:facet name="header">
+											<p:outputLabel value="Chalkbox UID"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.id}"></p:outputLabel>
+									</p:column>
+
+									<p:column sortBy="#{var.fname}" filterBy="#{var.fname}"
+										headerText="Name">
+										<f:facet name="header">
+											<p:outputLabel value="Name"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.fname}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Father's Name">
+										<f:facet name="header">
+											<p:outputLabel value="Father's Name"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.lname}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Category">
+										<f:facet name="header">
+											<p:outputLabel value="Category"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.category}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Sub Categ.">
+										<f:facet name="header">
+											<p:outputLabel value="Sub Categ."></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.subCateg}"></p:outputLabel>
+									</p:column>
+									
+									<p:column headerText="Biometric Device">
+										<f:facet name="header">
+											<p:outputLabel value="Biometric Device"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.bioDeviceName} / #{var.bioDeviceCode}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Staff Biometric Code">
+										<f:facet name="header">
+											<p:outputLabel value="Staff Biometric Code"></p:outputLabel>
+										</f:facet>
+										<p:inputText id="rfid#{var.sno}" value="#{var.bioCode}"
+											onfocus="this.select();"
+											onchange="duplicateRfid(#{var.sno},#{allotBioCodeToStaff.employeeList.size()})" validatorMessage="Please Enter Correct value">
+											<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+											</p:inputText>
+									</p:column>
+
+								</p:dataTable>
+
+								<br />
+								<br />
+								<center>
+									<p:commandButton style="width: 150px;" value="Update"
+										actionListener="#{allotBioCodeToStaff.submit}"
+										update=":form"></p:commandButton>
+								</center>
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

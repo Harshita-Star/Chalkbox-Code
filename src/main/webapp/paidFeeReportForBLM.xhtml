@@ -1,0 +1,161 @@
+	<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+					xmlns:ui="http://java.sun.com/jsf/facelets"
+					xmlns:h="http://java.sun.com/jsf/html"
+					xmlns:f="http://java.sun.com/jsf/core"
+					xmlns:p="http://primefaces.org/ui"
+					template="/WEB-INF/schoolMasterTemplate.xhtml">
+
+		<ui:define name="title">Paid Fee Report For BLM</ui:define>
+
+		<ui:define name="content">
+		   
+				<div class="ui-fluid">
+					<div class="ui-g">
+						<div class="ui-g-12">
+               		 	<div class="card card-w-title">
+               		 	
+             		  	<h:form id="form2">	 		
+               		 		<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+               		 		<p:panel header="Search">
+               		 			
+               		 		<p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+               		 		
+               		 		<p:outputLabel  for="@next" style="color:red" value="Select School"></p:outputLabel>
+							<p:selectOneMenu value="#{paidFeeReportForBLM.schid}"
+								required="true" requiredMessage="Please select a school">
+								<f:selectItem itemLabel="All" itemValue="-1"></f:selectItem>
+								<f:selectItems value="#{paidFeeReportForBLM.branchList}"></f:selectItems>
+	
+								<p:ajax listener="#{paidFeeReportForBLM.branchWiseWork}"
+									update="form2"></p:ajax>
+							</p:selectOneMenu>
+							
+							<p:outputLabel/><p:outputLabel/>
+               		 		
+               		 		<p:outputLabel rendered="#{paidFeeReportForBLM.showClass}" for="@next" style="color:red"   value="#{dueFeeReportVar.dueFeeReportClassLabel}*"></p:outputLabel>      
+               		 		<p:selectOneMenu rendered="#{paidFeeReportForBLM.showClass}" style="width:250px" value="#{paidFeeReportForBLM.selectedCLassSection}" required="true" requiredMessage="Please select a class">
+               		 			<f:selectItem itemLabel="All" itemValue="-1"></f:selectItem>
+               		 			<f:selectItems value="#{paidFeeReportForBLM.classSection}"></f:selectItems>
+               		 			<p:ajax update="sectionid" listener="#{paidFeeReportForBLM.allSections}"></p:ajax>
+               		 		</p:selectOneMenu>    
+               		 		
+               		 		<p:outputLabel rendered="#{paidFeeReportForBLM.showClass}" value="Section" for="@next" style="color:red" ></p:outputLabel>
+               		 		<p:selectOneMenu rendered="#{paidFeeReportForBLM.showClass}" id="sectionid" value="#{paidFeeReportForBLM.selectedSection}" required="true" requiredMessage="Please select a section"> 
+               		 			<f:selectItem itemLabel="All" itemValue="-1"></f:selectItem>
+               		 			<f:selectItems value="#{paidFeeReportForBLM.sectionList}"></f:selectItems>
+               		 		</p:selectOneMenu>
+               		 		
+               		 		<p:outputLabel  value="Select Month" for="@next" style="color:red" ></p:outputLabel>
+               		 		<p:selectOneMenu value="#{paidFeeReportForBLM.selectedMonth}" required="true" requiredMessage="Please Select Month"> 
+               		 			<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+               		 			<f:selectItems value="#{paidFeeReportForBLM.monthList}"></f:selectItems>
+               		 			<p:ajax update="installment" listener="#{paidFeeReportForBLM.checkMonth}"></p:ajax>
+               		 		</p:selectOneMenu>
+               		 		
+               		 		<p:outputLabel value="Select Installment" for="@next" style="color:red" ></p:outputLabel>
+               		 		 <p:selectCheckboxMenu id="installment"  multiple="true"
+												value="#{paidFeeReportForBLM.checkMonthSelected}" required="true"
+												requiredMessage="Please Select Installment">
+												<f:selectItems value="#{paidFeeReportForBLM.installmentList}"></f:selectItems>
+											</p:selectCheckboxMenu>
+											
+               		 		<p:commandButton update=":form3:up,:form2" actionListener="#{paidFeeReportForBLM.showReport}" value="#{dueFeeReportVar.dueFeeReportSearchNowButton}"></p:commandButton>  
+               		 		<p:commandButton value="Print" rendered="#{paidFeeReportForBLM.show}">
+               	       		<p:printer target="form3"></p:printer>
+               	       </p:commandButton>
+               		 		 <h:commandLink rendered="#{paidFeeReportForBLM.show}" value="Excel Export">
+                               <p:dataExporter type="xls" target=":form3:table" fileName="Due Fees" pageOnly="true"/>
+                             </h:commandLink>
+               		 		</p:panelGrid>  
+               		 		
+               		 		</p:panel>		 
+               		 
+               		 </h:form>
+               		 </div>
+               		 <div class="card card-w-title">
+               	<h:form id="form3">	 
+               		 
+               		 <p:panel header="Paid Fee Report" id="up"  >
+               		 
+               		 	<p:outputPanel rendered="#{paidFeeReportForBLM.show}">
+               		 	<center>
+						<p style="font-family: initial;font-style: oblique;font-size: 25px !important;font-weight:bold;margin:0px;">#{paidFeeReportForBLM.schname}</p>
+						<p style="font-family: initial;font-style: oblique;font-size: 15px !important;font-weight:bold;margin:0px;">#{paidFeeReportForBLM.affiliationNo}</p>
+						<p style="font-family: initial;font-style: oblique;font-size: 15px !important;font-weight:bold;margin:0px;">#{paidFeeReportForBLM.finalAddress}</p>
+						<p style="font-family: initial;font-style: oblique;font-size: 15px !important;font-weight:bold;margin:0px;">#{paidFeeReportForBLM.phoneno}</p>
+						
+						<p style="margin:0px;font-size: 25px !important;font-weight:bold;">Paid Fee Report For Month</p>
+						</center>
+						<br></br>
+				
+					<p:panelGrid columns="5" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+					
+						<p:panelGrid columns="2">
+							<p:outputLabel value="Class:"></p:outputLabel>
+							<h:outputText value="#{paidFeeReportForBLM.className}"></h:outputText>
+						</p:panelGrid>
+						
+						<p:panelGrid columns="2">
+							<p:outputLabel value="Section:"></p:outputLabel>
+							<h:outputText value="#{paidFeeReportForBLM.sectionName}"></h:outputText>
+						</p:panelGrid>
+			
+						<p:panelGrid columns="2">
+							<p:outputLabel value="Total Student:"></p:outputLabel>
+							<h:outputText value="#{paidFeeReportForBLM.totalStudent}"></h:outputText>
+						</p:panelGrid>
+						<p:panelGrid columns="2">
+							<p:outputLabel value="Up to Month:"></p:outputLabel>
+							<h:outputText value="#{paidFeeReportForBLM.monthName}"></h:outputText>
+						</p:panelGrid>
+						<p:panelGrid columns="2">
+							<p:outputLabel value="Total Amount:"></p:outputLabel>
+							<h:outputText value="#{sideMenuBean.list.country eq 'UAE' ? 'AED ' : 'Rs.'}#{paidFeeReportForBLM.totalamountString}"></h:outputText>
+						</p:panelGrid>
+						
+					</p:panelGrid>	
+               		  		<p:dataTable reflow="true"  id="table"  var="var" value="#{paidFeeReportForBLM.list}"> 
+               		  		        		  			
+               		  		       		  			
+               		  			<p:column headerText="SR.No." >
+               		  				<p:outputLabel value="#{var.srNo}"></p:outputLabel>
+               		  			</p:column>
+               		  			<p:column  sortBy="#{var.fname}" headerText="#{dueFeeReportVar.dueFeeReportFirstNameLabel}">
+               		  				<p:outputLabel value="#{var.fname}"></p:outputLabel>
+               		  			</p:column>
+               		  			
+               		  			<p:column headerText="Father's Name">
+               		  				<p:outputLabel value="#{var.fathersName}"></p:outputLabel>
+               		  			</p:column>
+               		  			
+               		  			<p:column headerText="Contact No." >
+               		  				<p:outputLabel value="#{var.contactNo}"></p:outputLabel>
+               		  			</p:column>
+               		  			
+               		  			<p:column  headerText="Class" >
+               		  				<p:outputLabel value="#{var.className}-#{var.sectionName}"></p:outputLabel>
+               		  			</p:column>
+               		  			
+               		  			<p:column rendered="#{paidFeeReportForBLM.showSchool}" headerText="School" >
+               		  				<p:outputLabel value="#{var.schname}"></p:outputLabel>
+               		  			</p:column>
+               		  		
+               		  		<p:column headerText="Total Amount (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})" >
+           		  				<p:outputLabel value="#{var.totalFee}"></p:outputLabel>
+           		  			</p:column>
+               		  			     		  		
+               		  		</p:dataTable>
+               		  	               		  
+               		  </p:outputPanel>         
+               		 	
+               		 </p:panel>
+               		  	
+				</h:form>
+							</div>
+						</div>
+					</div>
+				</div>
+		   
+		</ui:define>
+
+	</ui:composition>

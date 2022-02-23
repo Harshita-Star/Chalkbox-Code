@@ -1,0 +1,246 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Staff Communication</ui:define>
+
+	<ui:define name="content">
+		<script src="pramukhime.js"></script>
+		<script src="pramukhindic.js"></script>
+		<script src="pramukhime-common.js"></script>
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form" style="overflow:hidden">
+							<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+							<p:panel header="Staff Communication">
+								<p:dataTable reflow="true" id="dt" widgetVar="staffTable"
+									var="var" value="#{staffComm.list}"
+									selection="#{staffComm.selected}" rowKey="#{var.id}"
+									paginator="true" rows="10"
+									rowsPerPageTemplate="10,20,30,50,100,150,200">
+
+									<p:column selectionMode="multiple" style="text-align:center" />
+
+									<p:column headerText="SNo.">
+										<h:outputText value="#{var.sno}" />
+									</p:column>
+
+									<p:column headerText="Name">
+										<h:outputText value="#{var.name}" />
+									</p:column>
+
+									<p:column headerText="Mobile">
+										<h:outputText value="#{var.mobile}" />
+									</p:column>
+
+									<p:column headerText="Category" filterBy="#{var.category}"
+										filterMatchMode="contains" style="text-align:left;">
+										<f:facet name="filter">
+											<p:selectOneMenu onchange="PF('staffTable').filter()">
+												<f:selectItem itemLabel="Select One" itemValue="#{null}"
+													noSelectionOption="true" />
+												<f:selectItems value="#{staffComm.categoryList}" />
+											</p:selectOneMenu>
+										</f:facet>
+										<h:outputText value="#{var.category}" />
+									</p:column>
+
+								</p:dataTable>
+							</p:panel>
+
+							<hr style="border-top: dotted 1px;" />
+							<p:outputLabel style="font-weight: bold;font-size: 12px;"
+								value="Note: Copying and pasting the special characters ( such as ,' ) might affect the format of SMS. It is adviced to kindly type the message."></p:outputLabel>
+							<h:inputHidden id="text" value="#{studentWiseSMS.language}"></h:inputHidden>
+
+							<p:outputPanel id="msg">
+								<p:panelGrid columns="3"
+									styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:selectOneButton id="lang"
+										rendered="#{sideMenuBean.list.country eq 'India'}"
+										value="#{staffComm.lang}">
+										<f:selectItem itemLabel="English" itemValue="english" />
+										<f:selectItem itemLabel="हिन्दी" itemValue="hindi" />
+										<p:ajax listener="#{staffComm.checklang}"
+											update="selectKeyword,contentTable"></p:ajax>
+									</p:selectOneButton>
+									<p:outputLabel />
+									<p:outputLabel />
+
+
+									<p:outputLabel value="Select Keyword"></p:outputLabel>
+									<p:selectOneMenu id="selectKeyword"
+										value="#{staffComm.keyWord}">
+										<f:selectItem itemLabel="ALL" itemValue="-1"></f:selectItem>
+										<f:selectItems value="#{staffComm.allKeywords}"></f:selectItems>
+										<p:ajax listener="#{staffComm.showData}" update="contentTable" onsuccess="PF('table').filter();"></p:ajax>
+									</p:selectOneMenu>
+									<p:outputLabel />
+
+								</p:panelGrid>
+
+								<p:dataTable style="width: 70%;" id="contentTable"
+									value="#{staffComm.allTemplates}" var="var" widgetVar="table">
+
+									<p:column headerText="S.No.">
+										<p:outputLabel value="#{var.srNo}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="content" filterMatchMode="contains" filterBy="#{var.content}">
+										<p:outputLabel value="#{var.content}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Send">
+										<center>
+											<p:commandButton value="Send" styleClass="butwid"
+												icon="fa fa-paper-plane-o"
+												action="#{staffComm.checkStaffSelected}"
+												update=":MessageDialogOpen"
+												style="font-size:15px !important;">
+												<f:setPropertyActionListener
+													target="#{staffComm.selectedTemp}" value="#{var}"></f:setPropertyActionListener>
+											</p:commandButton>
+										</center>
+									</p:column>
+								</p:dataTable>
+							</p:outputPanel>
+							<hr style="border-top: dotted 1px;" />
+						</h:form>
+
+						<h:form id="MsgLimitForm" style="overflow:hidden">
+							<p:dialog header="Low SMS Balance" width="500"
+								widgetVar="MsgLmtDlg" modal="true" showEffect="fade"
+								hideEffect="fade" resizable="false">
+								<center>
+									<p:outputLabel value="#{staffComm.balMsg}"
+										style="font-size:14px;font-weight: bold;" />
+								</center>
+								<br></br>
+								<br></br>
+								<center>
+									<p:commandButton value="Skip" action="#{staffComm.sendMsg}"
+										update="MsgLimitForm" />
+									<br /> <br />
+									<p:commandButton value="Message Logs"
+										action="messageSchoolHistory.xhtml?faces-redirect=true"
+										update="MsgLimitForm" />
+									<br /> <br />
+									<p:commandButton value="Recharge Now"
+										action="purchaseMsgPack.xhtml?faces-redirect=true"
+										update="MsgLimitForm" />
+								</center>
+								<br></br>
+							</p:dialog>
+						</h:form>
+
+						<h:form id="MsgOverForm" style="overflow:hidden">
+							<p:dialog header="SMS Limit Over" width="500"
+								widgetVar="MsgOvrDlg" modal="true" showEffect="fade"
+								hideEffect="fade" resizable="false">
+								<center>
+									<p:outputLabel value="#{staffComm.balMsg}"
+										style="font-size:14px;font-weight: bold;" />
+								</center>
+								<br></br>
+								<br></br>
+								<center>
+									<p:commandButton value="Message Logs"
+										action="messageSchoolHistory.xhtml?faces-redirect=true"
+										update="MsgOverForm" />
+									<br /> <br />
+									<p:commandButton value="Recharge Now"
+										action="purchaseMsgPack.xhtml?faces-redirect=true"
+										update="MsgOverForm" />
+								</center>
+								<br></br>
+							</p:dialog>
+						</h:form>
+
+						<h:form id="MsgOtherForm" style="overflow:hidden">
+							<p:dialog header="SMS Limit Over" width="500"
+								widgetVar="MsgOthDlg" modal="true" showEffect="fade"
+								hideEffect="fade" resizable="false">
+								<center>
+									<p:outputLabel value="#{staffComm.balMsg}"
+										style="font-size:14px;font-weight: bold;" />
+								</center>
+								<br></br>
+								<br></br>
+								<center>
+									<p:commandButton value="OK"
+										action="staffCommunication.xhtml?faces-redirect=true"
+										update="MsgOtherForm" />
+								</center>
+							</p:dialog>
+						</h:form>
+
+
+						<h:form id="MessageDialogOpen" style="overflow:hidden">
+							<p:dialog header="Message Confirmation" width="500"
+								widgetVar="SendMessageCheck" modal="true" showEffect="fade"
+								hideEffect="fade" resizable="false">
+								<p:panelGrid columns="1">
+									<p:inputTextarea rendered="#{staffComm.showEnglish}"
+										value="#{staffComm.message}" rows="7" cols="30"
+										maxlength="765" counterTemplate="{0} characters remaining."
+										autoResize="false" style="width:400px !important;"
+										readonly="#{staffComm.editable eq 'true' ? 'false' : 'true'}">
+									</p:inputTextarea>
+
+									<p:inputTextarea rendered="#{staffComm.showHindi}"
+										value="#{staffComm.message}" rows="7" cols="30"
+										maxlength="765" counterTemplate="{0} characters remaining."
+										autoResize="false" style="width:400px !important;"
+										readonly="#{staffComm.editable eq 'true' ? 'false' : 'true'}">
+									</p:inputTextarea>
+								</p:panelGrid>
+
+								<p:outputLabel rendered="#{staffComm.lang eq 'english'}"
+									value="Regards, #{sideMenuBean.smsName}"
+									style="font-size:15px !important;" />
+								<p:outputLabel rendered="#{staffComm.lang eq 'hindi'}"
+									value="सादर, #{sideMenuBean.hindiName}"
+									style="font-size:15px !important;" />
+								<p:outputLabel />
+								<br />
+								<p:separator />
+								<center>
+
+									<p:commandButton value="Send Message"
+										action="#{staffComm.sendMessage}"
+										update=":form,:MessageDialogOpen"
+										style="width:120px;height:30px;" />
+
+								</center>
+								<p:separator />
+								<br />
+							</p:dialog>
+						</h:form>
+
+						<h:form id="HindiForm" style="overflow:hidden">
+							<p:dialog header="NOTIFICATION" width="500" widgetVar="hindiDi"
+								modal="true" showEffect="fade" hideEffect="fade"
+								resizable="false">
+								<center>
+									<p:outputLabel
+										value="Hindi Message Feature is Temporarily Unavailable"
+										style="font-size:14px;font-weight: bold;" />
+								</center>
+								<br></br>
+
+							</p:dialog>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

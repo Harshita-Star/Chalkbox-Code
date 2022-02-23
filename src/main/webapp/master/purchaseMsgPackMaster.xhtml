@@ -1,0 +1,141 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/masterTemplate.xhtml">
+	<f:loadBundle var="addClassVar" basename="myProperties" />
+	<ui:define name="title">SMS Recharge</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<h1>SMS Recharge</h1>
+
+							<p:panel header="SMS Recharge">
+								<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+								<p:panelGrid columns="1">
+									<p:outputLabel  for="@next" style="color:red" value="Select School"></p:outputLabel>
+									<p:selectOneMenu filter="true"
+										value="#{purchaseMsgPackMaster.schoolId}" required="true"
+										requiredMessage="Please select atleast one school!">
+										<f:selectItem itemLabel="select" itemValue=""></f:selectItem>
+										<f:selectItems value="#{purchaseMsgPackMaster.schoolList}"></f:selectItems>
+									</p:selectOneMenu>
+								</p:panelGrid>
+
+								<p:dataTable value="#{purchaseMsgPackMaster.packList}"
+									var="info">
+									<p:column headerText="Pack Name">
+										<p:outputLabel value="#{info.packName}"></p:outputLabel>
+									</p:column>
+									<p:column headerText="Quantity">
+										<p:outputLabel value="#{info.quantity}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Rate">
+										<p:outputLabel value="#{info.rate}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Amount">
+										<p:outputLabel value="#{info.amount}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Tax">
+										<p:outputLabel value="#{info.tax}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Total Amount">
+										<p:outputLabel value="#{info.totalAmount}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Purchase">
+										<p:commandButton value="Purchase"
+											action="#{purchaseMsgPackMaster.checkAction}">
+											<p:confirm header="Confirmation"
+												message="Are you sure to Purchase this pack?"
+												icon="ui-icon-alert" />
+											<f:setPropertyActionListener value="#{info}"
+												target="#{purchaseMsgPackMaster.selected}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+								</p:dataTable>
+							</p:panel>
+							
+							<p:confirmDialog global="true" showEffect="fade"
+								hideEffect="fade">
+								<p:commandButton value="Yes" type="button"
+									styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+								<p:commandButton value="No" type="button"
+									styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+							</p:confirmDialog>
+						</h:form>
+
+						<h:form id="form4">
+							<p:dialog header="Confirm OTP" widgetVar="addSchool" modal="true"
+								height="100">
+								<div class="ui-g form-group">
+
+									<p:panelGrid columns="3"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+										<p:outputLabel for="@next" style="color:red"  value="Enter OTP"></p:outputLabel>
+										<p:inputText required="true"
+											requiredMessage="Please Enter OTP"
+											value="#{purchaseMsgPackMaster.otpInput}" validatorMessage="Please Enter Correct value">
+										  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+										</p:inputText>
+
+										<p:commandButton value="Submit"
+											actionListener="#{purchaseMsgPackMaster.purchase}"
+											update=":form :form4"></p:commandButton>
+
+									</p:panelGrid>
+								</div>
+							</p:dialog>
+						</h:form>
+
+						<h:form id="othForm">
+							<p:dialog header="SMS Top Up" widgetVar="othDlg" modal="true"
+								showEffect="fade" hideEffect="fade">
+								<div class="ui-g form-group">
+									<p:outputPanel id="othpnl">
+									<p:messages autoUpdate="true" closable="true"></p:messages>
+									<p:panelGrid columns="2"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+										<p:outputLabel  for="@next" style="color:red" value="Quantity*"></p:outputLabel>
+										<p:inputText required="true"
+											requiredMessage="Please Enter Quantity"
+											value="#{purchaseMsgPackMaster.quant}" validatorMessage="Please Enter Correct value">
+										  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+										</p:inputText>
+											
+										<p:outputLabel for="@next" style="color:red"  value="Amount*"></p:outputLabel>
+										<p:inputText required="true"
+											requiredMessage="Please Enter Amount"
+											value="#{purchaseMsgPackMaster.totAmt}" validatorMessage="Please Enter Correct value">
+										  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+										</p:inputText>	
+
+										<p:commandButton value="Submit"
+											actionListener="#{purchaseMsgPackMaster.sendOTP}"
+											update="othpnl"></p:commandButton>
+
+									</p:panelGrid>
+									</p:outputPanel>
+								</div>
+							</p:dialog>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

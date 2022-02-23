@@ -1,0 +1,124 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Unmarked Attendance</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+							<h1>Unmarked Attendance Report</h1>
+
+							<p:panelGrid columns="2" style="width:100%">
+								<p:outputLabel for="@next" style="color:red" value="Select Date"></p:outputLabel>
+								<p:calendar value="#{attendenceNotMarkedReport.date}"
+									required="true" requiredMessage="Please select date"
+									navigator="true" pattern="dd/MM/yyyy"></p:calendar>
+							</p:panelGrid>
+
+							<br />
+							<p:separator />
+							<center>
+								<p:panelGrid
+									columns="3"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:commandButton action="#{attendenceNotMarkedReport.search}" styleClass="butwid" icon="fa fa-search"
+										update=":form" value="Search"></p:commandButton> 
+
+									<p:commandButton style="width:100px;" value="Print" styleClass="butwid" icon="fa fa-print"
+										rendered="#{attendenceNotMarkedReport.b}">
+										<p:printer target="dataTable"></p:printer>
+									</p:commandButton>
+
+									<p:commandButton value="PDF" style="width:50px;" ajax="false" rendered="#{attendenceNotMarkedReport.b}" styleClass="butwid"
+										process="@this" icon="fa fa-file-pdf-o"
+										actionListener="#{attendenceNotMarkedReport.exportNotMarkedPdf}">
+
+										<p:fileDownload value="#{attendenceNotMarkedReport.file}" />
+									</p:commandButton>
+								</p:panelGrid>
+							</center>
+							<p:separator />
+							<br />
+
+							<p:outputPanel id="dataTable"
+								rendered="#{attendenceNotMarkedReport.b}">
+
+								<center>
+									<p
+										style="font-family: initial; font-style: oblique; font-size: 25px !important; font-weight: bold; margin: 0px;">#{headerBean.name}</p>
+									<p
+										style="font-family: initial; font-style: oblique; font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.affiliationNo}</p>
+									<p
+										style="font-family: initial; font-style: oblique; font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.finalAddress}</p>
+									<p
+										style="font-family: initial; font-style: oblique; font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.phoneno}</p>
+
+									<p
+										style="margin: 0px; font-size: 25px !important; font-weight: bold;">Unmarked
+										Attendance Report - #{attendenceNotMarkedReport.strDate}</p>
+								</center>
+								<p:panelGrid columns="3" style="width:100%">
+
+									<p:panelGrid columns="2">
+										<p:outputLabel value="Total:-"></p:outputLabel>
+										<h:outputText value="#{attendenceNotMarkedReport.total}"></h:outputText>
+									</p:panelGrid>
+
+
+								</p:panelGrid>
+
+								<h:dataTable stickyHeader="true"
+									style="width:100%;border-collapse:collapse" border="1"
+									value="#{attendenceNotMarkedReport.classList}" var="var">
+
+									<p:column headerText="Add. No.">
+
+										<f:facet name="header">
+											<p:outputLabel value="S.No."></p:outputLabel>
+										</f:facet>
+										<center>
+											<p:outputLabel value="#{var.serialNumber}"></p:outputLabel>
+										</center>
+									</p:column>
+
+									<p:column headerText="Class">
+
+										<f:facet name="header">
+											<p:outputLabel value="Class"></p:outputLabel>
+										</f:facet>
+										<center>
+											<p:outputLabel value="#{var.className}"></p:outputLabel>
+										</center>
+									</p:column>
+
+									<p:column headerText="Section">
+
+										<f:facet name="header">
+											<p:outputLabel value="Section"></p:outputLabel>
+										</f:facet>
+										<center>
+											<p:outputLabel value="#{var.sectionName}"></p:outputLabel>
+										</center>
+									</p:column>
+								</h:dataTable>
+							</p:outputPanel>
+
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

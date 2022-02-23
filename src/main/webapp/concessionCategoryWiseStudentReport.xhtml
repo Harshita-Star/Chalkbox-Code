@@ -1,0 +1,166 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Concession Category Report</ui:define>
+
+	<ui:define name="content">
+
+		<style>
+.ui-datatable .ui-datatable-scrollable-body,
+	.ui-datatable-scrollable-header, .ui-datatable-footer,
+	.ui-datatable-header {
+	width: 100% !important;
+}
+
+body .ui-datatable thead th, body .ui-datatable tbody td {
+	width: var(--w) !important;
+}
+
+body .ui-paginator.ui-paginator-top {
+	position: sticky !important;
+	top: 98px !important;
+	width: 100% !important;
+}
+
+body .ui-datatable  .ui-datatable-header {
+	position: sticky !important;
+	top: 60px !important;
+	width: 100% !important;
+}
+
+.ui-datatable-scrollable .ui-datatable-scrollable-header,
+	.ui-datatable-scrollable .ui-datatable-scrollable-footer {
+	position: sticky !important;
+	top: 152px !important;
+}
+</style>
+
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form1">
+
+							<p:panel header="Concession Category Wise Student Report">
+								<p:panelGrid columns="5"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:outputLabel value="Concession"></p:outputLabel>
+									<p:selectOneMenu value="#{concessionCategoryReport.concession}">
+										<f:selectItem itemLabel="Select here" itemValue=""></f:selectItem>
+										<f:selectItems
+											value="#{concessionCategoryReport.categoryList}"></f:selectItems>
+
+									</p:selectOneMenu>
+								</p:panelGrid>
+
+								<br />
+								<p:separator />
+								<center>
+									<p:panelGrid
+										columns="3"
+										layout="grid" styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+
+									<p:commandButton  value="Search" update="myPanel" styleClass="butwid" icon="fa fa-search"
+										actionListener="#{concessionCategoryReport.searchReport}"></p:commandButton>
+
+									<p:commandButton value="PDF" styleClass="butwid" icon="fa fa-file-pdf-o"
+									 ajax="false"
+										process="@this"
+										actionListener="#{concessionCategoryReport.exportConsPdf}">
+
+										<p:fileDownload value="#{concessionCategoryReport.file}" />
+									</p:commandButton>
+									<h:commandLink >
+										<p:graphicImage name="images/excellogo.png"
+											library="avalon-layout" width="100" height="40"></p:graphicImage>
+										<pe:exporter type="xlsx" target=":form1:dtb"
+											fileName="Concession_Category_Student_Report"></pe:exporter>
+									</h:commandLink>
+									</p:panelGrid>
+								</center>
+								<p:separator />
+								<br />
+
+
+							</p:panel>
+							<br></br>
+							<p:panel id="myPanel">
+								<p:dataTable scrollable="true" scrollWidth="100%" id="dtb"
+									reflow="true" rendered="#{concessionCategoryReport.showTable}"
+									var="var" value="#{concessionCategoryReport.studentList}"
+									rows="15" paginator="true" rowsPerPageTemplate="15,30,50">
+									<f:facet name="header">
+										<p:outputLabel
+											value="Concession Category :#{concessionCategoryReport.categoryName}                Total Student:- #{concessionCategoryReport.totalStudent}"></p:outputLabel>
+									</f:facet>
+
+									<p:column headerText="S.No.">
+										<f:facet name="header">
+											<p:outputLabel value="S.No."></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.sno}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Admission Number">
+										<f:facet name="header">
+											<p:outputLabel value="Admission Number"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.srNo}"></p:outputLabel>
+									</p:column>
+
+									<p:column sortBy="#{var.fname}" headerText="Name">
+										<f:facet name="header">
+											<p:outputLabel value="Name"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.fname}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Father's Name">
+										<f:facet name="header">
+											<p:outputLabel value="Father's Name"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.fathersName}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Class">
+										<f:facet name="header">
+											<p:outputLabel value="Class"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.className}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Section">
+										<f:facet name="header">
+											<p:outputLabel value="Section"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.sectionName}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Father's Contact no.">
+
+										<f:facet name="header">
+											<p:outputLabel value="Father's Contact No"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.fathersPhone}"></p:outputLabel>
+									</p:column>
+								</p:dataTable>
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

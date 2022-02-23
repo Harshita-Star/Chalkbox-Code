@@ -1,0 +1,167 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Income Tax Report</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+
+						<h:form id="form" style="overflow:hidden">
+						<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+							<p:panel id="panel1" rendered="true"
+								header="Search Report By Month &amp; Year">
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel value="Tax Month"></p:outputLabel>
+									<p:selectOneMenu value="#{incomeTaxReportBean.taxMonth}">
+										<f:selectItem itemLabel="January" itemValue="1"></f:selectItem>
+										<f:selectItem itemLabel="February" itemValue="2"></f:selectItem>
+										<f:selectItem itemLabel="March" itemValue="3"></f:selectItem>
+										<f:selectItem itemLabel="April" itemValue="4"></f:selectItem>
+										<f:selectItem itemLabel="May" itemValue="5"></f:selectItem>
+										<f:selectItem itemLabel="June" itemValue="6"></f:selectItem>
+										<f:selectItem itemLabel="July" itemValue="7"></f:selectItem>
+										<f:selectItem itemLabel="August" itemValue="8"></f:selectItem>
+										<f:selectItem itemLabel="September" itemValue="9"></f:selectItem>
+										<f:selectItem itemLabel="October" itemValue="10"></f:selectItem>
+										<f:selectItem itemLabel="November" itemValue="11"></f:selectItem>
+										<f:selectItem itemLabel="December" itemValue="12"></f:selectItem>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Tax Year"></p:outputLabel>
+									<p:selectOneMenu value="#{incomeTaxReportBean.taxYear}">
+										<f:selectItems value="#{incomeTaxReportBean.yearlist}"></f:selectItems>
+									</p:selectOneMenu>
+
+
+									
+									<p:commandButton rendered="false" onclick="target='_blank'"
+										style="width:150px;" ajax="false" value="Print"
+										action="#{incomeTaxReportBean.print}" immediate="true"></p:commandButton>
+
+								</p:panelGrid>
+								<br></br>
+								<center>
+								<p:commandButton update=":repform" styleClass="butwid" icon="fa fa-search"
+										actionListener="#{incomeTaxReportBean.searchReport}"
+										 value="Search"></p:commandButton>
+								</center>
+							</p:panel>
+						</h:form>
+
+						<h:form id="form1" style="overflow:hidden">
+							<p:panel id="panel2" rendered="true"
+								header="Search Report Between Custom Dates">
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel  for="@next" style="color:red" value="Start Date"></p:outputLabel>
+									<p:calendar value="#{incomeTaxReportBean.startDate}"
+										required="true" requiredMessage="Please select start date"
+										navigator="true" pattern="dd/MM/yyyy"></p:calendar>
+
+									<p:outputLabel  for="@next" style="color:red" value="End Date"></p:outputLabel>
+									<p:calendar value="#{incomeTaxReportBean.endDate}"
+										required="true" requiredMessage="Please select end date"
+										navigator="true" pattern="dd/MM/yyyy"></p:calendar>
+									
+									<p:commandButton rendered="false" onclick="target='_blank'"
+										style="width:150px;" ajax="false" value="Print"
+										action="#{incomeTaxReportBean.print}" immediate="true"></p:commandButton>
+
+								</p:panelGrid>
+								<br></br>
+								<center>
+								<p:commandButton update=":repform" styleClass="butwid" icon="fa fa-search"
+										actionListener="#{incomeTaxReportBean.searchDateReport}"
+										 value="Search"></p:commandButton>
+								</center>
+							</p:panel>
+						</h:form>
+
+						<h:form id="repform" style="overflow:hidden">
+							<p:panel header="Income Tax Report">
+
+								<p:dataTable var="var" value="#{incomeTaxReportBean.iList}" rowIndexVar="index">
+
+									<p:column style="width:50px;" headerText="S.No">
+										<p:outputLabel value="#{index+1}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Income Date">
+										<p:outputLabel value="#{var.strIncomeDate}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Income From">
+										<p:outputLabel value="#{var.category}"></p:outputLabel>
+									</p:column>
+									
+									<p:column headerText="Voucher/Receipt No">
+										<p:outputLabel value="#{var.voucherNo}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Description">
+										<p:outputLabel value="#{var.description}"></p:outputLabel>
+									</p:column>
+
+
+									<p:column
+										headerText="Amount (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})">
+										<p:outputLabel value="#{var.normalAmt}">
+											<f:convertNumber groupingUsed="false" minFractionDigits="2"
+												maxFractionDigits="2"></f:convertNumber>
+										</p:outputLabel>
+									</p:column>
+
+									<p:column
+										headerText="Tax Amount (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})">
+										<p:outputLabel value="#{var.taxAmount}">
+											<f:convertNumber groupingUsed="false" minFractionDigits="2"
+												maxFractionDigits="2"></f:convertNumber>
+										</p:outputLabel>
+
+										<f:facet name="footer">
+										<p:panelGrid columns="1">
+												<p:outputLabel value="Total Tax Amount" />
+												<p:outputLabel
+													value="(#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'}) " />
+												<p:outputLabel value="#{incomeTaxReportBean.totalAmount}">
+													<f:convertNumber groupingUsed="false" minFractionDigits="2"
+														maxFractionDigits="2"></f:convertNumber>
+												</p:outputLabel>
+											</p:panelGrid>
+										</f:facet>
+									</p:column>
+									
+									<p:column
+										headerText="Total Amount (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})">
+										<p:outputLabel value="#{var.amount}">
+											<f:convertNumber groupingUsed="false" minFractionDigits="2"
+												maxFractionDigits="2"></f:convertNumber>
+										</p:outputLabel>
+									</p:column>
+
+
+								</p:dataTable>
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

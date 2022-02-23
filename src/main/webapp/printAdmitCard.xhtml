@@ -1,0 +1,328 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Admit Card</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<h1>Print Admit Card</h1>
+							<p:panel header="Print Admit Card">
+								<p:messages autoUpdate="true" closable="true"></p:messages>
+								<p:panelGrid columns="2"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel value="Select Type"  for="@next" style="color:red" />
+									<p:selectOneRadio value="#{printAdmitCard.type}"
+										required="true" requiredMessage="Please Select Type">
+										<f:selectItem itemLabel="Academics" itemValue="academics"></f:selectItem>
+										<f:selectItem itemLabel="Sports" itemValue="sports"></f:selectItem>
+										<p:ajax listener="#{printAdmitCard.checkType}"
+											update=":form,:outPnl"></p:ajax>
+									</p:selectOneRadio>
+
+									<p:outputLabel value="Select Class" for="@next" style="color:red" ></p:outputLabel>
+									<p:selectOneMenu filter="true"
+										value="#{printAdmitCard.selectedClass}" required="true"
+										requiredMessage="Please Select Class">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{printAdmitCard.classList}"></f:selectItems>
+										<p:ajax listener="#{printAdmitCard.allSections}"
+											update=":form:sectionid"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Select Section" for="@next" style="color:red" ></p:outputLabel>
+									<p:selectOneMenu id="sectionid" filter="true"
+										value="#{printAdmitCard.selectedSection}" required="true"
+										requiredMessage="Please select a Section">
+										<f:selectItem itemLabel="Select Section" itemValue=""></f:selectItem>
+										<f:selectItems value="#{printAdmitCard.sectionList}"></f:selectItems>
+										<p:ajax listener="#{printAdmitCard.allExams}"
+											update=":form:examid"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="#{printAdmitCard.examLabel}" for="@next" style="color:red" ></p:outputLabel>
+									<p:selectOneMenu id="examid" required="true"
+										requiredMessage="Please Select #{printAdmitCard.examLabel}"
+										value="#{printAdmitCard.selectedExam}">
+										<f:selectItem itemLabel="Select #{printAdmitCard.examLabel}"
+											itemValue=""></f:selectItem>
+										<f:selectItems value="#{printAdmitCard.examList}"></f:selectItems>
+									</p:selectOneMenu>
+
+									<p:commandButton value="Search" update=":form:pnl"
+										actionListener="#{printAdmitCard.searchExam}"></p:commandButton>
+								</p:panelGrid>
+							</p:panel>
+							<br></br>
+							
+							<p:panel id="pnl" header="Students">
+								<p:dataTable reflow="true"
+									rendered="#{printAdmitCard.showTable}"
+									value="#{printAdmitCard.studentList}" var="var"
+									selection="#{printAdmitCard.selectedList}"
+									rowKey="#{var.addNumber}">
+
+									<p:column selectionMode="multiple" style="width:70px"
+										headerText="Select"></p:column>
+
+									<p:column headerText="S.No." style="width:70px">
+										<p:outputLabel value="#{var.sno}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Admission No.">
+										<p:outputLabel value="#{var.srNo}"></p:outputLabel>
+									</p:column>
+
+									<p:column sortBy="#{var.fullName}" headerText="Student Name">
+										<p:outputLabel value="#{var.fullName}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Father's Name">
+										<p:outputLabel value="#{var.fathersName}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Class">
+										<p:outputLabel value="#{var.classFromName}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Section">
+										<p:outputLabel value="#{var.sectionName}"></p:outputLabel>
+									</p:column>
+
+									<f:facet name="footer">
+										<p:commandButton
+											actionListener="#{printAdmitCard.printAdmitCard}"
+											update=":form,:outPnl" value="Proceed"></p:commandButton>
+									</f:facet>
+								</p:dataTable>
+							</p:panel>
+							 
+						</h:form>
+					</div>
+					<div class="card card-w-title">
+						<p:outputPanel id="outPnl">
+							<h:form id="printForm" rendered="#{printAdmitCard.showPrint}" enctype="multipart/form-data"
+								style="overflow:hidden">
+								<p:commandButton value="Print" icon="ui-icon-print"
+									style="width:10%">
+									<p:printer target=":printForm:printPnl"></p:printer>
+								</p:commandButton>
+
+								<p:outputPanel id="printPnl">
+									<ui:repeat value="#{printAdmitCard.selectedList}" var="var">
+
+
+										<div style="width: 25cm; background-color: white;">
+											<!--  height: 590px !important    this is for below div-->
+											<div
+												style="border: 1px solid; height: auto; width: 100%; background-color: white">
+												<br></br>
+												<center>
+													<div style="width: 25%; float: left;">
+														<p:graphicImage
+															style="height:80px;width:100px;margin-left:-45%"
+															value="#{headerBean.logo}" />
+													</div>
+
+													<div style="width: 75%; float: revert; margin-left: -18%;">
+														<p:outputLabel style="font-size:30px!important;"
+															value="#{headerBean.name}"></p:outputLabel>
+														<br></br>
+														<p:outputLabel style="font-size:12px!important;"
+															value="#{headerBean.address1} #{headerBean.address2}"></p:outputLabel>
+														<br></br>
+														<p:outputLabel style="font-size:12px!important;"
+															value="ADMIT CARD"></p:outputLabel>
+														<br></br>
+														<p:outputLabel
+															style="font-size:15px!important;font-weight:bold;"
+															value="#{printAdmitCard.examName}"></p:outputLabel>
+													</div>
+												</center>
+
+												<br></br>
+
+												<div style="width: 100%">
+													<div style="width: 15%; float: right;">
+														<p:outputPanel
+															style="width:100px; height: 100px; border: 1px solid black;margin-top:-20px;">
+															<p:graphicImage url="#{var.student_image}" height="98px;"
+																width="98px;"></p:graphicImage>
+														</p:outputPanel>
+
+														<p:outputPanel rendered="false">
+															<table
+																style="width: 25%; font-size: 12px; border: 1px solid #333 !important; height: 82px;">
+
+																<tr>
+																	<td><center>
+																			AFFIX <br></br> PHOTOGRAPH OF <br></br> STUDENT HERE
+																		</center></td>
+																</tr>
+
+															</table>
+														</p:outputPanel>
+													</div>
+
+													<div style="width: 85%;">
+
+														<table border="1" cellpadding="5" cellspacing="0"
+															style="width: 90%; margin-top: 8px; font-size: 12px">
+
+															<tr>
+																<td style="width: 12.5%;">Student Name</td>
+																<td style="width: 12.5%;" colspan="5"><h:outputLabel
+																		value="#{var.fullName.toUpperCase()}" /></td>
+																<td style="width: 12.5%;">Father Name</td>
+																<td style="width: 12.5%;"><h:outputLabel
+																		value="#{var.fathersName.toUpperCase()}" /></td>
+																<td style="width: 12.5%;">Mother Name</td>
+																<td style="width: 12.5%;"><h:outputLabel
+																		value="#{var.motherName.toUpperCase()}" /></td>
+															</tr>
+
+
+															<tr>
+																<td style="width: 12.5%;">SR.No</td>
+																<td style="width: 12.5%;" colspan="5"><h:outputLabel
+																		value="#{var.srNo}" /></td>
+																<td style="width: 12.5%;">Class</td>
+																<td style="width: 12.5%;"><h:outputLabel
+																		value="#{var.className}" /></td>
+																<td style="width: 12.5%;">Roll No</td>
+																<td style="width: 12.5%;"><h:outputLabel
+																		value="#{var.rollNo}" /></td>
+															</tr>
+															
+															
+
+														</table>
+														
+														<table  cellpadding="5" cellspacing="0"
+															style="width: 90%; margin-top: 0px; font-size: 12px;border-right:1px solid black;border-left:1px solid black;border-bottom:1px solid black;">
+
+															<tr>
+																
+																<td style="width: 12%;border-right:1px solid black;">Exam Centre</td>
+																<td style="width: 60.5%;" ><h:outputLabel
+																		value="#{printAdmitCard.schoolName}" /></td>
+															
+															</tr>
+														</table>	
+
+													</div>
+												</div>
+												<br />
+												
+												<p:graphicImage height="320px" width="100%" rendered="#{printAdmitCard.photoType}"
+												value="#{printAdmitCard.selectedImage}"></p:graphicImage>
+												
+												<h:dataTable value="#{var.admitCardInfo}" var="data"
+													style="width:100%;border-collapse:collapse;text-align:center;font-size:17px;font-family: timesRoman;height: 320px;margin-top: 50px;"
+													border="1" rendered="#{printAdmitCard.manualType}">
+													<p:column headerText="S.No" style="width:50px;">
+														<center>
+															<f:facet name="header">S.No.</f:facet>
+														</center>
+														<p:outputLabel value="#{data.sNo}" style="font-size:15px"></p:outputLabel>
+													</p:column>
+
+													<p:column headerText="Subject"
+														rendered="#{printAdmitCard.showAcademic}"
+														style="font-size:15px">
+														<center>
+															<f:facet name="header">Subject</f:facet>
+														</center>
+														<p:outputLabel value="#{data.subjectName}"
+															style="font-size:15px"></p:outputLabel>
+													</p:column>
+
+													<p:column headerText="Description"
+														rendered="#{printAdmitCard.showSports}"
+														style="font-size:15px">
+														<center>
+															<f:facet name="header">Description</f:facet>
+														</center>
+														<p:outputLabel value="#{data.description}"
+															style="font-size:15px"></p:outputLabel>
+													</p:column>
+
+													<p:column headerText="Date" style="font-size:15px">
+														<center>
+															<f:facet name="header">Date</f:facet>
+														</center>
+														<p:outputLabel value="#{data.dateStr}"
+															style="font-size:15px"></p:outputLabel>
+													</p:column>
+
+													<p:column headerText="Time" style="font-size:15px">
+														<center>
+															<f:facet name="header">Time</f:facet>
+														</center>
+														<p:outputLabel value="#{data.time}" style="font-size:15px"></p:outputLabel>
+													</p:column>
+
+
+												</h:dataTable>
+
+												<br></br>
+												<br/>
+												<br></br>
+												<p:inputTextarea value="#{var.instructions}" rendered="#{printAdmitCard.renderInst}" disabled="true" style="width:100%;border-top:1px solid white;border-bottom:1px solid white;"></p:inputTextarea>
+												<br></br>
+												<br></br>
+												
+
+												<p:graphicImage
+													style="margin-left:15px;vertical-align:bottom;"
+													name="images/nilgiriSign.jpg" library="avalon-layout"
+													height="35" width="110"
+													rendered="#{sideMenuBean.list.branch_id eq '62'}" />
+												<br></br>
+												<p:outputLabel
+													rendered="#{sideMenuBean.list.branch_id ne '69'}"
+													value="Principal Signature"
+													style="margin-left:15px;vertical-align:bottom;font-size:14px"></p:outputLabel>
+												<p:outputLabel
+													rendered="#{sideMenuBean.list.branch_id ne '69'}"
+													value="Class Teacher Signature"
+													style="margin-left:260px;vertical-align:bottom;font-size:14px"></p:outputLabel>
+												<p:outputLabel
+													rendered="#{sideMenuBean.list.branch_id ne '69'}"
+													value="Student Signature"
+													style="margin-right:15px;vertical-align:bottom;font-size:14px;float: right;"></p:outputLabel>
+													<p:spacer height="10" width="100%"></p:spacer>
+											</div>
+
+										</div>
+                                          
+										
+										<br></br>
+                                        <p style="page-break-after: always;"></p> 
+									</ui:repeat>
+
+
+
+								</p:outputPanel>
+
+							</h:form>
+						</p:outputPanel>
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

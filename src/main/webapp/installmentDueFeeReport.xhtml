@@ -1,0 +1,456 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Due Fee Report Installment Wise</ui:define>
+
+	<ui:define name="content">
+		<style>
+.ui-datatable-scrollable .ui-datatable-scrollable-header,
+	.ui-datatable-scrollable .ui-datatable-scrollable-footer {
+	position: sticky !important;
+	top: 60px !important;
+}
+
+body .ui-datatable thead th, body .ui-datatable tbody td {
+	width: var(--w) !important;
+}
+</style>
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h1>Due Fee Report Installment Wise</h1>
+						<h:form id="form2">
+						<p:messages closable="true" autoUpdate="true"></p:messages>
+							<p:panel header="Search Student by Class-section">
+
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel for="@next" style="color:red"
+										value="#{dueFeeReportVar.dueFeeReportClassLabel}"></p:outputLabel>
+									<p:selectOneMenu style="width:250px"
+										value="#{installmentDueFeeReportBean.selectedCLassSection}"
+										required="true" requiredMessage="Please select a class">
+										<f:selectItem itemLabel="All" itemValue="-1"></f:selectItem>
+										<f:selectItems
+											value="#{installmentDueFeeReportBean.classSection}"></f:selectItems>
+										<p:ajax update="sectionid"
+											listener="#{installmentDueFeeReportBean.allSections}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Section" for="@next" style="color:red"></p:outputLabel>
+									<p:selectOneMenu id="sectionid"
+										value="#{installmentDueFeeReportBean.selectedSection}"
+										required="true" requiredMessage="Please select a section">
+										<f:selectItem itemLabel="All" itemValue="-1"></f:selectItem>
+										<f:selectItems
+											value="#{installmentDueFeeReportBean.sectionList}"></f:selectItems>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Select Installment" for="@next"
+										style="color:red"></p:outputLabel>
+									<p:selectCheckboxMenu multiple="true"
+										value="#{installmentDueFeeReportBean.checkMonthSelected}"
+										required="true" requiredMessage="Please Select Installment">
+										<f:selectItems
+											value="#{installmentDueFeeReportBean.installmentList}"></f:selectItems>
+									</p:selectCheckboxMenu>
+
+									<p:outputLabel value="Till Date" for="@next" style="color:red"></p:outputLabel>
+									<p:calendar value="#{installmentDueFeeReportBean.date}"
+										navigator="true" required="true"
+										requiredMessage="Please enter date" pattern="dd/MM/yyyy"></p:calendar>
+
+									<p:outputLabel value="Concession" for="@next" style="color:red"></p:outputLabel>
+									<p:selectOneMenu
+										value="#{installmentDueFeeReportBean.selectedConcession}"
+										required="true" requiredMessage="Please select a concession">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItem itemLabel="All" itemValue="ALL"></f:selectItem>
+										<f:selectItems
+											value="#{installmentDueFeeReportBean.concessionlist}"></f:selectItems>
+									</p:selectOneMenu>
+								</p:panelGrid>
+								
+								<br />
+								<p:separator />
+								<center>
+									<p:panelGrid
+										columns="#{installmentDueFeeReportBean.list.size() gt 0 ? '3' : '1'}"
+										layout="grid" styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+
+									<p:commandButton update=":form3:up,:form2,:form4" icon="fa fa-search" styleClass="butwid"
+										actionListener="#{installmentDueFeeReportBean.showReport}"
+										value="Search Now" ></p:commandButton>
+									<p:commandButton value="Print" styleClass="butwid" icon="fa fa-print"
+										rendered="#{installmentDueFeeReportBean.show}">
+										<p:printer target="form3"></p:printer>
+									</p:commandButton>
+
+
+									<h:commandLink rendered="#{installmentDueFeeReportBean.show}">
+										<p:graphicImage name="images/excellogo.png"
+											library="avalon-layout" width="100" height="40"></p:graphicImage>
+										<pe:exporter type="xlsx" target=":form3:table"
+											fileName="Defaulter_FEE"
+											></pe:exporter>
+									</h:commandLink>
+
+									</p:panelGrid>
+								</center>
+								<p:separator />
+								<br />
+
+							</p:panel>
+
+						</h:form>
+					</div>
+
+					<div class="card card-w-title">
+
+						<h:form id="form4">
+							<p:panel header="Block/Unblock App Modules (Copy to All)"
+								rendered="#{installmentDueFeeReportBean.showBlock}">
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel value="Select Modules" />
+									<p:selectCheckboxMenu multiple="true"
+										value="#{installmentDueFeeReportBean.selectedModule}">
+										<f:selectItems value="#{installmentDueFeeReportBean.allMods}" />
+									</p:selectCheckboxMenu>
+
+									<p:outputLabel value="Block Reason/Message" />
+									<p:inputTextarea autoResize="false"
+										value="#{installmentDueFeeReportBean.blockMsg}"
+										validatorMessage="Please Enter Valid Reason/Message">
+										<f:validateRegex
+											pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:inputTextarea>
+
+								</p:panelGrid>
+								<br />
+								<p:separator />
+								<center>
+									<p:commandButton update=":form3" icon = "fa fa-clone"
+										actionListener="#{installmentDueFeeReportBean.copyBlockStuff}"
+										value="Copy For All Students Below" style="width: 250px" />
+
+								</center>
+								<p:separator />
+							</p:panel>
+						</h:form>
+					</div>
+
+					<div class="card card-w-title">
+						<h:form id="form3">
+
+							<p:panel header="Defaulter Fee Report" id="up">
+
+								<p:outputPanel rendered="#{installmentDueFeeReportBean.show}">
+									<center>
+										<p
+											style="font-family: initial; font-style: oblique; font-size: 25px !important; font-weight: bold; margin: 0px;">#{installmentDueFeeReportBean.schname}</p>
+										<p
+											style="font-family: initial; font-style: oblique; font-size: 15px !important; font-weight: bold; margin: 0px;">#{installmentDueFeeReportBean.affiliationNo}</p>
+										<p
+											style="font-family: initial; font-style: oblique; font-size: 15px !important; font-weight: bold; margin: 0px;">#{installmentDueFeeReportBean.finalAddress}</p>
+										<p
+											style="font-family: initial; font-style: oblique; font-size: 15px !important; font-weight: bold; margin: 0px;">#{installmentDueFeeReportBean.phoneno}</p>
+
+										<p
+											style="margin: 0px; font-size: 25px !important; font-weight: bold;">Due
+											Fee Report For Month</p>
+									</center>
+									<br></br>
+
+									<p:panelGrid columns="5"
+										columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+										layout="grid" styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+
+
+										<p:panelGrid columns="2">
+											<p:outputLabel value="Total Amount:-"></p:outputLabel>
+											<h:outputText
+												value="#{installmentDueFeeReportBean.totalamountString}"></h:outputText>
+										</p:panelGrid>
+
+									</p:panelGrid>
+									<p:dataTable reflow="true" id="table" scrollable="true"
+										var="var" value="#{installmentDueFeeReportBean.list}"
+										rowKey="#{var.id}"
+										selection="#{installmentDueFeeReportBean.selectedStudentList}"
+										rowSelectMode="add">
+
+										<f:facet name="header">
+											<p:outputLabel value="Due Fee Report Installment Wise"></p:outputLabel>
+										</f:facet>
+
+										<p:column style="--w:50px;" headerText="select"
+											selectionMode="multiple" exportable="false"></p:column>
+
+										<p:column headerText="S.No." style="--w:50px;">
+											<f:facet name="header">
+												<p:outputLabel value="S.No."></p:outputLabel>
+											</f:facet>
+
+											<p:outputLabel value="#{var.sNo}"></p:outputLabel>
+										</p:column>
+
+
+										<p:column headerText="SR.No." style="--w:50px;">
+											<f:facet name="header">
+												<p:outputLabel value="SR.No."></p:outputLabel>
+											</f:facet>
+
+											<p:outputLabel value="#{var.srNo}"></p:outputLabel>
+										</p:column>
+										<p:column style="--w:70px;" sortBy="#{var.fname}"
+											headerText="#{dueFeeReportVar.dueFeeReportFirstNameLabel}">
+											<f:facet name="header">
+												<p:outputLabel
+													value="#{dueFeeReportVar.dueFeeReportFirstNameLabel}"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.fname}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Father's Name" style="--w:70px;">
+											<f:facet name="header">
+												<p:outputLabel value="Father's Name"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.fathersName}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Contact No." style="--w:80px;">
+											<f:facet name="header">
+												<p:outputLabel value="Contact No."></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.fathersPhone}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Class" style="--w:50px;">
+											<f:facet name="header">
+												<p:outputLabel value="Class"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.className}"></p:outputLabel>
+										</p:column>
+
+
+
+
+										<p:columns style="--w:70px;"
+											value="#{installmentDueFeeReportBean.feeListTest}"
+											var="column" columnIndexVar="colIndex">
+
+											<f:facet name="header">
+												<p:outputLabel value="#{column.insatllmentName}"></p:outputLabel>
+											</f:facet>
+
+											<p:outputLabel
+												value="#{var.feesMap[column.insatllmentValue]}"></p:outputLabel>
+										</p:columns>
+
+
+
+										<p:column headerText="Total Left Amount" style="--w:70px;">
+											<f:facet name="header">
+												<p:outputLabel value="Total Left Amount"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.totalFee}"></p:outputLabel>
+										</p:column>
+
+										<p:column exportable="false" headerText="Block Modules"
+											style="--w:220px;" rendered="#{installmentDueFeeReportBean.showBlock}">
+
+											<f:facet name="header">
+												<p:outputLabel value="Block Modules"></p:outputLabel>
+											</f:facet>
+											<p:selectManyMenu value="#{var.blockModList}" id="subject"
+												showCheckbox="true">
+												<f:selectItems value="#{var.modList}"></f:selectItems>
+											</p:selectManyMenu>
+										</p:column>
+
+										<p:column exportable="false" headerText="Reason / Message"
+											style="--w:200px;" rendered="#{installmentDueFeeReportBean.showBlock}">
+
+											<f:facet name="header">
+												<p:outputLabel value="Reason / Message"></p:outputLabel>
+											</f:facet>
+											<p:inputTextarea autoResize="false" value="#{var.msg}"
+												validatorMessage="Please Enter Valid Reason/Message">
+											</p:inputTextarea>
+										</p:column>
+
+										<f:facet name="footer">
+											<p:panelGrid columns="3" layout="grid"
+												styleClass="ui-panelgrid-blank form-group"
+												style="border:0px none; background-color:transparent;">
+												<p:commandButton icon="fa fa-envelope"
+													update=":form2,:form3"
+													value="Send Message to Selected Students"
+													actionListener="#{installmentDueFeeReportBean.sendMessageToSelectedStudents}"></p:commandButton>
+												<p:commandButton icon="fa fa-envelope"
+													value="Send Custom Message" update=":messageForm"
+													oncomplete="PF('messageDialog').show()"></p:commandButton>
+												<p:commandButton icon="fa fa-pencil" update=":form2 :form3"
+													value="Block/Unblock Modules"
+													actionListener="#{installmentDueFeeReportBean.updateAction}" rendered="#{installmentDueFeeReportBean.showBlock}">
+												</p:commandButton>
+											</p:panelGrid>
+										</f:facet>
+
+
+									</p:dataTable>
+
+								</p:outputPanel>
+
+							</p:panel>
+
+						</h:form>
+						<h:form id="messageForm">
+							<p:dialog resizable="false" widgetVar="messageDialog"
+								header="Enter your Message" showEffect="fade"
+								hideEffect="explode" modal="true">
+								<div class="ui-g form-group">
+									<p:panelGrid columns="2"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+
+										<p:outputLabel value="Message" for="@next" style="color:red"></p:outputLabel>
+										<p:inputTextarea
+											value="#{installmentDueFeeReportBean.message}"
+											required="true" requiredMessage="Please Enter Message"
+											id="engmsg"
+											onchange="trimFunc(this.value,'Please Section Name',this.id)"></p:inputTextarea>
+
+										<p:commandButton update=":form2,:form3,:messageForm"
+											actionListener="#{installmentDueFeeReportBean.sendMessageToSelectedStudentsCustome}"
+											value="Send Now" />
+
+									</p:panelGrid>
+								</div>
+							</p:dialog>
+						</h:form>
+
+						<h:form id="MsgLimitForm" style="overflow:hidden">
+							<p:dialog header="Low SMS Balance" width="500"
+								widgetVar="MsgLmtDlg" modal="true" showEffect="fade"
+								hideEffect="fade" resizable="false">
+								<center>
+									<p:outputLabel value="#{installmentDueFeeReportBean.balMsg}"
+										style="font-size:14px;font-weight: bold;" />
+								</center>
+								<br></br>
+								<br></br>
+								<center>
+									<p:commandButton value="Skip"
+										action="#{installmentDueFeeReportBean.sendMsg}"
+										update="MsgLimitForm" />
+									<br /> <br />
+									<p:commandButton value="Message Logs"
+										action="messageSchoolHistory.xhtml?faces-redirect=true"
+										update="MsgLimitForm" />
+									<br /> <br />
+									<p:commandButton value="Recharge Now"
+										action="purchaseMsgPack.xhtml?faces-redirect=true"
+										update="MsgLimitForm" />
+								</center>
+								<br></br>
+							</p:dialog>
+						</h:form>
+
+						<h:form id="MsgLimitForm1" style="overflow:hidden">
+							<p:dialog header="Low SMS Balance" width="500"
+								widgetVar="MsgLmtDlg1" modal="true" showEffect="fade"
+								hideEffect="fade" resizable="false">
+								<center>
+									<p:outputLabel value="#{installmentDueFeeReportBean.balMsg}"
+										style="font-size:14px;font-weight: bold;" />
+								</center>
+								<br></br>
+								<br></br>
+								<center>
+									<p:commandButton value="Skip"
+										action="#{installmentDueFeeReportBean.sendMsgCustom}"
+										update="MsgLimitForm1" />
+									<br /> <br />
+									<p:commandButton value="Message Logs"
+										action="messageSchoolHistory.xhtml?faces-redirect=true"
+										update="MsgLimitForm1" />
+									<br /> <br />
+									<p:commandButton value="Recharge Now"
+										action="purchaseMsgPack.xhtml?faces-redirect=true"
+										update="MsgLimitForm1" />
+								</center>
+								<br></br>
+							</p:dialog>
+						</h:form>
+
+						<h:form id="MsgOverForm" style="overflow:hidden">
+							<p:dialog header="SMS Limit Over" width="500"
+								widgetVar="MsgOvrDlg" modal="true" showEffect="fade"
+								hideEffect="fade" resizable="false">
+								<center>
+									<p:outputLabel value="#{installmentDueFeeReportBean.balMsg}"
+										style="font-size:14px;font-weight: bold;" />
+								</center>
+								<br></br>
+								<br></br>
+								<center>
+									<p:commandButton value="Message Logs"
+										action="messageSchoolHistory.xhtml?faces-redirect=true"
+										update="MsgOverForm" />
+									<br /> <br />
+									<p:commandButton value="Recharge Now"
+										action="purchaseMsgPack.xhtml?faces-redirect=true"
+										update="MsgOverForm" />
+								</center>
+								<br></br>
+							</p:dialog>
+						</h:form>
+
+						<h:form id="MsgOtherForm" style="overflow:hidden">
+							<p:dialog header="SMS Limit Over" width="500"
+								widgetVar="MsgOthDlg" modal="true" showEffect="fade"
+								hideEffect="fade" resizable="false">
+								<center>
+									<p:outputLabel value="#{installmentDueFeeReportBean.balMsg}"
+										style="font-size:14px;font-weight: bold;" />
+								</center>
+								<br></br>
+								<br></br>
+								<center>
+									<p:commandButton value="OK"
+										action="installmentDueFeeReport.xhtml?faces-redirect=true"
+										update="MsgOtherForm" />
+								</center>
+							</p:dialog>
+						</h:form>
+
+
+
+
+
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

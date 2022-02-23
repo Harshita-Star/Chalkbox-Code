@@ -1,0 +1,190 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/template.xhtml">
+	<ui:define name="title">Teacher Dashboard</ui:define>
+
+	<ui:define name="content">
+		<div class="dashboard">
+
+			<div class="ui-g">
+				<div class="ui-g-12 ui-lg-4">
+					<div class="card timeline ui-fluid" style="background-color: rgb(162, 32, 45, 0.3); ">
+						<div class="ui-g">
+							<table style="width: 100%">
+								<tr align="center">
+									<td><p:graphicImage height="150px" width="150px"
+											value="#{teacherHomePage.info.empImage}"></p:graphicImage></td>
+
+								</tr>
+								<tr>
+									<td></td>
+								</tr>
+								<tr align="center">
+									<td style="font-size: 18px; font-weight: bold; color: white;">#{teacherHomePage.info.fname}</td>
+								</tr>
+							</table>
+
+							<p:panel style="width:100%;margin-top:10%">
+								<f:facet name="header">
+									<i class="fa fa-user-circle" />
+									<span>Details</span>
+								</f:facet>
+								<p:panelGrid columns="2"
+									styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none;width:100%; background-color:transparent;">
+									<p:outputLabel style="font-weight:bold;color:green;"
+										value="Address :" />
+									<p:outputLabel value="#{teacherHomePage.info.address}" />
+
+									<p:outputLabel style="font-weight:bold;color:green;"
+										value="Date Of Birth :" />
+									<p:outputLabel value="#{teacherHomePage.info.dobStr}" />
+
+									<p:outputLabel style="font-weight:bold;color:green;"
+										value="Contact Mobile :" />
+									<p:outputLabel value="#{teacherHomePage.info.mobile}" />
+
+									<p:outputLabel style="font-weight:bold;color:green;"
+										value="Father / Husband’s Name :" />
+									<p:outputLabel value="#{teacherHomePage.info.spouseName}" />
+									<p:outputLabel />
+									<p:commandLink
+										style="float: right;color: blue;font-size:12px;"
+										immediate="true" value="...more details"
+										action="#{teacherHomePage.viewDetails}"></p:commandLink>
+								</p:panelGrid>
+							</p:panel>
+						</div>
+					</div>
+				</div>
+
+				<div class="ui-g-12 ui-lg-4 chat">
+					<div class="card timeline ui-fluid" style="background-color: rgb(254, 180, 2, 0.3); ">
+					<p:panel style="width:100%;text-align: justify;">
+						<f:facet name="header">
+							<i class="fa fa-align-justify" />
+							<span>Thoughts</span>
+						</f:facet>
+						<p:outputLabel style="width:100%;font-size:13px;"
+							value="#{teacherHomePage.thought}" escape="false"></p:outputLabel>
+					</p:panel>
+					<br />
+					<p:panel>
+						<f:facet name="header">
+							<i class="fa fa-calendar" />
+							<span>Upcoming Activities</span>
+						</f:facet>
+						<p:dataTable reflow="true" var="var"
+							value="#{teacherHomePage.activityList}" scrollable="true"
+							scrollHeight="100" style="text-align:center;">
+							<p:column headerText="Event Name">
+								<p:outputLabel value="#{var.desc}"></p:outputLabel>
+							</p:column>
+
+							<p:column headerText="Date">
+								<p:outputLabel value="#{var.strDate}" />
+							</p:column>
+
+						</p:dataTable>
+
+
+					</p:panel>
+
+					<p:panel>
+						<f:facet name="header">
+							<i class="fa fa-birthday-cake" />
+							<span>Today's Birthdays (Teacher)</span>
+						</f:facet>
+						<p:dataTable style="text-align:center;" reflow="true" var="var"
+							value="#{teacherHomePage.birthdayStudentList}" scrollable="true"
+							scrollHeight="150">
+							<p:column headerText="Pic">
+								<center>
+									<p:graphicImage value="#{var.empImage}" width="60px"
+										height="60px" />
+								</center>
+							</p:column>
+
+							<p:column headerText="Name">
+								<p:outputLabel value="#{var.fname}" />
+							</p:column>
+
+						</p:dataTable>
+
+
+					</p:panel>
+					</div>
+				</div>
+
+				<div class="ui-g-12 ui-lg-4">
+					<div class="card timeline ui-fluid" style="background-color: rgb(36, 47, 255, 0.3); ">
+						<div class="ui-g">
+							<h:form id="tch">
+								<p:panel style="width:100%;">
+									<f:facet name="header">
+										<i class="fa fa-users" />
+										<span>Teachers</span>
+									</f:facet>
+
+									<p:dataTable style="text-align:center;" reflow="true" var="var"
+										value="#{teacherHomePage.teacherList}" scrollable="true"
+										scrollHeight="200">
+										<p:column headerText="Pic">
+											<center>
+												<p:graphicImage value="#{var.description}" width="60px"
+													height="60px" />
+											</center>
+										</p:column>
+
+										<p:column headerText="Name">
+											<p:outputLabel value="#{var.label}" />
+										</p:column>
+
+									</p:dataTable>
+								</p:panel>
+								<br />
+								<p:panel style="width:100%;">
+									<f:facet name="header">
+										<i class="fa fa-users" />
+										<span>STUDENTS I TEACH IN CLASS</span>
+										<p:selectOneMenu value="#{teacherHomePage.selectedClassSection}">
+											<f:selectItem itemLabel="All" itemValue="all"></f:selectItem>
+											<f:selectItems value="#{teacherHomePage.teacherClassList}"></f:selectItems>
+											<p:ajax listener="#{teacherHomePage.classmateList}" update="table"></p:ajax>
+										</p:selectOneMenu>
+									</f:facet>
+									<h:commandLink value="View Detail Report" target="_blank" actionListener="#{teacherHomePage.viewDetailReport}"/>
+									<p:dataTable style="text-align:center;" id="table" reflow="true" var="var"
+										value="#{teacherHomePage.classMateList}" scrollable="true"
+										scrollHeight="200">
+										<p:column headerText="Pic">
+											<center>
+												<p:graphicImage value="#{var.student_image}" width="60px"
+													height="60px"/>
+											</center>
+										</p:column>
+
+										<p:column headerText="Name">
+											<p:outputLabel value="#{var.fullName}" />
+										</p:column>
+
+									</p:dataTable>
+
+								</p:panel>
+							</h:form>
+						</div>
+					</div>
+				</div>
+
+
+			</div>
+		</div>
+
+	</ui:define>
+
+
+
+</ui:composition>

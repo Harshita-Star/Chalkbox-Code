@@ -1,0 +1,218 @@
+.layout-rightpanel {
+    position: fixed;
+    z-index: 1000;
+    right: 0;
+    top:56px;
+    height: calc(100% - 56px);
+    padding: 0;
+    width: 260px;
+    overflow: auto;
+    box-shadow: 0 2px 10px 0 rgba(25, 26, 28, 0.12);
+    background-color: #f8fafc;
+    transform: translate3d(260px, 0px, 0px);
+    @include transition(transform $transitionDuration);
+    -webkit-backface-visibility: hidden;
+    -moz-backface-visibility: hidden;
+    backface-visibility: hidden;
+
+    .rightpanel-wrapper {
+        background-color:  rgba(216, 218, 220, .5);
+        height: 100%;
+        overflow: auto;
+        
+        .rightpanel-header {
+            background-color: #f8fafc;
+            .cover {
+                position: relative;
+    
+                .cover-image {
+                    width: 100%;
+                    height: auto;
+                }
+    
+                .avatar-image {
+                    position: absolute;
+                    bottom: -25px;
+                    left: 16px;
+                    width: 64px;
+                    height: 64px;
+                }
+            }
+    
+            .profile-info {
+                padding: 40px 16px 36px;
+                h4 {
+                    font-size: 14px;
+                    font-weight: 500;
+                    margin: 0;
+                    margin-bottom: 2px;
+                    color: #191a1c;
+                }
+    
+                span {
+                    font-size: 12px;
+                    display: block;
+                    color: #8b8e90;
+    
+                    &.status {
+                        color: #00acad;
+                        margin-top: 2px;
+                    }
+                }
+            }
+           
+        }
+    
+        .rightpanel-summary {
+            padding: 16px 16px 19px;
+            border-top: 1px solid #d8dadc;
+            border-bottom: 1px solid #d8dadc;
+    
+            h4 {
+                font-size: 14px;
+                font-weight: normal;
+                margin: 0;
+                color: #191a1c;
+            }
+    
+            .numbers-row {
+                @include flex();
+                @include flex-justify-between();
+                margin: 16px 0;
+                
+                .number {
+                    width: 100%;
+                    text-align: left;
+                    
+                    h5 {
+                        font-weight: normal;
+                        margin: 0;
+                        font-size: 13px;
+                        color: #191a1c;
+                    }
+    
+                    span {
+                        font-size: 12px;
+                        display: block;
+                        color: #65686a;
+                    }
+                }
+            }
+        }
+    
+        .rightpanel-graph {
+            padding: 24px 16px;
+    
+            h4 {
+                font-weight: normal;
+                margin: 0;
+                font-size: 14px;
+                color: #191a1c;
+            }
+    
+            .graph-content {
+                .graph-wrapper {
+                    @include flex();
+                    @include flex-align-center();
+                    width: 100%;
+                    margin-bottom: 16px;
+                    margin-top: 26px;
+        
+                    .graph-item {
+                        height: 16px;
+                        margin-right: -2px;
+                        z-index: 1;
+                        
+                        &:nth-child(1){
+                            width: 40%;
+                            background-color: #c03995;
+                            @include border-radius-left(2px);
+                        }
+                        &:nth-child(2){
+                            width: 20%;
+                            background-color: #00acad;
+                            z-index: 3;
+                        }
+                        &:nth-child(3){
+                            width: 25%;
+                            background-color: #f3a841;
+                            z-index: 2;
+                        }
+                        &:nth-child(4){
+                            width: 15%;
+                            background-color: #2e88ff;
+                            @include border-radius-right(2px);
+                        }
+                    }
+                }
+    
+                > ul {
+                    list-style-type: none;
+                    padding: 0;
+                    width: 100%;
+    
+                    > li {
+                        @include flex();
+                        cursor: pointer;
+                        padding: 4px 0;
+    
+                        &:nth-child(1){
+                            .label-color {
+                                background-color: #c03995;
+                            }
+                        }
+                        &:nth-child(2){
+                            .label-color {
+                                background-color: #00acad;
+                            }
+                        }
+                        &:nth-child(3){
+                            .label-color {
+                                background-color: #f3a841;
+                            }
+                        }
+                        &:nth-child(4){
+                            .label-color {
+                                background-color: #2e88ff;
+                            }
+                        }
+    
+                        .label-color {
+                            width: 8px;
+                            height: 8px;
+                            background-color: #4a79a6;
+                            @include border-radius(1px);
+                            display: inline-block;
+                            margin-right: 3px;
+                            vertical-align: middle;
+                        }
+    
+                        > span {
+                            font-size: 11px;
+                            font-weight: 500;
+                            color: #191a1c;
+                        }
+                    }
+                }
+            }
+    
+    
+        }
+    }
+
+}
+
+.layout-wrapper {
+    &.layout-rightpanel-active {
+        .layout-rightpanel {
+            transform: translate3d(0px, 0px, 0px);
+        }
+    }
+}
+
+@media(max-width:992px) {
+    .layout-rightpanel {
+        top:112px;
+        height: calc(100% - 112px);
+    }
+}

@@ -1,0 +1,226 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Route Wise Report</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<h1>Transport Route Wise Student Report</h1>
+
+							<p:panel header="Select a Route">
+								<p:messages closable="true" autoUpdate="true"></p:messages>
+								<p:panelGrid columns="5"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:outputLabel value="Select a Route"></p:outputLabel>
+									<p:selectOneMenu value="#{showStudentRouteBean.selectedRoute}">
+										<f:selectItem itemLabel="Select One" itemValue="select"></f:selectItem>
+										<f:selectItems value="#{showStudentRouteBean.routeNameList}"></f:selectItems>
+
+										<p:ajax update=":form"
+											listener="#{showStudentRouteBean.getStudentRoute}"></p:ajax>
+									</p:selectOneMenu>
+								</p:panelGrid>
+								
+								<br />
+								<p:separator />
+								<center>
+									<p:panelGrid
+										columns="#{showStudentRouteBean.studentList.size() gt 0 ? '3' : '1'}"
+										layout="grid" styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+
+									<p:commandButton value="Print" icon="fa fa-print" styleClass="butwid"
+										rendered="#{showStudentRouteBean.show}">
+										<p:printer target="dataTable"></p:printer>
+									</p:commandButton>
+
+									<h:commandLink rendered="#{showStudentRouteBean.show}" >
+										<p:graphicImage name="images/excellogo.png"
+											library="avalon-layout" width="100" height="40"></p:graphicImage>
+										<pe:exporter type="xlsx" target=":form:up"
+											fileName="RouteWiseStudent"></pe:exporter>
+									</h:commandLink>
+
+									<p:commandButton value="PDF" icon="fa fa-file-pdf-o" styleClass="butwid" ajax="false"
+										process="@this"
+										actionListener="#{showStudentRouteBean.exportRouteWisePdf}">
+
+										<p:fileDownload value="#{showStudentRouteBean.file}" />
+									</p:commandButton>
+
+									</p:panelGrid>
+								</center>
+								<p:separator />
+								<br />
+								
+								<br />
+								<p:outputPanel id="dataTable"
+									rendered="#{showStudentRouteBean.show}">
+
+									<p:outputPanel style="width:100%" styleClass="test test2">
+										<center>
+											<p
+												style="font-size: 25px !important; font-weight: bold; margin: 0px;">#{headerBean.name}</p>
+											<p
+												style="font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.affiliationNo}</p>
+											<p
+												style="font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.finalAddress}</p>
+											<p
+												style="font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.phoneno}</p>
+
+											<p
+												style="margin: 0px; font-size: 25px !important; font-weight: bold;">Transport
+												Route Wise Student Report</p>
+										</center>
+
+										<p:dataTable stickyHeader="true" id="up" reflow="true"
+											border="1" style="width:100%;border-collapse:collapse"
+											value="#{showStudentRouteBean.studentList}" var="var">
+
+											<f:facet name="header">
+												<p:panelGrid columns="6">
+													<p:outputLabel
+														value="Route : #{showStudentRouteBean.routeNumber}  "></p:outputLabel>
+													<p:outputLabel
+														value="Driver : #{showStudentRouteBean.driverName}  "></p:outputLabel>
+													<p:outputLabel
+														value="Conductor : #{showStudentRouteBean.conductorName}  "></p:outputLabel>
+													<p:outputLabel
+														value="Attendant : #{showStudentRouteBean.attendantName}  "></p:outputLabel>
+													<p:outputLabel
+														value="Vehicle No. : #{showStudentRouteBean.vehicleNumber}  "></p:outputLabel>
+													<p:outputLabel
+														value="Total Students : #{showStudentRouteBean.totalStudent}  "></p:outputLabel>
+
+													<p:outputLabel value=" "></p:outputLabel>
+													<p:outputLabel
+														value="Driver Mob. : #{showStudentRouteBean.driverName}  "></p:outputLabel>
+													<p:outputLabel
+														value="Conductor Mob. : #{showStudentRouteBean.conductorName}  "></p:outputLabel>
+													<p:outputLabel
+														value="Attendant Mob. : #{showStudentRouteBean.attendantName}  "></p:outputLabel>
+													<p:outputLabel value=" "></p:outputLabel>
+													<p:outputLabel value=" "></p:outputLabel>
+												</p:panelGrid>
+											</f:facet>
+
+											<p:column headerText="Sno.">
+
+												<f:facet name="header">
+													<p:outputLabel value="Sno."></p:outputLabel>
+												</f:facet>
+												<p:outputLabel value="#{var.sno}"></p:outputLabel>
+											</p:column>
+
+											<p:column headerText="Add No.">
+
+												<f:facet name="header">
+													<p:outputLabel value="SR.No."></p:outputLabel>
+												</f:facet>
+												<p:outputLabel value="#{var.srNo}"></p:outputLabel>
+											</p:column>
+
+											<p:column headerText="Student Name">
+
+												<f:facet name="header">
+													<p:outputLabel value="Student Name"></p:outputLabel>
+												</f:facet>
+												<p:outputLabel value="#{var.fullName}"></p:outputLabel>
+											</p:column>
+
+											<p:column headerText="Father's Name">
+
+												<f:facet name="header">
+													<p:outputLabel value="Father's Name"></p:outputLabel>
+												</f:facet>
+												<p:outputLabel value="#{var.fathersName}"></p:outputLabel>
+											</p:column>
+
+											<p:column headerText="Stop">
+
+												<f:facet name="header">
+													<p:outputLabel value="Stop"></p:outputLabel>
+												</f:facet>
+												<p:outputLabel value="#{var.routeStop}"></p:outputLabel>
+											</p:column>
+
+											<p:column headerText="Address">
+
+												<f:facet name="header">
+													<p:outputLabel value="Address"></p:outputLabel>
+												</f:facet>
+												<p:outputLabel value="#{var.currentAddress}"></p:outputLabel>
+											</p:column>
+
+											<p:column headerText="Ph.(resi)">
+
+												<f:facet name="header">
+													<p:outputLabel value="Ph.(resi)"></p:outputLabel>
+												</f:facet>
+												<p:outputLabel value="#{var.residencePhone}"></p:outputLabel>
+											</p:column>
+
+											<p:column headerText="Fathers's Phone No.">
+
+												<f:facet name="header">
+													<p:outputLabel value="Father's Phone No."></p:outputLabel>
+												</f:facet>
+												<p:outputLabel value="#{var.fathersPhone}"></p:outputLabel>
+											</p:column>
+
+											<p:column headerText="Mother's Phone No.">
+
+												<f:facet name="header">
+													<p:outputLabel value="Mother's Phone No."></p:outputLabel>
+												</f:facet>
+												<p:outputLabel value="#{var.mothersPhone}"></p:outputLabel>
+											</p:column>
+
+											<p:column headerText="Class">
+
+												<f:facet name="header">
+													<p:outputLabel value="Class"></p:outputLabel>
+												</f:facet>
+												<p:outputLabel value="#{var.className}"></p:outputLabel>
+											</p:column>
+
+											<p:column headerText="Sec">
+
+												<f:facet name="header">
+													<p:outputLabel value="Section"></p:outputLabel>
+												</f:facet>
+												<p:outputLabel value="#{var.sectionName}"></p:outputLabel>
+											</p:column>
+
+										</p:dataTable>
+
+									</p:outputPanel>
+								</p:outputPanel>
+
+
+							</p:panel>
+
+
+						</h:form>
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

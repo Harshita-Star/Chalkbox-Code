@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<f:loadBundle var="searchStudentVar" basename="myProperties" />
+<f:view contentType="text/html">
+	<h:head>
+		<title>Student Details</title>
+		<f:facet name="first">
+			<meta content='text/html; charset=UTF-8' http-equiv="Content-Type" />
+			<meta http-equiv="X-UA-Compatible" content="EmulateIE8" />
+		
+		</f:facet>
+
+	</h:head>
+	
+	<script>
+		
+			function printwin() {
+				document.getElementById('test').style.display="none";	
+				window.print();
+				document.getElementById('test').style.display="block";
+				document.URL="";
+			}
+	
+		</script>
+
+	<h:body style="font-size:9px">
+		<p:commandButton onclick="printwin()" id="test" value="Print"></p:commandButton>
+			<h:form id="form"  style="font-size:9px">
+			<center><p style="font-size: 25px !important;font-weight:bold;margin:0px;">#{headerBean.name}</p>
+						<p style="font-size: 15px !important;font-weight:bold;margin:0px;">#{headerBean.affiliationNo}</p>
+						<p style="font-size: 15px !important;font-weight:bold;margin:0px;">#{headerBean.finalAddress}</p>
+						<p style="font-size: 15px !important;font-weight:bold;margin:0px;">#{headerBean.phoneno}</p>
+			</center>
+					<center><p:outputLabel style="font-size:20px;" value="#{viewOnlineApplication.heading}"></p:outputLabel></center> 
+						<hr></hr>
+						<h:panelGrid style="width:100%" columns="2">
+							<h:panelGrid columns="4"  style="border-collapse:collapse;width:100%;font-size:13px"   >
+							
+								<p:outputLabel value="Name:"></p:outputLabel>
+								<p:outputLabel value="#{viewOnlineApplication.info.st_name}" ></p:outputLabel>
+								
+								<p:outputLabel value="Class:"></p:outputLabel>
+								<p:outputLabel value="#{viewOnlineApplication.info.classname}"></p:outputLabel>
+								
+								<p:outputLabel value="Father Name:"></p:outputLabel>
+								<p:outputLabel value="#{viewOnlineApplication.info.f_name}"></p:outputLabel>
+									
+								<p:outputLabel value="Mother Name:"></p:outputLabel>
+								<p:outputLabel value="#{viewOnlineApplication.info.m_name}"></p:outputLabel>
+								
+								<p:outputLabel value="Academic Year:"></p:outputLabel>
+								<p:outputLabel value="#{viewOnlineApplication.info.year}"></p:outputLabel>
+								
+								<p:outputLabel value="Gender:"></p:outputLabel>
+								<p:outputLabel value="#{viewOnlineApplication.info.gender}"></p:outputLabel>
+							
+							</h:panelGrid>
+							<h:panelGrid style="float:right" columns="1" border="1"> 
+								<p:graphicImage value="#{viewOnlineApplication.info.st_image eq '' ? 'noimage.png' : viewOnlineApplication.info.st_image}" height="100px" width="100px" ></p:graphicImage>
+							</h:panelGrid>
+						</h:panelGrid>
+						<hr></hr>
+						<table  border="1" cellpadding="5" cellspacing="0" style="width:100%;margin-top:12px;font-size:15px"   >
+				<tr>
+<td style="width:12.5%;">Applicant Name</td>
+<td style="width:12.5%;" colspan="5" > <h:outputLabel value="#{viewOnlineApplication.info.applicant_name}"  /></td>
+<td style="width:12.5%;">Relation to Child</td>
+<td style="width:12.5%;"> <h:outputLabel value="#{viewOnlineApplication.info.applicant_relation eq 'Other' ? viewOnlineApplication.info.other_rel : viewOnlineApplication.info.applicant_relation}" /></td>
+
+</tr>
+<tr>
+<td style="width:12.5%;">Place of Birth</td>
+<td style="width:12.5%;" colspan="5" > <h:outputLabel value="#{viewOnlineApplication.info.birth_place}"  /></td>
+<td style="width:12.5%;">Last School Attended </td>
+<td style="width:12.5%;"> <h:outputLabel value="#{viewOnlineApplication.info.last_school}" /></td>
+
+</tr>
+				
+				<tr>
+<td style="width:12.5%;">Application Date</td>
+<td style="width:12.5%;" colspan="5" > <h:outputLabel value="#{viewOnlineApplication.info.applydateStr}"  /></td>
+<td style="width:12.5%;">Date of Birth</td>
+<td style="width:12.5%;"> <h:outputLabel value="#{viewOnlineApplication.info.dobStr}" /></td>
+
+</tr>
+<tr>
+<td style="width:12.5%;">Place of Birth</td>
+<td style="width:12.5%;" colspan="5" > <h:outputLabel value="#{viewOnlineApplication.info.birth_place}"  /></td>
+<td style="width:12.5%;">Last School Attended </td>
+<td style="width:12.5%;"> <h:outputLabel value="#{viewOnlineApplication.info.last_school}" /></td>
+
+</tr>
+<tr>
+<td style="width:12.5%;"><h:outputLabel value="Religion"  /></td>
+<td style="width:12.5%;" colspan="5" > <h:outputLabel value="#{viewOnlineApplication.info.religion}"  /></td>
+<td style="width:12.5%;">Nationality</td>
+<td style="width:12.5%;"> <h:outputLabel value="#{viewOnlineApplication.info.nationality}" /></td>
+
+</tr>
+
+<tr>
+<td style="width:12.5%;"><h:outputLabel value="Home Language"  /></td>
+<td style="width:12.5%;" colspan="5" > <h:outputLabel value="#{viewOnlineApplication.info.lang}"  /></td>
+<td style="width:12.5%;">Other Languages Spoken</td>
+<td style="width:12.5%;"> <h:outputLabel value="#{viewOnlineApplication.info.other_lang}" /></td>
+
+
+</tr>
+
+<tr>
+<td style="width:12.5%;">Passport No.</td>
+<td style="width:12.5%;" colspan="5" > <h:outputLabel value="#{viewOnlineApplication.info.ppt_no}"  /></td>
+<td style="width:12.5%;">Passport Issue Date</td>
+<td style="width:12.5%;"> <h:outputLabel value="#{viewOnlineApplication.info.ppt_issue_dateStr}" /></td>
+
+</tr>
+
+<tr>
+<td style="width:12.5%;">Passport Expiry Date</td>
+<td style="width:12.5%;" colspan="5" > <h:outputLabel value="#{viewOnlineApplication.info.ppt_exp_dateStr}"  /></td>
+<td style="width:12.5%;">Place of Issue Passport</td>
+<td style="width:12.5%;"> <h:outputLabel value="#{viewOnlineApplication.info.ppt_place}" /></td>
+
+</tr>
+
+
+<tr>
+<td style="width:12.5%;">VISA No.</td>
+<td style="width:12.5%;" colspan="5" > <h:outputLabel value="#{viewOnlineApplication.info.visa_no}"  /></td>
+<td style="width:12.5%;">VISA Valid upto Date</td>
+<td style="width:12.5%;"> <h:outputLabel value="#{viewOnlineApplication.info.visa_exp_dateStr}" /></td>
+
+</tr>
+
+
+<tr>
+<td style="width:12.5%;">VISA Issue Date</td>
+<td style="width:12.5%;" colspan="5" > <h:outputLabel value="#{viewOnlineApplication.info.visa_issue_dateStr}"  /></td>
+<td style="width:12.5%;">Address in UAE</td>
+<td style="width:12.5%;"> <h:outputLabel value="#{viewOnlineApplication.info.address}"  /></td>
+</tr>
+
+
+<tr>
+<!-- 
+<td style="width:12.5%;">Ethnicity</td>
+<td style="width:12.5%;" colspan="5" > <h:outputLabel value="#{viewOnlineApplication.info.ethnicity}" /></td> -->
+<td style="width:12.5%;">Student Emirates ID</td>
+<td style="width:12.5%;" colspan="5"> <h:outputLabel value="#{viewOnlineApplication.info.emid}"  /></td>
+</tr>
+
+
+</table>
+
+                 <p:outputPanel>
+         	<hr style="border-top: dotted 2px;" ></hr>
+
+<p:outputPanel style="width:45%;text-align:center;border-collapse:collapse;font-size:10px;float:left;margin-top:12px">
+					  	  	              <p:outputLabel style="margin-left:80px!important;font-size:15px!important;font-weight:bold;text-decoration:underline" value="Father Details"></p:outputLabel> 
+					  	  	            <p:outputLabel></p:outputLabel>
+					  	  <table  border="1" cellpadding="5" cellspacing="0" style="width:100%;margin-top:12px;font-size:10px"   >
+				<tr>
+<td style="width:12.5%;">Name </td>
+<td style="width:12.5%;" colspan="5" > <h:outputLabel value="#{viewOnlineApplication.info.f_name}"  /></td>
+<td style="width:12.5%;">Mobile </td>
+<td style="width:12.5%;"> <h:outputLabel value="+971-#{viewOnlineApplication.info.f_mob}" /></td>
+
+</tr>
+
+	<tr>
+<td style="width:12.5%;">Email Address</td>
+<td style="width:12.5%;" colspan="5" > <h:outputLabel value="#{viewOnlineApplication.info.f_email}"  /></td>
+<td style="width:12.5%;">Emirates ID </td>
+<td style="width:12.5%;"> <h:outputLabel value="#{viewOnlineApplication.info.f_emid}" /></td>
+
+</tr>
+
+<tr>
+<td style="width:12.5%;">Occupation</td>
+<td style="width:12.5%;" colspan="5" > <h:outputLabel value="#{viewOnlineApplication.info.f_occupation}"  /></td>
+<td style="width:12.5%;">Employer</td>
+<td style="width:12.5%;"> <h:outputLabel value="#{viewOnlineApplication.info.f_employer}" /></td>
+
+</tr>
+
+<tr>
+<td style="width:12.5%;">Work No.</td>
+<td style="width:12.5%;" colspan="5" > <h:outputLabel value="#{viewOnlineApplication.info.f_work}"  /></td>
+<td style="width:12.5%;">Address </td>
+<td style="width:12.5%;"> <h:outputLabel value="#{viewOnlineApplication.info.f_address}" /></td>
+
+</tr>
+					  	  
+		</table>
+					  	  </p:outputPanel>
+	               			<p:outputPanel style="width:45%;text-align:center;border-collapse:collapse;font-size:10px;float:right;margin-top:12px">
+	               			   <p:outputLabel style="font-size:15px!important;font-weight:bold;text-decoration:underline" value="Mother Details"></p:outputLabel> 
+					  	  	 <table  border="1" cellpadding="5" cellspacing="0" style="width:100%;margin-top:12px;font-size:10px"   >
+				<tr>
+<td style="width:12.5%;">Name </td>
+<td style="width:12.5%;" colspan="5" > <h:outputLabel value="#{viewOnlineApplication.info.m_name}"  /></td>
+<td style="width:12.5%;">Mobile </td>
+<td style="width:12.5%;"> <h:outputLabel value="+971-#{viewOnlineApplication.info.m_mob}" /></td>
+
+</tr>
+
+<tr>
+<td style="width:12.5%;">Email Address</td>
+<td style="width:12.5%;" colspan="5" > <h:outputLabel value="#{viewOnlineApplication.info.m_email}"  /></td>
+<td style="width:12.5%;">Emirates ID</td>
+<td style="width:12.5%;"> <h:outputLabel value="#{viewOnlineApplication.info.m_emid}" /></td>
+
+</tr>
+
+	
+<tr>
+<td style="width:12.5%;">Occupation</td>
+<td style="width:12.5%;" colspan="5" > <h:outputLabel value="#{viewOnlineApplication.info.m_occupation}"  /></td>
+<td style="width:12.5%;">Employer </td>
+<td style="width:12.5%;"> <h:outputLabel value="#{viewOnlineApplication.info.m_employer}" /></td>
+
+</tr>
+
+<tr>
+<td style="width:12.5%;">Work No.</td>
+<td style="width:12.5%;" colspan="5" > <h:outputLabel value="#{viewOnlineApplication.info.m_work}"  /></td>
+<td style="width:12.5%;">Address</td>
+<td style="width:12.5%;"> <h:outputLabel value="#{viewOnlineApplication.info.m_address}" /></td>
+
+</tr>
+					  	  
+		</table>
+					  	  	</p:outputPanel>
+					  	  	<p:outputLabel></p:outputLabel>
+					  
+					  	<p:outputLabel></p:outputLabel>
+
+					  	  	<p:outputPanel style="width:100%;text-align:center;border-collapse:collapse;font-size:10px;float:left;margin-top:12px">
+					  	  	              <p:outputLabel style="font-size:15px!important;font-weight:bold;text-decoration:underline" value="Sibling Details"></p:outputLabel> 
+					  	  	            <p:outputLabel></p:outputLabel>
+					  	 <h:dataTable var="var" value="#{viewOnlineApplication.completeList}" style="width:100%;text-align:center;border-collapse:collapse;font-size:13px;margin-top:12px"   border="2" >
+      		  		
+      		  		
+      		  		
+      		  		<p:column>
+      		  				<center><f:facet name="header" >Name</f:facet></center>
+      		  					<center>#{var.name}</center>
+      		  			</p:column>
+
+
+              <p:column>
+      		  				<center><f:facet name="header">Class</f:facet></center>
+      		  					<center>#{var.class_name}</center>
+      		  			</p:column>
+		</h:dataTable>
+					  	  </p:outputPanel>	
+					  	  
+					  	  <p:outputLabel/><p:outputLabel/>
+					  	  	
+					  	  </p:outputPanel>
+					  	  <table  border="0" cellpadding="5" cellspacing="0" style="width:30%;margin-top:22px;font-size:15px;margin-top:10px;float:right"   >
+	<tr>
+		<td style="width:12.5%;"></td>
+		<td style="width:12.5%;font-weight:bold" colspan="5" ></td>
+		<td style="width:12.5%;"></td>
+		<td style="width:12.5%;font-weight:bold" colspan="5" ></td>
+		<td style="width:12.5%;"></td>
+		<td style="width:12.5%;font-weight:bold" colspan="5" ></td>
+		<td style="width:12.5%;"></td>
+		<td style="width:12.5%;font-weight:bold" colspan="5" ></td>
+	</tr>
+</table>
+
+</h:form>
+</h:body>
+</f:view>
+</html>

@@ -1,0 +1,96 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Issue TC</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form1">
+							<h1>Search Student For TC Generation</h1>
+
+							<p:messages closable="true" autoUpdate="true"></p:messages>
+
+							<p:panel header="Search Student by Name/Sr. No">
+
+								<p:panelGrid columns="3"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel value="Student Name/Sr. No" for="@next" style="color:red" ></p:outputLabel>
+									<p:autoComplete required="true" id="acSimple"
+										value="#{generateRbscTC.name}"
+										completeMethod="#{generateRbscTC.autoCompleteStudentInfo}" validatorMessage="Please Enter Correct value">
+									  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+									</p:autoComplete>
+
+									<p:commandButton update=":form3:up" value="Search Now"
+										actionListener="#{generateRbscTC.searchStudentByName}"></p:commandButton>
+
+								</p:panelGrid>
+
+							</p:panel>
+						</h:form>
+					</div>
+					<div class="card card-w-title">
+						<h:form id="form3">
+
+							<p:panel header="Student Details">
+
+								<p:outputPanel id="up">
+
+									<p:dataTable reflow="true" selection="#{generateRbscTC.selectedStudent}"
+										rowKey="#{var.addNumber}" rendered="#{generateRbscTC.show}"
+										var="var" value="#{generateRbscTC.list}" rows="5"
+										paginator="true" rowsPerPageTemplate="5,10,15">
+
+										<p:column headerText="Select Here"
+											selectionMode="single"></p:column>
+
+										<p:column headerText="Adm. No.">
+											<p:outputLabel value="#{var.srNo}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Student Name">
+											<p:outputLabel value="#{var.fname}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Reason">
+											<p:outputLabel value="#{var.reason}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Last Class">
+											<p:outputLabel value="#{var.className} - #{var.sectionName}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Grade">
+											<p:outputLabel value="#{var.grade}"></p:outputLabel>
+										</p:column>
+
+										<f:facet name="footer">
+											<p:commandButton rendered="#{generateRbscTC.show}"
+												action="#{generateRbscTC.editNow}" value="Generate T.C"></p:commandButton>
+										</f:facet>
+
+									</p:dataTable>
+
+								</p:outputPanel>
+
+							</p:panel>
+
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,174 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Class Wise Test Report</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<p:messages closable="true" autoUpdate="true"></p:messages>
+							<p:panel header="Print Test Performance">
+								<p:panelGrid columns="6"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel for="@next" style="color:red"
+										value="Select Class"></p:outputLabel>
+									<p:selectOneMenu
+										value="#{printTestPerformanceClassWise.selectedClass}"
+										filter="true" required="true"
+										requiredMessage="Please Select Class">
+										<f:selectItem itemLabel="Select Class" itemValue=""></f:selectItem>
+										<f:selectItems
+											value="#{printTestPerformanceClassWise.classSection}"></f:selectItems>
+										<p:ajax update=":form"
+											listener="#{printTestPerformanceClassWise.allSection}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel for="@next" style="color:red" rendered=""
+										value="Select Section"></p:outputLabel>
+									<p:selectOneMenu id="showSection" filter="true"
+										value="#{printTestPerformanceClassWise.selectedSection}"
+										required="true" requiredMessage="Please select a section">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItems
+											value="#{printTestPerformanceClassWise.sectionList}"></f:selectItems>
+									</p:selectOneMenu>
+
+
+									<p:outputLabel for="@next" style="color:red"
+										value="Select Month"></p:outputLabel>
+									<p:selectOneMenu filter="true"
+										value="#{printTestPerformanceClassWise.month}" required="true"
+										requiredMessage="Please select a section">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItem itemLabel="April" itemValue="4"></f:selectItem>
+										<f:selectItem itemLabel="May" itemValue="5"></f:selectItem>
+										<f:selectItem itemLabel="June" itemValue="6"></f:selectItem>
+										<f:selectItem itemLabel="July" itemValue="7"></f:selectItem>
+										<f:selectItem itemLabel="August" itemValue="8"></f:selectItem>
+										<f:selectItem itemLabel="September" itemValue="9"></f:selectItem>
+										<f:selectItem itemLabel="October" itemValue="10"></f:selectItem>
+										<f:selectItem itemLabel="November" itemValue="11"></f:selectItem>
+										<f:selectItem itemLabel="December" itemValue="12"></f:selectItem>
+										<f:selectItem itemLabel="January" itemValue="1"></f:selectItem>
+										<f:selectItem itemLabel="February" itemValue="2"></f:selectItem>
+										<f:selectItem itemLabel="March" itemValue="3"></f:selectItem>
+									</p:selectOneMenu>
+
+									<p:outputLabel for="@next" style="color:red" rendered="false"
+										value="Select Day"></p:outputLabel>
+									<p:calendar
+										value="#{printTestPerformanceClassWise.selectedDay}"
+										pattern="dd/MM/yyyy" navigator="true" required="true"
+										requiredMessage="Please Select Day" rendered="false"></p:calendar>
+
+								</p:panelGrid>
+								
+								<br />
+								<p:separator />
+								<center>
+									<p:panelGrid
+										columns="#{printTestPerformanceClassWise.studentDetails.size() gt 0 ? '2':'1'}"
+										layout="grid" styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+									<p:commandButton update=":form" styleClass="butwid" icon="fa fa-search"
+										action="#{printTestPerformanceClassWise.search}"
+										value="Search"></p:commandButton>
+
+									<p:commandButton styleClass="butwid" icon="fa fa-print"
+										rendered="#{printTestPerformanceClassWise.showStudentRecord}"
+										update=":form" value="Print">
+										<p:printer target="datatableid" />
+									</p:commandButton>
+										
+									</p:panelGrid>
+								</center>
+								<p:separator />
+								<br />
+							</p:panel>
+							<br />
+							<p:panel id="rr" header="Student Performance Details"
+								rendered="#{printTestPerformanceClassWise.showStudentRecord}">
+
+
+								<p:outputPanel id="datatableid">
+									<center>
+										<p
+											style="font-family: initial; font-style: oblique; font-size: 25px !important; font-weight: bold; margin: 0px;">#{headerBean.name}</p>
+
+										<p
+											style="margin: 0px; font-size: 20px !important; font-weight: bold;">Class
+											#{printTestPerformanceClassWise.className} Consolidated Month
+											Report</p>
+
+										<p
+											style="margin: 0px; font-size: 20px !important; font-weight: bold;">Month
+											Name - #{printTestPerformanceClassWise.monthName}</p>
+
+									</center>
+									<p:dataTable reflow="true"
+										rendered="#{printTestPerformanceClassWise.showStudentRecord}"
+										value="#{printTestPerformanceClassWise.studentDetails}"
+										var="var">
+
+										<p:column sortBy="#{var.fullName}" headerText="Student Name"
+											style="width: 150px;">
+											<p:outputLabel value="#{var.fullName}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Class" style="width: 150px;">
+											<p:outputLabel value="#{var.className}"></p:outputLabel>
+										</p:column>
+
+										<p:columns value="#{printTestPerformanceClassWise.list}"
+											var="column" columnIndexVar="colIndex" style="width: 80px;">
+											<f:facet name="header">
+												<p:panelGrid columns="1"
+													style="border:0px none; background-color:transparent;"
+													styleClass="ui-panelgrid-blank form-group">
+													<p:outputLabel value="#{column.testName}"></p:outputLabel>
+													<p:outputLabel value="#{column.subject}"></p:outputLabel>
+													<p:outputLabel value="(#{column.testMarks})"></p:outputLabel>
+
+													<p:outputLabel value="(#{column.stadd_date})"></p:outputLabel>
+
+
+												</p:panelGrid>
+
+											</f:facet>
+
+											<p:outputLabel
+												value="#{var.studentPerformnaceMap[column.id]}"></p:outputLabel>
+										</p:columns>
+
+										<p:column rendered="false"
+											headerText="Total (#{printTestPerformanceClassWise.totalmarks})"
+											style="width: 150px;">
+											<p:outputLabel value="#{var.totalTestNo}"></p:outputLabel>
+										</p:column>
+
+										<p:column rendered="false" headerText="Rank"
+											style="width: 100px;">
+											<p:outputLabel value="#{var.rank}"></p:outputLabel>
+										</p:column>
+									</p:dataTable>
+								</p:outputPanel>
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

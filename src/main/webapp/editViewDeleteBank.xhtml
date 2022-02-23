@@ -1,0 +1,185 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Sample</ui:define>
+
+    <ui:define name="content">
+       
+            <div class="ui-fluid">
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <div class="card card-w-title">
+                          	<h:form id="instlmnt" style="overflow:hidden">
+							<p:panel header="Edit / View / Delete Bank ACCs">
+								<p:dataTable reflow="true" id="dt" var="aa" value="#{editViewDeleteBank.bank_info}" paginator="true" rows="5" rowsPerPageTemplate="5,10,15">
+									<f:facet name="header">
+										<p:panelGrid columns="2">
+											<p:outputLabel value="School's Cash Balance : "/>
+											<p:outputLabel value="Rs. #{editViewDeleteBank.cashBalance}"></p:outputLabel>
+										</p:panelGrid>
+									</f:facet>
+								<p:column headerText="SNo." >
+									<h:outputText value="#{aa.sno}" />
+								</p:column>
+								
+								<p:column headerText="Date">
+									<h:outputText value="#{aa.strEntryDate}" />
+								</p:column>
+
+								<p:column headerText="Bank Name">
+									<h:outputText value="#{aa.bank_name}" />
+								</p:column>
+								
+								<p:column headerText="Bank Branch">
+									<h:outputText value="#{aa.bank_branch}" />
+								</p:column>
+								
+								<p:column headerText="Address">
+									<h:outputText value="#{aa.address}" />
+								</p:column>
+								
+								<p:column headerText="Acc.No.">
+									<h:outputText value="#{aa.acc_no}" />
+								</p:column>
+
+								<p:column headerText="Bank Code">
+									<h:outputText value="#{aa.bank_code}" />
+								</p:column>
+								
+								<p:column headerText="IFSC">
+									<h:outputText value="#{aa.bank_IFSC}" />
+								</p:column>
+								
+								<p:column rendered="false" headerText="Current Balance">
+									<h:outputText value="#{aa.current_balance}" />
+								</p:column>
+						
+							<!-- <p:column headerText="View" style="width: 49px !important;">
+									<p:commandButton icon="ui-icon-search" oncomplete="PF('viewDialog').show()" update=":form2">
+										<f:setPropertyActionListener value="#{aa}" target="#{editViewDeleteCenter.selectedcenter}" />
+									</p:commandButton>
+								</p:column> -->
+
+								<p:column headerText="Edit" >
+									<p:commandButton icon="ui-icon-pencil" action="#{editViewDeleteBank.editDetails}"  oncomplete="PF('editDialog').show()" update=":form3">
+										<f:setPropertyActionListener value="#{aa}" target="#{editViewDeleteBank.selectedBank}" />
+									</p:commandButton>
+								</p:column>
+
+								<!-- <p:column headerText="Delete" style="width: 49px !important;">
+									<p:commandButton update=":instlmnt" icon="ui-icon-trash" action="#{editViewDeleteCenter.delete}">
+										<f:setPropertyActionListener value="#{aa}" target="#{editViewDeleteCenter.selectedcenter}" />
+										<p:confirm header="Confirmation" message="Surely want to remove this user ?" icon="ui-icon-alert" />
+									</p:commandButton>
+
+
+								</p:column> -->								
+							</p:dataTable>
+							</p:panel>
+							
+				
+							
+							
+						</h:form>
+						
+						<!-- <h:form id="form20">
+							<p:panel header="Closing Balance On A Particular Date: ">
+								<p:panelGrid columns="4">
+									<p:outputLabel value="Select Date: "></p:outputLabel>
+									<p:calendar value="#{editViewDeleteBank.chkDate}" navigator="true" pattern="dd/MM/yyyy" required="true" requiredMessage="Please Select Date"></p:calendar>
+									<p:commandButton value="Cash Closing Balance" actionListener=""></p:commandButton>
+									<p:outputLabel></p:outputLabel>
+								</p:panelGrid>
+							</p:panel>
+						</h:form> -->
+						
+									
+					<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+						<p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+						<p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+					</p:confirmDialog>
+							
+							
+
+					<h:form id="form2" style="overflow:hidden">
+						<p:dialog closeOnEscape="true" header="Center Info" widgetVar="viewDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+							<p:outputPanel id="receiptDetail" style="text-align:center;">
+								<div class="ui-g form-group">
+								<p:panelGrid columns="2" columnClasses="label,value"   >
+									<h:outputText value="Center Name :" />
+									<h:outputText value="#{editViewDeleteCenter.selectedcenter.centerName}" />
+
+									<h:outputText value="Center Code :" />
+									<h:outputText value="#{editViewDeleteCenter.selectedcenter.centerCode}" />
+
+									<h:outputText value="Description :" />
+									<h:outputText value="#{editViewDeleteCenter.selectedcenter.description}" />
+								</p:panelGrid>
+								</div>
+							</p:outputPanel>
+						</p:dialog>
+
+					</h:form>
+					
+					<h:form id="form3" style="overflow:hidden">
+						<p:dialog header="Center Info" widgetVar="editDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+							<div class="ui-g form-group">
+							
+							<p:panelGrid columns="2"  styleClass="ui-panelgrid-blank form-group"
+                                        style="border:0px none; background-color:transparent;" >
+								<p:outputLabel value="Entry Date" for="@next" style="color:red" ></p:outputLabel>
+									<p:calendar value="#{editViewDeleteBank.entryDate}" navigator="true" pattern="dd/MM/yyyy" yearRange="c-10:c+10" required="true" requiredMessage="Please Enter Entry Date">
+								</p:calendar>		
+							
+								<p:outputLabel value="Bank Name" for="@next" style="color:red" ></p:outputLabel>
+		   				    	<p:inputText value="#{editViewDeleteBank.bankName}" required="true" requiredMessage="Please Enter Bank Name" validatorMessage="Please Enter Correct value">
+		   				    	  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+		   				    	</p:inputText>
+						  		
+						  		<p:outputLabel value="Bank Branch"  for="@next" style="color:red" ></p:outputLabel>
+			                    <p:inputText value="#{editViewDeleteBank.bankBranch}" required="true" requiredMessage="Enter The Bank Branch"  validatorMessage="Please Enter Correct value">
+			                     <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+			                    </p:inputText>
+						  		
+						  		<p:outputLabel value="Address" for="@next" style="color:red" ></p:outputLabel>
+			                    <p:inputTextarea rows="3" cols="50" value="#{editViewDeleteBank.bankAddress}" required="true" requiredMessage="Please Enter Address" validatorMessage="Please Enter Correct value">
+			                      <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+			                    </p:inputTextarea>
+			   					
+			   					<p:outputLabel value="Acc.No." for="@next" style="color:red" ></p:outputLabel>
+			                    <p:inputText value="#{editViewDeleteBank.accNo}" required="true" requiredMessage="Please Enter Acc.No." validatorMessage="Please Enter Correct value">
+			                      <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+			                    </p:inputText>
+						  		
+						   		<p:outputLabel value="Bank Code"></p:outputLabel>
+		    			   		<p:inputText value="#{editViewDeleteBank.bankCode}" validatorMessage="Please Enter Correct value">
+		    			   		  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+		    			   		</p:inputText>
+		                   
+			                    <p:outputLabel value="Bank IFSC Code" ></p:outputLabel>
+			                    <p:inputText value="#{editViewDeleteBank.bankIFSC}" validatorMessage="Please Enter Correct value">
+			                      <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+			                    </p:inputText>
+			                    
+							    <p:outputLabel value="Description"></p:outputLabel>
+								<p:inputTextarea value="#{editViewDeleteBank.description}" rows="3" cols="50" validatorMessage="Please Enter Correct value">
+								<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+								</p:inputTextarea>
+
+								<p:commandButton value="Update" actionListener="#{editViewDeleteBank.update}"/>
+							</p:panelGrid>
+							</div>
+						</p:dialog>
+					</h:form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+       
+    </ui:define>
+
+</ui:composition>

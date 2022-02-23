@@ -1,0 +1,300 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Complaint Diary</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form1">
+							<h1>Student Behaviour</h1>
+
+							<p:messages closable="true" autoUpdate="true"></p:messages>
+
+							<p:panel>
+								<f:facet name="header">
+									<span>Search Student By Student Name</span>
+									<span> <p:commandLink
+											style="float: right;margin-left: 15px;;color: blue;font-size:15px;"
+											immediate="true" value="Student Behaviour Report"
+											action="complaintDiary.xhtml?faces-redirect=true"></p:commandLink>
+									</span>
+								</f:facet>
+
+
+								<p:panelGrid columns="3"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel value="Student Name"></p:outputLabel>
+									<p:autoComplete id="acSimple" value="#{addComplainDiary.name}"
+										completeMethod="#{addComplainDiary.autoCompleteStudentInfo}"
+										validatorMessage="Please Enter Correct value">
+										<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:autoComplete>
+
+									<p:commandButton update=":form3:up" value="Search"
+										styleClass="butwid" icon="fa fa-search"
+										action="#{addComplainDiary.searchStudentByName}"></p:commandButton>
+								</p:panelGrid>
+							</p:panel>
+						</h:form>
+					</div>
+
+					<div class="card card-w-title">
+
+						<h:form id="form2">
+
+							<p:panel header="Search Student by Class Section">
+
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel for="@next" style="color:red"
+										value="Select Class"></p:outputLabel>
+									<p:selectOneMenu style="width:250px" filter="true"
+										value="#{addComplainDiary.selectedClassSection}"
+										required="true" requiredMessage="Please Select Class">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{addComplainDiary.classSection}"></f:selectItems>
+
+										<p:ajax update="sectionid"
+											listener="#{addComplainDiary.allSections}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel for="@next" style="color:red"
+										value="Select Section"></p:outputLabel>
+									<p:selectOneMenu id="sectionid" filter="true"
+										value="#{addComplainDiary.selectedSection}" required="true"
+										requiredMessage="Please select a section">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{addComplainDiary.sectionList}"></f:selectItems>
+
+										<p:ajax update=":form3:up"
+											listener="#{addComplainDiary.searchStudentByClassSection}"></p:ajax>
+									</p:selectOneMenu>
+
+								</p:panelGrid>
+
+							</p:panel>
+
+						</h:form>
+					</div>
+					<div class="card card-w-title">
+						<h:form id="form3">
+							<p:panel header="Student Details">
+
+								<p:outputPanel id="up">
+									<p:dataTable reflow="true" rendered="#{addComplainDiary.show}"
+										var="var" value="#{addComplainDiary.studentList}" rows="10"
+										paginator="true">
+
+										<p:column headerText="S.No.">
+											<p:outputLabel value="#{var.sno}"></p:outputLabel>
+										</p:column>
+
+										<p:column filterBy="#{var.srNo}" filterMatchMode="contains"
+											headerText="Admission No.">
+											<p:outputLabel value="#{var.srNo}"></p:outputLabel>
+										</p:column>
+
+										<p:column filterBy="#{var.fname}" filterMatchMode="contains"
+											headerText="Student Name">
+											<p:outputLabel value="#{var.fname}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Class">
+											<p:outputLabel value="#{var.className}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Father's Name">
+											<p:outputLabel value="#{var.fathersName}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Contact No.">
+											<p:outputLabel value="#{var.fathersPhone}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Add Behaviour">
+											<p:commandButton update=":noteForm" icon="ui-icon-pencil"
+												oncomplete="PF('noteDialog').show()">
+												<f:setPropertyActionListener
+													target="#{addComplainDiary.selectedStudent}" value="#{var}"></f:setPropertyActionListener>
+											</p:commandButton>
+										</p:column>
+
+
+									</p:dataTable>
+								</p:outputPanel>
+
+							</p:panel>
+
+						</h:form>
+
+						<h:form id="noteForm">
+							<p:dialog resizable="false" modal="true" widgetVar="noteDialog"
+								header="Student Behaviour" closeOnEscape="true" width="500">
+								<center>
+									<p:panelGrid columns="7"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+										<div class="ui-inputgroup">
+											<p:graphicImage value="red.png"
+												style="width:20px; height:20px;"></p:graphicImage>
+											<p:outputLabel value="Complaint / Bad" style="font-size:15;"></p:outputLabel>
+
+											<p:graphicImage value="green.png"
+												style="width:20px; height:20px;"></p:graphicImage>
+											<p:outputLabel value="Appreciation / Good"
+												style="font-size:15;"></p:outputLabel>
+
+											<p:graphicImage value="blue.png"
+												style="width:20px; height:20px;"></p:graphicImage>
+											<p:outputLabel value="Neutral" style="font-size:15;"></p:outputLabel>
+										</div>
+									</p:panelGrid>
+								</center>
+								<br />
+
+								<p:panelGrid columns="1" layout="grid"
+									styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel style="font-weight:bold;" value="Select Type"></p:outputLabel>
+									<p:selectOneRadio id="customRadio"
+										value="#{addComplainDiary.type}" layout="custom">
+										<f:selectItem itemLabel="complaint" itemValue="complaint" />
+										<f:selectItem itemLabel="appreciation"
+											itemValue="appreciation" />
+										<f:selectItem itemLabel="neutral" itemValue="neutral" />
+									</p:selectOneRadio>
+
+									<p:panelGrid columns="6" cellpadding="8">
+										<p:graphicImage value="red.png"
+											style="width:40px; height:50px;"></p:graphicImage>
+										<p:radioButton for="customRadio" itemIndex="0">
+										</p:radioButton>
+
+										<p:graphicImage value="green.png"
+											style="width:40px; height:50px;"></p:graphicImage>
+										<p:radioButton for="customRadio" itemIndex="1">
+										</p:radioButton>
+
+										<p:graphicImage value="blue.png"
+											style="width:40px; height:50px;"></p:graphicImage>
+										<p:radioButton for="customRadio" itemIndex="2">
+										</p:radioButton>
+									</p:panelGrid>
+									<p:outputLabel />
+
+									<p:outputLabel for="@next" style="color:red;font-weight:bold;"
+										value="Description"></p:outputLabel>
+									<p:inputTextarea value="#{addComplainDiary.description}"
+										required="true"
+										requiredMessage="Please Write Complaint Description" cols="20"
+										rows="10" validatorMessage="Please Enter Correct value">
+										<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:inputTextarea>
+
+									<p:outputLabel for="@next" style="color:red;font-weight:bold;"
+										value="Complaint/Appreciation By"></p:outputLabel>
+
+									<p:autoComplete value="#{addComplainDiary.complaintBy}"
+										completeMethod="#{addComplainDiary.autoCompleteEmplInfo}"
+										required="true"
+										requiredMessage="Please Fill 'Complaint By' Column"
+										validatorMessage="Please Enter Correct value">
+										<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:autoComplete>
+
+									<p:commandButton icon="ui-icon-plus" value="Add Behaviour"
+										update=":noteForm,:form3"
+										action="#{addComplainDiary.addComplaint}"></p:commandButton>
+								</p:panelGrid>
+							</p:dialog>
+						</h:form>
+
+						<h:form id="MsgLimitForm" style="overflow:hidden">
+							<p:dialog header="Low SMS Balance" width="500"
+								widgetVar="MsgLmtDlg" modal="true" showEffect="fade"
+								hideEffect="fade" resizable="false">
+								<center>
+									<p:outputLabel value="#{addComplainDiary.balMsg}"
+										style="font-size:14px;font-weight: bold;" />
+								</center>
+								<br></br>
+								<br></br>
+								<center>
+									<p:commandButton value="Skip"
+										action="#{addComplainDiary.sendMsg}"
+										update="MsgLimitForm,form3" />
+									<br /> <br />
+									<p:commandButton value="Message Logs"
+										action="messageSchoolHistory.xhtml?faces-redirect=true"
+										update="MsgLimitForm" />
+									<br /> <br />
+									<p:commandButton value="Recharge Now"
+										action="purchaseMsgPack.xhtml?faces-redirect=true"
+										update="MsgLimitForm" />
+								</center>
+								<br></br>
+							</p:dialog>
+						</h:form>
+
+						<h:form id="MsgOverForm" style="overflow:hidden">
+							<p:dialog header="SMS Limit Over" width="500"
+								widgetVar="MsgOvrDlg" modal="true" showEffect="fade"
+								hideEffect="fade" resizable="false">
+								<center>
+									<p:outputLabel value="#{addComplainDiary.balMsg}"
+										style="font-size:14px;font-weight: bold;" />
+								</center>
+								<br></br>
+								<br></br>
+								<center>
+									<p:commandButton value="Message Logs"
+										action="messageSchoolHistory.xhtml?faces-redirect=true"
+										update="MsgOverForm" />
+									<br /> <br />
+									<p:commandButton value="Recharge Now"
+										action="purchaseMsgPack.xhtml?faces-redirect=true"
+										update="MsgOverForm" />
+								</center>
+								<br></br>
+							</p:dialog>
+						</h:form>
+
+						<h:form id="MsgOtherForm" style="overflow:hidden">
+							<p:dialog header="SMS Limit Over" width="500"
+								widgetVar="MsgOthDlg" modal="true" showEffect="fade"
+								hideEffect="fade" resizable="false">
+								<center>
+									<p:outputLabel value="#{addComplainDiary.balMsg}"
+										style="font-size:14px;font-weight: bold;" />
+								</center>
+								<br></br>
+								<br></br>
+								<center>
+									<p:commandButton value="OK"
+										action="addComplaintDiary.xhtml?faces-redirect=true"
+										update="MsgOtherForm" />
+								</center>
+							</p:dialog>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

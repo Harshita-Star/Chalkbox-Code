@@ -1,0 +1,265 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	<f:loadBundle var="addClassVar" basename="myProperties" />
+
+	<ui:define name="title">Expense Report</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="initializePageDataForm">
+							<p:remoteCommand name="initializePageDataCommand" autoRun="true"
+								action="#{showExpense.init()}" update=":form" />
+						</h:form>
+						<h:form id="form">
+							<h1>#{showReportVar.showExpenseReportTitle}</h1>
+
+							<p:panel id="main" header="Show Expense">
+								<p:messages closable="true" autoUpdate="true"></p:messages>
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group">
+
+									<p:outputLabel value="Select Pay To"></p:outputLabel>
+									<p:selectOneMenu value="#{showExpense.payto}" filter="true">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItem itemLabel="All" itemValue="all"></f:selectItem>
+										<f:selectItems value="#{showExpense.paytoList}"></f:selectItems>
+										<f:selectItem itemLabel="Other" itemValue="other"></f:selectItem>
+										<p:ajax global="false"></p:ajax>
+									</p:selectOneMenu>
+									
+									<p:outputLabel value="Select category"></p:outputLabel>
+									<p:selectOneMenu value="#{showExpense.category}" filter="true">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItem itemLabel="All" itemValue="-1"></f:selectItem>
+										<f:selectItems value="#{showExpense.categoryList}"></f:selectItems>
+										<p:ajax listener="#{showExpense.reportCategoryListener}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel for="@next" style="color:red" 
+										value="#{showReportVar.showReportMainHeaderLabel}"></p:outputLabel>
+									<p:selectOneMenu value="#{showExpense.selectedFilter}"
+										filter="true" required="true"
+										requiredMessage="#{showReportVar.showReportSelectCategoryValidation}">
+
+										<f:selectItem itemValue=""
+											itemLabel="#{showReportVar.selectHereLabel}"></f:selectItem>
+										<f:selectItem
+											itemValue="#{showReportVar.showReportDailyLabel}"
+											itemLabel="#{showReportVar.showReportDailyLabel}"></f:selectItem>
+										<f:selectItem
+											itemValue="#{showReportVar.showReportWeeklyLabel}"
+											itemLabel="#{showReportVar.showReportWeeklyLabel}"></f:selectItem>
+										<f:selectItem
+											itemValue="#{showReportVar.showReportMonthlyLabel}"
+											itemLabel="#{showReportVar.showReportMonthlyLabel}"></f:selectItem>
+										<f:selectItem
+											itemValue="#{showReportVar.showReportQuarterlyLabel}"
+											itemLabel="#{showReportVar.showReportQuarterlyLabel}"></f:selectItem>
+										<f:selectItem
+											itemValue="#{showReportVar.showReportYearlyLabel}"
+											itemLabel="#{showReportVar.showReportYearlyLabel}"></f:selectItem>
+										<f:selectItem itemValue="Customreport"
+											itemLabel="#{showReportVar.showReportCustomReportLabel}"></f:selectItem>
+
+										<p:ajax update="main" listener="#{showExpense.selectedFilter}"></p:ajax>
+									</p:selectOneMenu>
+									
+									<p:outputLabel/><p:outputLabel/>
+
+									<p:outputLabel  for="@next" style="color:red" rendered="#{showExpense.dailyShow}"
+										value="#{showReportVar.showReportSelectADayLabel}"></p:outputLabel>
+									<p:calendar rendered="#{showExpense.dailyShow}"
+										pattern="dd/MM/yyyy" navigator="true"
+										value="#{showExpense.dailySelected}" required="true"
+										requiredMessage="#{showReportVar.showReportSelectDayValidation}"></p:calendar>
+									<p:commandButton update=":form:up,:form:printFirst" styleClass="butwid" icon="fa fa-search"
+										actionListener="#{showExpense.dailyReport}"
+										rendered="#{showExpense.dailyShow}"
+										value="#{showReportVar.showReportSearchNowButtonLabel}"></p:commandButton>
+
+									<p:outputLabel for="@next" style="color:red"  rendered="#{showExpense.weeklyShow}"
+										value="#{showReportVar.showReportSelectAWeekDayLabel}"></p:outputLabel>
+									<p:calendar rendered="#{showExpense.weeklyShow}"
+										pattern="dd/MM/yyyy" navigator="true"
+										value="#{showExpense.weeklySelected}" required="true"
+										requiredMessage="#{showReportVar.showReportSelectAWeekDayLabel}"></p:calendar>
+									<p:commandButton update=":form:up,:form:printFirst" styleClass="butwid" icon="fa fa-search"
+										actionListener="#{showExpense.weeklyReport}"
+										rendered="#{showExpense.weeklyShow}"
+										value="#{showReportVar.showReportSearchNowButtonLabel}"></p:commandButton>
+
+									<p:outputLabel  for="@next" style="color:red" rendered="#{showExpense.monthlyShow}"
+										value="#{showReportVar.showReportSelectMonthLabel}"></p:outputLabel>
+									<p:selectOneMenu rendered="#{showExpense.monthlyShow}"
+										value="#{showExpense.selectedMonth}" required="true"
+										requiredMessage="#{showReportVar.showReportSelectMonthValidation}">
+										<f:selectItem itemLabel="#{showReportVar.selectHereLabel}"
+											itemValue=""></f:selectItem>
+										<f:selectItems value="#{showExpense.monthList}"></f:selectItems>
+									</p:selectOneMenu>
+									<p:outputLabel for="@next" style="color:red"  rendered="#{showExpense.monthlyShow}"
+										value="#{showReportVar.showReportSelectYearlyLabel}"></p:outputLabel>
+									<p:selectOneMenu rendered="#{showExpense.monthlyShow}"
+										value="#{showExpense.selectedYear}" required="true"
+										requiredMessage="#{showReportVar.showReportSelectYearValidation}">
+
+										<f:selectItem itemLabel="#{showReportVar.selectHereLabel}"
+											itemValue=""></f:selectItem>
+										<f:selectItems value="#{showExpense.yearList}"></f:selectItems>
+
+									</p:selectOneMenu>
+
+									<p:commandButton actionListener="#{showExpense.monthlyReport}" styleClass="butwid" icon="fa fa-search"
+										update=":form:up,:form:printFirst"
+										rendered="#{showExpense.monthlyShow}"
+										value="#{showReportVar.showReportSearchNowButtonLabel}"></p:commandButton>
+
+									<p:outputLabel  for="@next" style="color:red" rendered="#{showExpense.quarterlyShow}"
+										value="#{showReportVar.showReportSelectQuarterLabel}"></p:outputLabel>
+									<p:selectOneMenu rendered="#{showExpense.quarterlyShow}"
+										value="#{showExpense.selectedQuarter}" required="true"
+										requiredMessage="#{showReportVar.showReportSelectQuarterValidation}">
+										<f:selectItem itemLabel="#{showReportVar.selectHereLabel}"
+											itemValue=""></f:selectItem>
+										<f:selectItem
+											itemLabel="#{showReportVar.showReportSelectFirstQuarterLabel}"
+											itemValue="1"></f:selectItem>
+										<f:selectItem
+											itemLabel="#{showReportVar.showReportSelectSecondQuarterLabel}"
+											itemValue="2"></f:selectItem>
+										<f:selectItem
+											itemLabel="#{showReportVar.showReportSelectThirdQuarterLabel}"
+											itemValue="3"></f:selectItem>
+									</p:selectOneMenu>
+									<p:commandButton
+										actionListener="#{showExpense.quarterlyReport}" styleClass="butwid" icon="fa fa-search"
+										update=":form:up,:form:printFirst"
+										rendered="#{showExpense.quarterlyShow}"
+										value="#{showReportVar.showReportSearchNowButtonLabel}"></p:commandButton>
+
+									<p:outputLabel  for="@next" style="color:red" rendered="#{showExpense.yearlyShow}"
+										value="#{showReportVar.showReportSelectYearlyLabel}"></p:outputLabel>
+									<p:selectOneMenu rendered="#{showExpense.yearlyShow}"
+										value="#{showExpense.selectedYear}" required="true"
+										requiredMessage="#{showReportVar.showReportSelectYearValidation}">
+
+										<f:selectItem itemLabel="#{showReportVar.selectHereLabel}"
+											itemValue=""></f:selectItem>
+										<f:selectItems value="#{showExpense.yearList}"></f:selectItems>
+
+									</p:selectOneMenu>
+									<p:commandButton actionListener="#{showExpense.yearlyReport}" styleClass="butwid" icon="fa fa-search"
+										update=":form:up,:form:printFirst"
+										rendered="#{showExpense.yearlyShow}"
+										value="#{showReportVar.showReportSearchNowButtonLabel}"></p:commandButton>
+									<p:outputPanel id="printFirst">
+										<p:commandButton action="#{showExpense.printExpenseReport}" styleClass="butwid" icon="fa fa-print"
+											onclick="target='_blank'" ajax="false" value="Print" 
+											rendered="#{showExpense.reportShowOther}"></p:commandButton>
+									</p:outputPanel>
+
+								</p:panelGrid>
+
+								<p:panelGrid rendered="#{showExpense.customShow}" columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group">
+
+									<p:outputLabel for="@next" style="color:red" 
+										value="#{showReportVar.showReportEnterStartingDateLabel}"></p:outputLabel>
+									<p:calendar value="#{showExpense.startingDate}"
+										pattern="dd/MM/yyyy" navigator="true" required="true"
+										requiredMessage="#{showReportVar.showReportSelectStartingDateValidation}"></p:calendar>
+
+									<p:outputLabel for="@next" style="color:red" 
+										value="#{showReportVar.showReportEnterEndingDateLabel}"></p:outputLabel>
+									<p:calendar value="#{showExpense.endingDate}"
+										pattern="dd/MM/yyyy" navigator="true" required="true"
+										requiredMessage="#{showReportVar.showReportSelectEndingDateValidation}"></p:calendar>
+
+									<p:commandButton update=":form:up,:form:printSecond" styleClass="butwid" icon="fa fa-search"
+										actionListener="#{showExpense.filterTable}"
+										value="#{showReportVar.showReportSearchNowButtonLabel}"></p:commandButton>
+									<p:outputPanel id="printSecond">
+										<p:commandButton action="#{showExpense.printExpenseReport}"
+											ajax="false" onclick="target='_blank'" update=":form" styleClass="butwid" icon="fa fa-print"
+											value="Print" rendered="#{showExpense.reportShowCustom}"></p:commandButton>
+									</p:outputPanel>
+
+								</p:panelGrid>
+
+								<p:outputPanel id="up">
+
+									<p:dataTable rendered="#{showExpense.reportShow}" var="var"
+										value="#{showExpense.expenseList}" paginator="true" rows="15"
+										rowsPerPageTemplate="5,10,15">
+										<p:column headerText="Sr. No." style="width:40px">
+											<p:outputLabel value="#{var.sNo}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="#{showReportVar.showReportHeaderDate}">
+											<p:outputLabel value="#{var.strIncomeDate}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Category" style="width:200px">
+											<p:outputLabel value="#{var.category}"></p:outputLabel>
+										</p:column>
+										
+										<p:column headerText="Expense For">
+											<p:outputLabel value="#{var.payTo}"></p:outputLabel>
+										</p:column>
+
+										<p:column
+											headerText="#{showReportVar.showReportHeaderAmount} (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})">
+											<p:outputLabel value="#{var.amount}">
+											<f:convertNumber groupingUsed="false" minFractionDigits="2"
+												maxFractionDigits="2"></f:convertNumber>
+											</p:outputLabel>
+											<f:facet name="footer">
+											<p:panelGrid columns="1">
+												<p:outputLabel value="Total Expense" />
+												<p:outputLabel
+													value="(#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'}) " />
+												<p:outputLabel value="#{showExpense.expenseAmount}">
+													<f:convertNumber groupingUsed="false" minFractionDigits="2"
+														maxFractionDigits="2"></f:convertNumber>
+												</p:outputLabel>
+											</p:panelGrid>
+
+											</f:facet>
+
+										</p:column>
+
+										<p:column headerText="Voucher No.">
+											<p:outputLabel value="#{var.voucherNo}"></p:outputLabel>
+										</p:column>
+
+										<p:column style="width:300px" headerText="Description">
+											<p:outputLabel value="#{var.description}"></p:outputLabel>
+										</p:column>
+
+									</p:dataTable>
+
+								</p:outputPanel>
+
+
+							</p:panel>
+
+						</h:form>
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

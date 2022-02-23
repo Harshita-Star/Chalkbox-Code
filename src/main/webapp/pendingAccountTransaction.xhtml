@@ -1,0 +1,113 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+	<ui:define name="title">Pending Transactions</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form" style="overflow:hidden">
+							<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+							<p:panel header="Due Cheque Notification">
+								<p:dataTable value="#{pendingAccountTransaction.crList}"
+									reflow="true" var="var" paginator="true" rows="50"
+									rowsPerPageTemplate="50,100,500">
+									<p:column headerText="S.No.">
+										<p:outputLabel value="#{var.sno}"></p:outputLabel>
+									</p:column>
+
+									<p:column filterBy="#{var.status}" headerText="Type">
+										<p:outputLabel value="#{var.status}"></p:outputLabel>
+									</p:column>
+									<p:column headerText="Cheque Date">
+										<p:outputLabel value="#{var.strDate}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Amount">
+										<p:outputLabel value="#{var.amount}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Node Name">
+										<p:outputLabel value="#{var.name}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Approve">
+										<p:commandButton disabled="#{var.disable}"
+											icon="ui-icon-check" oncomplete="PF('approveDialog').show()"
+											update=":approveForm">
+											<f:setPropertyActionListener
+												target="#{pendingAccountTransaction.selectedVar}"
+												value="#{var}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+
+									<p:column headerText="Deny">
+										<p:commandButton icon="ui-icon-close"
+											oncomplete="PF('denyDialog').show()" update=":denyForm">
+											<f:setPropertyActionListener
+												target="#{pendingAccountTransaction.selectedVar}"
+												value="#{var}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+
+								</p:dataTable>
+							</p:panel>
+						</h:form>
+
+						<h:form id="approveForm" style="overflow:hidden">
+							<p:dialog widgetVar="approveDialog" modal="true"
+								resizable="false" draggable="false"
+								header="Are You Sure To Approve ???">
+								<div class="ui-g form-group">
+									<p:panelGrid columns="2"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+										<p:outputLabel  for="@next" style="color:red" value="Cheque Clear Date:"></p:outputLabel>
+										<p:calendar readonlyInput="true" pattern="dd/MM/yyyy"
+											value="#{pendingAccountTransaction.chequeApproveDate}"
+											navigator="true" required="true"
+											requiredMessage="Please select Cheque Arrove date"></p:calendar>
+
+										<p:commandButton value="Yes" update=":approveForm,:form"
+											action="#{pendingAccountTransaction.approveCheque}"></p:commandButton>
+										<p:commandButton value="No" update=":approveForm,:form"></p:commandButton>
+									</p:panelGrid>
+								</div>
+							</p:dialog>
+						</h:form>
+
+						<h:form id="denyForm" style="overflow:hidden">
+							<p:dialog widgetVar="denyDialog" modal="true" resizable="false"
+								draggable="false" header="Are You Sure To Deny ???">
+								<div class="ui-g form-group">
+									<p:panelGrid columns="2"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+										<p:outputLabel for="@next" style="color:red"  value="Cheque Bounce Date:"></p:outputLabel>
+										<p:calendar readonlyInput="true" pattern="dd/MM/yyyy"
+											value="#{pendingAccountTransaction.chequeDenyDate}"
+											navigator="true" required="true"
+											requiredMessage="Please select Cheque Deny date"></p:calendar>
+
+										<p:commandButton value="Yes" update=":denyForm,:form"
+											action="#{pendingAccountTransaction.denyCheque}"></p:commandButton>
+										<p:commandButton value="No" update=":denyForm,:form"></p:commandButton>
+									</p:panelGrid>
+								</div>
+							</p:dialog>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

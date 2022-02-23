@@ -1,0 +1,208 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Document Report</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<h1>Document Report</h1>
+
+							<p:panel header="Select a Class">
+								<p:commandLink rendered="false" value="Show Chart"
+									immediate="true" style="float:right;color:blue"
+									action="classStrengthChart.xhtml"></p:commandLink>
+								<p:messages closable="true" autoUpdate="true"></p:messages>
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:outputLabel for="@next" style="color:red"
+										value="Select a Class"></p:outputLabel>
+									<p:selectOneMenu value="#{studentdocumentReport.selectedClass}"
+										required="true" requiredMessage="Please select a class"
+										filter="true">
+										<f:selectItem itemLabel="Select Class" itemValue="select"></f:selectItem>
+										<f:selectItems value="#{studentdocumentReport.classList}"></f:selectItems>
+
+										<p:ajax update="sectionid"
+											listener="#{studentdocumentReport.allSections}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel for="@next" style="color:red"
+										value="Select Section"></p:outputLabel>
+									<p:selectOneMenu id="sectionid"
+										value="#{studentdocumentReport.selectedSection}"
+										required="true" requiredMessage="Please select a section"
+										filter="true">
+										<f:selectItem itemLabel="Select Section" itemValue=""></f:selectItem>
+										<f:selectItems value="#{studentdocumentReport.sectionList}"></f:selectItems>
+
+										<p:ajax update=":form"
+											listener="#{studentdocumentReport.findDocs}"></p:ajax>
+									</p:selectOneMenu>
+
+
+
+								</p:panelGrid>
+								<p:outputPanel rendered="#{studentdocumentReport.b}">
+								<br />
+								<p:separator />
+								<center>
+									<p:panelGrid
+										columns="2"
+										layout="grid" styleClass="ui-panelgrid-blank form-group" 
+										style="border:0px none; background-color:transparent;">
+										<p:commandButton value="Print" styleClass="butwid" icon="fa fa-print"
+											>
+											<p:printer target="dataTable"></p:printer>
+										</p:commandButton>
+
+
+
+
+										<p:commandButton value="PDF" ajax="false" process="@this" styleClass="butwid" icon="fa fa-file-print-o"
+											actionListener="#{studentdocumentReport.exportPdf}"
+											rendered="#{studentdocumentReport.b}">
+
+											<p:fileDownload value="#{studentdocumentReport.file}" />
+										</p:commandButton>
+
+
+
+									</p:panelGrid>
+								</center>
+								<p:separator />
+								<br />
+								</p:outputPanel>
+
+								
+
+								<p:panel id="dataTable" rendered="#{studentdocumentReport.b}">
+
+									<center>
+										<p
+											style="font-size: 25px !important; font-weight: bold; margin: 0px;">#{headerBean.name}</p>
+										<p
+											style="font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.affiliationNo}</p>
+										<p
+											style="font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.finalAddress}</p>
+										<p
+											style="font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.phoneno}</p>
+
+										<p
+											style="margin: 0px; font-size: 25px !important; font-weight: bold;">Student
+											Document Report</p>
+									</center>
+									<p:panelGrid columns="3" style="width:100%">
+
+										<p:panelGrid columns="2">
+											<p:outputLabel value="Class:-"></p:outputLabel>
+											<h:outputText value="#{studentdocumentReport.className}"></h:outputText>
+										</p:panelGrid>
+
+										<p:panelGrid columns="2">
+											<p:outputLabel value="Section:-"></p:outputLabel>
+											<h:outputText value="#{studentdocumentReport.sectionName}"></h:outputText>
+										</p:panelGrid>
+
+										<p:panelGrid columns="2">
+											<p:outputLabel value="Total:-"></p:outputLabel>
+											<h:outputText value="#{studentdocumentReport.total}"></h:outputText>
+										</p:panelGrid>
+
+									</p:panelGrid>
+									<p:dataTable reflow="true" id="up"
+										style="width:100%;border-collapse:collapse" border="1"
+										value="#{studentdocumentReport.studentList}" var="var">
+										<f:facet name="header">
+											<p:outputLabel value=""></p:outputLabel>
+
+
+										</f:facet>
+
+										<p:column headerText="Sno"
+											style="width:50px;text-align:center">
+
+											<f:facet name="header">
+												<p:outputLabel value="Sno"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.sno}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Add. No." sortBy="#{var.addNumber}"
+											style="width:50px;text-align:center">
+
+											<f:facet name="header">
+												<p:outputLabel value="SR. No."></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.srNo}"></p:outputLabel>
+										</p:column>
+
+										<p:column style="width:70px;text-align:center"
+											sortBy="#{var.fullName}" headerText="Student Name">
+
+											<f:facet name="header">
+												<p:outputLabel value="Student Name"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.fullName}"></p:outputLabel>
+										</p:column>
+
+										<p:column style="width:70px;text-align:center"
+											headerText="Father's Name">
+
+											<f:facet name="header">
+												<p:outputLabel value="Father's Name"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.fathersName}"></p:outputLabel>
+										</p:column>
+
+
+
+
+
+										<p:column style="width:70px;text-align:center"
+											headerText="Class"
+											rendered="#{sideMenuBean.list.schid ne '287'}">
+
+											<f:facet name="header">
+												<p:outputLabel value="Class"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.className}-#{var.sectionName}"></p:outputLabel>
+										</p:column>
+
+										<p:columns value="#{studentdocumentReport.docList}"
+											var="column" columnIndexVar="colIndex">
+											<f:facet name="header">
+												<p:outputLabel value="#{column.documentName}"></p:outputLabel>
+											</f:facet>
+
+											<p:graphicImage value="/#{var.docMap[column.docId]}"
+												style="width:10px;height:10px;"></p:graphicImage>
+										</p:columns>
+
+
+
+
+
+									</p:dataTable>
+								</p:panel>
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

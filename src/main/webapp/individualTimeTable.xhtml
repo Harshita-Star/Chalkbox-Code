@@ -1,0 +1,266 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Individual Time Table</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<p:messages autoUpdate="true" closable="true"></p:messages>
+							<p:panel header="Individual Teacher Time Table">
+								<p:panelGrid columns="5" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; width:100%; background-color:transparent;">
+									<p:outputLabel value="Select Teacher" for="@next" style="color:red" ></p:outputLabel>
+									<p:selectOneMenu filter="true" filterMatchMode="contains"
+										value="#{individualTimeTable.selectedTeacher}" required="true"
+										requiredMessage="Please Select Teacher.">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{individualTimeTable.teacherList}"></f:selectItems>
+
+									</p:selectOneMenu>
+
+									<p:commandButton value="Show"
+										actionListener="#{individualTimeTable.showTable}"
+										update=":form"></p:commandButton>
+									<p:commandButton value="Print"
+										rendered="#{individualTimeTable.show}">
+										<p:printer target="print"></p:printer>
+									</p:commandButton>
+
+									<h:commandLink rendered="#{individualTimeTable.show}">
+										<p:graphicImage name="images/excellogo.png"
+											library="avalon-layout" width="100" height="40"></p:graphicImage>
+										<pe:exporter type="xlsx" target="up"
+											fileName="#{individualTimeTable.teacher_name.replaceAll(' ','_')}_Time_Table"></pe:exporter>
+									</h:commandLink>
+								</p:panelGrid>
+							</p:panel>
+							<p:panel>
+								<p:panel id="print" rendered="#{individualTimeTable.show}">
+									<center>
+										<p
+											style="font-family: initial; font-style: oblique; font-size: 30px !important; font-weight: bold; margin: 0px;">#{headerBean.name}</p>
+										<p style="margin: 0px;">Individual Time Table</p>
+									</center>
+
+									<p:panelGrid columns="2"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;width:100%">
+										<p:outputLabel
+											value="Teacher : #{individualTimeTable.teacher_name}"></p:outputLabel>
+										<p:outputLabel
+											value="Total Lecture : #{individualTimeTable.totalLoadTheory}"></p:outputLabel>
+									</p:panelGrid>
+
+									<h:dataTable 
+										style="width:100%;border-collapse:collapse;text-align: center;"
+										border="1" value="#{individualTimeTable.timeTableList}"
+										var="var">
+										<p:column headerText="Time">
+											<f:facet name="header">
+												<p:outputLabel value="Time"></p:outputLabel>
+											</f:facet>
+											<p:panelGrid columns="1"
+												styleClass="ui-panelgrid-blank form-group"
+												style="border:0px none; background-color:transparent; width: 100%;">
+												<p:outputLabel
+													value="#{var.lecNo eq 'LUNCH' ? '' : sideMenuBean.list.lectureLabel} #{var.lecNo}"></p:outputLabel>
+												<p:outputLabel value="#{var.lecTime}"
+													rendered="#{sideMenuBean.list.timeTableSchedule eq 'summer'}" />
+												<p:outputLabel value="#{var.winterLecTime}"
+													rendered="#{sideMenuBean.list.timeTableSchedule eq 'winter'}" />
+											</p:panelGrid>
+										</p:column>
+
+										<p:column headerText="Monday">
+											<f:facet name="header">
+												<p:outputLabel value="Monday"></p:outputLabel>
+											</f:facet>
+											<p:panelGrid columns="1"
+												styleClass="ui-panelgrid-blank form-group"
+												style="border:0px none; background-color:transparent; width: 100%;">
+												<p:outputLabel value="#{var.mon_class}" styleClass="abcd">
+												</p:outputLabel>
+
+												<p:outputLabel value="#{var.mon_sub_name}" styleClass="abcd">
+												</p:outputLabel>
+											</p:panelGrid>
+										</p:column>
+
+										<p:column headerText="Tuesday">
+
+											<f:facet name="header">
+												<p:outputLabel value="Tuesday"></p:outputLabel>
+											</f:facet>
+											<p:panelGrid columns="1"
+												styleClass="ui-panelgrid-blank form-group"
+												style="border:0px none; background-color:transparent; width: 100%;">
+												<p:outputLabel value="#{var.tues_class}" styleClass="abcd">
+												</p:outputLabel>
+
+												<p:outputLabel value="#{var.tues_sub_name}"
+													styleClass="abcd">
+												</p:outputLabel>
+											</p:panelGrid>
+										</p:column>
+
+										<p:column headerText="Wednesday">
+											<f:facet name="header">
+												<p:outputLabel value="Wednesday"></p:outputLabel>
+											</f:facet>
+											<p:panelGrid columns="1"
+												styleClass="ui-panelgrid-blank form-group"
+												style="border:0px none; background-color:transparent; width: 100%;">
+												<p:outputLabel value="#{var.wed_class}" styleClass="abcd">
+												</p:outputLabel>
+
+												<p:outputLabel value="#{var.wed_sub_name}" styleClass="abcd">
+												</p:outputLabel>
+											</p:panelGrid>
+										</p:column>
+
+										<p:column headerText="Thursday">
+											<f:facet name="header">
+												<p:outputLabel value="Thursday"></p:outputLabel>
+											</f:facet>
+											<p:panelGrid columns="1"
+												styleClass="ui-panelgrid-blank form-group"
+												style="border:0px none; background-color:transparent; width: 100%;">
+												<p:outputLabel value="#{var.thur_class}" styleClass="abcd">
+												</p:outputLabel>
+
+												<p:outputLabel value="#{var.thur_sub_name}"
+													styleClass="abcd">
+												</p:outputLabel>
+											</p:panelGrid>
+										</p:column>
+
+										<p:column headerText="Friday">
+											<f:facet name="header">
+												<p:outputLabel value="Friday"></p:outputLabel>
+											</f:facet>
+											<p:panelGrid columns="1"
+												styleClass="ui-panelgrid-blank form-group"
+												style="border:0px none; background-color:transparent; width: 100%;">
+												<p:outputLabel value="#{var.fri_class}" styleClass="abcd">
+												</p:outputLabel>
+
+												<p:outputLabel value="#{var.fri_sub_name}" styleClass="abcd">
+												</p:outputLabel>
+											</p:panelGrid>
+										</p:column>
+
+										<p:column headerText="Saturday">
+											<f:facet name="header">
+												<p:outputLabel value="Saturday"></p:outputLabel>
+											</f:facet>
+											<p:panelGrid columns="1"
+												styleClass="ui-panelgrid-blank form-group"
+												style="border:0px none; background-color:transparent; width: 100%;">
+
+												<p:outputLabel value="#{var.sat_class}" styleClass="abcd">
+												</p:outputLabel>
+
+												<p:outputLabel value="#{var.sat_sub_name}" styleClass="abcd">
+												</p:outputLabel>
+											</p:panelGrid>
+										</p:column>
+									</h:dataTable>
+
+									<p:dataTable id="up"
+										style="width:100%;border-collapse:collapse;text-align: center;"
+										border="1" value="#{individualTimeTable.timeTableList}"
+										var="var" rendered="false">
+										<p:column headerText="Time">
+											<f:facet name="header">
+												<p:outputLabel value="Time"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel
+												value="#{var.lecNo eq 'LUNCH' ? '' : sideMenuBean.list.lectureLabel} #{var.lecNo}"></p:outputLabel>
+												&#160;&#160;
+												<p:outputLabel value="(#{var.lecTime})"
+												rendered="#{sideMenuBean.list.timeTableSchedule eq 'summer'}" />
+											<p:outputLabel value="(#{var.winterLecTime})"
+												rendered="#{sideMenuBean.list.timeTableSchedule eq 'winter'}" />
+										</p:column>
+
+										<p:column headerText="Monday">
+											<f:facet name="header">
+												<p:outputLabel value="Monday"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.mon_class}" styleClass="abcd" />
+											<p:outputLabel rendered="#{var.mon_sub_name ne ''}"
+												value=" - " />
+											<p:outputLabel value="#{var.mon_sub_name}" styleClass="abcd" />
+										</p:column>
+
+										<p:column headerText="Tuesday">
+
+											<f:facet name="header">
+												<p:outputLabel value="Tuesday"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.tues_class}" styleClass="abcd" />
+											<p:outputLabel rendered="#{var.tues_sub_name ne ''}"
+												value=" - " />
+											<p:outputLabel value="#{var.tues_sub_name}" styleClass="abcd" />
+										</p:column>
+
+										<p:column headerText="Wednesday">
+											<f:facet name="header">
+												<p:outputLabel value="Wednesday"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.wed_class}" styleClass="abcd" />
+											<p:outputLabel rendered="#{var.wed_sub_name ne ''}"
+												value=" - " />
+											<p:outputLabel value="#{var.wed_sub_name}" styleClass="abcd" />
+										</p:column>
+
+										<p:column headerText="Thursday">
+											<f:facet name="header">
+												<p:outputLabel value="Thursday"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.thur_class}" styleClass="abcd" />
+											<p:outputLabel rendered="#{var.thur_sub_name ne ''}"
+												value=" - " />
+											<p:outputLabel value="#{var.thur_sub_name}" styleClass="abcd" />
+										</p:column>
+
+										<p:column headerText="Friday">
+											<f:facet name="header">
+												<p:outputLabel value="Friday"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.fri_class}" styleClass="abcd" />
+											<p:outputLabel rendered="#{var.fri_sub_name ne ''}"
+												value=" - " />
+											<p:outputLabel value="#{var.fri_sub_name}" styleClass="abcd" />
+										</p:column>
+
+										<p:column headerText="Saturday">
+											<f:facet name="header">
+												<p:outputLabel value="Saturday"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.sat_class}" styleClass="abcd" />
+											<p:outputLabel rendered="#{var.sat_sub_name ne ''}"
+												value=" - " />
+											<p:outputLabel value="#{var.sat_sub_name}" styleClass="abcd" />
+										</p:column>
+										</p:dataTable>
+								</p:panel>
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

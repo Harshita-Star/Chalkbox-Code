@@ -1,0 +1,139 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Student Wise Attendance </ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="initializePageDataForm">
+							<p:remoteCommand name="initializePageDataCommand" autoRun="true"
+								action="#{studentWiseAttendanceReport.init()}" update=":form" />
+						</h:form>
+						
+						<h:form id="form">
+                          <p:growl showDetail="true"  autoUpdate="true"> </p:growl>
+							<p:panel header="Student Wise Attendance Report">
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel for="@next" style="color:red"  value="Search Student by Name/Sr. No"></p:outputLabel>
+									<p:autoComplete required="true" minQueryLength="3"
+										forceSelection="true" id="acSimple"
+										value="#{studentWiseAttendanceReport.name}"
+										completeMethod="#{studentWiseAttendanceReport.autoCompleteStudentInfo}" validatorMessage="Please Enter Correct value">
+									  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+									</p:autoComplete>
+
+									<p:commandButton value="show report"
+										actionListener="#{studentWiseAttendanceReport.monthWiseRecord}"
+										update=":form"></p:commandButton>
+									<p:commandButton rendered="#{studentWiseAttendanceReport.show}"
+										ajax="false" value="Print" onclick="target='_blank'"
+										action="printStudentWiseAttendanceReport?faces-redirect=true"></p:commandButton>
+								</p:panelGrid>
+							</p:panel>
+							<p:panel id="show" rendered="#{studentWiseAttendanceReport.show}">
+								<center>
+									<p
+										style="font-family: initial; font-style: oblique; font-size: 25px !important; font-weight: bold; margin: 0px;">#{headerBean.name}</p>
+									<p
+										style="font-family: initial; font-style: oblique; font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.affiliationNo}</p>
+									<p
+										style="font-family: initial; font-style: oblique; font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.finalAddress}</p>
+									<p
+										style="font-family: initial; font-style: oblique; font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.phoneno}</p>
+
+									<p
+										style="margin: 0px; font-size: 25px !important; font-weight: bold;">Student
+										Attendance Report</p>
+								</center>
+								<p:panelGrid columns="6" style="width:100%">
+
+									<p:panelGrid columns="2">
+										<p:outputLabel value="Student Name:-"></p:outputLabel>
+										<h:outputText
+											value="#{studentWiseAttendanceReport.studentName}"></h:outputText>
+									</p:panelGrid>
+
+									<p:panelGrid columns="2">
+										<p:outputLabel value="Father's Name:-"></p:outputLabel>
+										<h:outputText
+											value="#{studentWiseAttendanceReport.fatherName}"></h:outputText>
+									</p:panelGrid>
+
+									<p:panelGrid columns="2">
+										<p:outputLabel value="Class:-"></p:outputLabel>
+										<h:outputText value="#{studentWiseAttendanceReport.className}"></h:outputText>
+									</p:panelGrid>
+
+									<p:panelGrid columns="2">
+										<p:outputLabel value="Section:-"></p:outputLabel>
+										<h:outputText value="#{studentWiseAttendanceReport.section}"></h:outputText>
+									</p:panelGrid>
+
+									<p:panelGrid columns="2">
+										<p:outputLabel value="Session:-"></p:outputLabel>
+										<h:outputText value="#{studentWiseAttendanceReport.session1}"></h:outputText>
+									</p:panelGrid>
+
+								</p:panelGrid>
+								<p:dataTable reflow="true" var="var"
+									value="#{studentWiseAttendanceReport.studentDetails}">
+
+									<p:column headerText="Months">
+										<h:outputText value="#{var.month}" />
+									</p:column>
+
+									<p:column headerText="Present(in this month)">
+										<h:outputText value="#{var.present}" />
+									</p:column>
+									<p:column headerText="Total Present(Up to last month)">
+										<h:outputText value="#{var.totalPresentUpToLastMonth}" />
+									</p:column>
+									<p:column headerText="Total Present">
+										<h:outputText value="#{var.totalPresent}" />
+									</p:column>
+
+									<p:column headerText="Absent(in this month)">
+										<h:outputText value="#{var.absent}" />
+									</p:column>
+									<p:column headerText="Total Absent(Up to last month)">
+										<h:outputText value="#{var.totalAbsentUpToLastMonth}" />
+									</p:column>
+									<p:column headerText="Total Absent">
+										<h:outputText value="#{var.totalAbsent}" />
+									</p:column>
+
+									<p:column headerText="Leave(in this month)">
+										<h:outputText value="#{var.holidays}" />
+									</p:column>
+									<p:column headerText="Total Leave(Up to last month)">
+										<h:outputText value="#{var.totalHolidayUpToLastMonth}" />
+									</p:column>
+									<p:column headerText="Total Leave">
+										<h:outputText value="#{var.totalHoliday}" />
+									</p:column>
+
+								</p:dataTable>
+							</p:panel>
+
+						</h:form>
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,85 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/studentTemplate.xhtml">
+
+	<ui:define name="title">Gallery</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title" style="background-color: rgb(162, 32, 45, 0.3); ">
+						<h:form id="form" enctype="multipart/form-data">
+							<p:dataGrid var="var" value="#{viewEditDeleteGallery.newsList}"
+								columns="3" layout="grid" id="dt">
+
+
+								<f:facet name="header">
+           				Gallery Images
+        				</f:facet>
+
+								<p:panel header="#{var.tag}" style="text-align:center">
+
+									<p:commandLink update=":form1" value="#{var.image}"
+										style="font-size:20px;font-weight:bold;"
+										action="#{viewEditDeleteGallery.showImage}">
+										<f:setPropertyActionListener
+											target="#{viewEditDeleteGallery.selectedNews}" value="#{var}"></f:setPropertyActionListener>
+									</p:commandLink>
+									<br />
+									<p:commandLink update=":form1" value="#{var.tag}"
+										style="font-size:20px;font-weight:bold;"
+										action="#{viewEditDeleteGallery.showImage}">
+										<f:setPropertyActionListener
+											target="#{viewEditDeleteGallery.selectedNews}" value="#{var}"></f:setPropertyActionListener>
+									</p:commandLink>
+
+								</p:panel>
+							</p:dataGrid>
+						</h:form>
+
+						<h:form id="form1" enctype="multipart/form-data">
+							<h1>Selected Folder Photos</h1>
+
+							<p:dataGrid var="var1"
+								value="#{viewEditDeleteGallery.imagesList}" columns="3"
+								layout="grid" rendered="#{viewEditDeleteGallery.view}">
+
+
+								<p:panel header="#{var1.imageName}" style="text-align:center">
+									<p:panelGrid columns="1">
+										<div class="col-lg-12 col-xs-12">
+
+											<div class="inner">
+												<center>
+													<p:lightBox styleClass="imagebox" id="lb1">
+														<h:outputLink value="#{var1.photo}">
+															<p:graphicImage url="#{var1.photo}" height="150px"
+																width="150px"></p:graphicImage>
+														</h:outputLink>
+													</p:lightBox>
+												</center>
+												<br></br>
+											</div>
+											
+										</div>
+										
+									</p:panelGrid>
+									
+								</p:panel>
+							</p:dataGrid>
+
+							
+
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

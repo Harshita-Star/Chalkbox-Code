@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+<f:view contentType="text/html">
+	<h:head>
+		<title>Task Reminder</title>
+		<f:facet name="first">
+			<meta content='text/html; charset=UTF-8' http-equiv="Content-Type" />
+			<meta http-equiv="X-UA-Compatible" content="EmulateIE8" />
+
+		</f:facet>
+
+		<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css"></link>
+		<link rel="stylesheet"
+			href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"></link>
+		<link rel="stylesheet"
+			href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css"></link>
+		<link rel="stylesheet" href="dist/css/AdminLTE.min.css"></link>
+		<link rel="stylesheet" href="dist/css/skins/all-skins.min.css"></link>
+		<link rel="stylesheet" type="text/css" href="css/style.css" />
+
+	</h:head>
+
+	<h:body>
+
+		<ui:include src="sideMenu.xhtml"></ui:include>
+		<div class="content-wrapper">
+			<style type="text/css">
+.redColored {
+	color: red;
+}
+
+.greenColored {
+	color: #00b100;
+}
+
+.orangeColored {
+	color: orange;
+}
+</style>
+			<h:form id="form">
+				<p:messages closable="true" autoUpdate="true"></p:messages>
+				<p:growl showDetail="true"  closable="true" autoUpdate="true"></p:growl>
+
+				<p:panel header="Task Reminder">
+					<p:dataTable id="dt" var="var" value="#{taskReminder.list}"
+						paginator="true" rows="10" rowsPerPageTemplate="20,25,50">
+						<p:column headerText="S.No." style="width: 20px !important;">
+							<h:outputText value="#{var.sno}" />
+						</p:column>
+
+						<p:column filterBy="#{var.title}" headerText="Title"
+							style="width: 90px !important;">
+							<h:outputText value="#{var.title}"></h:outputText>
+						</p:column>
+						<p:column headerText="Description" style="width:200px !important;">
+							<h:outputText value="#{var.description}"></h:outputText>
+						</p:column>
+						<p:column headerText="Date" style="width: 50px !important;">
+							<h:outputText value="#{var.strDate}"></h:outputText>
+						</p:column>
+
+						<p:column headerText="Snooze" style="width: 50px !important;">
+							<center>
+								<p:commandButton icon="ui-icon-refresh"
+									oncomplete="PF('editDialog').show()" update=":form :form1">
+									<f:setPropertyActionListener value="#{var}"
+										target="#{taskReminder.selectedTask}" />
+								</p:commandButton>
+							</center>
+						</p:column>
+
+						<p:column headerText="Clear" style="width: 50px !important;">
+							<center>
+								<p:commandButton update=":form" icon="ui-icon-trash"
+									action="#{taskReminder.clear}">
+									<f:setPropertyActionListener value="#{var}"
+										target="#{taskReminder.selectedTask}" />
+									<p:confirm header="Confirmation"
+										message="Surely You Want To Clear This Task ???"
+										icon="ui-icon-alert" />
+								</p:commandButton>
+							</center>
+						</p:column>
+					</p:dataTable>
+				</p:panel>
+			</h:form>
+
+			<h:form id="form1">
+				<p:dialog modal="true" widgetVar="editDialog"
+					header="Snooze Details">
+					<p:messages closable="true" autoUpdate="true"></p:messages>
+					<p:panelGrid columns="3">
+						<p:outputLabel value="Show This Reminder After" for="@next" style="color:red" ></p:outputLabel>
+						<p:inputText value="#{taskReminder.snoozDays}" required="true"
+							requiredMessage="Please Enter No. of Days">
+							<pe:keyFilter mask="pnum" ></pe:keyFilter>
+						</p:inputText>
+						<p:outputLabel value="Days"></p:outputLabel>
+
+						<p:commandButton value="Snooze" action="#{taskReminder.snooze}" update=":form :form1"></p:commandButton>
+					</p:panelGrid>
+				</p:dialog>
+			</h:form>
+
+			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+				<p:commandButton style="margin-left:50px" value="Yes" type="button"
+					styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+				<p:commandButton style="margin-left:50px" value="No" type="button"
+					styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+			</p:confirmDialog>
+
+
+		</div>
+	</h:body>
+</f:view>
+</html>

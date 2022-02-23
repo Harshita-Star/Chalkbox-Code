@@ -1,0 +1,43 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Fill Exam Marks</ui:define>
+
+    <ui:define name="content">
+       
+            <div class="ui-fluid">
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <div class="card card-w-title">
+                             	<h:form id="form">
+                             	<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+           				<p:panel header="Fill Max Marks Of Exam">
+           					<p:dataTable id="dt" reflow="true" scrollable="true" value="#{otherExamMark.examList}" var="var">
+           						<p:column headerText="Name" >
+           							<center><b><p:outputLabel rendered="#{var.subjectType eq 'mainSub'}"  value="#{var.subjectName}"></p:outputLabel></b></center>
+           							<u><p:outputLabel rendered="#{var.subjectType eq 'main'}"  value="#{var.subjectName}"></p:outputLabel></u> 
+           							<p:outputLabel rendered="#{var.subjectType eq 'sub'}"  value="#{var.subjectName}"></p:outputLabel>
+           						</p:column>
+           						
+           						<p:column headerText="Max Marks">
+           							<p:inputText rendered="#{var.subjectType eq 'sub'}" value="#{var.marks}"></p:inputText>
+           						</p:column>
+           						
+           						<f:facet name="footer">
+									<p:commandButton update="form" value="Submit" actionListener="#{otherExamMark.submitMarks}"></p:commandButton>           						
+           						</f:facet>
+           					</p:dataTable>
+						</p:panel>
+					</h:form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+       
+    </ui:define>
+
+</ui:composition>

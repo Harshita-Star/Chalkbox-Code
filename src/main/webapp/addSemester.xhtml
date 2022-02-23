@@ -1,0 +1,73 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Add Semester</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<h1>Add Semester</h1>
+
+							<p:panel header="Add Semester">
+                                 <p:messages closable="true" autoUpdate="true"></p:messages>
+								
+								<p:panelGrid columns="2" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel for="@next" style="color:red" value="Select Class"></p:outputLabel>
+									<p:selectManyCheckbox value="#{semesterBean.selectedClass}"
+										layout="responsive" columns="3" required="true"
+										requiredMessage="Please Select Class" styleClass="form-group">
+										<f:selectItems value="#{semesterBean.classList}"></f:selectItems>
+									</p:selectManyCheckbox>
+
+
+									<p:outputLabel for="@next" style="color:red" value="#{addSemesterVar.addSemesterName}"></p:outputLabel>
+									<p:inputText value="#{semesterBean.semesterName}"
+										required="true"
+										requiredMessage="#{addSemesterVar.addSemesterNameValidation}" id="secnm" onchange="trimFunc(this.value,'Please Section Name',this.id)" validatorMessage="Please Enter Correct value">
+									  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+									</p:inputText>
+
+									<p:outputLabel value="Percentage (Weightage of Term for Marksheet)"></p:outputLabel>
+									<p:inputText value="#{semesterBean.percentage}" validatorMessage="Please Enter Correct value">
+									  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									 </p:inputText>
+								</p:panelGrid>
+								
+								<br />
+								<p:separator />
+								<center>
+									<p:commandButton update="form" action="#{semesterBean.addNow}" styleClass="butwid" icon="fa fa-upload"
+										value="#{addSemesterVar.addSemesterButtonLabel}"></p:commandButton>
+								</center>
+								<p:separator />
+								<br />
+
+							</p:panel>
+							
+							<p:confirmDialog
+								header="#{addSemesterVar.addSemesterConfirmationHeaderLabel}"
+								message="#{addSemesterVar.addSemesterAddMoreTermsLabel}"
+								showEffect="fade" hideEffect="explode" widgetVar="dialog">
+								<p:commandButton onclick="dialog.hide();" styleClass="greenButt" value="Yes"
+									type="button"></p:commandButton>
+									
+								<p:commandButton value="No" styleClass="redButt" action="#{semesterBean.no}"></p:commandButton>
+							</p:confirmDialog>
+
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

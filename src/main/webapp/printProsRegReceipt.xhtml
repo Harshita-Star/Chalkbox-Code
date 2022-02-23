@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+<f:loadBundle var="addClassVar" basename="myProperties" />
+<f:view contentType="text/html">
+	<h:head>
+		<title>#{sideMenuBean.companyName} | Certificate Printing</title>
+		<f:facet name="first">
+			<meta content='text/html; charset=UTF-8' http-equiv="Content-Type" />
+			<meta http-equiv="X-UA-Compatible" content="EmulateIE8" />
+
+		</f:facet>
+
+		<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css"></link>
+		<link rel="stylesheet"
+			href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"></link>
+		<link rel="stylesheet"
+			href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css"></link>
+		<link rel="stylesheet" href="dist/css/AdminLTE.min.css"></link>
+		<link rel="stylesheet" href="dist/css/skins/all-skins.min.css"></link>
+		<link rel="stylesheet" type="text/css" href="css/style.css" />
+
+	</h:head>
+
+	<h:body>
+
+		<div class="content-wrapper">
+
+
+
+			<h:form id="form12">
+				<p:commandButton style="width:50px;" value="Print" type="button">
+					<p:printer target=":forms"></p:printer>
+				</p:commandButton>
+			</h:form>
+			<br />
+			<h:form id="forms">
+
+
+				<p:panel rendered="#{printProsRegReceiptBean.showReg}">
+					<table style="width: 100%; font-size: 11px">
+						<tr>
+							<td><p:graphicImage width="100%" height="120px"
+									value="#{printProsRegReceiptBean.headerImage}"></p:graphicImage></td>
+						</tr>
+					</table>
+					<hr style="border-top: solid 1px;" />
+					<center>
+						<h5 style="font-family: timesRoman;">
+							<u><b>Receipt</b></u>
+						</h5>
+					</center>
+					<table style="width: 100%;">
+						<tr>
+							<td align="right" style="font-size: 11px;">Date : <b>#{printProsRegReceiptBean.date}</b></td>
+						</tr>
+					</table>
+
+					<br></br>
+					<br></br>
+					<table style="margin: -20px">
+						<tr>
+							<td
+								style="font-size: 14px; line-height: 30px; text-align: justify;">RECEIPT
+								No. <u><i><b>#{printProsRegReceiptBean.receiptNo}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></i></u>
+								Prospectus/Registration No : <u><i><b>#{printProsRegReceiptBean.prosRegNo}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></i></u>
+								Received With Thanks From <u><i><b>#{printProsRegReceiptBean.name}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></i></u>
+								Son/Daughter of <u><i><b>#{printProsRegReceiptBean.fname}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></i></u>
+								Mobile No. <u><i><b>#{printProsRegReceiptBean.mobile}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></i></u>
+								Address <u><i><b>#{printProsRegReceiptBean.address}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></i></u>
+								Email Id <u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u>
+								Amount(In Numeric) Rs. <u><i><b>#{printProsRegReceiptBean.totAmount}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></i></u>
+								Amount(Words) <u><i><b>#{printProsRegReceiptBean.amtWords}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></i></u>
+								Mode of Payment(Cash/Cheque/DD) <u><i><b>#{printProsRegReceiptBean.mode}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></i></u>
+								No.<u><i><b>#{printProsRegReceiptBean.chqNo}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></i></u>
+								#{printProsRegReceiptBean.mode} Date<u><i><b>#{printProsRegReceiptBean.strChqDate}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></i></u>
+								Bank Name<u><i><b>#{printProsRegReceiptBean.bankName}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></i></u>
+								Submitted Bank Name<u><i><b>#{printProsRegReceiptBean.subBankName}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></i></u>
+								Dated <u><b>#{printProsRegReceiptBean.date}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></u>
+								Against the <u><b>#{printProsRegReceiptBean.type}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></u>
+								Class <u><b>#{printProsRegReceiptBean.className}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></u>
+							</td>
+						</tr>
+					</table>
+					<br></br>
+					<br></br>
+					<br></br>
+					<table style="width: 60%; margin-top: 10%; float: right;">
+						<tr>
+							<td align="right" style="font-size: 14px;">For A/C
+								Department<b></b>
+							</td>
+							<td align="right"></td>
+						</tr>
+						<tr>
+							<td align="right" style="font-size: 14px;"><b>Authorized
+									Signatory</b></td>
+							<td align="right"><b> <u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></b></td>
+						</tr>
+
+					</table>
+				</p:panel>
+				
+				<p:panel rendered="#{printProsRegReceiptBean.showEver}">
+					<table style="width: 100%; font-size: 11px">
+						<tr>
+							<td><p:graphicImage width="100%" height="120px"
+									value="#{sideMenuBean.headerImage}"></p:graphicImage></td>
+						</tr>
+					</table>
+					<hr style="border-top: solid 1px;" />
+					<center>
+						<h5 style="font-family: timesRoman;">
+							<u><b>Receipt</b></u>
+						</h5>
+					</center>
+					<br></br>
+					<br></br>
+					<table style="width: 100%;margin: -20px">
+						<tr>
+							<td align="left" style="font-size: 14px;">Dear
+								Parent/Guardian (s),
+							</td>
+						</tr>
+					</table>
+
+					<br></br>
+					<br></br>
+					<br></br>
+					<br></br>
+					<table style="margin: -20px">
+						<tr>
+							<td
+								style="font-size: 14px; line-height: 28px; text-align: justify;">
+								Warm welcome to <h:outputText style="font-size: 14px; line-height: 28px; text-align: justify;" value="#{sideMenuBean.list.branch_id eq '22' ? 'Ever Green' : 'Immortal'}" /> Family, Registration of your ward
+								Ma./Ku. <u><b>&nbsp;&nbsp;#{printProsRegReceiptBean.name}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></u>
+								for class <u><b>&nbsp;&nbsp;#{printProsRegReceiptBean.className}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></u>
+								having Enquiry No. <u><b>&nbsp;&nbsp;#{printProsRegReceiptBean.enqNo}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></u>
+								is confirmed on date <u><b>&nbsp;&nbsp;#{printProsRegReceiptBean.date}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></u>
+								with registration number <u><b>&nbsp;&nbsp;#{printProsRegReceiptBean.prosRegNo}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></u>
+								on the basis of details furnished by you. 
+								<br></br> <br></br>
+								We are in receipt of Rs.<u><b>&nbsp;#{printProsRegReceiptBean.totAmount}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></u>
+								regarding registration fee of your ward. 
+								<br></br>
+								Mode of Payment is:- <b>#{printProsRegReceiptBean.mode}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>
+								<br></br>
+								Receipt No.:- <u><b>&nbsp;#{printProsRegReceiptBean.receiptNo}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></u>
+								<br></br>
+								Dated:- <u><b>&nbsp;#{printProsRegReceiptBean.date}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></u>
+								<br></br> <br></br>
+								<p:outputPanel rendered="#{printProsRegReceiptBean.strTestDate ne ''}">
+								Your ward will have to appear for a Screening/Entrance test proposed to be held on <u><b>&nbsp;#{printProsRegReceiptBean.strTestDate}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></u> at 
+								09 AM. Admission will be given only after passing Screening/Entrance test.
+								<br></br> <br></br>
+								</p:outputPanel>
+								Thank You
+							</td>
+						</tr>
+					</table>
+					<br></br>
+					<br></br>
+					<br></br>
+					<br></br>
+					<br></br>
+					<table style="width: 60%; margin-top: 5%; float: left;margin: -20px;">
+						<tr>
+							<td align="left" style="font-size: 14px;"><b>Authorized
+									Signatory</b></td>
+							<td align="left"><b> <u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></b></td>
+						</tr>
+
+					</table>
+				</p:panel>
+
+				<p:panel rendered="#{printProsRegReceiptBean.showPros}">
+					<table style="width: 100%; font-size: 11px">
+						<tr>
+							<td><p:graphicImage width="100%" height="120px"
+									value="#{printProsRegReceiptBean.headerImage}"></p:graphicImage></td>
+						</tr>
+					</table>
+					<hr style="border-top: solid 1px;" />
+					<center>
+						<h4 style="font-family: timesRoman;">
+							<u><b>Receipt</b></u>
+						</h4>
+					</center>
+					<table style="width: 100%;">
+						<tr>
+							<td align="right" style="font-size: 11px;">Date : <b>#{printProsRegReceiptBean.date}</b></td>
+						</tr>
+					</table>
+
+					<br></br>
+					<br></br>
+					<table style="margin: -20px; width: 100%">
+						<tr>
+							<td
+								style="font-size: 14px; line-height: 30px; width: 100%; text-align: justify;">
+								
+								RECEIPT
+								No. <u> <i><b>#{printProsRegReceiptBean.receiptNo}</b></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							</u> Prospectus/Registration No : <u><i><b>#{printProsRegReceiptBean.prosRegNo}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></i></u>
+								Received With Thanks From <u><i><b>#{printProsRegReceiptBean.name}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></i></u>
+								Son/Daughter of <u><i><b>#{printProsRegReceiptBean.fname}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></i></u>
+								Amount(In Numeric) Rs. <u><i><b>#{printProsRegReceiptBean.totAmount}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></i></u>
+								Amount(Words) <u><i><b>#{printProsRegReceiptBean.amtWords}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></i></u>
+								Mode of Payment(Cash/Cheque/DD) <u><i><b>#{printProsRegReceiptBean.mode}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></i></u>
+								No. <u><i><b>#{printProsRegReceiptBean.chqNo}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></i></u>
+								#{printProsRegReceiptBean.mode} Date <u><i><b>#{printProsRegReceiptBean.strChqDate}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></i></u>
+								Bank Name <u><i><b>#{printProsRegReceiptBean.bankName}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></i></u>
+								Submitted Bank Name <u><i><b>#{printProsRegReceiptBean.subBankName}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></i></u>
+								Dated <u><b>#{printProsRegReceiptBean.date}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></u>
+								Against the <u><b>#{printProsRegReceiptBean.type}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></u>
+								Class <u><b>#{printProsRegReceiptBean.className}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></u>
+							</td>
+						</tr>
+					</table>
+					<br></br>
+					<br></br>
+					<br></br>
+					<table style="width: 60%; margin-top: 10%; float: right;">
+						<tr>
+							<td align="right" style="font-size: 14px;">For A/C
+								Department<b></b>
+							</td>
+							<td align="right"></td>
+						</tr>
+						<tr>
+							<td align="right" style="font-size: 14px;"><b>Authorized
+									Signatory</b></td>
+							<td align="right"><b><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></b></td>
+						</tr>
+						<tr>
+							<td align="right" style="font-size: 14px;"><b>School
+									Seal</b></td>
+							<td align="right"><b><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></b></td>
+						</tr>
+					</table>
+				</p:panel>
+
+				<p:panel rendered="#{printProsRegReceiptBean.showAdm}">
+					<table style="width: 100%; font-size: 11px">
+						<tr>
+							<td><p:graphicImage width="100%" height="120px"
+									value="#{printProsRegReceiptBean.headerImage}"></p:graphicImage></td>
+						</tr>
+					</table>
+					<hr style="border-top: solid 1px;" />
+					<center>
+						<h5 style="font-family: timesRoman;">
+							<u><b>Receipt</b></u>
+						</h5>
+					</center>
+					<table style="width: 100%;">
+						<tr>
+							<td align="left" style="font-size: 13px;">RECEIPT No. : <u><b>#{printProsRegReceiptBean.receiptNo}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></u></td>
+							<td align="right" style="font-size: 13px;">Date : <b>#{printProsRegReceiptBean.date}</b></td>
+						</tr>
+					</table>
+
+					<br></br>
+					<br></br>
+					<table style="margin: -20px">
+						<tr>
+							<td
+								style="font-size: 14px; line-height: 40px; text-align: justify;">Received
+								With Thanks From <u><i><b>#{printProsRegReceiptBean.name}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></i></u>
+								Son/Daughter of <u><i><b>#{printProsRegReceiptBean.fname}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></i></u>
+								Admission No. <u><i><b>#{printProsRegReceiptBean.prosRegNo}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></i></u>
+								Amount(In Numeric) Rs. <u><i><b>#{printProsRegReceiptBean.strAmt}.00&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></i></u>
+								Amount(Words) <u><i><b>#{printProsRegReceiptBean.amtWords}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></i></u>
+								Mode of Payment(Cash/Cheque/DD) <u><i><b>#{printProsRegReceiptBean.mode}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></i></u>
+								No.<u><i><b>#{printProsRegReceiptBean.chqNo}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></i></u>
+								#{printProsRegReceiptBean.mode} Date<u><i><b>#{printProsRegReceiptBean.strChqDate}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></i></u>
+								Bank Name<u><i><b>#{printProsRegReceiptBean.bankName}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></i></u>
+								Submitted Bank Name<u><i><b>#{printProsRegReceiptBean.subBankName}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></i></u>
+								Dated <u><b>#{printProsRegReceiptBean.date}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></u>
+								On Account Of <u><b>#{printProsRegReceiptBean.type}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></u>
+							</td>
+						</tr>
+					</table>
+					<br></br>
+					<br></br>
+					<br></br>
+					<br></br>
+					<br></br>
+					<h:dataTable
+						style="width:100%;border-collapse:collapse;font-size:12px;text-align:center;margin: -20px"
+						border="1" value="#{printProsRegReceiptBean.feeList}"
+						var="var">
+
+						<p:column headerText="S.No.">
+							<f:facet name="header">
+								<center><h:outputText value="S.No."></h:outputText></center>
+							</f:facet>
+							<h:outputText value="#{var.srno}"></h:outputText>
+						</p:column>
+						
+						<p:column headerText="Particulars">
+							<f:facet name="header">
+								<center><h:outputText value="Particulars" style="text-align:center"></h:outputText></center>
+							</f:facet>
+							<h:outputText value="#{var.feeName}"></h:outputText>
+						</p:column>
+
+						<p:column headerText="Amount" >
+							<f:facet name="header">
+								<center><h:outputText value="Amount"></h:outputText></center>
+							</f:facet>
+							<h:outputText value="#{var.strAmount}.00"></h:outputText>
+						</p:column>
+
+					</h:dataTable>
+					<br></br>
+					<br></br>
+					<table style="width: 60%; margin-top: 5%; float: right;">
+						<tr>
+							<td align="right" style="font-size: 14px;">For A/C
+								Department<b></b>
+							</td>
+							<td align="right"></td>
+						</tr>
+						<tr>
+							<td align="right" style="font-size: 14px;"><b>Authorized
+									Signatory</b></td>
+							<td align="right"><b> <u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></b></td>
+						</tr>
+						<tr>
+							<td align="right" style="font-size: 14px;"><b>School Seal</b></td>
+							<td align="right"><b> <u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></b></td>
+						</tr>
+
+					</table>
+				</p:panel>
+
+			</h:form>
+		</div>
+	</h:body>
+</f:view>
+</html>

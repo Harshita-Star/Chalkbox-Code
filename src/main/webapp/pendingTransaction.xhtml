@@ -1,0 +1,162 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Pending Transcations</ui:define>
+
+    <ui:define name="content">
+       
+            <div class="ui-fluid">
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <div class="card card-w-title">
+                           
+                           <h:form id="form" style="overflow:hidden">
+					<p:messages closable="true" autoUpdate="true"></p:messages>
+						<p:panel header="Credit : Due Cheque Notification">
+							<p:dataTable  value="#{pendingTrans.incomeList}"   reflow="true" var="var" paginator="true" rows="5" rowsPerPageTemplate="5,10,15">
+								 <p:column headerText="SNo." style="width:40px">
+							       <p:outputLabel value="#{var.sno}"></p:outputLabel>
+							    </p:column>
+							    
+							    <p:column filterBy="#{var.status}" headerText="Type">
+							       <p:outputLabel value="#{var.status}"></p:outputLabel>
+							    </p:column>
+							    
+							    <p:column filterBy="#{var.accountNo}" headerText="Transaction Name">
+							       <p:outputLabel value="#{var.accountNo}"></p:outputLabel>
+							    </p:column>
+							    
+							   
+							     <p:column headerText="Request Date">
+							       <p:outputLabel value="#{var.entryDateStr}"></p:outputLabel>
+							    </p:column>
+							    
+							   <p:column headerText="Amount (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})">
+							       <p:outputLabel value="#{var.amount}"></p:outputLabel>
+							    </p:column>
+							    
+							     <p:column headerText="Payment Mode">
+							       <p:outputLabel value="#{var.payMode}"></p:outputLabel>
+							    </p:column>
+							    
+							     <p:column headerText="Date">
+							       <p:outputLabel value="#{var.chq_ddDateStr}"></p:outputLabel>
+							    </p:column>
+							    
+							     <p:column headerText="View" >
+							      <p:commandButton icon="ui-icon-search" update=":infoForm" oncomplete="PF('receiptInfoDialog').show()" action="#{pendingTrans.viewDetails}">
+							          <f:setPropertyActionListener target="#{pendingTrans.selectedItem}" value="#{var}"></f:setPropertyActionListener>
+							       </p:commandButton>
+							    </p:column>
+							    
+							    <p:column headerText="Approve" >
+							      <p:commandButton disabled="#{var.disable}" icon="ui-icon-check" oncomplete="PF('approveDialog').show()" update=":approveForm">
+							          <f:setPropertyActionListener target="#{pendingTrans.selectedItem}" value="#{var}"></f:setPropertyActionListener>
+							       </p:commandButton>
+							    </p:column>
+							   
+							    <p:column headerText="Deny" >
+							        <p:commandButton icon="ui-icon-close" oncomplete="PF('denyDialog').show()" update=":denyForm">
+							          <f:setPropertyActionListener target="#{pendingTrans.selectedItem}" value="#{var}"></f:setPropertyActionListener>
+							       </p:commandButton>
+							    </p:column>
+							</p:dataTable> 
+						</p:panel>
+					</h:form> 
+					
+					<h:form id="approveForm" style="overflow:hidden">
+						<p:dialog widgetVar="approveDialog" modal="true" resizable="false" draggable="false" header="Are You Sure To Approve ???">
+							<div class="ui-g form-group">
+							<p:panelGrid columns="2"  >
+								<p:outputLabel value="Cheque Clear Date:" for="@next" style="color:red" ></p:outputLabel>
+								<p:calendar pattern="dd/MM/yyyy" value="#{pendingTrans.chqClearDate}" navigator="true" required="true" requiredMessage="Please select Cheque retun date"></p:calendar>
+								
+								<p:commandButton value="Yes" update=":approveForm,:form" action="#{pendingTrans.approveRequest}"></p:commandButton>
+								<p:commandButton value="No" update=":approveForm,:form"></p:commandButton>
+							</p:panelGrid>
+							</div>
+						</p:dialog>
+					</h:form>
+					
+					<h:form id="denyForm" style="overflow:hidden">
+						<p:dialog widgetVar="denyDialog" modal="true" resizable="false" draggable="false" header="Are You Sure To Deny ???">
+						<div class="ui-g form-group">
+							<p:panelGrid columns="2"  styleClass="ui-panelgrid-blank form-group"
+                                        style="border:0px none; background-color:transparent;">
+								<p:outputLabel value="Cheque Bounce Date:" for="@next" style="color:red" ></p:outputLabel>
+								<p:calendar pattern="dd/MM/yyyy" value="#{pendingTrans.chqReturnDate}" navigator="true" required="true" requiredMessage="Please select Cheque retun date"></p:calendar>
+								
+								<p:outputLabel value="Cheque Bounce Charge"></p:outputLabel>
+								<p:inputText onfocus="this.select();" value="#{pendingTrans.amount}">
+									<p:keyFilter mask="pnum"></p:keyFilter>
+								</p:inputText>
+							
+								<p:outputLabel value="Reason"></p:outputLabel>
+								<p:inputTextarea value="#{pendingTrans.reason}" rows="3" cols="20" validatorMessage="Please Enter Correct value">
+								  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+								</p:inputTextarea>
+								
+								<p:commandButton value="Yes" update=":denyForm,:form" action="#{pendingTrans.denyRequest}"></p:commandButton>
+								<p:commandButton value="No" update=":denyForm,:form"></p:commandButton>
+							</p:panelGrid>
+							</div>
+						</p:dialog>
+					</h:form>
+					
+					
+					<h:form id="infoForm" style="overflow:hidden">
+					
+						<p:dialog closeOnEscape="true" header="Receipt Info" widgetVar="receiptInfoDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+						<div class="ui-g form-group">
+							<p:panelGrid columns="2" styleClass="ui-panelgrid-blank form-group"
+                                        style="border:0px none; background-color:transparent;">
+								<h:outputText rendered="#{pendingTrans.showPayDetail}" value="Receipt No. :" />
+								<h:outputText rendered="#{pendingTrans.showPayDetail}" value="#{pendingTrans.selectedItem.receiptNo}" />
+
+								<h:outputText value="#{pendingTrans.label}  :" rendered="false"/>
+								<h:outputText value="#{pendingTrans.selectedItem.accountNo}" rendered="false"/>
+								
+									
+								<h:outputText value="Amount :" />
+								<h:outputText value="#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'} #{pendingTrans.selectedItem.amount}" />
+
+								<h:outputText value="Transaction Date :" />
+								<h:outputText value="#{pendingTrans.selectedItem.entryDateStr}" />
+
+								<h:outputText value="Payment Mode :" />
+								<h:outputText value="#{pendingTrans.selectedItem.payMode}" />
+
+								<h:outputText value="Cheque/DD No :" rendered="#{pendingTrans.value}" />
+								<h:outputText value="#{pendingTrans.selectedItem.chq_ddNo}" rendered="#{pendingTrans.value}" />
+
+								<h:outputText value="Cheque/DD Date :" rendered="#{pendingTrans.value}" />
+								<h:outputText value="#{pendingTrans.selectedItem.chq_ddDateStr}" rendered="#{pendingTrans.value}" />
+
+								<h:outputText value="Bank Name :" rendered="#{pendingTrans.value}" />
+								<h:outputText rendered="#{pendingTrans.value}" value="#{pendingTrans.selectedItem.bank_name}" />
+								
+								<h:outputText value="Submitted To Bank :" rendered="#{pendingTrans.value}" />
+								<h:outputText rendered="#{pendingTrans.value}" value="#{pendingTrans.selectedItem.transferredToBankName}" />
+								
+								<h:outputText rendered="#{pendingTrans.showPayDetail}" value="Penalty :" />
+								<h:outputText rendered="#{pendingTrans.showPayDetail}" value="#{pendingTrans.selectedItem.penalty}" />
+
+							</p:panelGrid>
+							</div>
+						</p:dialog>
+						
+
+					</h:form>
+                       
+                        </div>
+                    </div>
+                </div>
+            </div>
+       
+    </ui:define>
+
+</ui:composition>

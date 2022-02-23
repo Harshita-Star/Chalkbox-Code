@@ -1,0 +1,430 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Edit Exam Setting</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<p:panel header="Edit Bulk Exam Setting">
+
+								<p:messages closable="true" autoUpdate="true"></p:messages>
+								<p:panelGrid columns="1" columnClasses="ui-grid-col-12"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<h:commandLink style="float:right" immediate="true"
+										value="Back To Exam Setting"
+										action="#{editBulkExamSetting.goToExamSetting}"></h:commandLink>
+								</p:panelGrid>
+								<br />
+
+								<center>
+
+									<p:commandButton value="UPDATE" styleClass="butwid"
+										icon="fa fa-upload" action="#{editBulkExamSetting.editBulk}"
+										update=":form"></p:commandButton>
+								</center>
+
+							</p:panel>
+							<p:panel>
+
+
+								<p:dataTable value="#{editBulkExamSetting.examList}" id="dtb"
+									var="var" rowKey="#{var.sno}"
+									selection="#{editBulkExamSetting.selectedExamList}"
+									resizableColumns="true">
+
+
+									<p:column selectionMode="multiple"
+										style="width:16px;text-align:center"></p:column>
+
+									<p:column headerText="Sno" style="width:50px;">
+										<p:outputLabel value="#{var.sno}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Class Name" style="width:100px;">
+										<p:outputLabel value="#{var.className}"></p:outputLabel>
+									</p:column>
+
+
+									<p:column headerText="Enter Test Name *" style="width:150px;">
+										<p:inputText value="#{var.examName}"
+											onchange="trimFunc(this.value,'Please Section Name',this.id)"
+											validatorMessage="Please Enter Correct value">
+											<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+										</p:inputText>
+									</p:column>
+
+									<p:column headerText="Enter No. Of Test *" style="width:150px;">
+										<p:inputText value="#{var.no_of_PT}">
+											<p:keyFilter mask="num" />
+											<f:attribute name="Dummy" value="#{var.sno}"></f:attribute>
+											<p:ajax listener="#{editBulkExamSetting.createPTList}"
+												update=":form:dtb:finalPT"></p:ajax>
+										</p:inputText>
+									</p:column>
+
+									<p:column headerText="Reflective Marks *" style="width:150px;">
+										<p:inputText rendered="true" value="#{var.reflectMark}">
+											<p:keyFilter mask="num" />
+										</p:inputText>
+									</p:column>
+
+									<p:column
+										headerText="How Many Test You Want To Include For Final Evaluation *"
+										style="width:300px;">
+										<p:selectOneMenu value="#{var.include_PT}" id="finalPT">
+											<f:selectItem itemLabel="Select Here" itemValue="0"></f:selectItem>
+											<f:selectItems value="#{var.ptlist}"></f:selectItems>
+										</p:selectOneMenu>
+									</p:column>
+
+									<p:column headerText="Header1 *" style="width:250px;">
+										<p:inputText value="#{var.header1}"
+											validatorMessage="Please Enter Correct value">
+											<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+										</p:inputText>
+									</p:column>
+
+									<p:column headerText="Header2" style="width:250px;">
+										<p:inputText value="#{var.header2}"
+											validatorMessage="Please Enter Correct value">
+											<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+										</p:inputText>
+									</p:column>
+
+									<p:column headerText="Header3" style="width:250px;">
+										<p:inputText value="#{var.header3}"
+											validatorMessage="Please Enter Correct value">
+											<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+										</p:inputText>
+									</p:column>
+
+
+									<p:column headerText="Show School Header *"
+										style="width:150px;">
+										<p:selectOneRadio value="#{var.school_headerString}">
+											<f:selectItem itemLabel="Yes" itemValue="true"></f:selectItem>
+											<f:selectItem itemLabel="No" itemValue="false"></f:selectItem>
+										</p:selectOneRadio>
+									</p:column>
+
+									<p:column headerText="Show Student Image *"
+										style="width:150px;">
+										<p:selectOneRadio value="#{var.std_imageString}">
+											<f:selectItem itemLabel="Yes" itemValue="true"></f:selectItem>
+											<f:selectItem itemLabel="No" itemValue="false"></f:selectItem>
+										</p:selectOneRadio>
+									</p:column>
+
+									<p:column headerText="Marks will be entered in form of"
+										style="width:300px;">
+										<p:selectOneRadio value="#{var.marks_grade}">
+											<f:selectItem itemLabel="Marks" itemValue="marks"></f:selectItem>
+											<f:selectItem itemLabel="Grade" itemValue="grade"></f:selectItem>
+										</p:selectOneRadio>
+									</p:column>
+
+
+
+									<p:column
+										headerText="In Case Of medical leave(ML),include max marks in marksheet *"
+										style="width:350px;">
+										<p:selectOneRadio value="#{var.maxMarkML}">
+											<f:selectItem itemLabel="Yes" itemValue="yes"></f:selectItem>
+											<f:selectItem itemLabel="No" itemValue="no"></f:selectItem>
+										</p:selectOneRadio>
+									</p:column>
+
+									<p:column
+										headerText="In case of absent(AB), include max marks in marksheet *"
+										style="width:350px;">
+										<p:selectOneRadio value="#{var.maxMarkAB}">
+											<f:selectItem itemLabel="Yes" itemValue="yes"></f:selectItem>
+											<f:selectItem itemLabel="No" itemValue="no"></f:selectItem>
+										</p:selectOneRadio>
+									</p:column>
+
+									<p:column headerText="Final Marks Should Be *"
+										style="width:550px;">
+										<p:selectOneRadio value="#{var.finalMarks}">
+											<f:selectItem itemLabel="Total Of Term's Marks"
+												itemValue="total"></f:selectItem>
+											<f:selectItem itemLabel="Average Of Term's Marks"
+												itemValue="average"></f:selectItem>
+											<f:selectItem itemLabel="Percentage Of Term's Marks"
+												itemValue="percentage"></f:selectItem>
+										</p:selectOneRadio>
+									</p:column>
+
+									<p:column headerText="Rank Must Be Generated On Basis Of *"
+										style="width:250px;">
+										<p:selectOneRadio value="#{var.rank_base}">
+											<f:selectItem itemLabel="Total Marks" itemValue="total"></f:selectItem>
+											<f:selectItem itemLabel="Percentage" itemValue="percent"></f:selectItem>
+										</p:selectOneRadio>
+									</p:column>
+
+									<p:column
+										headerText="Show Scholastic Grade Scale in Marksheet *"
+										style="width:250px;">
+
+										<p:selectOneRadio value="#{var.showGradeScaleString}">
+											<f:selectItem itemLabel="Yes" itemValue="true"></f:selectItem>
+											<f:selectItem itemLabel="No" itemValue="false"></f:selectItem>
+										</p:selectOneRadio>
+									</p:column>
+
+									<p:column
+										headerText="Show Co-Scholastic Grade Scale in Marksheet *"
+										style="width:250px;">
+										<p:selectOneRadio value="#{var.showGradeScaleCoscholString}">
+											<f:selectItem itemLabel="Yes" itemValue="true"></f:selectItem>
+											<f:selectItem itemLabel="No" itemValue="false"></f:selectItem>
+										</p:selectOneRadio>
+									</p:column>
+
+									<p:column headerText="Want To Show Exam Marks With Exam Name *"
+										style="width:250px;">
+										<p:selectOneRadio value="#{var.examMarks}">
+											<f:selectItem itemLabel="Yes" itemValue="yes"></f:selectItem>
+											<f:selectItem itemLabel="No" itemValue="no"></f:selectItem>
+										</p:selectOneRadio>
+									</p:column>
+
+									<p:column headerText="Round Off Percentage *"
+										style="width:200px;">
+										<p:selectOneRadio value="#{var.round_off_percent}">
+											<f:selectItem itemLabel="Yes" itemValue="yes"></f:selectItem>
+											<f:selectItem itemLabel="No" itemValue="no"></f:selectItem>
+										</p:selectOneRadio>
+									</p:column>
+
+
+									<p:column headerText="Round Off Marks *" style="width:200px;">
+										<p:selectOneRadio value="#{var.round_off}">
+											<f:selectItem itemLabel="Yes" itemValue="yes"></f:selectItem>
+											<f:selectItem itemLabel="No" itemValue="no"></f:selectItem>
+											<f:attribute name="Dummy" value="#{var.sno}"></f:attribute>
+											<p:ajax listener="#{editBulkExamSetting.checkRoundOff}"
+												update=":form:dtb:id1,:form:dtb:id2,:form:dtb:id3"></p:ajax>
+										</p:selectOneRadio>
+									</p:column>
+
+									<p:column headerText="Type Of Round Off *" style="width:500px;">
+										<p:selectOneRadio id="id1" disabled="#{var.showType}"
+											value="#{var.round_off_type}">
+											<f:selectItem itemLabel="Upper (0.01=1,0.99=1)"
+												itemValue="upper"></f:selectItem>
+											<f:selectItem itemLabel="Mid (0.01=0,0.99=1)" itemValue="mid"></f:selectItem>
+											<f:selectItem itemLabel="Lower (0.99=0,0.01=0)"
+												itemValue="lower"></f:selectItem>
+										</p:selectOneRadio>
+									</p:column>
+
+
+									<p:column headerText="Select Marks Format *"
+										style="width:550px;">
+										<p:selectOneRadio id="id2" disabled="#{var.showType1}"
+											value="#{var.marksformat}">
+											<f:selectItem itemLabel="2" itemValue="1"></f:selectItem>
+											<f:selectItem itemLabel="2.0" itemValue="2"></f:selectItem>
+											<f:selectItem itemLabel="2.0 / 10.0" itemValue="3"></f:selectItem>
+											<f:selectItem itemLabel="2.0 / 10" itemValue="4"></f:selectItem>
+											<f:selectItem itemLabel="2 / 10" itemValue="5"></f:selectItem>
+											<f:selectItem itemLabel="2 / 10.0" itemValue="6"></f:selectItem>
+										</p:selectOneRadio>
+									</p:column>
+
+
+									<p:column headerText="Select Marks Format *"
+										style="width:250px;">
+										<p:selectOneRadio id="id3" disabled="#{var.showType2}"
+											value="#{var.marksformat}">
+											<f:selectItem itemLabel="2.04 / 10.0" itemValue="1"></f:selectItem>
+											<f:selectItem itemLabel="2.04" itemValue="2"></f:selectItem>
+										</p:selectOneRadio>
+									</p:column>
+
+
+									<p:column headerText="Show Co-scholastic Area *"
+										style="width:250px;">
+										<p:selectOneRadio value="#{var.coschol_subString}">
+											<f:selectItem itemLabel="Yes" itemValue="true"></f:selectItem>
+											<f:selectItem itemLabel="No" itemValue="false"></f:selectItem>
+										</p:selectOneRadio>
+									</p:column>
+
+
+									<p:column headerText="Header for Co-scholastic Area"
+										style="width:250px;">
+										<p:inputText value="#{var.coscholHeader}"
+											validatorMessage="Please Enter Correct value">
+											<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+										</p:inputText>
+									</p:column>
+
+
+									<p:column
+										headerText="Co-scholastic Header Contain Term Name At *"
+										style="width:450px;">
+										<p:selectOneRadio value="#{var.termNameCoschol}">
+											<f:selectItem itemLabel="Beginning of Header"
+												itemValue="begin"></f:selectItem>
+											<f:selectItem itemLabel="End Of Header" itemValue="end"></f:selectItem>
+											<f:selectItem itemLabel="Don't Add Term Name"
+												itemValue="dont"></f:selectItem>
+										</p:selectOneRadio>
+									</p:column>
+
+
+									<p:column headerText="Co-scholastic Area Contain *"
+										style="width:250px;">
+										<p:selectOneRadio value="#{var.coscholTerm}">
+											<f:selectItem itemLabel="Each Term" itemValue="each"></f:selectItem>
+											<f:selectItem itemLabel="Last Term" itemValue="last"></f:selectItem>
+										</p:selectOneRadio>
+									</p:column>
+
+
+									<p:column
+										headerText="Want Discipline Subject Area Seperate From Co-scholastic Area *"
+										style="width:350px;">
+										<p:selectOneRadio value="#{var.sepearte_disci}">
+											<f:selectItem itemLabel="Yes" itemValue="yes"></f:selectItem>
+											<f:selectItem itemLabel="No" itemValue="no"></f:selectItem>
+										</p:selectOneRadio>
+									</p:column>
+
+
+									<p:column headerText="Show Discipline Subject Area *"
+										style="width:250px;">
+										<p:selectOneRadio value="#{var.disci_subString}">
+											<f:selectItem itemLabel="Yes" itemValue="true"></f:selectItem>
+											<f:selectItem itemLabel="No" itemValue="false"></f:selectItem>
+										</p:selectOneRadio>
+									</p:column>
+
+
+									<p:column headerText="Header for Discipline Area"
+										style="width:250px;">
+										<p:inputText value="#{var.disci_header}"
+											validatorMessage="Please Enter Correct value">
+											<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+										</p:inputText>
+									</p:column>
+
+
+									<p:column headerText="Discipline Header Contain Term Name At *"
+										style="width:480px;">
+										<p:selectOneRadio value="#{var.termNameDisci}">
+											<f:selectItem itemLabel="Beginning of Header"
+												itemValue="begin"></f:selectItem>
+											<f:selectItem itemLabel="End Of Header" itemValue="end"></f:selectItem>
+											<f:selectItem itemLabel="Don't Add Term Name"
+												itemValue="dont"></f:selectItem>
+										</p:selectOneRadio>
+									</p:column>
+
+
+									<p:column headerText="Discipline Area Contain *"
+										style="width:250px;">
+										<p:selectOneRadio value="#{var.disci_term}">
+											<f:selectItem itemLabel="Each Term" itemValue="each"></f:selectItem>
+											<f:selectItem itemLabel="Last Term" itemValue="last"></f:selectItem>
+										</p:selectOneRadio>
+									</p:column>
+
+
+									<p:column headerText="Show Other Subject Area *"
+										style="width:250px;">
+										<p:selectOneRadio value="#{var.other_subString}">
+											<f:selectItem itemLabel="Yes" itemValue="true"></f:selectItem>
+											<f:selectItem itemLabel="No" itemValue="false"></f:selectItem>
+										</p:selectOneRadio>
+									</p:column>
+
+
+									<p:column headerText="Header for Other Subject Area"
+										style="width:250px;">
+										<p:inputText value="#{var.otherHeader}"
+											validatorMessage="Please Enter Correct value">
+											<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+										</p:inputText>
+									</p:column>
+
+									<p:column headerText="Other Subject Contain Term Name At *"
+										style="width:480px;">
+										<p:selectOneRadio value="#{var.termNameOther}">
+											<f:selectItem itemLabel="Beginning of Header"
+												itemValue="begin"></f:selectItem>
+											<f:selectItem itemLabel="End Of Header" itemValue="end"></f:selectItem>
+											<f:selectItem itemLabel="Don't Add Term Name"
+												itemValue="dont"></f:selectItem>
+										</p:selectOneRadio>
+									</p:column>
+
+									<p:column headerText="Other Subject Area Contain *"
+										style="width:250px;">
+										<p:selectOneRadio value="#{var.otherTerm}">
+											<f:selectItem itemLabel="Each Term" itemValue="each"></f:selectItem>
+											<f:selectItem itemLabel="Last Term" itemValue="last"></f:selectItem>
+										</p:selectOneRadio>
+									</p:column>
+
+
+									<p:column headerText="Show Additional Subject Area *"
+										style="width:250px;">
+										<p:selectOneRadio value="#{var.additional_subString}">
+											<f:selectItem itemLabel="Yes" itemValue="true"></f:selectItem>
+											<f:selectItem itemLabel="No" itemValue="false"></f:selectItem>
+										</p:selectOneRadio>
+									</p:column>
+
+
+									<p:column headerText="Header for Additional Subject Area"
+										style="width:250px;">
+										<p:inputText value="#{var.addHeader}"
+											validatorMessage="Please Enter Correct value">
+											<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+										</p:inputText>
+									</p:column>
+
+									<p:column headerText="Subject Group Position Setting"
+										style="width:250px;">
+										<p:selectOneRadio value="#{var.position}">
+											<f:selectItem itemLabel="Top" itemValue="top"></f:selectItem>
+											<f:selectItem itemLabel="Down" itemValue="down"></f:selectItem>
+										</p:selectOneRadio>
+									</p:column>
+								</p:dataTable>
+
+								<br />
+
+								<center>
+									<p:commandButton value="UPDATE" styleClass="butwid"
+										icon="fa fa-upload" action="#{editBulkExamSetting.editBulk}"
+										update=":form"></p:commandButton>
+								</center>
+
+								<br />
+
+
+							</p:panel>
+						</h:form>
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

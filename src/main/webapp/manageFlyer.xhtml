@@ -1,0 +1,113 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Today's Thought</ui:define>
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+					<h:form id="form" style="overflow:hidden" enctype="multipart/form-data">
+						   <p:growl showDetail="true"  autoUpdate="true"></p:growl>
+					<p:messages closable="true" autoUpdate="true"></p:messages>	
+						<p:panel header="Manage Flyer">
+							
+							<p:dataTable var="var" value="#{manageFlyerBean.informationList}"
+									reflow="true" paginator="true" rows="10"
+									paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+									rowsPerPageTemplate="10,20,30" filterDelay="1500" >
+									
+                                                                  
+									<p:column headerText="S.No." style="width:40px">
+										<p:outputLabel value="#{var.sno}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Image">
+											<center>
+												<p:graphicImage value="#{var.image}" width="60px"
+													height="60px"/>
+											</center>
+									</p:column>
+
+									<p:column headerText="Thought Date" filterBy="#{var.validateStrDate}"
+										filterMatchMode="contains">
+										<p:outputLabel value="#{var.validateStrDate}"></p:outputLabel>
+									</p:column>
+									
+									<p:column headerText="Frequency">
+										<p:outputLabel value="#{var.frequency}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Edit" style="width:100px">
+										<p:commandButton update=":editForm" icon="ui-icon-pencil"
+											oncomplete="PF('editDialog').show()" action="#{manageFlyerBean.editImage}">
+											<f:setPropertyActionListener target="#{manageFlyerBean.selectedRow}"
+												value="#{var}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+									
+										<p:column headerText="Delete" style="width:100px">
+										<p:commandButton icon="ui-icon-trash" update=":form"
+											action="#{manageFlyerBean.deleteFlyer}">
+											<f:setPropertyActionListener target="#{manageFlyerBean.selectedRow}"
+												value="#{var}"></f:setPropertyActionListener>
+										      <p:confirm header="Confirmation"
+												message="Are you sure for delete this Flyer ?"
+												icon="ui-icon-alert" />
+										</p:commandButton>
+									</p:column>
+									
+                               </p:dataTable>
+									
+						</p:panel>
+						
+						<p:dialog>
+						
+						</p:dialog>
+						
+					</h:form>
+					
+					<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+							<p:commandButton value="Yes" type="button"
+								styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+							<p:commandButton value="No" type="button"
+								styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+						</p:confirmDialog>
+						
+						<h:form id="editForm">
+							<p:dialog modal="true" widgetVar="editDialog" resizable="false" closable="true">
+								<p:panel header="Edit Flyer Details">
+									<div class="ui-g form-group">
+										<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+										<p:panelGrid columns="4" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+										
+											  
+											  <p:outputLabel value="Thought Date" style="color:red" ></p:outputLabel>
+											  <p:calendar required="true" pattern="dd/MM/yyyy" requiredMessage="Please Enter Validate Date" value="#{manageFlyerBean.thoughtDate}"></p:calendar>
+
+                                               <p:selectOneRadio value="#{manageFlyerBean.frequency}">
+                                                  <f:selectItem itemLabel="Once" itemValue="once"></f:selectItem>
+                                                  <f:selectItem itemLabel="Every Time" itemValue="every time"></f:selectItem>
+                                               </p:selectOneRadio>
+
+											<p:commandButton value="Update" update=":editForm,form" action="#{manageFlyerBean.updateFlyer}"></p:commandButton>
+										</p:panelGrid>
+									</div>
+								</p:panel>
+							</p:dialog>
+						</h:form>
+						
+						
+						
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

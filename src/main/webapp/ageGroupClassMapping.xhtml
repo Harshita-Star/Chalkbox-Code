@@ -1,0 +1,128 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	<f:loadBundle var="addClassVar" basename="myProperties"/>
+
+		<ui:define name="title">Add Age Group In Class</ui:define>
+
+		<ui:define name="content">
+
+			<div class="ui-fluid">
+				<div class="ui-g">
+					<div class="ui-g-12">
+						<div class="card card-w-title">
+							<h:form id="form">
+								<p:panel header="Add Age Group In Class">
+									<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+									<p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+										<p:outputLabel  for="@next" style="color:red" value="Select Class"></p:outputLabel>
+										<p:selectOneMenu value="#{ageGroupMapping.selectedClass}" filter="true" required="true" requiredMessage="#{addExamVar.selectClassValidation}">
+											<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+											<f:selectItems value="#{ageGroupMapping.classList}"></f:selectItems>
+										</p:selectOneMenu>
+									</p:panelGrid>
+									<br/>
+										<p:dataTable style="width:50%;" selection="#{ageGroupMapping.selectedAgeGroup}" rowIndexVar="index" rowKey="#{var.value}" var="var" value="#{ageGroupMapping.ageGroupList}" rows="20" paginator="true" rowsPerPageTemplate="20,50,100">
+											
+											<f:facet name="header">
+												<p:outputLabel value="Select Age Group"></p:outputLabel>
+											</f:facet>
+											
+											<p:column style="width:50px" headerText="S.No.">
+												<p:outputLabel value="#{index+1}"></p:outputLabel>
+											</p:column>
+											
+											<p:column style="width:80px" headerText="Select" selectionMode="multiple"></p:column>
+											
+											<p:column headerText="Age Group">
+												<p:outputLabel value="#{var.label}"></p:outputLabel>
+											</p:column>
+										</p:dataTable>
+										<br/>
+										<center>
+											<p:commandButton style="width: 100px;" update=":form,:form1" value="Submit" actionListener="#{ageGroupMapping.addParameter}"></p:commandButton>
+										</center>
+								</p:panel>
+							</h:form>
+							
+							<h:form id="form1">
+							<p:panel header="List">
+								<p:dataTable var="var" value="#{ageGroupMapping.allMappingList}" paginator="true" rowIndexVar="index" rowsPerPageTemplate="20,50,100">
+									<f:facet name="header">
+										<p:outputLabel value="Total:- #{ageGroupMapping.totalParameter}"></p:outputLabel>
+									</f:facet>
+									<p:column headerText="S.No.">
+										<p:outputLabel value="#{index+1}"></p:outputLabel>
+									</p:column>
+									
+									<p:column headerText="Name" filterMatchMode="contains" filterBy="#{var.className}">
+										<p:outputLabel value="#{var.className}"></p:outputLabel>
+									</p:column>
+									
+									<p:column headerText="View">
+										<p:commandButton icon="ui-icon-search" oncomplete="PF('viewDialog').show()" action="#{ageGroupMapping.viewDetails}" update=":form,:viewForm">
+											<f:setPropertyActionListener value="#{var}" target="#{ageGroupMapping.selectedItem}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+									
+									<p:column headerText="Edit">
+										<p:commandButton icon="ui-icon-pencil" action="#{ageGroupMapping.editDetails}" update=":form">
+											<f:setPropertyActionListener value="#{var}" target="#{ageGroupMapping.selectedItem}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+									
+									<p:column headerText="Delete">
+										<p:commandButton icon="ui-icon-trash" action="#{ageGroupMapping.deleteAgeGroupMapping}" update=":form1">
+											<f:setPropertyActionListener value="#{var}" target="#{ageGroupMapping.selectedItem}"></f:setPropertyActionListener>
+											<p:confirm header="Confirmation" message="Are You Sure To Delete This Data ???" icon="ui-icon-alert" />
+										</p:commandButton>
+									</p:column>
+									
+								</p:dataTable>
+							</p:panel>
+						</h:form>
+						
+						<h:form id="viewForm" style="width:600px !important">
+							<p:dialog style="width:600px !important" resizable="false" widgetVar="viewDialog" header="View Details" showEffect="fade" hideEffect="explode" modal="true">
+								<div class="ui-g form-group">
+									<p:panelGrid columns="2" styleClass="ui-panelgrid-blank form-group" style="width:600px !important;border:0px none; background-color:transparent;">
+										<p:outputLabel value="Class:- "></p:outputLabel>
+										<p:outputLabel value="#{ageGroupMapping.selectedItem.className}"></p:outputLabel>
+										
+									</p:panelGrid>
+									</div>
+									<div class="ui-g form-group">
+									<p:panelGrid columns="1" styleClass="ui-panelgrid-blank form-group" style="width:600px !important;border:0px none; background-color:transparent;">	
+										<p:dataTable style="width:600px !important"  value="#{ageGroupMapping.selectedItem.ageGroupGradeList}" rowIndexVar="index" var="var" >
+											
+											<f:facet name="header">
+												<p:outputLabel value="Age Group"></p:outputLabel>
+											</f:facet>
+											
+											<p:column style="width:50px" headerText="S.No.">
+												<p:outputLabel value="#{index+1}"></p:outputLabel>
+											</p:column>
+											
+											<p:column headerText="Age Group">
+												<p:outputLabel value="#{var.label}"></p:outputLabel>
+											</p:column>
+										</p:dataTable>
+									</p:panelGrid>
+								</div>
+							</p:dialog>
+						</h:form>
+						
+						<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+							<p:commandButton style="margin-left:50px" value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+							<p:commandButton style="margin-left:50px" value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+						</p:confirmDialog>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</ui:define>
+</ui:composition>

@@ -1,0 +1,71 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/masterTemplate.xhtml">
+
+	<ui:define name="title">Message Ledger</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+
+							<p:panel header="Message Details">
+
+								<p:messages closable="true" autoUpdate="true"></p:messages>
+
+								<p:panelGrid columns="2" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+									<p:outputLabel value="From Date"></p:outputLabel>
+							        <p:calendar value="#{schoolWiseMessageCheck.currentDate}" pattern="dd/MM/yyyy" yearRange="c-10:c+10"  ></p:calendar>
+								
+								   <p:outputLabel value="To Date"></p:outputLabel>
+							        <p:calendar value="#{schoolWiseMessageCheck.toDate}" pattern="dd/MM/yyyy" yearRange="c-10:c+10"  ></p:calendar>
+								
+								
+								 <p:commandButton value="Submit" action="#{schoolWiseMessageCheck.update}" update=":form"> </p:commandButton>
+								</p:panelGrid>
+							    
+							   
+							    
+							    
+							</p:panel>
+
+
+							<p:panel header="View Message History">
+
+								<p:dataTable reflow="true" rowIndexVar="index" value="#{schoolWiseMessageCheck.allDetails}" id="id"
+									var="var" sortOrder="DESCENDING" sortBy="#{var.count}">
+
+									<p:column headerText="S.No" >
+										<p:outputLabel value="#{index+1}"></p:outputLabel>
+										
+									</p:column>
+									
+									<p:column headerText="School Name" filterBy="#{var.description}" filterMatchMode="contains">
+										<p:outputLabel value="#{var.description}"></p:outputLabel>
+									</p:column>
+
+
+									<p:column headerText="Sent (#{schoolWiseMessageCheck.total})" sortBy="#{var.count}">
+										<p:outputLabel value="#{var.count}"></p:outputLabel>
+										
+										<f:facet name="footer">
+											Total : #{schoolWiseMessageCheck.total}
+										</f:facet>
+									</p:column>
+								</p:dataTable>
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

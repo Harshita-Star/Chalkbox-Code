@@ -1,0 +1,178 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Manual/Notes</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form" enctype="multipart/form-data">
+							<p:growl>
+								<p:autoUpdate />
+							</p:growl>
+							<p:panel header="View/Edit Manual/Notes">
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel value="Select Class"></p:outputLabel>
+									<p:selectOneMenu
+										value="#{viewEditDeleteNotes.selectedCLassSection}"
+										required="true" requiredMessage="Please select a class">
+										<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+										<f:selectItems value="#{viewEditDeleteNotes.classSection}"></f:selectItems>
+										<p:ajax update="sectionid"
+											listener="#{viewEditDeleteNotes.allSections}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Select Section"></p:outputLabel>
+									<p:selectOneMenu id="sectionid"
+										value="#{viewEditDeleteNotes.selectedSection}" required="true"
+										requiredMessage="Please select a section">
+										<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+										<f:selectItems value="#{viewEditDeleteNotes.sectionList}"></f:selectItems>
+										<p:ajax update="subjectid"
+											listener="#{viewEditDeleteNotes.allSubjects}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Select Subject"></p:outputLabel>
+									<p:selectOneMenu id="subjectid"
+										value="#{viewEditDeleteNotes.subject}" required="true"
+										requiredMessage="Please select a Subject">
+										<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+										<f:selectItem itemLabel="All" itemValue="all"></f:selectItem>
+										<f:selectItems value="#{viewEditDeleteNotes.subjectList}"></f:selectItems>
+									</p:selectOneMenu>
+
+								</p:panelGrid>
+								<br />
+								<br />
+								<center>
+									<p:commandButton value="Search" update=":form2"
+										action="#{viewEditDeleteNotes.search}" style="width: 150px;"></p:commandButton>
+								</center>
+							</p:panel>
+						</h:form>
+					</div>
+					<div class="card card-w-title">
+						<h:form id="form2" enctype="multipart/form-data">
+							<p:panel header="Manual/Notes List"
+								rendered="#{viewEditDeleteNotes.show}">
+								<p:dataTable value="#{viewEditDeleteNotes.list}" var="var"
+									reflow="true">
+
+									<p:column headerText="S.No.">
+										<p:outputLabel value="#{var.sNo}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Subject Name">
+										<p:outputLabel value="#{var.subjectName}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Description">
+										<p:outputLabel value="#{var.description}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Name">
+										<p:outputLabel value="#{var.assignmentName}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Section" filterBy="#{var.sectionName}"
+										filterMatchMode="contains">
+										<p:outputLabel value="#{var.sectionName}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Date">
+										<p:outputLabel value="#{var.openingDateStr}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Attachment">
+										<p:commandButton rendered="#{var.showFile}"
+											icon="fa fa-fw fa-paperclip" value="View"
+											action="#{viewEditDeleteNotes.view}" update=":View"
+											oncomplete="PF('dlg1').show();">
+											<f:setPropertyActionListener
+												target="#{viewEditDeleteNotes.selectedActivity}"
+												value="#{var}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+
+									<p:column headerText="Delete">
+										<p:commandButton update=":form2"
+											oncomplete="PF('dlg').show();" icon="ui-icon-trash">
+											<f:setPropertyActionListener
+												target="#{viewEditDeleteNotes.selectedActivity}"
+												value="#{var}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+
+								</p:dataTable>
+
+								<p:dialog resizable="false" widgetVar="dlg"
+									header="Do you surely want to delete this manual/notes"
+									showEffect="fade" hideEffect="explode" modal="true">
+									<div class="ui-g form-group">
+										<p:panelGrid columns="2"
+											styleClass="ui-panelgrid-blank form-group"
+											style="border:0px none; background-color:transparent;">
+											<p:commandButton update=":form2"
+												actionListener="#{viewEditDeleteNotes.deleteNow}"
+												value="Yes"></p:commandButton>
+											<p:commandButton value="No" update=":form2"
+												oncomplete="PF('dlg').hide();"></p:commandButton>
+										</p:panelGrid>
+									</div>
+								</p:dialog>
+
+							</p:panel>
+						</h:form>
+
+						<h:form id="View">
+							<p:dialog header="Notes" id="docm" widgetVar="dlg1" height="500"
+								width="500" modal="true" showEffect="fade" hideEffect="fade"
+								resizable="false">
+
+								<div class="ui-g form-group">
+									<p:panelGrid columns="2"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+										<p:dataTable value="#{viewEditDeleteNotes.fileList}"
+											var="info">
+
+											<p:column headerText="File 1">
+												<p:outputLabel value="#{info}"></p:outputLabel>
+											</p:column>
+
+											<p:column headerText="Attachment">
+												<p:commandButton icon="fa fa-fw fa-paperclip" value="View"
+													action="#{viewEditDeleteNotes.view1}">
+													<f:setPropertyActionListener
+														target="#{viewEditDeleteNotes.selected1}" value="#{info}"></f:setPropertyActionListener>
+												</p:commandButton>
+											</p:column>
+
+										</p:dataTable>
+									</p:panelGrid>
+								</div>
+
+							</p:dialog>
+
+
+						</h:form>
+
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

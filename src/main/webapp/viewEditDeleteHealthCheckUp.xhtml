@@ -1,0 +1,126 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Infirmary</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+
+						<h:form id="form">
+
+							<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+							<p:panel header="View Health Check Up">
+
+								<p:panelGrid columns="5"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:outputLabel  for="@next" style="color:red" value="Start Date"></p:outputLabel>
+									<p:calendar navigator="true" pattern="dd/MM/yyyy"
+										yearRange="c-10:c+10"
+										value="#{viewEditDeleteHealthCheckUp.startDate}" required="true" requiredMessage="Please select start date"></p:calendar>
+
+									<p:outputLabel for="@next" style="color:red"  value="End Date"></p:outputLabel>
+									<p:calendar navigator="true" pattern="dd/MM/yyyy"
+										yearRange="c-10:c+10" value="#{viewEditDeleteHealthCheckUp.endDate}" required="true" requiredMessage="Please select end date"></p:calendar>
+
+									<p:commandButton icon="ui-icon-search" update=":form"
+										actionListener="#{viewEditDeleteHealthCheckUp.search}"
+										value="Search"></p:commandButton>
+								</p:panelGrid>
+
+								<br></br>
+
+								<p:dataTable reflow="true" id="dt"
+									value="#{viewEditDeleteHealthCheckUp.healthList}" var="var">
+
+									<p:column headerText="S. No." style="width:100px;">
+										<p:outputLabel value="#{var.sno}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Check Up Date" filterBy="#{var.checkUpDate}">
+										<p:outputLabel value="#{var.checkUpDate}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Student Name"
+										filterBy="#{var.selectedStudent}" filterMatchMode="contains"
+										sortBy="#{var.selectedStudent}">
+										<p:outputLabel value="#{var.selectedStudent}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Time">
+										<p:outputLabel value="#{var.timevalue}"></p:outputLabel>
+									</p:column>
+
+
+									<p:column headerText="Remarks">
+										<p:outputLabel value="#{var.remarks}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="View" style="width:100px;">
+										<p:commandButton process=":form"
+											action="#{viewEditDeleteHealthCheckUp.viewHealthCheckUp}"
+											icon="ui-icon-search">
+											<f:setPropertyActionListener
+												target="#{viewEditDeleteHealthCheckUp.selectedCheckUp}"
+												value="#{var}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+
+									<p:column headerText="Edit" style="width:100px;">
+										<p:commandButton process=":form"
+											action="#{viewEditDeleteHealthCheckUp.editHealthCheckUp}"
+											icon="ui-icon-pencil">
+											<f:setPropertyActionListener
+												target="#{viewEditDeleteHealthCheckUp.selectedCheckUp}"
+												value="#{var}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+
+									<p:column headerText="Delete" style="width:100px;">
+										<p:commandButton update=":form"
+											oncomplete="PF('confirmDlt').show()" icon="ui-icon-trash">
+											<f:setPropertyActionListener
+												target="#{viewEditDeleteHealthCheckUp.selectedCheckUp}"
+												value="#{var}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+
+
+
+								</p:dataTable>
+							</p:panel>
+						</h:form>
+
+						<h:form id="dltForm" style="overflow:hidden">
+							<p:dialog header="Are You Sure To Delete...?" draggable="false"
+								resizable="false" closeOnEscape="true" widgetVar="confirmDlt"
+								modal="true">
+								<div class="ui-g form-group">
+									<p:panelGrid columns="2"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+										<p:commandButton value="Yes" update=":form,:dltForm"
+											action="#{viewEditDeleteHealthCheckUp.deleteCheckUp}"
+											oncomplete="PF('editDialog').hide()"></p:commandButton>
+										<p:commandButton value="No" update=":form,:dltForm"></p:commandButton>
+									</p:panelGrid>
+								</div>
+							</p:dialog>
+						</h:form>
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

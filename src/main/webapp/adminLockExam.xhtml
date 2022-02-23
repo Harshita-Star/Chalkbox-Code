@@ -1,0 +1,95 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Lock Exam</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<h1>Lock Exam</h1>
+							<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+							<p:panel header="Lock Exam">
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel for="@next" style="color:red"
+										value="Select Class"></p:outputLabel>
+									<p:selectOneMenu required="true"
+										requiredMessage="Please select a class"
+										value="#{lockExam.selectedClass}" filter="true">
+										<f:selectItem itemLabel="Select class" itemValue=""></f:selectItem>
+										<f:selectItems value="#{lockExam.classList}"></f:selectItems>
+									</p:selectOneMenu>
+
+									<p:commandButton value="Search" styleClass="butwid" icon="fa fa-search"
+										actionListener="#{lockExam.searchData}" update=":form" />
+								</p:panelGrid>
+
+								<p:panelGrid columns="2">
+									<p:dataTable value="#{lockExam.examList}" var="var">
+										<p:column headerText="Exam Name">
+											<p:outputLabel value="#{var.examName}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Class Name">
+											<p:outputLabel value="#{var.className}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Term Name">
+											<p:outputLabel value="#{var.semesterName}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Select Status">
+											<p:selectOneRadio value="#{var.show}">
+												<f:selectItem itemLabel="Lock" itemValue="Lock"></f:selectItem>
+												<f:selectItem itemLabel="Unlock" itemValue="Unlock"></f:selectItem>
+											</p:selectOneRadio>
+										</p:column>
+
+										<f:facet name="footer">
+											<center>
+												<p:commandButton  update=":form"
+													value="Update" styleClass="butwid" icon="fa fa-floppy-o"
+													actionListener="#{lockExam.updateLockStatus}">
+													<p:confirm header="Confirmation"
+														message="Are You Sure To Update ???" icon="ui-icon-alert" />
+												</p:commandButton>
+											</center>
+										</f:facet>
+
+									</p:dataTable>
+
+								</p:panelGrid>
+
+
+
+								<p:confirmDialog global="true" showEffect="fade"
+									hideEffect="fade">
+									<p:commandButton style="margin-left:30px" value="Yes"
+										type="button" styleClass="ui-confirmdialog-yes greenButt"
+										icon="ui-icon-check" />
+									<p:commandButton style="margin-left:50px" value="No"
+										type="button" styleClass="ui-confirmdialog-no redButt"
+										icon="ui-icon-close" />
+								</p:confirmDialog>
+
+							</p:panel>
+
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,119 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Exam Ordering</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form1">
+							<p:panel id="panel" header="Exam Rank Allotment">
+								<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:outputLabel value="Select Class" for="@next"
+										style="color:red"></p:outputLabel>
+									<p:selectOneMenu value="#{examRank.selectedClassSection}"
+										filter="true" required="true"
+										requiredMessage="Please select a class">
+										<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+										<f:selectItems value="#{examRank.classList}"></f:selectItems>
+										<p:ajax listener="#{examRank.getTerm}" update="termId"></p:ajax>
+									</p:selectOneMenu>
+									
+									<p:outputLabel value="Select Term" for="@next"
+										style="color:red"></p:outputLabel>
+									<p:selectOneMenu id="termId" value="#{examRank.selectedterm}"
+										filter="true" required="true"
+										requiredMessage="Please select a term">
+										<f:selectItem itemLabel="Select" itemValue=""></f:selectItem> 
+										<f:selectItems value="#{examRank.termList}"></f:selectItems>
+										<p:ajax listener="#{examRank.getType}" update="typeId"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Select Type" for="@next"
+										style="color:red"></p:outputLabel>
+									<p:selectOneMenu id="typeId" value="#{examRank.selectedType}"
+										required="true" requiredMessage="Please select Type">
+										<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+										<f:selectItems value="#{examRank.typeList}"></f:selectItems>
+									</p:selectOneMenu>
+
+									
+								</p:panelGrid>
+								
+								<br />
+								<p:separator />
+								<center>
+									<p:commandButton value="Search" update=":form1" styleClass="butwid" icon="fa fa-search"
+										action="#{examRank.search}"></p:commandButton>
+
+								</center>
+								<p:separator />
+								<br />
+
+								<br />
+
+								<p:outputLabel
+									value="Note : Please drag the rows up and down ⇅ to arrange the subjects in order and then click 'ALLOT RANK' to submit"
+									style="font-weigth:bold;font-size:16px;"
+									rendered="#{subjectRank.show}" />
+								<br />
+								<br />
+								<p:dataTable rendered="#{examRank.show}" reflow="true" var="var"
+									value="#{examRank.examList}" draggableRows="true">
+
+									<f:facet name="header">
+										<center>
+											<p:commandButton styleClass="butwid" icon="fa fa-sort" value="Set Order"
+												update=":form1" action="#{examRank.submit}"></p:commandButton>
+										</center>
+									</f:facet>
+
+									<p:ajax global="false" event="rowReorder" />
+
+									<p:column headerText="Drag">
+										<center>
+											<p:graphicImage value="drag.png" width="40" height="40" />
+										</center>
+									</p:column>
+
+									<p:column headerText="Exam Name">
+										<center>
+											<p:outputLabel value="#{var.examNameUpperCase}"></p:outputLabel>
+										</center>
+									</p:column>
+
+
+									<p:column headerText="Order">
+										<p:inputText style="font-weight: bold;" disabled="true"
+											value="#{var.order}">
+											<p:keyFilter mask="num"></p:keyFilter>
+										</p:inputText>
+									</p:column>
+
+									<f:facet name="footer">
+										<center>
+											<p:commandButton styleClass="butwid" icon="fa fa-sort" value="Set Order"
+												update=":form1" action="#{examRank.submit}"></p:commandButton>
+										</center>
+									</f:facet>
+								</p:dataTable>
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

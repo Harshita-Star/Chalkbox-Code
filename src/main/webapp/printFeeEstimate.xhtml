@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+<f:loadBundle var="addClassVar" basename="myProperties" />
+<f:view contentType="text/html">
+	<h:head>
+		<title>#{sideMenuBean.companyName} | Print Fee Estimate Report</title>
+		<f:facet name="first">
+			<meta content='text/html; charset=UTF-8' http-equiv="Content-Type" />
+			<meta http-equiv="X-UA-Compatible" content="EmulateIE8" />
+			
+		</f:facet>
+		
+		<script>
+		
+			function printwin() {
+				document.getElementById('test').style.display="none";	
+				window.print();
+				document.getElementById('test').style.display="block";
+				document.URL="";
+			}
+	
+		</script>
+		
+	</h:head>
+		
+		<h:body>
+		
+	 
+				
+			
+			<h:form  id="form2" >
+							<p:commandButton onclick="printwin()" id="test" value="Print" icon="ui-icon-print"></p:commandButton>		
+		<p:commandButton value="PDF" style="width:50px;" ajax="false" process="@this" actionListener="#{printFeeEstimate.exportFeeEstPdf}"> 
+                    
+          <p:fileDownload value="#{printFeeEstimate.file}"/>
+         </p:commandButton>  
+				<style>
+			
+					.test .ui-panelgrid-cell{
+						width:10%;
+						border:none;
+					}
+					
+					
+					.abc .ui-panelgrid-cell{
+						width:10%;
+						border:none;
+					}
+					
+					.test .ui-panelgrid .ui-panelgrid-cell .ui-widget-content
+					{
+						border-style:hidden;
+						border: 0px !important;
+					}
+					
+					.abc .ui-panelgrid .ui-panelgrid-cell .ui-widget-content
+					{
+					    margin-top:20px !important;
+						border-style:hidden;
+						border: 0px !important;
+					}
+					
+					.rightSide .ui-panelgrid-cell
+					{
+						text-align: right;
+					}
+										
+					.aa .ui-widget-content 
+					{
+						border:0px !important;
+						text-align:left;
+						
+					}
+					
+
+				</style>
+						
+						<p:outputPanel styleClass="aa" style="height: auto;width:100%;float:left;font-size:10px;border: 1px solid black;margin-right:1%;" >
+							<p:outputPanel> 
+								<div style="width:100%">
+									<table style="width:50%;float:left">
+										<tr>
+											<td><p:graphicImage style="height:50px;width:50px;" value="#{printFeeEstimate.imagePath}"/> </td>
+										</tr>
+									</table>
+									<table style="width:50%">
+										<tr>
+											<td style="float:right"> </td>
+										</tr>
+										<tr>
+											<td style="float:right"> </td>
+										</tr>
+									</table>
+								</div>
+								<table width="100%;" style="padding-bottom:15px;">
+									<tr style="position:relative">
+										<td><h1 style="margin:0px;text-align:Center">#{printFeeEstimate.schoolName}</h1></td>
+									</tr>
+									<tr>
+										<td ><h2 style="text-align:center;margin:0px">#{printFeeEstimate.add1} #{printFeeEstimate.add2}</h2></td>
+									</tr>
+									<!-- <tr>
+										<td><h2 style="text-align:center;margin:0px">Ph.: 01420-691567, 7891030403  | www.apsbandikui.org  | apsrajasthan@gmail.com</h2></td> 
+									</tr> -->
+									<tr style="height:10px">
+									
+									</tr>
+									<tr>
+										<td ><h3 style="text-align:center;margin:0px"> <u>STUDENT FEE ESTIMATE (#{printFeeEstimate.session})</u> </h3></td>
+									</tr>
+								</table>
+								<p:outputPanel rendered="#{printFeeEstimate.newStudent}">
+									<table style="width:100%;font-size:12px">
+										<tr>
+											<td><b>Class Name:- #{printFeeEstimate.className} &nbsp;&nbsp;&nbsp;&nbsp; Student Name:- <u>#{printFeeEstimate.studentName}</u></b></td>
+										</tr>
+										<tr></tr>
+										<tr>
+											<td><b>If School Transportation Facility required, Stop for Pick/Drop: <u>#{printFeeEstimate.routeName}</u> </b></td>
+										</tr>
+										<tr>
+											<td><b>Concession Category (If Any): <u>#{printFeeEstimate.concessionName}</u> </b></td>
+										</tr>
+									</table>
+								</p:outputPanel>
+								<p:outputPanel rendered="#{printFeeEstimate.oldStudent}">
+									<table style="width:100%;font-size:12px">
+										<tr>
+											<td><b>Admn No:- <u>#{printFeeEstimate.srNo}</u></b></td>
+											<td><b>Student Name:-<u>#{printFeeEstimate.studentName}</u></b></td>
+										</tr>
+										<tr>
+											<td><b>Class Name:- <u>#{printFeeEstimate.className}</u></b></td>
+											<td><b>Parent's Name:- <u>#{printFeeEstimate.parentName}</u></b></td>
+										</tr>
+										<tr>
+											<td><b> If School Transportation Facility required, Stop for Pick/Drop:- <u>#{printFeeEstimate.routeName}</u></b></td>
+											<td><b>Concession Cat.:- <u>#{printFeeEstimate.concessionName}</u></b></td>
+										</tr>
+									</table>
+								</p:outputPanel>
+								<br></br>
+								
+								<center>
+								<h:dataTable value="#{printFeeEstimate.feeList}" var="var" border="1" style="border-collapse:collapse">
+									<h:column >
+										<f:facet name="header">
+											Installments -->
+										</f:facet>
+										<center><h:outputLabel value="#{var.feeName}"></h:outputLabel></center> 
+									</h:column>
+									
+									<h:column >
+										<f:facet name="header">
+											APR-JUNE (Ist)
+										</f:facet>
+										<h:outputLabel style="float:right" value="#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'} #{var.firstQuarter}"></h:outputLabel>
+									</h:column>
+									
+									<h:column >
+										<f:facet name="header">
+											JULY-SEPT (IInd)
+										</f:facet>
+										<h:outputLabel style="float:right" value="#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'} #{var.secondQuarter}"></h:outputLabel>
+									</h:column>
+									
+									<h:column >
+										<f:facet name="header">
+											OCT-DEC (IIIrd)
+										</f:facet>
+										<h:outputLabel style="float:right" value="#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'} #{var.thirdQuarter}"></h:outputLabel>
+									</h:column>
+									
+									<h:column >
+										<f:facet name="header">
+											JAN-MAR (IVth)
+										</f:facet>
+										<h:outputLabel style="float:right" value="#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'} #{var.fourthQuarter}"></h:outputLabel>
+									</h:column>
+								</h:dataTable>
+								<table style="width:40%">
+									<tr>
+										<td>
+											Total Fee :- 
+										</td>
+										<td>
+										  <u><b>#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'} #{printFeeEstimate.totalFee}</b></u>
+										</td>
+									</tr>
+									<tr>
+										<td>
+											Total Amount To Be Paid :- 
+										</td>
+										<td>
+										  <u><b>#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'} #{printFeeEstimate.totalAmountToBePaid}</b></u>
+										</td>
+									</tr>
+								</table>
+								<table style="width:40%">
+									<tr> 
+										<td>In Words: <b><u>#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rupees'} #{printFeeEstimate.totalAmountInWords}</u></b></td>
+									</tr>
+								</table>
+								</center>
+								 <p><b>#{printFeeEstimate.aravali2}</b></p>
+								 <p style="font-size:12px;margin-left:20px">#{printFeeEstimate.aravali1} <br></br>
+								 #{printFeeEstimate.aravali3}
+								 <br></br>
+								 <br></br>
+								 #{printFeeEstimate.aravali4}<br></br>
+								 #{printFeeEstimate.aravali5}<br></br><br></br>
+								 
+								 #{printFeeEstimate.aravali6}<br></br><br></br>
+								 
+								 #{printFeeEstimate.aravali7} <br></br><br></br>
+								 
+								 #{printFeeEstimate.aravali8}<br></br>
+								 #{printFeeEstimate.aravali9}<br></br>
+								 #{printFeeEstimate.aravali10}<br></br>
+								 #{printFeeEstimate.aravali11}<br></br>
+								 #{printFeeEstimate.aravali12}<br></br>
+								 #{printFeeEstimate.aravali13}<br></br>
+								 #{printFeeEstimate.aravali14}<br></br>
+								 
+								 </p><br></br><br></br>
+								 <table style="width:100%;" >
+								 	<tr style="text-align: right">
+								 		<td>______________</td>
+								 	</tr>
+								 	<tr style="text-align: right;">
+								 		<td>Sign.</td>
+								 	</tr>
+								 </table>
+							</p:outputPanel>
+						</p:outputPanel>
+						
+			</h:form>	
+			
+		
+		</h:body>
+	
+	</f:view>
+</html>
+	
+	

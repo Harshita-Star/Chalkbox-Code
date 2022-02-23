@@ -1,0 +1,163 @@
+.layout-breadcrumb {
+    background-color: #f8fafc;
+    padding: 9px 24px;
+    @include flex();
+    height: 42px;
+    box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.08);
+    align-items: center;
+    justify-content: space-between;
+
+    .breadcrumb{
+        @include flex();
+        @include flex-align-center();
+        .breadcrumb-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 2px;
+            border: solid 1px #d8dadc;
+            background-color: #f8fafc;
+            @include flex();
+            @include flex-align-center();
+            @include flex-justify-center();
+            margin-right: 16px;
+
+            > i {
+                font-size: 14px;
+                color: #8b8e90;
+            }
+        }
+
+        .route-bar-breadcrumb {
+            list-style: none;
+            @include flex();
+            justify-content: space-around;
+            align-items: center;
+            padding: 0;
+            padding-left: 16px;
+            border-left: 1px solid #d8dadc;
+           
+            > li {
+                padding: 0;
+                padding-right: 12px;
+                font-size: 13px;
+                color: #65686a;
+
+                i{
+                    font-weight: bold;
+                    font-size: 10px;
+                }
+
+                .ui-link {
+                    font-size: 13px;
+                    color: #65686a;
+                    @include transition(color $transitionDuration);
+
+                    &:hover {
+                        color: $primaryColor;
+                    }
+                }
+            }
+        }
+    }
+
+    .status {
+        @include flex();
+        @include flex-align-center();
+
+        > span {
+            font-size: 13px;
+            color: #65686a;
+            margin-right: 3px;
+        }
+        .status-circle {
+            margin: 0 3px;
+            position: relative;
+
+           
+
+            i {
+                font-size: 14px;
+                color: #21b5ad;
+            }
+
+            .tooltip {
+                position: absolute;
+                display: none;
+                top: 17px;
+                left: -4px;
+                font-size: 10px;
+                padding: 0 1px;
+                color: #ffffff;
+                border-radius: 1px;
+                background-color: #354045;
+                
+                &:before, &:after {
+                    bottom: 100%;
+                    border: solid transparent;
+                    content: " ";
+                    height: 0;
+                    width: 0;
+                    position: absolute;
+                    pointer-events: none;
+                    left: 10px
+                }
+
+                &:before {
+                    border-color: transparent;
+                    border-bottom-color:#354045;
+                    border-width: 3px;
+                    margin-left: -3px;
+                }
+
+                &:after {
+                    border-color: transparent;
+                    border-bottom-color: #354045;
+                    border-width: 3px;
+                    margin-left: -3px;
+                }
+            }
+
+            &:nth-child(2) {
+                &:hover {
+                    .tooltip-1 {
+                        display: block;
+                    }
+                }
+            }
+            &:nth-child(3) {
+                i {
+                    color:#f3a841;
+                }
+                &:hover {
+                    .tooltip-2 {
+                        display: block;
+                    }
+                }
+            }
+            &:nth-child(4) {
+                &:hover {
+                    .tooltip-3 {
+                        display: block;
+                    }
+                }
+            }
+        }
+        
+    }
+}
+
+@media (max-width : 992px){
+    .layout-breadcrumb {
+
+        .breadcrumb{
+            width: 100%;
+            padding: 0 30px;
+        }
+
+        .status {
+            span {
+                display: none;
+            }
+        }
+    }
+}

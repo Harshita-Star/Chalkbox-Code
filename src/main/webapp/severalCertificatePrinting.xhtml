@@ -1,0 +1,428 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Certificates</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="initializePageDataForm">
+							<p:remoteCommand name="initializePageDataCommand" autoRun="true"
+								action="#{SCPBean.init()}" update=":form1" />
+						</h:form>
+
+						<h:form id="form1">
+							<h1>Search Student</h1>
+							<p:messages closable="true" autoUpdate="true"></p:messages>
+							<p:commandLink action="bulkSeveralCertificatePrinting.xhtml" immediate="true" value="Bulk Certificate Printing" style="font-size:18px !important;float:right;margin-bottom:10px;" ></p:commandLink><br/><br/>
+							<p:panel header="Search Student">
+								<p:panelGrid columns="5"
+									styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:outputLabel for="@next" style="color:red"  value="Search Student By Name/Adm.No."></p:outputLabel>
+									<p:inputText rendered="false" value="#{SCPBean.addNumber}"></p:inputText>
+									<p:autoComplete id="acSimple" value="#{SCPBean.studentName}"
+										minQueryLength="3"
+										completeMethod="#{SCPBean.autoCompleteStudentInfo}"
+										required="true" requiredMessage="Please Enter Name"
+										forceSelection="true" validatorMessage="Please Enter Correct value">
+										<p:ajax event="query" global="false" />
+										<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:autoComplete>
+
+									<p:commandButton value="Birth Certificate" icon="fa fa-file-text-o" 
+										action="#{SCPBean.birthCertificate}"></p:commandButton>
+									<p:commandButton value="Bank Certificate" icon="fa fa-file-text-o" 
+										action="#{SCPBean.bankCertificate}"></p:commandButton>
+									<p:commandButton value="Bonafide Certificate" icon="fa fa-file-text-o" 
+										action="#{SCPBean.bonafiedCertificate}"></p:commandButton>
+									
+									<p:outputLabel/><p:outputLabel/>
+									<p:commandButton value="Character Certificate" icon="fa fa-file-text-o" 
+										action="#{SCPBean.characterCertificate}"></p:commandButton>
+									<p:commandButton value="Affiliation Certificate" icon="fa fa-file-text-o" 
+										action="#{SCPBean.affiliationCertificate}"></p:commandButton>	
+									<p:commandButton value="Fee Certificate" icon="fa fa-file-text-o" styleClass="butwid"
+										action="#{SCPBean.feeCertificate}"></p:commandButton>	
+									
+									<p:outputLabel/><p:outputLabel/>
+									<p:commandButton value="Passport Apply Cert." icon="fa fa-file-text-o" 
+										action="#{SCPBean.passportApplyCertificate}"></p:commandButton>	
+									<p:commandButton value="LOC" icon="fa fa-file-text-o" 
+										action="#{SCPBean.locCertificate}"></p:commandButton>	
+										
+								</p:panelGrid>
+							</p:panel>
+						</h:form>
+						
+						<h:form id="remarkForm">
+
+							<p:dialog header="Give Remark" id="remark" widgetVar="dlgrem"
+								minHeight="40">
+
+								<p:panelGrid columns="2" layout="grid"
+									styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+                                    <p:outputLabel value="Remark :" for="@next" style="color:red"></p:outputLabel>  
+									<p:inputText value="#{SCPBean.remark}" required="true" requiredMessage="Please Give Remark" validatorMessage="Please Enter Correct value">
+									  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:inputText>
+									
+									<p:outputLabel value="Student Type:" for="@next" style="color:red"></p:outputLabel>  
+									<p:selectOneMenu value="#{SCPBean.studentTypeCharacterCertificate}" required="true" requiredMessage="Please select student Type">
+									  <f:selectItem itemLabel="Passed" itemValue="has passed"></f:selectItem>
+									  <f:selectItem itemLabel="Failed" itemValue="has failed in"></f:selectItem>
+									  <f:selectItem itemLabel="Currently Studying" itemValue="is currently studying in"></f:selectItem>
+									  <f:selectItem itemLabel="Due to appear" itemValue="is due to appear in"></f:selectItem>
+
+									</p:selectOneMenu>
+									
+									<p:commandButton value="Print Certificate"
+										action="#{SCPBean.giveRemark}"
+										oncomplete="PF('dlgrem').hide();"></p:commandButton>
+								</p:panelGrid>
+
+							</p:dialog>
+						</h:form>
+						
+						
+						<h:form id="feeForm">
+
+							<p:dialog header="Choose Fee Type" id="feeChoose" widgetVar="feeDlg"
+								style="width:100px">
+
+								<p:panelGrid columns="2" 
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;width: 60%;">
+									
+									
+									<p:outputLabel value="Type:" for="@next" style="color:red"></p:outputLabel>  
+									<p:selectCheckboxMenu style="width:50%;min-width: 15rem" filter="true"
+										filterMatchMode="startsWith" 
+										scrollHeight="250" 
+										required="true" multiple="true"
+										requiredMessage="Please select atleast one school"
+										value="#{SCPBean.selectedFees}">
+										
+									  <f:selectItems value="#{SCPBean.feelist}"></f:selectItems>
+									</p:selectCheckboxMenu>
+							
+							
+								</p:panelGrid>
+								<center>
+								<p:commandButton value="Print" styleClass="butwid"
+										action="#{SCPBean.calculateFee}"
+										oncomplete="PF('feeDlg').hide();"></p:commandButton>
+								</center>
+								</p:dialog>
+						</h:form>
+						
+						
+						<h:form id="tutionFeeAravali">
+
+							<p:dialog header="Search Student" id="aravaliFee" widgetVar="tutionAravali"
+								minHeight="40" width="700px" height="350px;">
+
+								<p:panelGrid columns="2" layout="grid"
+									styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+                                   <p:outputLabel  for="@next" style="color:red" value="Select Date"></p:outputLabel>
+									<p:calendar value="#{SCPBean.date}"
+										required="true" requiredMessage="Please Select Date"
+										navigator="true" pattern="dd/MM/yyyy">
+										<p:ajax event="dateSelect"></p:ajax>
+									</p:calendar>
+
+
+									<p:outputLabel value="Select Quarter"></p:outputLabel>
+									<p:selectManyCheckbox layout="grid" columns="2"
+										value="#{SCPBean.selectedQuarter}">
+										<f:selectItem itemLabel="APR - JUN" itemValue="1"></f:selectItem>
+										<f:selectItem itemLabel="JULY - SEP" itemValue="2"></f:selectItem>
+										<f:selectItem itemLabel="OCT - DEC" itemValue="3"></f:selectItem>
+										<f:selectItem itemLabel="JAN - MAR" itemValue="4"></f:selectItem>
+									</p:selectManyCheckbox>
+
+									<p:outputLabel value="Select Required Fee"></p:outputLabel>
+									<p:selectManyCheckbox columns="2" layout="grid"
+										value="#{SCPBean.selectedFee}">
+										<f:selectItems value="#{SCPBean.classFeeList}"></f:selectItems>
+									</p:selectManyCheckbox>
+
+									<p:commandButton  value="Search"
+										action="#{SCPBean.searchByName}"></p:commandButton>
+								</p:panelGrid>
+
+							</p:dialog>
+						</h:form>
+
+						<!-- <h:form id="form12">
+							<p:commandButton style="width:50px;" rendered="#{SCPBean.showPrint}" value="Print"
+								type="button">
+								<p:printer target=":forms"></p:printer>
+							</p:commandButton>
+						</h:form>
+<br/>
+						<h:form id="forms">
+							<p:panel rendered="#{SCPBean.showBirth}"
+								style="border: 3px solid !important;">
+								<p:panel style="margin:-20px;border:1px solid !important;">
+									<table style="width: 100%; font-size: 11px">
+										<tr>
+											<td><p:graphicImage width="100%" height="120px"
+													value="#{SCPBean.headerImage}"></p:graphicImage></td>
+											<td>
+						<h1 style="text-align:center;margin:0px;font-size:20px">#{headerBean.name}</h1>
+						<h3 style="text-align:center;margin:0px;font-size:11px">#{headerBean.address1},#{headerBean.address2}</h3>
+						<h3 style="text-align:center;margin:0px;font-size:11px">#{headerBean.website}</h3>
+						<h3 style="text-align:center;margin:0px;font-size:11px">Ph. #{headerBean.phoneno}</h3>
+						
+					</td>
+					<td>
+						<p:graphicImage value="image/exam.png" style="height:30px; vertical-align: middle;"/>
+					</td>
+										</tr>
+									</table>
+									<center>
+										<h3>
+											<u><b>BONAFIDE/BIRTH CERTIFICATE</b></u>
+										</h3>
+									</center>
+									<br></br>
+									<center>
+										<b><u>TO WHOM IT MAY CONCERN</u></b>
+									</center>
+									<br></br>
+									<br></br>
+									<table style="margin: -20px">
+										<tr>
+											<td><p:outputLabel style="font-size: 15px !important;"
+													value="This is to certified that #{SCPBean.studentInfo.fname} of Shri #{SCPBean.studentInfo.fathersName} and Smt. #{SCPBean.studentInfo.motherName}
+											is a bonafide student of this school studying in class #{SCPBean.studentInfo.className} in Session #{SCPBean.studentInfo.session}."></p:outputLabel>
+											</td>
+										</tr>
+									</table>
+									<br></br>
+
+									<table style="width: 100%">
+										<tr>
+											<td style="font-size: 15px"><b><u>#{SCPBean.check}</u></b>
+											</td>
+										</tr>
+									</table>
+									<br></br>
+									<br></br>
+									<table style="width: 55%; font-size: 12px; float: left;">
+
+										<tr>
+											<td>Date of Birth :</td>
+											<td><b>#{SCPBean.studentInfo.dobString}</b></td>
+										</tr>
+										<tr>
+											<td>Adm no. :</td>
+											<td><b>#{SCPBean.studentInfo.srNo}</b></td>
+										</tr>
+										<tr>
+											<td>Date of Adm. :</td>
+											<td><b>#{SCPBean.studentInfo.startingDateStr}</b></td>
+										</tr>
+										<tr>
+											<td>Address :</td>
+											<td><b>#{SCPBean.studentInfo.currentAddress}</b></td>
+										</tr>
+									</table>
+									<table
+										style="width: 25%; font-size: 12px; float: right; border: 1px solid #333 !important; height: 150px; margin-top: -35px; margin-right: 100px;">
+
+										<tr>
+											<td><center>
+													AFFIX <br></br> PHOTOGRAPH OF <br></br> STUDENT HERE
+												</center></td>
+										</tr>
+
+									</table>
+									<br></br>
+									<br></br>
+									<br></br>
+									<br></br>
+									<br></br>
+									<br></br>
+									<br></br>
+									<br></br>
+									<br></br>
+									<table style="width: 100%; margin-top: 30px">
+										<tr>
+											<td align="left">Date:- #{SCPBean.currentDate}</td>
+											<td align="right">Principal</td>
+										</tr>
+									</table>
+								</p:panel>
+							</p:panel>
+
+							<p:panel rendered="#{SCPBean.showBank}"
+								style="border: 3px solid !important;">
+								<p:panel
+									style="margin:-20px;border:1px solid !important;margin-left:-26px;margin-right:-26px">
+									<h3 style="margin:0px"> #{headerBean.name}</h3>
+								<h4 style="margin:0px">#{headerBean.address1},#{headerBean.address2}</h4>
+									<table style="width: 100%; font-size: 11px">
+										<tr>
+											<td><p:graphicImage width="100%" height="120px"
+													value="#{SCPBean.headerImage}"></p:graphicImage></td>
+											<td>
+						<h1 style="text-align:center;margin:0px;font-size:20px">#{headerBean.name}</h1>
+						<h3 style="text-align:center;margin:0px;font-size:11px">#{headerBean.address1},#{headerBean.address2}</h3>
+						<h3 style="text-align:center;margin:0px;font-size:11px">#{headerBean.website}</h3>
+						<h3 style="text-align:center;margin:0px;font-size:11px">Ph. #{headerBean.phoneno}</h3>
+						
+					</td>
+					<td>
+						<p:graphicImage value="image/exam.png" style="height:30px; vertical-align: middle;"/>
+					</td>
+										</tr>
+									</table>
+									<center>
+										<h3>
+											<u><b>Bank Certificate</b></u>
+										</h3>
+									</center>
+									<br></br>
+									<br></br>
+									<br></br>
+									<br></br>
+									<table style="margin: -20px">
+										<tr>
+											<td><p:outputLabel
+													value="This is to certified that #{SCPBean.studentInfo.fname}  of Shri #{SCPBean.studentInfo.fathersName}
+											regular student of ARAVALI PUBLIC SCHOOL from #{SCPBean.studentInfo.startingDateStr} to #{SCPBean.currentDate}.Her Mother name is Smt. #{SCPBean.studentInfo.motherName}.
+											She has appeared in class #{SCPBean.studentInfo.className} examination in the session #{SCPBean.studentInfo.session}."></p:outputLabel>
+											</td>
+										</tr>
+									</table>
+									<br></br>
+									<table style="width: 100%">
+										<tr>
+											<td style="font-size: 15px">Her Details according to
+												school record is</td>
+										</tr>
+									</table>
+									<br></br>
+									<table style="width: 100%; font-size: 12px">
+
+										<tr>
+											<td>Date of Birth :</td>
+											<td><b>#{SCPBean.studentInfo.dobString}</b></td>
+										</tr>
+										<tr>
+											<td>In Words :</td>
+											<td><b>#{SCPBean.studentInfo.dobInWord}</b></td>
+										</tr>
+										<tr>
+											<td>Address :</td>
+											<td><b>#{SCPBean.studentInfo.currentAddress}</b></td>
+										</tr>
+									</table>
+									<br></br>
+									<table style="width: 100%">
+										<tr>
+											<td style="font-size: 15px">She bears a good moral
+												Character.</td>
+										</tr>
+									</table>
+									<br></br>
+									<br></br>
+									<br></br>
+									<br></br>
+									<br></br>
+									<br></br>
+									<br></br>
+									<br></br>
+									<table style="width: 100%; margin: -20px">
+										<tr>
+											<td align="left">Date:- #{SCPBean.currentDate}</td>
+											<td align="right">Principal</td>
+										</tr>
+									</table>
+								</p:panel>
+							</p:panel>
+
+							<p:panel rendered="#{SCPBean.showBonafied}"
+								style="border: 3px solid !important;">
+								<p:panel
+									style="margin:-20px;border:1px solid !important;margin-left:-26px;margin-right:-26px">
+									<h3 style="margin:0px"> #{headerBean.name} </h3>
+								<h4 style="margin:0px">#{headerBean.address1},#{headerBean.address2}</h4>
+									<table style="width: 100%; font-size: 11px">
+										<tr>
+											<td><p:graphicImage width="100%" height="120px"
+													value="#{SCPBean.headerImage}"></p:graphicImage></td>
+											<td>
+						<h1 style="text-align:center;margin:0px;font-size:20px">#{headerBean.name}</h1>
+						<h3 style="text-align:center;margin:0px;font-size:11px">#{headerBean.address1},#{headerBean.address2}</h3>
+						<h3 style="text-align:center;margin:0px;font-size:11px">#{headerBean.website}</h3>
+						<h3 style="text-align:center;margin:0px;font-size:11px">Ph. #{headerBean.phoneno}</h3>
+						
+					</td>
+					<td>
+						<p:graphicImage value="image/exam.png" style="height:30px; vertical-align: middle;"/>
+					</td>
+										</tr>
+									</table>
+									<center>
+									<h3>
+										<u><b>BONAFIDE CERTIFICATE</b></u>
+									</h3>
+									</center>
+									<br />
+									<center>
+										<b><u>TO WHOM SO EVER IT MAY CONCERN</u></b>
+									</center>
+									<br></br>
+									<br></br>
+									<br></br>
+									<table style="margin: -20px">
+										<tr>
+											<td><p:outputLabel
+													value="It is certified that #{SCPBean.studentInfo.fname} son / daughter of Shri #{SCPBean.studentInfo.fathersName}
+										Admn No. #{SCPBean.studentInfo.srNo} , Date of Birth #{SCPBean.studentInfo.dobString} is a bonafide student of class #{SCPBean.studentInfo.className}  of 
+										ARAVALI PUBLIC SCHOOL, during the academic session #{SCPBean.studentInfo.session}."></p:outputLabel>
+											</td>
+										</tr>
+									</table>
+									<br></br>
+									<br></br>
+									<br></br>
+									<br></br>
+									<br></br>
+									<br></br>
+									<table style="width: 100%; margin: -20px">
+										<tr>
+											<td align="left">( Principal )</td>
+										</tr>
+										<tr>
+											<td align="left">Date:- #{SCPBean.currentDate}</td>
+										</tr>
+										<tr>
+											<td align="left">Place:</td>
+										</tr>
+									</table>
+								</p:panel>
+							</p:panel>
+						</h:form> -->
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

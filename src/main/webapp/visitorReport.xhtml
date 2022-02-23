@@ -1,0 +1,111 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Visitor</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form2">
+							<p:panel>
+								<p:panelGrid columns="5" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:outputLabel for="@next" style="color:red"  value="From Date"></p:outputLabel>
+									<p:calendar value="#{addVisitor.startDate}" navigator="true"
+										pattern="dd/MM/yyyy" required="true"
+										requiredMessage="Please Enter From Date"></p:calendar>
+									 
+									<p:outputLabel for="@next" style="color:red"  value="To Date"></p:outputLabel>
+									<p:calendar value="#{addVisitor.endDate}" navigator="true"
+										pattern="dd/MM/yyyy" required="true"
+										requiredMessage="Please Enter End Date"></p:calendar>	
+									
+									<p:commandButton update=":form2"
+										action="#{addVisitor.allVisitorList}" value="Search"></p:commandButton>	
+								</p:panelGrid>
+								<br/>
+								<p:dataTable reflow="true" value="#{addVisitor.visitorList}"
+									var="var" paginator="true" rowsPerPageTemplate="10,20,50"
+									rows="10" id="visitTbl">
+									<f:facet name="header">
+										<p:outputLabel
+											value="Total Visitor:- #{addVisitor.totalVisitor}"></p:outputLabel>
+										
+										<p:commandButton id="toggler" type="button" value="Columns"
+												style="width: auto;float: right;margin: -7px;" icon="	ui-icon-transfer-e-w" />
+											<p:columnToggler datasource="visitTbl" trigger="toggler" />	
+									</f:facet>
+									
+									<p:column headerText="S.No." style="width:30px">
+										<p:outputLabel value="#{var.sNo}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Date">
+										<p:outputLabel value="#{var.addDateStr}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Name" filterBy="#{var.name}" filterMatchMode="contains">
+										<p:outputLabel value="#{var.name}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Mobile No" filterBy="#{var.mobileNo}" filterMatchMode="contains">
+										<p:outputLabel value="#{var.mobileNo}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Address" filterBy="#{var.address}" filterMatchMode="contains">
+										<p:outputLabel value="#{var.address}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="To Meet">
+										<p:outputLabel value="#{var.meetType} : "></p:outputLabel>
+										<br/>
+										<p:outputLabel value="#{var.toMeet}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Purpose">
+										<p:outputLabel value="#{var.purpose}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Other Details">
+										<p:outputLabel value="#{var.otherDetails}"></p:outputLabel>
+									</p:column>
+									
+									<p:column headerText="No Of Person">
+										<p:outputLabel value="#{var.noOfPerson}"></p:outputLabel>
+									</p:column>
+									
+									<p:column headerText="Person Name">
+										<p:outputLabel value="#{var.personName}"></p:outputLabel>
+									</p:column>
+									
+									<p:column headerText="In Time">
+										<p:outputLabel value="#{var.inTime}"></p:outputLabel>
+									</p:column>
+									
+									<p:column headerText="Out Time">
+										<p:outputLabel value="#{var.outTime}"></p:outputLabel>
+									</p:column>
+
+									<p:column rendered="true" headerText="Image">
+										<p:graphicImage style="height:100%;width:100%;" cache="false"
+											url="#{(var.imagepath eq '' || var.imagepath eq 'null') ? 'noimage.png' : var.imagepath}"></p:graphicImage>
+									</p:column>
+								</p:dataTable>
+							</p:panel>
+						</h:form>
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

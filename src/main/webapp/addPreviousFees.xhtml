@@ -1,0 +1,69 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Previous Fee</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<h1>Add Previous Fee</h1>
+
+							<p:panel header="Add Previous Fees">
+
+								<p:messages closable="true" autoUpdate="true"></p:messages>
+								<p:commandLink
+									style="float: right;margin-left: 15px;color: blue;font-size:15px;"
+									immediate="true" value="Bulk Previous Fee Posting"
+									action="addMultiplePreviosFees.xhtml?faces-redirect=true?"></p:commandLink>        &#160;&#160;&#160;
+               		 		      
+               	<p:panelGrid columns="2" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel  for="@next" style="color:red" value="Student Name/Sr. No"></p:outputLabel>
+									<p:autoComplete id="acSimple" required="true"
+										minQueryLength="3" requiredMessage="Please Enter Student Name"
+										value="#{addPreviousFee.studentName}"
+										completeMethod="#{addPreviousFee.autoCompleteStudentInfo}" validatorMessage="Please Enter Correct value">
+										<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+										<p:ajax event="query" global="false" />
+									</p:autoComplete>
+
+
+									<p:outputLabel  for="@next" style="color:red" value="Previous Fees"></p:outputLabel>
+									<p:inputText id="preFee" value="#{addPreviousFee.previousFee}"
+										required="true" requiredMessage="Please Enter Student Fee" onkeyup="validateDecimal()">
+										<p:keyFilter mask="pnum"></p:keyFilter>	
+									</p:inputText>
+								</p:panelGrid>
+							
+								<br />
+								<p:separator />
+								<center>
+									<p:commandButton update="form" styleClass="butwid-1" icon="fa fa-plus"
+									action="#{addPreviousFee.addPreviousFees}"
+									value="Add Previous Fee"></p:commandButton>
+								</center>
+								<p:separator />
+								<br />
+								
+
+							</p:panel>
+
+
+
+
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

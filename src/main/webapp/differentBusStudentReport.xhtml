@@ -1,0 +1,219 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Different Bus Record</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<p:focus context=":form:srcpnl"></p:focus>
+						<h:form id="form">
+							<p:messages closable="true" autoUpdate="true"></p:messages>
+
+							<p:panel header="Different Bus Record" id="srcpnl">
+								<h4>Note 1 : This report will give you the list of students
+									who came to school by a bus and left the school by other bus.</h4>
+									<h4>Note 2 : Reports of the dates before 01-11-2019 will be available shortly</h4>
+								<p:panelGrid columns="5"
+									styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none;width:100%; background-color:transparent;">
+
+									<p:outputLabel  for="@next" style="color:red" value="Select Date"></p:outputLabel>
+									<p:calendar value="#{differentBusStudentReport.date}"
+										pattern="dd/MM/yyyy" navigator="true" required="true"
+										requiredMessage="Please Select Date" mindate="01/11/2019" maxdate="new Date();"
+										mask="true" readonlyInput="true" id="temp"
+										focusOnSelect="true">
+									</p:calendar>
+
+									<p:commandButton action="#{differentBusStudentReport.showRFID}"
+										value="Show" update=":form"></p:commandButton>
+
+									<h:commandLink>
+										<p:graphicImage name="images/excellogo.png"
+											library="avalon-layout" width="100" height="40"></p:graphicImage>
+										<pe:exporter type="xlsx" target="upp"
+											fileName="Different_Bus_Report_#{differentBusStudentReport.dateStr}"></pe:exporter>
+									</h:commandLink>
+
+									<p:commandButton value="PDF" style="width:100px;" ajax="false"
+										process="@this"
+										actionListener="#{differentBusStudentReport.exportLibPdf}">
+
+										<p:fileDownload value="#{differentBusStudentReport.file}" />
+									</p:commandButton>
+
+								</p:panelGrid>
+
+							</p:panel>
+
+							<p:dataTable id="up" stickyHeader="true"
+								value="#{differentBusStudentReport.slist}" var="stats"
+								rowIndexVar="rowId">
+
+								<p:column headerText="S.No.">
+									<f:facet name="header">
+										<p:outputLabel value="S.No."></p:outputLabel>
+									</f:facet>
+									<h:outputText value="#{rowId+1}"></h:outputText>
+								</p:column>
+
+								<p:column headerText="Name">
+									<f:facet name="header">
+										<p:outputLabel value="Name"></p:outputLabel>
+									</f:facet>
+									<h:outputText value="#{stats.fullName}"></h:outputText>
+								</p:column>
+
+								<p:column headerText="Class">
+									<f:facet name="header">
+										<p:outputLabel value="Class"></p:outputLabel>
+									</f:facet>
+									<h:outputText value="#{stats.className}"></h:outputText>
+								</p:column>
+
+								<p:column headerText="Pick From Home Stop">
+									<f:facet name="header">
+										<p:outputLabel value="Pick From Home Stop"></p:outputLabel>
+									</f:facet>
+									<p:panelGrid columns="1"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none;width:100%;text-align:center; background-color:transparent;">
+										<p:graphicImage
+											value="#{stats.rfidDataInfo.inBusMorn ne '' ? 'tick.png' : 'cross.png' }"
+											height='15' width='15' />
+										<h:outputText style="font-weight:bold;"
+											value="#{stats.rfidDataInfo.inBusMorn}" />
+										<h:outputText style="font-weight:bold;"
+											value="#{stats.rfidDataInfo.inBusMornName}" />
+									</p:panelGrid>
+								</p:column>
+
+								<p:column headerText="Drop In School">
+									<f:facet name="header">
+										<p:outputLabel value="Drop In School"></p:outputLabel>
+									</f:facet>
+									<p:panelGrid columns="1"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none;width:100%;text-align:center; background-color:transparent;">
+										<p:graphicImage
+											value="#{stats.rfidDataInfo.outBusMorn ne '' ? 'tick.png' : 'cross.png' }"
+											height='15' width='15' />
+										<h:outputText style="font-weight:bold;"
+											value="#{stats.rfidDataInfo.outBusMorn}" />
+										<h:outputText style="font-weight:bold;"
+											value="#{stats.rfidDataInfo.outBusMornName}" />
+									</p:panelGrid>
+								</p:column>
+
+								<p:column headerText="Pick From School">
+									<f:facet name="header">
+										<p:outputLabel value="Pick From School"></p:outputLabel>
+									</f:facet>
+									<p:panelGrid columns="1"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none;width:100%;text-align:center; background-color:transparent;">
+										<p:graphicImage
+											value="#{stats.rfidDataInfo.inBusEven ne '' ? 'tick.png' : 'cross.png' }"
+											height='15' width='15' />
+										<h:outputText style="font-weight:bold;"
+											value="#{stats.rfidDataInfo.inBusEven}" />
+										<h:outputText style="font-weight:bold;"
+											value="#{stats.rfidDataInfo.inBusEvenName}" />
+									</p:panelGrid>
+								</p:column>
+
+								<p:column headerText="Drop At Home Stop">
+									<f:facet name="header">
+										<p:outputLabel value="Drop At Home Stop"></p:outputLabel>
+									</f:facet>
+									<p:panelGrid columns="1"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none;width:100%;text-align:center; background-color:transparent;">
+										<p:graphicImage
+											value="#{stats.rfidDataInfo.outBusEven ne '' ? 'tick.png' : 'cross.png' }"
+											height='15' width='15' />
+										<h:outputText style="font-weight:bold;"
+											value="#{stats.rfidDataInfo.outBusEven}" />
+										<h:outputText style="font-weight:bold;"
+											value="#{stats.rfidDataInfo.outBusEvenName}" />
+									</p:panelGrid>
+								</p:column>
+
+							</p:dataTable>
+
+							<p:dataTable id="upp" rendered="false" stickyHeader="true"
+								value="#{differentBusStudentReport.slist}" var="stats"
+								rowIndexVar="rowId">
+
+								<p:column headerText="S.No.">
+									<f:facet name="header">
+										<p:outputLabel value="S.No."></p:outputLabel>
+									</f:facet>
+									<h:outputText value="#{rowId+1}"></h:outputText>
+								</p:column>
+
+								<p:column headerText="Name">
+									<f:facet name="header">
+										<p:outputLabel value="Name"></p:outputLabel>
+									</f:facet>
+									<h:outputText value="#{stats.fullName}"></h:outputText>
+								</p:column>
+
+								<p:column headerText="Class">
+									<f:facet name="header">
+										<p:outputLabel value="Class"></p:outputLabel>
+									</f:facet>
+									<h:outputText value="#{stats.className}"></h:outputText>
+								</p:column>
+
+								<p:column headerText="Pick From Home Stop">
+									<f:facet name="header">
+										<p:outputLabel value="Pick From Home Stop"></p:outputLabel>
+									</f:facet>
+										<h:outputText style="font-weight:bold;"
+											value="#{stats.rfidDataInfo.inBusMornComplex}" />
+								</p:column>
+
+								<p:column headerText="Drop In School">
+									<f:facet name="header">
+										<p:outputLabel value="Drop In School"></p:outputLabel>
+									</f:facet>
+										<h:outputText style="font-weight:bold;"
+											value="#{stats.rfidDataInfo.outBusMornComplex}" />
+								</p:column>
+
+								<p:column headerText="Pick From School">
+									<f:facet name="header">
+										<p:outputLabel value="Pick From School"></p:outputLabel>
+									</f:facet>
+										<h:outputText style="font-weight:bold;"
+											value="#{stats.rfidDataInfo.inBusEvenComplex}" />
+								</p:column>
+
+								<p:column headerText="Drop At Home Stop">
+									<f:facet name="header">
+										<p:outputLabel value="Drop At Home Stop"></p:outputLabel>
+									</f:facet>
+										<h:outputText style="font-weight:bold;"
+											value="#{stats.rfidDataInfo.outBusEvenComplex}" />
+								</p:column>
+
+							</p:dataTable>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

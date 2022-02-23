@@ -1,0 +1,92 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Directory</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form" enctype="multipart/form-data">
+							<h1>Directory</h1>
+
+
+							<p:messages autoUpdate="true" closable="true"></p:messages>
+							<p:panel header="Add Directory">
+								<p:commandLink immediate="true"
+									style="float:right;color:blue;font-size:15px;"
+									value="View Directory"
+									action="#{phonebook.navigateViewPhonebook}"></p:commandLink>
+								<br></br>
+								<br></br>
+								<p:dataTable reflow="true" id="table" value="#{phonebook.contactList}"
+									var="var">
+									<p:column headerText="S.No.">
+										<p:outputLabel value="#{var.sno}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Contact Person Name">
+										<p:outputLabel value="Name" />
+										<br></br>
+										<p:inputText value="#{var.contactName}"></p:inputText>
+									</p:column>
+
+									<p:column headerText="Designation">
+										<p:outputLabel value="Designation" />
+										<br></br>
+										<p:inputText value="#{var.designation}"></p:inputText>
+									</p:column>
+
+									<p:column headerText="Contact No.">
+										<p:outputLabel value="Contact No." />
+										<br></br>
+										<p:inputText value="#{var.contactNo}" maxlength="10"
+											validatorMessage="Please Enter 10 Digit Number">
+											<p:keyFilter mask="num"/>
+											<f:validateLength minimum="10"></f:validateLength>
+										</p:inputText>
+									</p:column>
+
+
+									<f:facet name="footer">
+									
+									
+								<br />
+								<p:separator />
+								<center>
+									<p:panelGrid
+										columns="2"
+										layout="grid" styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+										
+										<p:commandButton value="Add More Contacts" styleClass="butwid-1" icon="fa fa-plus-circle"
+												update=":form:table" actionListener="#{phonebook.addNewRow}"
+												ajax="false"></p:commandButton>
+										<p:commandButton value="Submit"  styleClass="butwid" icon="fa fa-floppy-o" action="#{phonebook.submit}"
+												update=":form"></p:commandButton>
+										
+									</p:panelGrid>
+								</center>
+								<p:separator />
+								<br />
+									</f:facet>
+
+								</p:dataTable>
+
+
+
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

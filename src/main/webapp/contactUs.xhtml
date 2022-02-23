@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+		xmlns:pe="http://primefaces.org/ui/extensions">
+<f:view contentType="text/html">
+	<h:head>
+		<title>#{sideMenuBean.companyName} | Contact Us</title>
+		<f:facet name="first">
+			<meta content='text/html; charset=UTF-8' http-equiv="Content-Type" />
+			<meta http-equiv="X-UA-Compatible" content="EmulateIE8" />
+		</f:facet>
+			<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css"></link>
+    		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"></link>
+    		<link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css"></link>
+   			<link rel="stylesheet" href="dist/css/AdminLTE.min.css"></link>
+    		<link rel="stylesheet" href="dist/css/skins/all-skins.min.css"></link>
+    		<link rel="stylesheet" type="text/css" href="css/style.css"/>	  			
+	</h:head>
+	<h:body>
+       <ui:include src="sideMenu.xhtml"></ui:include> 
+       <div class="content-wrapper">
+          <section class="content-header">
+        </section>
+					<h:form id="form" style="overflow:hidden" enctype="multipart/form-data">
+					<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+					 <p:messages closable="true" autoUpdate="true"></p:messages>	
+						<p:panel header="Contact Us">
+							<p:panelGrid columns="2">
+								
+							    <p:outputLabel value="Contact No." for="@next" style="color:red" ></p:outputLabel>
+								<p:inputText value="#{contactus.contactNo}" maxlength="10" validatorMessage="Please Enter 10 Digit Number"  required="true" requiredMessage="please enter contact no."  rows="3" cols="50" style="width:100%">
+									<pe:keyFilter mask="pnum"></pe:keyFilter>
+                  					<f:validateLength minimum="10"></f:validateLength>
+								</p:inputText>
+									
+							    <p:outputLabel value="Website (If Availiable)"></p:outputLabel>
+								<p:inputText value="#{contactus.website}" rows="3" cols="50" style="width:100%">
+								</p:inputText>
+									
+							    <p:outputLabel value="Email ID " for="@next" style="color:red" ></p:outputLabel>
+								<p:inputText value="#{contactus.emailId}" required="true" requiredMessage="please enter email Id" rows="3" cols="50" style="width:100%">
+								</p:inputText>
+						    
+						    <p:commandButton value="Submit" actionListener="#{contactus.insertDeatils}" ajax="false"></p:commandButton>
+							</p:panelGrid>
+						</p:panel>
+						
+							<p:panel  header="Recent Details">
+								<ui:repeat var="var" value="#{contactus.informationList}">
+								<p:panelGrid columns="2">
+								 <p:outputLabel value="Contact No.*"></p:outputLabel>
+								<p:outputLabel value="#{var.contactNum}"></p:outputLabel>
+								
+							
+								 <p:outputLabel value="Website"></p:outputLabel>
+									<p:outputLabel value="#{var.website}"></p:outputLabel>
+								
+								 <p:outputLabel value="Email ID"></p:outputLabel>
+								<p:outputLabel value="#{var.emailid}"></p:outputLabel>
+								</p:panelGrid>
+								</ui:repeat>
+							</p:panel>
+					</h:form>
+	</div>
+	</h:body>
+	</f:view>
+	</html>
+	

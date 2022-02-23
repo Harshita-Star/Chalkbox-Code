@@ -1,0 +1,215 @@
+.menu-wrapper {
+    background-color: $menuBgColor;
+    box-shadow: $menuShadow;
+    background-image: $menuBgGradient;
+ 
+    .layout-menu-container {
+        .layout-profile {
+            .layout-profile-button {
+                color: $rootMenuTextColor;
+
+                .layout-profile-name {
+                    color: $activeSubmenuItemTextColor;
+                }
+
+                .profile-image-icons {
+                    i {
+                        color: $submenuItemTextColor;
+        
+                        &:hover {
+                            color: rgba($submenuItemTextColor, .5);
+                        }
+                    }
+                }
+
+                .profile-info-button {
+                    &:hover {
+                        background-color: $rootMenuItemHoverBgColor;
+                    }
+                }
+            }
+
+            ul {
+                li {
+                    a {
+                        color: $submenuItemTextColor;
+                        &:hover {
+                            background-color: $submenuItemHoverBgColor;
+                        }
+                    }
+                }
+            }
+        }
+
+        .layout-menu {
+            > li {
+                > div {
+                    .layout-menuitem-text {
+                        color: $rootMenuTextColor;
+                    }
+                }
+
+                a {
+                    color: $rootMenuItemTextColor;
+
+                    &:hover {
+                        background-color: $rootMenuItemHoverBgColor;
+                    }
+                }
+
+                &.active-menuitem {
+                    > a {
+                        color: $activeRootMenuItemTextColor;
+                    }
+                }
+
+                > ul {
+                    > li {
+                        &.active-menuitem {
+                            border-color: $activeSubmenuItemTextColor;
+                        }
+                    }
+
+                    li {
+                        a {
+                            color: $submenuItemTextColor;
+        
+                            &:hover {
+                                background-color: $submenuItemHoverBgColor;
+                            }
+                        }
+
+                        &.active-menuitem {
+                            > a {
+                                color: $activeSubmenuItemTextColor;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media (min-width: 993px) {
+    &.layout-horizontal,
+    &.layout-slim,
+    &.layout-slim-plus {
+        .menu-wrapper {
+            .layout-menu-container {
+                .layout-profile {
+                    > ul {
+                        background-color: $externalSubmenuBgColor;
+
+                        > li {
+                            &.info {
+                                .profile-info {
+                                    color: $externalSubmenuItemTextColor;
+
+                                    .layout-profile-role {
+                                        color: rgba($externalSubmenuItemTextColor, .7);
+                                    }
+
+                                    .icons {
+                                        i {
+                                            color: rgba($externalSubmenuItemTextColor, .7);
+
+                                            &:hover {
+                                                color: $externalSubmenuItemTextColor;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            
+                            > a {
+                                color: $externalSubmenuItemTextColor;
+
+                                &:hover {
+                                    background-color: $externalSubmenuItemHoverBgColor;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @mixin extrenalSubmenuitem {
+        li {
+            > a {
+                color: $externalSubmenuItemTextColor;
+
+                &:hover {
+                    background-color: $externalSubmenuItemHoverBgColor;
+                }
+            }
+
+            &.active-menuitem {
+                > a {
+                    color: $externalActiveSubmenuItemTextColor;
+                }
+            }
+        }
+    }
+
+    &.layout-horizontal {
+        .menu-wrapper {
+            .layout-menu-container {
+                .layout-menu {
+                    > li {
+                        > ul {
+                            background-color: $externalSubmenuBgColor;
+                            box-shadow: $menuShadow;
+                            
+                            @include extrenalSubmenuitem;
+                        }
+                    }
+                } 
+            }
+        }
+    }
+
+    &.layout-slim,
+    &.layout-slim-plus {
+        .menu-wrapper {
+            .layout-menu-container {
+                .layout-menu {
+                    .layout-menu-tooltip {
+                        background-color: $menuTooltipBgColor;
+
+                        .layout-menu-tooltip-text {
+                            color: $menuTooltipTextColor ;
+                        }
+
+                        .layout-menu-tooltip-arrow {
+                            border-right-color: $menuTooltipBgColor;
+                        }
+                    }
+
+                    > li {
+                        &.active-menuitem {
+                            > a {
+                                background-color: $slimActiveRootMenuItemBgColor;
+                                color: $slimActiveRootMenuItemTextColor;
+
+                                &:hover {
+                                    color: $slimActiveRootMenuItemTextColor;
+                                }
+                            }
+                        }
+
+                        > ul {
+                            background-color:$externalSubmenuBgColor;
+                            border-color: $externalActiveSubmenuItemTextColor;
+                            box-shadow: $menuShadow;
+
+                            @include extrenalSubmenuitem;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

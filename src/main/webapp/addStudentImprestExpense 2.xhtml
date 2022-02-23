@@ -1,0 +1,179 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">All Students</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+
+					<div class="card card-w-title">
+						<h:form id="form1">
+
+							<p:messages closable="true" autoUpdate="true"></p:messages>
+
+							<p:panel header="Search Student by Name/Sr. No">
+
+								<p:panelGrid columns="5"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel value="Student Name/Sr. No"></p:outputLabel>
+									<p:autoComplete id="acSimple"
+										value="#{addStudentImprestExpenseBean.name}"
+										minQueryLength="3"
+										completeMethod="#{addStudentImprestExpenseBean.autoCompleteStudentInfo}"
+										validatorMessage="Please Enter Correct value">
+										<f:validateRegex
+											pattern="#{regexVar.regex}"></f:validateRegex>
+										<p:ajax event="query" global="false" />
+									</p:autoComplete>
+
+									<p:outputLabel value="Date"></p:outputLabel>
+									<p:calendar value="#{addStudentImprestExpenseBean.addexpdate}"
+										pattern="dd/MM/yyyy" yearRange="c-10:c+10" navigator="true"
+										maxdate="#{addStudentImprestExpenseBean.maxDate}">
+
+
+									</p:calendar>
+
+
+
+									<p:commandButton value="Search" update=":form"
+										actionListener="#{addStudentImprestExpenseBean.searchStudentByName}"></p:commandButton>
+
+								</p:panelGrid>
+
+							</p:panel>
+						</h:form>
+					</div>
+
+					<div class="card card-w-title">
+						<h:form id="form2">
+
+							<p:panel header="Search Student by Class-Section">
+
+								<p:panelGrid columns="8"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel for="@next" style="color:red"
+										value="Select Class"></p:outputLabel>
+									<p:selectOneMenu style="width:250px" filter="true"
+										value="#{addStudentImprestExpenseBean.selectedCLassSection}"
+										required="true" requiredMessage="Please select a class">
+										<f:selectItem itemLabel="#{searchStudentVar.selectHereLabel}"
+											itemValue=""></f:selectItem>
+										<f:selectItems
+											value="#{addStudentImprestExpenseBean.classSection}"></f:selectItems>
+
+										<p:ajax update="sectionid"
+											listener="#{addStudentImprestExpenseBean.allSections}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel for="@next" style="color:red"
+										value="Select Section"></p:outputLabel>
+									<p:selectOneMenu id="sectionid" filter="true"
+										value="#{addStudentImprestExpenseBean.selectedSection}"
+										required="true" requiredMessage="Please select a section">
+										<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+										<f:selectItems
+											value="#{addStudentImprestExpenseBean.sectionList}"></f:selectItems>
+
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Date"></p:outputLabel>
+									<p:calendar value="#{addStudentImprestExpenseBean.addexpdate}"
+										pattern="dd/MM/yyyy" yearRange="c-10:c+10" navigator="true"
+										maxdate="#{addStudentImprestExpenseBean.maxDate}">
+
+
+									</p:calendar>
+
+									<p:commandButton value="Search"
+										action="#{addStudentImprestExpenseBean.searchStudentByClassSection}"
+										update=":form" />
+
+								</p:panelGrid>
+
+							</p:panel>
+
+						</h:form>
+					</div>
+
+					<div class="card card-w-title">
+
+
+
+						<h:form id="form">
+
+							<p:panel id="dataTable"
+								rendered="#{addStudentImprestExpenseBean.b}">
+
+
+
+								<p:dataTable id="up" style="width:100%;border-collapse:collapse"
+									border="1" value="#{addStudentImprestExpenseBean.list}"
+									var="var">
+
+
+									<p:column headerText="Adm. No." style="text-align:center"
+										filterBy="#{var.srNo}">
+
+										<f:facet name="header">
+											<p:outputLabel value="Add No."></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.srNo}"></p:outputLabel>
+									</p:column>
+
+									<p:column style="text-align:center" headerText="Student Name"
+										filterBy="#{var.fname}">
+
+										<f:facet name="header">
+											<p:outputLabel value="Student Name"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.fname}"></p:outputLabel>
+									</p:column>
+
+									<p:columns value="#{addStudentImprestExpenseBean.expenceList}"
+										var="column" columnIndexVar="colIndex">
+
+										<f:facet name="header">
+											<p:outputLabel value="#{column.category}  "></p:outputLabel>
+										</f:facet>
+										<p:inputText style="width:70px!important;"
+											value="#{var.feesMap[column.categoryId]}">
+											<p:keyFilter regEx="/[\d]/"></p:keyFilter>
+										</p:inputText>
+
+
+									</p:columns>
+									<f:facet name="footer">
+
+										<p:commandButton value="Submit"
+											action="#{addStudentImprestExpenseBean.submitExpense}"
+											update=":form1 :form2 :form"></p:commandButton>
+
+
+									</f:facet>
+
+								</p:dataTable>
+
+
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

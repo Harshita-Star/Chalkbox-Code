@@ -1,0 +1,76 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	<f:loadBundle var="addClassVar" basename="myProperties" />
+
+	<ui:define name="title">Add Courseware Quantity</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<p:panel header="Add Courseware Quantity">
+								<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+								<p:panelGrid columns="2"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:outputLabel for="@next" style="color:red"  value="Courseware Name"></p:outputLabel>
+									<p:autoComplete value="#{addCoursewareQuant.bookName}"
+										completeMethod="#{addCoursewareQuant.autoCompleteBook}"
+										forceSelection="true" required="true"
+										requiredMessage="Please Enter Courseware Name" validatorMessage="Please Enter Correct value">
+										<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+										<p:ajax event="query" global="false" />
+									</p:autoComplete>
+
+									<p:outputLabel for="@next" style="color:red"  value="Quantity"></p:outputLabel>
+									<p:inputText value="#{addCoursewareQuant.quantity}"
+										required="true">
+										<p:keyFilter mask="pnum"></p:keyFilter>
+									</p:inputText>
+
+									<p:outputLabel for="@next" style="color:red"  value="Date"></p:outputLabel>
+									<p:calendar value="#{addCoursewareQuant.addDate}" navigator="true"
+										pattern="dd/MM/yyyy" required="true"
+										requiredMessage="Please Enter Date"></p:calendar>
+
+									<p:commandButton value="Proceed"
+										actionListener="#{addCoursewareQuant.createBookList}"
+										update=":form:panelId,:form:dataTable"></p:commandButton>
+								</p:panelGrid>
+								<p:panelGrid id="panelId" columns="1">
+										<p:dataTable rendered="#{addCoursewareQuant.show}" id="dataTable" value="#{addCoursewareQuant.subBookList}" var="var">
+											<p:column headerText="">
+												<p:outputLabel value="#{var.sNo}"></p:outputLabel>
+											</p:column>
+											
+											<p:column style="color:red"  headerText="Unique No.*">
+												<p:inputText id="acNo" value="#{var.bookId}" required="true" requiredMessage="Please Enter Unique No">
+												<f:attribute name="filter1" value="#{var.sNo}"></f:attribute>
+												<p:ajax update=":form:dataTable:acNo" listener="#{addCoursewareQuant.checkDuplicateAccessionNo}"></p:ajax>
+												</p:inputText>
+											</p:column>
+											
+											<p:column headerText="Image (If any) (Allowed file type are :- jpg,jpeg,png)">
+												<p:fileUpload value="#{var.barCode}" mode="simple" allowTypes="/(\.|\/)(gif|jpeg|png)$/" />
+											</p:column>
+										</p:dataTable>
+										<p:commandButton rendered="#{addCoursewareQuant.show}" value="Submit" actionListener="#{addCoursewareQuant.addBookQuantity}" update=":form,:form:dataTable"></p:commandButton>
+									</p:panelGrid>
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

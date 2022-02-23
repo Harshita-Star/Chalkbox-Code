@@ -1,0 +1,124 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Sample</ui:define>
+
+    <ui:define name="content">
+       
+            <div class="ui-fluid">
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <div class="card card-w-title">
+                              <h:form id="form1" >
+            	
+            		<h1> Search Student</h1>
+               		
+               		 <p:messages closable="true" autoUpdate="true"></p:messages>
+               		 		
+               		 		<p:panel header="Search by Student Name">
+	               						
+               		 		<p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+               		 	 		
+               		 			<p:outputLabel value="Student Name"></p:outputLabel>      
+               		 			<p:autoComplete id="acSimple" minQueryLength="3" value="#{viewAttendenceInCalenderFormat.name}" completeMethod="#{viewAttendenceInCalenderFormat.autoCompleteStudentInfo}" validatorMessage="Please Enter Correct value">
+               		 				<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex> 
+               		 				<p:ajax event="query" global="false"/>
+               		 			</p:autoComplete>
+               		 		
+               		 			<p:commandButton styleClass="butwid" icon = "fa fa-search" value="Search" update=":form" actionListener="#{viewAttendenceInCalenderFormat.searchStudentByName}" ></p:commandButton>
+               		 			
+               		 		</p:panelGrid> 
+               						 		
+               		 		</p:panel>
+               		 </h:form>
+               		  <h:form id="form" >
+            	
+            		<p:panel header="Attendance">
+	               	<center><p:dataTable var="var" value="#{viewAttendenceInCalenderFormat.weeks}" id="dataGrid" style="width:80%;">
+        				 <f:facet name="header">
+        				 	<p:panelGrid columns="3">
+        				 	<p:commandButton ajax="false" update=":form" icon="fa fa-fw fa-backward"  action="#{viewAttendenceInCalenderFormat.backward}" >
+											</p:commandButton>
+           					 <p:outputLabel value="#{viewAttendenceInCalenderFormat.month}"></p:outputLabel>
+           					 <p:commandButton update=":form" ajax="false" icon="fa fa-fw fa-forward"  action="#{viewAttendenceInCalenderFormat.forward}" >
+											</p:commandButton>
+           				    </p:panelGrid>
+        				</f:facet>
+        				
+        				<p:column headerText="SUN">
+        				<div style="background-color: #{var.sundayStatusColor}">
+        				  <center><p:outputLabel value="#{var.sunday}" ></p:outputLabel></center>
+        				   </div>
+        				 </p:column>
+        				 
+        				<p:column headerText="MON" >  
+        				<div style="background-color: #{var.mondayStatusColor};" >
+        				<center> <p:outputLabel value="#{var.monday}" ></p:outputLabel></center>
+        				 </div>
+        				</p:column>
+        				
+        				<p:column headerText="TUE">
+        				<div style="background-color: #{var.tuesdayStatusColor}">
+        				<center ><p:outputLabel value="#{var.tuesday}" ></p:outputLabel></center>
+        				</div>
+        				</p:column>
+        				
+        				<p:column headerText="WED">
+        				<div style="background-color: #{var.wesnesdayStatusColor}">
+        				 <center>  <p:outputLabel value="#{var.wesnesday}" ></p:outputLabel></center>
+        				</div>
+        				</p:column>
+        				
+        				<p:column headerText="THU">
+        				<div style="background-color: #{var.thusdayStatusColor}">
+        				 <center>  <p:outputLabel value="#{var.thusday}" ></p:outputLabel></center>
+        				</div>
+        				</p:column>
+        				
+        				<p:column headerText="FRI">
+        				<div style="background-color: #{var.fridayStatusColor}">
+        				<center>   <p:outputLabel value="#{var.friday}" ></p:outputLabel></center>
+        				</div>
+        				</p:column>
+        				
+        				<p:column headerText="SAT">
+        				<div style="background-color: #{var.saturdayStatusColor}">
+        				 <center>  <p:outputLabel value="#{var.saturday}" ></p:outputLabel></center>
+        				</div>
+        				</p:column>
+        				
+        				
+ 
+       					
+ 					</p:dataTable>	
+ 					</center>
+ 							
+ 							 
+               		 		<p:panel>
+               		 		<center>
+               		 			<p:panelGrid columns="2" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+               		 	 			<p:outputLabel value="Present:-#{viewAttendenceInCalenderFormat.present}" style="color:#93F2A3;"></p:outputLabel>  	
+               		 				<p:outputLabel value="Absent:-#{viewAttendenceInCalenderFormat.absent}" style="color:#F79BA3;"></p:outputLabel>  
+               		 				<p:outputLabel value="Leave:-#{viewAttendenceInCalenderFormat.leave}" style="color:#FFBF79;"></p:outputLabel>  	
+               		 				<p:outputLabel value="Medical Leave:-#{viewAttendenceInCalenderFormat.medical}" style="color:#FFFF5722;"></p:outputLabel>  
+               		 				<p:outputLabel value="Preparation Leave:-#{viewAttendenceInCalenderFormat.prepleave}" style="color:#FF0097A7;"></p:outputLabel>
+               		 				<p:outputLabel value="Unmarked:-#{viewAttendenceInCalenderFormat.notMarked}" style="color:#8DC8FF;"></p:outputLabel>
+               		 				<p:outputLabel value="Holiday:-#{viewAttendenceInCalenderFormat.holiday}" style="color:#FF512DA8;"></p:outputLabel>
+               		 			</p:panelGrid> 
+               		 			</center>
+               		 		</p:panel>
+               						 		
+               		 		</p:panel>
+               		 </h:form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+       
+    </ui:define>
+
+</ui:composition>

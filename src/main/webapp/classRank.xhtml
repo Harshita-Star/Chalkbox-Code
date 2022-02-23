@@ -1,0 +1,74 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Class Rank</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form1">
+
+
+							<p:panel id="panel" header="Class Rank Allotment">
+								<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+								<p:outputLabel
+									value="Note : Please drag the rows up and down ⇅ to arrange the classes in order and then click 'ALLOT RANK' to submit"
+									style="font-weigth:bold;font-size:16px;" />
+								<br />
+								<br />
+								<p:dataTable reflow="true" var="var"
+									value="#{classRank.classList}" draggableRows="true"
+									rowIndexVar="index">
+
+									<f:facet name="header">
+										<center>
+											<p:commandButton value="Allot Rank" update=":form1"
+												action="#{classRank.submit}" styleClass="butwid" icon="fa fa-arrow-right"></p:commandButton>
+										</center>
+									</f:facet>
+
+									<p:ajax global="false" event="rowReorder" />
+
+									<p:column headerText="Drag">
+										<center>
+											<p:graphicImage value="drag.png" width="40" height="40"/>
+										</center>
+									</p:column>
+
+									<p:column headerText="Class">
+										<center>
+											<p:outputLabel value="#{var.className}"></p:outputLabel>
+										</center>
+									</p:column>
+
+									<p:column headerText="Order">
+										<p:inputText style="font-weight: bold;" disabled="true" value="#{var.rank}">
+											<p:keyFilter mask="num"></p:keyFilter>
+										</p:inputText>
+									</p:column>
+
+									<f:facet name="footer">
+										<center>
+											<p:commandButton value="Allot Rank" update=":form1"
+												action="#{classRank.submit}" styleClass="butwid" icon="fa fa-arrow-right"></p:commandButton>
+										</center>
+									</f:facet>
+
+								</p:dataTable>
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

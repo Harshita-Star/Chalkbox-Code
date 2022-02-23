@@ -1,0 +1,103 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Message Setting</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<p:messages closable="true" autoUpdate="true"></p:messages>
+						<h:form id="form" enctype="multipart/form-data">
+							<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+
+							<p:panel header="Message Setting">
+								<p:panelGrid columns="3" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+									<p:selectBooleanCheckbox value="#{projectModule.feeenquType}">
+									</p:selectBooleanCheckbox>
+									<p:outputLabel value="Enquiry Message"></p:outputLabel>
+									<p:outputLabel></p:outputLabel>
+
+									<p:selectBooleanCheckbox value="#{projectModule.feesubmitType}">
+									</p:selectBooleanCheckbox>
+									<p:outputLabel value="Fee Message"></p:outputLabel>
+									<p:outputLabel></p:outputLabel>
+
+									<p:selectBooleanCheckbox value="#{projectModule.feeattType}">
+									</p:selectBooleanCheckbox>
+									<p:outputLabel value="Attendance Message"></p:outputLabel>
+									<p:outputLabel></p:outputLabel>
+
+
+									<p:selectBooleanCheckbox
+										value="#{projectModule.feeregistrationType}">
+									</p:selectBooleanCheckbox>
+									<p:outputLabel value="Registration Message"></p:outputLabel>
+									<p:outputLabel></p:outputLabel>
+									
+									<p:selectBooleanCheckbox
+										value="#{projectModule.complaintType}">
+									</p:selectBooleanCheckbox>
+									<p:outputLabel value="Complaint/Appreciation Message"></p:outputLabel>
+									<p:outputLabel></p:outputLabel>
+									
+									<p:selectBooleanCheckbox
+										value="#{projectModule.birthdayType}">
+									</p:selectBooleanCheckbox>
+									<p:outputLabel value="Birthday Message (09:30 AM Daily)"></p:outputLabel>
+									<p:inputTextarea placeholder="Birthday Template..." value="#{projectModule.birthTemplate}"></p:inputTextarea>
+									
+									<p:selectBooleanCheckbox
+										value="#{projectModule.eventNotify}">
+									</p:selectBooleanCheckbox>
+									<p:outputLabel value="Notifications While Updating School Calendar(Events)"></p:outputLabel>
+									<p:outputLabel></p:outputLabel>
+									
+									<p:selectBooleanCheckbox
+										value="#{projectModule.marksheetNotify}">
+									</p:selectBooleanCheckbox>
+									<p:outputLabel value="Notifications While Uploading Exam Marksheet"></p:outputLabel>
+									<p:outputLabel></p:outputLabel>
+									
+									<p:selectBooleanCheckbox
+										value="#{projectModule.resultNotify}">
+									</p:selectBooleanCheckbox>
+									<p:outputLabel value="Notifications on Result Declaration"></p:outputLabel>
+									<p:outputLabel></p:outputLabel>
+									
+									<p:selectBooleanCheckbox
+										value="#{projectModule.elearningNotify}" rendered="#{sideMenuBean.manageELearing}">
+									</p:selectBooleanCheckbox>
+									<p:outputLabel value="E-Learning Notifications" rendered="#{sideMenuBean.manageELearing}"></p:outputLabel>
+									<p:outputLabel rendered="#{sideMenuBean.manageELearing}"></p:outputLabel>
+									
+									<p:selectBooleanCheckbox
+										value="#{projectModule.meetingNotify}" rendered="#{sideMenuBean.manageAddMeeting}">
+									</p:selectBooleanCheckbox>
+									<p:outputLabel value="Notifications for Virtual Class(Meeting)" rendered="#{sideMenuBean.manageAddMeeting}"></p:outputLabel>
+									<p:outputLabel rendered="#{sideMenuBean.manageAddMeeting}"></p:outputLabel>
+								</p:panelGrid>
+									<br />
+								<p:separator />
+								<center>
+									<p:commandButton value="submit" styleClass="butwid" icon="fa fa-upload"
+										actionListener="#{projectModule.messagedefination}"></p:commandButton>
+								</center>
+								<p:separator />
+								<br />
+							</p:panel>
+
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

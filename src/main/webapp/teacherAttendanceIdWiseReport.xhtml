@@ -1,0 +1,122 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" 
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Attendance</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<p:focus context=":form:srcpnl"></p:focus>
+						<h:form id="form">
+							<h1>Staff Attendance Report</h1>
+
+							<p:messages closable="true" autoUpdate="true"></p:messages>
+
+							<p:panel header="Attendance Report" id="srcpnl">
+								<p:panelGrid columns="6" layout="grid"
+									styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none;width:100%; background-color:transparent;">
+									<p:outputLabel value="Search Employee" for="@next" style="color:red" ></p:outputLabel>
+									<p:autoComplete id="acSimple"
+										value="#{teacherAttendanceIdWiseReport.name}"
+										completeMethod="#{teacherAttendanceIdWiseReport.autoCompleteStudentInfo}"
+										forceSelection="true" required="true"
+										requiredMessage="Please Search an Employee First"
+										minQueryLength="3" placeholder="First 3 letters..." validatorMessage="Please Enter Correct value">
+										<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:autoComplete>
+
+									<p:outputLabel value="Start Date" for="@next" style="color:red" ></p:outputLabel>
+									<p:calendar value="#{teacherAttendanceIdWiseReport.startDate}"
+										pattern="dd/MM/yyyy" navigator="true" required="true"
+										requiredMessage="Please Select Start Date" mask="true"
+										readonlyInput="true" focusOnSelect="true"></p:calendar>
+
+									<p:outputLabel value="End Date" for="@next" style="color:red" ></p:outputLabel>
+									<p:calendar value="#{teacherAttendanceIdWiseReport.endDate}"
+										pattern="dd/MM/yyyy" navigator="true" required="true"
+										requiredMessage="Please Select End Date" mask="true"
+										readonlyInput="true" focusOnSelect="true"></p:calendar>
+
+									<p:commandButton action="#{teacherAttendanceIdWiseReport.show}"
+										value="Show" update=":form"></p:commandButton>
+
+									<h:commandLink
+										rendered="#{teacherAttendanceIdWiseReport.teacherList.size() gt 0}">
+										<p:graphicImage name="images/excellogo.png"
+											library="avalon-layout" width="100" height="40"></p:graphicImage>
+										<pe:exporter type="xlsx" target=":form:up"
+											fileName="StaffAttendance"></pe:exporter>
+									</h:commandLink>
+								</p:panelGrid>
+							</p:panel>
+
+							<p:dataTable id="up"
+								value="#{teacherAttendanceIdWiseReport.teacherList}" var="info"
+								rowIndexVar="rowId"
+								rowStyleClass="#{(info.inTime eq ' ' &amp;&amp; info.outTime eq ' ') ? 'ABSENT' : ((info.inTime eq ' ' || info.outTime eq ' ') ? 'MEDICAL' : '')}">
+
+								<p:column headerText="S.No.">
+									<f:facet name="header">
+								S.No.
+								</f:facet>
+									<p:outputLabel value="#{rowId+1}"></p:outputLabel>
+								</p:column>
+
+								<p:column headerText="Name">
+									<f:facet name="header">
+								Name
+								</f:facet>
+									<p:outputLabel value="#{info.name}"></p:outputLabel>
+								</p:column>
+
+								<p:column headerText="Date">
+									<f:facet name="header">
+								Date
+								</f:facet>
+									<p:outputLabel value="#{info.strDoj}"
+										style="font-weight: bold;"></p:outputLabel>
+								</p:column>
+
+								<p:column headerText="In Time">
+									<f:facet name="header">
+								In Time
+								</f:facet>
+									<p:outputLabel value="#{info.inTime}"
+										style="font-weight: bold;"></p:outputLabel>
+								</p:column>
+
+								<p:column headerText="Out Time">
+									<f:facet name="header">
+								Out Time
+								</f:facet>
+									<p:outputLabel value="#{info.outTime}"
+										style="font-weight: bold;"></p:outputLabel>
+								</p:column>
+
+								<p:column headerText="Total Time">
+									<f:facet name="header">
+								Total Time
+								</f:facet>
+									<p:outputLabel value="#{info.totalTime}"
+										style="font-weight: bold;"></p:outputLabel>
+								</p:column>
+
+							</p:dataTable>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

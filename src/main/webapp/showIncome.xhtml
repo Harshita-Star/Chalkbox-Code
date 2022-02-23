@@ -1,0 +1,273 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	<f:loadBundle var="addClassVar" basename="myProperties" />
+
+	<ui:define name="title">Income Report</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="initializePageDataForm">
+							<p:remoteCommand name="initializePageDataCommand" autoRun="true"
+								action="#{showIncome.init()}" update=":form" />
+						</h:form>
+						<h:form id="form">
+
+							<h1>#{showReportVar.showIncomeReportTitle}</h1>
+							<p:panel header="Show Income" id="main">
+								<p:messages closable="true" autoUpdate="true"></p:messages>
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group">
+									
+									<p:outputLabel value="Select Received From" for="@next" style="color:red" ></p:outputLabel>
+									<p:selectOneMenu rendered="#{sideMenuBean.list.country eq 'UAE'}" value="#{showIncome.payfrom}" filter="true" required="true" requiredMessage="Please Select Received From">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItem itemLabel="All" itemValue="all"></f:selectItem>
+										<f:selectItem itemLabel="Fee" itemValue="Fee"></f:selectItem>
+										<f:selectItems value="#{showIncome.paytoList}"></f:selectItems>
+										<f:selectItem itemLabel="Other" itemValue="other"></f:selectItem>
+										<p:ajax global="false"></p:ajax>
+									</p:selectOneMenu>
+									
+									<p:selectOneMenu rendered="#{sideMenuBean.list.country ne 'UAE'}" value="#{showIncome.payfrom}" filter="true" required="true" requiredMessage="Please Select Received From">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItem itemLabel="All" itemValue="all"></f:selectItem>
+										<f:selectItems value="#{showIncome.paytoList}"></f:selectItems>
+										<f:selectItem itemLabel="Other" itemValue="other"></f:selectItem>
+										<p:ajax global="false"></p:ajax>
+									</p:selectOneMenu>
+									
+									<p:outputLabel value="Select category" for="@next" style="color:red" ></p:outputLabel>
+									<p:selectOneMenu value="#{showIncome.category}" filter="true" required="true" requiredMessage="Please Select Category">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItem itemValue="-1" itemLabel="All"></f:selectItem>
+										<f:selectItems value="#{showIncome.categoryList}"></f:selectItems>
+										<p:ajax listener="#{showIncome.reportCategoryListener}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Select Type" for="@next" style="color:red" ></p:outputLabel>
+									<p:selectOneMenu value="#{showIncome.selectedFilter}"
+										required="true" filter="true"
+										requiredMessage="#{showReportVar.showReportSelectCategoryValidation}">
+
+										<f:selectItem itemValue=""
+											itemLabel="#{showReportVar.selectHereLabel}"></f:selectItem>
+										<f:selectItem
+											itemValue="#{showReportVar.showReportDailyLabel}"
+											itemLabel="#{showReportVar.showReportDailyLabel}"></f:selectItem>
+										<f:selectItem
+											itemValue="#{showReportVar.showReportWeeklyLabel}"
+											itemLabel="#{showReportVar.showReportWeeklyLabel}"></f:selectItem>
+										<f:selectItem
+											itemValue="#{showReportVar.showReportMonthlyLabel}"
+											itemLabel="#{showReportVar.showReportMonthlyLabel}"></f:selectItem>
+										<f:selectItem
+											itemValue="#{showReportVar.showReportQuarterlyLabel}"
+											itemLabel="#{showReportVar.showReportQuarterlyLabel}"></f:selectItem>
+										<f:selectItem
+											itemValue="#{showReportVar.showReportYearlyLabel}"
+											itemLabel="#{showReportVar.showReportYearlyLabel}"></f:selectItem>
+										<f:selectItem itemValue="Customreport"
+											itemLabel="#{showReportVar.showReportCustomReportLabel}"></f:selectItem>
+										<p:ajax update="main" listener="#{showIncome.selectedFilter}"></p:ajax>
+									</p:selectOneMenu>
+									
+									<p:outputLabel/><p:outputLabel/>
+
+									<p:outputLabel  for="@next" style="color:red" rendered="#{showIncome.dailyShow}"
+										value="#{showReportVar.showReportSelectADayLabel}"></p:outputLabel>
+									<p:calendar rendered="#{showIncome.dailyShow}"
+										pattern="dd/MM/yyyy" navigator="true"
+										value="#{showIncome.dailySelected}" required="true"
+										requiredMessage="#{showReportVar.showReportSelectDayValidation}"></p:calendar>
+									<p:commandButton update=":form:up,:form:printFirst"  styleClass="butwid" icon="fa fa-search"
+										actionListener="#{showIncome.dailyReport}"
+										rendered="#{showIncome.dailyShow}"
+										value="#{showReportVar.showReportSearchNowButtonLabel}"></p:commandButton>
+
+									<p:outputLabel for="@next" style="color:red"  rendered="#{showIncome.weeklyShow}"
+										value="#{showReportVar.showReportSelectAWeekDayLabel}"></p:outputLabel>
+									<p:calendar rendered="#{showIncome.weeklyShow}"
+										pattern="dd/MM/yyyy" navigator="true"
+										value="#{showIncome.weeklySelected}" required="true"
+										requiredMessage="#{showReportVar.showReportSelectAWeekDayLabel}"></p:calendar>
+									<p:commandButton update=":form:up,:form:printFirst"  styleClass="butwid" icon="fa fa-search"
+										actionListener="#{showIncome.weeklyReport}"
+										rendered="#{showIncome.weeklyShow}"
+										value="#{showReportVar.showReportSearchNowButtonLabel}"></p:commandButton>
+
+									<p:outputLabel  for="@next" style="color:red" rendered="#{showIncome.monthlyShow}"
+										value="#{showReportVar.showReportSelectMonthLabel}"></p:outputLabel>
+									<p:selectOneMenu rendered="#{showIncome.monthlyShow}"
+										filter="true" value="#{showIncome.selectedMonth}"
+										required="true"
+										requiredMessage="#{showReportVar.showReportSelectMonthValidation}">
+										<f:selectItem itemLabel="#{showReportVar.selectHereLabel}"
+											itemValue=""></f:selectItem>
+										<f:selectItems value="#{showIncome.monthList}"></f:selectItems>
+									</p:selectOneMenu>
+									<p:outputLabel  for="@next" style="color:red" rendered="#{showIncome.monthlyShow}"
+										value="#{showReportVar.showReportSelectYearlyLabel}"></p:outputLabel>
+									<p:selectOneMenu rendered="#{showIncome.monthlyShow}"
+										value="#{showIncome.selectedYear}" required="true"
+										requiredMessage="#{showReportVar.showReportSelectYearValidation}">
+
+										<f:selectItem itemLabel="#{showReportVar.selectHereLabel}"
+											itemValue=""></f:selectItem>
+										<f:selectItems value="#{showIncome.yearList}"></f:selectItems>
+
+									</p:selectOneMenu>
+
+									<p:commandButton actionListener="#{showIncome.monthlyReport}"  styleClass="butwid" icon="fa fa-search"
+										update=":form:up,:form:printFirst"
+										rendered="#{showIncome.monthlyShow}"
+										value="#{showReportVar.showReportSearchNowButtonLabel}"></p:commandButton>
+
+									<p:outputLabel for="@next" style="color:red"  rendered="#{showIncome.quarterlyShow}"
+										value="#{showReportVar.showReportSelectQuarterLabel}"></p:outputLabel>
+									<p:selectOneMenu rendered="#{showIncome.quarterlyShow}"
+										filter="true" value="#{showIncome.selectedQuarter}"
+										required="true"
+										requiredMessage="#{showReportVar.showReportSelectQuarterValidation}">
+										<f:selectItem itemLabel="#{showReportVar.selectHereLabel}"
+											itemValue=""></f:selectItem>
+										<f:selectItem
+											itemLabel="#{showReportVar.showReportSelectFirstQuarterLabel}"
+											itemValue="1"></f:selectItem>
+										<f:selectItem
+											itemLabel="#{showReportVar.showReportSelectSecondQuarterLabel}"
+											itemValue="2"></f:selectItem>
+										<f:selectItem
+											itemLabel="#{showReportVar.showReportSelectThirdQuarterLabel}"
+											itemValue="3"></f:selectItem>
+									</p:selectOneMenu>
+									<p:commandButton actionListener="#{showIncome.quarterlyReport}"  styleClass="butwid" icon="fa fa-search"
+										update=":form:up,:form:printFirst"
+										rendered="#{showIncome.quarterlyShow}"
+										value="#{showReportVar.showReportSearchNowButtonLabel}"></p:commandButton>
+
+									<p:outputLabel for="@next" style="color:red"  rendered="#{showIncome.yearlyShow}"
+										value="#{showReportVar.showReportSelectYearlyLabel}"></p:outputLabel>
+									<p:selectOneMenu rendered="#{showIncome.yearlyShow}"
+										filter="true" value="#{showIncome.selectedYear}"
+										required="true"
+										requiredMessage="#{showReportVar.showReportSelectYearValidation}">
+
+										<f:selectItem itemLabel="#{showReportVar.selectHereLabel}"
+											itemValue=""></f:selectItem>
+										<f:selectItems value="#{showIncome.yearList}"></f:selectItems>
+
+									</p:selectOneMenu>
+									<p:commandButton actionListener="#{showIncome.yearlyReport}"  styleClass="butwid" icon="fa fa-search"
+										update=":form:up,:form:printFirst"
+										rendered="#{showIncome.yearlyShow}"
+										value="#{showReportVar.showReportSearchNowButtonLabel}"></p:commandButton>
+									<p:outputPanel id="printFirst">
+										<p:commandButton action="#{showIncome.printIncomeReport}"  styleClass="butwid" icon="fa fa-print"
+											onclick="target='_blank'" ajax="false" update=":form:up"
+											value="Print" rendered="#{showIncome.reportShowOther}"></p:commandButton>
+									</p:outputPanel>
+
+								</p:panelGrid>
+
+
+								<p:panelGrid columns="4" rendered="#{showIncome.customShow}"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group">
+
+									<p:outputLabel for="@next" style="color:red" 
+										value="#{showReportVar.showReportEnterStartingDateLabel}"></p:outputLabel>
+									<p:calendar pattern="dd/MM/yyyy" navigator="true"
+										value="#{showIncome.startingDate}" required="true"
+										requiredMessage="#{showReportVar.showReportSelectStartingDateValidation}"></p:calendar>
+
+									<p:outputLabel for="@next" style="color:red" 
+										value="#{showReportVar.showReportEnterEndingDateLabel}"></p:outputLabel>
+									<p:calendar pattern="dd/MM/yyyy" navigator="true"
+										value="#{showIncome.endingDate}" required="true"
+										requiredMessage="#{showReportVar.showReportSelectEndingDateValidation}"></p:calendar>
+
+									<p:commandButton update=":form:up,:form:printSecond"  styleClass="butwid" icon="fa fa-search"
+										actionListener="#{showIncome.filterTable}"
+										value="#{showReportVar.showReportSearchNowButtonLabel}"></p:commandButton>
+
+									<p:outputPanel id="printSecond">
+										<p:commandButton action="#{showIncome.printIncomeReport}"  styleClass="butwid" icon="fa fa-print"
+											ajax="false" onclick="target='_blank'" update=":form:up"
+											value="Print" rendered="#{showIncome.reportShowCustom}"></p:commandButton>
+									</p:outputPanel>
+
+								</p:panelGrid>
+
+								<p:outputPanel id="up">
+
+									<p:dataTable reflow="true" var="var"
+										value="#{showIncome.incomeList}" rowIndexVar="index">
+
+										<p:column headerText="S.No." style="width:40px">
+											<p:outputLabel value="#{index+1}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="#{showReportVar.showReportHeaderDate}">
+											<p:outputLabel value="#{var.strIncomeDate}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Category">
+											<p:outputLabel value="#{var.category}"></p:outputLabel>
+										</p:column>
+										
+										<p:column headerText="Expense For">
+											<p:outputLabel value="#{var.payTo}"></p:outputLabel>
+										</p:column>
+
+										<p:column
+											headerText="#{showReportVar.showReportHeaderAmount} (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})">
+											<p:outputLabel value="#{var.amount}">
+											<f:convertNumber groupingUsed="false" minFractionDigits="2"
+												maxFractionDigits="2"></f:convertNumber>
+											</p:outputLabel>
+											<f:facet name="footer">
+											<p:panelGrid columns="1">
+												<p:outputLabel value="Total Income" />
+												<p:outputLabel
+													value="(#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'}) " />
+												<p:outputLabel value="#{showIncome.incomeAmount}">
+													<f:convertNumber groupingUsed="false" minFractionDigits="2"
+														maxFractionDigits="2"></f:convertNumber>
+												</p:outputLabel>
+											</p:panelGrid>
+											</f:facet>
+										</p:column>
+
+										<p:column headerText="Voucher/Receipt No">
+											<p:outputLabel value="#{var.voucherNo}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Description" style="width:300px">
+											<p:outputLabel value="#{var.description}"></p:outputLabel>
+										</p:column>
+
+									</p:dataTable>
+
+								</p:outputPanel>
+
+							</p:panel>
+
+						</h:form>
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

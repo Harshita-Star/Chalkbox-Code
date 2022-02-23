@@ -1,0 +1,86 @@
+.layout-topbar {
+    box-shadow: $topbarBoxShadow;
+    background-color: $topbarBgColor;
+    @include transition(width $transitionDuration);
+
+    .layout-topbar-wrapper {
+        .layout-topbar-left {
+            .menu-button {
+                color: $topbarItemTextColor;
+                background-color: $topbarItemBgColor;
+                @include transition(background-color $transitionDuration);
+
+                &:hover {
+                    background-color: darken($topbarItemBgColor, 15%);
+                }
+            }
+        }
+
+        .layout-topbar-right {
+            .layout-topbar-actions {
+                .topbar-item {
+                    > a {
+                        color: $topbarItemTextColor;
+                        @include transition(background-color $transitionDuration);
+
+                        &:hover {
+                            background-color: $topbarItemTextHoverBgColor;
+                        }
+                    }
+
+                    > ul {
+                        box-shadow: $topbarItemSubmenuBoxShadow;
+                        background-color: $topbarItemSubmenuBgColor;
+                        color: $topbarItemSubmenuTextColor;
+
+                        .layout-submenu-header {
+                            .header-helper-text {
+                                color: $topbarItemSubmenuSecondaryTextColor;
+                            }
+                        }
+
+                        .layout-submenu-item {
+                            @include transition(background-color $transitionDuration);
+
+                            &:hover {
+                                background-color: $topbarItemSubmenuItemHoverBgColor;
+                            }   
+                        }
+
+                        &.search-item-submenu {
+                            .search-input-wrapper {
+                                background-color: $topbarBgColor;
+
+                                input {
+                                    background-color: $topbarItemBgColor;
+                                    color: $topbarItemTextColor;
+
+                                    &::placeholder{
+                                        color: lighten($topbarItemTextColor, 10%);
+                                    }
+                                }
+
+                                i {
+                                    color: $topbarItemTextColor;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                .topbar-item-v-separator {
+                    border-right-color: $topbarItemSeparatorBorderColor;
+                }
+            }
+        }
+
+        .layout-rightpanel-button {
+            color: $topbarItemTextColor;
+
+            &:hover {
+                background-color: $topbarItemTextHoverBgColor;
+                @include transition(background-color $transitionDuration);
+            }
+        }
+    }
+}

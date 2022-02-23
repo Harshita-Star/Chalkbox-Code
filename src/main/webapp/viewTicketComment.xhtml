@@ -1,0 +1,93 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Ticket Details</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form1">
+						<p:growl showDetail="true"  autoUpdate="true"/>
+						<p:panel>
+						<f:facet name="header">
+							<span>Ticket Details</span>
+							<span> <p:commandLink
+						style="float: right;margin-left: 15px;color: blue;font-size:15px;"
+						immediate="true" value="All Tickets"
+						action="viewUserTicket.xhtml?faces-redirect=true"></p:commandLink>
+							</span>
+						</f:facet>
+							<p:panelGrid columns="6"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:outputLabel value="Ticket No : " style="font-weight:bold;"></p:outputLabel>
+									<p:outputLabel value="#{viewTicketCommentBean.selected.ticketNo}"></p:outputLabel>
+									
+									<p:outputLabel value="Ticket Date : " style="font-weight:bold;"></p:outputLabel>
+									<p:outputLabel value="#{viewTicketCommentBean.selected.ticketDateStr}"></p:outputLabel>
+									
+									<p:outputLabel value="Added by : " style="font-weight:bold;"></p:outputLabel>
+									<p:outputLabel value="#{viewTicketCommentBean.selected.userId}"></p:outputLabel>
+									
+									<p:outputLabel value="Description : " style="font-weight:bold;"></p:outputLabel>
+									<p:outputLabel value="#{viewTicketCommentBean.selected.description}"></p:outputLabel>
+									
+									<p:outputLabel value="Ticket Type : " style="font-weight:bold;"></p:outputLabel>
+									<p:outputLabel value="#{viewTicketCommentBean.selected.type}"></p:outputLabel>
+									
+									<p:outputLabel value="Status : " style="font-weight:bold;"></p:outputLabel>
+									<p:outputLabel value="#{viewTicketCommentBean.selected.status}"></p:outputLabel>
+									
+									<p:outputLabel  rendered="#{viewTicketCommentBean.show}" value="Any Comments : " for="@next" style="color:red;font-weight:bold;"></p:outputLabel>
+									<p:inputTextarea rendered="#{viewTicketCommentBean.show}" value="#{viewTicketCommentBean.comment}" required="true" requiredMessage="Please Write a Comment"></p:inputTextarea>
+									
+									<p:commandButton rendered="#{viewTicketCommentBean.show}" value="Add Comment" update=":form1"
+										action="#{viewTicketCommentBean.addRemark}"></p:commandButton>
+								</p:panelGrid>
+								<br/>
+								<br/>
+							<p:dataTable reflow="true" var="var"
+								value="#{viewTicketCommentBean.list}">
+
+								<p:column headerText="S.No" style="width:40px;">
+									<h:outputText value="#{var.sno}"></h:outputText>
+								</p:column>
+
+								<p:column headerText="Comment Date"
+									filterBy="#{var.ticketDateStr}" >
+									<h:outputText value="#{var.ticketDateStr}"></h:outputText>
+								</p:column>
+								
+								
+								<p:column headerText="Comment">
+									<h:outputText value="#{var.comment}">
+									</h:outputText>
+								</p:column>
+								
+								<p:column headerText="Added By" filterBy="#{var.userId}">
+									<h:outputText value="#{var.userId}"></h:outputText>
+								</p:column>
+								
+								<p:column headerText="Status" filterBy="#{var.status}">
+									<h:outputText value="#{var.status}">
+									</h:outputText>
+								</p:column>
+							</p:dataTable>
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

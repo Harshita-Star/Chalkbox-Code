@@ -1,0 +1,116 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Class Wise Strength</ui:define>
+
+	<ui:define name="content">
+
+
+		<style>
+.ui-datatable .ui-datatable-scrollable-body,
+	.ui-datatable-scrollable-header, .ui-datatable-footer,
+	.ui-datatable-header {
+	width: 100% !important;
+}
+
+body .ui-datatable thead th, body .ui-datatable tbody td {
+	width: var(--w) !important;
+}
+
+body .ui-datatable  .ui-datatable-header {
+	position: sticky !important;
+	top: 60px !important;
+	width: 100% !important;
+}
+
+.ui-datatable-scrollable .ui-datatable-scrollable-header,
+	.ui-datatable-scrollable .ui-datatable-scrollable-footer {
+	position: sticky !important;
+	top: 115px !important;
+}
+</style>
+
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form" enctype="multipart/form-data">
+							<p:panel header="Class Strength Reports">
+
+								<p:commandButton value="PDF" icon="fa fa-file-pdf-o" style="top:-15px;margin-right: 10px;" 
+								styleClass="butwid" ajax="false"
+									process="@this"
+									actionListener="#{smallClassStrength.exportClassStrnPdf}">
+
+									<p:fileDownload value="#{smallClassStrength.file}" />
+								</p:commandButton>
+
+								<h:commandLink>
+									<p:graphicImage name="images/excellogo.png"
+										library="avalon-layout" width="100" height="40"></p:graphicImage>
+									<pe:exporter type="xlsx" target=":form:dttt"
+										fileName="All_Classs_Strength"></pe:exporter>
+								</h:commandLink>
+
+
+								<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+								<p:dataTable id="dttt" scrollWidth="100%" scrollable="true"
+									value="#{smallClassStrength.finallist}" var="var" reflow="true">
+
+									<f:facet name="header">
+										<p:outputLabel
+											style="margin: 0px; font-size: 25px !important; font-weight: bold;"
+											value="All Class Strength"></p:outputLabel>
+									</f:facet>
+
+									<p:columnGroup type="header">
+										<p:row>
+											<p:column headerText="S.No"></p:column>
+											<p:column headerText="Class Name"></p:column>
+											<p:column headerText="Section"></p:column>
+											<p:column headerText="Total"></p:column>
+										</p:row>
+
+									</p:columnGroup>
+
+									<p:column headerText="S.No">
+										<p:outputLabel value="#{var.sno}"></p:outputLabel>
+									</p:column>
+
+
+
+									<p:column headerText="Class Name">
+										<p:outputLabel value="#{var.className}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Section">
+										<p:outputLabel value="#{var.section}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Total">
+										<p:outputLabel value="#{var.total}"></p:outputLabel>
+										<f:facet name="footer">
+											<p:outputLabel value="#{smallClassStrength.totalStudents}"></p:outputLabel>
+										</f:facet>
+
+									</p:column>
+
+								</p:dataTable>
+							</p:panel>
+						</h:form>
+
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

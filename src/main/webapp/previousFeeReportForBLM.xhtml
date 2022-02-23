@@ -1,0 +1,148 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	 template="/WEB-INF/schoolMasterTemplate.xhtml">
+
+	<ui:define name="title">Previous Fee</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form1">
+
+							<p:commandButton style="width:100px;" value="Print"
+								rendered="#{PreviousFeeReportForBLM.b}">
+								<p:printer target="dataTable"></p:printer>
+							</p:commandButton>
+							
+							     <p:commandButton value="PDF" style="width:50px;" ajax="false" process="@this" actionListener="#{PreviousFeeReportForBLM.exportPreviousPdf}"> 
+                    
+                                    <p:fileDownload value="#{PreviousFeeReportForBLM.file}"/>
+                                </p:commandButton>
+                                
+                                   <h:commandLink >
+                                        <p:graphicImage name="images/excellogo.png"
+                                            library="avalon-layout" width="100" height="40"></p:graphicImage>
+                                        <pe:exporter type="xlsx" target="table"
+                                            fileName="Previous_Fee_Collection.xlsx" ></pe:exporter>
+                                    </h:commandLink>
+							
+							<p:outputPanel id="dataTable">
+								
+								<p:panelGrid columns="3" style="width:100%">
+
+									<p:panelGrid columns="2">
+										<p:outputLabel value="Total:-"></p:outputLabel>
+										<h:outputText value="#{PreviousFeeReportForBLM.total}"></h:outputText>
+									</p:panelGrid>
+								</p:panelGrid>
+
+								<p:dataTable id="table" reflow="true"
+									style="width:100%;border-collapse:collapse;text-align: center;" border="1"
+									value="#{PreviousFeeReportForBLM.studentList}" var="var">
+									
+									<f:facet name="header">
+											<p:outputLabel value=""></p:outputLabel>
+										</f:facet>
+
+									<p:column headerText="Add. No.">
+
+										<f:facet name="header">
+											<p:outputLabel value="Sr. No."></p:outputLabel>
+										</f:facet>
+										
+											<p:outputLabel value="#{var.sno}"></p:outputLabel>
+										
+									</p:column>
+
+									<p:column headerText="Admission Number">
+										<f:facet name="header">
+											<p:outputLabel value="Adm. No."></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.srNo}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Name" sortBy="#{var.fname}">
+										<f:facet name="header">
+											<p:outputLabel value="Name"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.fname}"></p:outputLabel>
+									</p:column>
+									
+									<p:column headerText="Class &amp; Section">
+										<f:facet name="header">
+											<p:outputLabel value="Class &amp; Section"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.className} - #{var.sectionName}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Father's Name">
+										<f:facet name="header">
+											<p:outputLabel value="Father's Name"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.fatherName}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Contact Number">
+										<f:facet name="header">
+											<p:outputLabel value="Contact Number"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.fathersPhone}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Total Fees">
+										<f:facet name="header">
+											<p:outputLabel value="Total Fees "></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.admissionFeeDueAmount}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Paid Amount">
+										<f:facet name="header">
+											<p:outputLabel value="Paid Amount "></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.percentage}"></p:outputLabel>
+									</p:column>
+									
+									<p:column headerText="Discount Amount">
+										<f:facet name="header">
+											<p:outputLabel value="Discount Amount "></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.discountfee}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Left Amount">
+										<f:facet name="header">
+											<p:outputLabel value="Left Amount "></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.annualFeeDueAmount}"></p:outputLabel>
+									</p:column>
+
+								
+
+
+
+								</p:dataTable>
+							</p:outputPanel>
+						</h:form>
+
+						
+
+
+						
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

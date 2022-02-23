@@ -1,0 +1,103 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Biometric Record</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<p:focus context=":form:attPnl" />
+						<h:form id="form">
+							<h1>Biometric Attendance Record</h1>
+
+							<p:messages closable="true" autoUpdate="true"></p:messages>
+
+							<p:panel header="Biometric Attendance Record" id="attPnl">
+
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-4,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:outputLabel  for="@next" style="color:red" value="Select Date"></p:outputLabel>
+									<p:calendar value="#{dateWiseBiometricReport.date}"
+										pattern="dd/MM/yyyy" navigator="true" required="true"
+										requiredMessage="Please Select Date" maxdate="new Date();"
+										mask="true" readonlyInput="true" id="temp"
+										focusOnSelect="true">
+									</p:calendar>
+									<p:commandButton action="#{dateWiseBiometricReport.show}"
+										value="Show" update=":form"></p:commandButton>
+
+									<h:commandLink
+										rendered="#{dateWiseBiometricReport.teacherDetails.size() gt 0}">
+										<p:graphicImage name="images/excellogo.png"
+											library="avalon-layout" width="100" height="40"></p:graphicImage>
+										<pe:exporter type="xlsx" target=":form:up"
+											fileName="StaffBioMetricRecord#{dateWiseBiometricReport.dateStr}"></pe:exporter>
+									</h:commandLink>
+								</p:panelGrid>
+							</p:panel>
+
+							<p:dataTable id="up"
+								value="#{dateWiseBiometricReport.teacherDetails}" var="info"
+								rowIndexVar="rowId"
+								rowStyleClass="#{(info.status eq '') ? 'ABSENT' : ''}">
+
+								<p:column headerText="S.No.">
+									<f:facet name="header">
+								S.No.
+								</f:facet>
+									<p:outputLabel value="#{rowId+1}"></p:outputLabel>
+								</p:column>
+
+								<p:column headerText="Name">
+									<f:facet name="header">
+								Name
+								</f:facet>
+									<p:outputLabel value="#{info.name}"></p:outputLabel>
+								</p:column>
+
+								<p:column headerText="Category">
+									<f:facet name="header">
+								Category
+								</f:facet>
+									<p:outputLabel value="#{info.category}"></p:outputLabel>
+								</p:column>
+
+								<p:column headerText="Sub Category">
+									<f:facet name="header">
+								Sub Category
+								</f:facet>
+									<p:outputLabel value="#{info.subCateg}"></p:outputLabel>
+								</p:column>
+
+								<p:column headerText="Punch Time"  style="width:165px !important">
+									<f:facet name="header">
+								Punch Time
+								</f:facet>
+									<p:dataList rendered="false" value="#{info.punchList}" var="var"
+										type="ordered">
+        									<b>#{var}</b>
+   									 </p:dataList>
+   									 <p:outputLabel style="font-weight: bold;" value="#{info.status}"></p:outputLabel>
+								</p:column>
+
+
+							</p:dataTable>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

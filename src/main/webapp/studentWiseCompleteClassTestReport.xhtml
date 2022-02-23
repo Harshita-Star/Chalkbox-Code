@@ -1,0 +1,98 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Student Test Report</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+
+							<h1>Search Student</h1>
+
+							<p:messages closable="true" autoUpdate="true"></p:messages>
+
+							<p:panel header="Search Student by Student Name/Sr. No">
+
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel value="Student Name/Sr. No"></p:outputLabel>
+									<p:autoComplete id="acSimple"
+										value="#{stdCompltClsTstReport.name}" minQueryLength="3"
+										completeMethod="#{stdCompltClsTstReport.autoCompleteStudentInfo}" validatorMessage="Please Enter Correct value">
+										<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+										<p:ajax event="query" global="false" />
+									</p:autoComplete>
+
+									<p:commandButton value="Search" update=":form,:form:dataTable" styleClass="butwid" icon="fa fa-search"
+										actionListener="#{stdCompltClsTstReport.searchStudentByName}"></p:commandButton>
+									<p:commandButton value="Print" styleClass="butwid" icon="fa fa-print"
+										rendered="#{stdCompltClsTstReport.show}">
+										<p:printer target="dataTable"></p:printer>
+									</p:commandButton>
+								</p:panelGrid>
+								
+							</p:panel>
+							<br />
+							<p:outputPanel id="dataTable" rendered="#{stdCompltClsTstReport.show}" style="border:none !important">
+									<center>
+										<p
+											style="font-family: initial; font-style: oblique; font-size: 25px !important; font-weight: bold; margin: 0px;">#{headerBean.name}</p>
+										<p
+											style="font-family: initial; font-style: oblique; font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.affiliationNo}</p>
+										<p
+											style="font-family: initial; font-style: oblique; font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.finalAddress}</p>
+										<p
+											style="font-family: initial; font-style: oblique; font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.phoneno}</p>
+										<p
+											style="margin: 0px; font-size: 25px !important; font-weight: bold;">Student Wise Test Report</p>
+									</center>
+									<p:dataTable id="up" reflow="true" style="border-collapse:collapse" border="1" value="#{stdCompltClsTstReport.list}" var="var">
+										<p:column headerText="Add. No." style="text-align:center">
+											<f:facet name="header">
+												<p:outputLabel value="S.No."></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.sno}"></p:outputLabel>
+										</p:column>
+										
+										<p:column style="text-align:center" headerText="Date">
+											<f:facet name="header">
+												<p:outputLabel value="Date"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.dt}"></p:outputLabel>
+										</p:column>
+										
+										<p:column style="text-align:center" headerText="Test Name">
+											<f:facet name="header">
+												<p:outputLabel value="Test Name"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.testName}"></p:outputLabel>
+										</p:column>
+										
+										<p:columns value="#{stdCompltClsTstReport.subjectList}" var="subject" >
+											<f:facet name="header">
+												<p:outputLabel value="#{subject.subjectName}"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.marksMap[subject.subjectId]}"></p:outputLabel>
+
+										</p:columns>
+									</p:dataTable>
+								</p:outputPanel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

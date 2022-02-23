@@ -1,0 +1,87 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	<f:loadBundle var="addClassVar" basename="myProperties" />
+
+	<ui:define name="title">Performance Graph</ui:define>
+
+	<ui:define name="content">
+		<h:form id="form">
+			<div class="ui-fluid">
+				<div class="ui-g">
+					<div class="ui-g-12">
+						<div class="card card-w-title">
+							<h:form id="form">
+								<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+								<p:panel header="Student Performance Comparison Subject Wise">
+									<p:panelGrid columns="6"
+										columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+										layout="grid" styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+
+										<p:outputLabel value="Student Name"></p:outputLabel>
+										<p:autoComplete forceSelection="true" minQueryLength="3"
+											id="acSimple" value="#{studentSubjPerformanceBarGraph.name}"
+											completeMethod="#{studentSubjPerformanceBarGraph.autoCompleteStudentInfo}" validatorMessage="Please Enter Correct value">
+											<p:ajax event="itemSelect"
+												listener="#{studentSubjPerformanceBarGraph.allTerm}"
+												update=":form"></p:ajax>
+												<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+										</p:autoComplete>
+
+										<p:outputLabel value="Select Term"></p:outputLabel>
+										<p:selectOneMenu filter="true"
+											value="#{studentSubjPerformanceBarGraph.selectTerm}">
+											<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+											<f:selectItems
+												value="#{studentSubjPerformanceBarGraph.termList}"></f:selectItems>
+											<p:ajax listener="#{studentSubjPerformanceBarGraph.show}"
+												update=":form"></p:ajax>
+										</p:selectOneMenu>
+
+										<p:outputLabel value="Select Exam"></p:outputLabel>
+										<p:selectOneMenu filter="true"
+											value="#{studentSubjPerformanceBarGraph.selectExam}">
+											<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+											<f:selectItems
+												value="#{studentSubjPerformanceBarGraph.examList}"></f:selectItems>
+										</p:selectOneMenu>
+
+
+										
+									</p:panelGrid>
+									
+									<br />
+								<p:separator />
+								<center>
+								
+								<p:commandButton update=":form" value="Show Graph" styleClass="butwid" icon="fa fa-line-chart"
+											action="#{studentSubjPerformanceBarGraph.search}"></p:commandButton>
+								
+								
+								</center>
+								<p:separator />
+								<br />
+									
+									<br/>	
+									<p:chart type="bar" style="height:500px"
+										rendered="#{studentSubjPerformanceBarGraph.show}"
+										model="#{studentSubjPerformanceBarGraph.barmodel}" />
+								</p:panel>
+
+
+							</h:form>
+
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</h:form>
+
+	</ui:define>
+
+</ui:composition>

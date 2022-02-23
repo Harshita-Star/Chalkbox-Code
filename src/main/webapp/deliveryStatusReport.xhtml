@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+<f:loadBundle var="addClassVar" basename="myProperties" />
+<f:view contentType="text/html">
+	<h:head>
+		<title></title>
+		<f:facet name="first">
+			<meta content='text/html; charset=UTF-8' http-equiv="Content-Type" />
+			<meta http-equiv="X-UA-Compatible" content="EmulateIE8" />
+
+		</f:facet>
+
+		<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css"></link>
+		<link rel="stylesheet"
+			href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"></link>
+		<link rel="stylesheet"
+			href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css"></link>
+		<link rel="stylesheet" href="dist/css/AdminLTE.min.css"></link>
+		<link rel="stylesheet" href="dist/css/skins/all-skins.min.css"></link>
+		<link rel="stylesheet" type="text/css" href="css/style.css" />
+	</h:head>
+
+	<h:body>
+
+		<!-- <ui:include src="sideMenu.xhtml"></ui:include> 
+    -->
+		<div class="content-wrapper">
+			<p:commandButton value="Print" type="button">
+				<p:printer target=":forms"></p:printer>
+			</p:commandButton>
+			<br></br><br></br>
+			
+
+			<h:form id="forms" style="width: 100%;">
+	
+			
+			
+			<h:commandLink >
+										<p:graphicImage name="images/excellogo.png"
+											library="avalon-layout" width="100" height="40"></p:graphicImage>
+										<pe:exporter type="xlsx" target=":forms:dt"
+											fileName="MessageDeliveryReport"   ></pe:exporter>
+									</h:commandLink>
+			<br></br><br></br>
+				<p:dataTable id="dt"  var="var"
+					value="#{deliveryStatusReportBean.messageList}">
+
+
+					<p:column headerText="S.No.">
+						<f:facet name="header">
+												<p:outputLabel value="S.No."></p:outputLabel>
+											</f:facet>
+					
+						<p:outputLabel value="#{var.count}"></p:outputLabel>
+					</p:column>
+					
+					<p:column headerText="AddNumber">
+					
+						<f:facet name="header">
+												<p:outputLabel value="AddNumber"></p:outputLabel>
+											</f:facet>
+						<p:outputLabel value="#{var.addNumber}"></p:outputLabel>
+					</p:column>
+
+					<p:column headerText="Name">
+					<f:facet name="header">
+												<p:outputLabel value="Name"></p:outputLabel>
+											</f:facet>
+						<p:outputLabel value="#{var.stuName.replace('@CB@','-')}"></p:outputLabel>
+					</p:column>
+
+					<p:column headerText="Class">
+					<f:facet name="header">
+												<p:outputLabel value="Class"></p:outputLabel>
+											</f:facet>
+						<p:outputLabel value="#{var.stuClass}"></p:outputLabel>
+					</p:column>
+
+					<p:column headerText="Mobile No">
+					<f:facet name="header">
+												<p:outputLabel value="Mobile No"></p:outputLabel>
+											</f:facet>
+						<p:outputLabel value="#{var.contactnumber}"></p:outputLabel>
+					</p:column>
+
+					<p:column headerText="Message">
+					<f:facet name="header">
+												<p:outputLabel value="Message"></p:outputLabel>
+											</f:facet>
+						<p:outputLabel value="#{var.message}"></p:outputLabel>
+					</p:column>
+
+					<p:column headerText="Date">
+					<f:facet name="header">
+												<p:outputLabel value="Date"></p:outputLabel>
+											</f:facet>
+						<p:outputLabel value="#{var.date}"></p:outputLabel>
+					</p:column>
+
+					<p:column headerText="Status">
+					<f:facet name="header">
+												<p:outputLabel value="Status"></p:outputLabel>
+											</f:facet>
+						<p:outputLabel value="#{var.status}"></p:outputLabel>
+					</p:column>
+
+
+				</p:dataTable>
+			</h:form>
+		</div>
+	</h:body>
+</f:view>
+</html>

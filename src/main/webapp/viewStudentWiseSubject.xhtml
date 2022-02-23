@@ -1,0 +1,357 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Student Wise subject</ui:define>
+
+	<ui:define name="content">
+
+
+		<style>
+.ui-datatable .ui-datatable-scrollable-body,
+	.ui-datatable-scrollable-header, .ui-datatable-footer,
+	.ui-datatable-header {
+	width: 100% !important;
+}
+
+body .ui-datatable thead th, body .ui-datatable tbody td {
+	width: var(- -w) !important;
+}
+
+body .ui-datatable  .ui-datatable-header {
+	position: sticky !important;
+	top: 59px !important;
+	width: 100% !important;
+}
+
+.ui-datatable-scrollable .ui-datatable-scrollable-header,
+	.ui-datatable-scrollable .ui-datatable-scrollable-footer {
+	position: sticky !important;
+	top: 93px !important;
+}
+</style>
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form1">
+
+							<h1>Student Wise Subject Report</h1>
+
+							<p:messages closable="true" autoUpdate="true"></p:messages>
+
+							<p:panel header="Search Student by Name/Sr. No">
+
+								<p:panelGrid columns="5"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel value="Student Name/Sr. No"></p:outputLabel>
+									<p:autoComplete id="acSimple"
+										value="#{viewStudentWiseSubjectReport.name}"
+										minQueryLength="3"
+										completeMethod="#{viewStudentWiseSubjectReport.autoCompleteStudentInfo}"
+										forceSelection="true"
+										validatorMessage="Please Enter Correct value">
+										<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+										<p:ajax event="query" global="false" />
+									</p:autoComplete>
+
+									<p:commandButton update=":form3" value="Search"
+										styleClass="butwid" icon="fa fa-search"
+										actionListener="#{viewStudentWiseSubjectReport.searchStudentByName}"></p:commandButton>
+
+									<p:commandButton value="PDf" styleClass="butwid"
+										icon="fa fa-file-pdf-o" ajax="false" process="@this"
+										actionListener="#{viewStudentWiseSubjectReport.exportStuWiseSubPdf}"
+										rendered="#{viewStudentWiseSubjectReport.showSubTable}">
+
+										<p:fileDownload value="#{viewStudentWiseSubjectReport.file}" />
+									</p:commandButton>
+								</p:panelGrid>
+							</p:panel>
+
+						</h:form>
+
+						<br />
+						<h:form id="form2">
+							<p:panel header="Search by Class-Section">
+
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel for="@next" style="color:red"
+										value="Select Class"></p:outputLabel>
+									<p:selectOneMenu
+										value="#{viewStudentWiseSubjectReport.selectedCLassSection}"
+										required="true" requiredMessage="Please select a class">
+										<f:selectItem itemLabel="#{searchStudentVar.selectHereLabel}"
+											itemValue=""></f:selectItem>
+										<f:selectItems
+											value="#{viewStudentWiseSubjectReport.classSection}"></f:selectItems>
+
+										<p:ajax update="sectionid"
+											listener="#{viewStudentWiseSubjectReport.allSections}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel for="@next" style="color:red"
+										value="Select Section"></p:outputLabel>
+									<p:selectOneMenu id="sectionid"
+										value="#{viewStudentWiseSubjectReport.selectedSection}"
+										required="true" requiredMessage="Please select a section">
+										<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+										<f:selectItem itemLabel="All" itemValue="-1"></f:selectItem>
+										<f:selectItems
+											value="#{viewStudentWiseSubjectReport.sectionList}"></f:selectItems>
+
+									</p:selectOneMenu>
+
+									<p:outputLabel for="@next" style="color:red"
+										value="Subject Format in Report"></p:outputLabel>
+									<p:selectOneMenu
+										value="#{viewStudentWiseSubjectReport.reportFormat}"
+										required="true"
+										requiredMessage="Please select a subject format for report">
+										<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+										<f:selectItem itemLabel="Multiple Rows" itemValue="multiRow"></f:selectItem>
+										<f:selectItem itemLabel="Single Row With Subject Type"
+											itemValue="singleRowWithType"></f:selectItem>
+										<f:selectItem itemLabel="Single Row Without Subject Type"
+											itemValue="singleRowNoType"></f:selectItem>
+									</p:selectOneMenu>
+								</p:panelGrid>
+
+								<br />
+								<p:separator />
+								<center>
+									<p:panelGrid columns="2" layout="grid"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+
+										<p:commandButton value="Search" styleClass="butwid"
+											icon="fa fa-search"
+											action="#{viewStudentWiseSubjectReport.searchStudentByClassSection}"
+											update=":form3" />
+
+										<h:commandLink>
+											<p:graphicImage name="images/excellogo.png"
+												library="avalon-layout" width="100" height="40"></p:graphicImage>
+											<pe:exporter type="xlsx" target=":form3:upp"
+												fileName="#{viewStudentWiseSubjectReport.className.replaceAll(' ','_')}_#{viewStudentWiseSubjectReport.sectionName.replaceAll(' ','_')}_Subjects"></pe:exporter>
+										</h:commandLink>
+									</p:panelGrid>
+								</center>
+								<p:separator />
+								<br />
+
+							</p:panel>
+						</h:form>
+						<br />
+						<h:form id="form3">
+							<p:panel header="Subject List" id="panel"
+								rendered="#{viewStudentWiseSubjectReport.show}">
+								<p:panelGrid
+									rendered="#{viewStudentWiseSubjectReport.showSubTable}"
+									columns="3" style="width:100%">
+
+									<p:panelGrid columns="2">
+										<p:outputLabel value="Class:-"></p:outputLabel>
+										<h:outputText
+											value="#{viewStudentWiseSubjectReport.className}"></h:outputText>
+									</p:panelGrid>
+
+									<p:panelGrid columns="2">
+										<p:outputLabel value="Section:-"></p:outputLabel>
+										<h:outputText
+											value="#{viewStudentWiseSubjectReport.sectionName}"></h:outputText>
+									</p:panelGrid>
+
+									<p:panelGrid columns="2">
+										<p:outputLabel value="Total:-"></p:outputLabel>
+										<h:outputText value="#{viewStudentWiseSubjectReport.total}"></h:outputText>
+									</p:panelGrid>
+
+								</p:panelGrid>
+
+								<p:dataTable value="#{viewStudentWiseSubjectReport.subjectList}"
+									scrollable="true" scrollWidth="100%" var="var"
+									rendered="#{viewStudentWiseSubjectReport.showSubTable}">
+									<f:facet name="header">
+										<p:outputLabel
+											style="margin:0px;font-size: 15px !important;font-weight:bold;"
+											value="All Subjects"></p:outputLabel>
+									</f:facet>
+
+									<p:column headerText="S.No.">
+										<f:facet name="header">
+
+											<p:outputLabel value="S.No."></p:outputLabel>
+
+										</f:facet>
+
+										<p:outputLabel value="#{var.serialNumber}"></p:outputLabel>
+
+									</p:column>
+
+									<p:column headerText="Subject Name">
+										<f:facet name="header">
+											<p:outputLabel value="Subject Name"></p:outputLabel>
+										</f:facet>
+
+										<p:outputLabel value="#{var.subjectName}"></p:outputLabel>
+
+									</p:column>
+									<p:column headerText="Subject Type">
+										<f:facet name="header">
+
+											<p:outputLabel value="Subject Type"></p:outputLabel>
+										</f:facet>
+
+										<p:outputLabel value="#{var.subjectType}"></p:outputLabel>
+
+									</p:column>
+								</p:dataTable>
+
+								<p:dataTable id="up"
+									value="#{viewStudentWiseSubjectReport.finalList}"
+									scrollable="true" scrollWidth="100%" var="var"
+									rowIndexVar="index"
+									rendered="#{viewStudentWiseSubjectReport.showStuTable}">
+									<f:facet name="header">
+										<h:outputText
+											value="#{viewStudentWiseSubjectReport.className} - #{viewStudentWiseSubjectReport.sectionName} Subject Report"></h:outputText>
+									</f:facet>
+
+									<p:column headerText="SR.NO."
+										groupRow="#{viewStudentWiseSubjectReport.reportFormat eq 'multiRow'}">
+
+										<f:facet name="header">
+											<p:outputLabel value="SR.NO."></p:outputLabel>
+										</f:facet>
+
+										<p:outputLabel value="#{var.srNo}"></p:outputLabel>
+
+									</p:column>
+
+									<p:column headerText="Student Name"
+										groupRow="#{viewStudentWiseSubjectReport.reportFormat eq 'multiRow'}">
+
+										<f:facet name="header">
+											<p:outputLabel value="Student Name"></p:outputLabel>
+										</f:facet>
+
+										<p:outputLabel value="#{var.fullName}"></p:outputLabel>
+
+									</p:column>
+
+									<p:column headerText="Class"
+										groupRow="#{viewStudentWiseSubjectReport.reportFormat eq 'multiRow'}">
+
+										<f:facet name="header">
+											<p:outputLabel value="Class"></p:outputLabel>
+										</f:facet>
+
+										<p:outputLabel value="#{var.className} - #{var.sectionName}"></p:outputLabel>
+										<p:outputLabel value="#{var.serialNumber}"
+											style="color: transparent;"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Subject Name">
+										<f:facet name="header">
+											<p:outputLabel value="Subject Name"></p:outputLabel>
+										</f:facet>
+
+										<p:outputLabel value="#{var.subjectName}"></p:outputLabel>
+
+									</p:column>
+
+									<p:column headerText="Subject Type"
+										rendered="#{viewStudentWiseSubjectReport.reportFormat eq 'multiRow'}">
+										<f:facet name="header">
+											<p:outputLabel value="Subject Type"></p:outputLabel>
+										</f:facet>
+
+										<p:outputLabel value="#{var.subjectType}"></p:outputLabel>
+
+									</p:column>
+								</p:dataTable>
+
+								<p:dataTable id="upp"
+									value="#{viewStudentWiseSubjectReport.finalList}"
+									scrollable="true" scrollWidth="100%" var="var"
+									rowIndexVar="index" style="display:none;">
+									<f:facet name="header">
+										<h:outputText
+											value="                                     #{viewStudentWiseSubjectReport.className} - #{viewStudentWiseSubjectReport.sectionName} Subject Report"></h:outputText>
+									</f:facet>
+
+									<p:column headerText="SR.NO."
+										groupRow="#{viewStudentWiseSubjectReport.reportFormat eq 'multiRow'}">
+
+										<f:facet name="header">
+											<p:outputLabel value="SR.NO."></p:outputLabel>
+										</f:facet>
+
+										<p:outputLabel value="#{var.srNo}"></p:outputLabel>
+
+									</p:column>
+
+									<p:column headerText="Student Name"
+										groupRow="#{viewStudentWiseSubjectReport.reportFormat eq 'multiRow'}">
+
+										<f:facet name="header">
+											<p:outputLabel value="Student Name"></p:outputLabel>
+										</f:facet>
+
+										<p:outputLabel value="#{var.fullName}"></p:outputLabel>
+
+									</p:column>
+
+									<p:column headerText="Class"
+										groupRow="#{viewStudentWiseSubjectReport.reportFormat eq 'multiRow'}">
+
+										<f:facet name="header">
+											<p:outputLabel value="Class"></p:outputLabel>
+										</f:facet>
+
+										<p:outputLabel value="#{var.className} - #{var.sectionName}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Subject Name">
+										<f:facet name="header">
+											<p:outputLabel value="Subject Name"></p:outputLabel>
+										</f:facet>
+
+										<p:outputLabel value="#{var.subjectName}"></p:outputLabel>
+
+									</p:column>
+
+									<p:column headerText="Subject Type"
+										rendered="#{viewStudentWiseSubjectReport.reportFormat eq 'multiRow'}">
+										<f:facet name="header">
+											<p:outputLabel value="Subject Type"></p:outputLabel>
+										</f:facet>
+
+										<p:outputLabel value="#{var.subjectType}"></p:outputLabel>
+
+									</p:column>
+								</p:dataTable>
+
+							</p:panel>
+
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

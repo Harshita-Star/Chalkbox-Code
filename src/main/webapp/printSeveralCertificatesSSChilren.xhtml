@@ -1,0 +1,1017 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+<f:loadBundle var="addClassVar" basename="myProperties" />
+<f:view contentType="text/html">
+	<h:head>
+		<title>#{sideMenuBean.companyName} | Certificate Printing</title>
+		<f:facet name="first">
+			<meta content='text/html; charset=UTF-8' http-equiv="Content-Type" />
+			<meta http-equiv="X-UA-Compatible" content="EmulateIE8" />
+
+		</f:facet>
+
+		<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css"></link>
+		<link rel="stylesheet"
+			href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"></link>
+		<link rel="stylesheet"
+			href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css"></link>
+		<link rel="stylesheet" href="dist/css/AdminLTE.min.css"></link>
+		<link rel="stylesheet" href="dist/css/skins/all-skins.min.css"></link>
+		<link rel="stylesheet" type="text/css" href="css/style.css" />
+
+		<style>
+.box {
+	display: initial;
+	border-top: 1px solid black;
+	border-left: 1px solid black;
+	border-right: 2px solid black;
+	border-bottom: 4px solid black;
+	padding: 10px 20px;
+	font-style: bold;
+	font-size: 16px !important;
+}
+</style>
+
+		<style>
+.statistics_lines {
+	text-decoration: underline;
+	text-decoration-style: dotted;
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+.statistics_lines:after {
+	content: "\a0\a0\a0\a0\a0\a0\a0";
+}
+</style>
+
+		<style>
+.dob {
+	text-decoration: underline;
+	text-decoration-style: dotted;
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+.dob:after {
+	content:
+		"\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0";
+}
+</style>
+
+		<style>
+.dobCharacter {
+	text-decoration: underline;
+	text-decoration-style: dotted;
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+.dobCharacter:after {
+	content:
+		"\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0";
+}
+</style>
+
+		<style>
+.classCharacter {
+	text-decoration: underline;
+	text-decoration-style: dotted;
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+.classCharacter:after {
+	content:
+		"\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0";
+}
+</style>
+
+		<style>
+.sessionCharacter {
+	text-decoration: underline;
+	text-decoration-style: dotted;
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+.sessionCharacter:after {
+	content:
+		"\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0";
+}
+</style>
+
+		<style>
+.studentCharacter {
+	text-decoration: underline;
+	text-decoration-style: dotted;
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+.studentCharacter:after {
+	content:
+		"\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0";
+}
+</style>
+
+		<style>
+.fathersCharacter {
+	text-decoration: underline;
+	text-decoration-style: dotted;
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+.fathersCharacter:after {
+	content:
+		"\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0";
+}
+</style>
+
+		<style>
+.dobWord {
+	text-decoration: underline;
+	text-decoration-style: dotted;
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+.dobWord:after {
+	content:
+		"\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0";
+}
+</style>
+
+		<style>
+.dobWordCharacter {
+	text-decoration: underline;
+	text-decoration-style: dotted;
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+.dobWordCharacter:after {
+	content:
+		"\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0\a0";
+}
+</style>
+
+		<style>
+@media print {
+	html, body {
+		border: 1px solid white;
+		height: 99%;
+		page-break-after: always;
+		page-break-before: always;
+	}
+}
+</style>
+	</h:head>
+
+	<h:body>
+
+		<div class="content-wrapper">
+
+
+
+			<h:form id="form12" rendered="false">
+				<p:commandButton style="width:50px;" rendered="#{SCPBean.showPrint}"
+					value="Print" type="button">
+					<p:printer target=":forms"></p:printer>
+				</p:commandButton>
+
+
+
+			</h:form>
+			<br />
+			<h:form id="forms">
+
+				<p:panel rendered="#{SCPBean.showBirth}"
+					style="margin-left:40px;margin-right:40px;">
+
+
+
+
+					<table style="width: 100%; font-size: 11px">
+						<tr>
+							<td><p:graphicImage width="100%" height="120px"
+									value="#{SCPBean.headerImage}"></p:graphicImage></td>
+						</tr>
+					</table>
+					<hr
+						style="margin-top: 20px; margin-bottom: 20px; border: 0; border-top: 1px solid #171717;"></hr>
+					<br></br>
+
+
+
+					<center>
+						<p:outputLabel styleClass="box" value="DATE OF BIRTH CERTIFICATE"></p:outputLabel>
+					</center>
+					<br></br>
+					<br></br>
+					<br></br>
+					<br></br>
+
+
+					<table style="margin: -20px">
+						<tr>
+							<td
+								style="font-family: timesRoman; font-size: 20px; line-height: 50px; text-align: justify;">
+								<p style="text-align: justify;">
+									This is to certify that
+									#{SCPBean.studentInfo.gender.toLowerCase() eq 'male' ? 'Mr.' :
+									'Km.'} <b><p:outputLabel
+											value="#{SCPBean.studentInfo.fname}"
+											style="font-size:18px !important;"></p:outputLabel></b>
+									#{SCPBean.studentInfo.gender.toLowerCase() eq 'male' ? 'S/O ' :
+									'D/O'} of Mr. <b><p:outputLabel
+											value="#{SCPBean.studentInfo.fathersName}"
+											style="font-size:18px !important;" /></b> #{SCPBean.oldOrActive}
+									a bonafide student of Class <b><p:outputLabel
+											value="#{SCPBean.studentInfo.className}"
+											style="font-size:19px !important;"></p:outputLabel></b> of this
+									institution during the session #{SCPBean.session}.
+									#{SCPBean.studentInfo.gender.toLowerCase() eq 'male' ? 'His' :
+									'Her'} Date of Birth is <b><p:outputLabel
+											value="#{SCPBean.studentInfo.dobString}"
+											style="font-size:18px !important;"></p:outputLabel></b> <b><p:outputLabel
+											value="(#{SCPBean.studentInfo.dobInWord})"
+											style="font-size:18px !important;"></p:outputLabel></b> as per
+									school record.
+								</p>
+
+							</td>
+
+						</tr>
+					</table>
+					<br></br>
+					<br></br>
+
+
+
+					<table style="width: 100%; margin-top: 80px; font-size: 16px;">
+						<tr>
+							<td align="left"><b>Date:- #{SCPBean.currentDate}</b></td>
+							<p:outputPanel
+								rendered="#{sideMenuBean.list.branch_id eq '99' ? 'true' : 'false'}">
+								<td align="right" style="padding-right: 80px;"><b>Principal</b></td>
+							</p:outputPanel>
+							<p:outputPanel
+								rendered="#{sideMenuBean.list.branch_id eq '101' ? 'true' : 'false'}">
+								<td align="right" style="padding-right: 150px;"><b>Principal</b></td>
+							</p:outputPanel>
+
+						</tr>
+						<!-- <tr>
+											<td align="left"> <b></b></td>
+											<td align="right" style="padding-right:25px;"><b>#{SCPBean.principalNameSS}</b></td>
+										</tr> -->
+						<tr>
+							<td align="left"><b></b></td>
+							<td align="right" style="padding-right: 20px;"><b>#{SCPBean.schinfo.schoolName}</b></td>
+						</tr>
+
+					</table>
+				</p:panel>
+
+
+
+
+
+				<p:panel rendered="#{SCPBean.showBank}">
+
+					<table style="width: 100%; font-size: 11px">
+						<tr>
+							<td><p:graphicImage width="100%" height="120px"
+									value="#{SCPBean.headerImage}"></p:graphicImage></td>
+						</tr>
+					</table>
+
+
+					<hr style="border-top: solid 1px;" />
+
+
+					<center>
+						<h3 style="font-family: timesRoman;">
+							<b>BANK CERTIFICATE</b>
+						</h3>
+					</center>
+
+					<center>
+						<h3 style="font-family: timesRoman;">
+							<b><u>TO WHOMSOEVER IT MAY CONCERN</u></b>
+						</h3>
+					</center>
+					<br></br>
+
+					<table>
+						<tr>
+							<td
+								style="font-family: timesRoman; font-size: 18px; line-height: 25px;">This
+								is certified that #{SCPBean.studentInfo.gender.toLowerCase() eq
+								'male' ? 'Master ' : 'Miss '}<b>#{SCPBean.studentInfo.fname}</b>#{SCPBean.checkGender}
+								of #{sideMenuBean.list.country eq 'India' ? 'Shri' : 'Mr.'} <b>#{SCPBean.studentInfo.fathersName}</b>
+								regular student of <b>#{SCPBean.schinfo.schoolName}</b> from <b>#{SCPBean.studentInfo.startingDateStr}</b>
+								to <b>#{SCPBean.currentDate}</b>.#{SCPBean.studentInfo.gender.toLowerCase()
+								eq 'male' ? 'His' : 'Her'} Mother's name is
+								#{sideMenuBean.list.country eq 'India' ? 'Smt.' : 'Mrs.'} <b>#{SCPBean.studentInfo.motherName}</b>.
+								#{SCPBean.studentInfo.gender.toLowerCase() eq 'male' ? 'He' :
+								'She'} has appeared in Class <b>#{SCPBean.studentInfo.className}</b>
+								examination in the session <b>#{SCPBean.session}</b>.
+							</td>
+						</tr>
+					</table>
+					<br></br>
+					<br></br>
+					<br></br>
+					<br></br>
+					<table style="width: 100%">
+						<tr>
+							<td style="font-size: 18px; font-family: timesRoman"><b><u>#{SCPBean.check}</u></b></td>
+						</tr>
+					</table>
+					<br></br>
+					<table style="width: 100%; font-size: 16px">
+
+						<tr style="font-family: timesRoman">
+							<td style="width: 118px;">Date of Birth :</td>
+							<td><b>#{SCPBean.studentInfo.dobString}</b></td>
+						</tr>
+						<tr style="font-family: timesRoman">
+							<td style="width: 118px;">In words :</td>
+							<td><b>#{SCPBean.studentInfo.dobInWord}</b></td>
+						</tr>
+						<tr style="font-family: timesRoman">
+							<td style="width: 118px;">Address :</td>
+							<td><b>#{SCPBean.studentInfo.currentAddress}</b></td>
+						</tr>
+					</table>
+					<br></br>
+					<br></br>
+					<table style="width: 100%">
+						<tr>
+							<td style="font-size: 18px; font-family: timesRoman">He/She
+								bears a good moral Character.</td>
+						</tr>
+					</table>
+					<br></br>
+					<br></br>
+					<br></br>
+
+
+					<table style="width: 100%; margin-top: 80px; font-size: 17px;">
+						<tr>
+							<td align="left">Date:- <b>#{SCPBean.currentDate}</b></td>
+							<p:outputPanel
+								rendered="#{sideMenuBean.list.branch_id eq '99' ? 'true' : 'false'}">
+								<td align="right" style="padding-right: 67px;"><b>Principal</b></td>
+							</p:outputPanel>
+							<p:outputPanel
+								rendered="#{sideMenuBean.list.branch_id eq '101' ? 'true' : 'false'}">
+								<td align="right" style="padding-right: 135px;"><b>Principal</b></td>
+							</p:outputPanel>
+
+						</tr>
+						<tr>
+							<td align="left"></td>
+							<td align="right"><b>#{SCPBean.schinfo.schoolName}</b></td>
+						</tr>
+					</table>
+
+				</p:panel>
+
+				<p:panel rendered="#{SCPBean.showBonafied}">
+
+					<table style="width: 100%; font-size: 11px">
+						<tr>
+							<td><p:graphicImage width="100%" height="120px"
+									value="#{SCPBean.headerImage}"></p:graphicImage></td>
+						</tr>
+					</table>
+
+
+					<hr style="border-top: solid 1px;" />
+					<br></br>
+					<center>
+						<p:outputLabel styleClass="box" value="BONAFIDE CERTIFICATE"></p:outputLabel>
+					</center>
+					<br></br>
+
+					<center>
+						<h3 style="font-family: timesRoman;">
+							<b><u>TO WHOMSOEVER IT MAY CONCERN</u></b>
+						</h3>
+					</center>
+
+					<center>
+						<table style="width: 25%; font-size: 12px; height: 150px;">
+
+							<tr>
+								<td><center>
+										<p:graphicImage value="#{SCPBean.studentInfo.student_image}"
+											width="120" height="150"></p:graphicImage>
+									</center></td>
+							</tr>
+
+						</table>
+					</center>
+					<br></br>
+					<br></br>
+					<br></br>
+
+					<table>
+						<tr>
+							<td
+								style="font-family: timesRoman; font-size: 18px; line-height: 25px;">This
+								is to certify that <b>#{SCPBean.studentInfo.fname}</b>
+								#{SCPBean.studentInfo.gender.toLowerCase() eq 'male' ? 'S/O' :
+								'D/O'} of #{sideMenuBean.list.country eq 'India' ? 'Mr.' :
+								'Mr.'} <b>#{SCPBean.studentInfo.fathersName}</b>, Admission No.
+								<b>#{SCPBean.studentInfo.srNo}</b>, Date of birth <b>#{SCPBean.studentInfo.dobString}</b>,
+								is a bonafide student of Class <b>#{SCPBean.studentInfo.className}</b>
+								of our school during the session of <b>#{SCPBean.session}</b>.
+							</td>
+						</tr>
+					</table>
+					<br></br>
+					<br></br>
+					<table style="width: 100%; margin-top: 100px; font-size: 17px;">
+						<tr>
+							<td align="left">Date: <b>#{SCPBean.currentDate}</b></td>
+						</tr>
+						<tr>
+							<td align="left">Place: <b>Moradabad</b></td>
+							<p:outputPanel
+								rendered="#{sideMenuBean.list.branch_id eq '99' ? 'true' : 'false'}">
+								<td align="right" style="padding-right: 67px;"><b>Principal</b></td>
+							</p:outputPanel>
+							<p:outputPanel
+								rendered="#{sideMenuBean.list.branch_id eq '101' ? 'true' : 'false'}">
+								<td align="right" style="padding-right: 135px;"><b>Principal</b></td>
+							</p:outputPanel>
+						</tr>
+						<tr>
+							<td align="left"></td>
+							<td align="right"><b>#{SCPBean.schinfo.schoolName}</b></td>
+						</tr>
+					</table>
+				</p:panel>
+
+				<p:panel rendered="#{SCPBean.showCharacter}">
+
+
+					<table style="width: 100%; font-size: 11px">
+						<tr>
+							<td><p:graphicImage width="100%" height="120px"
+									value="#{SCPBean.headerImage}"></p:graphicImage></td>
+						</tr>
+					</table>
+					<hr style="border-top: solid 1px;" />
+					<br></br>
+
+					<center>
+						<p:outputLabel styleClass="box" value="CHARACTER CERTIFICATE"></p:outputLabel>
+					</center>
+					<br></br>
+
+					<br></br>
+					<br></br>
+					<table style="margin: -20px">
+						<tr>
+							<td
+								style="font-family: timesRoman; font-size: 18px; line-height: 34px;">
+								<p style="text-align: justify;">
+									Certified that #{SCPBean.studentInfo.gender.toLowerCase() eq
+									'male' ? 'Mr. ' : 'Km. '} <b><p:outputLabel
+											value="#{SCPBean.studentInfo.fname}"
+											style="font-size:19px !important;"></p:outputLabel></b>
+									#{SCPBean.studentInfo.gender.toLowerCase() eq 'male' ? 'S/O' :
+									'D/O'} of Mr. <b><p:outputLabel
+											value="#{SCPBean.studentInfo.fathersName}"
+											style="font-size:19px !important;"></p:outputLabel></b> is a
+									bonafide student of this institution during the period <b><p:outputLabel
+											value="#{SCPBean.session}" style="font-size:19px !important;"></p:outputLabel></b>.
+									#{SCPBean.studentInfo.gender.toLowerCase() eq 'male' ? 'He ' :
+									'She'} #{SCPBean.studentTypeCharacterCertificate} class <b><p:outputLabel
+											value="#{SCPBean.studentInfo.className}"
+											style="font-size:19px !important;"></p:outputLabel></b>
+									examination of the school/CBSE.
+									#{SCPBean.studentInfo.gender.toLowerCase() eq 'male' ? 'His' :
+									'Her'} date of birth, as per school records is <b><p:outputLabel
+											value="#{SCPBean.studentInfo.dobString}"
+											style="font-size:19px !important;"></p:outputLabel></b> <b><p:outputLabel
+											value="(#{SCPBean.studentInfo.dobInWord})"
+											style="font-size:19px !important;"></p:outputLabel></b>.
+									#{SCPBean.studentInfo.gender.toLowerCase() eq 'male' ? 'He ' :
+									'She'} bears a good moral character.
+									#{SCPBean.studentInfo.gender.toLowerCase() eq 'male' ? 'His ' :
+									'Her'} conduct during the stay in this institution had been
+									good. #{SCPBean.studentInfo.gender.toLowerCase() eq 'male' ?
+									'He ' : 'She'} had been an active participant in the
+									co-curricular activities.<br></br> <br></br> I wish
+									#{SCPBean.studentInfo.gender.toLowerCase() eq 'male' ? 'him ' :
+									'her'} success and a bright future.<br /> Remarks :
+									#{SCPBean.remark}
+								</p>
+							</td>
+						</tr>
+					</table>
+					<br></br>
+					<br></br>
+					<br></br>
+					<br></br>
+
+
+
+
+					<table style="width: 100%; margin-top: 120px; font-size: 17px;">
+						<tr>
+							<td align="left"><b>Date: #{SCPBean.currentDate}</b></td>
+							<p:outputPanel
+								rendered="#{sideMenuBean.list.branch_id eq '99' ? 'true' : 'false'}">
+								<td align="right" style="padding-right: 67px;"><b>Principal</b></td>
+							</p:outputPanel>
+							<p:outputPanel
+								rendered="#{sideMenuBean.list.branch_id eq '101' ? 'true' : 'false'}">
+								<td align="right" style="padding-right: 135px;"><b>Principal</b></td>
+							</p:outputPanel>
+						</tr>
+
+						<tr>
+							<td align="left"><b></b></td>
+							<td align="right" style="padding-right: 5px;"><b>#{SCPBean.schinfo.schoolName}</b></td>
+						</tr>
+					</table>
+				</p:panel>
+
+
+
+				<p:panel rendered="#{SCPBean.showAffiliation}">
+					<table style="width: 100%; font-size: 11px">
+						<tr>
+							<td><p:graphicImage width="100%" height="120px"
+									value="#{SCPBean.headerImage}"></p:graphicImage></td>
+						</tr>
+					</table>
+
+					<hr style="border-top: solid 1px;" />
+					<br></br>
+					<br></br>
+
+					<center>
+						<h3 style="font-family: timesRoman;">
+							<b>AFFILIATION CERTIFICATE</b>
+						</h3>
+					</center>
+
+					<center>
+						<h3 style="font-family: timesRoman;">
+							<b><u>TO WHOMSOEVER IT MAY CONCERN</u></b>
+						</h3>
+					</center>
+					<br></br>
+
+					<table style="margin: -20px">
+						<tr>
+							<td
+								style="font-family: timesRoman; font-size: 18px; line-height: 25px;">This
+								is certify that #{SCPBean.studentInfo.gender.toLowerCase() eq
+								'male' ? 'Master ' : 'Miss '}<b>#{SCPBean.studentInfo.fname}</b>#{SCPBean.checkGender}
+								of #{sideMenuBean.list.country eq 'India' ? 'Shri' : 'Mr.'} <b>#{SCPBean.studentInfo.fathersName}</b>
+								and #{sideMenuBean.list.country eq 'India' ? 'Smt.' : 'Mrs.'} <b>#{SCPBean.studentInfo.motherName}</b>
+								is a bonafide student of this school, studying in Class <b>#{SCPBean.studentInfo.className}</b>
+								during the Session <b>#{SCPBean.session}</b>.
+							</td>
+						</tr>
+					</table>
+					<br></br>
+					<br></br>
+					<br></br>
+					<br></br>
+					<table style="width: 100%">
+						<tr>
+							<td style="font-size: 18px; font-family: timesRoman"><b><u>#{SCPBean.check}</u></b></td>
+						</tr>
+					</table>
+					<br></br>
+					<table style="width: 100%; font-size: 15px">
+
+						<tr style="font-family: timesRoman">
+							<td style="width: 118px;">Date of Birth :</td>
+							<td><b>#{SCPBean.studentInfo.dobString}</b></td>
+						</tr>
+						<tr style="font-family: timesRoman">
+							<td style="width: 118px;">In words :</td>
+							<td><b>#{SCPBean.studentInfo.dobInWord}</b></td>
+						</tr>
+						<tr style="font-family: timesRoman">
+							<td style="width: 118px;">Address :</td>
+							<td><b>#{SCPBean.studentInfo.currentAddress}</b></td>
+						</tr>
+					</table>
+					<br></br>
+					<br></br>
+					<table style="width: 100%">
+						<tr>
+							<td style="font-size: 18px; font-family: timesRoman">This
+								school is affiliated to <b>#{SCPBean.board}, New Delhi</b>
+								&nbsp; Affiliation No. is <b>#{SCPBean.affNo}</b>
+							</td>
+						</tr>
+					</table>
+					<br></br>
+					<br></br>
+					<br></br>
+					<br></br>
+					<br></br>
+
+					<table style="width: 100%; margin-top: 60px; font-size: 17px;">
+						<tr>
+							<td align="left">Date:- <b>#{SCPBean.currentDate}</b></td>
+							<p:outputPanel
+								rendered="#{sideMenuBean.list.branch_id eq '99' ? 'true' : 'false'}">
+								<td align="right" style="padding-right: 67px;"><b>Principal</b></td>
+							</p:outputPanel>
+							<p:outputPanel
+								rendered="#{sideMenuBean.list.branch_id eq '101' ? 'true' : 'false'}">
+								<td align="right" style="padding-right: 135px;"><b>Principal</b></td>
+							</p:outputPanel>
+
+						</tr>
+						<tr>
+							<td align="left"></td>
+							<td align="right"><b>#{SCPBean.schinfo.schoolName}</b></td>
+						</tr>
+					</table>
+				</p:panel>
+
+				<p:panel rendered="#{SCPBean.showFee}"
+					style="margin-left:40px;margin-right:40px;">
+
+
+					<table style="width: 100%; font-size: 11px">
+						<tr>
+							<td><p:graphicImage width="100%" height="120px"
+									value="#{SCPBean.headerImage}"></p:graphicImage></td>
+						</tr>
+					</table>
+					<hr style="border-top: solid 1px;" />
+					<br></br>
+					<br></br>
+					<br></br>
+					<br></br>
+					<br></br>
+					<br></br>
+					<br></br>
+
+
+
+					<center>
+						<div>
+							<p:outputLabel styleClass="box" style="font-size:24px !important"
+								value="CERTIFICATE OF FEE"></p:outputLabel>
+						</div>
+					</center>
+					<br />
+					<br></br>
+					<br></br>
+					<br></br>
+
+
+
+					<table>
+						<tr>
+							<td
+								style="font-family: timesRoman; font-size: 18px; line-height: 40px;">
+								<p style="text-align: justify;">
+									This is to certify that <b><p:outputLabel
+											value="#{SCPBean.studentInfo.fname}"
+											style="font-size:19px !important;"></p:outputLabel></b>
+									#{SCPBean.checkGender} of #{SCPBean.prefix1} <b><p:outputLabel
+											value="#{SCPBean.studentInfo.fathersName}"
+											style="font-size:19px !important;"></p:outputLabel></b> &amp;
+									#{SCPBean.prefix2}  <b><p:outputLabel
+											value="#{SCPBean.studentInfo.motherName}"
+											style="font-size:19px !important;"></p:outputLabel></b> is a
+									bonafide student of class <b><p:outputLabel
+											value="#{SCPBean.studentInfo.className}"
+											style="font-size:19px !important;"></p:outputLabel></b> of this
+									institution during the financial year <b><p:outputLabel
+											value="#{SCPBean.session}" style="font-size:19px !important;"></p:outputLabel></b>.
+									The Annual Composite Fee (Tuition Fee) paid by
+									#{SCPBean.studentInfo.gender.toLowerCase() eq 'male' ? 'him ' :
+									'her'} for the period <b><p:outputLabel
+											value="APRIL, #{SCPBean.startSession}"
+											style="font-size:19px !important;"></p:outputLabel></b> to <b><p:outputLabel
+											value="MARCH, #{SCPBean.endSession}"
+											style="font-size:19px !important;"></p:outputLabel></b> is Rs <b><p:outputLabel
+											value="#{SCPBean.totalPaidAmount}"
+											style="font-size:19px !important;"></p:outputLabel></b> (Rs. <b><p:outputLabel
+											value="#{SCPBean.totalAmountInWords}"
+											style="font-size:19px !important;"></p:outputLabel></b>).<br></br>
+									The Academic session of this institution runs from April to
+									March.
+								</p>
+							</td>
+						</tr>
+					</table>
+					<br></br>
+					<br></br>
+
+					<br></br>
+					<table style="width: 100%; margin-top: 8%; font-size: 18px;">
+						<tr>
+							<td align="left"><b>S.No. : </b></td>
+							<p:outputPanel
+								rendered="#{sideMenuBean.list.branch_id eq '99' ? 'true' : 'false'}">
+								<td align="right" style="padding-right: 25px;"><b>Authorised
+										Signatory</b></td>
+							</p:outputPanel>
+							<p:outputPanel
+								rendered="#{sideMenuBean.list.branch_id eq '101' ? 'true' : 'false'}">
+								<td align="right" style="padding-right: 90px;"><b>Authorised
+										Signatory</b></td>
+							</p:outputPanel>
+						</tr>
+						<tr>
+							<td align="left"><b></b></td>
+							<td align="right"><b></b></td>
+						</tr>
+						<!--  <tr>
+											<td align="left"><b>DATE : #{SCPBean.currentDate}</b></td>
+											<td align="right" style="padding-right: 15px;"><b>#{SCPBean.principalNameSS}</b></td>
+										</tr>-->
+						<tr>
+							<td align="left"><b>DATE : #{SCPBean.currentDate}</b></td>
+							<td align="right"><b>#{SCPBean.schinfo.schoolName}</b></td>
+						</tr>
+
+					</table>
+				</p:panel>
+
+				<p:panel rendered="#{SCPBean.showPassportApply}">
+
+					<table style="width: 100%; font-size: 11px">
+						<tr>
+							<td><p:graphicImage width="100%" height="120px"
+									value="#{SCPBean.headerImage}"></p:graphicImage></td>
+						</tr>
+					</table>
+					<hr style="border-top: solid 1px;" />
+					<br></br>
+					<table style="width: 100%;">
+						<tr>
+							<td align="left" style="font-size: 11px;">Ref.No. :
+								LFCS/PAC/#{SCPBean.endSession}/#{SCPBean.studentInfo.srNo}<b></b>
+							</td>
+							<td align="right" style="font-size: 11px;">Dated : <b>#{SCPBean.currentDate}</b></td>
+						</tr>
+					</table>
+					<br></br>
+					<br></br>
+					<br></br>
+					<center>
+						<h3 style="font-family: timesRoman;">
+							<b>PASSPORT APPLICATION CERTIFICATE</b>
+						</h3>
+					</center>
+
+					<center>
+						<h3 style="font-family: timesRoman;">
+							<b><u>TO WHOMSOEVER IT MAY CONCERN</u></b>
+						</h3>
+					</center>
+					<br />
+
+					<table style="margin: -20px">
+						<tr>
+							<td
+								style="font-family: timesRoman; font-size: 18px; line-height: 25px;">This
+								is to certify that #{SCPBean.studentInfo.gender.toLowerCase() eq
+								'male' ? 'Master ' : 'Miss '}<b>#{SCPBean.studentInfo.fname}</b>#{SCPBean.checkGender}
+								#{sideMenuBean.list.country eq 'India' ? 'Shri' : 'Mr.'} <b>#{SCPBean.studentInfo.fathersName}</b>
+								and #{sideMenuBean.list.country eq 'India' ? 'Smt.' : 'Mrs.'} <b>#{SCPBean.studentInfo.motherName}</b>
+								is a bonafide student of <b>#{SCPBean.schinfo.schoolName},
+									#{SCPBean.schinfo.add1}</b>. #{SCPBean.heShe} is studying in this
+								school in Class <b>#{SCPBean.studentInfo.className}</b> under
+								Adm. No. <b>#{SCPBean.studentInfo.srNo}</b>. #{SCPBean.check}
+								date of birth as per record is <b>#{SCPBean.studentInfo.dobString}</b>
+								(#{SCPBean.studentInfo.dobInWord}). #{SCPBean.check} residential
+								address is <b>#{SCPBean.studentInfo.currentAddress}</b>
+							</td>
+						</tr>
+					</table>
+					<br></br>
+					<br></br>
+					<br></br>
+					<br></br>
+					<br></br>
+					<br></br>
+					<br></br>
+					<table style="width: 100%">
+						<tr>
+							<td style="font-size: 18px; font-family: timesRoman">This
+								certificate is issued on #{SCPBean.check} parent's request.</td>
+						</tr>
+					</table>
+					<br></br>
+					<br></br>
+					<br></br>
+					<table
+						style="width: 100%; margin-top: 10%; font-size: 17px !important;">
+						<tr>
+							<p:outputPanel
+								rendered="#{sideMenuBean.list.branch_id eq '99' ? 'true' : 'false'}">
+								<td align="left" style="padding-left: 60px;"><b>Principal</b></td>
+							</p:outputPanel>
+							<p:outputPanel
+								rendered="#{sideMenuBean.list.branch_id eq '101' ? 'true' : 'false'}">
+								<td align="left" style="padding-left: 120px;"><b>Principal</b></td>
+							</p:outputPanel>
+						</tr>
+						<tr>
+							<td align="left"><b>#{SCPBean.schinfo.schoolName}</b></td>
+						</tr>
+					</table>
+				</p:panel>
+
+				<p:panel rendered="#{SCPBean.showLOC}">
+
+					<table style="width: 100%; font-size: 11px">
+						<tr>
+							<td><p:graphicImage width="100%" height="120px"
+									value="#{SCPBean.headerImage}"></p:graphicImage></td>
+						</tr>
+					</table>
+					<table border="1"
+						style="width: 100%; font-size: 15px; border-collapse: collapse;">
+						<tr>
+							<td colspan="2">&nbsp;CBSE-ONLINE LOC DATA ENTRY FORM FOR
+								CLASS #{SCPBean.cls} CANDIDATES</td>
+						</tr>
+						<tr>
+							<td colspan="2">&nbsp;CLASS &nbsp;<u>#{SCPBean.studentInfo.className}</u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+								ROLL NO. #{SCPBean.studentInfo.rollNo}
+							</td>
+						</tr>
+						<tr>
+							<td style="width: 50%">&nbsp;NAME OF CANDIDATE :</td>
+							<td style="width: 50%">&nbsp;#{SCPBean.studentInfo.fname}</td>
+						</tr>
+						<tr>
+							<td>&nbsp;MOTHER'S NAME :</td>
+							<td>&nbsp;#{SCPBean.studentInfo.motherName}</td>
+						</tr>
+						<tr>
+							<td>&nbsp;FATHER'S NAME :</td>
+							<td>&nbsp;#{SCPBean.studentInfo.fathersName}</td>
+						</tr>
+						<tr>
+							<td>&nbsp;Mobile No :</td>
+							<td>&nbsp;#{SCPBean.studentInfo.fathersPhone}</td>
+						</tr>
+						<tr>
+							<td>&nbsp;Aadhar No :</td>
+							<td>&nbsp;#{SCPBean.studentInfo.aadharNo}</td>
+						</tr>
+						<tr>
+							<td>&nbsp;BOARD REG No :</td>
+							<td>&nbsp;</td>
+						</tr>
+						<tr>
+							<td>&nbsp;ADMISSION SR. :</td>
+							<td>&nbsp;#{SCPBean.studentInfo.srNo}</td>
+						</tr>
+						<tr>
+							<td>&nbsp;DATE OF BIRTH :</td>
+							<td>&nbsp;#{SCPBean.studentInfo.dobString}</td>
+						</tr>
+						<tr>
+							<td>&nbsp;GENDER :</td>
+							<td>&nbsp;#{SCPBean.studentInfo.gender}</td>
+						</tr>
+						<tr>
+							<td>&nbsp;CASTE/CATEGORY :</td>
+							<td>&nbsp;#{SCPBean.studentInfo.category}</td>
+						</tr>
+						<tr>
+							<td>&nbsp;HANDICAPPED/PWD :</td>
+							<td>&nbsp;N.A. ,BLIND ,DEAF ,HANDICAPPED ,DYLEXSIC ,SPASTIC</td>
+						</tr>
+						<tr>
+							<td>&nbsp;MAIN SUBJECT :</td>
+							<td>&nbsp;</td>
+						</tr>
+						<tr>
+							<td>&nbsp;i. : #{SCPBean.subject1}</td>
+							<td>&nbsp;</td>
+						</tr>
+
+						<tr>
+							<td>&nbsp;ii. : #{SCPBean.subject2}</td>
+							<td>&nbsp;</td>
+						</tr>
+
+						<tr>
+							<td>&nbsp;iii. : #{SCPBean.subject3}</td>
+							<td>&nbsp;</td>
+						</tr>
+
+						<tr>
+							<td>&nbsp;iv. : #{SCPBean.subject4}</td>
+							<td>&nbsp;</td>
+						</tr>
+
+						<tr>
+							<td>&nbsp;v. : #{SCPBean.subject5}</td>
+							<td>&nbsp;</td>
+						</tr>
+
+						<tr>
+							<td>&nbsp;INTERNAL SUBJECT :</td>
+							<td>&nbsp;</td>
+						</tr>
+						<tr>
+							<td>&nbsp;i. : WORK EXPERIENCE</td>
+							<td>&nbsp;</td>
+						</tr>
+
+						<tr>
+							<td>&nbsp;ii. : HEALTH &amp; PHY. EDUCATION</td>
+							<td>&nbsp;</td>
+						</tr>
+
+						<tr>
+							<td>&nbsp;iii. : GENERAL STUDIES</td>
+							<td>&nbsp;</td>
+						</tr>
+
+
+
+
+						<tr>
+							<td>&nbsp;ANNUAL INCOME OF MOTHER AND FATHER :</td>
+							<td>&nbsp;#{sideMenuBean.list.country eq 'UAE' ? 'AED' :
+								'Rs.'}</td>
+						</tr>
+
+						<!-- <tr>
+											<td>&nbsp;CLASS X BOARD ROLL NO. :</td>
+											<td>&nbsp;</td>
+										</tr>
+										<tr>
+											<td>&nbsp;PASSING YEAR OF CLASS X :</td>
+											<td>&nbsp; </td>
+										</tr> -->
+						<tr>
+							<td>&nbsp;ADMITTED DIRECTLY IN CLASS IX :</td>
+							<td>&nbsp;YES &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; NO
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+						</tr>
+						<tr>
+							<td>&nbsp;ONLY CHILD OF PARENTS :</td>
+							<td>&nbsp;YES &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; NO
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+						</tr>
+						<tr>
+							<td>&nbsp; DATE OF JOINING :</td>
+							<td>&nbsp;#{SCPBean.studentInfo.startingDateStr}</td>
+						</tr>
+						<tr>
+							<td>&nbsp;DO YOU BELONG TO MINORITY SECTION :</td>
+							<td>&nbsp;YES &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; NO
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+						</tr>
+
+						<tr>
+							<td>&nbsp;THE ABOVE GIVEN DATA ARE YOUR WARD'S DETAILS AS
+								PER SCHOOL RECORDS AND WILL BE SENT TO CBSE FOR REGISTRATION
+								PLEASE VERIFY</td>
+							<td></td>
+						</tr>
+
+						<tr>
+							<td></td>
+							<td><br></br>
+							<br></br>
+							<br></br>&nbsp;PARENT'S SIGNATURE</td>
+						</tr>
+
+					</table>
+				</p:panel>
+
+
+
+			</h:form>
+		</div>
+	</h:body>
+</f:view>
+</html>

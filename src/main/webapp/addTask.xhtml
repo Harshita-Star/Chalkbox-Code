@@ -1,0 +1,198 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Add Task</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+
+							<p:messages closable="true" autoUpdate="true"></p:messages>
+							<p:panel header="Add Tasks" id="adt">
+
+								<p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+									<p:outputLabel value="Select Type: " for="@next" style="color:red" ></p:outputLabel>
+									<p:selectOneRadio value="#{addTask.type}" required="true"
+										requiredMessage="Please Select Type">
+										<f:selectItem itemLabel="One Time" itemValue="One Time"></f:selectItem>
+										<f:selectItem itemLabel="Recurring" itemValue="Recurring"></f:selectItem>
+									</p:selectOneRadio>
+
+									<p:outputLabel id="freqq" value="Select Frequency : "
+										rendered="true" for="@next" style="color:red" ></p:outputLabel>
+									<p:selectOneMenu id="freq" value="#{addTask.frequency}"
+										required="true" requiredMessage="Please Select Frequency"
+										rendered="true">
+										<f:selectItem itemLabel="Select Frequency" itemValue="NA"></f:selectItem>
+										<f:selectItem itemLabel="Daily" itemValue="1"></f:selectItem>
+										<f:selectItem itemLabel="Weekly" itemValue="7"></f:selectItem>
+										<f:selectItem itemLabel="15 Days" itemValue="15"></f:selectItem>
+										<f:selectItem itemLabel="Monthly" itemValue="30"></f:selectItem>
+										<f:selectItem itemLabel="Quarterly" itemValue="90"></f:selectItem>
+										<f:selectItem itemLabel="Half Yearly" itemValue="180"></f:selectItem>
+										<f:selectItem itemLabel="Yearly" itemValue="365"></f:selectItem>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Date "  for="@next" style="color:red" />
+									<p:calendar value="#{addTask.date}" navigator="true"
+										pattern="dd/MM/yyyy" required="true"
+										requiredMessage="Please Select Date" />
+
+									<p:outputLabel value="Title " for="@next" style="color:red" ></p:outputLabel>
+									<p:inputText value="#{addTask.title}" required="true"
+										requiredMessage="Please Enter Title" validatorMessage="Please Enter Correct value">
+                                      <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:inputText>
+
+									<p:outputLabel value="Description " for="@next" style="color:red" ></p:outputLabel>
+									<p:inputTextarea value="#{addTask.description}" required="true"
+										requiredMessage="Please Enter Description" validatorMessage="Please Enter Correct value">
+										<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:inputTextarea>	
+
+
+
+									<p:commandButton update=":form :form1"
+										action="#{addTask.submit}" value="Submit"></p:commandButton>
+
+								</p:panelGrid>
+							</p:panel>
+
+						</h:form>
+						</div>
+						<div class="card card-w-title">
+						<h:form id="form1" style="overflow:hidden">
+							<p:panel header="View / Edit / Delete Tasks">
+								<p:dataTable reflow="true" id="dt" var="var" value="#{addTask.list}"
+									paginator="true" rows="10" rowsPerPageTemplate="20,25,50">
+									<p:column headerText="S.No." >
+										<h:outputText value="#{var.sno}" />
+									</p:column>
+
+									<p:column filterBy="#{var.title}" headerText="Title">
+										<h:outputText value="#{var.title}"></h:outputText>
+									</p:column>
+									<p:column headerText="Description">
+										<h:outputText value="#{var.description}"></h:outputText>
+									</p:column>
+									<p:column headerText="Date">
+										<h:outputText value="#{var.strDate}"></h:outputText>
+									</p:column>
+									<p:column filterBy="#{var.type}" headerText="Type">
+										<h:outputText value="#{var.type}"></h:outputText>
+									</p:column>
+
+									<p:column filterBy="#{var.strFreq}" headerText="Frequency">
+										<h:outputText value="#{var.strFreq}"></h:outputText>
+									</p:column>
+
+									<p:column filterBy="#{var.status}" headerText="Status">
+										<h:outputText value="#{var.status}"></h:outputText>
+									</p:column>
+
+									<p:column headerText="Edit">
+										<center>
+											<p:commandButton icon="ui-icon-pencil"
+												action="#{addTask.editDetails}"
+												oncomplete="PF('editDialog').show()"
+												disabled="#{var.disableEdit}" update=":form1,:form2">
+												<f:setPropertyActionListener value="#{var}"
+													target="#{addTask.selectedTask}" />
+											</p:commandButton>
+										</center>
+									</p:column>
+
+									<p:column headerText="Delete">
+										<center>
+											<p:commandButton update=":form,:form1" icon="ui-icon-trash"
+												action="#{addTask.delete}">
+												<f:setPropertyActionListener value="#{var}"
+													target="#{addTask.selectedTask}" />
+												<p:confirm header="Confirmation"
+													message="Surely You Want To Remove This Task ???"
+													icon="ui-icon-alert" />
+											</p:commandButton>
+										</center>
+									</p:column>
+
+								</p:dataTable>
+							</p:panel>
+						</h:form>
+						
+						<h:form id="form2">
+							<p:dialog modal="true" widgetVar="editDialog"
+								header="Task Details">
+								<p:messages closable="true" autoUpdate="true"></p:messages>
+								<div class="ui-g form-group">
+									<p:panelGrid columns="2"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+									<p:outputLabel value="Title" for="@next" style="color:red" ></p:outputLabel>
+									<p:inputText value="#{addTask.title}" required="true"
+										requiredMessage="Please Enter Title" validatorMessage="Please Enter Correct value">
+                                       <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:inputText>
+
+									<p:outputLabel value="Description" for="@next" style="color:red" ></p:outputLabel>
+									<p:inputTextarea value="#{addTask.description}" required="true"
+										requiredMessage="Please Enter Description" validatorMessage="Please Enter Correct value">
+										<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:inputTextarea>	
+
+									<p:outputLabel value="Date "  for="@next" style="color:red" />
+									<p:calendar value="#{addTask.date}" navigator="true"
+										pattern="dd/MM/yyyy" required="true"
+										requiredMessage="Please Select Date" />
+
+									<p:outputLabel value="Select Type : " for="@next" style="color:red" ></p:outputLabel>
+									<p:selectOneRadio value="#{addTask.type}" required="true"
+										requiredMessage="Please Select Type">
+										<f:selectItem itemLabel="One Time" itemValue="One Time"></f:selectItem>
+										<f:selectItem itemLabel="Recurring" itemValue="Recurring"></f:selectItem>
+									</p:selectOneRadio>
+
+									<p:outputLabel id="freqq1" value="Select Frequency : " for="@next" style="color:red" 
+										rendered="true"></p:outputLabel>
+									<p:selectOneMenu id="freq1" value="#{addTask.frequency}"
+										required="true" requiredMessage="Please Select Frequency"
+										rendered="true">
+										<f:selectItem itemLabel="Select Frequency" itemValue="NA"></f:selectItem>
+										<f:selectItem itemLabel="Daily" itemValue="1"></f:selectItem>
+										<f:selectItem itemLabel="Weekly" itemValue="7"></f:selectItem>
+										<f:selectItem itemLabel="15 Days" itemValue="15"></f:selectItem>
+										<f:selectItem itemLabel="Monthly" itemValue="30"></f:selectItem>
+										<f:selectItem itemLabel="Quarterly" itemValue="90"></f:selectItem>
+										<f:selectItem itemLabel="Half Yearly" itemValue="180"></f:selectItem>
+										<f:selectItem itemLabel="Yearly" itemValue="365"></f:selectItem>
+									</p:selectOneMenu>
+
+									<p:commandButton value="Update" action="#{addTask.update}"></p:commandButton>
+								</p:panelGrid>
+								</div>
+							</p:dialog>
+						</h:form>
+
+
+						<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+							<p:commandButton style="margin-left:50px" value="Yes"
+								type="button" styleClass="ui-confirmdialog-yes"
+								icon="ui-icon-check" />
+							<p:commandButton style="margin-left:50px" value="No"
+								type="button" styleClass="ui-confirmdialog-no"
+								icon="ui-icon-close" />
+						</p:confirmDialog>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

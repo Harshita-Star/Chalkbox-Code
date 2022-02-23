@@ -1,0 +1,76 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/studentTemplate.xhtml">
+
+	<ui:define name="title">Student Test Report</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title" style="background-color: rgb(254, 180, 2, 0.3); ">
+						<h:form id="form">
+
+							<p:messages closable="true" autoUpdate="true"></p:messages>
+
+							
+							
+									<p:dataTable id="up" reflow="true"
+										style="border-collapse:collapse" border="1"
+										value="#{studentClassTestReport.list}" var="var">
+
+										<p:column headerText="Add. No." style="text-align:center">
+
+											<f:facet name="header">
+												<p:outputLabel value="S.No."></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.sno}"></p:outputLabel>
+										</p:column>
+										<p:column style="text-align:center" headerText="Date">
+
+											<f:facet name="header">
+												<p:outputLabel value="Date"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.dt}"></p:outputLabel>
+										</p:column>
+										<p:column style="text-align:center" headerText="Subject">
+
+											<f:facet name="header">
+												<p:outputLabel value="Subject"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.subject}"></p:outputLabel>
+										</p:column>
+
+
+										<p:column style="text-align:center" headerText="Test Name">
+
+											<f:facet name="header">
+												<p:outputLabel value="Test Name"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.testName}"></p:outputLabel>
+										</p:column>
+										<p:column style="text-align:center" headerText="Test Marks">
+
+											<f:facet name="header">
+												<p:outputLabel value="Test Marks"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.testMarks}"></p:outputLabel>
+										</p:column>
+
+									</p:dataTable>
+									<br/>
+                                <p:panel rendered="#{studentClassTestReport.show}">
+                                   	<p:chart type="bar" model="#{studentClassTestReport.testGraph}"></p:chart> 
+                                </p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

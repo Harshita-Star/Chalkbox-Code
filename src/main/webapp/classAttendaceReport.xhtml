@@ -1,0 +1,188 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	<f:loadBundle var="addClassVar" basename="myProperties" />
+
+	<ui:define name="title">Class Attendance Report</ui:define>
+
+	<ui:define name="content">
+	<h:form id="form">
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						
+							<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+
+							<h1>Class Attendance Report</h1>
+
+							<p:panel header="Attendance Report">
+								<p:panelGrid columns="6" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+									<p:outputLabel value="Select Date"></p:outputLabel>
+									<p:calendar value="#{ClassWiseCombineReportBean.selectDate}" navigator="true"
+										pattern="dd/MM/yyyy" rendered="true"
+										requiredMessage="Please Select Date"></p:calendar>
+                                      
+                                      
+                                      <p:commandButton value="Search" update=":form" icon="fa fa-search" styleClass="butwid"
+										action="#{ClassWiseCombineReportBean.search}"></p:commandButton>
+
+									<p:commandButton value="Print" styleClass="butwid" icon = "fa fa-print"
+							>
+							<p:printer target="dataTable"></p:printer>
+						</p:commandButton>
+							
+                             <h:commandLink >
+										<p:graphicImage name="images/excellogo.png"
+											library="avalon-layout" width="100" height="40"></p:graphicImage>
+										<pe:exporter type="xlsx" target=":form:table"
+											fileName="Attendance_Report_#{ClassWiseCombineReportBean.strDate}"></pe:exporter>
+											</h:commandLink>
+                             
+                              <p:commandButton value="PDF" styleClass="butwid" icon = "fa fa-file-pdf-o" ajax="false" process="@this" actionListener="#{ClassWiseCombineReportBean.exportClassAttPdf}"> 
+                    
+          <p:fileDownload value="#{ClassWiseCombineReportBean.file}"/>
+         </p:commandButton>
+								</p:panelGrid>
+							</p:panel>
+							</div>
+							<div class="card card-w-title">
+							<p:panel id="dataTable" >
+								<center>
+									<p
+										style="font-family: initial; font-style: oblique; font-size: 25px !important; font-weight: bold; margin: 0px;">#{headerBean.name}</p>
+									<p
+										style="font-family: initial; font-style: oblique; font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.affiliationNo}</p>
+									<p
+										style="font-family: initial; font-style: oblique; font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.finalAddress}</p>
+									<p
+										style="font-family: initial; font-style: oblique; font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.phoneno}</p>
+
+									<p
+										style="margin: 0px; font-size: 25px !important; font-weight: bold;">
+										Attendance Report #{ClassWiseCombineReportBean.strDate}</p>
+								</center>
+								
+
+
+								<p:dataTable stickyHeader="true" id="table" reflow="true" style="width:100%;border-collapse:collapse"
+									border="1" value="#{ClassWiseCombineReportBean.list}" var="var"
+									>
+
+									<p:column headerText="Class Name" style="width:110px"
+										>
+
+										<f:facet name="header">
+											<p:outputLabel value="Class Name"></p:outputLabel>
+										</f:facet>
+										
+											<p:outputLabel value="#{var.className}" style="margin-left:110px;"></p:outputLabel>
+										
+									</p:column>
+y
+                                  <p:column style="width:100px" headerText="Total Present">
+
+										<f:facet name="header">
+											<p:outputLabel value="Total Present"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.totalPresent}"></p:outputLabel>
+										
+										<f:facet  name="footer">
+										    <p:outputLabel value="#{ClassWiseCombineReportBean.totalP}"></p:outputLabel>
+										</f:facet>
+
+									</p:column>
+
+									<p:column style="width:60px" 
+										 headerText="Total Absent">
+
+										<f:facet name="header">
+											<p:outputLabel value="Total Absent"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.toatalAbsent}"></p:outputLabel>
+																				<f:facet  name="footer">
+										<p:outputLabel value="#{ClassWiseCombineReportBean.totalA}"></p:outputLabel>
+										</f:facet>
+										
+									</p:column>
+
+
+									<p:column style="width:80px" headerText="Total Leave">
+
+										<f:facet name="header">
+											<p:outputLabel value="Total Leave"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.totalLeave}"></p:outputLabel>
+										
+										<f:facet  name="footer">
+										<p:outputLabel value="#{ClassWiseCombineReportBean.totalL}"></p:outputLabel>
+										</f:facet>
+										
+									</p:column>
+									
+									<p:column style="width:80px" headerText="Total Medical Leave">
+
+										<f:facet name="header">
+											<p:outputLabel value="Total Medical Leave"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.totalMedical}"></p:outputLabel>
+										
+										<f:facet  name="footer">
+										<p:outputLabel value="#{ClassWiseCombineReportBean.totalML}"></p:outputLabel>
+										</f:facet>
+										
+									</p:column>
+									
+									<p:column style="width:80px" headerText="Total Preparation Leave">
+
+										<f:facet name="header">
+											<p:outputLabel value="Total Preparation Leave"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.totalPrepleave}"></p:outputLabel>
+										
+										<f:facet  name="footer">
+										<p:outputLabel value="#{ClassWiseCombineReportBean.totalPL}"></p:outputLabel>
+										</f:facet>
+										
+									</p:column>
+									
+									<p:column style="width:80px" headerText="Total Holiday">
+
+										<f:facet name="header">
+											<p:outputLabel value="Total Holiday"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.totalHoliday}"></p:outputLabel>
+										
+										<f:facet  name="footer">
+										<p:outputLabel value="#{ClassWiseCombineReportBean.totalH}"></p:outputLabel>
+										</f:facet>
+										
+									</p:column>
+
+									<p:column style="width:80px" headerText="Total Student">
+
+										<f:facet name="header">
+											<p:outputLabel value="Total Student"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.totalStudent}"></p:outputLabel>
+										
+										<f:facet  name="footer">
+										<p:outputLabel value="#{ClassWiseCombineReportBean.totalS}"></p:outputLabel>
+										</f:facet>
+										
+									</p:column>
+
+								</p:dataTable>
+							</p:panel>
+					</div>
+				</div>
+			</div>
+		</div>
+		</h:form>
+
+	</ui:define>
+
+</ui:composition>

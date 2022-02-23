@@ -1,0 +1,74 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/masterTemplate.xhtml">
+	<f:loadBundle var="addClassVar" basename="myProperties" />
+	<ui:define name="title">Chhotu Recharge</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+						<h1>Chhotu Recharge</h1>
+
+						<p:panel header="Chhotu Recharge">
+                           <p:growl showDetail="true"  autoUpdate="true"></p:growl>
+                           <p:panelGrid columns="2">
+                           <p:outputLabel value="Select School" for="@next" style="color:red" ></p:outputLabel>
+                           <p:selectOneMenu filter="true" value="#{chootuRecharge.schoolId}" required="true" requiredMessage="Please select atleast one school!">
+                           <f:selectItem itemLabel="select" itemValue=""></f:selectItem>
+                           <f:selectItems value="#{chootuRecharge.schoolList}"></f:selectItems>
+                           </p:selectOneMenu>
+						
+						
+						<p:outputLabel value="No. of Message"></p:outputLabel>
+						<p:outputLabel value="5000"></p:outputLabel>
+						
+						
+						 <p:commandButton update=":form" value="Recharge" action="#{chootuRecharge.sendOTP}">
+						 <p:confirm header="Confirmation" message="Are you sure to Chhotu recharge " icon="ui-icon-alert" />
+						 </p:commandButton>
+						</p:panelGrid>
+						</p:panel>
+                         <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+				       <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+				       <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+				      </p:confirmDialog> 
+						</h:form>
+						
+						<h:form id="form4">
+							<p:dialog header="Chhotu Recharge" widgetVar="addSchool"
+								modal="true" height="100">
+								<div class="ui-g form-group">
+
+									<p:panelGrid columns="3"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+										<p:outputLabel value="Enter OTP" for="@next" style="color:red" ></p:outputLabel>
+										<p:inputText required="true"
+											requiredMessage="Please Enter OTP"
+											value="#{chootuRecharge.otpInput}" validatorMessage="Please Enter Correct value">
+										 <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+										</p:inputText>
+
+										<p:commandButton value="Submit"
+											actionListener="#{chootuRecharge.recharge}"
+											update=":form :form4"></p:commandButton>
+
+									</p:panelGrid>
+								</div>
+							</p:dialog>
+						</h:form>
+						
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

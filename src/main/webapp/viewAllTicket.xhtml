@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+<f:loadBundle var="addClassVar" basename="myProperties" />
+<f:view contentType="text/html">
+	<h:head>
+		<title>View Pending Ticket Raising</title>
+		<f:facet name="first">
+			<meta content='text/html; charset=UTF-8' http-equiv="Content-Type" />
+			<meta http-equiv="X-UA-Compatible" content="EmulateIE8" />
+
+		</f:facet>
+
+		<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css"></link>
+		<link rel="stylesheet"
+			href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"></link>
+		<link rel="stylesheet"
+			href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css"></link>
+		<link rel="stylesheet" href="dist/css/AdminLTE.min.css"></link>
+		<link rel="stylesheet" href="dist/css/skins/all-skins.min.css"></link>
+		<link rel="stylesheet" type="text/css" href="css/style.css" />
+	</h:head>
+
+	<h:body>
+
+
+		<h:form id="form">
+			<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+			<h1>Pending Ticket Raising Report</h1>
+			<p:panel header="Ticket Raising Info">
+
+
+				<p:panelGrid columns="9">
+
+					<p:outputLabel  for="@next" style="color:red" value="Select School"></p:outputLabel>
+					<p:selectOneMenu value="#{viewAllTicket.schoolId}" filter="true"
+						required="true"
+						requiredMessage="Please select atleast one school!">
+						<f:selectItem itemLabel="All" itemValue="All"></f:selectItem>
+						<f:selectItems value="#{viewAllTicket.schoolList}"></f:selectItems>
+						<p:ajax listener="#{viewAllTicket.initial}" update=":form"></p:ajax>
+
+					</p:selectOneMenu>
+					<p:commandButton update=":form" action="#{viewAllTicket.check1}"
+						value="Pending (#{viewAllTicket.count1})"></p:commandButton>
+					<p:commandButton update=":form" action="#{viewAllTicket.check2}"
+						value="Inprocess (#{viewAllTicket.count2})"></p:commandButton>
+					<p:commandButton update=":form" action="#{viewAllTicket.check3}"
+						value="Not Appropriate (#{viewAllTicket.count3})"></p:commandButton>
+					<p:commandButton update=":form" action="#{viewAllTicket.check4}"
+						value="Resolved (#{viewAllTicket.count4})"></p:commandButton>
+					<p:commandButton update=":form" action="#{viewAllTicket.check6}"
+						value="Wrapping Up (#{viewAllTicket.count6})"></p:commandButton>
+					<p:commandButton update=":form" action="#{viewAllTicket.check7}"
+						value="Closed (#{viewAllTicket.count7})"></p:commandButton>
+					<p:commandButton update=":form" action="#{viewAllTicket.check5}"
+						value="All (#{viewAllTicket.count5})"></p:commandButton>
+				</p:panelGrid>
+				<p:commandLink immediate="true"
+					style="float:right;color:blue;font-size: 15px !important;"
+					value="Logout" action="ChalkboxLogin.xhtml?faces-redirect=true"></p:commandLink>
+
+				<p:commandLink immediate="true"
+					style="float:right;color:blue;font-size: 15px !important; margin-right:20px;"
+					value="View Full Report"
+					action="viewFullTicketRaisingReport.xhtml?faces-redirect=true"></p:commandLink>
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					
+
+			
+				<br></br>
+				<br></br>
+				<p:dataTable id="up" value="#{viewAllTicket.list}" var="var"
+					paginator="true" rows="20" rowsPerPageTemplate="20,40,60">
+
+					<f:facet name="header">
+						<h:commandLink>
+							<p:graphicImage name="images/excellogo.png"
+								library="avalon-layout" width="100" height="40"></p:graphicImage>
+							<pe:exporter type="xlsx" target=":form:up" fileName="Tickets"></pe:exporter>
+						</h:commandLink>
+					</f:facet>
+
+					<p:column headerText="S.No">
+						<f:facet name="header">
+							<p:outputLabel value="S.No"></p:outputLabel>
+						</f:facet>
+						<h:outputText value="#{var.sno}"></h:outputText>
+					</p:column>
+
+					<p:column headerText="Ticket No" filterBy="#{var.ticketNo}"
+						filterMatchMode="contains">
+						<f:facet name="header">
+							<p:outputLabel value="Ticket No"></p:outputLabel>
+						</f:facet>
+						<h:outputText value="#{var.ticketNo}"></h:outputText>
+					</p:column>
+
+					<p:column headerText="Ticket Date" filterBy="#{var.ticketDateStr}"
+						filterMatchMode="contains" sortBy="#{var.ticketDateStr}">
+						<f:facet name="header">
+							<p:outputLabel value="Ticket Date"></p:outputLabel>
+						</f:facet>
+						<h:outputText value="#{var.ticketDateStr}"></h:outputText>
+					</p:column>
+
+					<p:column headerText="Ticket Type" filterBy="#{var.type}"
+						filterMatchMode="contains">
+						<f:facet name="header">
+							<p:outputLabel value="Ticket Type"></p:outputLabel>
+						</f:facet>
+						<h:outputText value="#{var.type}"></h:outputText>
+					</p:column>
+
+
+					<p:column headerText="User Name" filterBy="#{var.userName}"
+						filterMatchMode="contains">
+						<f:facet name="header">
+							<p:outputLabel value="User Name"></p:outputLabel>
+						</f:facet>
+						<h:outputText value="#{var.userName}"></h:outputText>
+					</p:column>
+
+					<p:column headerText="Desc">
+						<f:facet name="header">
+							<p:outputLabel value="Desc"></p:outputLabel>
+						</f:facet>
+						<h:outputText value="#{var.description}">
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="School Name">
+						<f:facet name="header">
+							<p:outputLabel value="School Name"></p:outputLabel>
+						</f:facet>
+						<h:outputText value="#{var.schoolName}">
+						</h:outputText>
+					</p:column>
+					<p:column headerText="Status" filterBy="#{var.status}"
+						filterMatchMode="contains">
+						<f:facet name="header">
+							<p:outputLabel value="Status"></p:outputLabel>
+						</f:facet>
+						<h:outputText value="#{var.status}">
+						</h:outputText>
+					</p:column>
+
+					<p:column exportable="false" headerText="Image">
+						<f:facet name="header">
+							<p:outputLabel value="Image"></p:outputLabel>
+						</f:facet>
+						<p:lightBox styleClass="imagebox" id="lighbox1">
+							<h:outputLink value="#{var.screenshot}">
+								<h:graphicImage value="#{var.screenshot}"
+									style="height: 70px; width: 100px" />
+							</h:outputLink>
+						</p:lightBox>
+					</p:column>
+
+					<p:column exportable="false" headerText="View Comments">
+						<f:facet name="header">
+							<p:outputLabel value="View Comments"></p:outputLabel>
+						</f:facet>
+						<p:commandButton icon="ui-icon-search"
+							action="#{viewAllTicket.viewDetail}">
+							<f:setPropertyActionListener
+								target="#{viewAllTicket.selectedTicket}" value="#{var}"></f:setPropertyActionListener>
+						</p:commandButton>
+					</p:column>
+
+					<p:column exportable="false" headerText="In process"
+						rendered="#{viewAllTicket.showStatus}">
+						<f:facet name="header">
+							<p:outputLabel value="In Process"></p:outputLabel>
+						</f:facet>
+						<p:commandButton icon="ui-icon-clock"
+							oncomplete="PF('inprocessDialog').show()" update=":form2,:form">
+							<f:setPropertyActionListener
+								target="#{viewAllTicket.selectedTicket}" value="#{var}"></f:setPropertyActionListener>
+						</p:commandButton>
+					</p:column>
+					<p:column exportable="false" headerText="Not Appropriate"
+						rendered="#{viewAllTicket.showStatus}">
+						<f:facet name="header">
+							<p:outputLabel value="Not Appropriate"></p:outputLabel>
+						</f:facet>
+						<p:commandButton icon="ui-icon-close"
+							oncomplete="PF('pendingDialog').show()" update=":form2,:form">
+							<f:setPropertyActionListener
+								target="#{viewAllTicket.selectedTicket}" value="#{var}"></f:setPropertyActionListener>
+						</p:commandButton>
+					</p:column>
+					<p:column exportable="false" headerText="Resolved"
+						rendered="#{viewAllTicket.showStatus}">
+						<f:facet name="header">
+							<p:outputLabel value="Resolved"></p:outputLabel>
+						</f:facet>
+						<p:commandButton icon="ui-icon-check"
+							oncomplete="PF('resolvedDialog').show()"
+							action="#{viewAllTicket.checkResolve}" update=":form2,:form">
+							<f:setPropertyActionListener
+								target="#{viewAllTicket.selectedTicket}" value="#{var}"></f:setPropertyActionListener>
+						</p:commandButton>
+					</p:column> 
+
+					<p:column exportable="false" headerText="Convert to Pending"
+						rendered="#{viewAllTicket.showWrap}">
+						<f:facet name="header">
+							<p:outputLabel value="Convert to Pending"></p:outputLabel>
+						</f:facet>
+						<p:commandButton icon="ui-icon-search"
+							oncomplete="PF('convertDialog').show()" update=":form2,:form" value="Pending">
+							<f:setPropertyActionListener
+								target="#{viewAllTicket.selectedTicket}" value="#{var}"></f:setPropertyActionListener>
+						</p:commandButton>
+					</p:column>
+					<p:column exportable="false" headerText="Close"
+						rendered="#{viewAllTicket.showWrap}">
+						<f:facet name="header">
+							<p:outputLabel value="Close"></p:outputLabel>
+						</f:facet>
+						<p:commandButton icon="ui-icon-check" value="Close"
+							oncomplete="PF('closeDialog').show()" update=":form2,:form">
+							<f:setPropertyActionListener
+								target="#{viewAllTicket.selectedTicket}" value="#{var}"></f:setPropertyActionListener>
+						</p:commandButton>
+					</p:column>
+
+					<!--	<p:column headerText="Implemented"
+						rendered="#{viewAllTicket.suggestionStatus}">
+						<p:commandButton icon="ui-icon-check"
+							oncomplete="PF('pendingDialog').show()" update=":form2,:form"
+							actionListener="#{viewAllTicket.implemented}">
+							<f:setPropertyActionListener
+								target="#{viewAllTicket.selectedTicket}" value="#{var}"></f:setPropertyActionListener>
+						</p:commandButton>
+					</p:column>
+					<p:column headerText="Noted"
+						rendered="#{viewAllTicket.suggestionStatus}">
+						<p:commandButton icon="ui-icon-pencil"
+							oncomplete="PF('pendingDialog').show()" update=":form2,:form"
+							actionListener="#{viewAllTicket.noted}">
+							<f:setPropertyActionListener
+								target="#{viewAllTicket.selectedTicket}" value="#{var}"></f:setPropertyActionListener>
+						</p:commandButton>
+					</p:column> -->
+
+				</p:dataTable>
+
+			</p:panel>
+
+		</h:form>
+
+		<h:form id="form2">
+			<p:dialog header="Not Appropriate" widgetVar="pendingDialog" resizable="false"
+				closable="true">
+				<p:panelGrid columns="2">
+					<p:outputLabel value="Remark"></p:outputLabel>
+					<p:inputTextarea value="#{viewAllTicket.remark2}">
+					</p:inputTextarea>
+					<p:commandButton value="Submit"
+						action="#{viewAllTicket.updateNotApp}" update=":form,:form2">
+
+					</p:commandButton>
+				</p:panelGrid>
+			</p:dialog>
+
+			<p:dialog header="In Process" widgetVar="inprocessDialog"
+				resizable="false" closable="true">
+				<p:panelGrid columns="2">
+					<p:outputLabel value="Remark"></p:outputLabel>
+					<p:inputTextarea value="#{viewAllTicket.remark1}">
+					</p:inputTextarea>
+					<p:commandButton value="Submit"
+						action="#{viewAllTicket.updateInProcess}" update=":form,:form2">
+
+					</p:commandButton>
+				</p:panelGrid>
+			</p:dialog>
+
+			<p:dialog header="Resolve This Ticket" widgetVar="resolvedDialog"
+				resizable="false" closable="true">
+				<p:panelGrid columns="2">
+					<p:outputLabel value="Remark"></p:outputLabel>
+					<p:inputTextarea value="#{viewAllTicket.remark}">
+					</p:inputTextarea>
+					<p:commandButton value="Submit"
+						action="#{viewAllTicket.updateresolved}" update=":form,:form2">
+
+					</p:commandButton>
+				</p:panelGrid>
+			</p:dialog>
+
+			<p:dialog header="Close This Thread" widgetVar="closeDialog" resizable="false"
+				closable="true">
+				<p:panelGrid columns="2">
+					<p:outputLabel value="Remark"></p:outputLabel>
+					<p:inputTextarea value="#{viewAllTicket.remark4}">
+					</p:inputTextarea>
+					<p:commandButton value="Submit"
+						action="#{viewAllTicket.updateclosed}" update=":form,:form2">
+
+					</p:commandButton>
+				</p:panelGrid>
+			</p:dialog>
+			
+			 <p:dialog header="Convert To Pending" widgetVar="convertDialog" resizable="false"
+				closable="true">
+				<p:panelGrid columns="2">
+					<p:outputLabel value="Remark"></p:outputLabel>
+					<p:inputTextarea value="#{viewAllTicket.remark3}">
+					</p:inputTextarea>
+					<p:commandButton value="Submit"
+						action="#{viewAllTicket.updateconvert}" update=":form,:form2">
+
+					</p:commandButton>
+				</p:panelGrid>
+			</p:dialog>
+		</h:form>
+
+		<p:ajaxStatus onstart="PF('statusDialog').show()"
+			onsuccess="PF('statusDialog').hide()" />
+		<p:dialog modal="true" widgetVar="statusDialog" resizable="false"
+			showHeader="false">
+			<center>
+				<i class="fa fa-circle-o-notch fa-5x fa-spin ajax-loader"></i>
+			</center>
+			<center>
+				<h3>Please Wait...</h3>
+			</center>
+		</p:dialog>
+	</h:body>
+</f:view>
+</html>

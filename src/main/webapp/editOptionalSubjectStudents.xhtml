@@ -1,0 +1,243 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Edit Subjects</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<h1>Assign / Edit / Delete Optional Subject Students</h1>
+
+
+							<p:panel header="Assign Subjects Students" id="panel">
+
+								<p:messages closable="true" autoUpdate="true"></p:messages>
+								<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+
+								<p:dataTable value="#{editOptionalSubjectStudents.subjectList}"
+									var="var">
+									<f:facet name="header">
+										All Subjects
+									</f:facet>
+
+									<p:column headerText="Serial Number">
+
+										<p:outputLabel value="#{var.serialNumber}"></p:outputLabel>
+
+									</p:column>
+
+									<p:column sortBy="#{var.className}" headerText="Class Name">
+
+										<p:outputLabel value="#{var.className}"></p:outputLabel>
+
+									</p:column>
+									<p:column rendered="false" sortBy="#{var.sectionName}"
+										headerText="Section Name">
+
+										<p:outputLabel value="#{var.sectionName}"></p:outputLabel>
+
+									</p:column>
+
+									<p:column headerText="Subject Type">
+
+										<p:outputLabel value="#{var.subjectType}"></p:outputLabel>
+
+									</p:column>
+
+									<p:column sortBy="#{var.subjectName}" headerText="Subject Name">
+
+										<p:outputLabel value="#{var.subjectName}"></p:outputLabel>
+
+									</p:column>
+
+
+
+									<p:column headerText="Assign/DeAssign Students">
+
+										<p:commandButton update=":editForm" icon="ui-icon-plus"
+											styleClass="butwid"
+											action="#{editOptionalSubjectStudents.allSection}">
+
+											<f:setPropertyActionListener
+												target="#{editOptionalSubjectStudents.selectedSubject}"
+												value="#{var}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+
+									<p:column headerText="Edit" style="width: 150px !important;">
+										<p:commandButton icon="ui-icon-pencil" process=":form"
+											styleClass="butwid" oncomplete="PF('editDialog').show()"
+											update=":form1">
+											<f:setPropertyActionListener value="#{var}"
+												target="#{editOptionalSubjectStudents.selectedSubject}" />
+										</p:commandButton>
+									</p:column>
+
+									<p:column headerText="Delete" style="width: 150px !important;">
+										<p:commandButton update=":form" icon="ui-icon-trash"
+											styleClass="butwid redButt"
+											action="#{editOptionalSubjectStudents.delete}"
+											disabled="#{var.disable}" immediate="true">
+											<f:setPropertyActionListener value="#{var}"
+												target="#{editOptionalSubjectStudents.selectedSubject}" />
+											<p:confirm header="Confirmation"
+												message="Really Want To Remove This Subject ???"
+												icon="ui-icon-alert" />
+										</p:commandButton>
+									</p:column>
+
+								</p:dataTable>
+
+
+
+							</p:panel>
+							<p:confirmDialog global="true" showEffect="fade"
+								hideEffect="fade">
+								<p:commandButton style="margin-left:50px" value="Yes"
+									type="button" styleClass="ui-confirmdialog-yes greenButt"
+									icon="ui-icon-check" />
+								<p:commandButton style="margin-left:50px" value="No"
+									type="button" styleClass="ui-confirmdialog-no redButt"
+									icon="ui-icon-close" />
+							</p:confirmDialog>
+						</h:form>
+
+						<h:form id="form1" style="overflow:hidden">
+							<p:dialog header="Edit Subject Name" widgetVar="editDialog"
+								modal="true" showEffect="fade" hideEffect="fade"
+								resizable="false">
+								<p:panelGrid columns="2">
+
+									<p:outputLabel value="Subject Name: *"></p:outputLabel>
+									<p:inputText
+										value="#{editOptionalSubjectStudents.selectedSubject.subjectName}"
+										required="true" requiredMessage="Please Enter Subject Name"
+										validatorMessage="Please Enter Correct value">
+										<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:inputText>
+
+									<p:outputLabel value="Add Subject In Exam"></p:outputLabel>
+									<p:selectOneRadio
+										value="#{editOptionalSubjectStudents.selectedSubject.addInExam}">
+										<f:selectItem itemLabel="Yes" itemValue="yes"></f:selectItem>
+										<f:selectItem itemLabel="No" itemValue="no"></f:selectItem>
+									</p:selectOneRadio>
+
+
+								</p:panelGrid>
+
+								<br />
+								<p:separator />
+								<center>
+									<p:commandButton value="Update "
+										action="#{editOptionalSubjectStudents.update}" update=":form"
+										styleClass="butwid" icon="fa fa-upload"></p:commandButton>
+
+								</center>
+								<p:separator />
+								<br />
+
+							</p:dialog>
+						</h:form>
+
+
+						<h:form id="editForm">
+							<p:panel header="Student List">
+								<p:panelGrid id="pnlgrid"
+									rendered="#{editOptionalSubjectStudents.show}" columns="5"
+									styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:outputLabel for="@next"
+										style="color:red;font-weight:bold;font-size:15px;"
+										value="Select Section of Class - #{editOptionalSubjectStudents.selectedSubject.className}" />
+
+									<p:selectOneMenu id="showSection"
+										value="#{editOptionalSubjectStudents.selectedSection}"
+										required="true" requiredMessage="Please select a section">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItems
+											value="#{editOptionalSubjectStudents.sectionList}"></f:selectItems>
+										<p:ajax update=":editForm"
+											listener="#{editOptionalSubjectStudents.editStudentSubjectDetails}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:spacer height="0px;" width="40px;"></p:spacer>
+
+									<p:outputLabel value="Subject Name :"></p:outputLabel>
+									<p:outputLabel
+										value="#{editOptionalSubjectStudents.selectedSubject.subjectName}"></p:outputLabel>
+								</p:panelGrid>
+								<br />
+								<center>
+									<p:pickList showSourceFilter="true" showTargetFilter="true"
+										filterMatchMode="contains"
+										rendered="#{editOptionalSubjectStudents.showPicker}"
+										itemLabel="#{var}" itemValue="#{var}" id="pickList"
+										value="#{editOptionalSubjectStudents.studentList}"
+										responsive="true" var="var">
+										<f:facet name="sourceCaption">Subject Not Assigned</f:facet>
+										<f:facet name="targetCaption">Subject Assigned</f:facet>
+									</p:pickList>
+								</center>
+								
+								<p:outputPanel rendered="#{editOptionalSubjectStudents.showPicker}">
+								<br />
+								<p:separator />
+								<center>
+									<p:panelGrid
+										columns="2"
+										layout="grid" styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+												
+								<p:commandButton update=":editForm :form" styleClass="butwid" icon="fa fa-upload"
+									rendered="#{editOptionalSubjectStudents.showPicker}"
+									action="#{editOptionalSubjectStudents.submit}" value="Submit"
+									style="margin-top:5px" />
+								<p:commandButton
+									rendered="#{editOptionalSubjectStudents.showPicker}" styleClass="butwid redButt" icon="fa fa-cancel"
+									update=":editForm"
+									action="#{editOptionalSubjectStudents.cancel}" value="Cancel"
+									style="margin-top:5px" />
+										
+										
+										
+									</p:panelGrid>
+								</center>
+								<p:separator />
+								<br />
+								</p:outputPanel>
+								
+								
+							</p:panel>
+						</h:form>
+
+						<h:form id="confirmForm">
+							<p:dialog header="Optional Subject Allotment" widgetVar="enqDlg"
+								resizable="false" closable="false" modal="true"
+								showEffect="fade" hideEffect="fade">
+								<p:panel>
+									<p:outputLabel style="font-weight:bold;font-size:15px;"
+										value="Optional Subject Allotment Successfully!"></p:outputLabel>
+									<br></br>
+									<br></br>
+									<p:commandButton action="#{editOptionalSubjectStudents.ok}"
+										value="OK" styleClass="greenButt" style="margin-top:10px" />
+								</p:panel>
+							</p:dialog>
+						</h:form>
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

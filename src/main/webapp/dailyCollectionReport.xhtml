@@ -1,0 +1,95 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Daily Collection</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<h1>Daily Collection Report</h1>
+							<p:messages autoUpdate="true" closable="true"></p:messages>
+							<p:panel header="Search Data">
+								<p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+									<p:outputLabel value="Start Date:-" for="@next" style="color:red" ></p:outputLabel>
+									<p:calendar value="#{dailyFeeCollection.startDate}"
+										navigator="true" pattern="dd/MM/yyyy" required="true"
+										requiredMessage="Please Enter Start Date" />
+
+									<p:outputLabel value="End Date:-" for="@next" style="color:red" ></p:outputLabel>
+									<p:calendar value="#{dailyFeeCollection.endDate}"
+										navigator="true" pattern="dd/MM/yyyy" required="true"
+										requiredMessage="Please Enter End Date" />
+
+									<p:commandButton value="Search"
+										actionListener="#{dailyFeeCollection.searchData}"
+										update=":form"></p:commandButton>
+									<p:commandButton value="Print"
+										rendered="#{dailyFeeCollection.showPrintButton}">
+										<p:printer target="dataTable"></p:printer>
+									</p:commandButton>
+								</p:panelGrid>
+							</p:panel>
+							<br/>
+							<p:panel id="dataTable" rendered="#{dailyFeeCollection.showData}">
+								<center>
+									<p
+										style="font-family: initial; font-style: oblique; font-size: 30px !important; font-weight: bold; margin: 0px;">#{headerBean.name}</p>
+									<p style="margin: 0px;">Daily Collection Report</p>
+								</center>
+								<p:dataTable style="width:100%;border-collapse:collapse"
+									border="1" var="var" value="#{dailyFeeCollection.feeList}">
+									<f:facet name="header">
+										<p:outputLabel
+											value="Date Period:- #{dailyFeeCollection.date}"></p:outputLabel>
+									</f:facet>
+
+									<p:column groupRow="true" headerText="Date" style="width:70px">
+										<p:outputLabel value="#{var.dateName}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Recpt. No." style="width:40px">
+										<p:outputLabel value="#{var.receiptNo}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Student Name" style="width:70px">
+										<p:outputLabel value="#{var.studentName}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Admn No" style="width:30px">
+										<p:outputLabel value="#{var.addNumber}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Class" style="width:30px">
+										<p:outputLabel value="#{var.className}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Cheque No." style="width:40px">
+										<p:outputLabel value="#{var.chqNo}"></p:outputLabel>
+									</p:column>
+
+									<p:columns value="#{dailyFeeCollection.classFeeList}"
+										var="column" columnIndexVar="colIndex">
+										<f:facet name="header">
+											<p:outputLabel value="#{column.feeName}"></p:outputLabel>
+										</f:facet>
+
+										<p:outputLabel value="#{var.feeMap[column.feeName]}"></p:outputLabel>
+									</p:columns>
+								</p:dataTable>
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,86 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Consent</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form enctype="multipart/form-data" id="form">
+							<h1>Post Consent</h1>
+							<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+							<p:panel>
+
+								<f:facet name="header">
+									<span>Allowed file types are :-
+										jpg,jpeg,png,pdf,doc,docx</span>
+									<span> <p:commandLink
+											style="float: right;margin-left: 15px;;color: blue;font-size:15px;"
+											immediate="true" value="Consent Report"
+											action="generalConsentReport.xhtml?faces-redirect=true"></p:commandLink>
+									</span>
+								</f:facet>
+
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel value="Select Class" for="@next" style="color:red" ></p:outputLabel>
+									<p:selectOneMenu value="#{postConsent.selectedCLassSection}"
+										required="true" requiredMessage="Please select a class"
+										filter="true">
+										<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+										<f:selectItems value="#{postConsent.classSection}"></f:selectItems>
+										<p:ajax update="sectionid"
+											listener="#{postConsent.allSections}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Select Section" for="@next" style="color:red" ></p:outputLabel>
+									<p:selectOneMenu id="sectionid"
+										value="#{postConsent.selectedSection}" required="true"
+										requiredMessage="Please select a section" filter="true">
+										<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+										<f:selectItems value="#{postConsent.sectionList}"></f:selectItems>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Consent For" for="@next" style="color:red" ></p:outputLabel>
+									<p:inputTextarea value="#{postConsent.des}" rows="3" cols="20"
+										required="true" requiredMessage="Please Enter Consent For"></p:inputTextarea>
+
+									<p:outputLabel value="Last Date To Respond" for="@next" style="color:red" ></p:outputLabel>
+									<p:calendar value="#{postConsent.assShowDate}" navigator="true"
+										pattern="dd/MM/yyyy" required="true"
+										requiredMessage="Please Select Last Date To Respond"
+										mindate="new Date();"></p:calendar>
+
+
+									<p:outputLabel value="Attachment (If Any)"></p:outputLabel>
+									<p:fileUpload mode="simple" skinSimple="true"
+										value="#{postConsent.assignmentPhoto1}"></p:fileUpload>
+
+								</p:panelGrid>
+
+								<br />
+								<br />
+
+								<center>
+									<p:commandButton value="Submit"
+										title="Click On to Post Consent" ajax="false" update=":form"
+										action="#{postConsent.upload}" style="width: 150px;"></p:commandButton>
+								</center>
+							</p:panel>
+						</h:form>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</ui:define>
+</ui:composition>

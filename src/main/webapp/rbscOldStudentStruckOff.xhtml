@@ -1,0 +1,252 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Old Student TC</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+
+							<h1>Student TC Details</h1>
+
+
+							<p:messages autoUpdate="true" closable="true"></p:messages>
+
+							<p:panel header="Student Details">
+								<p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+									<p:outputLabel for="@next" style="color:red"  value="Register No"></p:outputLabel>
+									<p:inputText value="#{rbscOldStudentStruckOff.registerNo}"
+										required="true" requiredMessage="Please Enter Rgister No." validatorMessage="Please Enter Correct value">
+										<f:ajax></f:ajax>
+										<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:inputText>
+
+									<p:outputLabel  for="@next" style="color:red" value="S.No."></p:outputLabel>
+									<p:inputText value="#{rbscOldStudentStruckOff.addNumber}"
+										required="true" requiredMessage="Please Enter Admission No." validatorMessage="Please Enter Correct value">
+										<p:ajax
+											listener="#{rbscOldStudentStruckOff.checkAdmissionNumber}"
+											update=":form"></p:ajax>
+										<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+									</p:inputText>
+
+									<p:outputLabel for="@next" style="color:red"  value="Student Name"></p:outputLabel>
+									<p:inputText value="#{rbscOldStudentStruckOff.studentName}"
+										required="true" requiredMessage="Please Enter Student Name" validatorMessage="Please Enter Correct value">
+									   <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+									</p:inputText>
+
+									<p:outputLabel  for="@next" style="color:red" value="Father Name"></p:outputLabel>
+									<p:inputText value="#{rbscOldStudentStruckOff.fatherName}"
+										required="true" requiredMessage="Please Enter Father's Name" validatorMessage="Please Enter Correct value">
+									  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:inputText>
+
+									<p:outputLabel for="@next" style="color:red"  value="Mother Name"></p:outputLabel>
+									<p:inputText value="#{rbscOldStudentStruckOff.motherName}"
+										required="true" requiredMessage="Please Enter Mother's Name" validatorMessage="Please Enter Correct value">
+									  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+									</p:inputText>
+
+									<p:outputLabel  for="@next" style="color:red" value="Admission Date"></p:outputLabel>
+									<p:calendar value="#{rbscOldStudentStruckOff.admissionDate}"
+										update=":form" navigator="true" pattern="dd/MM/yyyy"
+										yearRange="c-10:c+10" required="true"
+										requiredMessage="Please Select Admission Date">
+									</p:calendar>
+
+									<p:outputLabel  for="@next" style="color:red" value="Removal Date"></p:outputLabel>
+									<p:calendar value="#{rbscOldStudentStruckOff.removalDate}"
+										update=":form" navigator="true" pattern="dd/MM/yyyy"
+										yearRange="c-10:c+10" required="true"
+										requiredMessage="Please Select Removal Date">
+									</p:calendar>
+
+									<p:outputLabel  for="@next" style="color:red" value="Cause of Removal"></p:outputLabel>
+									<p:selectOneMenu required="true" editable="true" filter="true"
+										requiredMessage="Please Select Reason"
+										value="#{rbscOldStudentStruckOff.reason}">
+										<f:selectItem itemLabel="Select Reason" itemValue=""></f:selectItem>
+										<f:selectItem itemLabel="Due to long absent"
+											itemValue="Due to Long Absent"></f:selectItem>
+										<f:selectItem itemLabel="To study else where"
+											itemValue="To Study Else Where"></f:selectItem>
+										<f:selectItem itemLabel="To study for higher classes"
+											itemValue="To Study For Higher Classes"></f:selectItem>
+										<f:selectItem itemLabel="Parents transfer to other city"
+											itemValue="Parents Transfer to Other City"></f:selectItem>
+										<f:selectItem itemLabel="other" itemValue="Other"></f:selectItem>
+
+									</p:selectOneMenu>
+
+									<p:outputLabel  for="@next" style="color:red" value="Date Of Birth"></p:outputLabel>
+									<p:calendar value="#{rbscOldStudentStruckOff.dob}"
+										navigator="true" pattern="dd/MM/yyyy" yearRange="c-10:c+10"
+										required="true" requiredMessage="Please Select DOB">
+									</p:calendar>
+
+									<p:outputLabel for="@next" style="color:red"  value="Guardian Name"></p:outputLabel>
+									<p:inputText value="#{rbscOldStudentStruckOff.guardianName}"
+										required="true" requiredMessage="Please Enter Guardian Name" validatorMessage="Please Enter Correct value">
+									  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+									</p:inputText>
+
+									<p:outputLabel for="@next" style="color:red"  value="Occupation"></p:outputLabel>
+									<p:inputText value="#{rbscOldStudentStruckOff.occupation}"
+										required="true" requiredMessage="Please Enter Occupation" validatorMessage="Please Enter Correct value">
+									  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+									</p:inputText>
+
+									<p:outputLabel for="@next" style="color:red"  value="Relation"></p:outputLabel>
+									<p:inputText value="#{rbscOldStudentStruckOff.relation}"
+										required="true" requiredMessage="Please Enter Relation" validatorMessage="Please Enter Correct value">
+									  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+								    </p:inputText>
+
+									<p:outputLabel for="@next" style="color:red"  value="Address"></p:outputLabel>
+									<p:inputText value="#{rbscOldStudentStruckOff.address}"
+										required="true" requiredMessage="Please Enter Address" validatorMessage="Please Enter Correct value">
+									  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+									</p:inputText>
+
+									<p:outputLabel  for="@next" style="color:red" value="Last School Name"></p:outputLabel>
+									<p:inputText value="#{rbscOldStudentStruckOff.lastSchool}"
+										required="true"
+										requiredMessage="Please Enter Last School Name" validatorMessage="Please Enter Correct value">
+									  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+									</p:inputText>
+
+									<p:outputLabel for="@next" style="color:red"  value="Last Class"></p:outputLabel>
+									<p:inputText value="#{rbscOldStudentStruckOff.lastClass}"
+										required="true"
+										requiredMessage="Please Enter Last School Class" validatorMessage="Please Enter Correct value">
+									  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+									 </p:inputText>
+
+									<p:outputLabel for="@next" style="color:red"  value="Last result"></p:outputLabel>
+									<p:inputText value="#{rbscOldStudentStruckOff.lastResult}"
+										required="true"
+										requiredMessage="Please Enter Last School Result" validatorMessage="Please Enter Correct value">
+									  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+									</p:inputText>
+
+
+
+								</p:panelGrid>
+<br/>
+								<p:dataTable reflow="true" id="table"
+									value="#{rbscOldStudentStruckOff.tcDetail}" var="var">
+									
+									<p:column headerText="S.No." style="width:35px">
+										<p:outputLabel value="#{var.sNo}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Class">
+										<p:selectOneMenu value="#{var.className}"
+											style="width:80px !important;" filter="true">
+											<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+											<f:selectItems value="#{rbscOldStudentStruckOff.sectionList}"></f:selectItems>
+											<p:ajax event="itemSelect"></p:ajax>
+										</p:selectOneMenu>
+									</p:column>
+
+									<p:column headerText="Date of Admission">
+										<p:calendar value="#{var.doa}" 
+											navigator="true" pattern="dd/MM/yyyy" yearRange="c-10:c+10">
+											<p:ajax event="dateSelect"></p:ajax>
+										</p:calendar>
+									</p:column>
+
+									<p:column headerText="Date of Passing">
+										<p:calendar value="#{var.dop}"
+											navigator="true" pattern="dd/MM/yyyy" yearRange="c-10:c+10">
+											<p:ajax event="dateSelect"></p:ajax>
+										</p:calendar>
+									</p:column>
+
+									<p:column headerText="School Meeting">
+										<p:inputText value="#{var.schoolMeeting}">
+											<p:keyFilter mask="pnum"/>
+											<f:ajax></f:ajax>
+										</p:inputText>
+									</p:column>
+
+									<p:column headerText="Student Meeting">
+										<p:inputText value="#{var.studentMeeting}">
+											<p:keyFilter mask="pnum"/>
+											<f:attribute name="sNo" value="#{var.sNo}"></f:attribute>
+											<p:ajax listener="#{rbscOldStudentStruckOff.checkMeeting}"
+												update=":form:table"></p:ajax>
+										</p:inputText>
+									</p:column>
+
+									<p:column headerText="Total Student">
+										<p:inputText value="#{var.totalStudent}">
+											<p:keyFilter mask="pnum"/>
+											<p:ajax></p:ajax>
+										</p:inputText>
+									</p:column>
+
+									<p:column headerText="Result">
+										<p:selectOneMenu editable="true" style="width:90px !important" filter="true"
+											value="#{var.result}" >
+											<f:selectItem itemLabel="Select " itemValue=""></f:selectItem>
+											<f:selectItem itemLabel="Pass" itemValue="Pass"></f:selectItem>
+											<f:selectItem itemLabel="Fail" itemValue="Fail"></f:selectItem>
+											<f:selectItem itemLabel="Supplementary"
+												itemValue="Supplementary"></f:selectItem>
+											<f:selectItem itemLabel="Pass By Grace"
+												itemValue="Pass By Grace"></f:selectItem>
+											<f:selectItem itemLabel="Reading In" itemValue="Reading In"></f:selectItem>
+											<p:ajax event="itemSelect"></p:ajax>
+										</p:selectOneMenu>
+									</p:column>
+
+									<p:column headerText="Session">
+										<p:inputText value="#{var.session}" validatorMessage="Please Enter Correct value">
+											<p:ajax></p:ajax>
+											<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+										</p:inputText>
+
+									</p:column>
+
+
+									<p:column headerText="Conduct And Work">
+										<p:selectOneMenu editable="true" style="width:90px !important"
+											value="#{var.work}">
+											<f:selectItem itemLabel="Select " itemValue=""></f:selectItem>
+											<f:selectItem itemLabel="Good-Good" itemValue="Good-Good"></f:selectItem>
+											<f:selectItem itemLabel="Common-Common"
+												itemValue="Common-Common"></f:selectItem>
+											<f:selectItem itemLabel="Reading In" itemValue="Reading In"></f:selectItem>
+											<p:ajax event="itemSelect"></p:ajax>
+										</p:selectOneMenu>
+									</p:column>
+
+									<f:facet name="header">
+										<p:commandButton ajax="false" value="Submit"  style="width:150px;"
+											action="#{rbscOldStudentStruckOff.submit}" update=":form"></p:commandButton>
+									</f:facet>
+									<f:facet name="footer">
+										<p:commandButton ajax="false" value="Submit" style="width:150px;"
+											action="#{rbscOldStudentStruckOff.submit}" update=":form"></p:commandButton>
+									</f:facet>
+								</p:dataTable>
+							</p:panel>
+
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

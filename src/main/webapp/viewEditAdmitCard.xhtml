@@ -1,0 +1,293 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Admit Card</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="instlmnt" style="overflow:hidden">
+							<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+							<p:panel header="Edit / View / Delete Admit Card">
+								<p:dataTable reflow="true" id="dt" var="aa"
+									value="#{viewEditAdmitCardBean.list}" rowIndexVar="index">
+
+									<p:column headerText="S.No.">
+										<h:outputText value="#{index+1}" />
+									</p:column>
+
+									<p:column headerText="Class" filterBy="#{aa.className}" filterMatchMode="contains">
+										<h:outputText value="#{aa.className}" />
+									</p:column>
+
+									<p:column headerText="Section" filterBy="#{aa.sectionName}">
+										<h:outputText value="#{aa.sectionName}" />
+									</p:column>
+
+									<p:column headerText="Exam Name" filterBy="#{aa.examName}" filterMatchMode="contains">
+										<h:outputText value="#{aa.examName}" />
+									</p:column>
+
+									<p:column headerText="Type" filterBy="#{aa.type}">
+										<h:outputText value="#{aa.type}" />
+									</p:column>
+
+									<p:column headerText="View" style="width: 50px !important;">
+										<p:commandButton icon="ui-icon-search"
+											oncomplete="PF('viewDialog').show()"
+											action="#{viewEditAdmitCardBean.view}" update=":form2">
+											<f:setPropertyActionListener value="#{aa}"
+												target="#{viewEditAdmitCardBean.selected}" />
+										</p:commandButton>
+									</p:column>
+
+									<p:column headerText="Edit" style="width: 50px !important;">
+										<p:commandButton icon="ui-icon-pencil"
+											action="#{viewEditAdmitCardBean.editDetails}"
+											oncomplete="PF('editDialog').show()" update=":form3">
+											<f:setPropertyActionListener value="#{aa}"
+												target="#{viewEditAdmitCardBean.selected}" />
+										</p:commandButton>
+									</p:column>
+
+									<p:column headerText="Delete" style="width: 50px !important;">
+										<p:commandButton update=":instlmnt" icon="ui-icon-trash"
+											action="#{viewEditAdmitCardBean.delete}">
+											<f:setPropertyActionListener value="#{aa}"
+												target="#{viewEditAdmitCardBean.selected}" />
+											<p:confirm header="Confirmation"
+												message="Surely want to remove this admit card ?"
+												icon="ui-icon-alert" />
+										</p:commandButton>
+									</p:column>
+								</p:dataTable>
+							</p:panel>
+
+
+
+
+						</h:form>
+
+
+						<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+							<p:commandButton value="Yes" type="button"
+								styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+							<p:commandButton value="No" type="button"
+								styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+						</p:confirmDialog>
+
+
+
+						<h:form id="form2" style="overflow:hidden" enctype="multipart/form-data">
+							<p:dialog closeOnEscape="true" header="Admit Card Info"
+								widgetVar="viewDialog" modal="true" showEffect="fade"
+								hideEffect="fade" resizable="false" height="600px" width="700px">
+								
+								<p:graphicImage height="300px" width="300px" rendered="false"
+												value="#{viewEditAdmitCardBean.selectedImage}"></p:graphicImage>
+								<p:commandButton value="View File" rendered="#{viewEditAdmitCardBean.photoType}" action="#{viewEditAdmitCardBean.viewFile}"></p:commandButton>				
+								
+								
+								<p:outputPanel id="manualView" rendered="#{viewEditAdmitCardBean.manualType}" style="width:100%;font-size:14px;">
+								
+								<br/>
+								<center><p:outputLabel value="DATESHEET" style="font-size:20px;"></p:outputLabel></center>
+								
+								<br/>
+								<br/>
+								
+								<p:panelGrid columns="4"   style="border:0px none;width:100%; background-color:transparent;">
+								  <p:outputLabel value="Class :"></p:outputLabel>
+								  <p:outputLabel value="#{viewEditAdmitCardBean.selected.className}"></p:outputLabel>
+								  
+								  <p:outputLabel value="Section :"></p:outputLabel>
+								  <p:outputLabel value="#{viewEditAdmitCardBean.selected.sectionName}"></p:outputLabel>
+								  
+								  <p:outputLabel value="Exam Name :"></p:outputLabel>
+								  <p:outputLabel value="#{viewEditAdmitCardBean.selected.examName}"></p:outputLabel>
+								  
+								  <p:outputLabel value="Type :"></p:outputLabel>
+								  <p:outputLabel value="#{viewEditAdmitCardBean.selected.type}"></p:outputLabel>
+								  
+						
+								  
+								</p:panelGrid>
+								
+								<br/>
+								<br/>
+								
+								<p:dataTable  style="width:100%"
+									value="#{viewEditAdmitCardBean.subList}" var="var" >
+									<p:column headerText="S.No." style="width:60px">
+										<p:outputLabel value="#{var.sNo}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Subject"
+										rendered="#{viewEditAdmitCardBean.selected.type.toLowerCase() eq 'academics'}">
+										<p:outputLabel value="#{var.subjectName}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Description"
+										rendered="#{viewEditAdmitCardBean.selected.type.toLowerCase() eq 'sports'}">
+										<p:outputLabel value="#{var.description}">
+										</p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Date">
+										<p:outputLabel value="#{var.dateStr}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Time">
+										<p:outputLabel value="#{var.timeExam}"></p:outputLabel>
+									</p:column>
+								</p:dataTable>
+								</p:outputPanel>
+								
+								<center>
+								<p:commandButton value="print" rendered="#{viewEditAdmitCardBean.manualType}" style="width:150px;">
+		   		                  <p:printer target=":form2:manualView"></p:printer>
+	                            </p:commandButton>
+	                            </center>
+
+							</p:dialog>
+
+						</h:form>
+
+						<h:form id="form3" style="overflow:hidden" enctype="multipart/form-data">
+							<p:dialog header="Admit Card Info" widgetVar="editDialog"
+								modal="true" showEffect="fade" hideEffect="fade"
+								resizable="false">
+								
+								<h:panelGrid columns="1" rendered="#{viewEditAdmitCardBean.photoType}">
+								<p:outputLabel value="(Allowed file type are :- jpg,jpeg,png,pdf)" style="font-weight: bold;"></p:outputLabel>
+							    
+							    <p:outputLabel value="Note : Size limit for an file is 1MB. Please do not upload file(s) of size greater than 1MB" style="font-weight: bold;"></p:outputLabel>
+							</h:panelGrid>
+								
+								
+								<br/>
+								<p:outputPanel id="receiptDetail" style="text-align:center;">
+									<p:panelGrid columns="2"
+										columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+										layout="grid" styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+										<p:outputLabel  for="@next" style="color:red"  id="exmLbl"
+											value="#{viewEditAdmitCardBean.selected.type.toLowerCase() eq 'academics' ? 'Exam Name' : 'Event Name'}"></p:outputLabel>
+										<p:inputText value="#{viewEditAdmitCardBean.examName}"
+											required="true"
+											requiredMessage="Please Enter #{viewEditAdmitCardBean.selected.type.toLowerCase() eq 'academics' ? 'Exam Name' : 'Event Name'}">
+											
+											</p:inputText>
+									</p:panelGrid>
+									<br></br>
+									<br></br>
+
+                                 <p:graphicImage height="300px" width="300px" rendered="false"
+												value="#{viewEditAdmitCardBean.selectedImage}"></p:graphicImage>
+												
+							<center><p:commandButton value="View File" style="width:100px;" rendered="#{viewEditAdmitCardBean.photoType}" action="#{viewEditAdmitCardBean.viewFile}"></p:commandButton>				
+									</center>			
+									
+								<br/>				
+					             <p:outputLabel value="Choose File (Allowed file type are :- jpg,jpeg,png,pdf)" rendered="#{viewEditAdmitCardBean.photoType}"></p:outputLabel> 
+					             <p:fileUpload mode="simple" value="#{viewEditAdmitCardBean.file}" rendered="#{viewEditAdmitCardBean.photoType}" allowTypes="/(\.|\/)(gif|jpeg|png|pdf)$/" sizeLimit="1000000"></p:fileUpload>
+												
+                                  <p:outputPanel rendered="#{viewEditAdmitCardBean.manualType}">
+									<p:dataTable reflow="true" 
+										rendered="#{viewEditAdmitCardBean.selected.type.toLowerCase() eq 'academics'}"
+										id="tbl" style="width:600px"
+										value="#{viewEditAdmitCardBean.subList}" var="var">
+										<p:column headerText="S.No." style="width:60px">
+											<p:outputLabel value="#{var.sNo}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Subject*">
+											<p:selectOneMenu value="#{var.subjectId}" filter="true" disabled="#{var.disableEdit}">
+												<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+												<f:selectItems value="#{viewEditAdmitCardBean.subjectList}"></f:selectItems>
+												<f:attribute name="sNo" value="#{var.sNo}"></f:attribute>
+												<p:ajax listener="#{viewEditAdmitCardBean.checkSubject}"
+													update=":form3:tbl"></p:ajax>
+											</p:selectOneMenu>
+										</p:column>
+
+										<p:column headerText="Date*">
+											<p:calendar value="#{var.examDate}" navigator="true"
+												pattern="dd/MM/yyyy" yearRange="c-10:c+10" disabled="#{var.disableEdit}">
+												<p:ajax event="dateSelect" ></p:ajax>
+											</p:calendar>
+										</p:column>
+
+										<p:column headerText="Time">
+											<p:inputText value="#{var.timeExam}" disabled="#{var.disableEdit}">
+												<f:attribute name="sNo" value="#{var.sNo}"></f:attribute>
+												<p:ajax></p:ajax>
+											</p:inputText>
+										</p:column>
+										<f:facet name="footer">
+											<p:commandButton rendered="false" value="Add More" update=":form3:tbl"
+												actionListener="#{viewEditAdmitCardBean.addMore}"
+												ajax="false" style="width: 100px !important;"></p:commandButton>
+										</f:facet>
+									</p:dataTable>
+
+									<p:dataTable reflow="true" id="tblSports" style="width:600px"
+										value="#{viewEditAdmitCardBean.subList}" var="var"
+										rendered="#{viewEditAdmitCardBean.selected.type.toLowerCase() eq 'sports'}">
+										<p:column headerText="S.No." style="width:60px">
+											<p:outputLabel value="#{var.sNo}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Description*">
+											<p:inputText value="#{var.description}" disabled="#{var.disableEdit}">
+											</p:inputText>
+										</p:column>
+
+										<p:column headerText="Date*">
+											<p:calendar value="#{var.examDate}" navigator="true"
+												pattern="dd/MM/yyyy" yearRange="c-10:c+10" disabled="#{var.disableEdit}">
+											</p:calendar>
+										</p:column>
+
+										<p:column headerText="Time">
+											<p:inputText value="#{var.timeExam}" disabled="#{var.disableEdit}">
+											</p:inputText>
+										</p:column>
+
+										<f:facet name="footer">
+											<p:commandButton rendered="false" value="Add More" update=":form3:tblSports"
+												actionListener="#{viewEditAdmitCardBean.addMore}"
+												ajax="false" style="width: 100px !important;"></p:commandButton>
+										</f:facet>
+
+									</p:dataTable>
+									</p:outputPanel>
+									<br></br>
+									<br></br>
+									<p:outputPanel>
+									<p:outputLabel value="INSTRUCTIONS" style="font-size:17px;"></p:outputLabel><br/>
+									<h:inputTextarea  value="#{viewEditAdmitCardBean.selected.instructions}" style="height:150px !important;width:100%;overflow:auto;" ></h:inputTextarea>
+									</p:outputPanel>
+									
+									<center>
+										<p:commandButton value="Update" update=":instlmnt,:form3"
+											action="#{viewEditAdmitCardBean.update}" ajax="false"
+											style="width: 150px !important;"></p:commandButton>
+									</center>
+								</p:outputPanel>
+							</p:dialog>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

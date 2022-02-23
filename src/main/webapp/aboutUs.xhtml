@@ -1,0 +1,79 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	<f:loadBundle var="addClassVar" basename="myProperties" />
+
+	<ui:define name="title">About Us</ui:define>
+   
+	<ui:define name="content">
+<h:form id="form" enctype="multipart/form-data">
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						
+							<p:messages closable="true" autoUpdate="true"></p:messages>
+							<p:panel header="About Us (Allowed file type are :- jpg,jpeg)">
+								<p:panelGrid columns="3" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+									
+									
+									<p:outputLabel value="Principal Message"></p:outputLabel>
+									<p:inputTextarea value="#{aboutus.principalMessage}" rows="3"
+										cols="50" style="width:100%">
+									</p:inputTextarea>
+									<p:fileUpload value="#{aboutus.principalPicture}" mode="simple"
+										allowTypes="/(\.|\/)(gif|jpeg|png)$/" />
+
+									<p:outputLabel value="Chairman Message"></p:outputLabel>
+									<p:inputTextarea value="#{aboutus.chairManMessage}" rows="3"
+										cols="50" style="width:100%">
+									</p:inputTextarea>
+									<p:fileUpload value="#{aboutus.chairmanPicture}" mode="simple"
+										allowTypes="/(\.|\/)(gif|jpeg|png)$/" />
+
+									<p:outputLabel value="School Message"></p:outputLabel>
+									<p:inputTextarea value="#{aboutus.schoolmeassage}" rows="3"
+										cols="50" style="width:100%">
+									</p:inputTextarea>
+									<p:fileUpload value="#{aboutus.schoolPicture}" mode="simple"
+										allowTypes="/(\.|\/)(gif|jpeg|png)$/" />
+									
+									<p:commandButton value="Submit"
+										actionListener="#{aboutus.insertAboutUsDeatils}" ajax="false"></p:commandButton>
+								</p:panelGrid>
+							</p:panel>
+							</div>
+							<div class="card card-w-title">
+							<p:panel header="Previous Uploaded Details">
+								<ui:repeat var="var" value="#{aboutus.informationList}">
+									<p:panelGrid columns="7" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+										<p:outputLabel value="Principal Message :-"></p:outputLabel>
+										<p:outputLabel value="#{var.principalMessage}"></p:outputLabel>
+										<p:graphicImage cache="false" style="width:100px;height:100px"
+											url="#{var.principalPicture}"></p:graphicImage>.
+							
+									 <p:outputLabel value="Chairman Message :-"></p:outputLabel>
+										<p:outputLabel value="#{var.chairManMessage}"></p:outputLabel>
+										<p:graphicImage cache="false" style="width:100px;height:100px"
+											value="#{var.chairmanPicture}"></p:graphicImage>
+
+										<p:outputLabel value="School Message :-"></p:outputLabel>
+										<p:outputLabel value="#{var.schoolmeassage}"></p:outputLabel>
+										<p:graphicImage cache="false" style="width:100px;height:100px"
+											value="#{var.schoolPicture}"></p:graphicImage>
+
+									</p:panelGrid>
+								</ui:repeat>
+							</p:panel>
+						
+					</div>
+				</div>
+			</div>
+		</div>
+</h:form>
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,96 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Book Expense</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+
+						<h:form id="form" style="overflow:hidden">
+						<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+							<p:panel id="panel1" rendered="true" header="Book Expense">
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:outputLabel value="Expense Date" for="@next" style="color:red" ></p:outputLabel>
+									<p:calendar maxdate="#{bookExpense.maxDate}"
+										mindate="#{bookExpense.minDate}" navigator="true"
+										pattern="dd/MM/yyyy" yearRange="c-10:c+10" required="true"
+										requiredMessage="Please enter bookExpense date"
+										value="#{bookExpense.expanseDate}">
+										<p:ajax event="dateSelect" />
+									</p:calendar>
+
+									<p:outputLabel value="Expense For" for="@next" style="color:red" ></p:outputLabel>
+									<p:inputText value="#{bookExpense.partyName}" required="true"
+										requiredMessage="Please Enter Party Name" validatorMessage="Please Enter Correct value">
+									  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+									</p:inputText>
+
+									<p:outputLabel value="Amount" for="@next" style="color:red" ></p:outputLabel>
+									<p:inputText value="#{bookExpense.amount}" required="true"
+										requiredMessage="Please Enter Amount">
+									</p:inputText>
+
+									<p:outputLabel value="Tax Amount"></p:outputLabel>
+									<p:inputText value="#{bookExpense.taxamount}">
+									</p:inputText>
+
+									<p:outputLabel value="Tax Month"></p:outputLabel>
+									<p:selectOneMenu value="#{bookExpense.taxMonth}" filter="true">
+										<f:selectItem itemLabel="January" itemValue="1"></f:selectItem>
+										<f:selectItem itemLabel="February" itemValue="2"></f:selectItem>
+										<f:selectItem itemLabel="March" itemValue="3"></f:selectItem>
+										<f:selectItem itemLabel="April" itemValue="4"></f:selectItem>
+										<f:selectItem itemLabel="May" itemValue="5"></f:selectItem>
+										<f:selectItem itemLabel="June" itemValue="6"></f:selectItem>
+										<f:selectItem itemLabel="July" itemValue="7"></f:selectItem>
+										<f:selectItem itemLabel="August" itemValue="8"></f:selectItem>
+										<f:selectItem itemLabel="September" itemValue="9"></f:selectItem>
+										<f:selectItem itemLabel="October" itemValue="10"></f:selectItem>
+										<f:selectItem itemLabel="November" itemValue="11"></f:selectItem>
+										<f:selectItem itemLabel="December" itemValue="12"></f:selectItem>
+
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Tax Year"></p:outputLabel>
+									<p:selectOneMenu value="#{bookExpense.taxYear}" filter="true">
+										<f:selectItems value="#{bookExpense.yearlist}"></f:selectItems>
+									</p:selectOneMenu>
+
+									<p:outputLabel  for="@next" style="color:red" value="Description"></p:outputLabel>
+									<p:inputTextarea value="#{bookExpense.description}" rows="3"
+										cols="50" required="true"
+										requiredMessage="Please Enter Description" validatorMessage="Please Enter Correct value">
+										<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:inputTextarea>
+
+                                    <p:outputLabel></p:outputLabel>
+            						 <p:outputLabel></p:outputLabel>
+
+								</p:panelGrid>
+								<br/>
+								<center>
+								<p:commandButton update=":form" style="width:150px;"
+										actionListener="#{bookExpense.addExpense}" 
+										value="Add Now">
+									</p:commandButton></center>
+								
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

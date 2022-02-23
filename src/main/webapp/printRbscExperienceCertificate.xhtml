@@ -1,0 +1,123 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Sample</ui:define>
+
+    <ui:define name="content">
+       
+            <div class="ui-fluid">
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <div class="card card-w-title">
+                                 <h:form  id="form">
+	 
+		<p:commandButton value="Print" icon="ui-icon-print" style="width:10%">
+			<p:printer target=":form:panel2"></p:printer>
+		</p:commandButton>
+		<center><p:outputPanel id="panel2" layout="block" style="widht:100%;border:2px solid #666666;margin-bottom:20px">
+			
+			<!-- <center>
+			
+			
+   		
+		
+		<p:outputLabel value="" style="float:right;width:100%;margin-top:.5cm" >
+			
+	</p:outputLabel>
+				<p:outputLabel style="font-size:32px !important" value="#{headerBean.name}"></p:outputLabel><br></br>
+				<p:outputLabel style="font-size:20px !important" value="#{headerBean.address1}"></p:outputLabel>
+				<p:outputLabel style="font-size:26px !important" value="#{headerBean.address2}"></p:outputLabel>
+				<p:outputLabel style="font-size:24px !important" value="#{headerBean.address3}"></p:outputLabel><br></br>
+				<p:outputLabel style="font-size:22px !important" value="#{headerBean.address4}"></p:outputLabel>
+				<p:outputLabel style="font-size:20px !important" value=", Phone:-#{headerBean.mobileno}"></p:outputLabel><br></br>
+				<p:outputLabel style="font-size:16px !important;text-decoration:underline" value="Experience Certificate"></p:outputLabel>
+			</center> -->
+			
+			<p:graphicImage width="100%" height="100px" value="#{sideMenuBean.headerImage}"></p:graphicImage>
+			<br/><br></br>
+			<center><h3 style="margin:0px"><u>EXPERIENCE CERTIFICATE</u></h3></center>
+			<br></br>
+			<table style="width:80%;">
+			<tr>
+					<td style="margin-left:55px !important;font-weight: bold;font-style: italic;" > Dept No.: #{printRbscExperienceCertificate.deptNo}</td>
+					<td style="float:right;font-weight: bold;font-style: italic;" > Date: #{printRbscExperienceCertificate.issuedDate}</td>
+				
+				</tr>
+				
+			</table>
+			<br></br>
+			
+			<p:panelGrid styleClass="certify-line" columns="2" style="width:100%;">
+			    
+			<p:outputLabel style="margin-bottom: 0px;margin-left:35px!important;text-align:left;font-size:13px!important;font-style: italic;" value="It is Certified that Mr. / Miss."></p:outputLabel>
+			<p:outputLabel style="margin:0px 5px!important;font-size:15px!important;font-weight:bold;border-bottom:1px solid #000;" value="#{printRbscExperienceCertificate.name}"></p:outputLabel>
+			     
+			    
+			</p:panelGrid>
+			
+			<p:panelGrid styleClass="details-line" columns="4" style="width:100%">
+			<p:outputLabel style="margin-bottom: 0px;margin-left:35px!important;font-size:13px!important;font-style: italic;" value="S/o Sh."></p:outputLabel>
+			<p:outputLabel style="margin:0px 5px!important;font-size:15px!important;font-weight:bold;width:80%;background-color: transparent;border-style: solid; border-width: 0px 0px 1px 0px; border-color:black;" value="#{printRbscExperienceCertificate.fatherName}"></p:outputLabel>
+			
+			<p:outputLabel style="margin-bottom: 0px;margin-left:8px!important;font-size:13px!important;font-style: italic;" value="VPO.-VILL."></p:outputLabel>
+			<p:outputLabel style="margin:0px 5px!important;font-size:15px!important;font-weight:bold;width:80%;background-color: transparent;border-style: solid; border-width: 0px 0px 1px 0px; border-color:black;" value="#{printRbscExperienceCertificate.villageName}"></p:outputLabel>
+			
+			<p:outputLabel style="margin-bottom: 0px;margin-left:35px!important;font-size:13px!important;font-style: italic;" value="District"></p:outputLabel>
+			<p:outputLabel style="margin:0px 5px!important;font-size:15px!important;font-weight:bold;width:80%;background-color: transparent;border-style: solid; border-width: 0px 0px 1px 0px; border-color:black;" value="#{printRbscExperienceCertificate.districtName}"></p:outputLabel>
+			
+			<p:outputLabel style="margin-bottom: 0px;margin-left:8px!important;font-size:13px!important;font-style: italic;" value="State"></p:outputLabel>
+			<p:outputLabel style="margin:0px 5px!important;font-size:15px!important;font-weight:bold;width:80%;background-color: transparent;border-style: solid; border-width: 0px 0px 1px 0px; border-color:black;" value="#{printRbscExperienceCertificate.stateName}"></p:outputLabel>
+			
+			</p:panelGrid>
+			
+			<p:panelGrid styleClass="has-been-line" columns="2" style="width:100%">
+			<p:outputLabel style="margin-bottom: 0px;margin-left:35px!important;font-size:13px!important;font-style: italic;" value="has been working as a - "></p:outputLabel>
+			<p:outputLabel style="margin:0px 5px!important;font-size:15px!important;font-weight:bold;width:35%;background-color: transparent;border-style: solid; border-width: 0px 0px 1px 0px; border-color:black;" value="#{printRbscExperienceCertificate.designation}"></p:outputLabel>
+			
+			</p:panelGrid>
+			
+			<p:panelGrid styleClass="details-line" columns="4" style="width:100%">
+			<p:outputLabel style="margin-bottom: 0px;margin-left:35px!important;font-size:13px!important;font-style: italic;" value="From"></p:outputLabel>
+			<p:outputLabel style="margin:0px 5px!important;font-size:15px!important;font-weight:bold;width:70%;background-color: transparent;border-style: solid; border-width: 0px 0px 1px 0px; border-color:black;" value="#{printRbscExperienceCertificate.fromDate}"></p:outputLabel>
+			<p:outputLabel style="margin-bottom: 0px;margin:8px!important;font-size:13px!important;font-style: italic;" value=" to "></p:outputLabel>
+			<p:outputLabel style="margin:0px 5px!important;font-size:15px!important;font-weight:bold;width:70%;background-color: transparent;border-style: solid; border-width: 0px 0px 1px 0px; border-color:black;" value="#{printRbscExperienceCertificate.toDate}"></p:outputLabel>
+			
+			</p:panelGrid>
+			
+			<table style="width:100%;margin-left:43px!important">
+				<tr>
+					<td style="font-weight: bold;font-style: italic;" >During this period his work and conduct was good. I wish his/her bright future.</td>
+					
+				</tr>
+				<br></br>
+				
+				<br></br>
+			
+				<tr>
+					
+					<td style="margin-left:35px!important;font-weight: bold;font-style: italic;" >We have no objection if he/she joins any Govt / Private organization</td>
+				</tr>
+			</table>
+			
+			<br></br>
+			
+			<table style="width:80%">
+				<tr>
+					<td style="float:right;font-weight: bold;font-style: italic;" > PRINCIPAL</td>
+				</tr>
+			</table>
+		</p:outputPanel>
+		</center>	
+	</h:form>     
+                        </div>
+                    </div>
+                </div>
+            </div>
+       
+    </ui:define>
+
+</ui:composition>

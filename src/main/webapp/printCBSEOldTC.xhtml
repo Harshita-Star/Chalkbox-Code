@@ -1,0 +1,1487 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">TC ISSUE</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form12"
+							rendered="#{sideMenuBean.list.tcType ne 'new'}">
+							<center>
+								<h:commandLink>
+									<p:graphicImage name="images/printLogo.png"
+										library="avalon-layout" width="100" height="80"></p:graphicImage>
+									<p:printer target=":forms"></p:printer>
+								</h:commandLink>
+							</center>
+						</h:form>
+
+						<h:form id="form123"
+							rendered="#{sideMenuBean.list.tcType eq 'new'}">
+							<center>
+								<h:commandLink>
+									<p:graphicImage name="images/printLogo.png"
+										library="avalon-layout" width="100" height="80"></p:graphicImage>
+									<p:printer target=":forms1"></p:printer>
+								</h:commandLink>
+
+								<h:commandLink rendered="#{cbscOldStudentTC.showpdfbtn}"
+									ajax="false" process="@this"
+									actionListener="#{cbscOldStudentTC.exportClasWiseLessPdf}">
+									<p:graphicImage name="images/pdfLogo.png"
+										library="avalon-layout" width="100" height="80"></p:graphicImage>
+									<p:fileDownload value="#{cbscOldStudentTC.file}" />
+								</h:commandLink>
+
+							</center>
+						</h:form>
+						<h:form id="forms" style="width:95%;"
+							rendered="#{sideMenuBean.list.tcType ne 'new'}">
+							<p:outputPanel id="expnsBoucher"
+								rendered="#{sideMenuBean.list.branch_id ne '30'}">
+									<p:outputPanel rendered="#{sideMenuBean.list.branch_id ne '99' and sideMenuBean.list.branch_id ne '101'}">
+								<div
+									style="border: 2px solid !important; width: 100% !important; background-color: white; margin: 20px; border-radius: 10px; overflow: hidden; position: relative">
+									<div>
+										<p:graphicImage width="100%" height="100px"
+											value="#{cbscOldStudentTC.headerImage}"></p:graphicImage>
+									</div>
+
+									<hr width="100%"></hr>
+									<center>
+										<h4 style="margin: 0px">
+											<u>TRANSFER CERTIFICATE</u>
+										</h4>
+									</center>
+									<br></br>
+									<table style="margin-left: 20px; width: 95%;">
+										<tr>
+											<td style="text-align: left"><p:outputLabel
+													value="TC No.: #{cbscOldStudentTC.session}/#{cbscOldStudentTC.tcNumber}"></p:outputLabel>
+											</td>
+											<td style="text-align: right"><p:outputLabel
+													value="Admission No. #{cbscOldStudentTC.addmissionnumber}"></p:outputLabel></td>
+										</tr>
+									</table>
+									<br></br>
+									<div style="width: 100%; overflow: hidden; height: auto;">
+										<table style="margin-left: 20px; float: left; width: 100%;">
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 1. Name of Student"></p:outputLabel></td>
+												<td style="text-align: left; width: 35%;"><p:outputLabel
+														value="#{cbscOldStudentTC.fullName}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 7px"></tr>
+											<tr>
+												<td style="text-align: lef; twidth: 65%;"><p:outputLabel
+														value=" 2. Father/Guardian's Name"></p:outputLabel></td>
+												<td style="text-align: left; width: 35%;"><p:outputLabel
+														value="#{cbscOldStudentTC.fatherName}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 7px"></tr>
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 3. Mother's Name"></p:outputLabel></td>
+												<td style="text-align: left; width: 35%;"><p:outputLabel
+														value="#{cbscOldStudentTC.motherName}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 7px"></tr>
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 4. Nationality"></p:outputLabel></td>
+												<td style="text-align: left; width: 35%;"><p:outputLabel
+														value="#{cbscOldStudentTC.nationality}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 7px"></tr>
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 5. Whether the candidate belongs to Schedule Caste or Schedule Tribe"></p:outputLabel></td>
+												<td style="text-align: left; width: 35%;"><p:outputLabel
+														value="#{cbscOldStudentTC.category}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 7px"></tr>
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 6. Date of First admission in the school with Class"></p:outputLabel></td>
+												<td style="text-align: left; width: 35%;"><p:outputLabel
+														value="#{cbscOldStudentTC.startingdate1} &#160;&#160;&#160;&#160;&#160;Class :-  #{cbscOldStudentTC.className}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 7px"></tr>
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 7. Date of Birth(in Christian Era) according to admission Register(in Figures) "></p:outputLabel></td>
+												<td style="text-align: left; width: 35%;"><p:outputLabel
+														value="#{cbscOldStudentTC.dob1}"></p:outputLabel></td>
+											</tr>
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value="(in Words)"></p:outputLabel></td>
+												<td style="text-align: left; width: 35%;"><p:outputLabel
+														value="#{cbscOldStudentTC.dobinword}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 7px"></tr>
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 8. Class in which the Student last studied(in figures)"></p:outputLabel></td>
+												<td style="text-align: left; width: 35%;"><p:outputLabel
+														value="#{cbscOldStudentTC.previousClass}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 7px"></tr>
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 9.  School/Board Annual examination last taken with result"></p:outputLabel></td>
+												<td style="text-align: left; width: 35%;"><p:outputLabel
+														value="#{cbscOldStudentTC.schoolExam}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 7px"></tr>
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 10.  Whether failed, if so once/twice in the same class"></p:outputLabel></td>
+												<td style="text-align: left; width: 35%;"><p:outputLabel
+														value="#{cbscOldStudentTC.failedOrNot}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 7px"></tr>
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 11.  Subject Studied"></p:outputLabel></td>
+												<td style="text-align: left; width: 35%;"><p:outputLabel
+														value="#{cbscOldStudentTC.subjectStudied}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 7px"></tr>
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 12.  Whether qualified for promotion to the higher class"></p:outputLabel></td>
+												<td style="text-align: left; width: 35%;"><p:outputLabel
+														value="#{cbscOldStudentTC.qualifiedPromotion}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 7px"></tr>
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 13.  Month upto which (Student has paid ) school dues/paid"></p:outputLabel></td>
+												<td style="text-align: left; width: 35%;"><p:outputLabel
+														value="#{cbscOldStudentTC.monthOfFeePaid}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 7px"></tr>
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 14.  Total No. of working Days/Meetings"></p:outputLabel></td>
+												<td style="text-align: left; width: 35%;"><p:outputLabel
+														value="#{cbscOldStudentTC.workingDays}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 7px"></tr>
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 15.  Total No. of working days/Meetings present"></p:outputLabel></td>
+												<td style="text-align: left; width: 35%;"><p:outputLabel
+														value="#{cbscOldStudentTC.workingDayPresent}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 7px"></tr>
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 16.  Any fee concession availed of : if so, the nature of such concession"></p:outputLabel></td>
+												<td style="text-align: left; width: 35%;"><p:outputLabel
+														value="#{cbscOldStudentTC.feeConcession}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 7px"></tr>
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 17.  Games Played"></p:outputLabel></td>
+												<td style="text-align: left; width: 35%;"><p:outputLabel
+														value="#{cbscOldStudentTC.gamesPlayed}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 7px"></tr>
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 18.  Extra-curricular activities"></p:outputLabel></td>
+												<td style="text-align: left; width: 35%;"><p:outputLabel
+														value="#{cbscOldStudentTC.extraActivity}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 7px"></tr>
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 19.  General Conduct"></p:outputLabel></td>
+												<td style="text-align: left; width: 35%;"><p:outputLabel
+														value="#{cbscOldStudentTC.perfom}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 7px"></tr>
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 20.  #{sideMenuBean.list.schid eq '213' ? 'Date of Leaving/ last attended the class' : 'Date of Application for Certificate'}"></p:outputLabel></td>
+												<td style="text-align: left; width: 35%;"><p:outputLabel
+														value="#{cbscOldStudentTC.lastDateStr}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 7px"></tr>
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 21.  Date of issue of certificate"></p:outputLabel></td>
+												<td style="text-align: left; width: 35%;"><p:outputLabel
+														value="#{cbscOldStudentTC.issuDateStr}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 7px"></tr>
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 22.  Reason for leaving the school"></p:outputLabel></td>
+												<td style="text-align: left; width: 35%;"><p:outputLabel
+														value="#{cbscOldStudentTC.reason}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 7px"></tr>
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 23.  Any other remarks"></p:outputLabel></td>
+												<td style="text-align: left; width: 35%;"><p:outputLabel
+														value="#{cbscOldStudentTC.otherRemark}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 30px"></tr>
+										</table>
+										<table
+											style="margin-left: 20px; float: left; width: 100%; margin-top: 1%">
+											<tr>
+												<td style="text-align: left; width: 30%;"><p:outputLabel
+														value="Prepared By___________ "></p:outputLabel></td>
+												<td style="text-align: left; width: 30%;"><p:outputLabel
+														value="Checked By "></p:outputLabel></td>
+												<td style="text-align: left; width: 30%;"><p:outputLabel
+														value="Principal "></p:outputLabel></td>
+											</tr>
+											<tr style="height: 10px;"></tr>
+										</table>
+										<p style="font-size: 10px; margin-left: 20px;">
+											Note:- To Verify Transfer Certificate log on at <span
+												style="color: blue; text-decoration: underline;">#{cbscOldStudentTC.website}</span>
+										</p>
+
+									</div>
+								</div>
+								</p:outputPanel>
+							<p:outputPanel id="expnsSSChild" rendered="#{sideMenuBean.list.branch_id eq '99' || sideMenuBean.list.branch_id eq '101'}">
+
+								<div
+									style="border: 2px solid !important; width: 100% !important; background-color: white; margin: auto; margin-left: 21px; border-radius: 10px; overflow: hidden; position: relative; font-size: 11px;">
+									<p:graphicImage width="100%" height="120px"
+										value="#{cbscOldStudentTC.headerImage}"></p:graphicImage>
+									<div
+										style="margin: auto; width: 40%; border: 1px solid #73AD21; padding-top: 4px; text-align: center; font-size: 26px; height: 35px; color: red;">
+										<p:outputLabel style="font-size:20px !important;"
+											value="TRANSFER CERTIFICATE"></p:outputLabel>
+									</div>
+
+									<br></br>
+
+									<table style="margin-left: 20px; width: 95%;">
+										<tr>
+											<td style="text-align: left"><p:outputLabel
+													value="Affiliation No. : #{cbscOldStudentTC.schoolAffilationNo}"></p:outputLabel>
+											</td>
+											<td style="text-align: center"><p:outputLabel
+													value="School Code : #{cbscOldStudentTC.schNo}"></p:outputLabel></td>
+
+										</tr>
+
+										<tr>
+											<td style="text-align: left"><p:outputLabel
+													value="Book No. : "></p:outputLabel></td>
+
+											<td style="text-align: center"><p:outputLabel
+													value="Sl No. : #{cbscOldStudentTC.session}/#{cbscOldStudentTC.tcNumber}"></p:outputLabel></td>
+
+											<td style="text-align: right"><p:outputLabel
+													value="Admission No. #{cbscOldStudentTC.addmissionnumber}"></p:outputLabel></td>
+										</tr>
+									</table>
+									<br></br>
+
+									<div style="width: 100%; overflow: hidden; height: auto;">
+										<table style="margin-left: 20px; float: left; width: 100%;">
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 1. Name of the Student"></p:outputLabel></td>
+												<td
+													style="text-align: left; width: 35%; border-bottom: 1px dotted #000;"><p:outputLabel
+														value="#{cbscOldStudentTC.fullName.toUpperCase()}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 5px"></tr>
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 2. Mother's Name"></p:outputLabel></td>
+												<td
+													style="text-align: left; width: 35%; border-bottom: 1px dotted #000;"><p:outputLabel
+														value="#{cbscOldStudentTC.motherName.toUpperCase()}"></p:outputLabel></td>
+											</tr>
+
+											<tr style="height: 5px"></tr>
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 3. Father's/Guardian's Name"></p:outputLabel></td>
+												<td
+													style="text-align: left; width: 35%; border-bottom: 1px dotted #000;"><p:outputLabel
+														value="#{cbscOldStudentTC.fatherName.toUpperCase()}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 5px"></tr>
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 4. Date of Birth(in Christian Era)(in Figures) "></p:outputLabel></td>
+												<td
+													style="text-align: left; width: 35%; border-bottom: 1px dotted #000;"><p:outputLabel
+														value="#{cbscOldStudentTC.dob1}"></p:outputLabel></td>
+											</tr>
+											<tr>
+
+												<td style="text-align: left; width: 65%;"><p:spacer
+														height="0" width="20px;"></p:spacer> <p:outputLabel
+														value="(in Words)"></p:outputLabel></td>
+												<td
+													style="text-align: left; width: 35%; border-bottom: 1px dotted #000;"><p:outputLabel
+														value="#{cbscOldStudentTC.dobinword.toUpperCase()}"></p:outputLabel></td>
+											</tr>
+
+											<tr style="height: 5px"></tr>
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 5. Nationality"></p:outputLabel></td>
+												<td
+													style="text-align: left; width: 35%; border-bottom: 1px dotted #000;"><p:outputLabel
+														value="#{cbscOldStudentTC.nationality.toUpperCase()}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 5px"></tr>
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 6. Whether the candidate belongs to SC/ST/OBC"></p:outputLabel></td>
+												<td
+													style="text-align: left; width: 35%; border-bottom: 1px dotted #000;"><p:outputLabel
+														value="#{cbscOldStudentTC.category.toUpperCase()}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 5px"></tr>
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 7. Date of First admission in the school with Class"></p:outputLabel></td>
+												<td
+													style="text-align: left; width: 35%; border-bottom: 1px dotted #000;"><p:outputLabel
+														value="#{cbscOldStudentTC.startingdate1} &#160;&#160;&#160;&#160;&#160;Class :-  #{cbscOldStudentTC.className.toUpperCase()}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 5px"></tr>
+
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 8. Class in which the pupil last studied"></p:outputLabel></td>
+												<td
+													style="text-align: left; width: 35%; border-bottom: 1px dotted #000;"><p:outputLabel
+														value="#{cbscOldStudentTC.previousClass.toUpperCase()} #{cbscOldStudentTC.previosClassWord} (#{cbscOldStudentTC.lastSession})"></p:outputLabel></td>
+											</tr>
+
+											<tr style="height: 5px"></tr>
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 9.  School/Board Annual examination last taken with result"></p:outputLabel></td>
+												<td
+													style="text-align: left; width: 35%; border-bottom: 1px dotted #000;"><p:outputLabel
+														value="#{cbscOldStudentTC.schoolExam.toUpperCase()} #{cbscOldStudentTC.schoolExamWord.toUpperCase()} #{cbscOldStudentTC.result.toUpperCase()}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 5px"></tr>
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 10.  Whether failed, if so once/twice in the same class"></p:outputLabel></td>
+												<td
+													style="text-align: left; width: 35%; border-bottom: 1px dotted #000;"><p:outputLabel
+														value="#{cbscOldStudentTC.failedOrNot.toUpperCase()}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 5px"></tr>
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 11.  Subjects Studied"></p:outputLabel></td>
+												<td
+													style="text-align: left; width: 35%; border-bottom: 1px dotted #000;"
+													class="subjects"><p:outputLabel
+														value="#{cbscOldStudentTC.subjectStudied.toUpperCase()}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 5px"></tr>
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 12.  Whether qualified for promotion to the higher class?"></p:outputLabel></td>
+												<td
+													style="text-align: left; width: 35%; border-bottom: 1px dotted #000;"><p:outputLabel
+														value="#{cbscOldStudentTC.qualifiedPromotion.toUpperCase()}"></p:outputLabel></td>
+											</tr>
+											<tr>
+
+												<td style="text-align: left; width: 65%;"><p:spacer
+														height="0" width="20px;"></p:spacer> <p:outputLabel
+														value="If so, to which class"></p:outputLabel></td>
+												<td
+													style="text-align: left; width: 35%; border-bottom: 1px dotted #000;"><p:outputLabel
+														value="#{cbscOldStudentTC.qualifiedPromotion.toUpperCase()} #{cbscOldStudentTC.promotedClassWord.toUpperCase()}"></p:outputLabel></td>
+											</tr>
+
+											<tr style="height: 5px"></tr>
+
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 13.  Total No. of working days in the academic session"></p:outputLabel></td>
+												<td
+													style="text-align: left; width: 35%; border-bottom: 1px dotted #000;"><p:outputLabel
+														value="#{cbscOldStudentTC.workingDays}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 5px"></tr>
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 14.  Total No. of presence in the academic session"></p:outputLabel></td>
+												<td
+													style="text-align: left; width: 35%; border-bottom: 1px dotted #000;"><p:outputLabel
+														value="#{cbscOldStudentTC.workingDayPresent}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 5px"></tr>
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 15. Month upto which the pupil has paid school dues "></p:outputLabel></td>
+												<td
+													style="text-align: left; width: 35%; border-bottom: 1px dotted #000;"><p:outputLabel
+														value="#{cbscOldStudentTC.monthOfFeePaid.toUpperCase()}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 5px"></tr>
+
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 16.  Any fee concession availed of,if so, the nature of such concession"></p:outputLabel></td>
+												<td
+													style="text-align: left; width: 35%; border-bottom: 1px dotted #000;"><p:outputLabel
+														value="#{cbscOldStudentTC.feeConcession.toUpperCase()}"></p:outputLabel></td>
+											</tr>
+
+											<tr style="height: 5px"></tr>
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 17.   Participation and achievement in extra curricular activities"></p:outputLabel></td>
+												<td
+													style="text-align: left; width: 35%; border-bottom: 1px dotted #000;"><p:outputLabel
+														value="#{cbscOldStudentTC.gamesPlayed.toUpperCase()}"></p:outputLabel></td>
+											</tr>
+
+											<tr style="height: 5px"></tr>
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 18.  General Conduct"></p:outputLabel></td>
+												<td
+													style="text-align: left; width: 35%; border-bottom: 1px dotted #000;"><p:outputLabel
+														value="#{cbscOldStudentTC.perfom.toUpperCase()}"></p:outputLabel></td>
+											</tr>
+
+											<tr style="height: 5px"></tr>
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 19.  Date of application for certificate"></p:outputLabel></td>
+												<td
+													style="text-align: left; width: 35%; border-bottom: 1px dotted #000;"><p:outputLabel
+														value="#{cbscOldStudentTC.lastDateStr}"></p:outputLabel></td>
+											</tr>
+
+											<tr style="height: 5px"></tr>
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 20.  Date of issue of certificate"></p:outputLabel></td>
+												<td
+													style="text-align: left; width: 35%; border-bottom: 1px dotted #000;"><p:outputLabel
+														value="#{cbscOldStudentTC.issuDateStr}"></p:outputLabel></td>
+											</tr>
+
+											<tr style="height: 5px"></tr>
+
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 21.  Reason for leaving the school"></p:outputLabel></td>
+												<td
+													style="text-align: left; width: 35%; border-bottom: 1px dotted #000;"><p:outputLabel
+														value="#{cbscOldStudentTC.reason.toUpperCase()}"></p:outputLabel></td>
+											</tr>
+
+											<tr style="height: 5px"></tr>
+
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 22.  Any other remarks"></p:outputLabel></td>
+												<td
+													style="text-align: left; width: 35%; border-bottom: 1px dotted #000;"><p:outputLabel
+														value="#{cbscOldStudentTC.otherRemark.toUpperCase()}"></p:outputLabel></td>
+											</tr>
+
+											<tr style="height: 10px"></tr>
+
+										</table>
+										<p style="font-size: 14px; margin-left: 20px; color: red;">
+											I hereby declare that the above information including Name of
+											the candidate, Father's Name, Mother's Name and Date of Birth
+											furnished above is correct as per school records.</p>
+										<table
+											style="margin-left: 20px; float: left; width: 100%; margin-top: 1%">
+											<tr>
+												<td style="text-align: left; width: 20%;"><p:outputLabel
+														value="Date : "></p:outputLabel> <span
+													style="border-bottom: 1px solid;">
+														#{cbscOldStudentTC.issuDateStr}</span></td>
+
+
+											</tr>
+											<tr style="height: 5px;"></tr>
+										</table>
+
+											<table
+											style="margin-left: 20px; float: left; width: 100%; margin-top: 1%">
+											<tr>
+												<td style="text-align: left; width: 5%;"><p:outputLabel
+														value="S.No. _________"></p:outputLabel></td>
+												<td style="text-align: left; width: 5%;"><p:outputLabel
+														value="Checked By "></p:outputLabel></td>
+
+												<td style="text-align: left; width: 18%;"><p:outputLabel
+														value="Sign. of Class Teacher "></p:outputLabel></td>
+
+												<td style="text-align: left; width: 8%;"><p:outputLabel
+														value="Sign. of  Principal "></p:outputLabel></td>
+
+											</tr>
+											<tr style="height: 5px;"></tr>
+										</table>
+
+									</div>
+								</div>
+
+							</p:outputPanel>
+							</p:outputPanel>
+							
+
+							<p:outputPanel id="expnsBoucher1"
+								rendered="#{sideMenuBean.list.branch_id eq '30'}">
+
+								<div
+									style="border: 2px solid !important; width: 100% !important; background-color: white; margin: 20px; border-radius: 10px; overflow: hidden; position: relative">
+									<div>
+										<p:graphicImage width="100%" height="100px"
+											value="#{cbscOldStudentTC.headerImage}"></p:graphicImage>
+									</div>
+
+									<hr width="100%"></hr>
+									<center>
+										<h4 style="margin: 0px">
+											<u>TRANSFER CERTIFICATE</u>
+										</h4>
+									</center>
+									<br></br>
+									<table style="margin-left: 20px; width: 95%;">
+										<tr>
+											<td style="text-align: left"><p:outputLabel
+													value="Certificate No.: #{cbscOldStudentTC.session}/#{cbscOldStudentTC.tcNumber}"></p:outputLabel>
+											</td>
+											<td style="text-align: left"><p:outputLabel
+													value="Admission No.: #{cbscOldStudentTC.addmissionnumber}"></p:outputLabel></td>
+											<td style="text-align: right"><p:outputLabel
+													value="Date : #{cbscOldStudentTC.issuDateStr}"></p:outputLabel></td>
+										</tr>
+									</table>
+									<center>
+										<div
+											style="border-bottom: 1px solid black; width: 98%; overflow: hidden; position: relative"></div>
+									</center>
+									<br></br>
+									<div style="width: 100%; overflow: hidden; height: auto;">
+										<table style="margin-left: 20px; float: left; width: 100%;">
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 1. Name of Student"></p:outputLabel></td>
+												<td style="text-align: left; width: 35%;"><p:outputLabel
+														value="#{cbscOldStudentTC.fullName}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 7px"></tr>
+											<tr>
+												<td style="text-align: lef; twidth: 65%;"><p:outputLabel
+														value=" 2. Father/Guardian's Name"></p:outputLabel></td>
+												<td style="text-align: left; width: 35%;"><p:outputLabel
+														value="#{cbscOldStudentTC.fatherName}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 7px"></tr>
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 3. Mother's Name"></p:outputLabel></td>
+												<td style="text-align: left; width: 35%;"><p:outputLabel
+														value="#{cbscOldStudentTC.motherName}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 7px"></tr>
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 4. Nationality"></p:outputLabel></td>
+												<td style="text-align: left; width: 35%;"><p:outputLabel
+														value="#{cbscOldStudentTC.nationality}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 7px"></tr>
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 5. Whether the candidate belongs to Schedule Caste or Schedule Tribe"></p:outputLabel></td>
+												<td style="text-align: left; width: 35%;"><p:outputLabel
+														value="#{cbscOldStudentTC.category}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 7px"></tr>
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 6. Date of First admission in the school with Class"></p:outputLabel></td>
+												<td style="text-align: left; width: 35%;"><p:outputLabel
+														value="#{cbscOldStudentTC.startingdate1} &#160;&#160;&#160;&#160;&#160;Class :-  #{cbscOldStudentTC.className}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 7px"></tr>
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 7. Date of Birth(in Christian Era) according to admission Register(in Figures) "></p:outputLabel></td>
+												<td style="text-align: left; width: 35%;"><p:outputLabel
+														value="#{cbscOldStudentTC.dob1}"></p:outputLabel></td>
+											</tr>
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value="(in Words)"></p:outputLabel></td>
+												<td style="text-align: left; width: 35%;"><p:outputLabel
+														value="#{cbscOldStudentTC.dobinword}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 7px"></tr>
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 8. Class in which the Student last studied(in figures)"></p:outputLabel></td>
+												<td style="text-align: left; width: 35%;"><p:outputLabel
+														value="#{cbscOldStudentTC.previousClass}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 7px"></tr>
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 9.  School/Board Annual examination last taken with result"></p:outputLabel></td>
+												<td style="text-align: left; width: 35%;"><p:outputLabel
+														value="#{cbscOldStudentTC.schoolExam}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 7px"></tr>
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 10.  Whether failed, if so once/twice in the same class"></p:outputLabel></td>
+												<td style="text-align: left; width: 35%;"><p:outputLabel
+														value="#{cbscOldStudentTC.failedOrNot}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 7px"></tr>
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 11.  Subject Studied"></p:outputLabel></td>
+												<td style="text-align: left; width: 35%;"><p:outputLabel
+														value="#{cbscOldStudentTC.subjectStudied}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 7px"></tr>
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 12.  Whether qualified for promotion to the higher class"></p:outputLabel></td>
+												<td style="text-align: left; width: 35%;"><p:outputLabel
+														value="#{cbscOldStudentTC.qualifiedPromotion}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 7px"></tr>
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 13.  Month upto which (Student has paid ) school dues/paid"></p:outputLabel></td>
+												<td style="text-align: left; width: 35%;"><p:outputLabel
+														value="#{cbscOldStudentTC.monthOfFeePaid}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 7px"></tr>
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 14.  Any fee concession availed of : if so, the nature of such concession"></p:outputLabel></td>
+												<td style="text-align: left; width: 35%;"><p:outputLabel
+														value="#{cbscOldStudentTC.feeConcession}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 7px"></tr>
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 15.  Total No. of working Days"></p:outputLabel></td>
+												<td style="text-align: left; width: 35%;"><p:outputLabel
+														value="#{cbscOldStudentTC.workingDays}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 7px"></tr>
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 16.  Total No. of working days present"></p:outputLabel></td>
+												<td style="text-align: left; width: 35%;"><p:outputLabel
+														value="#{cbscOldStudentTC.workingDayPresent}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 7px"></tr>
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 17.  Whether the pupil is NCC Cadet/Boy Scout/ Girl Guide ( details may be given)"></p:outputLabel></td>
+												<td style="text-align: left; width: 35%;"><p:outputLabel
+														value="#{cbscOldStudentTC.ncc}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 7px"></tr>
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 18.  Games Played or extra-curricular activities in which pupil usually took part"></p:outputLabel></td>
+												<td style="text-align: left; width: 35%;"><p:outputLabel
+														value="#{cbscOldStudentTC.gamesPlayed}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 7px"></tr>
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 19.  General Conduct"></p:outputLabel></td>
+												<td style="text-align: left; width: 35%;"><p:outputLabel
+														value="#{cbscOldStudentTC.perfom}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 7px"></tr>
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 20.  #{sideMenuBean.list.schid eq '213' ? 'Date of Leaving/ last attended the class' : 'Date of Application for Certificate'}"></p:outputLabel></td>
+												<td style="text-align: left; width: 35%;"><p:outputLabel
+														value="#{cbscOldStudentTC.lastDateStr}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 7px"></tr>
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 21.  Date of issue of certificate"></p:outputLabel></td>
+												<td style="text-align: left; width: 35%;"><p:outputLabel
+														value="#{cbscOldStudentTC.issuDateStr}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 7px"></tr>
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 22.  Reason for leaving the school"></p:outputLabel></td>
+												<td style="text-align: left; width: 35%;"><p:outputLabel
+														value="#{cbscOldStudentTC.reason}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 7px"></tr>
+											<tr>
+												<td style="text-align: left; width: 65%;"><p:outputLabel
+														value=" 23.  Any other remarks"></p:outputLabel></td>
+												<td style="text-align: left; width: 35%;"><p:outputLabel
+														value="#{cbscOldStudentTC.otherRemark}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 30px"></tr>
+										</table>
+										<table
+											style="margin-left: 20px; float: left; width: 100%; margin-top: 1%">
+											<tr>
+												<td style="text-align: left; width: 30%;"><p:outputLabel
+														value="Prepared By___________ "></p:outputLabel></td>
+												<td style="text-align: left; width: 30%;"><p:outputLabel
+														value="Checked By "></p:outputLabel></td>
+												<td style="text-align: left; width: 30%;"><p:outputLabel
+														value="Principal "></p:outputLabel></td>
+											</tr>
+											<tr style="height: 25px;"></tr>
+										</table>
+										<center>
+											<div
+												style="border-bottom: 1px solid black; width: 98%; overflow: hidden; position: relative"></div>
+										</center>
+										<p style="font-size: 14px; margin-left: 40px;">Certified
+											that the above information is in the accordance with the
+											school register</p>
+										<br /> <br />
+
+										<table
+											style="margin-left: 40px; float: left; width: 100%; margin-top: 1%">
+											<tr>
+												<td style="text-align: left; width: 30%;"><p:outputLabel
+														value="Signature of Class Teacher "></p:outputLabel></td>
+												<td style="text-align: center; width: 30%;"><p:outputLabel
+														value="Checked By "></p:outputLabel></td>
+												<td style="text-align: center; width: 30%;"><p:outputLabel
+														value="(PRINCIPAL) "></p:outputLabel></td>
+											</tr>
+											<tr>
+												<td style="text-align: left; width: 30%;"><p:outputLabel
+														value=" "></p:outputLabel></td>
+												<td style="text-align: center; width: 30%;"><p:outputLabel
+														value="PADMA DATT PALARIYA"></p:outputLabel></td>
+												<td style="text-align: center; width: 30%;"><p:outputLabel
+														value=" "></p:outputLabel></td>
+											</tr>
+											<tr style="height: 10px;"></tr>
+
+										</table>
+
+									</div>
+								</div>
+							</p:outputPanel>
+						</h:form>
+
+						<h:form id="forms1" style="width:95%;"
+							rendered="#{sideMenuBean.list.tcType eq 'new'}">
+							<p:outputPanel id="expnsBoucher"
+								rendered="#{sideMenuBean.list.branch_id eq '22' || sideMenuBean.list.branch_id eq '27'}">
+								<div
+									style="border: 0px solid !important; width: 100% !important; background-color: white; margin: 20px; border-radius: 1px; overflow: hidden; position: relative">
+									<div>
+										<p:graphicImage width="100%" height="150px"
+											value="#{cbscOldStudentTC.headerImage}"></p:graphicImage>
+									</div>
+									<div
+										style="border: 2px solid !important; width: 100% !important; background-color: white; border-radius: 1px;">
+										<br></br>
+										<center>
+											<h4
+												style="margin: 0px; height: 25px; border: 2px solid #000; width: 40%;">स्थानांतरण
+												प्रमाण - पत्र /TRANSFER CERTIFICATE</h4>
+										</center>
+										<br></br>
+										<table style="margin-left: 20px; height: auto; width: 95%;">
+											<tr>
+												<td style="text-align: left"><p:outputLabel
+														value="विद्यालय सं. / School No.: #{sideMenuBean.list.regNo}"></p:outputLabel>
+												</td>
+												<td style="text-align: right"><p:outputLabel
+														value="पुस्तक न./ Book No.: 1/#{sideMenuBean.startSession}"></p:outputLabel></td>
+												<td style="text-align: right"><p:outputLabel
+														value="क्रम सं./ Sr. No.: #{cbscOldStudentTC.tcNumber}"></p:outputLabel></td>
+												<td style="text-align: right"><p:outputLabel
+														value="प्रवेश सं./ Adm No.: #{cbscOldStudentTC.addmissionnumber}"></p:outputLabel></td>
+											</tr>
+											<tr>
+												<td style="text-align: left"><p:outputLabel
+														value="Affiliation No.: #{sideMenuBean.list.add4}"></p:outputLabel>
+												</td>
+												<td style="text-align: right"><p:outputLabel
+														value="Renewed Upto: #{sideMenuBean.list.branch_id eq '22' ? '31-03-2021' : (sideMenuBean.list.branch_id eq '27' ? '' : sideMenuBean.startSession)}"></p:outputLabel></td>
+												<td style="text-align: right"><p:outputLabel value=" "></p:outputLabel></td>
+												<td style="text-align: right"><p:outputLabel
+														value="Status Of School : #{sideMenuBean.list.schType}"></p:outputLabel></td>
+											</tr>
+										</table>
+										<br></br>
+										<table style="margin-left: 20px; height: auto; width: 95%;">
+											<tr>
+												<td style="text-align: left; width: 55%;"><p:outputLabel
+														value="Registration No. of the candidate(in case Class -IX to XII)"></p:outputLabel></td>
+												<td style="text-align: left; width: 45%;"><p:outputLabel
+														value=""></p:outputLabel></td>
+											</tr>
+										</table>
+										<br></br>
+										<div style="width: 100%; overflow: hidden; height: auto;">
+											<table style="margin-left: 20px; float: left; width: 100%;">
+												<tr>
+													<td
+														style="text-align: left; width: 60%; padding-right: 45px;"><p:outputLabel
+															value=" 1.विद्यार्थी का नाम / Name of Pupil"></p:outputLabel></td>
+													<td
+														style="text-align: left; width: 75%; float: left; border-bottom: 1px dotted #000;"><p:outputLabel
+															value="#{cbscOldStudentTC.fullName}"></p:outputLabel></td>
+												</tr>
+												<tr style="height: 7px"></tr>
+												<tr>
+													<td
+														style="text-align: left; width: 60%; padding-right: 45px;"><p:outputLabel
+															value="&#160;&#160;&#160;आधार कार्ड नं. / Adhar Card No."></p:outputLabel></td>
+													<td
+														style="text-align: left; width: 75%; float: left; border-bottom: 1px dotted #000;"><p:outputLabel
+															value="#{cbscOldStudentTC.stadhar}"></p:outputLabel></td>
+												</tr>
+												<tr style="height: 7px"></tr>
+												<tr>
+													<td
+														style="text-align: left; width: 60%; padding-right: 45px;"><p:outputLabel
+															value=" 2.माता का नाम / Mother's Name"></p:outputLabel></td>
+													<td
+														style="text-align: left; width: 75%; float: left; border-bottom: 1px dotted #000;"><p:outputLabel
+															value="#{cbscOldStudentTC.motherName}"></p:outputLabel></td>
+												</tr>
+												<tr style="height: 7px"></tr>
+												<tr>
+													<td
+														style="text-align: left; width: 60%; padding-right: 45px;"><p:outputLabel
+															value="&#160;&#160;&#160;आधार कार्ड नं. / Adhar Card No."></p:outputLabel></td>
+													<td
+														style="text-align: left; width: 75%; float: left; border-bottom: 1px dotted #000;"><p:outputLabel
+															value="#{cbscOldStudentTC.madhar}"></p:outputLabel></td>
+												</tr>
+												<tr style="height: 7px"></tr>
+												<tr>
+													<td
+														style="text-align: left; width: 60%; padding-right: 45px;"><p:outputLabel
+															value=" 3.पिता /अभिभावक का नाम / Father/Guardian's Name"></p:outputLabel></td>
+													<td
+														style="text-align: left; width: 75%; float: left; border-bottom: 1px dotted #000;"><p:outputLabel
+															value="#{cbscOldStudentTC.fatherName}"></p:outputLabel></td>
+												</tr>
+												<tr style="height: 7px"></tr>
+												<tr>
+													<td
+														style="text-align: left; width: 60%; padding-right: 45px;"><p:outputLabel
+															value="&#160;&#160;&#160;आधार कार्ड नं. / Adhar Card No."></p:outputLabel></td>
+													<td
+														style="text-align: left; width: 75%; float: left; border-bottom: 1px dotted #000;"><p:outputLabel
+															value="#{cbscOldStudentTC.fadhar}"></p:outputLabel></td>
+												</tr>
+												<tr style="height: 7px"></tr>
+												<tr>
+													<td
+														style="text-align: left; width: 60%; padding-right: 45px;"><p:outputLabel
+															value=" 4.राष्ट्रीयता / Nationality"></p:outputLabel></td>
+													<td
+														style="text-align: left; width: 75%; float: left; border-bottom: 1px dotted #000;"><p:outputLabel
+															value="#{cbscOldStudentTC.nationality}"></p:outputLabel></td>
+												</tr>
+												<tr style="height: 7px"></tr>
+												<tr>
+													<td
+														style="text-align: left; width: 60%; padding-right: 45px;"><p:outputLabel
+															value=" 5.क्या अभ्यर्थी अनुसूचित जाति या अनुसूचित जनजाति या अन्य पिछ़डे वर्ग से सम्बन्धित है ?/ Whether the candidate belongs to SC/ST/OBC Category"></p:outputLabel></td>
+													<td
+														style="text-align: left; width: 75%; float: left; border-bottom: 1px dotted #000;"><p:outputLabel
+															value="#{cbscOldStudentTC.category}"></p:outputLabel></td>
+												</tr>
+												<tr style="height: 7px"></tr>
+												<tr>
+													<td
+														style="text-align: left; width: 60%; padding-right: 45px;"><p:outputLabel
+															value=" 6.प्रवेश पुस्तिका के अनुसार जन्म तिथि (अंको में) / Date of Birth according to admission Register(in Figures) "></p:outputLabel></td>
+													<td
+														style="text-align: left; width: 75%; float: left; border-bottom: 1px dotted #000;"><p:outputLabel
+															value="#{cbscOldStudentTC.dob1}"></p:outputLabel></td>
+												</tr>
+												<tr>
+													<td style="text-align: left; width: 60%;"><p:outputLabel
+															value="(शब्दों में) / (in Words)"></p:outputLabel></td>
+													<td
+														style="text-align: left; width: 75%; float: left; border-bottom: 1px dotted #000;"><p:outputLabel
+															value="#{cbscOldStudentTC.dobinword}"></p:outputLabel></td>
+												</tr>
+												<tr style="height: 7px"></tr>
+												<tr>
+													<td
+														style="text-align: left; width: 60%; padding-right: 45px;"><p:outputLabel
+															value=" 7.क्या विद्यार्थी का परीक्षा परिणाम अनुत्तीर्ण है ? / Whether the student is failed ?"></p:outputLabel></td>
+													<td
+														style="text-align: left; width: 75%; float: left; border-bottom: 1px dotted #000;"><p:outputLabel
+															value="#{cbscOldStudentTC.failedOrNot}"></p:outputLabel></td>
+												</tr>
+												<tr style="height: 7px"></tr>
+												<tr>
+													<td
+														style="text-align: left; width: 60%; padding-right: 45px;"><p:outputLabel
+															value=" 8.प्रस्तावित विषय / Subject Offered"></p:outputLabel></td>
+													<td
+														style="text-align: left; width: 75%; float: left; border-bottom: 1px dotted #000;"><p:outputLabel
+															value="#{cbscOldStudentTC.subjectStudied}"></p:outputLabel></td>
+												</tr>
+												<tr style="height: 7px"></tr>
+												<tr>
+													<td
+														style="text-align: left; width: 60%; padding-right: 45px;"><p:outputLabel
+															value=" 9.पिछली कक्षा जिसमे विद्यार्थी अध्ययनरत था (अंको में) / Class in which the pupil last studied(in figures)"></p:outputLabel></td>
+													<td
+														style="text-align: left; width: 75%; float: left; border-bottom: 1px dotted #000;"><p:outputLabel
+															value="#{cbscOldStudentTC.previousClass}"></p:outputLabel></td>
+												</tr>
+												<tr>
+													<td style="text-align: left; width: 60%;"><p:outputLabel
+															value="(शब्दों में) / (in Words)"></p:outputLabel></td>
+													<td
+														style="text-align: left; width: 75%; float: left; border-bottom: 1px dotted #000;"><p:outputLabel
+															value="#{cbscOldStudentTC.previosClassWord}"></p:outputLabel></td>
+												</tr>
+												<tr style="height: 7px"></tr>
+												<tr>
+													<td
+														style="text-align: left; width: 60%; padding-right: 45px;"><p:outputLabel
+															value=" 10.पिछले विद्यालय / बोर्ड परीक्षा एवं परिणाम  / School/Board Annual examination last taken with result"></p:outputLabel></td>
+													<td
+														style="text-align: left; width: 75%; float: left; border-bottom: 1px dotted #000;"><p:outputLabel
+															value="#{cbscOldStudentTC.schoolExam}"></p:outputLabel></td>
+												</tr>
+												<tr style="height: 7px"></tr>
+												<tr>
+													<td
+														style="text-align: left; width: 60%; padding-right: 45px;"><p:outputLabel
+															value=" 11.क्या उच्च कक्षा में पदोन्नति का अधिकारी है ? (अंको में)/ Whether qualified for promotion to the higher class"></p:outputLabel></td>
+													<td
+														style="text-align: left; width: 75%; float: left; border-bottom: 1px dotted #000;"><p:outputLabel
+															value="#{cbscOldStudentTC.qualifiedPromotion}"></p:outputLabel></td>
+												</tr>
+												<tr style="height: 7px"></tr>
+												<tr>
+													<td
+														style="text-align: left; width: 60%; padding-right: 45px;"><p:outputLabel
+															value=" 12.क्या विद्यार्थी ने विद्यालय की सभी देय राशि का भुगतान कर दिया है ?/ Whether the pupil has paid all dues to the School ?"></p:outputLabel></td>
+													<td
+														style="text-align: left; width: 75%; float: left; border-bottom: 1px dotted #000;"><p:outputLabel
+															value="#{cbscOldStudentTC.monthOfFeePaid}"></p:outputLabel></td>
+												</tr>
+												<tr style="height: 7px"></tr>
+												<tr>
+													<td
+														style="text-align: left; width: 60%; padding-right: 45px;"><p:outputLabel
+															value=" 13.क्या विद्यार्थी को कोई शुल्क रियायत प्रदान की गयी थी यदि हाँ तो उसकी प्रकृति ?/ Whether the pupil was in receipt of any fee concession, if so the nature of such concession ?"></p:outputLabel></td>
+													<td
+														style="text-align: left; width: 75%; float: left; border-bottom: 1px dotted #000;"><p:outputLabel
+															value="#{cbscOldStudentTC.feeConcession}"></p:outputLabel></td>
+												</tr>
+												<tr style="height: 7px"></tr>
+												<tr>
+													<td
+														style="text-align: left; width: 60%; padding-right: 45px;"><p:outputLabel
+															value=" 14.क्या विद्यार्थी एन.सी.सी. कैडेट /स्काउट है ?(विवरण दें) / Whether the pupil is NCC Cadet/Boy Scout/ Girl Guide ( give details) ?"></p:outputLabel></td>
+													<td
+														style="text-align: left; width: 75%; float: left; border-bottom: 1px dotted #000;"><p:outputLabel
+															value="#{cbscOldStudentTC.ncc}"></p:outputLabel></td>
+												</tr>
+												<tr style="height: 7px"></tr>
+												<tr>
+													<td
+														style="text-align: left; width: 60%; padding-right: 45px;"><p:outputLabel
+															value=" 15.विद्यालय से विद्यार्थी का नाम काटे जाने की तिथि  / Date on which pupil name was struck off the rolls of the School"></p:outputLabel></td>
+													<td
+														style="text-align: left; width: 75%; float: left; border-bottom: 1px dotted #000;"><p:outputLabel
+															value="#{cbscOldStudentTC.lastDateStr}"></p:outputLabel></td>
+												</tr>
+												<tr style="height: 7px"></tr>
+												<tr>
+													<td
+														style="text-align: left; width: 60%; padding-right: 45px;"><p:outputLabel
+															value=" 16.अंतिम तिथि तक उपस्थितियों की कुल संख्या / No. of meetings up to date"></p:outputLabel></td>
+													<td
+														style="text-align: left; width: 75%; float: left; border-bottom: 1px dotted #000;"><p:outputLabel
+															value="#{cbscOldStudentTC.workingDays}"></p:outputLabel></td>
+												</tr>
+												<tr style="height: 7px"></tr>
+												<tr>
+													<td
+														style="text-align: left; width: 60%; padding-right: 45px;"><p:outputLabel
+															value=" 17.विद्यार्थी की विद्यालय दिवसो की कुल उपस्थितियां / No. of school days the pupil attended"></p:outputLabel></td>
+													<td
+														style="text-align: left; width: 75%; float: left; border-bottom: 1px dotted #000;"><p:outputLabel
+															value="#{cbscOldStudentTC.workingDayPresent}"></p:outputLabel></td>
+												</tr>
+												<tr style="height: 7px"></tr>
+												<tr>
+													<td
+														style="text-align: left; width: 60%; padding-right: 45px;"><p:outputLabel
+															value=" 18.सामान्य आचरण / General Conduct"></p:outputLabel></td>
+													<td
+														style="text-align: left; width: 75%; float: left; border-bottom: 1px dotted #000;"><p:outputLabel
+															value="#{cbscOldStudentTC.perfom}"></p:outputLabel></td>
+												</tr>
+												<tr style="height: 7px"></tr>
+												<tr>
+													<td
+														style="text-align: left; width: 60%; padding-right: 45px;"><p:outputLabel
+															value="19.विद्यालय छोड़ने का कारण / Reason for leaving the school"></p:outputLabel></td>
+													<td
+														style="text-align: left; width: 75%; float: left; border-bottom: 1px dotted #000;"><p:outputLabel
+															value="#{cbscOldStudentTC.reason}"></p:outputLabel></td>
+												</tr>
+												<tr style="height: 7px"></tr>
+												<tr>
+													<td
+														style="text-align: left; width: 60%; padding-right: 45px;"><p:outputLabel
+															value=" 20.कोई अन्य टिप्पणी / Any other remarks"></p:outputLabel></td>
+													<td
+														style="text-align: left; width: 75%; float: left; border-bottom: 1px dotted #000;"><p:outputLabel
+															value="#{cbscOldStudentTC.otherRemark}"></p:outputLabel></td>
+												</tr>
+												<tr style="height: 7px"></tr>
+												<tr>
+													<td
+														style="text-align: left; width: 60%; padding-right: 45px;"><p:outputLabel
+															value=" 21.प्रमाण पत्र जारी करने की तिथि / Date of issue of certificate"></p:outputLabel></td>
+													<td
+														style="text-align: left; width: 75%; float: left; border-bottom: 1px dotted #000;"><p:outputLabel
+															value="#{cbscOldStudentTC.issuDateStr}"></p:outputLabel></td>
+												</tr>
+
+												<tr style="height: 45px"></tr>
+											</table>
+
+											<table
+												style="margin-left: 20px; float: left; width: 100%; margin-top: 1%">
+												<tr>
+													<td style="text-align: left; width: 30%;"><p:outputLabel
+															value="______________________"></p:outputLabel></td>
+													<td style="text-align: left; width: 30%;"><p:outputLabel
+															value="______________________"></p:outputLabel></td>
+													<td style="text-align: left; width: 30%;"><p:outputLabel
+															value="______________________"></p:outputLabel></td>
+												</tr>
+												<tr>
+													<td style="text-align: left; width: 30%;"><p:outputLabel
+															value="तैय़ारकर्ता / Prepared By"></p:outputLabel></td>
+													<td style="text-align: left; width: 30%;"><p:outputLabel
+															value="जॉंचकर्ता / Checked By"></p:outputLabel></td>
+													<td style="text-align: left; width: 30%;"><p:outputLabel
+															value="ह.प्रधानाचार्य  / कार्यालय मोहर"></p:outputLabel></td>
+												</tr>
+												<tr>
+													<td style="text-align: left; width: 30%;"><p:outputLabel
+															value="(Name &amp; Designation)"></p:outputLabel></td>
+													<td style="text-align: left; width: 30%;"><p:outputLabel
+															value="(Name &amp; Designation)"></p:outputLabel></td>
+													<td style="text-align: left; width: 30%;"><p:outputLabel
+															value="Sign. of Principal with Official Seal"></p:outputLabel></td>
+												</tr>
+												<tr style="height: 10px;"></tr>
+											</table>
+											<p style="font-size: 12px; margin-left: 20px;">नोट: - यदि
+												यह स्थानांतरण पत्र इंचार्ज प्रधानाचार्य द्वारा हस्ताक्षरित
+												हो तो प्रबंधक / अध्यक्ष विद्यालय प्रबंधन समिति द्वारा प्रति
+												हस्ताक्षरित अवश्य कराये |</p>
+											<p style="font-size: 12px; margin-left: 20px;">Note: This
+												T.C. must be invariably countersigned by the Manager-
+												S.M.C., if is issued by the officiating / Incharge
+												Principal.</p>
+
+										</div>
+									</div>
+								</div>
+							</p:outputPanel>
+
+							<p:outputPanel id="expnsBoucher1"
+								rendered="#{sideMenuBean.list.branch_id ne '22' &amp;&amp; sideMenuBean.list.branch_id ne '27'}">
+								<div
+									style="border: 2px solid !important; width: 100% !important; background-color: white; margin: 20px; border-radius: 1px; overflow: hidden; position: relative">
+									<div>
+										<p:graphicImage width="100%" height="100px"
+											value="#{cbscOldStudentTC.headerImage}"></p:graphicImage>
+									</div>
+									<center>
+										<h4
+											style="margin: 0px; height: 25px; border: 2px solid #000; width: 40%;">स्थानांतरण
+											प्रमाण - पत्र /TRANSFER CERTIFICATE</h4>
+									</center>
+									<br></br>
+									<p:outputPanel id="uppnl1"
+										rendered="#{sideMenuBean.list.branch_id ne '62'}">
+										<table style="margin-left: 20px; height: auto; width: 95%;">
+											<tr>
+												<td style="text-align: left"><p:outputLabel
+														value="विद्यालय सं. / School No.: #{sideMenuBean.list.regNo}"></p:outputLabel>
+												</td>
+												<td style="text-align: right"><p:outputLabel
+														value="पुस्तक न./ Book No.: 1/#{sideMenuBean.startSession}"></p:outputLabel></td>
+												<td style="text-align: right"><p:outputLabel
+														value="क्रम सं./ Sr. No.: #{cbscOldStudentTC.tcNumber}"></p:outputLabel></td>
+												<td style="text-align: right"><p:outputLabel
+														value="प्रवेश सं./ Adm No.: #{cbscOldStudentTC.addmissionnumber}"></p:outputLabel></td>
+											</tr>
+											<tr>
+												<td style="text-align: left"><p:outputLabel
+														value="Affiliation No.: #{sideMenuBean.list.add4}"></p:outputLabel>
+												</td>
+												<td style="text-align: right"><p:outputLabel
+														value="Renewed Upto: #{sideMenuBean.list.branch_id eq '54' ? sideMenuBean.startSession.concat(' - 23') : ''}"></p:outputLabel></td>
+												<td style="text-align: right"><p:outputLabel
+														value="Status Of School : "></p:outputLabel></td>
+												<td style="text-align: right"><p:outputLabel
+														value="#{sideMenuBean.list.schType}"></p:outputLabel></td>
+											</tr>
+										</table>
+									</p:outputPanel>
+
+									<p:outputPanel id="uppnl2"
+										rendered="#{sideMenuBean.list.branch_id eq '62'}">
+										<table style="margin-left: 20px; height: auto; width: 95%;">
+											<tr>
+												<td style="text-align: left"><p:outputLabel
+														value="क्रम सं. / Sr. No.: #{cbscOldStudentTC.tcNumber}"></p:outputLabel></td>
+												<td style="text-align: right"><p:outputLabel
+														value="दिनांक / Date: "></p:outputLabel></td>
+												<td
+													style="text-align: right; border-bottom: 1px dotted #000;"><p:outputLabel
+														value="&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;"></p:outputLabel></td>
+											</tr>
+										</table>
+									</p:outputPanel>
+									<br></br>
+									<table style="margin-left: 20px; height: auto; width: 95%;">
+										<tr>
+											<td style="text-align: left; width: 55%;"><p:outputLabel
+													value="Registration No. of the candidate(in case Class -IX to XII)"></p:outputLabel></td>
+											<td style="text-align: left; width: 45%;"><p:outputLabel
+													value=""></p:outputLabel></td>
+										</tr>
+									</table>
+									<br></br>
+									<div style="width: 100%; overflow: hidden; height: auto;">
+										<table style="margin-left: 20px; float: left; width: 100%;">
+											<tr>
+												<td
+													style="text-align: left; width: 60%; padding-right: 45px;"><p:outputLabel
+														value=" 1.विद्यार्थी का नाम / Name of Pupil"></p:outputLabel></td>
+												<td
+													style="text-align: left; width: 75%; float: left; border-bottom: 1px dotted #000;"><p:outputLabel
+														value="#{cbscOldStudentTC.fullName}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 7px"></tr>
+											<tr>
+												<td
+													style="text-align: left; width: 60%; padding-right: 45px;"><p:outputLabel
+														value="&#160;&#160;&#160;आधार कार्ड नं. / Adhar Card No."></p:outputLabel></td>
+												<td
+													style="text-align: left; width: 75%; float: left; border-bottom: 1px dotted #000;"><p:outputLabel
+														value="#{cbscOldStudentTC.stadhar}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 7px"></tr>
+											<tr>
+												<td
+													style="text-align: left; width: 60%; padding-right: 45px;"><p:outputLabel
+														value=" 2.माता का नाम / Mother's Name"></p:outputLabel></td>
+												<td
+													style="text-align: left; width: 75%; float: left; border-bottom: 1px dotted #000;"><p:outputLabel
+														value="#{cbscOldStudentTC.motherName.contains('Mrs.') ? '' : 'Mrs.'} #{cbscOldStudentTC.motherName}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 7px"></tr>
+											<tr>
+												<td
+													style="text-align: left; width: 60%; padding-right: 45px;"><p:outputLabel
+														value="&#160;&#160;&#160;आधार कार्ड नं. / Adhar Card No."></p:outputLabel></td>
+												<td
+													style="text-align: left; width: 75%; float: left; border-bottom: 1px dotted #000;"><p:outputLabel
+														value="#{cbscOldStudentTC.madhar}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 7px"></tr>
+											<tr>
+												<td
+													style="text-align: left; width: 60%; padding-right: 45px;"><p:outputLabel
+														value=" 3.पिता /अभिभावक का नाम / Father/Guardian's Name"></p:outputLabel></td>
+												<td
+													style="text-align: left; width: 75%; float: left; border-bottom: 1px dotted #000;"><p:outputLabel
+														value="#{cbscOldStudentTC.fatherName.contains('Mr.') ? '' : 'Mr.'} #{cbscOldStudentTC.fatherName}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 7px"></tr>
+											<tr>
+												<td
+													style="text-align: left; width: 60%; padding-right: 45px;"><p:outputLabel
+														value="&#160;&#160;&#160;आधार कार्ड नं. / Adhar Card No."></p:outputLabel></td>
+												<td
+													style="text-align: left; width: 75%; float: left; border-bottom: 1px dotted #000;"><p:outputLabel
+														value="#{cbscOldStudentTC.fadhar}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 7px"></tr>
+											<tr>
+												<td
+													style="text-align: left; width: 60%; padding-right: 45px;"><p:outputLabel
+														value=" 4.राष्ट्रीयता / Nationality"></p:outputLabel></td>
+												<td
+													style="text-align: left; width: 75%; float: left; border-bottom: 1px dotted #000;"><p:outputLabel
+														value="#{cbscOldStudentTC.nationality}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 7px"></tr>
+											<tr>
+												<td
+													style="text-align: left; width: 60%; padding-right: 45px;"><p:outputLabel
+														value=" 5.क्या अभ्यर्थी अनुसूचित जाति या अनुसूचित जनजाति या अन्य पिछ़डे वर्ग से सम्बन्धित है ?/ Whether the candidate belongs to SC/ST/OBC Category"></p:outputLabel></td>
+												<td
+													style="text-align: left; width: 75%; float: left; border-bottom: 1px dotted #000;"><p:outputLabel
+														value="#{cbscOldStudentTC.category}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 7px"></tr>
+											<tr>
+												<td
+													style="text-align: left; width: 60%; padding-right: 45px;"><p:outputLabel
+														value=" 6.प्रवेश पुस्तिका के अनुसार जन्म तिथि (अंको में) / Date of Birth according to admission Register(in Figures) "></p:outputLabel></td>
+												<td
+													style="text-align: left; width: 75%; float: left; border-bottom: 1px dotted #000;"><p:outputLabel
+														value="#{cbscOldStudentTC.dob1}"></p:outputLabel></td>
+											</tr>
+											<tr>
+												<td style="text-align: left; width: 60%;"><p:outputLabel
+														value="(शब्दों में) / (in Words)"></p:outputLabel></td>
+												<td
+													style="text-align: left; width: 75%; float: left; border-bottom: 1px dotted #000;"><p:outputLabel
+														value="#{cbscOldStudentTC.dobinword}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 7px"></tr>
+											<tr>
+												<td
+													style="text-align: left; width: 60%; padding-right: 45px;"><p:outputLabel
+														value=" 7.क्या विद्यार्थी का परीक्षा परिणाम अनुत्तीर्ण है ? / Whether the student is failed ?"></p:outputLabel></td>
+												<td
+													style="text-align: left; width: 75%; float: left; border-bottom: 1px dotted #000;"><p:outputLabel
+														value="#{cbscOldStudentTC.failedOrNot}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 7px"></tr>
+											<tr>
+												<td
+													style="text-align: left; width: 60%; padding-right: 45px;"><p:outputLabel
+														value=" 8.प्रस्तावित विषय / Subject Offered"></p:outputLabel></td>
+												<td
+													style="text-align: left; width: 75%; float: left; border-bottom: 1px dotted #000;"><p:outputLabel
+														value="#{cbscOldStudentTC.subjectStudied}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 7px"></tr>
+											<tr>
+												<td
+													style="text-align: left; width: 60%; padding-right: 45px;"><p:outputLabel
+														value=" 9.पिछली कक्षा जिसमे विद्यार्थी अध्ययनरत था (अंको में) / Class in which the pupil last studied(in figures)"></p:outputLabel></td>
+												<td
+													style="text-align: left; width: 75%; float: left; border-bottom: 1px dotted #000;"><p:outputLabel
+														value="#{cbscOldStudentTC.previousClass}"></p:outputLabel></td>
+											</tr>
+											<tr>
+												<td style="text-align: left; width: 60%;"><p:outputLabel
+														value="(शब्दों में) / (in Words)"></p:outputLabel></td>
+												<td
+													style="text-align: left; width: 75%; float: left; border-bottom: 1px dotted #000;"><p:outputLabel
+														value="#{cbscOldStudentTC.previosClassWord}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 7px"></tr>
+											<tr>
+												<td
+													style="text-align: left; width: 60%; padding-right: 45px;"><p:outputLabel
+														value=" 10.पिछले विद्यालय / बोर्ड परीक्षा एवं परिणाम  / School/Board Annual examination last taken with result"></p:outputLabel></td>
+												<td
+													style="text-align: left; width: 75%; float: left; border-bottom: 1px dotted #000;"><p:outputLabel
+														value="#{cbscOldStudentTC.schoolExam}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 7px"></tr>
+											<tr>
+												<td
+													style="text-align: left; width: 60%; padding-right: 45px;"><p:outputLabel
+														value=" 11.क्या उच्च कक्षा में पदोन्नति का अधिकारी है ? (अंको में)/ Whether qualified for promotion to the higher class"></p:outputLabel></td>
+												<td
+													style="text-align: left; width: 75%; float: left; border-bottom: 1px dotted #000;"><p:outputLabel
+														value="#{cbscOldStudentTC.qualifiedPromotion}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 7px"></tr>
+											<tr>
+												<td
+													style="text-align: left; width: 60%; padding-right: 45px;"><p:outputLabel
+														value=" 12.क्या विद्यार्थी ने विद्यालय की सभी देय राशि का भुगतान कर दिया है ?/ Whether the pupil has paid all dues to the School ?"></p:outputLabel></td>
+												<td
+													style="text-align: left; width: 75%; float: left; border-bottom: 1px dotted #000;"><p:outputLabel
+														value="#{cbscOldStudentTC.monthOfFeePaid}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 7px"></tr>
+											<tr>
+												<td
+													style="text-align: left; width: 60%; padding-right: 45px;"><p:outputLabel
+														value=" 13.क्या विद्यार्थी को कोई शुल्क रियायत प्रदान की गयी थी यदि हाँ तो उसकी प्रकृति ?/ Whether the pupil was in receipt of any fee concession, if so the nature of such concession ?"></p:outputLabel></td>
+												<td
+													style="text-align: left; width: 75%; float: left; border-bottom: 1px dotted #000;"><p:outputLabel
+														value="#{cbscOldStudentTC.feeConcession}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 7px"></tr>
+											<tr>
+												<td
+													style="text-align: left; width: 60%; padding-right: 45px;"><p:outputLabel
+														value=" 14.क्या विद्यार्थी एन.सी.सी. कैडेट /स्काउट है ?(विवरण दें) / Whether the pupil is NCC Cadet/Boy Scout/ Girl Guide ( give details) ?"></p:outputLabel></td>
+												<td
+													style="text-align: left; width: 75%; float: left; border-bottom: 1px dotted #000;"><p:outputLabel
+														value="#{cbscOldStudentTC.ncc}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 7px"></tr>
+											<tr>
+												<td
+													style="text-align: left; width: 60%; padding-right: 45px;"><p:outputLabel
+														value=" 15.विद्यालय से विद्यार्थी का नाम काटे जाने की तिथि  / Date on which pupil name was struck off the rolls of the School"></p:outputLabel></td>
+												<td
+													style="text-align: left; width: 75%; float: left; border-bottom: 1px dotted #000;"><p:outputLabel
+														value="#{cbscOldStudentTC.lastDateStr}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 7px"></tr>
+											<tr>
+												<td
+													style="text-align: left; width: 60%; padding-right: 45px;"><p:outputLabel
+														value=" 16.अंतिम तिथि तक उपस्थितियों की कुल संख्या / No. of meetings up to date"></p:outputLabel></td>
+												<td
+													style="text-align: left; width: 75%; float: left; border-bottom: 1px dotted #000;"><p:outputLabel
+														value="#{cbscOldStudentTC.workingDays}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 7px"></tr>
+											<tr>
+												<td
+													style="text-align: left; width: 60%; padding-right: 45px;"><p:outputLabel
+														value=" 17.विद्यार्थी की विद्यालय दिवसो की कुल उपस्थितियां / No. of school days the pupil attended"></p:outputLabel></td>
+												<td
+													style="text-align: left; width: 75%; float: left; border-bottom: 1px dotted #000;"><p:outputLabel
+														value="#{cbscOldStudentTC.workingDayPresent}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 7px"></tr>
+											<tr>
+												<td
+													style="text-align: left; width: 60%; padding-right: 45px;"><p:outputLabel
+														value=" 18.सामान्य आचरण / General Conduct"></p:outputLabel></td>
+												<td
+													style="text-align: left; width: 75%; float: left; border-bottom: 1px dotted #000;"><p:outputLabel
+														value="#{cbscOldStudentTC.perfom}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 7px"></tr>
+											<tr>
+												<td
+													style="text-align: left; width: 60%; padding-right: 45px;"><p:outputLabel
+														value="19.विद्यालय छोड़ने का कारण / Reason for leaving the school"></p:outputLabel></td>
+												<td
+													style="text-align: left; width: 75%; float: left; border-bottom: 1px dotted #000;"><p:outputLabel
+														value="#{cbscOldStudentTC.reason}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 7px"></tr>
+											<tr>
+												<td
+													style="text-align: left; width: 60%; padding-right: 45px;"><p:outputLabel
+														value=" 20.कोई अन्य टिप्पणी / Any other remarks"></p:outputLabel></td>
+												<td
+													style="text-align: left; width: 75%; float: left; border-bottom: 1px dotted #000;"><p:outputLabel
+														value="#{cbscOldStudentTC.otherRemark}"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 7px"></tr>
+											<tr>
+												<td
+													style="text-align: left; width: 60%; padding-right: 45px;"><p:outputLabel
+														value=" 21.प्रमाण पत्र जारी करने की तिथि / Date of issue of certificate"></p:outputLabel></td>
+												<td
+													style="text-align: left; width: 75%; float: left; border-bottom: 1px dotted #000;"><p:outputLabel
+														value="#{cbscOldStudentTC.issuDateStr}"></p:outputLabel></td>
+											</tr>
+
+											<tr style="height: 45px"></tr>
+										</table>
+
+										<table
+											style="margin-left: 20px; float: left; width: 100%; margin-top: 1%">
+											<tr>
+												<td style="text-align: left; width: 30%;"><p:outputLabel
+														value="______________________"></p:outputLabel></td>
+												<td style="text-align: left; width: 30%;"><p:outputLabel
+														value="______________________"></p:outputLabel></td>
+												<td style="text-align: left; width: 30%;"><p:outputLabel
+														value="______________________"></p:outputLabel></td>
+											</tr>
+											<tr>
+												<td style="text-align: left; width: 30%;"><p:outputLabel
+														value="तैय़ारकर्ता / Prepared By"></p:outputLabel></td>
+												<td style="text-align: left; width: 30%;"><p:outputLabel
+														value="जॉंचकर्ता / Checked By"></p:outputLabel></td>
+												<td style="text-align: left; width: 30%;"><p:outputLabel
+														value="ह.प्रधानाचार्य  / कार्यालय मोहर"></p:outputLabel></td>
+											</tr>
+											<tr>
+												<td style="text-align: left; width: 30%;"><p:outputLabel
+														value="(Name &amp; Designation)"></p:outputLabel></td>
+												<td style="text-align: left; width: 30%;"><p:outputLabel
+														value="(Name &amp; Designation)"></p:outputLabel></td>
+												<td style="text-align: left; width: 30%;"><p:outputLabel
+														value="Sign. of Principal with Official Seal"></p:outputLabel></td>
+											</tr>
+											<tr style="height: 10px;"></tr>
+										</table>
+										<p style="font-size: 12px; margin-left: 20px;">नोट: - यदि
+											यह स्थानांतरण पत्र इंचार्ज प्रधानाचार्य द्वारा हस्ताक्षरित हो
+											तो प्रबंधक / अध्यक्ष विद्यालय प्रबंधन समिति द्वारा प्रति
+											हस्ताक्षरित अवश्य कराये |</p>
+										<p style="font-size: 12px; margin-left: 20px;">Note: This
+											T.C. must be invariably countersigned by the Manager- S.M.C.,
+											if is issued by the officiating / Incharge Principal.</p>
+
+									</div>
+								</div>
+							</p:outputPanel>
+						</h:form>
+						<!-- </div> -->
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

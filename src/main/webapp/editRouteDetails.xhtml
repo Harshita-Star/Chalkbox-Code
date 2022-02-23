@@ -1,0 +1,165 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Edit Route Details</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<h1>Edit/Delete Transport Route</h1>
+
+							<p:panel header="Edit Transport Route" id="panel">
+
+								<p:messages closable="true" autoUpdate="true"></p:messages>
+
+								<p:panelGrid columns="2" styleClass="form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:dataTable reflow="true" selection="#{editRouteDetails.list}"
+										rowKey="#{var.id}" value="#{editRouteDetails.routeList}"
+										var="var">
+										<f:facet name="header">
+										All Transport Route
+									</f:facet>
+
+										<p:column headerText="Select" selectionMode="single"></p:column>
+										<p:column headerText="Serial Number">
+											
+											#{var.serialNumber}
+											
+									</p:column>
+
+										<p:column sortBy="#{var.name}" filterBy="#{var.name}"
+											headerText="Route">
+											
+											#{var.name}
+											
+									</p:column>
+
+										<p:column filterBy="#{var.gpsAlias}" headerText="GPS Device">
+											
+											#{var.gpsAlias}
+											
+									</p:column>
+
+										<p:column headerText="Delete">
+										<center>
+										<p:commandButton update=":form" styleClass="redButt butwid"
+												oncomplete="PF('dlg').show();" icon="ui-icon-trash">
+												<f:setPropertyActionListener
+													target="#{editRouteDetails.list}" value="#{var}"></f:setPropertyActionListener>
+											</p:commandButton>
+										</center>
+										</p:column>
+
+										<f:facet name="footer">
+											<center>
+												<p:commandButton style="width:150px;" value="Edit Selected" icon="fa fa-pencil"
+													action="#{editRouteDetails.editSeletedRow}"
+													update=":form:panel"></p:commandButton>
+											</center>
+										</f:facet>
+
+
+									</p:dataTable>
+
+
+									<p:panelGrid rendered="#{editRouteDetails.editDetailsShow}"
+										columns="2" styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+
+
+										<p:outputLabel value="Route Name" for="@next" style="color:red" ></p:outputLabel>
+										<p:inputText disabled="false" value="#{editRouteDetails.name}"
+											required="true" requiredMessage="Please enter route name"
+											id="rtnm"
+											onchange="trimFunc(this.value,'Please Enter Route Name',this.id)" validatorMessage="Please Enter Correct value">
+										  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+										</p:inputText>
+
+										<p:outputLabel value="Source" for="@next" style="color:red" ></p:outputLabel>
+										<p:inputText value="#{editRouteDetails.source}"
+											required="true" requiredMessage="Please enter source name"
+											id="srnm"
+											onchange="trimFunc(this.value,'Please Enter Source Name',this.id)" validatorMessage="Please Enter Correct value">
+										  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+										</p:inputText>
+
+										<p:outputLabel value="Destination" for="@next" style="color:red" ></p:outputLabel>
+										<p:inputText disabled="true"
+											value="#{editRouteDetails.destination}" required="true"
+											requiredMessage="Please enter destination name" validatorMessage="Please Enter Correct value">
+										  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+										</p:inputText>
+
+										<p:outputLabel value="Starting Date" for="@next" style="color:red" ></p:outputLabel>
+										<p:calendar disabled="true"
+											value="#{editRouteDetails.creatingDate}" pattern="dd/MM/yyyy"
+											navigator="true" required="true"
+											requiredMessage="Please enter starting Date"></p:calendar>
+
+										<p:outputLabel value="Updating Date" for="@next" style="color:red" ></p:outputLabel>
+										<p:calendar disabled="true"
+											value="#{editRouteDetails.updatingDate}" pattern="dd/MM/yyyy"
+											navigator="true" required="true"
+											requiredMessage="Please enter updating Date"></p:calendar>
+
+										<p:outputLabel value="Select Bus" for="@next" style="color:red" ></p:outputLabel>
+										<p:selectOneMenu filter="true"
+											value="#{editRouteDetails.selectedBus}" required="true"
+											requiredMessage="Please Select Bus">
+											<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+											<f:selectItems value="#{editRouteDetails.busList}"></f:selectItems>
+										</p:selectOneMenu>
+
+										<p:outputLabel value="Bus Attendent"></p:outputLabel>
+										<p:selectOneMenu filter="true" filterMatchMode="contains"
+											value="#{editRouteDetails.busAttendent}">
+											<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+											<f:selectItems value="#{editRouteDetails.employeelist}"></f:selectItems>
+										</p:selectOneMenu>
+											<br />
+								<p:separator />
+								<center>
+										<p:commandButton update=":form:panel" styleClass="butwid" icon="fa fa-floppy-o"
+											actionListener="#{editRouteDetails.editNow}"
+											value="Save Here"></p:commandButton>
+								</center>
+								<p:separator />
+								<br />
+									</p:panelGrid>
+								
+								</p:panelGrid>
+							</p:panel>
+
+							<p:dialog resizable="false" widgetVar="dlg"
+								header="Do you really want to delete this route"
+								showEffect="fade" hideEffect="explode" modal="true">
+								<div class="ui-g form-group">
+									<p:panelGrid columns="2"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+										<p:commandButton update=":form" styleClass="greenButt"
+											actionListener="#{editRouteDetails.deleteNow}"
+											oncomplete="PF('dlg').hide();" value="Yes"></p:commandButton>
+										<p:commandButton value="No" update=":form" styleClass="redButt"
+											oncomplete="PF('dlg').hide();"></p:commandButton>
+									</p:panelGrid>
+								</div>
+							</p:dialog>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

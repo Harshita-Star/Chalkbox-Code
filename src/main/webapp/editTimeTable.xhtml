@@ -1,0 +1,171 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Edit Time Table</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					
+					<div class="card card-w-title">
+						<h:form id="form1">
+					<p:messages autoUpdate="true" closable="true"></p:messages>
+					<p:panel header="Edit Time Table">
+						<p:panel>
+							<p:dataTable id="data" value="#{editTimeTableBean.changeTableList}" var="var" >
+								<p:column headerText="S.No." style="width:25px">
+									<p:outputLabel value="#{var.sNo}"></p:outputLabel>
+								</p:column>
+								
+								<p:column headerText="Class">
+									<p:outputLabel value="#{var.courseName}"></p:outputLabel>
+								</p:column>
+								
+								<p:column headerText="Section">
+									<p:outputLabel value="#{var.sectionName}"></p:outputLabel>
+								</p:column>
+								
+								<p:column headerText="Edit">
+									<p:commandButton icon="ui-icon-pencil" title="Click here to Update Time-Table" update=":timeTableForm" actionListener="#{editTimeTableBean.createTimeTable}">
+										<f:attribute name="sNo" value="#{var.sNo}"></f:attribute>
+									</p:commandButton>
+								</p:column>
+								
+							</p:dataTable>
+						</p:panel>
+					</p:panel>
+				</h:form>
+				
+				
+				<h:form id="alertForm" style="overflow:hidden">
+					<p:dialog header="Information" widgetVar="alertDialog" resizable="false" closable="true" modal="true" showEffect="fade" hideEffect="fade">
+						<p:panel>
+							<p:outputLabel value="#{editTimeTableBean.message}"></p:outputLabel><br></br><br></br>
+						</p:panel>
+					</p:dialog>
+				</h:form>
+				
+				<h:form id="timeTableForm" style="overflow:hidden">
+					<p:dialog header="Update Time Table" widgetVar="timeTableDialog" resizable="false" closable="true" modal="true" showEffect="fade" hideEffect="fade">
+						<p:panel>
+							<p:dataTable value="#{editTimeTableBean.timeTableList}" id="timeData" var="var"  scrollable="true" scrollHeight="75%">
+								<f:facet name="header">
+									<p:panelGrid columns="1">
+										<p:outputLabel value="Class : #{editTimeTableBean.className}"></p:outputLabel>
+									</p:panelGrid>
+								</f:facet>
+									
+								<p:column headerText="Time">
+									<p:panelGrid columns="1">
+										<p:outputLabel value="Lecture #{var.lecNo}"></p:outputLabel>
+										<p:outputLabel value="#{var.lecTime}" rendered="#{sideMenuBean.list.timeTableSchedule eq 'summer'}" />
+										<p:outputLabel value="#{var.winterLecTime}" rendered="#{sideMenuBean.list.timeTableSchedule eq 'winter'}" />
+									</p:panelGrid>
+								</p:column>
+								
+								<p:column headerText="Monday">
+									<p:panelGrid columns="1">
+										<p:selectOneMenu filter="true" filterMatchMode="contains" value="#{var.mon_tchr}" styleClass="abcd">
+											<f:selectItem itemLabel="Faculty 1" itemValue=""></f:selectItem>
+											<f:selectItems value="#{editTimeTableBean.teacherList}"></f:selectItems>
+										</p:selectOneMenu>
+										
+										<p:selectOneMenu value="#{var.mon_sub}" styleClass="abcd">
+											<f:selectItem itemLabel="Subject" itemValue=""></f:selectItem>
+											<f:selectItems value="#{editTimeTableBean.subjectList}"></f:selectItems>
+										</p:selectOneMenu>
+									</p:panelGrid>
+								</p:column>
+
+								<p:column headerText="Tuesday">
+									<p:panelGrid columns="1">
+										<p:selectOneMenu filter="true" filterMatchMode="contains" value="#{var.tues_tchr}" styleClass="abcd">
+											<f:selectItem itemLabel="Faculty 1" itemValue=""></f:selectItem>
+											<f:selectItems value="#{editTimeTableBean.teacherList}"></f:selectItems>
+										</p:selectOneMenu>
+	
+										<p:selectOneMenu value="#{var.tues_sub}" styleClass="abcd">
+											<f:selectItem itemLabel="Subject" itemValue=""></f:selectItem>
+											<f:selectItems value="#{editTimeTableBean.subjectList}"></f:selectItems>
+										</p:selectOneMenu>
+									</p:panelGrid>
+								</p:column>
+								
+								<p:column headerText="Wednesday">
+									<p:panelGrid columns="1">
+										<p:selectOneMenu filter="true" filterMatchMode="contains" value="#{var.wed_tchr}" styleClass="abcd">
+											<f:selectItem itemLabel="Faculty 1" itemValue=""></f:selectItem>
+											<f:selectItems value="#{editTimeTableBean.teacherList}"></f:selectItems>
+										</p:selectOneMenu>
+										
+										<p:selectOneMenu value="#{var.wed_sub}" styleClass="abcd">
+											<f:selectItem itemLabel="Subject" itemValue=""></f:selectItem>
+											<f:selectItems value="#{editTimeTableBean.subjectList}"></f:selectItems>
+										</p:selectOneMenu>
+									</p:panelGrid>
+								</p:column>
+								
+								<p:column headerText="Thursday">
+									<p:panelGrid columns="1">
+										<p:selectOneMenu filter="true" filterMatchMode="contains" value="#{var.thur_tchr}" styleClass="abcd">
+											<f:selectItem itemLabel="Faculty 1" itemValue=""></f:selectItem>
+											<f:selectItems value="#{editTimeTableBean.teacherList}"></f:selectItems>
+										</p:selectOneMenu>
+										
+										<p:selectOneMenu value="#{var.thur_sub}" styleClass="abcd">
+											<f:selectItem itemLabel="Subject" itemValue=""></f:selectItem>
+											<f:selectItems value="#{editTimeTableBean.subjectList}"></f:selectItems>
+										</p:selectOneMenu>
+									</p:panelGrid>
+								</p:column>
+								
+								<p:column headerText="Friday">
+									<p:panelGrid columns="1">
+										<p:selectOneMenu filter="true" filterMatchMode="contains"  value="#{var.fri_tchr}" styleClass="abcd">
+											<f:selectItem itemLabel="Faculty 1" itemValue=""></f:selectItem>
+											<f:selectItems value="#{editTimeTableBean.teacherList}"></f:selectItems>
+										</p:selectOneMenu>
+										
+										<p:selectOneMenu value="#{var.fri_sub}" styleClass="abcd">
+											<f:selectItem itemLabel="Subject" itemValue=""></f:selectItem>
+											<f:selectItems value="#{editTimeTableBean.subjectList}"></f:selectItems>
+										</p:selectOneMenu>
+									</p:panelGrid>
+								</p:column>
+								
+								<p:column headerText="Saturday">
+									<p:panelGrid columns="1">
+										<p:selectOneMenu filter="true" filterMatchMode="contains" value="#{var.sat_tchr}" styleClass="abcd">
+											<f:selectItem itemLabel="Faculty 1" itemValue=""></f:selectItem>
+											<f:selectItems value="#{editTimeTableBean.teacherList}"></f:selectItems>
+										</p:selectOneMenu>
+										
+										<p:selectOneMenu value="#{var.sat_sub}" styleClass="abcd">
+											<f:selectItem itemLabel="Subject" itemValue=""></f:selectItem>
+											<f:selectItems value="#{editTimeTableBean.subjectList}"></f:selectItems>
+										</p:selectOneMenu>
+									</p:panelGrid>
+								</p:column>
+									
+								<f:facet name="footer">
+									<p:panelGrid columns="2">
+										<p:commandButton value="Update" actionListener="#{editTimeTableBean.update}"/>
+									</p:panelGrid>
+								</f:facet>
+								</p:dataTable>
+							</p:panel>
+						</p:dialog>
+					</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

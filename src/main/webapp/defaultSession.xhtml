@@ -1,0 +1,50 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Defaul Session</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="initializePageDataForm">
+							<p:remoteCommand name="initializePageDataCommand" autoRun="true"
+								action="#{selectSession.init()}" />
+						</h:form>
+
+						<h:form>
+							<h1>Default ERP Session</h1>
+
+							<p:panel header="Change The Default ERP Session">
+
+								<p:messages closable="true">
+									<p:autoUpdate />
+								</p:messages>
+								
+
+								<p:panelGrid columns="3"
+									styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:outputLabel value="Change Default ERP Session To : "
+										style="font-size: 14px;font-weight: bold;" />
+									<p:outputLabel value="#{selectSession.selectedSession}"
+										style="font-size: 14px;font-weight: bold;" />
+									<p:commandButton action="#{selectSession.defaultSession}"
+										value="Set Default ERP Session : #{selectSession.selectedSession} >>>"
+										icon="ui-icon-plus"></p:commandButton>
+								</p:panelGrid>
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

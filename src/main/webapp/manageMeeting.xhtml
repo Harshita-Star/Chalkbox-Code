@@ -1,0 +1,141 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Manage Meeting</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+
+						<h:form id="form">
+						<p:messages autoUpdate="true" closable="true"></p:messages>
+							<p:panel header="All Meetings">
+								<p:dataTable var="var" value="#{manageMeeting.meetingList}"
+									reflow="true" paginator="true" rows="10"
+									paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+									rowsPerPageTemplate="10,20,30" filterDelay="1500" selection="#{manageMeeting.selectedList}" rowKey="#{var.sno}">
+									
+									
+									<f:facet name="header">
+									
+									<p:panel>
+									  <p:panelGrid columns="2">
+									
+									  <p:commandButton value="Approve Multiple Meetings" styleClass="butwid-2 greenButt" icon="fa fa-check"  action="#{manageMeeting.approveMultiple}" update=":form"></p:commandButton>
+									
+									  	  <p:commandButton value="Deny Multiple Meetings" styleClass="butwid-2 redButt" icon="fa fa-ban" action="#{manageMeeting.denyMultiple}" update=":form"></p:commandButton>
+									   
+									  </p:panelGrid>
+									</p:panel>
+									
+									</f:facet>
+									
+									<f:facet name="footer">
+									
+									<p:panel>
+									  <p:panelGrid columns="2">
+									  	  
+									  <p:commandButton value="Approve Multiple Meetings" styleClass="butwid-2 greenButt" icon="fa fa-check"  action="#{manageMeeting.approveMultiple}" update=":form"></p:commandButton>
+										 
+									
+									  	  <p:commandButton value="Deny Multiple Meetings" styleClass="butwid-2 redButt" icon="fa fa-ban" action="#{manageMeeting.denyMultiple}" update=":form"></p:commandButton>
+									
+									  </p:panelGrid>
+									</p:panel>
+									
+									</f:facet>
+									
+                               
+                                   <p:column selectionMode="multiple" exportable="false" style="width:50px;">
+                                    
+                                   </p:column>
+                               
+                                   
+									<p:column headerText="S.No." style="width:40px">
+										<p:outputLabel value="#{var.sno}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Class" filterBy="#{var.className}"
+										filterMatchMode="contains">
+										<p:outputLabel value="#{var.className}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Section" filterBy="#{var.sectionName}"
+										filterMatchMode="contains">
+										<p:outputLabel value="#{var.sectionName}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Subject"
+										filterBy="#{var.subjectName}" filterMatchMode="contains">
+										<p:outputLabel value="#{var.subjectName}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Meeting Date" filterBy="#{var.addDateStr}" filterMatchMode="contains">
+										<p:outputLabel value="#{var.addDateStr}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Start Time">
+										<p:outputLabel value="#{var.startTimeStr}"></p:outputLabel>
+									</p:column>
+
+
+									<p:column headerText="End Time">
+										<p:outputLabel value="#{var.endTimeStr}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Zoom Id">
+										<p:outputLabel value="#{var.zoomId}"></p:outputLabel>
+									</p:column>
+									
+									<p:column headerText="Added By">
+										<p:outputLabel value="#{var.addedbyUsername}"></p:outputLabel>
+									</p:column>
+
+
+									<p:column headerText="Approve">
+										<p:commandButton icon="ui-icon-check" update=":form" styleClass="greenButt"
+											action="#{manageMeeting.approveMeeting}">
+											<f:setPropertyActionListener target="#{manageMeeting.selectedMeeting}"
+												value="#{var}"></f:setPropertyActionListener>
+											<p:confirm header="Confirmation"
+												message="Are you sure for approve this Meeting ?"
+												icon="ui-icon-alert" />
+										</p:commandButton>
+									</p:column>
+									
+										<p:column headerText="Deny">
+										<p:commandButton icon="ui-icon-trash" update=":form" styleClass="redButt"
+											action="#{manageMeeting.cancelMeeting}">
+											<f:setPropertyActionListener target="#{manageMeeting.selectedMeeting}"
+												value="#{var}"></f:setPropertyActionListener>
+											<p:confirm header="Confirmation"
+												message="Are you sure for deny this Meeting ?"
+												icon="ui-icon-alert" />
+										</p:commandButton>
+									</p:column>
+								</p:dataTable>
+							</p:panel>
+						</h:form>
+
+						<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+							<p:commandButton value="Yes" type="button"
+								styleClass="ui-confirmdialog-yes greenButt" icon="ui-icon-check"/>
+							<p:commandButton value="No" type="button"
+								styleClass="ui-confirmdialog-no redButt" icon="ui-icon-close" />
+						</p:confirmDialog>
+
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

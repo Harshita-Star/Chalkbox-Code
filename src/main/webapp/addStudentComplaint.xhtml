@@ -1,0 +1,53 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Student Complaint</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form1" enctype="multipart/form-data">
+
+							<h1>Student Complaint</h1>
+
+							<p:messages closable="true" autoUpdate="true"></p:messages>
+
+							<p:panel header="Search Student by Name/Sr. No">
+
+								<p:panelGrid columns="2" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel value="Student Name/Sr. No"></p:outputLabel>
+									<p:autoComplete id="acSimple"
+										value="#{addStudentComplaint.name}" minQueryLength="3"
+										completeMethod="#{addStudentComplaint.autoCompleteStudentInfo}">
+										<p:ajax event="query" global="false" />
+									</p:autoComplete>
+									<p:outputLabel value="Image (Allowed file type are :- jpg,jpeg,png)"></p:outputLabel>
+									<p:fileUpload value="#{addStudentComplaint.image}"
+										mode="simple" />
+
+									<p:outputLabel  for="@next" style="color:red" value="Complaint"></p:outputLabel>
+									<p:inputTextarea value="#{addStudentComplaint.description}"
+										required="true" requiredMessage="Please Enter Complaint"></p:inputTextarea>
+
+									<p:commandButton value="Submit" ajax="false" update=":form1"
+										actionListener="#{addStudentComplaint.submit}"></p:commandButton>
+
+								</p:panelGrid>
+
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

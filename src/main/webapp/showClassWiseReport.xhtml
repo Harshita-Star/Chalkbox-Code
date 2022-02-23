@@ -1,0 +1,447 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Class Strength Report</ui:define>
+
+	<ui:define name="content">
+		<style>
+.ui-datatable .ui-datatable-scrollable-body,
+	.ui-datatable-scrollable-header, .ui-datatable-footer,
+	.ui-datatable-header {
+	width: 100% !important;
+}
+
+.ui-datatable-scrollable .ui-datatable-scrollable-header,
+	.ui-datatable-scrollable .ui-datatable-scrollable-footer {
+	position: sticky !important;
+	top: 60px !important;
+}
+
+body .ui-datatable thead th, body .ui-datatable tbody td {
+	width: var(--w) !important;
+}
+</style>
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<h1>Class Strength Report</h1>
+
+							<p:panel header="Select a Class">
+								<p:commandLink rendered="false" value="Show Chart"
+									immediate="true" style="float:right;color:blue"
+									action="classStrengthChart.xhtml"></p:commandLink>
+								<p:messages closable="true" autoUpdate="true"></p:messages>
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:outputLabel for="@next" style="color:red"
+										value="Select a Class"></p:outputLabel>
+									<p:selectOneMenu value="#{showClassStrengthBean.selectedClass}"
+										required="true" requiredMessage="Please select a class"
+										filter="true">
+										<f:selectItem itemLabel="Select Class" itemValue="select"></f:selectItem>
+										<f:selectItems value="#{showClassStrengthBean.classList}"></f:selectItems>
+
+										<p:ajax update="sectionid"
+											listener="#{showClassStrengthBean.allSections}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel for="@next" style="color:red"
+										value="Select Section"></p:outputLabel>
+									<p:selectOneMenu id="sectionid"
+										value="#{showClassStrengthBean.selectedSection}"
+										required="true" requiredMessage="Please select a section"
+										filter="true">
+										<f:selectItem itemLabel="Select Section" itemValue=""></f:selectItem>
+										<f:selectItems value="#{showClassStrengthBean.sectionList}"></f:selectItems>
+
+										<p:ajax update=":form"
+											listener="#{showClassStrengthBean.getStudentStrength}"></p:ajax>
+									</p:selectOneMenu>
+
+								</p:panelGrid>
+								<p:outputPanel rendered="#{showClassStrengthBean.b}">
+									<br />
+								<p:separator />
+								<center>
+									<p:panelGrid
+										columns="4"
+										layout="grid" styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+									<p:commandButton value="Print" icon="fa fa-print" styleClass="butwid"
+										rendered="#{showClassStrengthBean.b}">
+										<p:printer target="dataTable"></p:printer>
+									</p:commandButton>
+
+									<p:commandButton value="PDF"  icon="fa fa-file-pdf-o" styleClass="butwid" ajax="false"
+										process="@this"
+										actionListener="#{showClassStrengthBean.exportClasWisePdf}"
+										rendered="#{showClassStrengthBean.b}">
+
+										<p:fileDownload value="#{showClassStrengthBean.file}" />
+									</p:commandButton>
+
+									<h:commandButton rendered="#{showClassStrengthBean.b}"  
+										value="Excel Export With Photo" style="float:left;">
+										<pe:exporter type="xlsx" target=":form:up"
+											fileName="#{showClassStrengthBean.className}-#{showClassStrengthBean.sectionName}"
+											postProcessor="#{showClassStrengthBean.toNum}"></pe:exporter>
+									</h:commandButton>
+
+									<h:commandButton rendered="#{showClassStrengthBean.b}"
+										value="Excel Export Without Photo" style="float:left;">
+										<pe:exporter type="xlsx" target=":form:up"
+											fileName="#{showClassStrengthBean.className}-#{showClassStrengthBean.sectionName}"
+											postProcessor="#{showClassStrengthBean.toNumWithoutPhoto}"></pe:exporter>
+									</h:commandButton>
+										
+									</p:panelGrid>
+								</center>
+								<p:separator />
+								<br />
+								</p:outputPanel>
+
+								<p:panel id="dataTable" rendered="#{showClassStrengthBean.b}">
+
+									<center>
+										<p
+											style="font-size: 25px !important; font-weight: bold; margin: 0px;">#{headerBean.name}</p>
+										<p
+											style="font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.affiliationNo}</p>
+										<p
+											style="font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.finalAddress}</p>
+										<p
+											style="font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.phoneno}</p>
+
+										<p
+											style="margin: 0px; font-size: 25px !important; font-weight: bold;">Class
+											Wise Student Report</p>
+									</center>
+									<p:panelGrid columns="3" style="width:100%">
+
+										<p:panelGrid columns="2">
+											<p:outputLabel value="Class:-"></p:outputLabel>
+											<h:outputText value="#{showClassStrengthBean.className}"></h:outputText>
+										</p:panelGrid>
+
+										<p:panelGrid columns="2">
+											<p:outputLabel value="Section:-"></p:outputLabel>
+											<h:outputText value="#{showClassStrengthBean.sectionName}"></h:outputText>
+										</p:panelGrid>
+										<p:panelGrid columns="2">
+											<p:outputLabel value="Total:-"></p:outputLabel>
+											<h:outputText value="#{showClassStrengthBean.total}"></h:outputText>
+										</p:panelGrid>
+
+									</p:panelGrid>
+									<p:dataTable reflow="true" id="up" scrollWidth="100%"
+										scrollable="true" style="border-collapse:collapse;" border="1"
+										value="#{showClassStrengthBean.studentList}" var="var">
+										<f:facet name="header">
+											<p:outputLabel value=""></p:outputLabel>
+										</f:facet>
+
+										<p:column headerText="Sno" style="--w:50px;text-align:center">
+
+											<f:facet name="header">
+												<p:outputLabel value="Sno"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.sno}"></p:outputLabel>
+										</p:column>
+
+										<p:column style="--w:120px;text-align:center"
+											headerText="lastSchoolName" exportable="false"
+											rendered="#{sideMenuBean.list.schid ne '243'}">
+
+											<f:facet name="header">
+												<p:outputLabel value="Student Image"></p:outputLabel>
+											</f:facet>
+											<p:lightBox styleClass="imagebox">
+												<h:outputLink value="#{var.student_image}">
+													<p:graphicImage value="#{var.student_image}" width="100"
+														height="120"></p:graphicImage>
+												</h:outputLink>
+											</p:lightBox>
+
+										</p:column>
+
+										<p:column headerText="Add. No." sortBy="#{var.addNumber}"
+											style="--w:50px;text-align:center">
+
+											<f:facet name="header">
+												<p:outputLabel value="SR. No."></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.srNo}"></p:outputLabel>
+										</p:column>
+
+										<p:column style="--w:70px;text-align:center"
+											sortBy="#{var.fullName}" headerText="Student Name">
+
+											<f:facet name="header">
+												<p:outputLabel value="Student Name"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.fullName}"></p:outputLabel>
+										</p:column>
+										
+										
+										<p:column style="--w:70px;text-align:center"
+											headerText="Mother's Name">
+
+											<f:facet name="header">
+												<p:outputLabel value="Mother's Name"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.motherName}"></p:outputLabel>
+										</p:column>
+
+										<p:column style="--w:70px;text-align:center"
+											headerText="Father's Name">
+
+											<f:facet name="header">
+												<p:outputLabel value="Father's Name"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.fathersName}"></p:outputLabel>
+										</p:column>
+
+										<p:column style="--w:70px;text-align:center"
+											headerText="Class">
+
+											<f:facet name="header">
+												<p:outputLabel value="Class"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.className}"></p:outputLabel>
+										</p:column>
+
+										<p:column style="--w:70px;text-align:center"
+											headerText="Add. Date"
+											rendered="#{sideMenuBean.list.schid ne '287'}">
+
+											<f:facet name="header">
+												<p:outputLabel value="Add. Date"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.admissionDate}"></p:outputLabel>
+										</p:column>
+
+										<p:column style="--w:70px;text-align:center"
+											headerText="D.O.B.">
+
+											<f:facet name="header">
+												<p:outputLabel value="D.O.B"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.dobString}"></p:outputLabel>
+										</p:column>
+
+										<p:column style="--w:65px;text-align:center"
+											headerText="Category">
+
+											<f:facet name="header">
+												<p:outputLabel value="Category"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.category}"></p:outputLabel>
+										</p:column>
+
+										<p:column style="--w:100px;text-align:center"
+											headerText="Gender">
+
+											<f:facet name="header">
+												<p:outputLabel value="Gender"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.gender}"></p:outputLabel>
+										</p:column>
+
+
+										<p:column style="--w:100px;text-align:center"
+											headerText="Current Address">
+
+											<f:facet name="header">
+												<p:outputLabel value="Current Address"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.currentAddress}"></p:outputLabel>
+										</p:column>
+
+										<p:column style="--w:100px;text-align:center"
+											headerText="Permanent Address"
+											rendered="#{sideMenuBean.list.schid ne '287'}">
+
+											<f:facet name="header">
+												<p:outputLabel value="Permanent Address"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.permanentAddress}"></p:outputLabel>
+										</p:column>
+
+
+										<p:column style="--w:100px;text-align:center"
+											headerText="Phone No">
+
+											<f:facet name="header">
+												<p:outputLabel value="Phone No"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.fathersPhone}"></p:outputLabel>
+										</p:column>
+
+										<p:column style="--w:100px;text-align:center"
+											headerText="Mother's No">
+
+											<f:facet name="header">
+												<p:outputLabel value="Mother's No"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.mothersPhone}"></p:outputLabel>
+										</p:column>
+
+										<p:column style="--w:100px;text-align:center"
+											headerText="Aadhar No"
+											rendered="#{sideMenuBean.list.schid ne '287'}">
+
+											<f:facet name="header">
+												<p:outputLabel value="Aadhar No"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.aadharNo}"></p:outputLabel>
+										</p:column>
+
+										<p:column style="--w:100px;text-align:center"
+											headerText="Blood Group"
+											rendered="#{sideMenuBean.list.schid ne '287'}">
+
+											<f:facet name="header">
+												<p:outputLabel value="Blood Group"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.bloodGroup}"></p:outputLabel>
+										</p:column>
+
+										<p:column style="--w:100px;text-align:center"
+											headerText="Religion"
+											rendered="#{sideMenuBean.list.schid ne '287'}">
+
+											<f:facet name="header">
+												<p:outputLabel value="Religion"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.religion}"></p:outputLabel>
+										</p:column>
+
+										<p:column style="--w:100px;text-align:center"
+											headerText="Caste"
+											rendered="#{sideMenuBean.list.schid ne '287'}">
+
+											<f:facet name="header">
+												<p:outputLabel value="Caste"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.caste}"></p:outputLabel>
+										</p:column>
+
+										<p:column style="--w:100px;text-align:center"
+											headerText="lastSchoolName"
+											rendered="#{sideMenuBean.list.schid ne '287'}">
+
+											<f:facet name="header">
+												<p:outputLabel value="Last School"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.lastSchoolName}"></p:outputLabel>
+										</p:column>
+
+										<p:column style="--w:100px;text-align:center"
+											headerText="Transport">
+											<f:facet name="header">
+												<p:outputLabel value="Transport"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.routeName}"></p:outputLabel>
+										</p:column>
+
+										<p:column style="--w:100px;text-align:center"
+											headerText="Father Annual Income">
+											<f:facet name="header">
+												<p:outputLabel value="Father Annual Income"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.fatherAnnIncome}"></p:outputLabel>
+										</p:column>
+
+										<p:column style="--w:100px;text-align:center"
+											headerText="Mother Annual Income">
+											<f:facet name="header">
+												<p:outputLabel value="Mother Annual Income"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.motherAnnIncome}"></p:outputLabel>
+										</p:column>
+
+										<p:column style="--w:100px;text-align:center"
+											headerText="Father School Employee">
+											<f:facet name="header">
+												<p:outputLabel value="Father School Employee"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.fatherSchoolEmp}"></p:outputLabel>
+										</p:column>
+
+										<p:column style="--w:100px;text-align:center"
+											headerText="Mother School Employee">
+											<f:facet name="header">
+												<p:outputLabel value="Mother School Employee"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.motherSchoolEmp}"></p:outputLabel>
+										</p:column>
+
+										<p:column style="--w:100px;text-align:center"
+											headerText="Admission Remark">
+											<f:facet name="header">
+												<p:outputLabel value="Admission Remark"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.admRemark}"></p:outputLabel>
+										</p:column>
+
+										<p:column style="--w:100px;text-align:center"
+											headerText="Single Child">
+											<f:facet name="header">
+												<p:outputLabel value="Single Child"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.singleChild}"></p:outputLabel>
+										</p:column>
+
+										<p:column style="--w:100px;text-align:center"
+											headerText="Ledger No.">
+											<f:facet name="header">
+												<p:outputLabel value="Ledger No."></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.ledgerNo}"></p:outputLabel>
+										</p:column>
+										
+										<p:column style="--w:100px;text-align:center"
+											headerText="Xth Class Roll No.">
+											<f:facet name="header">
+												<p:outputLabel value="Xth Class Roll No."></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.tenRoll}"></p:outputLabel>
+										</p:column>
+										<p:column style="--w:100px;text-align:center"
+											headerText="Xth Passing Year">
+											<f:facet name="header">
+												<p:outputLabel value="Xth Passing Year"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.tenYearOfPass}"></p:outputLabel>
+										</p:column>
+										<p:column style="--w:100px;text-align:center"
+											headerText="Xth Board">
+											<f:facet name="header">
+												<p:outputLabel value="Xth Board"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.tenBoard}"></p:outputLabel>
+										</p:column>
+
+
+									</p:dataTable>
+								</p:panel>
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

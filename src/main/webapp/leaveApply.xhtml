@@ -1,0 +1,189 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Apply Leave</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+				<h:form id="form">
+   			     <p:growl showDetail="true"  autoUpdate="true" ></p:growl>
+					<p:panel header="Apply Leave">
+						<p:panelGrid columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;" columns="6">
+							<p:outputLabel value="Name:-" style="font-weight:bold;"></p:outputLabel>
+							<p:outputLabel value="#{leaveApplyTeacher.name}" style="width:300px"></p:outputLabel>
+							
+							<p:outputLabel value="Department:-"  style="font-weight:bold;"></p:outputLabel>
+							<p:outputLabel value="#{leaveApplyTeacher.dept}" style="width:300px"/>
+							
+							<p:outputLabel value="Apply Date:-"  style="font-weight:bold;"></p:outputLabel>
+							<p:outputLabel value="#{leaveApplyTeacher.applyDate}"/>
+						</p:panelGrid>
+						<br/>
+						<p:panelGrid columns="2" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+							
+							<p:outputLabel value="Leave Type:-"></p:outputLabel>
+							<p:selectOneRadio value="#{leaveApplyTeacher.leaveType}">
+								<f:selectItem itemLabel="Half Day" itemValue="Half Day"></f:selectItem>
+								<f:selectItem itemLabel="Full Day" itemValue="Full Day"></f:selectItem>
+								<p:ajax listener="#{leaveApplyTeacher.checkLeaveType}" update="form"></p:ajax>
+							</p:selectOneRadio>
+							
+							<p:outputLabel value="From" for="@next" style="color:red" ></p:outputLabel>
+							<p:calendar navigator="true" mindate="#{leaveApplyTeacher.viewDate}" maxdate="#{leaveApplyTeacher.viewDate}" pattern="dd/MM/yyyy" yearRange="c-10:c+10" value="#{leaveApplyTeacher.startDate}" required="true" requiredMessage="Please Enter Start Date">
+								<p:ajax event="dateSelect" update=":form:todt,:form:myDay" listener="#{leaveApplyTeacher.checkFrom}"></p:ajax>
+							</p:calendar>
+							
+							<p:outputLabel rendered="#{leaveApplyTeacher.showEndDate}" value="To:-" for="@next" style="color:red" ></p:outputLabel>
+							<p:calendar id="todt" rendered="#{leaveApplyTeacher.showEndDate}" mindate="#{leaveApplyTeacher.startDate}" navigator="true" pattern="dd/MM/yyyy" yearRange="c-10:c+10" value="#{leaveApplyTeacher.endDate}" required="true" requiredMessage="Please Enter End Date">
+								<p:ajax event="dateSelect" listener="#{leaveApplyTeacher.calculateDay}" update=":form:myDay"></p:ajax>
+							</p:calendar>
+							
+							<p:outputLabel value="Days " for="@next" style="color:red" ></p:outputLabel>
+							<p:inputText disabled="true" id="myDay" value="#{leaveApplyTeacher.days}" required="true" requiredMessage="Please fill the days" validatorMessage="Please Enter Correct value">
+							  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+							</p:inputText>
+							
+							<p:outputLabel value="Reason For Leave" for="@next" style="color:red" ></p:outputLabel>
+							<p:inputTextarea required="true" requiredMessage="Please Enter Reason For Leave" value="#{leaveApplyTeacher.description}" rows="3" cols="50" validatorMessage="Please Enter Correct value">
+							  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+							</p:inputTextarea>
+							<br/>
+							<br/>
+							<center>
+							<p:commandButton styleClass="butwid" icon="fa fa-pencil-square" update="form,:form1" actionListener="#{leaveApplyTeacher.applyLeave}" style="float:right" value="Apply"></p:commandButton>
+							</center>
+						</p:panelGrid>
+					</p:panel>
+				</h:form><br></br>
+ 				<h:form id="form1">
+   			     	<p:panel header="Details">
+   			     		<p:panelGrid columns="5" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+							<p:outputLabel value="Select Start Date" for="@next" style="color:red" ></p:outputLabel>
+							<p:calendar navigator="true" pattern="dd/MM/yyyy" yearRange="c-10:c+10" value="#{leaveApplyTeacher.searchStartDate}" required="true" requiredMessage="Please Enter Date">
+							</p:calendar>
+							
+							<p:outputLabel value="Select End Date" for="@next" style="color:red" ></p:outputLabel>
+							<p:calendar navigator="true" pattern="dd/MM/yyyy" yearRange="c-10:c+10" value="#{leaveApplyTeacher.searchEndDate}" required="true" requiredMessage="Please Enter Date">
+							</p:calendar>
+							<p:commandButton  styleClass="butwid" icon="fa fa-search" value="search" actionListener="#{leaveApplyTeacher.viewLeaves}" update=":form1"></p:commandButton>
+						</p:panelGrid><br></br>
+						<p:dataTable reflow="true" id="table" value="#{leaveApplyTeacher.leaveInfo}" var="var"> 
+							<p:column headerText="Apply Date">
+								<p:outputLabel value="#{var.aDate}"></p:outputLabel>
+							</p:column>
+							
+							<p:column headerText="From">
+								<p:outputLabel value="#{var.sDate}"></p:outputLabel>
+							</p:column>
+							
+							<p:column headerText="To">
+								<p:outputLabel value="#{var.eDate}"></p:outputLabel>
+							</p:column>
+							
+							<p:column headerText="Days">
+								<p:outputLabel value="#{var.days}"></p:outputLabel>
+							</p:column>
+							
+							<p:column headerText="Description">
+								<p:outputLabel value="#{var.description}"></p:outputLabel>
+							</p:column>
+							
+							<p:column headerText="Status">
+								<p:outputLabel value="#{var.status}"></p:outputLabel>
+							</p:column>
+							
+							<p:column headerText="Leave Type">
+								<p:outputLabel value="#{var.leaveType}"></p:outputLabel>
+							</p:column>
+							
+							<p:column headerText="Edit">
+								<p:commandButton disabled="#{var.disableApprove}" styleClass="greenButt" icon="ui-icon-pencil" oncomplete="PF('editDialog').show()" update=":form2" action="#{leaveApplyTeacher.editDetails}">
+									<f:setPropertyActionListener target="#{leaveApplyTeacher.selectedEmp}" value="#{var}"></f:setPropertyActionListener>
+								</p:commandButton>
+							</p:column>
+							
+							<p:column headerText="Delete">
+								<p:commandButton  styleClass="redButt"  disabled="#{var.disableApprove}" icon="ui-icon-trash" update=":form,:form1" action="#{leaveApplyTeacher.deleteLeave}">
+									<p:confirm header="Confirmation" message="Are You Sure To Delete Leave...???" icon="ui-icon-alert" />
+									<f:setPropertyActionListener target="#{leaveApplyTeacher.selectedEmp}" value="#{var}"></f:setPropertyActionListener>
+								</p:commandButton>
+							</p:column>
+						
+						</p:dataTable>
+   			     	</p:panel>
+   			     	<br></br>
+   			     </h:form>
+		
+		<h:form id="form2">
+			<p:dialog resizable="false" modal="true" header="Edit Details" widgetVar="editDialog">
+				<p:panelGrid columns="8" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+					<p:outputLabel value="Name:-"></p:outputLabel>
+					<p:outputLabel value="#{leaveApplyTeacher.name}"></p:outputLabel>
+							
+					<p:outputLabel value="Department:-"></p:outputLabel>
+					<p:outputLabel value="#{leaveApplyTeacher.dept}" />
+							
+													
+					<p:outputLabel value="Apply Date:-"></p:outputLabel>
+					<p:outputLabel value="#{leaveApplyTeacher.uApplyDate}"/>
+				</p:panelGrid>
+				<br/>
+				<p:panelGrid columns="2" id="myGrid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">	
+					<p:outputLabel value="Leave Type:-"></p:outputLabel>
+					<p:selectOneMenu value="#{leaveApplyTeacher.uLeaveType}">
+						<f:selectItem itemLabel="Half Day" itemValue="Half Day"></f:selectItem>
+						<f:selectItem itemLabel="Full Day" itemValue="Full Day"></f:selectItem>
+						<p:ajax listener="#{leaveApplyTeacher.checkLeaveTypeForUpdate}" update=":form2:myGrid"></p:ajax>
+					</p:selectOneMenu>
+					
+					<p:outputLabel value="Leave From" for="@next" style="color:red" ></p:outputLabel>
+					<p:calendar navigator="true" pattern="dd/MM/yyyy" yearRange="c-10:c+10" value="#{leaveApplyTeacher.uStartDate}" required="true" requiredMessage="Please Enter Start Date">
+						<p:ajax event="dateSelect" update=":form2:todt,:form2:myDay" listener="#{leaveApplyTeacher.checkFromForUpdate}"></p:ajax>
+					</p:calendar>
+					
+					<p:outputLabel for="@next" style="color:red"  rendered="#{leaveApplyTeacher.uShowEndDate}" value="To:-"></p:outputLabel>
+					<p:calendar id="todt" rendered="#{leaveApplyTeacher.uShowEndDate}" mindate="#{leaveApplyTeacher.uStartDate}" navigator="true" pattern="dd/MM/yyyy" yearRange="c-10:c+10" value="#{leaveApplyTeacher.uEndDate}" required="true" requiredMessage="Please Enter End Date">
+						<p:ajax event="dateSelect" listener="#{leaveApplyTeacher.calculateDayForUpdate}" update=":form2:myDay"></p:ajax>
+					</p:calendar>
+					
+					<p:outputLabel value="Days "></p:outputLabel>
+					<p:outputLabel id="myDay" value="#{leaveApplyTeacher.uDays}"/>
+					
+					<p:outputLabel value="Reason For Leave" for="@next" style="color:red" ></p:outputLabel>
+					<p:inputTextarea required="true" requiredMessage="Please Enter Reason For Leave" value="#{leaveApplyTeacher.uDescription}" rows="3" cols="50" validatorMessage="Please Enter Correct value">
+					  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+					</p:inputTextarea>
+							
+				</p:panelGrid>
+				
+				<br />
+								<p:separator />
+								<center>
+									<p:commandButton styleClass="butwid" icon="fa fa-upload" update=":form,:form1" actionListener="#{leaveApplyTeacher.updateLeave}" style="float:right" value="Update"></p:commandButton>
+
+								</center>
+								<p:separator />
+								<br />
+				
+			</p:dialog>
+		</h:form>
+		
+		<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+			<p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+			<p:commandButton value="No" style="margin-left:50px" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+		</p:confirmDialog>
+	</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

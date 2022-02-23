@@ -1,0 +1,64 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	<f:loadBundle var="addClassVar" basename="myProperties" />
+
+	<ui:define name="title">SMS Graph</ui:define>
+
+	<ui:define name="content">
+	<h:form id="form">
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						  
+							<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+							<p:panel header="SMS Graph">
+							<p:panelGrid columns="2">
+						   
+						   
+                           
+                            <p:outputLabel value="Report Type"></p:outputLabel>
+							<p:selectOneMenu value="#{deleiveryReportBarModel.days}" filter="true">
+							<f:selectItem itemLabel="Custom" itemValue="custom"></f:selectItem>
+							<f:selectItem itemLabel="Last 7 days" itemValue="lastweek"></f:selectItem>
+							<f:selectItem itemLabel="Last 30 days" itemValue="lastmonth"></f:selectItem>
+							<f:selectItem itemLabel="Monthly" itemValue="month"></f:selectItem>
+							<p:ajax update=":form" listener="#{deleiveryReportBarModel.custom}" event="itemSelect"></p:ajax>
+						    </p:selectOneMenu>
+							
+							 <p:outputLabel  for="@next" style="color:red" value="startdate:" rendered="#{deleiveryReportBarModel.showCustom}" />
+                             <p:calendar value="#{deleiveryReportBarModel.stdate}" required="true" requiredMessage="Please select date!" locale="de" navigator="true" pattern="yyyy-MM-dd" rendered="#{deleiveryReportBarModel.showCustom}">
+                             </p:calendar>
+                             
+                              <p:outputLabel  for="@next" style="color:red" value="Enddate" rendered="#{deleiveryReportBarModel.showCustom}"/>
+                             <p:calendar value="#{deleiveryReportBarModel.endate}"  required="true" requiredMessage="Please select date!" locale="de" navigator="true" pattern="yyyy-MM-dd" rendered="#{deleiveryReportBarModel.showCustom}">
+                             </p:calendar>
+                             
+                             <p:outputLabel  for="@next" style="color:red" value="Select Year" rendered="#{deleiveryReportBarModel.showmonth}"></p:outputLabel>
+                             <p:selectOneMenu value="#{deleiveryReportBarModel.year}"  required="true" requiredMessage="Please select date!" rendered="#{deleiveryReportBarModel.showmonth}">
+							<f:selectItem itemLabel="Select Year" itemValue=""></f:selectItem>
+							<f:selectItems value="#{deleiveryReportBarModel.yearList}"></f:selectItems>
+							</p:selectOneMenu>
+                            
+                            
+                            <f:facet name="footer">
+                            <p:commandButton value="Show" style="margin-left:27px;"  styleClass="butwid" icon="fa fa-eye" update=":form" action="#{deleiveryReportBarModel.show}"></p:commandButton>
+                            </f:facet>
+                            </p:panelGrid>
+                            <br/><br/>
+							<p:chart type="bar" style="height:300px" model="#{deleiveryReportBarModel.barmodel1}"></p:chart>
+							</p:panel>
+					</div>
+				</div>
+			</div>
+		</div>
+		</h:form>
+
+	</ui:define>
+
+</ui:composition>
+ 

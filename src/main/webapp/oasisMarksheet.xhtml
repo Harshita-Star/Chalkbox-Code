@@ -1,0 +1,162 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Student Performance Marks List</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<h1>Student Performance Marks List</h1>
+
+							<p:panel header="Student Performance Marks List">
+
+								<p:messages closable="true" autoUpdate="true"></p:messages>
+
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel value="Select Class" for="@next"
+										style="color:red"></p:outputLabel>
+									<p:selectOneMenu required="true"
+										requiredMessage="Please Select A Class" filter="true"
+										value="#{oasisMarksheetBean.selectedClass}">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{oasisMarksheetBean.classList}"></f:selectItems>
+										<p:ajax update=":form"
+											listener="#{oasisMarksheetBean.allTerm}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Select Section" for="@next"
+										style="color:red"></p:outputLabel>
+									<p:selectOneMenu id="showSection"
+										value="#{oasisMarksheetBean.selectedSection}" filter="true"
+										required="true" requiredMessage="Please select a section">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{oasisMarksheetBean.sectionList}"></f:selectItems>
+
+										<p:ajax></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Select Term" for="@next"
+										style="color:red"></p:outputLabel>
+									<p:selectOneMenu required="true"
+										requiredMessage="Please Select A Term" filter="true"
+										id="showTerm" value="#{oasisMarksheetBean.selectedTerm}">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{oasisMarksheetBean.termList}"></f:selectItems>
+										<p:ajax update=":form" listener="#{oasisMarksheetBean.method}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel rendered="#{oasisMarksheetBean.showExam}"
+										for="@next" style="color:red" value="Select Exam type"></p:outputLabel>
+									<p:selectOneMenu rendered="#{oasisMarksheetBean.showExam}"
+										filter="true" required="true"
+										requiredMessage="Please select exam type"
+										value="#{oasisMarksheetBean.selectedExam}">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{oasisMarksheetBean.examTypeList}"></f:selectItems>
+										<p:ajax listener="#{oasisMarksheetBean.createSubExamList}"
+											update=":form"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel rendered="#{oasisMarksheetBean.showSubExam}"
+										for="@next" style="color:red" value="Select Sub Exam"></p:outputLabel>
+									<p:selectOneMenu rendered="#{oasisMarksheetBean.showSubExam}"
+										filter="true" value="#{oasisMarksheetBean.subExam}"
+										required="true" requiredMessage="Please Select Sub Exam">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{oasisMarksheetBean.subExamList}"></f:selectItems>
+										<p:ajax listener="#{oasisMarksheetBean.sessionDetails}"
+											update=":form"></p:ajax>
+									</p:selectOneMenu>
+
+								</p:panelGrid>
+
+
+
+							</p:panel>
+
+							<br></br>
+							<p:panel header="Student Details">
+
+								<p:dataTable reflow="true"
+									rendered="#{oasisMarksheetBean.showStudentRecord}"
+									value="#{oasisMarksheetBean.studentDetails}" var="var">
+
+									<f:facet name="header">
+										<p:panelGrid columns="2" layout="grid"
+											styleClass="ui-panelgrid-blank form-group"
+											style="border:0px none; background-color:transparent;">
+
+											<p:commandButton value="All Student Marksheet"
+												action="#{oasisMarksheetBean.allStudentPrint}"
+												icon="fa fa-users" styleClass="butwid-1">
+											</p:commandButton>
+											<p:commandButton value="Class Wise Performance"
+												action="#{oasisMarksheetBean.performancePrint}"
+												icon="fa fa-home" styleClass="butwid-1">
+											</p:commandButton>
+										</p:panelGrid>
+									</f:facet>
+
+									<p:column
+										headerText="#{searchStudentVar.searchStudentAdmissionNumberLabel}">
+										<p:outputLabel value="#{var.srNo}"></p:outputLabel>
+									</p:column>
+
+									<p:column sortBy="#{var.fname}"
+										headerText="#{searchStudentVar.seacrhStudentFirstNameLabel}">
+										<p:outputLabel value="#{var.fname}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Father's Name">
+										<p:outputLabel value="#{var.fathersName}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Marksheet Print">
+										<p:commandButton value="print"
+											action="#{oasisMarksheetBean.submit}" icon="fa fa-print"
+											styleClass="butwid">
+											<f:setPropertyActionListener
+												target="#{oasisMarksheetBean.selectedStudent}"
+												value="#{var}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+
+									<f:facet name="footer">
+										<p:panelGrid columns="2" layout="grid"
+											styleClass="ui-panelgrid-blank form-group"
+											style="border:0px none; background-color:transparent;">
+
+											<p:commandButton value="All Student Marksheet"
+												action="#{oasisMarksheetBean.allStudentPrint}"
+												icon="fa fa-users" styleClass="butwid-1">
+											</p:commandButton>
+											<p:commandButton value="Class Wise Performance"
+												action="#{oasisMarksheetBean.performancePrint}"
+												icon="fa fa-home" styleClass="butwid-1">
+											</p:commandButton>
+										</p:panelGrid>
+									</f:facet>
+
+								</p:dataTable>
+
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

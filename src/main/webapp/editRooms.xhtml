@@ -1,0 +1,149 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Hostel</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+						<p:growl showDetail="true"  autoUpdate="true"/>
+
+							<p:panel header="View Rooms">
+
+
+								<p:dataTable id="dt" value="#{editRooms.roomList}" var="var"
+									reflow="true">
+
+									<p:column headerText="S. No.">
+										<p:outputLabel value="#{var.sno}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Room No" filterBy="#{var.roomNo}"
+										filterMatchMode="contains" sortBy="#{var.roomNo}">
+										<p:outputLabel value="#{var.roomNo}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Hostel Name" filterBy="#{var.hostelName}"
+										filterMatchMode="contains" sortBy="#{var.hostelName}">
+										<p:outputLabel value="#{var.hostelName}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="No. of Beds" filterBy="#{var.noOfBed}"
+										filterMatchMode="contains" sortBy="#{var.noOfBeds}">
+										<p:outputLabel value="#{var.noOfBed}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Edit">
+										<p:commandButton process=":form" update=":form3"
+											oncomplete="PF('editDialog').show()" icon="ui-icon-pencil">
+											<f:setPropertyActionListener
+												target="#{editRooms.selectedRooms}" value="#{var}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+
+									<p:column headerText="Delete">
+										<p:commandButton update=":form"
+											oncomplete="PF('confirmDlt').show()" icon="ui-icon-trash">
+											<f:setPropertyActionListener
+												target="#{editRooms.selectedRooms}" value="#{var}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+
+									<p:column headerText="Damage Room">
+										<p:commandButton update=":form"
+											oncomplete="PF('confirmDlt1').show()"
+											icon="ui-icon-closethick">
+											<f:setPropertyActionListener
+												target="#{editRooms.selectedRooms}" value="#{var}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+
+								</p:dataTable>
+							</p:panel>
+						</h:form>
+
+						<h:form id="form3" style="overflow:hidden">
+							<p:dialog resizable="false" draggable="false"
+								header="Edit Rooms Details" closeOnEscape="true"
+								widgetVar="editDialog" modal="true">
+								<div class="ui-g form-group">
+									<p:panelGrid columns="2"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+										<p:outputLabel value="Room No" for="@next" style="color:red" ></p:outputLabel>
+										<p:inputText value="#{editRooms.selectedRooms.roomNo}"
+											required="true" requiredMessage="Please Enter Room Name"
+											onfocus="this.select()" validatorMessage="Please Enter Correct value">
+										  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+										</p:inputText>
+
+										<p:outputLabel value="No Of Beds" for="@next" style="color:red" ></p:outputLabel>
+										<p:inputText value="#{editRooms.selectedRooms.noOfBed}"
+											required="true" requiredMessage="Please Enter No of Beds"
+											onfocus="this.select()" validatorMessage="Please Enter Correct value">
+										  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+										</p:inputText>
+
+										<p:outputLabel value="Hostel Name"></p:outputLabel>
+										<p:selectOneMenu value="#{editRooms.selectedRooms.hostelId}">
+											<f:selectItem itemLabel="Select Hostel Name" itemValue=""></f:selectItem>
+											<f:selectItems value="#{addRoom.hostelNameList}"></f:selectItems>
+										</p:selectOneMenu>
+
+										<p:commandButton value="Update Here"
+											action="#{editRooms.updateRoomsDetails}"
+											update=":form,:form3" oncomplete="PF('editDialog').hide()"></p:commandButton>
+									</p:panelGrid>
+								</div>
+							</p:dialog>
+						</h:form>
+
+						<h:form id="dltForm" style="overflow:hidden">
+							<p:dialog header="Are You Sure To Delete...???" draggable="false"
+								resizable="false" closeOnEscape="true" widgetVar="confirmDlt"
+								modal="true">
+								<div class="ui-g form-group">
+									<p:panelGrid columns="2"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+										<p:commandButton value="Yes" update=":form,:dltForm"
+											action="#{editRooms.deleteRooms}"
+											oncomplete="PF('editDialog').hide()"></p:commandButton>
+										<p:commandButton value="No" update=":form,:dltForm"></p:commandButton>
+									</p:panelGrid>
+								</div>
+							</p:dialog>
+						</h:form>
+
+						<h:form id="dltForm1" style="overflow:hidden">
+							<p:dialog header="Are You Sure...???" draggable="false"
+								resizable="false" closeOnEscape="true" widgetVar="confirmDlt1"
+								modal="true">
+								<div class="ui-g form-group">
+									<p:panelGrid columns="2"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+										<p:commandButton value="Yes" update=":form,:dltForm"
+											action="#{editRooms.damageRooms}"
+											oncomplete="PF('confirmDlt1').hide()"></p:commandButton>
+										<p:commandButton value="No" update=":form,:dltForm1"></p:commandButton>
+									</p:panelGrid>
+								</div>
+							</p:dialog>
+						</h:form>
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

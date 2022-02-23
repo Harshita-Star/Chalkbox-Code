@@ -1,0 +1,213 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	<f:loadBundle var="addClassVar" basename="myProperties" />
+	<ui:define name="title">Enquiry </ui:define>
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<p:messages closable="true" autoUpdate="true"></p:messages>
+							<p:panel header="Enquiry">
+								<p:panelGrid columns="4" cellpadding="5"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group">
+
+
+									<p:outputLabel value="Visiting Date" for="@next" style="color:red" ></p:outputLabel>
+									<p:calendar navigator="true" effect="fold" pattern="dd/MM/yyyy"
+										yearRange="c-30:c+30"
+										value="#{instituteEnquiryForm.admissionDate}" required="true"
+										requiredMessage="Please Enter Date"></p:calendar>
+
+									<p:outputLabel value="Student Name " for="@next" style="color:red" ></p:outputLabel>
+									<p:inputText required="true"
+										requiredMessage="Please Enter Student Name"
+										value="#{instituteEnquiryForm.studentName}" validatorMessage="Please Enter Correct value">
+									  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:inputText>
+
+									<p:outputLabel value="Father's Name " for="@next" style="color:red" ></p:outputLabel>
+									<p:inputText required="true"
+										requiredMessage="Please Enter Father's Name"
+										value="#{instituteEnquiryForm.fatherName}" validatorMessage="Please Enter Correct value">
+									  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:inputText>
+
+									<p:outputLabel value="Parents MobNo." for="@next" style="color:red" ></p:outputLabel>
+									<p:inputText required="true"
+										requiredMessage="Please Enter Mob.no" maxlength="10"
+										value="#{instituteEnquiryForm.mobno}" validatorMessage="Please Enter Correct value">
+										<f:validateLength minimum="10"></f:validateLength>
+										<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:inputText>
+
+									<p:outputLabel value="Student MobNo."></p:outputLabel>
+									<p:inputText maxlength="10"
+										value="#{instituteEnquiryForm.studentMobno}" validatorMessage="Please Enter Correct value">
+										<f:validateLength minimum="10"></f:validateLength>
+										<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:inputText>
+
+									<p:outputLabel value="Addmission  sought  for Class " for="@next" style="color:red" ></p:outputLabel>
+									<p:selectOneMenu required="true"
+										requiredMessage="Please select a Class"
+										value="#{instituteEnquiryForm.addmissionclass}">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{instituteEnquiryForm.classList}"></f:selectItems>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Medium " for="@next" style="color:red" ></p:outputLabel>
+									<p:selectOneRadio value="#{instituteEnquiryForm.medium}"
+										required="true" requiredMessage="Please Enter Medium">
+										<f:selectItem itemLabel="Hindi" itemValue="Hindi"></f:selectItem>
+										<f:selectItem itemLabel="English" itemValue="English"></f:selectItem>
+									</p:selectOneRadio>
+
+									<p:outputLabel value="Coaching Institute(If Any) "></p:outputLabel>
+									<p:inputTextarea value="#{instituteEnquiryForm.instituteInfo}" validatorMessage="Please Enter Correct value">
+									 <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:inputTextarea>
+
+
+									<p:outputLabel value="Previous School "></p:outputLabel>
+									<p:inputText value="#{instituteEnquiryForm.preSchool}" validatorMessage="Please Enter Correct value">
+									  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:inputText>
+
+
+									<p:outputLabel value="Address "></p:outputLabel>
+									<p:inputTextarea value="#{instituteEnquiryForm.address}" validatorMessage="Please Enter Correct value">
+									  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:inputTextarea>
+
+									<p:outputLabel
+										value="Marks In Previous Exam(Obtained/Expected)"></p:outputLabel>
+									<p:selectOneRadio layout="grid" columns="9"
+										value="#{instituteEnquiryForm.selectedClasses}">
+										<f:selectItems value="#{instituteEnquiryForm.classes}"></f:selectItems>
+									</p:selectOneRadio>
+
+									<p:outputLabel value="How did you come to know about Institute"></p:outputLabel>
+									<p:selectManyCheckbox layout="grid" columns="9"
+										value="#{instituteEnquiryForm.information}">
+										<f:selectItem itemLabel="Marketing Team"
+											itemValue="Marketing Team"></f:selectItem>
+										<f:selectItem itemLabel="Newspaper" itemValue="Newspaper"></f:selectItem>
+										<f:selectItem itemLabel="Teachers" itemValue="Teachers"></f:selectItem>
+										<f:selectItem itemLabel="Ex.Students" itemValue="Ex.Students"></f:selectItem>
+										<f:selectItem itemLabel="Friends/Relative"
+											itemValue="Friends/Relative"></f:selectItem>
+										<f:selectItem itemLabel="Website" itemValue="Website"></f:selectItem>
+										<f:selectItem itemLabel="Other" itemValue="Other"></f:selectItem>
+									</p:selectManyCheckbox>
+
+									<p:outputLabel value="Remark"></p:outputLabel>
+									<p:inputText value="#{instituteEnquiryForm.remark}" validatorMessage="Please Enter Correct value">
+									  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:inputText>
+
+									<p:outputLabel value="Follow Up Date" for="@next" style="color:red" ></p:outputLabel>
+									<p:calendar value="#{instituteEnquiryForm.followDate}"
+										mindate="#{instituteEnquiryForm.todayDate}" navigator="true"
+										effect="fold" pattern="dd/MM/yyyy" yearRange="c-30:c+30"
+										required="true" requiredMessage="Please Enter Follow Up Date"></p:calendar>
+
+									<p:outputLabel value="Select Status" for="@next" style="color:red" ></p:outputLabel>
+									<p:selectOneMenu value="#{instituteEnquiryForm.status}"
+										required="true" requiredMessage="Please Select Status">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItem itemLabel="Super Hot" itemValue="superhot"></f:selectItem>
+										<f:selectItem itemLabel="Hot" itemValue="hot"></f:selectItem>
+										<f:selectItem itemLabel="Warm" itemValue="warm"></f:selectItem>
+										<f:selectItem itemLabel="Cold" itemValue="cold"></f:selectItem>
+									</p:selectOneMenu>
+
+
+									<p:commandButton value="Submit" update=":form" ajax="false"
+										action="#{instituteEnquiryForm.addEnqiury}"></p:commandButton>
+								</p:panelGrid>
+							</p:panel>
+						</h:form>
+
+						<h:form id="MsgLimitForm" style="overflow:hidden">
+							<p:dialog header="Low SMS Balance" width="500"
+								widgetVar="MsgLmtDlg" modal="true" showEffect="fade"
+								hideEffect="fade" resizable="false">
+								<center>
+									<p:outputLabel value="#{instituteEnquiryForm.balMsg}"
+										style="font-size:14px;font-weight: bold;" />
+								</center>
+								<br></br>
+								<br></br>
+								<center>
+									<p:commandButton value="Skip" action="#{instituteEnquiryForm.sendMsg}"
+										update="MsgLimitForm" />
+									<br /> <br />
+									<p:commandButton value="Message Logs"
+										action="messageSchoolHistory.xhtml?faces-redirect=true"
+										update="MsgLimitForm" />
+									<br /> <br />
+									<p:commandButton value="Recharge Now"
+										action="purchaseMsgPack.xhtml?faces-redirect=true"
+										update="MsgLimitForm" />
+								</center>
+								<br></br>
+							</p:dialog>
+						</h:form>
+
+						<h:form id="MsgOverForm" style="overflow:hidden">
+							<p:dialog header="SMS Limit Over" width="500"
+								widgetVar="MsgOvrDlg" modal="true" showEffect="fade"
+								hideEffect="fade" resizable="false">
+								<center>
+									<p:outputLabel value="#{instituteEnquiryForm.balMsg}"
+										style="font-size:14px;font-weight: bold;" />
+								</center>
+								<br></br>
+								<br></br>
+								<center>
+									<p:commandButton value="Message Logs"
+										action="messageSchoolHistory.xhtml?faces-redirect=true"
+										update="MsgOverForm" />
+									<br /> <br />
+									<p:commandButton value="Recharge Now"
+										action="purchaseMsgPack.xhtml?faces-redirect=true"
+										update="MsgOverForm" />
+								</center>
+								<br></br>
+							</p:dialog>
+						</h:form>
+
+						<h:form id="MsgOtherForm" style="overflow:hidden">
+							<p:dialog header="SMS Limit Over" width="500"
+								widgetVar="MsgOthDlg" modal="true" showEffect="fade"
+								hideEffect="fade" resizable="false">
+								<center>
+									<p:outputLabel value="#{instituteEnquiryForm.balMsg}"
+										style="font-size:14px;font-weight: bold;" />
+								</center>
+								<br></br>
+								<br></br>
+								<center>
+									<p:commandButton value="OK"
+										action="instituteEnquiryForm.xhtml?faces-redirect=true"
+										update="MsgOtherForm" />
+								</center>
+							</p:dialog>
+						</h:form>
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,186 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Add Stop</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+							<h1>#{addNewStopVar.addNewStopTitle}</h1>
+
+							<p:messages closable="true" autoUpdate="true"></p:messages>
+
+							<p:panel header="Add New Stops">
+
+								<p:panelGrid columns="2"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel for="@next" style="color:red"
+										value="#{addNewStopVar.addNewStopSelectRoute}"></p:outputLabel>
+									<p:selectOneMenu value="#{transportBean.selectedRoute}"
+										required="true"
+										requiredMessage="#{addNewStopVar.addNewStopSelectRouteValidation}">
+										<f:selectItem itemLabel="#{addNewStopVar.selectHereLabel}"
+											itemValue=""></f:selectItem>
+										<f:selectItems value="#{transportBean.routeList}"></f:selectItems>
+
+										<p:ajax update="view" listener="#{transportBean.showNow}"></p:ajax>
+									</p:selectOneMenu>
+
+								</p:panelGrid>
+								<br></br>
+								<center>
+									<p:dataTable reflow="true" id="stopTable"
+										value="#{transportBean.routeInfoList}" var="var"
+										style="width:600px;">
+
+										<f:facet name="header">
+											<center>
+
+												<p:commandButton styleClass="butwid" icon="fa fa-floppy-o"
+													update=":form" value="Submit"
+													actionListener="#{transportBean.addNewStopList}"></p:commandButton>
+											</center>
+
+										</f:facet>
+
+										<p:column headerText="S.No." style="width:60px">
+											<p:outputLabel value="#{var.serialNumber}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Stop Name" id="stnm">
+											<p:inputText id="stop#{var.serialNumber}"
+												value="#{var.stopName}"
+												onchange="calculatess(#{var.serialNumber})"
+												validatorMessage="Please Enter Correct value">
+												<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+
+											</p:inputText>
+										</p:column>
+
+
+										<p:column
+											headerText="Amount (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})"
+											rendered="#{transportBean.showAmount}">
+											<p:inputText value="#{var.amount}">
+												<p:keyFilter mask="pnum" />
+												<p:ajax global="false"></p:ajax>
+											</p:inputText>
+										</p:column>
+
+										<p:column rendered="#{transportBean.showCategory}"
+											headerText="Category">
+											<p:selectOneMenu value="#{var.categoryId}">
+												<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+												<f:selectItems value="#{transportBean.categoryList}"></f:selectItems>
+											</p:selectOneMenu>
+										</p:column>
+
+										<f:facet name="footer">
+											<center>
+												<p:commandButton styleClass="butwid" icon="fa fa-floppy-o"
+													update=":form" value="Submit"
+													actionListener="#{transportBean.addNewStopList}"></p:commandButton>
+											</center>
+										</f:facet>
+									</p:dataTable>
+								</center>
+
+							</p:panel>
+							<br></br>
+							<p:panel id="view" header="Stop Info">
+								<center>
+									<p style="font-size: 15px !important; font-weight: bold;">#{transportBean.routeName}</p>
+								</center>
+
+								<p:dataTable reflow="true" value="#{transportBean.list}"
+									var="var" rowIndexVar="index"
+									selection="#{transportBean.selectedList}" rowKey="#{var.id}"
+									rowSelectMode="add">
+									<f:facet name="header">
+										All Stop
+									</f:facet>
+
+									<p:column exportable="false" selectionMode="multiple"
+										style="width:50px;text-align:center"></p:column>
+
+									<p:column headerText="S.No.">
+										<p:outputLabel value="#{index+1}" />
+									</p:column>
+
+									<p:column sortBy="#{var.stopName}" headerText="Stop">
+										<p:outputLabel value="#{var.stopName}" />
+									</p:column>
+
+									<p:column
+										headerText="Current Fees (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})">
+										<p:outputLabel value="#{var.amount}" />
+									</p:column>
+
+									<p:column rendered="true"
+										headerText="Enter New Fees (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})">
+										<p:inputText value="#{var.newAmount}">
+											<p:keyFilter mask="pint" />
+										</p:inputText>
+									</p:column>
+
+									<f:facet name="footer">
+										<center>
+											<p:commandButton rendered="true" styleClass="butwid"
+												icon="fa fa-floppy-o" update=":dialogForm"
+												value="Update Fees" action="#{transportBean.monthDetails}"
+												oncomplete="PF('dlgUpdate').show()" />
+										</center>
+									</f:facet>
+
+								</p:dataTable>
+
+							</p:panel>
+
+						</h:form>
+
+						<h:form id="dialogForm">
+
+							<p:dialog resizable="false" widgetVar="dlgUpdate"
+								header="Enter Details" showEffect="fade" hideEffect="explode"
+								modal="true">
+								<div class="ui-g form-group">
+									<p:panelGrid columns="2"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+
+										<p:outputLabel value="Update From"></p:outputLabel>
+										<p:selectOneMenu value="#{transportBean.selectedMonth}">
+											<f:selectItem itemLabel="Update For Whole Session"
+												itemValue="-1"></f:selectItem>
+											<f:selectItems value="#{transportBean.monthList}"></f:selectItems>
+
+										</p:selectOneMenu>
+
+										<p:commandButton update=":form:view,:dialogForm"
+											actionListener="#{transportBean.updateStopFees}"
+											value="Confirm Update"></p:commandButton>
+
+									</p:panelGrid>
+								</div>
+							</p:dialog>
+
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

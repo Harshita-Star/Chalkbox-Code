@@ -1,0 +1,52 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	<f:loadBundle var="addClassVar" basename="myProperties" />
+	<ui:define name="title">All Class-Section</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form1" enctype="multipart/form-data">
+						
+						
+							<p:panel header="All Class Section">
+								<p:dataTable reflow="true" value="#{classSectionIdReport.classSectionList}"
+									var="var" rowIndexVar="index" style="text-align: center;">
+
+									<p:column filterBy="#{var.className}"
+										filterMatchMode="contains" headerText="Class Name" groupRow="true">
+										<p:outputLabel value="#{var.className}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Class ID" groupRow="true">
+										<p:outputLabel value="#{var.classid}"></p:outputLabel>
+									</p:column>
+
+									<p:column filterBy="#{var.sectionName}"
+										filterMatchMode="contains" headerText="Section Name">
+										<p:outputLabel value="#{var.sectionName}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Section ID">
+										<p:outputLabel value="#{var.sectionId}"></p:outputLabel>
+									</p:column>
+
+								</p:dataTable>
+							</p:panel>
+						</h:form>
+					</div>
+
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

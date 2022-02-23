@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+<h:head>	
+
+<link rel="stylesheet" href="css2/bootstrap.css"/>
+<link rel="stylesheet" href="css2/student.css"/>
+<link href="https://fonts.googleapis.com/css?family=Bellefair" rel="stylesheet"/>
+<link href="css2/font-awesome.css" rel="stylesheet"/> 
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</h:head>
+<body class="background-style" style="background:url(school-images01.png);">
+<h:form id="form">
+<p:growl showDetail="true"  closable="true" autoUpdate="true" ></p:growl>	
+			
+	<div class="container-fluid">
+		<div class="container pos-relative">
+			<div class="row ">
+				<div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-12 logo-div">
+					<img class="img-responsive logo-size" src="education-pro-logo-N.png" ></img>
+					<h4 class="blue-color">Quick . Simple . Reliable</h4>
+				</div>
+			</div>
+			<div class="col-md-12 col-sm-12 col-xs-12">
+				<div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-12 login-div-pos" >
+					<div class="panel panel-default">
+						<div class="panel-heading form-head">LOGIN</div>
+						<div class="panel-body padding-LR-Z label-color">
+								<div class="form-group group-margin user-margin">
+									<label>USER NAME</label>
+											<p:inputText id="loginid" value="#{loginBean.id}" required="true" requiredMessage="#{loginPageVar.loginPageUsernameValidation}" ></p:inputText>
+			                  </div>
+								<div class="form-group group-margin">
+									<label>PASSWORD</label>
+											<p:password  id="password" value="#{loginBean.pswd}" required="true" requiredMessage="#{loginPageVar.loginPagePasswordValidation}" />	
+		
+								</div>
+								 <p:commandButton styleClass="btn log-button login-margin" value="Login"  update=":form" action="#{loginBean.check}"  />
+			
+						</div>
+					</div>
+					<img class="img-responsive child-pos" src="child3.png"></img>
+				</div>	
+			</div>
+		</div>
+	</div>
+	</h:form>
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+

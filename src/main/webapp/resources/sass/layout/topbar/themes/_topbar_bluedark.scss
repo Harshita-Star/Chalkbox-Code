@@ -1,0 +1,16 @@
+.layout-topbar-bluedark {
+    $topbarBgColor: #232946;
+    $topbarBoxShadow: 0 2px 10px 0 rgba(25, 26, 28, 0.12);
+    $topbarItemTextColor: #b8c1ec;
+    $topbarItemSecondaryTextColor: rgba(216, 218, 220, .64);
+    $topbarItemTextHoverBgColor: rgba(216, 216, 216, .1);
+    $topbarItemBgColor:rgba(216, 216, 216, .1);
+    $topbarItemSeparatorBorderColor: rgba(216, 216, 216, .1);
+    $topbarItemSubmenuBgColor: #ffffff;
+    $topbarItemSubmenuTextColor: #191a1c;
+    $topbarItemSubmenuSecondaryTextColor: #8b8e90;
+    $topbarItemSubmenuItemHoverBgColor: #EBEDEF;
+    $topbarItemSubmenuBoxShadow: 0 2px 8px 0 rgba(25, 26, 28, 0.12);
+
+    @import '../_topbar_theme';
+}

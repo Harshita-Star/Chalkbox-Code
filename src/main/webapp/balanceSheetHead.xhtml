@@ -1,0 +1,96 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+	<ui:define name="title">Balance Sheet</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form" style="overflow:hidden">
+
+							<p:panel header="Balance Sheet">
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:outputLabel value="Enter Date:"  for="@next" style="color:red" ></p:outputLabel>
+									<p:calendar readonlyInput="true"
+										value="#{balanceSheetHead.endDate}" pattern="dd/MM/yyyy"
+										yearRange="c-3:c+10" navigator="true" required="true"
+										requiredMessage="Select Date First">
+										<p:ajax global="false" event="dateSelect"></p:ajax>
+									</p:calendar>
+
+									<p:commandButton value="Generate Balance Sheet"
+										actionListener="#{balanceSheetHead.search}" update="form"></p:commandButton>
+								</p:panelGrid>
+							</p:panel>
+
+							<br />
+
+							<p:panel id="tb" header="Balance Sheet"
+								rendered="#{balanceSheetHead.shw}">
+								<p:dataTable id="tbl" value="#{balanceSheetHead.incomeList3}"
+									var="var">
+
+									<p:column headerText="Opening">
+										<p:outputLabel style="float:right;" value="0.0"></p:outputLabel>
+
+										<f:facet name="footer">
+											<p:outputLabel value="0.0" style="float:right;"></p:outputLabel>
+										</f:facet>
+									</p:column>
+
+									<p:column headerText="Liabilities" style="width:200px;">
+										<p:outputLabel value="#{var.libName}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Amount">
+										<p:outputLabel style="float:right;" value="#{var.libAmount}"></p:outputLabel>
+
+										<f:facet name="footer">
+											<p:outputLabel value="#{balanceSheetHead.strLibAmount}"
+												style="float:right;"></p:outputLabel>
+										</f:facet>
+									</p:column>
+
+									<p:column headerText="Opening">
+										<p:outputLabel style="float:right;" value="0.0"></p:outputLabel>
+
+										<f:facet name="footer">
+											<p:outputLabel value="0.0" style="float:right;"></p:outputLabel>
+										</f:facet>
+									</p:column>
+
+
+									<p:column headerText="Assets">
+										<p:outputLabel value="#{var.assetsName}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Amount">
+										<p:outputLabel style="float:right;"
+											value="#{var.assetsAmount}"></p:outputLabel>
+										<f:facet name="footer">
+											<p:outputLabel value="#{balanceSheetHead.strAssAmount}"
+												style="float:right;"></p:outputLabel>
+										</f:facet>
+									</p:column>
+
+								</p:dataTable>
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

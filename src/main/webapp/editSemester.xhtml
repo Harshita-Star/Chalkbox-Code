@@ -1,0 +1,131 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Edit Semester</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<h1>Edit/Delete Semester</h1>
+
+
+							<p:panel header="Edit Semester" id="panel">
+
+								<p:messages closable="true" autoUpdate="true"></p:messages>
+
+
+								<p:dataTable reflow="true" value="#{editTerm.semesterList}"
+									var="var">
+
+									<f:facet name="header">
+										All Semester/Terms
+									</f:facet>
+
+									<p:column headerText="Serial Number">
+
+										<p:outputLabel value="#{var.serialNumber}"></p:outputLabel>
+
+									</p:column>
+
+									<p:column sortBy="#{var.className}" headerText="Class Name">
+
+										<p:outputLabel value="#{var.className}"></p:outputLabel>
+
+									</p:column>
+
+									<p:column sortBy="#{var.semesterName}" headerText="Semester">
+
+										<p:outputLabel value="#{var.semesterName}"></p:outputLabel>
+
+									</p:column>
+
+									<p:column headerText="Edit">
+									<center>
+										<p:commandButton update=":editForm" styleClass="butwid"
+											oncomplete="PF('editDialog').show();" icon="ui-icon-pencil"
+											action="#{editTerm.editTermDetails}">
+											<f:setPropertyActionListener
+												target="#{editTerm.selectedSemester}" value="#{var}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</center>
+									</p:column>
+
+									<p:column headerText="Delete">
+									<center>
+									<p:commandButton update=":form" oncomplete="PF('dlg').show();" styleClass="butwid redButt"
+											icon="ui-icon-trash" disabled="#{var.disableDelete}">
+											<f:setPropertyActionListener
+												target="#{editTerm.selectedSemester}" value="#{var}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</center>
+									</p:column>
+								</p:dataTable>
+
+
+								<p:dialog resizable="false" widgetVar="dlg"
+									header="Do you really want to delete this Semester"
+									showEffect="fade" hideEffect="explode" modal="true">
+									<div class="ui-g form-group">
+										<p:panelGrid columns="2"
+											styleClass="ui-panelgrid-blank form-group"
+											style="border:0px none; background-color:transparent;">
+
+											<p:commandButton update=":form" styleClass="greenButt"
+												actionListener="#{editTerm.deleteNow}" value="Yes"></p:commandButton>
+											<p:commandButton value="No" update=":form" styleClass="redButt"
+												oncomplete="PF('dlg').hide();"></p:commandButton>
+										</p:panelGrid>
+									</div>
+								</p:dialog>
+
+							</p:panel>
+
+						</h:form>
+						<h:form id="editForm">
+							<p:dialog resizable="false" widgetVar="editDialog"
+								header="Edit Details" showEffect="fade" hideEffect="explode"
+								modal="true">
+								<div class="ui-g form-group">
+									<p:panelGrid columns="2"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+
+										<p:outputLabel value="Semester Name" for="@next" style="color:red" ></p:outputLabel>
+										<p:inputText value="#{editTerm.semesterName}" required="true"
+											requiredMessage="Please enter Semester Name" id="secnm"
+											onchange="trimFunc(this.value,'Please Section Name',this.id)">
+										  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+										</p:inputText>
+											
+										<p:outputLabel value="Percentage (Weightage of Term for Marksheet)"></p:outputLabel>
+										<p:inputText value="#{editTerm.percentage}">
+										  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+										</p:inputText>
+									</p:panelGrid>
+								</div>
+								<br />
+								<p:separator />
+								<center>
+									
+										<p:commandButton update=":form:panel,:editForm" styleClass="butwid" icon="fa fa-floppy-o"
+											actionListener="#{editTerm.updateNow}" value="Save Here"></p:commandButton>
+								</center>
+								<p:separator />
+								<br />
+							</p:dialog>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,48 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Hostel</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+
+						<h:form id="form">
+							<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+							<p:panel header="Room Details">
+								<p:dataGrid var="room" value="#{hostelRoomDetails.roomList}"
+									columns="3" layout="grid" rows="12" paginator="true" id="cars">
+
+
+
+									<p:panel header="#{room.roomNo}" style="text-align:center">
+										<p:panelGrid columns="2"
+											styleClass="ui-panelgrid-blank form-group"
+											style="border:0px none; background-color:transparent;">
+
+											<p:selectManyCheckbox value="#{room.occupiedBeds}">
+												<f:selectItems value="#{room.occupiedBedList}"></f:selectItems>
+											</p:selectManyCheckbox>
+
+											</p:panelGrid>
+									</p:panel>
+
+								</p:dataGrid>
+							</p:panel>
+
+						</h:form>
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

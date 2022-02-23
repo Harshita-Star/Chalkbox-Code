@@ -1,0 +1,373 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">All Book Report</ui:define>
+
+	<ui:define name="content">
+
+		<style>
+.ui-datatable .ui-datatable-scrollable-body,
+	.ui-datatable-scrollable-header {
+	width: 100% !important;
+}
+
+.ui-datatable-scrollable .ui-datatable-scrollable-header,
+	.ui-datatable-scrollable .ui-datatable-scrollable-footer {
+	position: sticky !important;
+	top: 60px !important;
+	z-index: 9 !important;
+}
+
+body .ui-datatable thead th, body .ui-datatable tbody td {
+	width: var(--w) !important;
+}
+</style>
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+					
+						<h:form id="form1" enctype="multipart/form-data">
+						<p:growl showDetail="true" autoUpdate="true"></p:growl>
+							<p:panel header="Search By Alphabet">
+							
+								<c:forEach items="#{allBookReport.list}" var="alpha">
+									<p:commandButton value="#{alpha}" style="width:35px" update=":form" action="#{allBookReport.searchData}">
+										<f:setPropertyActionListener value="#{alpha}" target="#{allBookReport.selectedAlpha}"></f:setPropertyActionListener>
+									</p:commandButton><p:spacer width="9px"></p:spacer>
+				          		</c:forEach>
+							</p:panel>
+						</h:form>
+					
+						<h:form id="form" enctype="multipart/form-data">
+							<p:panel rendered="#{allBookReport.showTable}" header="Book Details">
+
+								<h:commandLink>
+									<p:graphicImage name="images/excellogo.png" library="avalon-layout" width="100" height="40"></p:graphicImage>
+									<pe:exporter type="xlsx" target=":form:up" fileName="ALL_BOOKS"></pe:exporter>
+								</h:commandLink>
+
+								<p:commandButton actionListener="#{allBookReport.exportbookPdf}" value="PDF" styleClass="butwid"
+									icon="fa fa-file-pdf-o" style="margin-left: 18px; top: -15px;" ajax="false" process="@this" >
+									<p:fileDownload value="#{allBookReport.file}" />
+								</p:commandButton>
+
+								<p:dataTable id="up" value="#{allBookReport.bookList}" selection="#{allBookReport.selectedBookList}"
+										rowKey="#{var.sNo}" var="var" scrollable="true" scrollWidth="100%" reflow="true" rowIndexVar="index">
+
+									<p:column style="--w:50px" headerText="Select" selectionMode="multiple"></p:column>
+									
+									<p:column headerText="S.No" exportable="false" style="--w:50px">
+										<f:facet name="header">
+											<p:outputLabel value="S.No"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.sNo}"></p:outputLabel>
+									</p:column>
+
+									<p:column filterMatchMode="contains" filterBy="#{var.bookId}"
+										headerText="Accession No." style="--w:150px">
+										<f:facet name="header">
+											<p:outputLabel value="Accession No."></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.bookId}"></p:outputLabel>
+									</p:column>
+
+									<p:column filterMatchMode="contains"
+										filterBy="#{var.authorName}" headerText="Author"
+										style="--w:100px">
+										<f:facet name="header">
+											<p:outputLabel value="Author"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.authorName}"></p:outputLabel>
+									</p:column>
+
+									<p:column filterMatchMode="contains" filterBy="#{var.bookName}"
+										headerText="Book Name" style="--w:150px">
+										<f:facet name="header">
+											<p:outputLabel value="Book Name"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.bookName}"></p:outputLabel>
+									</p:column>
+
+									<p:column filterMatchMode="contains"
+										filterBy="#{var.keyword_book}" headerText="Keyword"
+										style="--w:100px">
+										<f:facet name="header">
+											<p:outputLabel value="Keyword"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.keyword_book}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Sub Title" style="width:100px">
+										<f:facet name="header">
+											<p:outputLabel value="Sub Title"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.subTitle}"></p:outputLabel>
+									</p:column>
+
+									<p:column filterMatchMode="contains"
+										filterBy="#{var.publicationName}"
+										headerText="Publisher / Place" style="--w:150px">
+										<f:facet name="header">
+											<p:outputLabel value="Publisher / Place"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.publicationName}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Year Of Publication" style="--w:100px">
+										<f:facet name="header">
+											<p:outputLabel value="Year Of Publication"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.yearOfPublish}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Page" style="--w:100px">
+										<f:facet name="header">
+											<p:outputLabel value="Page"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.page}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Source" style="--w:100px">
+										<f:facet name="header">
+											<p:outputLabel value="Source"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.source}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Call No." style="--w:100px">
+										<f:facet name="header">
+											<p:outputLabel value="Call No."></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.callNo}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Book No." style="--w:100px">
+										<f:facet name="header">
+											<p:outputLabel value="Book No."></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.bookNo}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Price" style="--w:100px">
+										<f:facet name="header">
+											<p:outputLabel value="Price"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.bookPrice}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="ISBN No." style="--w:100px">
+										<f:facet name="header">
+											<p:outputLabel value="ISBN No."></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.isbnNo}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Category" style="--w:100px">
+										<f:facet name="header">
+											<p:outputLabel value="Category"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.bookCategoryName}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Subject Name" filterMatchMode="contains"
+										filterBy="#{var.subjectName}" style="--w:100px">
+										<f:facet name="header">
+											<p:outputLabel value="Subject Name"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.subjectName}"></p:outputLabel>
+									</p:column>
+
+									<p:column filterMatchMode="contains"
+										filterBy="#{var.addDateStr}" headerText="Date Of Entry"
+										style="--w:150px">
+										<f:facet name="header">
+											<p:outputLabel value="Date Of Entry"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.addDateStr}"></p:outputLabel>
+									</p:column>
+
+									<p:column filterMatchMode="contains"
+										filterBy="#{var.receivedStatus}" headerText="Status"
+										style="--w:150px">
+										<f:facet name="header">
+											<p:outputLabel value="Status"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.receivedStatus}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Edit" style="--w:50px" exportable="false">
+										<f:facet name="header">
+											<p:outputLabel value="Edit"></p:outputLabel>
+										</f:facet>
+										<p:commandButton icon="ui-icon-pencil"
+											action="#{allBookReport.editDetails}" update=":editForm"
+											oncomplete="PF('editDialog').show()">
+											<f:setPropertyActionListener value="#{var}"
+												target="#{allBookReport.selectedBook}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+									
+									<p:column headerText="Delete"  style="--w:50px" exportable="false">
+										<f:facet name="header">
+											<p:outputLabel value="Delete"></p:outputLabel>
+										</f:facet>
+										<p:commandButton disabled="#{var.enableDelete}" update=":form" icon="ui-icon-trash" action="#{allBookReport.deleteBook}">
+											<p:confirm header="Confirmation" message="Are you sure to delete this book ??" icon="ui-icon-alert" />
+											<f:setPropertyActionListener value="#{var}" target="#{allBookReport.selectedBook}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+									
+									<f:facet name="footer">
+										<center>
+										<p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+											<p:commandButton update=":form" value="Delete Selected Books" action="#{allBookReport.deleteMultipleBook}" styleClass="redButt butwid-2" icon="fa fa-trash" style="margin-top:10px;">
+												<p:confirm header="Confirmation" message="Are you sure to delete these books ??" icon="ui-icon-alert" />
+											</p:commandButton>
+										</p:panelGrid>
+										</center>
+									</f:facet>
+									
+									<f:facet name="header">
+										<center>
+										<p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+											<p:commandButton update=":form" value="Delete Selected Books" action="#{allBookReport.deleteMultipleBook}" styleClass="redButt butwid-2" icon="fa fa-trash" style="margin-top:10px;">
+												<p:confirm header="Confirmation" message="Are you sure to delete these books ??" icon="ui-icon-alert" />
+											</p:commandButton>
+										</p:panelGrid>
+										</center>
+									</f:facet>
+								</p:dataTable>
+							</p:panel>
+						</h:form>
+						
+						<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+	  						<p:commandButton value="Yes" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+	  						<p:commandButton value="No" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+						</p:confirmDialog>
+
+						<h:form id="editForm" enctype="multipart/form-data">
+							<p:dialog resizable="false" modal="true" widgetVar="editDialog"
+								header="Project Details (Allowed file type are :- gif,jpg,jpeg,png)" closeOnEscape="true">
+								<div class="ui-g form-group">
+									<p:panelGrid columns="4"
+										styleClass="ui-panelgrid-blank form-group">
+										<p:outputLabel for="@next" style="color:red" value="Book Name"></p:outputLabel>
+										<p:inputText value="#{allBookReport.bookName}" required="true"
+											requiredMessage="Please Enter Book Name"></p:inputText>
+
+										<p:outputLabel value="Sub Title"></p:outputLabel>
+										<p:inputText value="#{allBookReport.subTitle}"></p:inputText>
+
+										<p:outputLabel value="Keyword"></p:outputLabel>
+										<p:inputText value="#{allBookReport.keyword_book}"></p:inputText>
+
+										<p:outputLabel value="Accession No."></p:outputLabel>
+										<p:inputText value="#{allBookReport.accNo}">
+											<p:keyFilter regEx="/[0-9.]/i" />
+
+										</p:inputText>
+
+										<p:outputLabel value="Book For"></p:outputLabel>
+										<p:selectOneRadio value="#{allBookReport.bookfor}">
+											<f:selectItem itemLabel="Class" itemValue="class">
+											</f:selectItem>
+											<f:selectItem itemLabel="Other" itemValue="other"></f:selectItem>
+											<p:ajax listener="#{allBookReport.checkBookFor}"
+												update=":editForm:checkbook"></p:ajax>
+										</p:selectOneRadio>
+
+										<p:outputLabel value="Book Type"></p:outputLabel>
+										<p:selectOneMenu id="checkbook"
+											value="#{allBookReport.booktype}">
+											<f:selectItems value="#{allBookReport.bookForList}"></f:selectItems>
+										</p:selectOneMenu>
+
+										<p:outputLabel for="@next" style="color:red"
+											value="Author Name"></p:outputLabel>
+										<p:autoComplete minQueryLength="3"
+											value="#{allBookReport.author}"
+											completeMethod="#{allBookReport.autoCompleteAuthor}"
+											forceSelection="true" required="true"
+											requiredMessage="Please Enter Author Name">
+											<p:ajax event="query" global="false" />
+										</p:autoComplete>
+
+										<p:outputLabel for="@next" style="color:red"
+											value="Publication Name"></p:outputLabel>
+										<p:autoComplete minQueryLength="3"
+											value="#{allBookReport.publication}"
+											completeMethod="#{allBookReport.autoCompletePublication}"
+											forceSelection="true" required="true"
+											requiredMessage="Please Enter Publication">
+											<p:ajax event="query" global="false" />
+										</p:autoComplete>
+
+										<p:outputLabel for="@next" style="color:red"
+											value="Subject Name"></p:outputLabel>
+										<p:autoComplete minQueryLength="3"
+											value="#{allBookReport.subject}"
+											completeMethod="#{allBookReport.autoCompleteSubject}"
+											forceSelection="true" required="true"
+											requiredMessage="Please Enter Subject">
+											<p:ajax event="query" global="false" />
+										</p:autoComplete>
+
+										<p:outputLabel value="Year Of Publication"></p:outputLabel>
+										<p:inputText value="#{allBookReport.yearOfPublish}"></p:inputText>
+
+										<p:outputLabel value="Page"></p:outputLabel>
+										<p:inputText value="#{allBookReport.page}"></p:inputText>
+
+										<p:outputLabel value="Source"></p:outputLabel>
+										<p:inputText value="#{allBookReport.source}"></p:inputText>
+
+										<p:outputLabel value="Call no."></p:outputLabel>
+										<p:inputText value="#{allBookReport.callNo}"></p:inputText>
+
+										<p:outputLabel value="Book No."></p:outputLabel>
+										<p:inputText value="#{allBookReport.bookNo}"></p:inputText>
+
+										<p:outputLabel value="ISBN No."></p:outputLabel>
+										<p:inputText value="#{allBookReport.isbnNo}"></p:inputText>
+
+										<p:outputLabel for="@next" style="color:red"
+											value="Price(Per Book)"></p:outputLabel>
+										<p:inputText value="#{allBookReport.bookPrice}"
+											required="true" requiredMessage="Please Enter Book Price">
+											<p:keyFilter mask="pnum"></p:keyFilter>
+										</p:inputText>
+
+										<p:graphicImage height="100" width="100"
+											value="#{allBookReport.bookImage}"></p:graphicImage>
+										<p:fileUpload value="#{allBookReport.newImage}" mode="simple"
+											allowTypes="/(\.|\/)(gif|jpeg|png)$/" />
+									</p:panelGrid>
+								</div>
+								
+								<br />
+								<p:separator />
+								<center>
+									<p:commandButton ajax="false" value="Update" styleClass="butwid" icon="fa fa-upload"
+											actionListener="#{allBookReport.updateBook}"></p:commandButton>
+								</center>
+								<p:separator />
+								<br />
+								
+							</p:dialog>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

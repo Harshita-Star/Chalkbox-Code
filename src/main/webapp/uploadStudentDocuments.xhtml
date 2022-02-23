@@ -1,0 +1,100 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Upload Documents</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form" enctype="multipart/form-data">
+							<p:messages autoUpdate="true" closable="true"></p:messages>
+
+
+							<p:outputPanel id="allStudentDocuments">
+
+								<p:panel>
+									<f:facet name="header">
+									<span>Upload Student Documents (Allowed file type are :- Image,Document)</span>
+									<span> <p:commandLink
+											style="float: right;margin-left: 15px;;color: blue;font-size:15px;"
+											immediate="true" value="Check Document Report"
+											action="studentDocumentReport.xhtml?faces-redirect=true"></p:commandLink>
+									</span>
+								</f:facet>
+								
+									<p:panelGrid columns="3" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+										<p:outputLabel value="Select Student"></p:outputLabel>
+										<p:autoComplete id="acSimple" value="#{uploadStudentDocuments.name}" minQueryLength="3" completeMethod="#{uploadStudentDocuments.autoCompleteStudentInfo}" forceSelection="true">
+               		 				<p:ajax event="query" global="false"/>
+               		 			</p:autoComplete>
+               		 			
+               		 			<p:commandButton value="Go" styleClass="butwid" icon="fa fa-arrow-right" actionListener="#{uploadStudentDocuments.checkDocuments}" update=":form"></p:commandButton> 
+									</p:panelGrid>
+									<br></br>
+									
+									<p:panel rendered="#{uploadStudentDocuments.ren}">
+									<p:dataTable reflow="true" id="table" value="#{uploadStudentDocuments.docList}" 
+										var="var">
+										<p:column headerText="S.No." >
+											<p:outputLabel value="#{var.sno}"></p:outputLabel>
+										</p:column>
+										
+										<p:column headerText="Document Name" >
+											<p:outputLabel value="#{var.documentName}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Upload file" >
+											  <p:fileUpload mode="simple" value="#{var.file}"></p:fileUpload>
+										</p:column>
+										
+										
+										
+										<p:column headerText="View Documents" >
+										<center>
+											<p:commandButton value="view" styleClass="butwid" icon="fa fa-eye" rendered="#{var.fileRender}" action="#{uploadStudentDocuments.viewDocss}">
+											  <f:setPropertyActionListener  value="#{var}" target="#{uploadStudentDocuments.selected}"></f:setPropertyActionListener>
+											 </p:commandButton>
+										</center>
+										</p:column>
+
+	                                  <p:column headerText="Remove Document" >
+	                                  <center>
+	                                  		<p:commandButton value="delete" styleClass="butwid redButt" icon="fa fa-trash"  rendered="#{var.fileRender}"  action="#{uploadStudentDocuments.deleteDoc}" update=":form:table">
+											  <f:setPropertyActionListener  value="#{var}" target="#{uploadStudentDocuments.selected}"></f:setPropertyActionListener>
+											  <p:confirm header="Confirmation" message="Surely Want To Remove This Document???" icon="ui-icon-alert" />
+											 </p:commandButton>
+	                                  </center>
+										</p:column>
+
+										
+
+									</p:dataTable>
+									
+									<br></br>
+                                    <center>
+									<p:commandButton ajax="false" value="Submit" style="width:150px;" icon="fa fa-upload"
+										action="#{uploadStudentDocuments.uploadDocs}" update=":form"></p:commandButton></center>
+										</p:panel>
+								</p:panel>
+							</p:outputPanel>
+							
+							<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+						<p:commandButton style="margin-left:50px" value="Yes" type="button" styleClass="ui-confirmdialog-yes greenButt" icon="ui-icon-check" />
+						<p:commandButton style="margin-left:50px" value="No" type="button" styleClass="ui-confirmdialog-no redButt" icon="ui-icon-close" />
+					</p:confirmDialog>
+							
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

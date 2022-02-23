@@ -1,0 +1,319 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Route Wise Message </ui:define>
+
+	<ui:define name="content">
+		<script src="pramukhime.js"></script>
+		<script src="pramukhindic.js"></script>
+		<script src="pramukhime-common.js"></script>
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<p:messages closable="true" autoUpdate="true"></p:messages>
+							<h1>Route Wise Message</h1>
+
+							<p:panel header="Select a Route">
+								<p:panelGrid columns="2"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:outputLabel value="Select a Route"></p:outputLabel>
+									<p:selectOneMenu value="#{sendMessageRouteWise.selectedRoute}"
+										filter="true">
+										<f:selectItem itemLabel="Select Route" itemValue="select"></f:selectItem>
+										<f:selectItems value="#{sendMessageRouteWise.routeNameList}"></f:selectItems>
+										<p:ajax update=":form"
+											listener="#{sendMessageRouteWise.getStudentRoute}"></p:ajax>
+									</p:selectOneMenu>
+									<p:outputLabel value="Select a Stop"></p:outputLabel>
+									<p:selectOneMenu value="#{sendMessageRouteWise.selectedStop}"
+										filter="true">
+										<f:selectItem itemLabel="Select Stop" itemValue="select"></f:selectItem>
+										<f:selectItems value="#{sendMessageRouteWise.stopList}"></f:selectItems>
+										<p:ajax update=":form"
+											listener="#{sendMessageRouteWise.getStudentRouteStop}"></p:ajax>
+									</p:selectOneMenu>
+								</p:panelGrid>
+							</p:panel>
+
+							<p:panel id="dataTable" rendered="#{sendMessageRouteWise.show}">
+								<p:outputLabel style="font-weight: bold;font-size: 12px;"
+									value="Note: Copying and pasting the special characters ( such as ,' ) might affect the format of SMS. It is adviced to kindly type the message."></p:outputLabel>
+								<h:inputHidden id="text"
+									value="#{sendMessageRouteWise.language}"></h:inputHidden>
+
+								<br></br>
+								<br></br>
+								<p:panelGrid columns="3"
+									styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:selectBooleanCheckbox
+										itemLabel="#{sideMenuBean.list.country ne 'India' ? 'Send As Email' : 'Send As SMS'}"
+										value="#{sendMessageRouteWise.sms}">
+										<p:ajax></p:ajax>
+									</p:selectBooleanCheckbox>
+									<p:selectBooleanCheckbox disabled="true"
+										itemLabel="Send As App Notification (Please Send Notification Through NEWS)"
+										value="#{sendMessageRouteWise.notification}">
+										<p:ajax></p:ajax>
+									</p:selectBooleanCheckbox>
+									<p:outputLabel />
+
+									<p:selectOneButton id="lang"
+										rendered="#{sideMenuBean.list.country eq 'India'}"
+										value="#{sendMessageRouteWise.language}">
+										<f:selectItem itemLabel="English" itemValue="english" />
+										<f:selectItem itemLabel="हिन्दी" itemValue="hindi" />
+										<p:ajax listener="#{sendMessageRouteWise.checkLanguage}"
+											oncomplete="javascript:changeLanguage3('form:text','true','form:transliterateDiv')"
+											update="dataTable,:form:lang"></p:ajax>
+									</p:selectOneButton>
+									<p:outputLabel
+										rendered="#{sideMenuBean.list.country eq 'India'}" />
+									<p:outputLabel
+										rendered="#{sideMenuBean.list.country eq 'India'}" />
+
+									<p:outputLabel value="Message:"
+										style="font-size:15px !important;"></p:outputLabel>
+									<p:outputLabel rendered="#{sendMessageRouteWise.englishShow}"
+										value="Dear Parent," style="font-size:15px !important;" />
+									<p:outputLabel rendered="#{sendMessageRouteWise.hindiShow}"
+										value="प्रिय अभिभावक," style="font-size:15px !important;" />
+									<p:outputPanel>
+										<p:panelGrid columns="4" style="float:right;">
+											<p:outputLabel style="font-size:12px !important;"
+												value="Message Count-:"></p:outputLabel>
+											<p:outputLabel style="font-size:12px !important;" id="table1"
+												value="0"></p:outputLabel>
+
+											<p:outputLabel style="font-size:12px !important;"
+												value="Message Char.-:"></p:outputLabel>
+											<p:outputLabel style="font-size:12px !important;" id="table2"
+												value="0"></p:outputLabel>
+
+										</p:panelGrid>
+									</p:outputPanel>
+
+									<p:outputLabel />
+									<p:inputTextarea rendered="#{sendMessageRouteWise.englishShow}"
+										value="#{sendMessageRouteWise.typeMessage}" rows="7" cols="30"
+										counter="display" maxlength="765"
+										counterTemplate="{0} characters remaining." autoResize="false"
+										style="width:400px !important;" required="true"
+										requiredMessage="Please Write a Message to Send"
+										onkeyup="changeColor(this.value)" id="engmsg"
+										onchange="trimFunc(this.value,'Please Section Name',this.id)">
+
+									</p:inputTextarea>
+									<p:panelGrid columns="2"
+										rendered="#{sendMessageRouteWise.hindiShow}">
+										<p:inputTextarea value="#{sendMessageRouteWise.typeMessage}"
+											rows="7" cols="30" counter="display" maxlength="765"
+											counterTemplate="{0} characters remaining."
+											autoResize="false" style="width:400px !important;"
+											required="true"
+											requiredMessage="Please Write a Message to Send"
+											id="transliterateDiv">
+											<p:keyFilter preventPaste="true"></p:keyFilter>
+
+										</p:inputTextarea>
+										<input type="checkbox" id="languagess" name=""
+											value="pramukhindic:hindi" checked="checked"
+											onchange="javascript:changeLanguage2(this.checked,'form:transliterateDiv')"></input>
+
+									</p:panelGrid>
+									<p:outputLabel id="display" style="font-size:15px !important;" />
+
+									<p:outputLabel />
+									<p:outputLabel rendered="#{sendMessageRouteWise.englishShow}"
+										value="Regards, #{sideMenuBean.smsName}"
+										style="font-size:15px !important;" />
+									<p:outputLabel rendered="#{sendMessageRouteWise.hindiShow}"
+										value="सादर, #{sideMenuBean.hindiName}"
+										style="font-size:15px !important;" />
+									<p:outputLabel />
+								</p:panelGrid>
+								<br></br>
+								<p:dataTable
+									selection="#{sendMessageRouteWise.selectedStudentList}"
+									rowKey="#{var.id}" value="#{sendMessageRouteWise.studentList}"
+									var="var">
+									<p:column selectionMode="multiple"
+										style="width:40px;text-align:center"></p:column>
+									<p:column headerText="Admission No.">
+										<p:outputLabel value="#{var.addNumber}"></p:outputLabel>
+									</p:column>
+									<p:column headerText="Student Name">
+										<p:outputLabel value="#{var.fullName}"></p:outputLabel>
+									</p:column>
+									<p:column headerText="Father's Name">
+										<p:outputLabel value="#{var.fathersName}"></p:outputLabel>
+									</p:column>
+									<p:column headerText="Fathers's Phone No.">
+										<p:outputLabel value="#{var.fathersPhone}"></p:outputLabel>
+									</p:column>
+									<p:column headerText="Class">
+										<p:outputLabel value="#{var.className}"></p:outputLabel>
+									</p:column>
+									<p:column headerText="Section">
+										<p:outputLabel value="#{var.sectionName}"></p:outputLabel>
+									</p:column>
+									<f:facet name="footer">
+
+										<p:commandButton value="Send message to selected student"
+											action="#{sendMessageRouteWise.checkRouteSelected}"
+											style="font-size:15px !important; "
+											update=":MessageDialogOpen" />
+									</f:facet>
+								</p:dataTable>
+							</p:panel>
+
+						</h:form>
+
+						<h:form id="MsgLimitForm" style="overflow:hidden">
+							<p:dialog header="Low SMS Balance" width="500"
+								widgetVar="MsgLmtDlg" modal="true" showEffect="fade"
+								hideEffect="fade" resizable="false">
+								<center>
+									<p:outputLabel value="#{sendMessageRouteWise.balMsg}"
+										style="font-size:14px;font-weight: bold;" />
+								</center>
+								<br></br>
+								<br></br>
+								<center>
+									<p:commandButton value="Skip"
+										action="#{sendMessageRouteWise.sendMsg}" update="MsgLimitForm" />
+									<br /> <br />
+									<p:commandButton value="Message Logs"
+										action="messageSchoolHistory.xhtml?faces-redirect=true"
+										update="MsgLimitForm" />
+									<br /> <br />
+									<p:commandButton value="Recharge Now"
+										action="purchaseMsgPack.xhtml?faces-redirect=true"
+										update="MsgLimitForm" />
+								</center>
+								<br></br>
+							</p:dialog>
+						</h:form>
+
+						<h:form id="MsgOverForm" style="overflow:hidden">
+							<p:dialog header="SMS Limit Over" width="500"
+								widgetVar="MsgOvrDlg" modal="true" showEffect="fade"
+								hideEffect="fade" resizable="false">
+								<center>
+									<p:outputLabel value="#{sendMessageRouteWise.balMsg}"
+										style="font-size:14px;font-weight: bold;" />
+								</center>
+								<br></br>
+								<br></br>
+								<center>
+									<p:commandButton value="Message Logs"
+										action="messageSchoolHistory.xhtml?faces-redirect=true"
+										update="MsgOverForm" />
+									<br /> <br />
+									<p:commandButton value="Recharge Now"
+										action="purchaseMsgPack.xhtml?faces-redirect=true"
+										update="MsgOverForm" />
+								</center>
+								<br></br>
+							</p:dialog>
+						</h:form>
+
+						<h:form id="MsgOtherForm" style="overflow:hidden">
+							<p:dialog header="SMS Limit Over" width="500"
+								widgetVar="MsgOthDlg" modal="true" showEffect="fade"
+								hideEffect="fade" resizable="false">
+								<center>
+									<p:outputLabel value="#{sendMessageRouteWise.balMsg}"
+										style="font-size:14px;font-weight: bold;" />
+								</center>
+								<br></br>
+								<br></br>
+								<center>
+									<p:commandButton value="OK"
+										action="sendMessageRouteWise.xhtml?faces-redirect=true"
+										update="MsgOtherForm" />
+								</center>
+							</p:dialog>
+						</h:form>
+
+
+						<h:form id="MessageDialogOpen" style="overflow:hidden">
+							<p:dialog header="Message Confirmation" width="500"
+								widgetVar="SendMessageCheck" modal="true" showEffect="fade"
+								hideEffect="fade" resizable="false">
+
+								<p:panelGrid columns="1">
+
+									<p:outputLabel rendered="#{sendMessageRouteWise.englishShow}"
+										value="Dear Parent," style="font-size:15px !important;" />
+									<p:outputLabel rendered="#{sendMessageRouteWise.hindiShow}"
+										value="प्रिय अभिभावक," style="font-size:15px !important;" />
+
+
+									<p:inputTextarea rendered="#{sendMessageRouteWise.englishShow}"
+										value="#{sendMessageRouteWise.typeMessage}" rows="7" cols="30"
+										maxlength="765" counterTemplate="{0} characters remaining."
+										autoResize="false" style="width:400px !important;"
+										readonly="true">
+									</p:inputTextarea>
+
+									<p:inputTextarea rendered="#{sendMessageRouteWise.hindiShow}"
+										value="#{sendMessageRouteWise.typeMessage}" rows="7" cols="30"
+										maxlength="765" counterTemplate="{0} characters remaining."
+										autoResize="false" style="width:400px !important;"
+										readonly="true">
+									</p:inputTextarea>
+								</p:panelGrid>
+
+								<p:outputLabel rendered="#{sendMessageRouteWise.englishShow}"
+									value="Regards, #{sideMenuBean.smsName}"
+									style="font-size:15px !important;" />
+								<p:outputLabel rendered="#{sendMessageRouteWise.hindiShow}"
+									value="सादर, #{sideMenuBean.hindiName}"
+									style="font-size:15px !important;" />
+								<p:outputLabel />
+
+
+								<br />
+								<br />
+								<p:commandButton value="Send Message"
+									action="#{sendMessageRouteWise.sendMessage}"
+									update=":form,:MessageDialogOpen"
+									style="width:120px;height:30px;" />
+
+								<p:commandButton value="Change Message"
+									action="#{sendMessageRouteWise.closeConfirmDialog}"
+									update=":MessageDialogOpen" style="width:150px;height:30px;" />
+
+							</p:dialog>
+						</h:form>
+
+						<h:form id="HindiForm" style="overflow:hidden">
+							<p:dialog header="NOTIFICATION" width="500" widgetVar="hindiDi"
+								modal="true" showEffect="fade" hideEffect="fade"
+								resizable="false">
+								<center>
+									<p:outputLabel
+										value="Hindi Message Feature is Temporarily Unavailable"
+										style="font-size:14px;font-weight: bold;" />
+								</center>
+								<br></br>
+
+							</p:dialog>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

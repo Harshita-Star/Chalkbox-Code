@@ -1,0 +1,38 @@
+		<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+						xmlns:ui="http://java.sun.com/jsf/facelets"
+						xmlns:h="http://java.sun.com/jsf/html"
+						xmlns:f="http://java.sun.com/jsf/core"
+						xmlns:p="http://primefaces.org/ui"
+						template="/WEB-INF/template.xhtml">
+
+			<ui:define name="title">Session Collection</ui:define>
+
+			<ui:define name="content">
+			   
+					<div class="ui-fluid">
+						<div class="ui-g">
+							<div class="ui-g-12">
+								<div class="card card-w-title">
+								           
+          <h:form id="form">
+        <p:panel header="Session Collection">
+        <p:panelGrid columns="2" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+			<p:outputLabel value="Total Collection"> </p:outputLabel>
+			<p:outputLabel value="= #{sessionTotalCollection.totalcollection}"></p:outputLabel>
+			
+			<p:outputLabel value="Total Amount Paid"> </p:outputLabel>
+			<p:outputLabel value="= #{sessionTotalCollection.amountpaid}"></p:outputLabel>
+			
+			<p:outputLabel value="Amount Remaining"> </p:outputLabel>
+			<p:outputLabel value="= #{sessionTotalCollection.amountremianing}"></p:outputLabel>
+			</p:panelGrid>
+			</p:panel>
+			</h:form>	 
+								</div>
+							</div>
+						</div>
+					</div>
+			   
+			</ui:define>
+
+		</ui:composition>

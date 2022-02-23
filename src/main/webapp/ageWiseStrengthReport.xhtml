@@ -1,0 +1,138 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Age Wise Student Report</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form enctype="multipart/form-data" id="form1">
+							<h1>Age Wise Student Report</h1>
+							<p:panel>
+								<p:panelGrid columns="4">
+									<p:outputLabel for="@next" style="color:red"
+										value="Select Date"></p:outputLabel>
+									<p:calendar value="#{ageWiseStrengthReport.searchDate}"
+										pattern="dd/MM/yyyy" navigator="true" required="true"
+										requiredMessage="Please Enter Date"></p:calendar>
+
+									<p:commandButton value="Submit"
+										actionListener="#{ageWiseStrengthReport.submit}"
+										update=":form1"></p:commandButton>
+									<p:commandButton value="Print">
+										<p:printer target=":form1:myPanel"></p:printer>
+									</p:commandButton>
+								</p:panelGrid>
+
+							</p:panel>
+							<p:panel header="Age Wise Student Report" id="myPanel">
+
+								<p:separator />
+								<center>
+									<p:panelGrid
+										columns="2"
+										layout="grid" styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+											<h:commandLink>
+												<p:graphicImage name="images/excellogo.png"
+													library="avalon-layout" width="100" height="40"></p:graphicImage>
+												<pe:exporter type="xlsx" target=":form1:attend"
+													fileName="Age_Wise_Strength"
+													></pe:exporter>
+											</h:commandLink>
+
+
+											<p:commandButton value="PDF" style="width:50px;" ajax="false"
+												process="@this"
+												actionListener="#{ageWiseStrengthReport.exportAgedPdf}">
+
+												<p:fileDownload value="#{ageWiseStrengthReport.file}" />
+											</p:commandButton>
+											
+								</p:panelGrid>
+								</center>
+								<p:separator />
+										
+								<p:dataTable reflow="true" id="attend" var="var"
+									value="#{ageWiseStrengthReport.studentList}">
+
+									<f:facet name="header">
+										<p:outputLabel value="                                                                                                                           Age Wise Strength Report"></p:outputLabel>
+									</f:facet>
+
+									<p:columnGroup type="header">
+										<p:row>
+											<p:column style="width:100px" rowspan="1" headerText="Class" />
+											<c:forEach items="#{ageWiseStrengthReport.religionList}"
+												var="category">
+												<p:column style="width:80px" colspan="3"
+													headerText="#{category.value}" />
+											</c:forEach>
+											<p:column style="width:120px" colspan="3" headerText=" Total" />
+											<p:column style="width:100px" rowspan="1"
+												headerText="Grand Total" />
+										</p:row>
+										<p:row>
+											<p:column rowspan="1" headerText="" />
+											<c:forEach items="#{ageWiseStrengthReport.religionList}"
+												var="category">
+											<p:column style="width:60px" headerText="Boys"></p:column>
+											<p:column style="width:60px" headerText="Girls"></p:column>
+											<p:column style="width:60px" headerText="Transgender"></p:column>
+											</c:forEach>
+											<p:column style="width:60px" headerText="Boys"></p:column>
+											<p:column style="width:60px" headerText="Girls"></p:column>
+											<p:column style="width:60px" headerText="Transgender"></p:column>
+										</p:row>
+									</p:columnGroup>
+
+									<p:column>
+										<p:outputLabel value="#{var.className}"></p:outputLabel>
+
+									</p:column>
+
+									<p:columns value="#{ageWiseStrengthReport.columnsList}"
+										var="ll">
+											<p:outputLabel value="#{var.attendanceMap[ll]}"
+												style="text-align:center" />
+									</p:columns>
+									<p:column headerText="Boys">
+										<p:outputLabel value="#{var.boysTotal}"></p:outputLabel>
+
+									</p:column>
+
+									<p:column headerText="Girls">
+										<p:outputLabel value="#{var.girlTotal}"></p:outputLabel>
+
+									</p:column>
+
+									<p:column headerText="Transgender">
+										<p:outputLabel value="#{var.transTotal}"></p:outputLabel>
+
+									</p:column>
+
+									<p:column headerText="grand Total">
+										<p:outputLabel value="#{var.grandTotalBoysAndGirls}"></p:outputLabel>
+
+									</p:column>
+								</p:dataTable>
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

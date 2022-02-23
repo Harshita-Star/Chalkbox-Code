@@ -1,0 +1,176 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Bill Payment</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="myForm" style="margin-top: 250px;">
+							<center>
+								<u> <p:outputLabel
+										style="font-size:25px !important;margin-top:250px"
+										value="#{billPayment.billtype}"></p:outputLabel></u><br></br>
+
+							</center>
+							<p:outputLabel
+								style="float:right;font-size:20px !important;margin-right:30px; "
+								value="Dated:- #{billPayment.currentDate}"></p:outputLabel>
+							<br></br>
+							<center>
+								<table style="margin: 30px;" frame="box" border="1">
+									<tr>
+										<td style="width: 30%"><center>
+												<p:outputLabel style="font-size:15px !important;"
+													value="Bill OF:-      #{billPayment.selectedStudent.fname}  "></p:outputLabel>
+											</center></td>
+										<td style="width: 30%"><center>
+												<p:outputLabel style="font-size:15px !important;"
+													value="Student No:-   #{billPayment.selectedStudent.addNumber}  "></p:outputLabel>
+											</center></td>
+										<td style="width: 30%"><center>
+												<p:outputLabel style="font-size:15px !important;"
+													value="Class:-    #{billPayment.selectedStudent.className}  "></p:outputLabel>
+											</center></td>
+									</tr>
+
+								</table>
+							</center>
+							<p:outputPanel style="margin:30px;">
+								<table width="100%" frame="box" border="1">
+									<tr>
+										<td style="width: 80%"><p:outputLabel
+												style="font-size:15px !important;"
+												value=" Hostel Fee (Total) "></p:outputLabel></td>
+										<td style="width: 20%"><p:outputLabel
+												style="font-size:15px !important;"
+												value=" #{billPayment.totalHostelFee}"></p:outputLabel></td>
+									</tr>
+									<tr>
+										<td style="width: 80%"><p:outputLabel
+												style="font-size:15px !important;"
+												value=" Plus(+) Total Expenses (Till #{billPayment.currentDate})"></p:outputLabel>
+										</td>
+										<td style="width: 20%"><p:outputLabel
+												style="font-size:15px !important;"
+												value=" #{billPayment.otherExpe}"></p:outputLabel></td>
+
+
+
+									</tr>
+									<tr>
+										<td style="width: 80%"><p:outputLabel
+												style="font-size:15px !important;" value=" Total Amount"></p:outputLabel>
+										</td>
+										<td style="width: 20%"><p:outputLabel
+												style="font-size:15px !important;"
+												value=" #{billPayment.TOTALAMOUNT}"></p:outputLabel></td>
+
+
+									</tr>
+									<tr>
+										<td style="width: 80%"><p:outputLabel
+												style="font-size:15px !important;"
+												value=" Less(-) Installment Paid"></p:outputLabel></td>
+										<td style="width: 00%"><p:outputLabel
+												style="font-size:15px !important;"
+												value=" #{billPayment.totalpaidamount}"></p:outputLabel></td>
+									</tr>
+
+									<tr>
+										<td style="width: 80%"><p:outputLabel
+												style="font-size:15px !important;"
+												value=" Net payable Amount"></p:outputLabel></td>
+										<td style="width: 20%"><p:outputLabel
+												style="font-size:15px !important;"
+												value=" #{billPayment.leftAmount}"></p:outputLabel></td>
+
+
+									</tr>
+
+								</table>
+							</p:outputPanel>
+							<br></br>
+							<p:outputPanel style="margin:30px;">
+
+								<div style="border: 1px solid black; width: 100%;">Please
+									Pay the Amount Via</div>
+								<p:panelGrid>
+									<table frame="box" width="100%">
+
+										<tr>
+											<td><p:outputLabel
+													value=" 1. D.D in the name of Touch Woood School, Dehradun, payable al Dehradun."></p:outputLabel>
+											</td>
+										</tr>
+										<tr>
+
+											<td><p:outputLabel
+													value=" 2. Cross cheque in the favour of Touch Wood School, Dehradun."></p:outputLabel></td>
+										</tr>
+
+										<tr>
+											<td><p:outputLabel
+													value=" 3. Account transfer via RTGS/NEFT in the name of : "></p:outputLabel>
+											</td>
+
+										</tr>
+										<tr>
+											<td><p:outputLabel
+													value="					   A.) Touch Wood School Society, Dehradun    at Punjab National Bank, Sahastradhara Road, Dehradun (A/C No. 4925002100000025)
+   IFS Code PUNB0492500. "></p:outputLabel>
+											</td>
+
+										</tr>
+
+										<tr>
+											<td><p:outputLabel
+													value="					   B.) The Woods, Dehradun at Punjab National Bank, Sahastradhara Road, Dehradun (A/C No. 4925002100001015)
+   IFS Code PUNB0492500. "></p:outputLabel>
+											</td>
+
+										</tr>
+
+
+										<tr>
+											<td><p:outputLabel value=" 4. Pay via CASH."></p:outputLabel>
+											</td>
+										</tr>
+
+									</table>
+
+								</p:panelGrid>
+							</p:outputPanel>
+							<br></br>
+							<br></br>
+							<p:panelGrid columns="1" style="margin: 30px;">
+								<p:outputLabel
+									style="font-family: bold;font-size: 15px !important;"
+									value="Thank You"></p:outputLabel>
+								<p:outputLabel
+									style="font-family: bold;font-size: 15px !important;"
+									value="Yours Sincerely,"></p:outputLabel>
+								<p:outputPanel style="height:25px"></p:outputPanel>
+								<p:outputLabel
+									style="font-family: bold;font-size: 15px !important;"
+									value="(Mr. Aman Saxena)"></p:outputLabel>
+								<p:outputLabel
+									style="font-family: bold;font-size: 15px !important;"
+									value="Administrator"></p:outputLabel>
+							</p:panelGrid>
+
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

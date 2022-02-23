@@ -1,0 +1,87 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/schoolMasterTemplate.xhtml">
+
+	<ui:define name="title">Student Ledger</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					
+					
+					
+				
+					<div class="card card-w-title">
+					   <h:form id="form">
+                           <p:panel id="dataTable" >
+								<p:dataTable style="padding: 0px;" reflow="true" id="dtt"
+											value="#{studentLedgerBean.list}" var="var">
+											
+											<f:facet name="header">
+												<p:panelGrid columns="3">
+													<p:outputLabel value="Name:- #{studentLedgerBean.name}"></p:outputLabel>
+													<p:outputLabel value="Father Name:- #{studentLedgerBean.fathersName}"></p:outputLabel>
+													<p:outputLabel value="Class:- #{studentLedgerBean.className}"></p:outputLabel>
+												</p:panelGrid>
+											</f:facet>
+                                           
+                                         <p:column headerText="Installment">
+												<p:outputLabel value="#{var.feeMonth}"></p:outputLabel>
+											</p:column>
+											
+											
+                                           
+                                          	<p:column headerText="Fee Name">
+												<p:outputLabel id="feeName#{var.sno}" value="#{var.feeName}"></p:outputLabel>
+											</p:column>
+											
+										
+											<p:column headerText="Assigned Amount">
+												<p:outputLabel id="dueamt#{var.sno}"
+													onfocus="this.select();" value="#{var.dueamount}">
+												</p:outputLabel>
+											
+											</p:column>
+											
+
+											<p:column headerText="Received Amount">
+												<p:outputLabel  styleClass="payamtClass"
+													value="#{var.strAmount}">
+												
+												</p:outputLabel>
+												
+											</p:column>
+											
+												<p:column headerText="Date">
+												<p:outputLabel  styleClass="payamtClass"
+													value="#{var.stdate}">
+												
+												</p:outputLabel>
+												
+											</p:column>
+											
+												<p:column headerText="BAL.AMOUNT">
+												<p:outputLabel  styleClass="payamtClass"
+													value="#{var.amount}">
+												
+												</p:outputLabel>
+												
+											</p:column>
+											
+											
+										</p:dataTable>
+
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

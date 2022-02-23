@@ -1,0 +1,194 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Show Leave Repor</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<h1>Show Leave Report</h1>
+							<p:panel>
+
+
+								<p:panelGrid columns="5"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:outputLabel value="Starting Date of Apply Leave: "
+										for="@next" style="color:red"></p:outputLabel>
+									<p:calendar pattern="dd/MM/yyyy" navigator="true"
+										yearRange="c-30:c+30" value="#{allLeaveReport.startingDate}"
+										required="true" requiredMessage="Please Enter Starting Date.">
+									</p:calendar>
+
+									<p:outputLabel value="Ending Date of Apply Leave: " for="@next"
+										style="color:red"></p:outputLabel>
+									<p:calendar pattern="dd/MM/yyyy" navigator="true"
+										yearRange="c-30:c+30" value="#{allLeaveReport.endingDate}"
+										required="true" requiredMessage="Please Enter Ending Date.">
+									</p:calendar>
+
+								</p:panelGrid>
+
+								<br />
+								<p:separator />
+								<center>
+									<p:panelGrid
+										columns="2"
+										layout="grid" styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+
+
+
+									<p:commandButton icon="fa fa-search" styleClass="butwid" value="Show Report"
+										actionListener="#{allLeaveReport.showReport}"
+										update=":form:dt" />
+
+									<p:commandButton icon="fa fa-file-pdf-o"  value="PDF" styleClass="butwid" ajax="false"
+										process="@this"
+										actionListener="#{allLeaveReport.exportLeavesPdf}">
+
+										<p:fileDownload value="#{allLeaveReport.file}" />
+									</p:commandButton>
+
+									</p:panelGrid>
+								</center>
+								<p:separator />
+								<br />
+							</p:panel>
+
+							<p:panel>
+
+								<p:messages autoUpdate="true"></p:messages>
+								<p:dataTable stickyHeader="true" reflow="true"
+									style="width:100%;border-collapse:collapse" border="1"
+									value="#{allLeaveReport.studentlist}" var="var" id="dt"
+									rowStyleClass="#{var.status eq '0' ? 'redColored' : ''} #{var.status eq '1' ? 'greenColored' : ''} #{var.status eq '2' ? 'blueColored' : ''}">
+
+									<p:column headerText="Sr. No">
+
+										<f:facet name="header">
+											<center>
+												<p:outputLabel value="Sr. No."></p:outputLabel>
+											</center>
+										</f:facet>
+										<center>
+											<p:outputLabel value="#{var.sno}"></p:outputLabel>
+										</center>
+									</p:column>
+
+
+									<p:column sortBy="#{var.studentName}" headerText="Student Name">
+
+										<f:facet name="header">
+											<center>
+												<p:outputLabel value="Student Name"></p:outputLabel>
+											</center>
+										</f:facet>
+										<center>
+											<p:outputLabel value="#{var.studentName}"></p:outputLabel>
+										</center>
+									</p:column>
+
+									<p:column headerText="Father's Name">
+
+										<f:facet name="header">
+											<center>
+												<p:outputLabel value="Father's Name"></p:outputLabel>
+											</center>
+										</f:facet>
+										<center>
+											<p:outputLabel value="#{var.fathersName}"></p:outputLabel>
+										</center>
+									</p:column>
+
+
+									<p:column sortBy="#{var.className}" headerText="Student Name">
+
+										<f:facet name="header">
+											<center>
+												<p:outputLabel value="Class Name"></p:outputLabel>
+											</center>
+										</f:facet>
+										<center>
+											<p:outputLabel value="#{var.className}"></p:outputLabel>
+										</center>
+									</p:column>
+
+
+
+									<p:column sortBy="#{var.sectionName}" headerText="Student Name">
+
+										<f:facet name="header">
+											<center>
+												<p:outputLabel value="Section Name"></p:outputLabel>
+											</center>
+										</f:facet>
+										<center>
+											<p:outputLabel value="#{var.sectionName}"></p:outputLabel>
+										</center>
+									</p:column>
+
+
+
+									<p:column headerText="Starting date Of leave Apply">
+
+										<f:facet name="header">
+											<center>
+												<p:outputLabel value="Starting date Of leave Apply"></p:outputLabel>
+											</center>
+										</f:facet>
+										<center>
+											<p:outputLabel value="#{var.startDate}"></p:outputLabel>
+										</center>
+									</p:column>
+
+
+									<p:column headerText="Ending date Of leave Apply">
+
+										<f:facet name="header">
+											<center>
+												<p:outputLabel value="Ending date Of leave Apply"></p:outputLabel>
+											</center>
+										</f:facet>
+										<center>
+											<p:outputLabel value="#{var.endDate}"></p:outputLabel>
+										</center>
+									</p:column>
+
+
+									<p:column headerText="Father's Mobile No.">
+
+										<f:facet name="header">
+											<center>
+												<p:outputLabel value="Father's Mobile No."></p:outputLabel>
+											</center>
+										</f:facet>
+										<center>
+											<p:outputLabel value="#{var.phone}"></p:outputLabel>
+										</center>
+									</p:column>
+
+
+
+
+
+								</p:dataTable>
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

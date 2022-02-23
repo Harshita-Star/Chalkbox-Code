@@ -1,0 +1,163 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Experince Certificate</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+
+
+
+
+							<p:messages autoUpdate="true" closable="true"></p:messages>
+							<p:panel header=" Experience Certificate">
+								<f:facet name="header">
+									<span>Experience Certificate</span>
+									<span> <p:commandLink
+											style="float: right;margin-left: 15px;color: blue;font-size:15px;"
+											immediate="true" value="View All"
+											action="experienceCertificateReport.xhtml?faces-redirect=true"></p:commandLink>
+									</span>
+								</f:facet>
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:outputLabel value="Select employee type"></p:outputLabel>
+									<p:selectOneRadio
+										value="#{rbscExperienceCertificate.selectType}">
+										<f:selectItem itemLabel="Existing" itemValue="Existing"></f:selectItem>
+										<f:selectItem itemLabel="Old" itemValue="Old"></f:selectItem>
+										<p:ajax update=":form" global="false"
+											listener="#{rbscExperienceCertificate.select}"></p:ajax>
+									</p:selectOneRadio>
+								</p:panelGrid>
+								<br></br>
+								<p:panelGrid rendered="#{rbscExperienceCertificate.search}"
+									columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:outputLabel
+										value="#{searchEmployeeVar.searchEmployeeEnterEmployeeName}"></p:outputLabel>
+									<p:autoComplete id="acSimple"
+										value="#{rbscExperienceCertificate.name}"
+										completeMethod="#{rbscExperienceCertificate.autoCompleteStudentInfo}" validatorMessage="Please Enter Correct value">
+                                      <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex> 
+										<!-- <p:ajax event="blur" update=":form3:up" listener="#{searchEmployee.searchEmployeeByName}" ></p:ajax> -->
+									</p:autoComplete>
+
+									<p:commandButton value="Show" styleClass="butwid" icon="fa fa-eye"
+										action="#{rbscExperienceCertificate.searchEmployeeByName}"
+										update="form"></p:commandButton>
+
+								</p:panelGrid>
+
+							</p:panel>
+							<p:panel header="Person Details" id="panel"
+								rendered="#{rbscExperienceCertificate.show}">
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel  for="@next" style="color:red" value="Dept No."></p:outputLabel>
+									<p:inputText value="#{rbscExperienceCertificate.deptNo}"
+										required="true" requiredMessage="Please Enter Department No" validatorMessage="Please Enter Correct value">
+									  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+									</p:inputText>
+
+									<p:outputLabel  for="@next" style="color:red" value="Certificate Issued Date"></p:outputLabel>
+									<p:calendar value="#{rbscExperienceCertificate.issuedDate}"
+										navigator="true" pattern="dd/MM/yyyy" yearRange="c-10:c+10"
+										required="true" requiredMessage="Please Select Issued Date">
+									</p:calendar>
+
+									<p:outputLabel for="@next" style="color:red"  value="Person Name"></p:outputLabel>
+									<p:inputText value="#{rbscExperienceCertificate.name}"
+										required="true" requiredMessage="Please Enter Person Name" validatorMessage="Please Enter Correct value">
+									  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+									</p:inputText>
+
+									<p:outputLabel  for="@next" style="color:red" value="Father's Name"></p:outputLabel>
+									<p:inputText value="#{rbscExperienceCertificate.fatherName}"
+										required="true" requiredMessage="Please Enter Father Name" validatorMessage="Please Enter Correct value">
+									  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+									</p:inputText>
+
+									<p:outputLabel  for="@next" style="color:red" value="Address"
+										rendered="#{rbscExperienceCertificate.showAddress}"></p:outputLabel>
+									<p:outputLabel value="#{rbscExperienceCertificate.address}"
+										rendered="#{rbscExperienceCertificate.showAddress}"
+										required="true" requiredMessage="Please Enter Father Name"></p:outputLabel>
+
+									<p:outputLabel for="@next" style="color:red"  value="Village Name"></p:outputLabel>
+									<p:inputText value="#{rbscExperienceCertificate.villageName}"
+										required="true" requiredMessage="Please Enter Village Name" validatorMessage="Please Enter Correct value">
+									  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+								    </p:inputText>
+
+									<p:outputLabel for="@next" style="color:red"  value="District Name"></p:outputLabel>
+									<p:inputText value="#{rbscExperienceCertificate.districtName}"
+										required="true" requiredMessage="Please Enter District Name" validatorMessage="Please Enter Correct value">
+									  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+									</p:inputText>
+
+									<p:outputLabel for="@next" style="color:red"  value="State Name"></p:outputLabel>
+									<p:inputText value="#{rbscExperienceCertificate.stateName}"
+										required="true" requiredMessage="Please Enter State Name" validatorMessage="Please Enter Correct value">
+									  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+									</p:inputText>
+
+
+									<p:outputLabel  for="@next" style="color:red" value="Designation"></p:outputLabel>
+									<p:inputText value="#{rbscExperienceCertificate.designation}"
+										required="true" requiredMessage="Please Enter Designation" validatorMessage="Please Enter Correct value">
+									  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+									</p:inputText>
+
+
+									<p:outputLabel for="@next" style="color:red"  value="From Date"></p:outputLabel>
+									<p:calendar value="#{rbscExperienceCertificate.fromDate}"
+										navigator="true" pattern="dd/MM/yyyy" yearRange="c-10:c+10"
+										required="true" requiredMessage="Please Select From Date">
+									</p:calendar>
+
+									<p:outputLabel for="@next" style="color:red"  value="To Date"></p:outputLabel>
+									<p:calendar value="#{rbscExperienceCertificate.toDate}"
+										navigator="true" pattern="dd/MM/yyyy" yearRange="c-10:c+10"
+										required="true" requiredMessage="Please Select To Date">
+									</p:calendar>
+								</p:panelGrid>
+								
+								
+								<br />
+								<p:separator />
+								<center>
+									<p:commandButton value="Submit" icon="fa fa-upload" styleClass="butwid"
+										action="#{rbscExperienceCertificate.submit}" update=":form"></p:commandButton>
+								</center>
+								<p:separator />
+								<br />
+								
+								<br></br>
+
+							</p:panel>
+
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

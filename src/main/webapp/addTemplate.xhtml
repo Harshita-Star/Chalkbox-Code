@@ -1,0 +1,63 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	<f:loadBundle var="addClassVar" basename="myProperties" />
+
+	<ui:define name="title">Add Template</ui:define>
+
+	<ui:define name="content">
+	<h:form id="form">
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						 <h:form id="form" >
+						 <p:growl showDetail="true"  autoUpdate="true"></p:growl>
+						<p:panel header="Add Template">
+					     <p:panelGrid columns="1">
+					     <p:outputLabel value="Title Name"></p:outputLabel>
+					     <p:inputText value="#{addTemplates.name}" validatorMessage="Please Enter Correct value">
+					       <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+					     </p:inputText>
+					     <p:outputLabel value="Message"></p:outputLabel>
+					     <p:inputTextarea value="#{addTemplates.message}" validatorMessage="Please Enter Correct value">
+					       <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+					     </p:inputTextarea>
+					     <f:facet name="footer">
+					     <p:panelGrid columns="3">
+					     <p:commandButton value="#name" action="#{addTemplates.name}" update=":form" disabled="#{addTemplates.showName}"></p:commandButton>
+					     <p:commandButton value="#date" action="#{addTemplates.date}" update=":form" disabled="#{addTemplates.showDate}"></p:commandButton>
+                         <p:commandButton value="Reset" action="#{addTemplates.reset}" update=":form"></p:commandButton>
+
+					     </p:panelGrid>
+					     </f:facet>
+					     </p:panelGrid>	
+					     
+					    
+                         </p:panel>
+                         
+                         <br />
+								<p:separator />
+								<center>
+									<p:commandButton styleClass="butwid" icon="fa fa-uplaod" value="submit" update=":form" action="#{addTemplates.submit}"></p:commandButton>
+								</center>
+								<p:separator />
+								<br />
+                         
+             
+	                  </h:form>
+						
+						
+							
+					</div>
+				</div>
+			</div>
+		</div>
+		</h:form>
+
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,70 @@
+		<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+						xmlns:ui="http://java.sun.com/jsf/facelets"
+						xmlns:h="http://java.sun.com/jsf/html"
+						xmlns:f="http://java.sun.com/jsf/core"
+						xmlns:p="http://primefaces.org/ui"
+						template="/WEB-INF/template.xhtml">
+
+			<ui:define name="title">Received Book</ui:define>
+
+			<ui:define name="content">
+			   
+					<div class="ui-fluid">
+						<div class="ui-g">
+							<div class="ui-g-12">
+								<div class="card card-w-title">
+								    <h:form id="form" >
+                <p:panel header="Receive Book Report">
+                <p:growl showDetail="true"  autoUpdate="true"></p:growl>
+                    <p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+                      <p:outputLabel value="Start Date" for="@next" style="color:red" ></p:outputLabel>
+                      <p:calendar value="#{receiveBookReport.startDate}" pattern="dd/MM/yyyy" navigator="true" required="true" requiredMessage="Please Enter Start Date"></p:calendar> 
+                      
+                      <p:outputLabel value="Start Date" for="@next" style="color:red" ></p:outputLabel>
+                      <p:calendar value="#{receiveBookReport.endDate}" pattern="dd/MM/yyyy" navigator="true" required="true" requiredMessage="Please Enter End Date"></p:calendar>
+                      
+                    <p:commandButton value="Search" update=":form" actionListener="#{receiveBookReport.searchData}"></p:commandButton>
+                    </p:panelGrid>
+                    <br></br>
+                    <p:panelGrid columns="1" >
+                    <p:dataTable reflow="true"  value="#{receiveBookReport.bookList}" var="var">
+                        <p:column headerText="S.No" >
+                          <p:outputLabel value="#{var.sNo}"></p:outputLabel>
+                        </p:column>
+                        
+                        <p:column headerText="Book Name">
+                          <p:outputLabel value="#{var.bookName}"></p:outputLabel>
+                        </p:column>
+                        
+                        <p:column headerText="Author Name">
+                          <p:outputLabel value="#{var.authorName}"></p:outputLabel>
+                        </p:column>
+                        
+                        <p:column headerText="Publication Name">
+                          <p:outputLabel value="#{var.publicationName}"></p:outputLabel>
+                        </p:column>
+                        
+                        <p:column headerText="Subject Name">
+                          <p:outputLabel value="#{var.subjectName}"></p:outputLabel>
+                        </p:column>
+                        
+                        <p:column headerText="Receive Date">
+                          <p:outputLabel value="#{var.receiveDateStr}"></p:outputLabel>
+                        </p:column>
+                        
+                        <p:column headerText="Receive Quantity">
+                          <p:outputLabel value="#{var.receiveQuantity}"></p:outputLabel>
+                        </p:column>
+                        
+                      </p:dataTable>
+                  </p:panelGrid> 
+                </p:panel>
+        </h:form>
+								</div>
+							</div>
+						</div>
+					</div>
+			   
+			</ui:define>
+
+		</ui:composition>

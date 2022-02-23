@@ -1,0 +1,640 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/schoolMasterTemplate.xhtml">
+
+	<ui:define name="title">Fee Collection</ui:define>
+
+	<ui:define name="content">
+
+		<style>
+			body {
+    background-color: white;
+     }
+			
+		</style>
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<p:panel header="Student Fee Collection" id="data">
+							   
+								<p:growl showDetail="true"  closable="true" autoUpdate="true"></p:growl>
+							<h3>	<p:outputLabel style="float: right;"  value="Total Collection :-  #{masterStudentFee.totalCollection}"></p:outputLabel></h3>
+								
+								
+								<div style="width:30%;float: left;">
+								<p:panelGrid columns="2"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel  for="@next" style="color:red" value="EBLM NO"></p:outputLabel>
+									<p:autoComplete onfocus="this.select();" value="#{masterStudentFee.autoname}"
+										completeMethod="#{masterStudentFee.autoCompleteStudentInfo}"
+										required="true" minQueryLength="2"
+										requiredMessage="Please select student">
+										<p:ajax event="query" global="false"></p:ajax>
+									</p:autoComplete>
+									
+									<p:outputLabel value="Fee Date"  for="@next" style="color:red;font-weight: bold;"></p:outputLabel>
+										<p:calendar disabled="false"
+											value="#{masterStudentFee.recipietDate}" required="true" requiredMessage="Select Fee Date" pattern="dd/MM/yyyy"
+											navigator="true" yearRange="c-10:c+10" />
+                                    <p:outputLabel></p:outputLabel>
+                                    <p:commandButton value="Search" update=":form"
+										action="#{masterStudentFee.searchStudentByAutoName}"></p:commandButton>
+
+
+								</p:panelGrid>
+									<p:panelGrid columns="2" layout="grid"
+										style="border:0px none; background-color:white;" styleClass="ui-panelgrid-blank form-group">
+										<p:graphicImage
+											value="#{masterStudentFee.sList.student_image}" width="80px"
+											height="80px"></p:graphicImage>
+
+
+
+										<p:outputLabel rendered="false" value="Student Name"></p:outputLabel>
+										<p:panelGrid columns="1">
+										<p:outputLabel value="#{masterStudentFee.name}"
+											style="font-weight: bold;"></p:outputLabel>
+											<p:outputLabel style="font-weight: bold;" value="#{masterStudentFee.srNo}"></p:outputLabel>
+									  <p:outputLabel value="#{masterStudentFee.sList.className}"></p:outputLabel>
+										
+									    </p:panelGrid>
+										<p:outputLabel></p:outputLabel>
+										<p:outputLabel />
+
+										<p:outputLabel value="Father name" style="font-weight: bold;"></p:outputLabel>
+										<p:outputLabel value="#{masterStudentFee.fathersName}"></p:outputLabel>
+
+										<p:outputLabel value="Mother Name" style="font-weight: bold;"></p:outputLabel>
+										<p:outputLabel value="#{masterStudentFee.sList.motherName}"></p:outputLabel>
+
+
+										<p:outputLabel value="Mobile No" style="font-weight: bold;"></p:outputLabel>
+										<p:outputLabel value="#{masterStudentFee.sList.fathersPhone}"></p:outputLabel>
+										
+
+										<p:outputLabel value="#{collectFeeVar.collectFeeDOBLabel}"
+											style="font-weight: bold;"></p:outputLabel>
+										<p:outputLabel value="#{masterStudentFee.dobString}"></p:outputLabel>
+										<p:outputLabel value="Address" style="font-weight: bold;"></p:outputLabel>
+										<p:outputLabel
+											value="#{masterStudentFee.sList.currentAddress}"></p:outputLabel>
+
+										
+										
+										
+									</p:panelGrid>
+								</div>
+								
+								<div style="width:70%;float: left;border-left:1px solid black;padding-left: 5px;">
+									<p:panelGrid columns="2" layout="grid"
+										style="border:0px none; background-color:white;" styleClass="ui-panelgrid-blank form-group">
+										<p:outputLabel value="Payment mode"  for="@next" style="color:red;font-weight: bold;"></p:outputLabel>
+										<p:selectOneRadio required="true"
+											requiredMessage="Please select a payment mode"
+											value="#{masterStudentFee.paymentMode}"
+											styleClass="form-group">
+											<f:selectItem itemLabel="Cash" itemValue="Cash"></f:selectItem>
+											<f:selectItem itemLabel="Cheque" itemValue="Cheque"></f:selectItem>
+											<f:selectItem itemLabel="Net Banking" itemValue="Net Banking"></f:selectItem>
+											<f:selectItem itemLabel="Challan" itemValue="Challan"></f:selectItem>
+
+											<p:ajax update=":form"
+												listener="#{masterStudentFee.paymentModeListener}"></p:ajax>
+										</p:selectOneRadio>
+										
+										<p:outputLabel rendered="#{masterStudentFee.showPaymentMode}"
+											value="Bank Name"  for="@next" style="color:red;font-weight: bold;"></p:outputLabel>
+										<p:selectOneMenu  rendered="#{masterStudentFee.showPaymentMode}"
+											required="true"
+											requiredMessage="Please Enter Bank name" editable="true" 
+											value="#{masterStudentFee.bankName}"
+											styleClass="form-group">
+											<f:selectItem itemLabel="KNSB" itemValue="KNSB"></f:selectItem>
+											<f:selectItem itemLabel="SBI" itemValue="SBI"></f:selectItem>
+											<f:selectItem itemLabel="BOB" itemValue="BOB"></f:selectItem>
+											<f:selectItem itemLabel="HDFC" itemValue="HDFC"></f:selectItem>
+                                            <f:selectItem itemLabel="ICICI" itemValue="ICICI"></f:selectItem>
+                                            <f:selectItem itemLabel="NTBL" itemValue="NTBL"></f:selectItem>
+                                            <f:selectItem itemLabel="AUCB" itemValue="AUCB"></f:selectItem>
+											
+										</p:selectOneMenu >
+											
+
+										<p:outputLabel rendered="#{masterStudentFee.showCheque}"
+											value="cheque number"  for="@next" style="color:red;font-weight: bold;"></p:outputLabel>
+										<p:inputText required="true"
+											requiredMessage="Please Enter cheque number"
+											rendered="#{masterStudentFee.showCheque}"
+											value="#{masterStudentFee.chequeNumber}"></p:inputText>
+
+										<p:outputLabel rendered="#{masterStudentFee.showCheque}"
+											value="Cheque Date"  for="@next" style="color:red;font-weight: bold;"></p:outputLabel>
+										<p:calendar required="true"
+											requiredMessage="Please Enter Cheque Date"
+											rendered="#{masterStudentFee.showCheque}"
+											value="#{masterStudentFee.challanDate}" pattern="dd/MM/yyyy"
+											navigator="true" yearRange="c-10:c+10" />
+
+
+										<p:outputLabel rendered="#{masterStudentFee.showChallan}"
+											value="Challan Number"  for="@next" style="color:red;font-weight: bold;"></p:outputLabel>
+										<p:inputText rendered="#{masterStudentFee.showChallan}"
+											required="true" requiredMessage="Please Enter Challan Number"
+											value="#{masterStudentFee.chequeNumber}"></p:inputText>
+
+										<p:outputLabel rendered="#{masterStudentFee.showChallan}"
+											value="Challan Date"  for="@next" style="color:red;font-weight: bold;"></p:outputLabel>
+										<p:calendar required="true"
+											requiredMessage="Please Enter Challan Date"
+											rendered="#{masterStudentFee.showChallan}"
+											value="#{masterStudentFee.challanDate}" pattern="dd/MM/yyyy"
+											navigator="true" yearRange="c-10:c+10" />
+
+										<p:outputLabel rendered="#{masterStudentFee.showNeft}"
+											value="NEFT / IMPS Number"  for="@next" style="color:red;font-weight: bold;"></p:outputLabel>
+										<p:inputText rendered="#{masterStudentFee.showNeft}"
+											required="true"
+											requiredMessage="Please Enter NEFT / IMPS Number"
+											value="#{masterStudentFee.chequeNumber}"></p:inputText>
+
+										<p:outputLabel rendered="#{masterStudentFee.showNeft}"
+											value="NEFT Date"  for="@next" style="color:red;font-weight: bold;"></p:outputLabel>
+										<p:calendar required="true"
+											requiredMessage="Please Enter NEFT Date"
+											rendered="#{masterStudentFee.showNeft}"
+											value="#{masterStudentFee.challanDate}" pattern="dd/MM/yyyy"
+											navigator="true" yearRange="c-10:c+10" />
+
+									</p:panelGrid>
+									<br/>
+									<div style="width:30%;float: left">
+                                       <p:panelGrid columns="2" style="float:right">
+                                       <p:selectBooleanCheckbox value="#{masterStudentFee.waveOffLateFee}">
+                                          <p:ajax listener="#{masterStudentFee.checkWaveOfFee}" update=":form" event="change"></p:ajax>
+                                       
+                                       </p:selectBooleanCheckbox>
+                                       <p:outputLabel value="WLF"></p:outputLabel>
+										</p:panelGrid>
+										<p:selectManyCheckbox id="grid3"
+											value="#{masterStudentFee.selectedCheckFees}"
+											layout="responsive" columns="1">
+											<f:selectItems value="#{masterStudentFee.installmentList}"></f:selectItems>
+											<p:ajax event="change" listener="#{masterStudentFee.checkingInstallment}" update=":form"></p:ajax>
+										</p:selectManyCheckbox>
+										<p:outputLabel style="font-weight:bold" value="Total Selected Amount : #{masterStudentFee.totalseletedAMT}"></p:outputLabel>
+                                           <p:panelGrid columns="2"> 
+										<p:commandButton style="width:100px;" value="Show Fees"
+											actionListener="#{masterStudentFee.newGenerateFee}"
+											update=":form"></p:commandButton>
+											<p:commandButton style="width:100px;" rendered="#{masterStudentFee.directSubmitFee}" value="Submit"
+											action="#{masterStudentFee.submitNow}"
+											update=":form"></p:commandButton>
+											
+											<p:commandButton style="width:100px;" value="Fee Certificate"
+											action="#{masterStudentFee.createInstallment}" oncomplete="PF('installDialog').show();"
+											update=":installForm,:form"></p:commandButton>
+											
+											<p:commandButton style="width:100px;" value="Student Ledger"
+											action="#{masterStudentFee.studentLedger}" 
+											></p:commandButton>
+											</p:panelGrid>
+									</div>
+									<div style="width:70%;float: right">
+
+										<p:dataTable rendered="#{masterStudentFee.nonDirectFeeSubmit}" style="padding: 0px;" reflow="true" id="dtt"
+											value="#{masterStudentFee.newclassFeelist}" var="var">
+                                           
+                                           <f:facet name="header">
+                                              <p:outputLabel value="#{masterStudentFee.remark}"></p:outputLabel>
+                                           </f:facet>
+ 
+ 
+											<p:column headerText="S.No." style="width:60px;">
+												<p:outputLabel value="#{var.sno}"></p:outputLabel>
+											</p:column>
+
+											
+											<p:column headerText="Fee Name">
+												<p:outputLabel id="feeName#{var.sno}" value="#{var.feeName}-"></p:outputLabel>
+											</p:column>
+											
+											<p:column headerText="Installment">
+												<p:outputLabel value="#{var.feeInstallment}"></p:outputLabel>
+											</p:column>
+											
+											
+
+											<p:column headerText="Due Amount">
+												<p:outputLabel id="dueamt#{var.sno}"
+													onfocus="this.select();" value="#{var.dueamount}">
+												</p:outputLabel>
+												<f:facet name="footer">
+													<p:outputLabel value=" #{masterStudentFee.dueAmount}"></p:outputLabel>
+												</f:facet>
+											</p:column>
+											<p:column headerText="Discount">
+												<p:inputText disabled="#{var.disabledDiscountFee}" id="pdiscount#{var.sno}"
+													styleClass="discountClass"
+													onkeyup="changeDiscount(#{var.sno},'discount');"
+													onfocus="this.select();" value="#{var.payDiscount}"  >
+                                                    
+													<f:attribute name="auto" value="#{var.sno}"></f:attribute>
+                        								<p:keyFilter mask="pnum" />
+												</p:inputText>
+												<f:facet name="footer">
+													<p:outputLabel id="discount"
+														value="#{masterStudentFee.discountAmount}" ></p:outputLabel>
+												</f:facet>
+											</p:column>
+
+											<p:column headerText="Submit Amount">
+												<p:inputText id="pamt#{var.sno}" styleClass="payamtClass"
+													onkeyup="totalAmount();" onfocus="this.select();"
+													value="#{var.payAmount}">
+														<p:keyFilter mask="pnum" />
+											
+												</p:inputText>
+												<f:facet name="footer">
+													<p:outputLabel id="submit"
+														value="#{masterStudentFee.submitAmount}"></p:outputLabel>
+
+												</f:facet>
+											</p:column>
+											
+											<f:facet name="footer">
+													<p:commandButton
+												value="Submit"
+												action="#{masterStudentFee.previousSubmit}" update=":form"></p:commandButton>
+												</f:facet>
+											
+										</p:dataTable>
+										<br />
+										
+									</div>
+								</div>
+								
+								<br></br>
+								<br></br>
+								<br></br>
+								<br></br>
+								<br></br>
+
+
+								<p:dataTable id="up" reflow="true"
+									tableStyle="table-layout:auto;"
+									style="float: right;width: 100%;" var="fee"
+									value="#{masterStudentFee.dailyfee}">
+
+
+                                 <p:column style="font-size:12px !important"
+										headerText="Receipt no">
+
+										<f:facet name="header">
+								Receipt No.
+							</f:facet>
+										<h:outputText style="font-size:15px !important"
+											value="#{fee.reciptno}" />
+									</p:column>
+
+
+
+									<p:column style="font-size:12px !important"
+										headerText="Total amount">
+
+										<f:facet name="header">
+							 Total	Amount
+							</f:facet>
+										<h:outputText style="font-size:15px !important"
+											value="#{fee.amount}" />
+									</p:column>
+
+									<p:column style="font-size:12px !important"
+										headerText="Total Discount">
+
+										<f:facet name="header">
+							 Total  Discount
+							</f:facet>
+										<h:outputText style="font-size:15px !important"
+											value="#{fee.discount}" />
+									</p:column>
+
+									<p:column style="font-size:12px !important"
+										headerText="Payment Mode">
+
+										<f:facet name="header">
+								Payment Mode 
+							</f:facet>
+										<h:outputText style="font-size:15px !important"
+											value="#{fee.paymentmode} #{fee.bankname}"  />
+									</p:column>
+
+
+									<p:column style="font-size:12px !important"
+										headerText="Installment">
+
+										<f:facet name="header">
+								Installment 
+							</f:facet>
+										<h:outputText style="font-size:15px !important"
+											value="#{fee.feeRemark}" />
+									</p:column>
+
+
+
+
+									<p:column
+										style="font-size:12px !important;width:80px !important;"
+										headerText="Date">
+
+										<f:facet name="header">
+								Date
+							</f:facet>
+										<h:outputText style="font-size:15px !important"
+											value="#{fee.feeDateStr}" />
+									</p:column>
+
+									<p:column
+										style="font-size:12px !important;width:80px !important;"
+										headerText="Date">
+
+										<f:facet name="header">
+								User
+							</f:facet>
+										<h:outputText style="font-size:15px !important"
+											value="#{fee.user}" />
+									</p:column>
+
+									<p:column rendered="#{masterStudentFee.showAdminAuth}" exportable="false"
+										style="font-size:9px !important;width:50px !important;"
+										headerText="Edit">
+										<f:facet name="Edit">
+											<p:outputLabel style="font-size:9px !important" value="Edit"></p:outputLabel>
+										</f:facet>
+										<p:commandButton value="Edit" 
+											action="#{masterStudentFee.editFee}"
+											oncomplete="PF('editfee').show();" update=":form5">
+											<f:setPropertyActionListener
+												target="#{masterStudentFee.selectedstudent}" value="#{fee}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+
+                                   <p:column  exportable="false"
+										style="font-size:9px !important;width:50px !important;"
+										headerText="View">
+										<f:facet name="View">
+											<p:outputLabel style="font-size:9px !important" value="Edit"></p:outputLabel>
+										</f:facet>
+										<p:commandButton value="View"
+											action="#{masterStudentFee.editFee}"
+											oncomplete="PF('viewfee').show();" update=":form6">
+											<f:setPropertyActionListener
+												target="#{masterStudentFee.selectedstudent}" value="#{fee}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+									
+										<p:column rendered="#{masterStudentFee.showAdminAuth}" exportable="false"
+							style="font-size:9px !important;width:50px !important;"
+							headerText="Cancel">
+							<f:facet name="header">
+								<p:outputLabel style="font-size:9px !important" value="Cancel"></p:outputLabel>
+							</f:facet>
+							<p:commandButton icon="ui-icon-close" action="#{masterStudentFee.checkcancelOTP}"
+								oncomplete="PF('cancelfee').show();" update=":form2">
+								<f:setPropertyActionListener
+									target="#{masterStudentFee.selectedstudent}" value="#{fee}"></f:setPropertyActionListener>
+							</p:commandButton>
+						</p:column>
+
+								</p:dataTable>
+
+
+
+							</p:panel>
+
+						</h:form>
+						</div>
+						
+						<h:form id="form2">
+				<p:dialog header="Cancel Fee" widgetVar="cancelfee" modal="true">
+					<p:outputLabel rendered="#{masterStudentFee.check}" style="font-weight:bold;" value="OTP SEND TO #{masterStudentFee.discoutnNo}"></p:outputLabel>
+					<br/>
+					<br/>
+					<div class="ui-g form-group">
+	
+					
+					<p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group"
+                                        style="border:0px none; background-color:transparent;">
+                                             <p:outputLabel rendered="#{masterStudentFee.check}" value="OTP"></p:outputLabel>
+                             <p:inputText rendered="#{masterStudentFee.check}" value="#{masterStudentFee.otpInput}"></p:inputText>
+                        
+						<p:outputLabel value="Remark " for="@next" style="color:red" ></p:outputLabel>
+						<p:inputTextarea value="#{masterStudentFee.cancelremark}"
+							required="true" requiredMessage="Please enter  Remark"></p:inputTextarea>
+
+					</p:panelGrid>
+					
+					</div>
+					<br/>
+					<p:commandButton value="yes"
+							actionListener="#{masterStudentFee.cancelReceipt}"
+							update=":form :form2"></p:commandButton>
+							<br/><br/>
+						<p:commandButton value="No" onclick="PF('cancelfee').hide();"
+							update=":form2"></p:commandButton>
+				</p:dialog>
+			</h:form>
+						<h:form id="form5">
+							<p:dialog header="Edit Fee" height="500"  widgetVar="editfee" modal="true">
+
+								<p:outputPanel id="up">
+									<div class="ui-g form-group">
+									<p:panelGrid columns="2">
+                                        <p:outputLabel value="Date">
+                                            
+                                        </p:outputLabel>
+                                        <p:calendar value="#{masterStudentFee.changeDate}" pattern="dd/MM/yyyy" navigator="true" yearRange="c-10:c+10"></p:calendar>
+                                        </p:panelGrid>
+										<p:dataTable value="#{masterStudentFee.feesSelected}"
+										scrollable="true" scrollHeight="400"	var="var">
+
+											<p:column headerText="FeeName">
+												<p:outputLabel style="font-size:15px !important" value="#{var.feeName}"></p:outputLabel>
+											</p:column>
+
+											<p:column headerText="Pay Amount">
+												<p:inputText style="font-size:15px !important" value="#{var.feeamunt}">
+													<p:ajax listener="#{masterStudentFee.updatelistner}"
+														update=":form5:up"></p:ajax>
+												</p:inputText>
+												<f:facet name="footer">
+													<p:outputLabel style="font-size:15px !important" value="#{masterStudentFee.totalPayAmunt}"></p:outputLabel>
+												</f:facet>
+											</p:column>
+
+
+											<p:column headerText="Pay Discount">
+												<p:inputText style="font-size:15px !important" value="#{var.discount}">
+
+													<p:ajax listener="#{masterStudentFee.updatelistner}"
+														update=":form5:up"></p:ajax>
+
+												</p:inputText>
+
+												<f:facet name="footer">
+													<p:outputLabel style="font-size:15px !important"
+														value="#{masterStudentFee.totalDiscountAmount}"></p:outputLabel>
+												</f:facet>
+											</p:column>
+
+
+											<f:facet name="footer">
+												<p:commandButton value="Update"
+													actionListener="#{masterStudentFee.update}"
+													update=":form5 :form"></p:commandButton>
+
+											</f:facet>
+
+										</p:dataTable>
+
+
+
+									</div>
+								</p:outputPanel>
+							</p:dialog>
+						</h:form>
+						
+						
+						<h:form id="form6">
+							<p:dialog header="View Fee"  height="500" widgetVar="viewfee" modal="true" >
+
+								<p:outputPanel id="up">
+									<div class="ui-g form-group">
+									
+                                        
+										<p:dataTable value="#{masterStudentFee.feesSelected}"
+											var="var" scrollable="true" scrollHeight="400">
+
+											<p:column headerText="FeeName">
+												<p:outputLabel style="font-size:15px !important" value="#{var.feeName}"></p:outputLabel>
+											</p:column>
+											
+											<p:column headerText="Installment">
+												<p:outputLabel style="font-size:15px !important" value="#{var.intallment}"></p:outputLabel>
+											</p:column>
+
+											<p:column headerText="Pay Amount">
+												<p:outputLabel style="font-size:15px !important" value="#{var.feeamunt}">
+													
+												</p:outputLabel>
+												<f:facet name="footer">
+													<p:outputLabel style="font-size:15px !important" value="#{masterStudentFee.totalPayAmunt}"></p:outputLabel>
+												</f:facet>
+											</p:column>
+
+
+											<p:column headerText="Pay Discount">
+												<p:outputLabel style="font-size:15px !important" value="#{var.discount}">
+
+
+												</p:outputLabel>
+
+												<f:facet name="footer">
+													<p:outputLabel style="font-size:15px !important"
+														value="#{masterStudentFee.totalDiscountAmount}"></p:outputLabel>
+												</f:facet>
+											</p:column>
+
+										</p:dataTable>
+
+
+
+									</div>
+								</p:outputPanel>
+							</p:dialog>
+						</h:form>
+
+
+
+						<h:form id="otpdialog">
+							<p:dialog header="Discount OTP" widgetVar="otp"
+								showEffect="explode" hideEffect="bounce"
+								style="text-align:center">
+								<p:outputLabel
+									value="OTP SEND TO #{masterStudentFee.discoutnNo}"></p:outputLabel>
+								<br />
+								<p:panelGrid columns="2">
+									<p:outputLabel value="OTP"></p:outputLabel>
+									<p:inputText value="#{masterStudentFee.otpInput}"></p:inputText>
+									<p:commandButton value="submit"
+										action="#{masterStudentFee.discountSave}"></p:commandButton>
+								</p:panelGrid>
+							</p:dialog>
+						</h:form>
+						
+						
+						
+						<h:form id="conn">
+							<p:dialog header="Entry Time Discount" widgetVar="dis"
+								showEffect="explode" hideEffect="bounce"
+								style="text-align:center">
+								<br />
+								<p:panelGrid columns="2">
+									<p:outputLabel value="Reason"></p:outputLabel>
+									<p:selectOneMenu editable="true" value="#{masterStudentFee.reason}">
+									       <f:selectItem itemLabel="Management Discount" itemValue="Management Discount"></f:selectItem>
+									       <f:selectItem itemLabel="Late Addmission Discount" itemValue="Late Addmission Discount"></f:selectItem>
+									       <f:selectItem itemLabel="Transfer Case" itemValue="Transfer Case"></f:selectItem>
+									       <f:selectItem itemLabel="Other" itemValue="other"></f:selectItem>
+									</p:selectOneMenu>
+									
+									<p:commandButton value="submit"
+										action="#{masterStudentFee.submit}" update=":conn :form"></p:commandButton>
+								</p:panelGrid>
+							</p:dialog>
+						</h:form>
+						
+						<h:form id="installForm">
+							<p:dialog header="Select Installment" widgetVar="installDialog"
+								showEffect="explode" hideEffect="bounce"
+								style="text-align:center">
+								<p:panelGrid columns="2">
+								
+									<p:outputLabel value="Session" for="@next" style="color:red" ></p:outputLabel>
+									<p:selectOneMenu  multiple="true"
+										value="#{masterStudentFee.session}" required="true"
+										requiredMessage="Please Select session">
+							             <f:selectItem itemLabel="select Here" itemValue=""></f:selectItem>
+							             <f:selectItem itemLabel="2018-2019" itemValue="2018-2019"></f:selectItem>
+							             <f:selectItem itemLabel="2019-2020" itemValue="2019-2020"></f:selectItem>			
+									      <f:selectItem itemLabel="2020-2021" itemValue="2020-2021"></f:selectItem>			
+									
+									</p:selectOneMenu>
+								
+									<p:outputLabel value="Installment" for="@next" style="color:red" ></p:outputLabel>
+									<p:selectCheckboxMenu  multiple="true"
+										value="#{masterStudentFee.checkMonthSelected}" required="true"
+										requiredMessage="Please Select Installment">
+										<f:selectItems value="#{masterStudentFee.installmentList2}"></f:selectItems>
+									</p:selectCheckboxMenu>
+									
+									<p:commandButton value="Submit" action="#{masterStudentFee.printFeeCertificate}"></p:commandButton>
+								</p:panelGrid>
+							</p:dialog>
+						</h:form>
+					
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,100 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Add/Edit Employee Category</ui:define>
+
+    <ui:define name="content">
+       
+            <div class="ui-fluid">
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <div class="card card-w-title">
+                             <h:form id="form" >
+				 <h1>Add/Edit/View Employee Category Here</h1>
+				 	<p:panel header="Add Employee Category">
+               			<p:messages closable="true" autoUpdate="true"></p:messages>
+               			<p:panelGrid columns="3" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+               			
+               				<p:outputLabel value="Add Employee Category" for="@next" style="color:red" ></p:outputLabel>
+               				<p:inputText value="#{editEmpCategory.employeeCategory}" required="true" requiredMessage="Please Enter Category Name" validatorMessage="Please Enter Correct value">
+               				   <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+               				 </p:inputText>
+               				
+               				<p:commandButton update="form" action="#{editEmpCategory.addEmployeeCategory}" value="Add Category Here"></p:commandButton>
+               				
+               			</p:panelGrid>
+               		
+               		</p:panel>
+					<p:panel header="Edit Employee Category" id="panel">
+					<p:panelGrid columns="2">
+						<p:dataTable value="#{editEmpCategory.categoryList}" var="var" >
+									
+							<f:facet name="header">
+								All Employee Category
+							</f:facet>
+							
+							<p:column sortBy="#{var.category}" headerText="Employee Category">
+								<p:outputLabel value="#{var.category}"></p:outputLabel>
+							</p:column>
+							
+							<p:column headerText="Edit">
+								<center>
+								<p:commandButton style="width:10%" immediate="true" update=":editForm" oncomplete="PF('editDialog').show();" icon="ui-icon-pencil" action="#{editEmpCategory.editEmpDetails}">
+									<f:setPropertyActionListener target="#{editEmpCategory.selectedCategory}" value="#{var}"></f:setPropertyActionListener>
+								</p:commandButton>
+								</center>
+							</p:column>
+							
+							<p:column headerText="Delete">
+							<center>
+								<p:commandButton style="width:10%" immediate="true" update=":dltForm" oncomplete="PF('dlg').show();" icon="ui-icon-trash" >
+									<f:setPropertyActionListener target="#{editEmpCategory.selectedCategory}" value="#{var}"></f:setPropertyActionListener>
+								</p:commandButton>
+								</center>
+							</p:column>
+						</p:dataTable>
+							
+					</p:panelGrid>
+					</p:panel>
+				</h:form>
+				<h:form id="dltForm">
+					<p:dialog resizable="false" widgetVar="dlg" header="Do you really want to delete this category" showEffect="fade" hideEffect="explode" modal="true">
+					<div class="ui-g form-group">
+						<p:panelGrid columns="2"  styleClass="ui-panelgrid-blank form-group"
+                                        style="border:0px none; background-color:transparent;">
+							<p:commandButton update=":form,:dltForm" actionListener="#{editEmpCategory.deleteNow}" value="Yes"></p:commandButton>
+							<p:commandButton value="No" update=":form" oncomplete="PF('dlg').hide();"></p:commandButton>
+						</p:panelGrid>
+						</div>
+					</p:dialog>
+							
+				</h:form>
+				<h:form id="editForm">
+					<p:dialog resizable="false" widgetVar="editDialog" header="Edit category" showEffect="fade" hideEffect="explode" modal="true">
+					<div class="ui-g form-group">
+					
+						<p:panelGrid columns="2"  styleClass="ui-panelgrid-blank form-group"
+                                        style="border:0px none; background-color:transparent;">
+							<p:outputLabel value="Category" for="@next" style="color:red" ></p:outputLabel>
+							<p:inputText value="#{editEmpCategory.category}" required="true" requiredMessage="Please enter category" validatorMessage="Please Enter Correct value">
+							  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+							</p:inputText>
+							<p:commandButton update=":form:panel,:editForm" actionListener="#{editEmpCategory.editNow}" value="Save Here"></p:commandButton>
+						</p:panelGrid>
+						</div>
+					</p:dialog>
+				</h:form>
+                
+          
+                        </div>
+                    </div>
+                </div>
+            </div>
+       
+    </ui:define>
+
+</ui:composition>

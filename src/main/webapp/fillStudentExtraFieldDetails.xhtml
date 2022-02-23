@@ -1,0 +1,242 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Fill Student Details</ui:define>
+
+    <ui:define name="content">
+       
+            <div class="ui-fluid">
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <div class="card card-w-title">
+                             	<h:form id="form">
+					<h1>Fill Student Details</h1>
+            			
+            			<p:panel header="Fill Student Details">
+            			<p:messages closable="true" autoUpdate="true"></p:messages>
+               			<p:panelGrid columns="6" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+               			
+           					<p:outputLabel value="Select Class" for="@next" style="color:red" ></p:outputLabel>
+           					<p:selectOneMenu value="#{stdExtraFieldDetail.selectedClass}" filter="true" required="true" requiredMessage="Please Select Class">
+           						<f:selectItem itemLabel="#{addExamVar.selectHereLabel}" itemValue=""></f:selectItem>
+           						<f:selectItems value="#{stdExtraFieldDetail.classList}"></f:selectItems>
+           						
+           						<p:ajax update="sectionid,semesterId,:form" listener="#{stdExtraFieldDetail.showSemester}"></p:ajax>
+           					</p:selectOneMenu>
+           					
+           					<p:outputLabel value="Section" for="@next" style="color:red" ></p:outputLabel>
+               		 		<p:selectOneMenu id="sectionid" value="#{stdExtraFieldDetail.selectedSection}"  filter="true" required="true" requiredMessage="Please Select Section"> 
+               		 			<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+               		 			
+               		 			<f:selectItems value="#{stdExtraFieldDetail.sectionList}"></f:selectItems>
+               		 			<p:ajax></p:ajax>
+               		 		</p:selectOneMenu>
+           					
+           					<p:outputLabel value="Select Term" for="@next" style="color:red" ></p:outputLabel>
+           					<p:selectOneMenu id="semesterId" value="#{stdExtraFieldDetail.selectedSemester}"  filter="true" required="true" requiredMessage="Please Select Term">
+           						<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+           						<f:selectItems value="#{stdExtraFieldDetail.termList}"></f:selectItems>
+           						<p:ajax></p:ajax>
+           					</p:selectOneMenu>
+           					
+           					<p:outputLabel value="Select Fill Type" for="@next" style="color:red" ></p:outputLabel>
+           					<p:selectOneRadio value="#{stdExtraFieldDetail.fillType}" required="true" requiredMessage="Please Select Fill Type">
+           						<f:selectItem itemLabel="Remark" itemValue="remark"></f:selectItem>
+           						<f:selectItem itemLabel="Other Value" itemValue="otherValue"></f:selectItem>
+           						<f:selectItem itemLabel="Attendance" itemValue="Attendance"></f:selectItem>
+           						<p:ajax listener="#{stdExtraFieldDetail.checkFillType}" update=":form"></p:ajax>
+           					</p:selectOneRadio>
+           					
+           				
+           				   <p:outputLabel  value="Attendance Fill Type" rendered="#{stdExtraFieldDetail.showAttendance}" for="@next" style="color:red"></p:outputLabel>
+           					<p:selectOneRadio  value="#{stdExtraFieldDetail.attendanceFillType}" required="true" requiredMessage="Please Select Attendance Fill Type" rendered="#{stdExtraFieldDetail.showAttendance}"> 
+           						<f:selectItem itemLabel="Manual" itemValue="Manual"></f:selectItem>
+           						<f:selectItem itemLabel="Auto" itemValue="Auto"></f:selectItem>
+           						   <p:ajax listener="#{stdExtraFieldDetail.checkAttendanceFillType}" update=":form"></p:ajax>
+           						
+           					</p:selectOneRadio>
+           					
+           					<p:outputLabel  value="Remark Fill Type" rendered="#{stdExtraFieldDetail.showRemarkFill}" for="@next" style="color:red"></p:outputLabel>
+           					<p:selectOneRadio  value="#{stdExtraFieldDetail.remarkFillType}" required="true" requiredMessage="Please Select Remark Fill Type" rendered="#{stdExtraFieldDetail.showRemarkFill}"> 
+           						<f:selectItem itemLabel="Manual" itemValue="Manual"></f:selectItem>
+           						<f:selectItem itemLabel="Auto" itemValue="Auto"></f:selectItem>
+           						   <p:ajax listener="#{stdExtraFieldDetail.checkRemarkFillType}" update=":form"></p:ajax>
+           						
+           					</p:selectOneRadio>
+           					
+           					
+           					
+           					
+           					
+           					
+               					
+           				</p:panelGrid>
+           				<br />
+								<p:separator />
+								<center>
+								<p:commandButton update=":form:pnl" value="Search" styleClass="butwid" icon="fa fa-search" actionListener="#{stdExtraFieldDetail.searchStudent}"></p:commandButton>
+								</center>
+								<p:separator />
+								<br />
+           				<br></br>
+           				<p:outputPanel id="pnl">
+           					<p:outputPanel rendered="#{stdExtraFieldDetail.showMsg}">
+           						<p:outputLabel value="NOTE:-" style="font-weight:bold"></p:outputLabel>
+           						<p:outputLabel value=" For adding principal remark please add it in class teacher's remark by adding "></p:outputLabel>
+           						<p:outputLabel value="P:-" style="font-weight:bold"></p:outputLabel> 
+           					</p:outputPanel>
+           					
+           					<p:dataTable id="dt" rendered="#{stdExtraFieldDetail.showTable}"   value="#{stdExtraFieldDetail.studentList}" var="var">
+           						
+           						<f:facet name="header">
+           						   <p:panelGrid columns="5" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4">
+           						        
+           						    <p:outputLabel rendered="#{stdExtraFieldDetail.showRemarkCopy}" value="Remark"></p:outputLabel>
+           				            <p:inputText rendered="#{stdExtraFieldDetail.showRemarkCopy}" value="#{stdExtraFieldDetail.remark}" validatorMessage="Please Enter Correct value">
+                                       <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+                                    </p:inputText>
+           						         
+           						    <p:commandButton update=":form:pnl" rendered="#{stdExtraFieldDetail.showRemarkCopy}"  value="Copy Remark" actionListener="#{stdExtraFieldDetail.copyRemark}"></p:commandButton>   
+           						       
+           						    <p:outputLabel value="Select Term" for="@next" style="color:red" rendered="#{stdExtraFieldDetail.showRemarkAuto}"></p:outputLabel>
+           					        <p:selectOneMenu  value="#{stdExtraFieldDetail.selectedSemesterAuto}"  filter="true" required="true" requiredMessage="Please Select Term" rendered="#{stdExtraFieldDetail.showRemarkAuto}">
+           						                 <f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+           						                 <f:selectItems value="#{stdExtraFieldDetail.termList}"></f:selectItems>
+           						                 <p:ajax></p:ajax>
+           					          </p:selectOneMenu>  
+           					          
+           					        <p:commandButton update=":form:pnl" rendered="#{stdExtraFieldDetail.showRemarkAuto}"  value="AutoFill" actionListener="#{stdExtraFieldDetail.autoFillRemark}"></p:commandButton>   
+           					           
+           						         
+           						         
+           						         <p:outputLabel rendered="#{stdExtraFieldDetail.showAttendanceCopy}" value="Max Attendance"></p:outputLabel>
+           				            <p:inputText rendered="#{stdExtraFieldDetail.showAttendanceCopy}" value="#{stdExtraFieldDetail.maxAttendance}" validatorMessage="Please Enter Correct value">
+           				     		  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+           				     	</p:inputText>
+           						         
+           						         
+           						      <p:commandButton update=":form:pnl" rendered="#{stdExtraFieldDetail.showAttendanceCopy}"  value="Copy Max Attendance" actionListener="#{stdExtraFieldDetail.maxAttendanceApplyAll}"></p:commandButton>   
+           						      
+           						      <p:outputLabel rendered="#{stdExtraFieldDetail.showAutoAtt}" value="Start Date" for="@next" style="color:red" ></p:outputLabel>
+		               		 		<p:calendar rendered="#{stdExtraFieldDetail.showAutoAtt}" value="#{stdExtraFieldDetail.startDate}" navigator="true" pattern="dd/MM/yyyy" required="true" requiredMessage="PLease Select Start Date"></p:calendar>
+		               		 		
+		               		 		<p:outputLabel rendered="#{stdExtraFieldDetail.showAutoAtt}" value="End Date" for="@next" style="color:red" ></p:outputLabel>
+		               		 		<p:calendar rendered="#{stdExtraFieldDetail.showAutoAtt}" value="#{stdExtraFieldDetail.endDate}" navigator="true" pattern="dd/MM/yyyy" required="true" requiredMessage="PLease Select End Date"></p:calendar>
+		               		 		
+           						         
+           						      <p:commandButton update=":form:pnl" rendered="#{stdExtraFieldDetail.showAutoAtt}"  value="AutoFill" actionListener="#{stdExtraFieldDetail.autoFillAtt}"></p:commandButton>   
+           						         
+           						         
+           						         
+           						     </p:panelGrid>
+           						   
+           						</f:facet>
+           						
+           						<p:column headerText="S.No." >
+           							<p:outputLabel value="#{var.sNo}"></p:outputLabel>
+           						</p:column>
+           						
+           						<p:column headerText="Student Name" sortBy="#{var.studentName}">
+           							<p:outputLabel value="#{var.studentName}"></p:outputLabel>
+           						</p:column>
+           						
+           						<p:column headerText="Addmission Number">
+           						<center><p:outputLabel value="#{var.srNo}"></p:outputLabel></center>	
+           						</p:column>
+           						
+           						<p:column rendered="#{stdExtraFieldDetail.showOther}" headerText="Height">
+           							<p:inputText value="#{var.height}" validatorMessage="Please Enter Correct value">
+           							  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+           							</p:inputText>
+           						</p:column>
+           						
+           						<p:column rendered="#{stdExtraFieldDetail.showOther}" headerText="Weight">
+           							<p:inputText value="#{var.weight}" validatorMessage="Please Enter Correct value">
+           							  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+           							</p:inputText>
+           						</p:column>
+           						
+           						<p:column rendered="#{stdExtraFieldDetail.showOther}" headerText="Vision">
+           							<p:inputText value="#{var.vision}" validatorMessage="Please Enter Correct value">
+           							   <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+           							</p:inputText>
+           						</p:column>
+           						
+           						<p:column rendered="#{stdExtraFieldDetail.showOther}" headerText="Blood Group">
+           							<p:inputText value="#{var.bloodGroup}" validatorMessage="Please Enter Correct value">
+           							  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+           							</p:inputText>
+           						</p:column>
+           			
+           						<p:column id="maxat" rendered="#{stdExtraFieldDetail.showAttendance}" headerText="Max Attendance">
+	           						<f:facet name="header">
+	           							<p:panelGrid columns="1" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+	           								<p:outputLabel style="font-weight:bold;" value="Max Attendance"></p:outputLabel>
+	           								<p:outputLabel rendered="false" value="Apply To All"></p:outputLabel>
+	           								<p:inputText rendered="false" value="#{stdExtraFieldDetail.maxAtt}" validatorMessage="Please Enter Correct value">
+	           									<p:ajax listener="#{stdExtraFieldDetail.maxAttendanceApplyAll}" update=":form:dt:maxat" event="blur"></p:ajax>
+	           									<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+	           								</p:inputText>
+	           							</p:panelGrid>
+	           						</f:facet>
+           							<p:inputText value="#{var.maxAttendance}" disabled="#{stdExtraFieldDetail.disableAttedance}" validatorMessage="Please Enter Correct value">
+           							  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+           							</p:inputText>
+           						</p:column>
+           			
+           						
+           						<p:column rendered="#{stdExtraFieldDetail.showAttendance}" headerText="Attendance" >
+           							<p:inputText value="#{var.attendance}" disabled="#{stdExtraFieldDetail.disableAttedance}" validatorMessage="Please Enter Correct value">
+           							  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+           							</p:inputText>
+           						</p:column>
+           						
+           						<p:column rendered="#{stdExtraFieldDetail.showRemark}" headerText="Class Teacher Remark">
+           							<p:inputTextarea  value="#{var.remark}" >
+           							</p:inputTextarea>
+           						</p:column>
+           						
+           						<f:facet name="footer">
+           						<center>
+           						<p:commandButton update=":form,:MsgLimitForm" value="Submit" styleClass="butwid" icon="fa fa-upload" actionListener="#{stdExtraFieldDetail.submitValue}"  oncomplete="PF('MsgLmtDlg').show();"></p:commandButton>
+           						
+           						</center>
+           					</f:facet>
+           					</p:dataTable>
+           				</p:outputPanel>
+					</p:panel>
+				</h:form>
+				
+						
+							<h:form id="MsgLimitForm" style="overflow:hidden">
+				<p:dialog header="ALERT : " width="500" widgetVar="MsgLmtDlg"
+					modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+					<center>
+						<p:outputLabel value="#{stdExtraFieldDetail.message}"
+							style="font-size:14px;font-weight: bold;" />
+					</center>
+					<br></br>
+					<br></br>
+					<center>
+						<p:commandButton value="OK" 
+							update="MsgLimitForm"
+							onclick="PF('MsgLmtDlg').hide();"
+												
+							 />
+						<br /> <br />
+											</center>
+					<br></br>
+				</p:dialog>
+			</h:form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+       
+    </ui:define>
+
+</ui:composition>

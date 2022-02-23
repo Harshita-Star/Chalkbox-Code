@@ -1,0 +1,58 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/masterTemplate.xhtml">
+
+    <ui:define name="title">App Permissions</ui:define>
+
+    <ui:define name="content">
+       
+            <div class="ui-fluid">
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <div class="card card-w-title">
+                       <h:form id="form">
+
+				<p:panel id="pnl" header="Give App Permission">
+					<p:messages closable="true" autoUpdate="true"/>
+					<p:growl showDetail="true"  autoUpdate="true"/>
+					
+					<!-- ******************************************************************************************************************** -->
+					<div style="border: 1px solid black; height: auto;">
+						<p:dataGrid var="var" value="#{setAppPermissionBean.moduleList}" columns="1"
+							layout="grid" id="mdl">
+							<f:facet name="header">
+									APP MODULES<br></br>
+								<p:commandButton rendered="#{setAppPermissionBean.showDemo}" value="Add App Permission"
+									action="#{setAppPermissionBean.submitValue}" update=":form" />
+							</f:facet>
+							<!-- <div style="border: 1px dotted black;"> -->
+								<p:panel header="#{var.moduleName}">
+									<h:panelGrid columns="1" style="width:100%">
+										<p:selectManyCheckbox value="#{var.selectedPages}"
+											styleClass="mcb" layout="responsive" columns="4">
+											<f:selectItems value="#{var.pageList}" />
+										</p:selectManyCheckbox>
+									</h:panelGrid>
+								</p:panel>
+
+							<!-- </div> -->
+
+							<f:facet name="footer">
+								<p:commandButton rendered="#{setAppPermissionBean.showDemo}" value="Add App Permission"
+									action="#{setAppPermissionBean.submitValue}" update=":form" />
+							</f:facet>
+						</p:dataGrid>
+					</div>
+				</p:panel>
+			</h:form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+       
+    </ui:define>
+
+</ui:composition>

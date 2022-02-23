@@ -1,0 +1,116 @@
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:pu="http://primefaces.org/avalon">
+
+    <h:form id="menuform">
+        <div class="layout-menu-container #{guestPreferences.menuClass}">
+            <div class="nano">
+                <div class="nano-content menu-scroll-content">
+                    <ui:fragment rendered="#{guestPreferences.profileMode == 'inline' and guestPreferences.menuLayout != 'menu-layout-static menu-layout-horizontal'}">
+                        <!-- <div class="profile">
+                            <a id="profile-options" href="#">
+                                <p:graphicImage value="#{sideMenuBean.imagepath}" styleClass="profile-image" style="border: 0 none"/>
+                                <span class="profile-name">#{sideMenuBean.name}</span>
+                                <i class="fa fa-fw fa-caret-down"></i>
+                                <span class="profile-role">#{sideMenuBean.userType}</span>
+                            </a>
+                        </div> -->
+<!--                      <ul id="profile-menu" class="layout-menu">
+                            <p:outputPanel rendered="#{sideMenuBean.showAdmin}">
+	                        <li role="menuitem">
+	                            <a href="Dashboard.xhtml">
+                                    <i class="fa fa-fw fa-home"></i>
+                                    <span>Home</span>
+                                </a>
+                                <div class="layout-menu-tooltip">
+                                    <div class="layout-menu-tooltip-arrow"></div>
+                                    <div class="layout-menu-tooltip-text">Home</div>
+                                </div>
+	                        </li>
+	                        </p:outputPanel>
+	                        <p:outputPanel rendered="#{sideMenuBean.showTeacher}">
+	                        <li role="menuitem">
+	                            <a href="studentPerformance.xhtml">
+                                   <i class="fa fa-fw fa-home"></i>
+                                   <span>Home</span>
+                           	    </a>
+                               <div class="layout-menu-tooltip">
+                                   <div class="layout-menu-tooltip-arrow"></div>
+                                   <div class="layout-menu-tooltip-text">Home</div>
+                               </div>
+	                        </li>
+	                        </p:outputPanel>
+	                        <p:outputPanel rendered="#{sideMenuBean.showAccount}">
+	                        <li role="menuitem">
+	                            <a href="feeCollection.xhtml">
+                                  <i class="fa fa-fw fa-home"></i>
+                                  <span>Home</span>
+                          	    </a>
+                              <div class="layout-menu-tooltip">
+                                  <div class="layout-menu-tooltip-arrow"></div>
+                                  <div class="layout-menu-tooltip-text">Home</div>
+                              </div>
+	                        </li>
+	                        </p:outputPanel>
+	                        <li role="menuitem">
+                                <a href="changePassWord.xhtml">
+                                    <i class="fa fa-fw fa-cog"></i>
+                                    <span>Change Password</span>
+                                </a>
+                                <div class="layout-menu-tooltip">
+                                    <div class="layout-menu-tooltip-arrow"></div>
+                                    <div class="layout-menu-tooltip-text">Change Password</div>
+                                </div>
+                            </li>
+                            <p:outputPanel rendered="#{sideMenuBean.logoutchalkbox}">
+	                            <li role="menuitem">
+	                                <a href="ChalkboxLogin.xhtml">
+	                                    <i class="fa fa-fw fa-sign-out"></i>
+	                                    <span>Logout</span>
+	                                </a>
+	                                <div class="layout-menu-tooltip">
+	                                    <div class="layout-menu-tooltip-arrow"></div>
+	                                    <div class="layout-menu-tooltip-text">Logout</div>
+	                                </div>
+	                            </li>
+                            </p:outputPanel>
+                            <p:outputPanel rendered="#{sideMenuBean.master}">
+	                            <li role="menuitem">
+	                                <a href="viewEditDeleteSchool.xhtml">
+	                                    <i class="fa fa-fw fa-sign-out"></i>
+	                                    <span>Back To Master</span>
+	                                </a>
+	                                <div class="layout-menu-tooltip">
+	                                    <div class="layout-menu-tooltip-arrow"></div>
+	                                    <div class="layout-menu-tooltip-text">Back To Master</div>
+	                                </div>
+	                            </li>
+                            </p:outputPanel>
+                        </ul> -->
+                    </ui:fragment>
+
+                    <pu:menu widgetVar="me">
+                            
+                       <p:menuitem value="Home" outcome="homeOnlineAdm.xhtml" icon="fa fa-fw fa-life-saver"/>
+                    		
+                       <p:submenu label="For Applicant" icon="fa fa-fw fa-life-saver">
+	                       	<p:menuitem value="Registration Form" outcome="onlineRegAe.xhtml" icon="fa fa-fw fa-certificate"/>
+	                        	<p:menuitem value="My Applications" outcome="myOnlineApplication.xhtml" icon="fa fa-fw fa-certificate"/>
+                        </p:submenu>
+                        
+                        <p:menuitem value="Logout" outcome="signUpAe.xhtml" icon="fa fa-fw fa-life-saver"/>
+                       
+                        
+                    </pu:menu>
+                    <!-- do not remove or uncomment this line - done by piyush <p:menuitem rendered="#{sideMenuBean.manageStudentAttendance}" value="Student Attendance" icon="fa fa-fw fa-sign-in" outcome="studentWiseAttendanceReport.xhtml"/>
+                     --> 
+                     <!-- <p:menuitem value="Religion Report" icon="fa fa-fw fa-exclamation-circle" outcome="religionWiseReport.xhtml"/> -->       
+                </div>
+            </div>
+        </div>
+    </h:form>
+</ui:composition>

@@ -1,0 +1,166 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/masterTemplate.xhtml">
+
+	<ui:define name="title">Add Biometric Device</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+
+							<p:panel header="Add Biometric Device">
+
+								<p:messages closable="true" autoUpdate="true"></p:messages>
+
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+
+									<p:outputLabel for="@next" style="color:red"  value="School Name"></p:outputLabel>
+									<p:selectOneMenu filter="true" value="#{addBiometricDevice.schid}"
+										required="true" requiredMessage="Please Select School">
+										<f:selectItem itemLabel="select" itemValue=""></f:selectItem>
+										<f:selectItems value="#{addBiometricDevice.schoolList}"></f:selectItems>
+									</p:selectOneMenu>
+
+									<p:outputLabel for="@next" style="color:red"  value="Device Name"></p:outputLabel>
+									<p:inputText value="#{addBiometricDevice.name}" required="true"
+										requiredMessage="Please enter device name" validatorMessage="Please Enter Correct value">
+										<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:inputText>	
+
+									<p:outputLabel for="@next" style="color:red"  value="Device Code"></p:outputLabel>
+									<p:inputText value="#{addBiometricDevice.imei}" required="true"
+										requiredMessage="Please enter device code" validatorMessage="Please Enter Correct value">
+										<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:inputText>
+									
+									<p:commandButton style="width: 150px;" update="form"
+										action="#{addBiometricDevice.submit}" value="Add Device"
+										icon="ui-icon-plus"></p:commandButton>
+									<p:outputLabel/>	
+
+								</p:panelGrid>
+
+							</p:panel>
+						</h:form>
+						<br />
+						<h:form id="form1">
+							<p:panel header="Biometric Device List">
+
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+
+									<p:outputLabel for="@next" style="color:red"  value="School Name"></p:outputLabel>
+									<p:selectOneMenu filter="true" value="#{addBiometricDevice.schnm}"
+										required="true" requiredMessage="Please Select School">
+										<f:selectItem itemLabel="All" itemValue="all"></f:selectItem>
+										<f:selectItems value="#{addBiometricDevice.schoolList}"></f:selectItems>
+									</p:selectOneMenu>
+
+									
+									<p:commandButton style="width: 150px;" update="form1"
+										action="#{addBiometricDevice.deviceList}" value="Search"
+										icon="ui-icon-search"></p:commandButton>
+									<p:outputLabel/>
+									
+								</p:panelGrid>
+								<br />
+
+								<p:dataTable value="#{addBiometricDevice.list}" var="var"
+									reflow="true" rowIndexVar="index">
+
+									<p:column headerText="S.No.">
+										<p:outputLabel value="#{index+1}"></p:outputLabel>
+									</p:column>
+
+									<p:column filterBy="#{var.name}" filterMatchMode="contains"
+										headerText="School Name">
+										<p:outputLabel value="#{var.name}"
+											style=" word-break: break-all;"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Device Name">
+										<p:outputLabel value="#{var.bioName}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Device Code">
+										<p:outputLabel value="#{var.bioCode}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Edit">
+										<p:commandButton icon="ui-icon-pencil" update=":form3"
+											oncomplete="PF('edit').show()" action="#{addBiometricDevice.editDetail}" value="Edit">
+											<f:setPropertyActionListener
+												target="#{addBiometricDevice.selectedDevice}" value="#{var}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+
+									<p:column headerText="Delete">
+										<p:commandButton icon="fa fa-fw fa-trash" update=":form1"
+											action="#{addBiometricDevice.delete}" value="Delete">
+											<f:setPropertyActionListener
+												target="#{addBiometricDevice.selectedDevice}" value="#{var}"></f:setPropertyActionListener>
+											<p:confirm header="Confirmation"
+												message="Are You Sure To Delete This Device ?"
+												icon="ui-icon-alert" />
+										</p:commandButton>
+									</p:column>
+								</p:dataTable>
+							</p:panel>
+
+						</h:form>
+
+						<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+							<p:commandButton value="Yes" styleClass="ui-confirmdialog-yes"
+								icon="ui-icon-check" />
+							<p:commandButton value="No" styleClass="ui-confirmdialog-no"
+								icon="ui-icon-close" />
+						</p:confirmDialog>
+
+						<h:form id="form3">
+							<p:dialog header="Device Details" widgetVar="edit" modal="true"
+								showEffect="fade" hideEffect="fade" resizable="false">
+								<div class="ui-g form-group">
+									<p:outputPanel id="EditTable" style="text-align:center;">
+										<p:panelGrid columns="2" columnClasses="label,value">
+
+											<p:outputLabel for="@next" style="color:red"  value="Device Name"></p:outputLabel>
+											<p:inputText value="#{addBiometricDevice.selectedDevice.bioName}"
+												required="true" requiredMessage="Please enter device name" validatorMessage="Please Enter Correct value">
+                                              <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+                                            </p:inputText>
+                                            
+											<p:outputLabel for="@next" style="color:red"  value="Device Code"></p:outputLabel>
+											<p:inputText value="#{addBiometricDevice.selectedDevice.bioCode}"
+												required="true" requiredMessage="Please enter device code" validatorMessage="Please Enter Correct value">
+											  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+											</p:inputText>
+
+											<p:commandButton update=":form1 :form3" value="Update"
+												action="#{addBiometricDevice.update}"></p:commandButton>
+										</p:panelGrid>
+									</p:outputPanel>
+								</div>
+							</p:dialog>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,116 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Assign Courseware</ui:define>
+
+	<ui:define name="content">
+	<style type="text/css">
+	
+		.redColored
+		{
+			color:red;
+		}
+	</style>
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form" style="width:50%;float:left">
+							<p:panel header="Assign Courseware By Courseware Name">
+								<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+								<p:panelGrid columns="2"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:outputLabel value="Courseware Name" for="@next" style="color:red" ></p:outputLabel>
+									<p:autoComplete minQueryLength="3" value="#{assignCourseware.bookName}"
+										completeMethod="#{assignCourseware.autoCompleteBook}" forceSelection="true" required="true"
+										requiredMessage="Please Enter Courseware Name" validatorMessage="Please Enter Correct value">
+										<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+										<p:ajax event="itemSelect" global="false" update="oneMenu" listener="#{assignCourseware.checkBookSelected}"/>
+									</p:autoComplete>
+									
+									<p:outputLabel value="Select Unique No" for="@next" style="color:red" ></p:outputLabel>
+									<p:selectOneMenu filter="true" id="oneMenu" value="#{assignCourseware.bookId}" required="true" requiredMessage="Please Select Unique No">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{assignCourseware.freeBookList}"></f:selectItems>
+										<p:ajax update="bookImage1" event="itemSelect" listener="#{assignCourseware.checkBookIdSelected}"/>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Student Name" for="@next" style="color:red" ></p:outputLabel>
+									<p:autoComplete minQueryLength="3" value="#{assignCourseware.studentName}"
+										completeMethod="#{assignCourseware.autoCompleteStudent}"
+										forceSelection="true" required="true"
+										requiredMessage="Please Enter Student Name">
+										<p:ajax event="itemSelect" update="className1" listener="#{assignCourseware.checkSelectedType}" />
+									</p:autoComplete>
+									
+									<p:outputLabel value="Class"></p:outputLabel>
+									<p:outputLabel id="className1" value="#{assignCourseware.className}"></p:outputLabel>
+									
+									<p:outputLabel value="Image"></p:outputLabel>
+									<p:graphicImage id="bookImage1" width="80px" height="80px" value="#{assignCourseware.bookImage}"></p:graphicImage>
+									
+									
+									<p:outputLabel value="Assign Date" for="@next" style="color:red" ></p:outputLabel>
+									<p:calendar value="#{assignCourseware.addDate}" navigator="true"
+										pattern="dd/MM/yyyy" required="true"
+										requiredMessage="Please Enter Date"></p:calendar>
+
+									<p:commandButton value="Assign Courseware"
+										actionListener="#{assignCourseware.assignBook}" update=":form"></p:commandButton>
+								</p:panelGrid>
+							</p:panel>
+						</h:form>
+						<h:form id="form1" style="width:49%;float:right">
+							<p:panel header="Assign Courseware By Courseware Unique No">
+								<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+								<p:panelGrid columns="2"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:outputLabel  for="@next" style="color:red" value="Courseware Unique No"></p:outputLabel>
+									<p:autoComplete  value="#{assignCourseware.bookId}"
+										required="true"
+										requiredMessage="Please Enter Courseware Unique No" completeMethod="#{assignCourseware.autoCompleteBookId}" forceSelection="true" validatorMessage="Please Select Book Id From Auto Complete List">
+										<p:ajax event="itemSelect" global="false" update="oneMenu1,bookImage" listener="#{assignCourseware.checkBookIdSelected}"/>
+									</p:autoComplete>
+									
+									<p:outputLabel value="Courseware Name"></p:outputLabel>
+									<p:outputLabel id="oneMenu1" value="#{assignCourseware.bookName}"></p:outputLabel>
+
+									<p:outputLabel value="Student" for="@next" style="color:red" ></p:outputLabel>
+									<p:autoComplete minQueryLength="3" value="#{assignCourseware.studentName}"
+										completeMethod="#{assignCourseware.autoCompleteStudent}"
+										forceSelection="true" required="true"
+										requiredMessage="Please Enter Student Name">
+										<p:ajax event="itemSelect" update="className" listener="#{assignCourseware.checkSelectedType}" />
+									</p:autoComplete>
+									
+									<p:outputLabel value="Class"></p:outputLabel>
+									<p:outputLabel id="className" value="#{assignCourseware.className}"></p:outputLabel>
+									
+									<p:outputLabel value="Image"></p:outputLabel>
+									<p:graphicImage id="bookImage" width="80px" height="80px" value="#{assignCourseware.bookImage}"></p:graphicImage>
+									
+
+									<p:outputLabel value="Assign Date" for="@next" style="color:red" ></p:outputLabel>
+									<p:calendar value="#{assignCourseware.addDate}" navigator="true"
+										pattern="dd/MM/yyyy" required="true"
+										requiredMessage="Please Enter Date"></p:calendar>
+
+									<p:commandButton value="Assign Courseware"
+										actionListener="#{assignCourseware.assignBook}" update=":form1"></p:commandButton>
+								</p:panelGrid>
+							</p:panel>
+						</h:form>
+						
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

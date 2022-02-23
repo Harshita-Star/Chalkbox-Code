@@ -1,0 +1,219 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Old Student CC Report</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+						 <p:growl showDetail="true"  autoUpdate="true"> </p:growl>
+							<p:panel header="All Old Student CC">
+								<p:dataTable var="var" reflow="true" rowIndexVar="index"
+									value="#{oldStudentCC.studentList}">
+
+									<p:column headerText="S.No.">
+										<p:outputLabel value="#{index+1}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Sr. No."
+										filterBy="#{var.srno}">
+										<p:outputLabel value="#{var.srno}"></p:outputLabel>
+									</p:column>
+										
+									<p:column headerText="Student Name"
+										filterBy="#{var.studentName}">
+										<p:outputLabel value="#{var.studentName}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Father Name">
+										<p:outputLabel value="#{var.fatherName}"></p:outputLabel>
+									</p:column>
+									
+									<p:column headerText="Mother Name">
+										<p:outputLabel value="#{var.motherName}"></p:outputLabel>
+									</p:column>
+									
+									<p:column headerText="Gender">
+										<p:outputLabel value="#{var.gender}"></p:outputLabel>
+									</p:column>
+									
+									<p:column rendered="false" headerText="Address">
+										<p:outputLabel value="#{var.address}"></p:outputLabel>
+									</p:column>
+									
+									<p:column headerText="Adm. Date">
+										<p:outputLabel value="#{var.strAdmitDate}"></p:outputLabel>
+									</p:column>
+									
+									<p:column headerText="Removal Date">
+										<p:outputLabel value="#{var.struckOffDateStr}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Last Class">
+										<p:outputLabel value="#{var.lastClass}"></p:outputLabel>
+									</p:column>
+									
+									<p:column headerText="Passed / Failed">
+										<p:outputLabel value="#{var.passedClass}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Session">
+										<p:outputLabel value="#{var.year}"></p:outputLabel>
+									</p:column>
+									
+									<p:column headerText="Place">
+										<p:outputLabel value="#{var.address1}"></p:outputLabel>
+									</p:column>
+
+
+									<p:column headerText="Print">
+										<p:commandButton icon="ui-icon-print"
+											onclick="target='_blank'"
+											action="#{oldStudentCC.printDetails}">
+											<f:setPropertyActionListener
+												target="#{oldStudentCC.selectedStudent}" value="#{var}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+
+									<p:column headerText="Edit">
+										<p:commandButton icon="ui-icon-pencil"
+											action="#{oldStudentCC.editDetails}"
+											oncomplete="PF('editDlg').show()" update=":form3">
+											<f:setPropertyActionListener
+												target="#{oldStudentCC.selectedStudent}" value="#{var}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+
+									<p:column headerText="Delete" style="width:80px">
+										<p:commandButton icon="ui-icon-trash" styleClass="redButt"
+											action="#{oldStudentCC.deleteDetails}">
+											<f:setPropertyActionListener
+												target="#{oldStudentCC.selectedStudent}" value="#{var}"></f:setPropertyActionListener>
+											<p:confirm header="Confirmation"
+												message="Are You Sure To Delete...?" icon="ui-icon-alert" />
+										</p:commandButton>
+									</p:column>
+								</p:dataTable>
+							</p:panel>
+						</h:form>
+						<h:form id="form3">
+							<p:dialog modal="true" widgetVar="editDlg" header="CC Detail">
+								<div class="ui-g form-group">
+									<p:panelGrid columns="2"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+
+										<p:outputLabel  for="@next" style="color:red" value="Sr.No. *"></p:outputLabel>
+										<p:inputText required="true" requiredMessage="Enter Sr.No"
+											value="#{oldStudentCC.srno}" validatorMessage="Please Enter Correct value">
+										  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+										</p:inputText>
+
+										<p:outputLabel for="@next" style="color:red"  value="Student Name *"></p:outputLabel>
+										<p:inputText required="true"
+											requiredMessage="Enter Student Name"
+											value="#{oldStudentCC.studentName}" validatorMessage="Please Enter Correct value">
+										  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+										</p:inputText>
+
+										<p:outputLabel for="@next" style="color:red"  value="Gender *"></p:outputLabel>
+										<p:selectOneRadio value="#{oldStudentCC.gender}"
+											required="true" requiredMessage="Please Select Gender">
+											<f:selectItem itemLabel="Male" itemValue="male"></f:selectItem>
+											<f:selectItem itemLabel="Female" itemValue="female"></f:selectItem>
+										</p:selectOneRadio>
+
+										<p:outputLabel/><p:outputLabel/>	
+										<p:outputLabel for="@next" style="color:red"  rendered="false" value="Address *"></p:outputLabel>
+										<p:inputTextarea rendered="false" required="true"
+											requiredMessage="Enter Address"
+											value="#{oldStudentCC.address}" validatorMessage="Please Enter Correct value">
+										  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+										</p:inputTextarea>
+
+										<p:outputLabel for="@next" style="color:red"  value="Father Name *"></p:outputLabel>
+										<p:inputText value="#{oldStudentCC.fatherName}"
+											required="true" requiredMessage="Enter Father Name" validatorMessage="Please Enter Correct value">
+										  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+										</p:inputText>
+
+										<p:outputLabel for="@next" style="color:red"  value="Mother Name *"></p:outputLabel>
+										<p:inputText value="#{oldStudentCC.motherName}"
+											required="true" requiredMessage="Enter Mother Name" validatorMessage="Please Enter Correct value">
+										  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+										</p:inputText>
+
+										<p:outputLabel for="@next" style="color:red"  value="Admission Date *"></p:outputLabel>
+										<p:calendar required="true"
+											requiredMessage="Please Select Admission Date"
+											focusOnSelect="true" value="#{oldStudentCC.admDate}"
+											pattern="dd/MM/yyyy" navigator="true" yearRange="c-10:c+10" />
+
+										<p:outputLabel for="@next" style="color:red"  value="Removal Date *"></p:outputLabel>
+										<p:calendar required="true"
+											requiredMessage="Please Select Removal Date"
+											focusOnSelect="true" value="#{oldStudentCC.removalDate}"
+											pattern="dd/MM/yyyy" navigator="true" yearRange="c-10:c+10" />
+
+										<p:outputLabel for="@next" style="color:red"  value="Last Class *"></p:outputLabel>
+										<p:inputText value="#{oldStudentCC.lastClass}" required="true"
+											requiredMessage="Please Enter Last Class" validatorMessage="Please Enter Correct value">
+										  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+										</p:inputText>
+
+										<p:outputLabel for="@next" style="color:red"  value="Whether Passed or Failed? *"></p:outputLabel>
+										<p:selectOneRadio value="#{oldStudentCC.passFail}"
+											required="true"
+											requiredMessage="Please Select Whether Passed or Failed">
+											<f:selectItem itemLabel="Passed" itemValue="Passed"></f:selectItem>
+											<f:selectItem itemLabel="Failed" itemValue="Failed"></f:selectItem>
+										</p:selectOneRadio>
+
+										<p:outputLabel for="@next" style="color:red"  value="Session *(Eg. 2017-2018 etc.)"></p:outputLabel>
+										<p:inputText value="#{oldStudentCC.lastYear}" required="true"
+											requiredMessage="Please Enter Session" validatorMessage="Please Enter Correct value">
+										  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+										</p:inputText>
+
+										<p:outputLabel for="@next" style="color:red"  value="Place *"></p:outputLabel>
+										<p:inputText value="#{oldStudentCC.place}" required="true"
+											requiredMessage="Please Enter Place" validatorMessage="Please Enter Correct value">
+										  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+										</p:inputText>
+
+
+										
+									</p:panelGrid>
+								</div>
+								<br />
+								<p:separator />
+								<center>
+									<p:commandButton action="#{oldStudentCC.updateDetails}" icon="fa fa-upload" styleClass="butwid"
+											value="Update CC" update=":form,:form3"></p:commandButton>
+								</center>
+								<p:separator />
+								<br />
+							</p:dialog>
+						</h:form>
+						<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+							<p:commandButton value="Yes" type="button"
+								styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+							<p:commandButton value="No" type="button"
+								styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+						</p:confirmDialog>
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

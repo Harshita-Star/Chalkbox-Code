@@ -1,0 +1,106 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	<f:loadBundle var="addClassVar" basename="myProperties" />
+
+	<ui:define name="title">Message Purchase History</ui:define>
+
+	<ui:define name="content">
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+
+
+							<p:panel header="Message Purchase History">
+								<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+
+								<p:panelGrid columns="6"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel value="Start Date"></p:outputLabel>
+									<p:calendar value="#{msgPurchaseHistry.startDate}"
+										navigator="true" pattern="dd/MM/yyyy" readonlyInput="true"
+										requiredMessage="Please Select Date"></p:calendar>
+
+									<p:outputLabel value="End Date"></p:outputLabel>
+									<p:calendar value="#{msgPurchaseHistry.endDate}"
+										navigator="true" pattern="dd/MM/yyyy" readonlyInput="true"
+										requiredMessage="Please Select Date"></p:calendar>
+								</p:panelGrid>
+
+
+								<br />
+								<p:separator />
+								<center>
+									<p:panelGrid
+										columns="2"
+										layout="grid" styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+
+										<p:commandButton value="Search" update=":form" icon="fa fa-search" styleClass="butwid"
+											action="#{msgPurchaseHistry.check1}"></p:commandButton>
+
+										<p:commandButton value="PDF" icon="fa fa-file-pdf-o" styleClass="butwid" ajax="false" process="@this"
+											actionListener="#{msgPurchaseHistry.exportmsghisPdf}">
+
+											<p:fileDownload value="#{msgPurchaseHistry.file}" />
+										</p:commandButton>
+
+									</p:panelGrid>
+								</center>
+								<p:separator />
+								<br />
+
+
+								<p:dataTable value="#{msgPurchaseHistry.packList}" var="info">
+									<p:column headerText="Pack Name">
+										<p:outputLabel value="#{info.packName}"></p:outputLabel>
+									</p:column>
+									<p:column headerText="Quantity">
+										<p:outputLabel value="#{info.quantity}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Rate">
+										<p:outputLabel value="#{info.rate}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Amount">
+										<p:outputLabel value="#{info.amount}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Tax">
+										<p:outputLabel value="#{info.tax}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Total Amount">
+										<p:outputLabel value="#{info.totalAmount}"></p:outputLabel>
+									</p:column>
+
+
+									<p:column headerText="Date">
+										<p:outputLabel value="#{info.date}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Status">
+										<p:outputLabel value="#{info.paidStatus.toUpperCase()}"></p:outputLabel>
+									</p:column>
+
+								</p:dataTable>
+							</p:panel>
+						</h:form>
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

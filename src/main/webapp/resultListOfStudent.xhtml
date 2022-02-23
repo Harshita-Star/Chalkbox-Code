@@ -1,0 +1,106 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Result List</ui:define>
+
+    <ui:define name="content">
+       
+            <div class="ui-fluid">
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <div class="card card-w-title">
+                           <h:form id="form2">
+               			 <h1>Result List</h1> 	
+               			
+               		 		<p:panel header="Search Student by Class Section">
+               		 	
+               		 		<p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+               		 		
+	               		 		<p:outputLabel for="@next" style="color:red"  value="Select Class"></p:outputLabel>      
+	               		 		<p:selectOneMenu style="width:250px" filter="true" value="#{resultList.selectedClassSection}" required="true" requiredMessage="Please Select Class" >
+	               		 			<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+	               		 			<f:selectItems value="#{resultList.classSection}"></f:selectItems>
+	               		 			
+	               		 			<p:ajax update="sectionid,termid" listener="#{resultList.allSections}"></p:ajax>
+	               		 		</p:selectOneMenu>    
+	
+	               		 		<p:outputLabel  for="@next" style="color:red" value="Select Section"></p:outputLabel>
+	               		 		<p:selectOneMenu id="sectionid" filter="true" value="#{resultList.selectedSection}" required="true" requiredMessage="Please Select A Section"> 
+	               		 			<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+	               		 			<f:selectItems value="#{resultList.sectionList}"></f:selectItems>
+	               		 		</p:selectOneMenu>
+	               		 		
+	               		 		<p:outputLabel  for="@next" style="color:red" value="Select Term"></p:outputLabel>
+	               		 		<p:selectManyCheckbox id="termid" value="#{resultList.selectedTerm}" layout="responsive" columns="3" required="true"
+										requiredMessage="Please Select Term" styleClass="form-group">
+									<f:selectItems value="#{resultList.termList}"></f:selectItems>
+								</p:selectManyCheckbox>
+	               		 		
+               		 		  	<p:commandButton update=":form3:up" value="Search" actionListener="#{resultList.generatePromotion}"></p:commandButton>
+               		 		  	<p:commandButton value="Print" type="button"  >
+						 			<p:printer target=":form3:up"></p:printer>			
+								</p:commandButton>
+               		 		</p:panelGrid>  		 
+               		 
+               		 		</p:panel>
+               		 
+               		 </h:form>
+               		<h:form id="form3">
+               		 	
+               		 	<p:panel header="Student Details">
+               		 				
+               		 		 <p:outputPanel id="up">
+               		 		 	<center><table>
+               		 		 		<tr><td>Class:- #{resultList.className}</td></tr>
+               		 		 		<tr><td>Section:- #{resultList.sectionName}</td></tr>
+               		 		 		<tr><td>Result list Of Student</td></tr>
+               		 		 	</table></center> 
+               		  			<p:dataTable rendered="#{resultList.show}" var="var" value="#{resultList.studentList}" reflow="true">
+               		  			<f:facet name="header">
+               		  				
+               		  			</f:facet> 
+               		  			
+               		  			<p:column headerText="Add Number" >
+               		  				<p:outputLabel value="#{var.addNumber}"></p:outputLabel>
+               		  			</p:column>
+               		  			
+               		  			<p:column sortBy="#{var.fname}" headerText="Student Name">
+               		  				<p:outputLabel value="#{var.fname}"></p:outputLabel>
+               		  			</p:column>
+               		  			
+               		  			<p:column headerText="Father's Name">
+               		  				<p:outputLabel value="#{var.fathersName}"></p:outputLabel>
+               		  			</p:column>
+               		  			
+               		  			<p:column headerText="Marks">
+               		  				<p:outputLabel value="#{var.marks}"></p:outputLabel>
+               		  			</p:column>
+               		  			
+               		  			<p:column headerText="Percentage">
+               		  				<p:outputLabel value="#{var.percentage}"></p:outputLabel>
+               		  			</p:column>
+               		  			
+               		  			<p:column headerText="Result">
+               		  				<p:outputLabel value="#{var.examResult}"></p:outputLabel>
+               		  			</p:column>
+               		  			
+               		  			<p:column headerText="Rank" style="width:40px">
+               		  				<p:outputLabel value="#{var.rank}"></p:outputLabel>
+               		  			</p:column>
+               		  			
+               		  		</p:dataTable>
+               		  </p:outputPanel>
+               		</p:panel>
+				</h:form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+       
+    </ui:define>
+
+</ui:composition>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+  <h:head>	
+<link rel="stylesheet" href="css1/bootstrap.min.css"/>
+<link rel="stylesheet" type="text/css" href="css1/cast.css"/>
+<link rel="stylesheet" type="text/css" href="font-awesome-4.6.1.1/css/font-awesome.min.css"/>
+<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700" rel="stylesheet"/>
+</h:head>
+<body>
+<div class="container-fluid">
+	<div class="container">
+	<f:loadBundle var="loginPageVar" basename="myProperties" />
+		<div class="card col-md-12">CHALK BOX ERP</div>
+		
+		<div class="card col-md-12">
+		<p:messages closable="true" autoUpdate="true"></p:messages>	
+		<br></br> 	 	
+			<div class="col-md-12">
+				<i class="fa fa-user icon" aria-hidden="true" style="font-size:26px;"></i>
+			</div>
+			<h1 class="title">Login Now</h1>
+			<div class="col-md-12">
+				<i class="fa fa-unlock-alt icon1" aria-hidden="true" style="font-size: 26px;"></i>
+			</div>
+			<p class="enter">Enter User Name and Password</p>
+			
+			<h:form id="form" style="width:100%;float: left;padding:15px;">
+			
+				<div class="form-group">
+					<div class="col-md-12 group">
+						<div class="triangle-right">
+							<label for="email" class="email"> Username:</label>
+						</div>
+						<p:inputText styleClass="form-control" id="loginid" value="#{loginBean.id}" required="true" requiredMessage="#{loginPageVar.loginPageUsernameValidation}" style="width:70%;float:left"></p:inputText>
+					</div>
+				</div>	
+			<div class="form-group">
+				<div class="col-md-12 group">
+					<div class="triangle-right">
+						<label for="pwd" class="email">Password:</label>
+					</div>
+					<p:password styleClass="form-control" id="password" value="#{loginBean.pswd}" required="true" requiredMessage="#{loginPageVar.loginPagePasswordValidation}" style="width:70%;float:left"/>	
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-md-12" style="text-align: center;">
+				 <p:commandButton styleClass="btn btn-default logSubmit" aria-hidden="true" value="Login"  update=":form" action="#{loginBean.check}" style="margin-left:8px" />
+			
+				</div>
+			</div>
+			</h:form>
+			<div class="last col-md-12" style="border-radius: 0 0 10px 10px;">
+				<p class="last_p"></p>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script src="js.1/jquery.min.js"></script>
+<script src="js.1/bootstrap.min.js"></script>
+</body>	
+</html>
+
+
+
+
+
+
+
+
+

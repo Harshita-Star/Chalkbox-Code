@@ -1,0 +1,151 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">No RFID Punch Record</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<p:focus context=":form:srcpnl"></p:focus>
+						<h:form id="form">
+							<p:messages closable="true" autoUpdate="true"></p:messages>
+
+							<p:panel header="No RFID Punch Record" id="srcpnl">
+								<h4>Note : This report will give you the list of students
+									whose RFID punching is not received even once till today.</h4>
+								<p:panelGrid columns="8" layout="grid"
+									styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none;width:100%; background-color:transparent;">
+									<p:outputLabel for="@next" style="color:red"
+										value="Select a Class"></p:outputLabel>
+									<p:selectOneMenu value="#{noRFIDPunchReport.selectedClass}"
+										required="true" requiredMessage="Please select a class"
+										filter="true">
+										<f:selectItem itemLabel="Select Class" itemValue="select"></f:selectItem>
+
+										<f:selectItems value="#{noRFIDPunchReport.classList}"></f:selectItems>
+
+										<p:ajax update="sectionid"
+											listener="#{noRFIDPunchReport.allSections}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel for="@next" style="color:red"
+										value="Select Section"></p:outputLabel>
+									<p:selectOneMenu id="sectionid"
+										value="#{noRFIDPunchReport.selectedSection}" required="true"
+										requiredMessage="Please select a section" filter="true">
+										<f:selectItem itemLabel="Select Section" itemValue=""></f:selectItem>
+
+										<f:selectItems value="#{noRFIDPunchReport.sectionList}"></f:selectItems>
+
+									</p:selectOneMenu>
+
+									<p:commandButton action="#{noRFIDPunchReport.showRFID}"
+										value="Show" update=":form"></p:commandButton>
+									<p:outputLabel />
+
+									<h:commandLink>
+										<p:graphicImage name="images/excellogo.png"
+											library="avalon-layout" width="100" height="40"></p:graphicImage>
+										<pe:exporter type="xlsx" target="up"
+											fileName="RFID_Record_#{noRFIDPunchReport.className}_#{noRFIDPunchReport.section}_#{noRFIDPunchReport.dateStr}"></pe:exporter>
+									</h:commandLink>
+
+									<p:commandButton value="PDF" style="width:100px;" ajax="false"
+										process="@this"
+										actionListener="#{noRFIDPunchReport.exportLibPdf}">
+
+										<p:fileDownload value="#{noRFIDPunchReport.file}" />
+									</p:commandButton>
+
+								</p:panelGrid>
+								<br />
+								<p:panelGrid columns="2"
+									styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:outputLabel value="Students NOT USING Transport "
+										style="font-weigth:bold;font-size:18px;background-color: #F79B83E6 !important" />
+									<p:outputLabel value="  Students USING Transport"
+										style="font-weigth:bold;font-size:18px;background-color: #FFFF90 !important" />
+								</p:panelGrid>
+							</p:panel>
+
+							<p:dataTable id="up" stickyHeader="true"
+								value="#{noRFIDPunchReport.slist}" var="stats"
+								rowIndexVar="rowId"
+								rowStyleClass="#{stats.transStatus eq 'no' ? 'ABSENT' : 'MEDICAL'}">
+
+								<p:column headerText="S.No.">
+									<f:facet name="header">
+										<p:outputLabel value="S.No."></p:outputLabel>
+									</f:facet>
+									<h:outputText value="#{rowId+1}"></h:outputText>
+								</p:column>
+
+								<p:column headerText="Adm.No.">
+									<f:facet name="header">
+										<p:outputLabel value="Adm.No."></p:outputLabel>
+									</f:facet>
+									<h:outputText value="#{stats.srNo}"></h:outputText>
+								</p:column>
+
+								<p:column headerText="Class">
+									<f:facet name="header">
+										<p:outputLabel value="Class"></p:outputLabel>
+									</f:facet>
+									<h:outputText value="#{stats.className} - #{stats.sectionName}"></h:outputText>
+								</p:column>
+
+								<p:column headerText="Name">
+									<f:facet name="header">
+										<p:outputLabel value="Name"></p:outputLabel>
+									</f:facet>
+									<h:outputText value="#{stats.fullName}"></h:outputText>
+								</p:column>
+
+								<p:column headerText="Father's Name">
+									<f:facet name="header">
+										<p:outputLabel value="Father's Name"></p:outputLabel>
+									</f:facet>
+									<h:outputText value="#{stats.fathersName}"></h:outputText>
+								</p:column>
+
+								<p:column headerText="Mother's Name">
+									<f:facet name="header">
+										<p:outputLabel value="Mother's Name"></p:outputLabel>
+									</f:facet>
+									<h:outputText value="#{stats.motherName}"></h:outputText>
+								</p:column>
+
+								<p:column headerText="Tranport Status">
+									<f:facet name="header">
+										<p:outputLabel value="Transport Status"></p:outputLabel>
+									</f:facet>
+									<h:outputText value="#{stats.transStatus.toUpperCase()}"></h:outputText>
+								</p:column>
+
+								<p:column headerText="RFID No.">
+									<f:facet name="header">
+										<p:outputLabel value="RFID No."></p:outputLabel>
+									</f:facet>
+									<h:outputText value="#{stats.rfidNo}"></h:outputText>
+								</p:column>
+
+							</p:dataTable>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

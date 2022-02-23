@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+<f:loadBundle var="addClassVar" basename="myProperties" />
+<f:view contentType="text/html">
+	<h:head>
+		<title>#{sideMenuBean.companyName} | Sibling Fee Collection</title>
+		<f:facet name="first">
+			<meta content='text/html; charset=UTF-8' http-equiv="Content-Type" />
+			<meta http-equiv="X-UA-Compatible" content="EmulateIE8" />
+			
+		</f:facet>
+
+  <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css"></link>
+    		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"></link>
+    	<link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css"></link>
+   <link rel="stylesheet" href="dist/css/AdminLTE.min.css"></link>
+    <link rel="stylesheet" href="dist/css/skins/all-skins.min.css"></link>
+
+	</h:head>
+
+	<h:body>
+      
+      <ui:include src="sideMenu.xhtml"></ui:include> 
+   
+      <div class="content-wrapper">
+          
+                	<h:form id="form">
+   			        <h1>#{collectFeeVar.collectFeeTitle}</h1>
+            		<p:panel rendered="#{siblingFee.showSibling1}" header="Sibling 1 Details">
+						<p:panelGrid columns="4">
+				
+							<p:outputLabel value="Addmission Number"></p:outputLabel>
+							<p:outputLabel value="#{siblingFee.addNo1}"></p:outputLabel>
+							
+							<p:outputLabel value="Name"></p:outputLabel>
+							<p:outputLabel value="#{siblingFee.fname1}" ></p:outputLabel>
+							
+							<p:outputLabel value="Class"></p:outputLabel>
+							<p:outputLabel value="#{siblingFee.className1}"></p:outputLabel>
+							
+						</p:panelGrid>
+               			<p:dataTable id="dataTable0" value="#{siblingFee.feeStructureList1}" var="var" >
+           				    <f:facet name="header">
+           				     	<p:outputLabel value="Fee Status"></p:outputLabel>
+           				    </f:facet> 
+           				    					
+           					<p:column headerText="Fee Type">
+           						<p:outputLabel  value="#{var.feeName}"></p:outputLabel>
+           					</p:column>       
+           				               					
+           					<p:column headerText="Fee Amount">
+           						<p:outputLabel  value="#{var.totalFeeAmount}"></p:outputLabel>
+           					</p:column>
+           					
+           					<p:column headerText="Fee Paid">
+           						<p:outputLabel value="#{var.totalFeePaidAmount}"></p:outputLabel>
+           					</p:column>
+           					
+           					<p:column headerText="Balance Left">
+           						<p:outputLabel value="#{var.totalFeeLeftAmount}"></p:outputLabel>
+           					</p:column>
+               			</p:dataTable>
+               			
+               		</p:panel>
+               		
+               		<p:panel rendered="#{siblingFee.showSibling2}" header="Sibling 2 Details">
+						<p:panelGrid columns="4">
+				
+							<p:outputLabel value="Addmission Number"></p:outputLabel>
+							<p:outputLabel value="#{siblingFee.addNo2}"></p:outputLabel>
+							
+							<p:outputLabel value="Name"></p:outputLabel>
+							<p:outputLabel value="#{siblingFee.fName2}" ></p:outputLabel>
+							
+							<p:outputLabel value="Class"></p:outputLabel>
+							<p:outputLabel value="#{siblingFee.className2}"></p:outputLabel>
+							
+						</p:panelGrid>
+               			<p:dataTable id="dataTable1" value="#{siblingFee.feeStructureList2}" var="var" >
+           				    <f:facet name="header">
+           				     	<p:outputLabel value="Fee Status"></p:outputLabel>
+           				    </f:facet> 
+           				    					
+           					<p:column headerText="Fee Type">
+           						<p:outputLabel  value="#{var.feeName}"></p:outputLabel>
+           					</p:column>       
+           				               					
+           					<p:column headerText="Fee Amount">
+           						<p:outputLabel  value="#{var.totalFeeAmount}"></p:outputLabel>
+           					</p:column>
+           					
+           					<p:column headerText="Fee Paid">
+           						<p:outputLabel value="#{var.totalFeePaidAmount}"></p:outputLabel>
+           					</p:column>
+           					
+           					<p:column headerText="Balance Left">
+           						<p:outputLabel value="#{var.totalFeeLeftAmount}"></p:outputLabel>
+           					</p:column>
+               			</p:dataTable>
+               			
+               		</p:panel>
+               		
+               		<p:panel header="Sibling Details" rendered="#{siblingFee.showOther}">
+               			<h1>No Sibling Found</h1>
+               		</p:panel>
+         
+			</h:form>		
+          
+          
+      </div>
+   
+	
+	
+	</h:body>
+</f:view>
+</html>

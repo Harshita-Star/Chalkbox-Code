@@ -1,0 +1,157 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Hold Student Result</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<p:panel header="Hold Student Result">
+							<f:facet name="header">
+									<span>Hold Student Result</span>
+									<span> <p:commandLink
+									style="float: right;margin-left: 15px;;color: blue;font-size:15px;"
+									immediate="true" value="Declare Student Result"
+									action="declareResultOfStudent.xhtml?faces-redirect=true"></p:commandLink>
+									</span>
+								</f:facet>
+
+								<p:messages closable="true" autoUpdate="true"></p:messages>
+
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:outputLabel value="Select Class" for="@next" style="color:red" ></p:outputLabel>
+									<p:selectOneMenu required="true" filter="true"
+										requiredMessage="Please select a class"
+										value="#{declareStdResult.selectedClass}">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{declareStdResult.classList}"></f:selectItems>
+										<p:ajax update=":form" listener="#{declareStdResult.allTerm}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Select Section" for="@next" style="color:red" ></p:outputLabel>
+									<p:selectOneMenu id="showSection" filter="true"
+										value="#{declareStdResult.selectedSection}" required="true"
+										requiredMessage="Please select a section">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{declareStdResult.sectionList}"></f:selectItems>
+										<p:ajax></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Select Term" for="@next" style="color:red" ></p:outputLabel>
+									<p:selectOneMenu required="true" filter="true"
+										requiredMessage="Please select a term" id="showTerm"
+										value="#{declareStdResult.selectedTerm}">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{declareStdResult.termList}"></f:selectItems>
+										<p:ajax></p:ajax>
+									</p:selectOneMenu>
+									
+									<p:outputLabel value="Select Subject Type" for="@next" style="color:red" ></p:outputLabel>
+									<p:selectOneMenu value="#{declareStdResult.selectedType}" filter="true"
+										required="true" requiredMessage="Please Select Type Of Area">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{declareStdResult.subjectTypeList}"></f:selectItems>
+										<p:ajax update=":form" listener="#{declareStdResult.allExamType}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Select Exam type" for="@next" style="color:red" ></p:outputLabel>
+									<p:selectOneMenu filter="true" required="true"
+										requiredMessage="Please select exam type"
+										value="#{declareStdResult.selectedExam}">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{declareStdResult.examList}"></f:selectItems>
+									</p:selectOneMenu>
+
+								
+								</p:panelGrid>
+								<br />
+								<p:separator />
+								<center>
+										<p:commandButton value="Search" styleClass="butwid" icon="fa fa-search"
+										actionListener="#{declareStdResult.studentDetail1}"
+										update=":form,:form1" />
+								</center>
+								<p:separator />
+								<br />
+							</p:panel>
+						</h:form>
+						<br />
+						<h:form id="form1">
+							<p:panel header="Student List">
+								<p:dataTable reflow="true" id="table" rowIndexVar="index"
+									rendered="#{declareStdResult.showTable}"
+									value="#{declareStdResult.studentDetails}" var="var"
+									selection="#{declareStdResult.selectedStudent}"
+									rowKey="#{var.addNumber}" rowSelectMode="add">
+
+									<p:column selectionMode="multiple" style="width:60px;"></p:column>
+
+									<p:column headerText="S.No">
+										<f:facet name="header">
+											<p:outputLabel value="S.No"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{index+1}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Sr. No" sortBy="#{var.srNo}">
+										<f:facet name="header">
+											<p:outputLabel value="Sr. No."></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.srNo}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Add. Number">
+										<f:facet name="header">
+											<p:outputLabel value="Add. Number"></p:outputLabel>
+
+										</f:facet>
+
+										<p:outputLabel value="#{var.addNumber}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Student Name" sortBy="#{var.studentName}">
+
+										<f:facet name="header">
+											<p:outputLabel value="Student Name"></p:outputLabel>
+
+										</f:facet>
+										<p:outputLabel value="#{var.studentName}"></p:outputLabel>
+									</p:column>
+
+
+									<p:column headerText="Father Name" sortBy="#{var.fatherName}">
+
+										<f:facet name="header">
+											<p:outputLabel value="Father Name"></p:outputLabel>
+
+										</f:facet>
+										<p:outputLabel value="#{var.fatherName}"></p:outputLabel>
+									</p:column>
+
+									<f:facet name="footer">
+										<p:commandButton update=":form,:form1" value="Hold Result" styleClass="butwid" icon="fa fa-square"
+											action="#{declareStdResult.undeclare}"></p:commandButton>
+									</f:facet>
+								</p:dataTable>
+							</p:panel>
+						</h:form>
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,305 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Paid Fee Report</ui:define>
+
+	<ui:define name="content">
+
+		<style>
+.ui-datatable .ui-datatable-scrollable-body,
+	.ui-datatable-scrollable-header, .ui-datatable-footer,
+	.ui-datatable-header, .ui-datatable-scrollable-footer {
+	width: 100% !important;
+}
+
+.ui-datatable-scrollable .ui-datatable-scrollable-header,
+	.ui-datatable-scrollable .ui-datatable-scrollable-footer {
+	position: sticky !important;
+	top: 42px !important;
+}
+
+.ui-datatable .ui-datatable-scrollable-body,
+	.ui-datatable-scrollable-header {
+	width: 100% !important;
+}
+
+.ui-datatable-header {
+	display: none;
+}
+</style>
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+							<p:panel>
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:outputLabel value="Select a Class" for="@next"
+										style="color:red"></p:outputLabel>
+									<p:selectOneMenu value="#{paidFeeReport.selectedClass}"
+										required="true" requiredMessage="Please Select Class">
+										<f:selectItem itemLabel="All" itemValue="-1"></f:selectItem>
+										<f:selectItems value="#{paidFeeReport.classList}"></f:selectItems>
+										<p:ajax update="sectionid"
+											listener="#{paidFeeReport.allSections}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Select Section"></p:outputLabel>
+									<p:selectOneMenu id="sectionid"
+										value="#{paidFeeReport.selectedSection}">
+										<f:selectItem itemLabel="All" itemValue="-1"></f:selectItem>
+										<f:selectItems value="#{paidFeeReport.sectionList}"></f:selectItems>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Select Student Type"></p:outputLabel>
+									<p:selectOneMenu value="#{paidFeeReport.studentType}">
+										<f:selectItem itemLabel="All" itemValue="All"></f:selectItem>
+										<f:selectItem itemLabel="Day Scholar" itemValue="Regular"></f:selectItem>
+										<f:selectItem itemLabel="Hosteler" itemValue="Hosteler"></f:selectItem>
+										<f:selectItem itemLabel="Day Boarding" itemValue="Day Brd"></f:selectItem>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Concession" for="@next" style="color:red"></p:outputLabel>
+									<p:selectOneMenu value="#{paidFeeReport.selectedConcession}"
+										required="true" requiredMessage="Please select a concession">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItem itemLabel="All" itemValue="ALL"></f:selectItem>
+										<f:selectItems value="#{paidFeeReport.concessionlist}"></f:selectItems>
+									</p:selectOneMenu>
+								</p:panelGrid>
+								
+								<br />
+								<p:separator />
+								<center>
+									<p:panelGrid
+										columns="#{paidFeeReport.studentList.size() gt 0 ? '4' : '1'}"
+										layout="grid" styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+
+									<p:commandButton value="Show Report" styleClass="butwid" icon = "fa fa-search"
+										actionListener="#{paidFeeReport.showPaidFeeList}"
+										update=":form"></p:commandButton>
+									<p:commandButton value="Print" rendered="#{paidFeeReport.b}" styleClass="butwid" icon="fa fa-print">
+										<p:printer target="paidfeereport"></p:printer>
+									</p:commandButton>
+
+									<h:commandLink rendered="#{paidFeeReport.b}">
+										<p:graphicImage name="images/excellogo.png"
+											library="avalon-layout" width="100" height="40"></p:graphicImage>
+										<pe:exporter type="xlsx" target="table"
+											fileName="Paid_Fee_Report.xlsx"
+											></pe:exporter>
+									</h:commandLink>
+
+									<p:commandButton value="PDF" rendered="#{paidFeeReport.b}" styleClass="butwid" icon="fa fa-file-pdf-o" ajax="false"
+										process="@this"
+										actionListener="#{paidFeeReport.exportPaidFeePdf}">
+
+										<p:fileDownload value="#{paidFeeReport.file}" />
+									</p:commandButton>
+									</p:panelGrid>
+								</center>
+								<p:separator />
+								<br />
+								
+							</p:panel>
+
+							<p:panel id="paidfeereport" rendered="#{paidFeeReport.b}">
+								<center>
+									<p
+										style="font-size: 25px !important; font-weight: bold; margin: 0px;">#{headerBean.name}</p>
+									<p
+										style="font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.affiliationNo}</p>
+									<p
+										style="font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.finalAddress}</p>
+									<p
+										style="font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.phoneno}</p>
+
+								</center>
+								<p:panelGrid columns="3" style="width:100%">
+
+									<p:panelGrid columns="2">
+										<p:outputLabel value="Total Students:-"></p:outputLabel>
+										<h:outputText value="#{paidFeeReport.total}"></h:outputText>
+									</p:panelGrid>
+								</p:panelGrid>
+
+
+								<p:dataTable id="table" var="var"
+									value="#{paidFeeReport.studentList}" scrollable="true"
+									scrollWidth="100%">
+
+									<f:facet name="header">
+										<p:outputLabel value="                                                                                                                                                           Paid Fee Collection Report"></p:outputLabel>
+									</f:facet>
+									<p:columnGroup type="header">
+										<p:row>
+											<p:column headerText="" colspan="11"></p:column>
+										</p:row>
+										<p:row>
+											<p:column
+												headerText="Total Students : #{paidFeeReport.total}"
+												colspan="11"></p:column>
+										</p:row>
+
+
+										<p:row>
+
+											<p:column headerText="S.No." />
+											<p:column headerText="Sr.No." />
+											<p:column headerText="Student Name" />
+											<p:column headerText="Fathers Phone" />
+											<p:column headerText="Class Name" />
+											<p:column headerText="Student Status" />
+											<p:column
+												headerText="Fees (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})" />
+											<p:column
+												headerText="Transport Fee (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})" />
+											<p:column
+												headerText="Total Fee (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})" />
+											<p:column
+												headerText="Total Paid (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})" />
+											<p:column
+												headerText="Total Discount (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})" />
+											<p:column
+												headerText="Total Left (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})" />
+
+
+										</p:row>
+
+
+
+									</p:columnGroup>
+
+									<p:column headerText="S.No." style="font-size:8px !important">
+
+										<p:outputLabel style="font-size:8px !important"
+											value="#{var.sno}"></p:outputLabel>
+									</p:column>
+
+									<p:column filterBy="#{var.srNo}"
+										style="font-size:8px !important" headerText="Sr.No.">
+
+										<h:outputText style="font-size:8px !important"
+											value="#{var.srNo}" />
+									</p:column>
+
+									<p:column filterBy="#{var.fname}"
+										style="font-size:9px !important" headerText="Student Name">
+
+										<h:outputText style="font-size:9px !important"
+											value="#{var.fname} / #{var.fathersName}" />
+									</p:column>
+
+									<p:column style="font-size:9px !important"
+										headerText="Fathers Phone">
+
+										<h:outputText style="font-size:9px !important"
+											value="#{var.sendMessageMobileNo}" />
+									</p:column>
+
+									<p:column style="font-size:9px !important"
+										headerText="Class Name">
+
+										<h:outputText style="font-size:9px !important"
+											value="#{var.className}-#{var.sectionName}" />
+									</p:column>
+
+
+									<p:column style="font-size:9px !important"
+										headerText="Student Status">
+
+										<h:outputText style="font-size:9px !important"
+											value="#{var.studentStatus}" />
+									</p:column>
+
+									<p:column style="font-size:9px !important"
+										headerText="Fees (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})">
+
+										<h:outputText style="font-size:9px !important"
+											value="#{var.fee}" />
+
+										<f:facet name="footer">
+											<p:outputLabel value="#{paidFeeReport.feeString}"></p:outputLabel>
+										</f:facet>
+
+									</p:column>
+
+									<p:column style="font-size:10px !important"
+										headerText="Transport Fee (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})">
+
+										<h:outputText style="font-size:10px !important"
+											value="#{var.tranportFee}" />
+
+										<f:facet name="footer">
+											<p:outputLabel value="#{paidFeeReport.transportfeeString}"></p:outputLabel>
+										</f:facet>
+									</p:column>
+
+									<p:column style="font-size:10px !important"
+										headerText="Total Fee (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})">
+
+										<h:outputText style="font-size:10px !important"
+											value="#{var.totalFee}" />
+
+										<f:facet name="footer">
+											<p:outputLabel value="#{paidFeeReport.totalfeeString}"></p:outputLabel>
+										</f:facet>
+									</p:column>
+
+									<p:column style="font-size:10px !important"
+										headerText="Total Paid (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})">
+
+										<h:outputText style="font-size:10px !important"
+											value="#{var.paidFee}" />
+
+										<f:facet name="footer">
+											<p:outputLabel value="#{paidFeeReport.totalPaidString}"></p:outputLabel>
+										</f:facet>
+									</p:column>
+
+									<p:column style="font-size:10px !important"
+										headerText="Total Discount (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})">
+
+										<h:outputText style="font-size:10px !important"
+											value="#{var.discountfee}" />
+
+										<f:facet name="footer">
+											<p:outputLabel value="#{paidFeeReport.totalDiscountString}"></p:outputLabel>
+										</f:facet>
+									</p:column>
+
+									<p:column style="font-size:10px !important"
+										headerText="Total Left (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})">
+
+										<h:outputText style="font-size:10px !important"
+											value="#{var.leftFee}" />
+
+										<f:facet name="footer">
+											<p:outputLabel value="#{paidFeeReport.totalLeftString}"></p:outputLabel>
+										</f:facet>
+									</p:column>
+
+								</p:dataTable>
+							</p:panel>
+
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

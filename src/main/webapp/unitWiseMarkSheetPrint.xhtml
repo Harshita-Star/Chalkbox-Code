@@ -1,0 +1,256 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Student Performance Marks List</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form1">
+							<p:commandButton value="Print" styleClass="butwid" icon="fa fa-print">
+								<p:printer target="form"></p:printer>
+							</p:commandButton>
+						</h:form>
+						<br/><br/>
+						<h:form id="form">
+							
+                          <ui:repeat var="mainVar" value="#{oassisPrintMarksheetBean.studentlist}">
+							<p:outputPanel id="show">
+								<div>
+								<p:graphicImage value="#{oassisPrintMarksheetBean.headerImage}" width="120" height="120" style="border: 0 none;margin-left: 1%;margin-top: 15px;"/>
+								
+								<center style="margin-top: -14%">
+									<p
+										style="font-family: initial; font-size: 25px !important; font-weight: bold; margin: 0px;">#{headerBean.name}</p>
+									<br></br>
+									<p:outputPanel rendered="#{oassisPrintMarksheetBean.show}">
+									<p
+										style="font-family: initial; font-size: 18px !important; margin: 0px;">ACADEMIC
+										PROGRESS REPORT FOR - #{mainVar.termName} #{oassisPrintMarksheetBean.startSession}</p>
+										</p:outputPanel>
+									
+									<p:outputPanel rendered="#{oassisPrintMarksheetBean.showFooter}">
+									<p
+										style="font-family: initial; font-size: 18px !important; margin: 0px;">ACADEMIC
+										PROGRESS REPORT</p>
+										</p:outputPanel>	
+									<br></br>
+									<p
+										style="font-family: initial; font-size: 18px !important; margin: 0px;">Periodic Test - 1</p>
+									<br></br>
+									<p
+										style="font-family: initial; font-size: 18px !important; margin: 0px;">NAME-
+										#{mainVar.fullName}
+										&#160;&#160; Roll No-
+										#{mainVar.rollNo}
+										&#160;&#160; CLASS-
+										#{mainVar.className}</p>
+
+								</center>
+								<Center>
+									<p:dataTable style="margin-top:50px" 
+										value="#{mainVar.markslist}" var="var">
+											<f:facet name="header">
+										Scholastic
+										</f:facet>
+										<p:column headerText="Subject">
+											<center>
+												<p:outputLabel value="#{var.subjectName}"></p:outputLabel>
+											</center>
+										</p:column>
+
+										<p:column headerText="Marks">
+											<center>
+												<p:outputLabel value="#{var.mainmarks}"></p:outputLabel>
+											</center>
+
+										</p:column>
+
+										<p:column headerText="Grade">
+											<center>
+												<p:outputLabel value="#{var.grade}"></p:outputLabel>
+											</center>
+
+										</p:column>
+
+										
+
+									</p:dataTable>
+
+								</Center>
+								<br></br>
+								<br></br>
+								<p:dataTable  rendered="false" style="marging:50px"
+									
+									value="#{mainVar.coscholasticMarklist}"
+									var="var">
+										<f:facet name="header">
+										Coscholastic
+										</f:facet>
+									<p:column headerText="Subject">
+										<center>
+											<p:outputLabel value="#{var.subjectName}"></p:outputLabel>
+										</center>
+
+									</p:column>
+
+
+									<p:column headerText="Grade">
+										<center>
+											<p:outputLabel value="#{var.grade}"></p:outputLabel>
+										</center>
+
+									</p:column>
+
+								</p:dataTable>
+ 
+
+								<br></br>
+								<br></br>
+								<p:outputLabel
+									style="text-align: left;vertical-align:bottom; margin-left: 30px; font-weight: bold; font-size: 20px;" value="Class Teacher Remark :- "/>	
+								
+								<br></br>
+								<br></br>
+								<br></br>
+								<p:outputPanel rendered="#{oassisPrintMarksheetBean.showFooter}">
+								<p:outputLabel
+									style="text-align: left;vertical-align:bottom; margin-left: 30px; font-weight: bold; font-size: 20px;" value="Class Teacher"/>
+									
+								<p:outputLabel
+									style="text-align: center;vertical-align:bottom; margin-left: 150px; font-weight: bold; font-size: 20px;" value="Supervisor"/>	
+								
+								<p:outputLabel
+									style="text-align: right;vertical-align:bottom; margin-right: 30px; font-weight: bold; font-size: 20px;float: right;" value="Principal"/>
+								</p:outputPanel>
+								<p:outputPanel rendered="#{oassisPrintMarksheetBean.show}">
+								<p
+									style="text-align: end; margin-right: 30px; font-weight: bold; font-size: 20px;">Academic
+									Coordinator</p>
+									</p:outputPanel>
+								</div>	
+<p:outputPanel rendered="#{oassisPrintMarksheetBean.show}">
+								<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+					
+					<center>
+						<u><p style="margin:0px;font-size: 25px !important;font-weight:bold;font-family: timesRoman;">Scholastic Areas</p></u>
+					</center>
+					<br></br><br></br><br></br>
+					<table style="width:100%;font-size:22px;border-collapse: collapse;font-family: timesRoman;" border="1" >
+						<tr>
+							<td><center style="margin-bottom: 10px;">Grade</center></td>
+							<td><center style="margin-bottom: 10px;">Marks Range</center></td>
+							<td><center style="margin-bottom: 10px;">Grade Point</center></td>
+						</tr>
+						
+						<tr>
+							<td><center style="margin-bottom: 10px;">A1</center></td>
+							<td><center style="margin-bottom: 10px;">91 - 100</center></td>
+							<td><center style="margin-bottom: 10px;">10</center></td>
+						</tr>
+						
+						<tr>
+							<td><center style="margin-bottom: 10px;">A2</center></td>
+							<td><center style="margin-bottom: 10px;">81 - 90</center></td>
+							<td><center style="margin-bottom: 10px;">9</center></td>
+						</tr>
+						
+						<tr>
+							<td><center style="margin-bottom: 10px;">B1</center></td>
+							<td><center style="margin-bottom: 10px;">71 - 80</center></td>
+							<td><center style="margin-bottom: 10px;">8</center></td>
+						</tr>
+						
+						<tr>
+							<td><center style="margin-bottom: 10px;">B2</center></td>
+							<td><center style="margin-bottom: 10px;">61 - 70</center></td>
+							<td><center style="margin-bottom: 10px;">7</center></td>
+						</tr>
+						
+						<tr>
+							<td><center style="margin-bottom: 10px;">C1</center></td>
+							<td><center style="margin-bottom: 10px;">51 - 60</center></td>
+							<td><center style="margin-bottom: 10px;">6</center></td>
+						</tr>
+						
+						<tr>
+							<td><center style="margin-bottom: 10px;">C2</center></td>
+							<td><center style="margin-bottom: 10px;">41 - 50</center></td>
+							<td><center style="margin-bottom: 10px;">5</center></td>
+						</tr>
+						
+						<tr>
+							<td><center style="margin-bottom: 10px;">D</center></td>
+							<td><center style="margin-bottom: 10px;">33 - 40</center></td>
+							<td><center style="margin-bottom: 10px;">4</center></td>
+						</tr>
+						
+						<tr>
+							<td><center style="margin-bottom: 10px;">E1</center></td>
+							<td><center style="margin-bottom: 10px;">21 - 32</center></td>
+							<td><center style="margin-bottom: 10px;">3</center></td>
+						</tr>
+						
+						<tr>
+							<td><center style="margin-bottom: 10px;">E2</center></td>
+							<td><center style="margin-bottom: 10px;">0 - 20</center></td>
+							<td><center style="margin-bottom: 10px;">2</center></td>
+						</tr>
+					</table>
+					
+					<br/><br/><br/><br/><br/>
+					
+					<center>
+						<u><p style="margin:0px;font-size: 25px !important;font-weight:bold;font-family: timesRoman;">Profile and Co-scholastic Ratings</p></u>
+					</center>
+					<br></br><br></br><br></br>
+					<table style="width:100%;font-size:22px;border-collapse: collapse;font-family: timesRoman;" border="1" >
+						
+						<tr>
+							<td style="width:50%;"><center style="margin-bottom: 10px;">A</center></td>
+							<td style="width:50%;"><center style="margin-bottom: 10px;">Exceeds The Standard</center></td>
+						</tr>
+						
+						<tr>
+							<td style="width:50%;"><center style="margin-bottom: 10px;">B</center></td>
+							<td style="width:50%;"><center style="margin-bottom: 10px;">Meets the Standard</center></td>
+						</tr>
+						
+						<tr>
+							<td style="width:50%;"><center style="margin-bottom: 10px;">C</center></td>
+							<td style="width:50%;"><center style="margin-bottom: 10px;">Progressing towards the standard</center></td>
+						</tr>
+						
+						<tr>
+							<td style="width:50%;"><center style="margin-bottom: 10px;">D</center></td>
+							<td style="width:50%;"><center style="margin-bottom: 10px;">Beginning to develop the standard</center></td>
+						</tr>
+						
+						<tr>
+							<td style="width:50%;"><center style="margin-bottom: 10px;">E</center></td>
+							<td style="width:50%;"><center style="margin-bottom: 10px;">Rarely comes up to the standard</center></td>
+						</tr>
+						
+						
+					</table>
+
+					<br/><br/><br/><br/><br/><br/><br/><br/>
+					</p:outputPanel>
+							</p:outputPanel>
+							    <p style="page-break-after: always;"></p>
+							</ui:repeat>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

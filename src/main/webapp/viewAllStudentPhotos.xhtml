@@ -1,0 +1,146 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Student Photo</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form" enctype="multipart/form-data">
+							<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+
+							<p:panel header="View All Student Photos">
+
+								<p:dataTable value="#{viewAllStudentPhotos.pendingList}"
+									style="text-align: center;" var="var">
+
+									<p:column headerText="Sr. No.">
+										<p:outputLabel value="#{var.sno}"></p:outputLabel>
+									</p:column>
+
+
+
+
+									<p:column headerText="Student Name">
+										<p:outputLabel value="#{var.studentName}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Class Name">
+										<p:outputLabel value="#{var.className}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Student Photo">
+										<p:panelGrid columns="1"
+											styleClass="ui-panelgrid-blank form-group"
+											style="border:0px none; background-color:transparent;">
+											<p:lightBox styleClass="imagebox">
+												<h:outputLink value="#{sideMenuBean.list.downloadpath}#{var.sPhoto}">
+													<p:graphicImage
+														value="#{sideMenuBean.list.downloadpath}#{var.sPhoto}"
+														width="100" height="100" rendered="#{var.showSphoto}" />
+												</h:outputLink>
+											</p:lightBox>
+											<p:selectBooleanCheckbox value="#{var.photo1}"
+												rendered="#{var.showSphoto}"></p:selectBooleanCheckbox>
+
+
+										</p:panelGrid>
+									</p:column>
+
+									<p:column headerText="Father Photo">
+										<p:panelGrid columns="1"
+											styleClass="ui-panelgrid-blank form-group"
+											style="border:0px none; background-color:transparent;">
+											<p:lightBox styleClass="imagebox">
+												<h:outputLink value="#{sideMenuBean.list.downloadpath}#{var.fPhoto}">
+													<p:graphicImage
+														value="#{sideMenuBean.list.downloadpath}#{var.fPhoto}"
+														width="100" height="100" rendered="#{var.showFphoto}" />
+												</h:outputLink>
+											</p:lightBox>
+											<p:selectBooleanCheckbox value="#{var.photo2}"
+												rendered="#{var.showFphoto}"></p:selectBooleanCheckbox>
+
+										</p:panelGrid>
+									</p:column>
+
+									<p:column headerText="Mother Photo">
+										<p:panelGrid columns="1"
+											styleClass="ui-panelgrid-blank form-group"
+											style="border:0px none; background-color:transparent;">
+
+											<p:lightBox styleClass="imagebox">
+												<h:outputLink value="#{sideMenuBean.list.downloadpath}#{var.mPhoto}">
+													<p:graphicImage
+														value="#{sideMenuBean.list.downloadpath}#{var.mPhoto}"
+														width="100" height="100" rendered="#{var.showMphoto}" />
+												</h:outputLink>
+											</p:lightBox>
+											<p:selectBooleanCheckbox value="#{var.photo3}"
+												rendered="#{var.showMphoto}"></p:selectBooleanCheckbox>
+
+										</p:panelGrid>
+									</p:column>
+									<p:column headerText="Approve">
+										<p:commandButton update=":form" icon="fa fa-check" styleClass="butwid greenButt"
+											action="#{viewAllStudentPhotos.approve}" value="Approve">
+											<f:setPropertyActionListener value="#{var}"
+												target="#{viewAllStudentPhotos.selected}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+									<p:column headerText="Reject">
+										<p:commandButton update=":form1" icon="fa fa-ban" styleClass="butwid redButt"
+											oncomplete="PF('dialog').show()" value="Reject">
+											<f:setPropertyActionListener value="#{var}"
+												target="#{viewAllStudentPhotos.selected}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+
+
+								</p:dataTable>
+
+							</p:panel>
+
+						</h:form>
+
+						<h:form id="form1" enctype="multipart/form-data">
+							<p:dialog resizable="false" modal="true" widgetVar="dialog"
+								header="Remark" closeOnEscape="true">
+								<p:panelGrid style="margin:auto" columns="2">
+									<p:outputLabel for="@next" style="color:red"  value="Remark"></p:outputLabel>
+									<p:inputText value="#{viewAllStudentPhotos.remark}"
+										required="true" requiredMessage="Please Enter Remark"></p:inputText>
+
+								</p:panelGrid>
+								<br/>
+								<br/>
+								<center>
+									<p:commandButton update=":form1 :form" styleClass="butwid redButt" icon="fa fa-ban"
+									action="#{viewAllStudentPhotos.reject}" style="float:right"
+									value="Reject">
+								</p:commandButton>
+								</center>
+							</p:dialog>
+						</h:form>
+
+						<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+							<p:commandButton value="Yes" type="button"
+								styleClass="ui-confirmdialog-yes greenButt" icon="ui-icon-check" />
+							<p:commandButton value="No" style="margin-left:50px"
+								type="button" styleClass="ui-confirmdialog-no redButt"
+								icon="ui-icon-close" />
+						</p:confirmDialog>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

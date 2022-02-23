@@ -1,0 +1,153 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/masterTemplate.xhtml"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	<f:loadBundle var="addClassVar" basename="myProperties" />
+
+	<ui:define name="title">Message Purchase History</ui:define>
+
+	<ui:define name="content">
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+
+
+							<p:panel header="SMS Purchase History">
+								<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel value="Select School" for="@next" style="color:red" ></p:outputLabel>
+									<p:selectOneMenu value="#{msgPurchaseHistoryMaster.schoolId}"
+										filter="true" required="true"
+										requiredMessage="Please select atleast one school!">
+										<f:selectItem itemLabel="select" itemValue=""></f:selectItem>
+										<f:selectItems value="#{msgPurchaseHistoryMaster.schoolList}"></f:selectItems>
+									</p:selectOneMenu>
+
+									<p:commandButton value="Filter Data" update=":form1"
+										action="#{msgPurchaseHistoryMaster.show}"></p:commandButton>
+
+									<p:commandButton value="Get All School Data" update=":form1"
+										action="#{msgPurchaseHistoryMaster.allData}" immediate="true"></p:commandButton>
+								</p:panelGrid>
+							</p:panel>
+						</h:form>
+						<br />
+
+						<h:form id="form1">
+							<p:dataTable value="#{msgPurchaseHistoryMaster.smsList}"
+								var="info" rendered="true" rowIndexVar="index"
+								rowStyleClass="#{info.packId eq '0' ? 'LEAVE' : (info.paidStatus.toLowerCase() eq 'paid' ? 'PAID' : 'ABSENT')}">
+								<f:facet name="header">
+									<p:outputLabel value="All details of sms purchase history" />
+									<br />
+									<p:panelGrid columns="3">
+										<p:outputLabel value="Select Session " for="@next" style="color:red" ></p:outputLabel>
+										<p:selectOneMenu value="#{msgPurchaseHistoryMaster.session}"
+											required="true" requiredMessage="Please Select Session">
+											<f:selectItem itemLabel="Select Session" itemValue=""></f:selectItem>
+											<f:selectItems
+												value="#{msgPurchaseHistoryMaster.sessionList}"></f:selectItems>
+										</p:selectOneMenu>
+
+										<p:commandButton value="Proceed"
+											action="#{msgPurchaseHistoryMaster.report}" update=":form1"></p:commandButton>
+									</p:panelGrid>
+								</f:facet>
+								<p:column headerText="S.No.">
+									<p:outputLabel value="#{index+1}"></p:outputLabel>
+								</p:column>
+
+								<p:column headerText="School Name">
+									<p:outputLabel value="#{info.schoolName}"
+										style=" word-break: break-all;"></p:outputLabel>
+								</p:column>
+
+								<p:column headerText="Pack Name">
+									<p:outputLabel value="#{info.packName}"></p:outputLabel>
+								</p:column>
+								<p:column headerText="Quantity">
+									<p:outputLabel value="#{info.quantity}"></p:outputLabel>
+									<f:facet name="footer">
+										<p:outputLabel
+											value="Total quantity: #{msgPurchaseHistoryMaster.qSum}"></p:outputLabel>
+									</f:facet>
+								</p:column>
+
+								<p:column headerText="Rate">
+									<p:outputLabel value="#{info.rate}"></p:outputLabel>
+
+								</p:column>
+
+								<p:column headerText="Amount">
+									<p:outputLabel value="#{info.amount}"></p:outputLabel>
+									<f:facet name="footer">
+										<p:outputLabel
+											value="Toatl Amount: #{msgPurchaseHistoryMaster.aSum}"></p:outputLabel>
+									</f:facet>
+								</p:column>
+
+								<p:column headerText="Tax">
+									<p:outputLabel value="#{info.tax}"></p:outputLabel>
+									<f:facet name="footer">
+										<p:outputLabel
+											value="Total Tax: #{msgPurchaseHistoryMaster.tSum}"></p:outputLabel>
+									</f:facet>
+								</p:column>
+
+								<p:column headerText="Total Amount">
+									<p:outputLabel value="#{info.totalAmount}"></p:outputLabel>
+									<f:facet name="footer">
+										<p:outputLabel
+											value="Total Amount: #{msgPurchaseHistoryMaster.taSum}"></p:outputLabel>
+									</f:facet>
+								</p:column>
+
+								<p:column headerText="Date">
+									<p:outputLabel value="#{info.strDate}"></p:outputLabel>
+								</p:column>
+
+								<p:column headerText="Status">
+									<p:outputLabel value="#{info.paidStatus.toUpperCase()}"></p:outputLabel>
+								</p:column>
+
+								<p:column headerText="Action">
+									<p:commandButton rendered="#{info.show}" value="Pay"
+										update=":form1" action="#{msgPurchaseHistoryMaster.paid}"
+										icon="ui-icon-check" immediate="true">
+										<p:confirm header="Confirmation"
+											message="Are you sure to change it to PAID ?"
+											icon="ui-icon-alert" />
+										<f:setPropertyActionListener value="#{info}"
+											target="#{msgPurchaseHistoryMaster.selected}"></f:setPropertyActionListener>
+									</p:commandButton>
+								</p:column>
+
+							</p:dataTable>
+
+							<p:confirmDialog global="true" showEffect="fade"
+								hideEffect="fade">
+								<p:commandButton value="Yes" type="button"
+									styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+								<p:commandButton value="No" type="button"
+									styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+							</p:confirmDialog>
+						</h:form>
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

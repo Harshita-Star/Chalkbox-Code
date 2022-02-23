@@ -1,0 +1,87 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+    template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Class Wise Test Report</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<p:panel id="rr" header="Student Performance Details">
+								
+							<br/><br/>
+							<h:commandLink>
+									<p:graphicImage name="images/excellogo.png"
+												library="avalon-layout" width="100" height="40"></p:graphicImage>
+											<pe:exporter type="xlsx" target=":form:dt" 
+												fileName="classWisePerformance"></pe:exporter>
+									</h:commandLink>
+            		
+							
+							
+								
+								<p:outputPanel id="datatableid">
+									<center>
+									<p
+										style="font-family: initial; font-size: 25px !important; font-weight: bold; margin: 0px;">#{headerBean.name}</p>
+									<p
+										style="font-family: initial; font-size: 20px !important; margin: 0px;">ACADEMIC
+										PROGRESS REPORT FOR - #{printOasisPerformanceClassWise.termName}</p>
+									<p
+										style="font-family: initial; font-size: 20px !important; margin: 0px;">Name
+										of Examination - #{printOasisPerformanceClassWise.examName}</p>
+										<p
+											style="margin: 0px; font-size: 20px !important; font-weight: bold;">Report of Class
+											#{printOasisPerformanceClassWise.className} -
+											#{printOasisPerformanceClassWise.sectionName}</p>
+									</center>
+									<br/>
+									<p:dataTable id="dt" reflow="true" value="#{printOasisPerformanceClassWise.studentDetails}" var="var">
+
+										<p:column sortBy="#{var.fullName}" headerText="Student Name" style="width:150px">
+										
+											<f:facet name="header">
+												<p:outputLabel
+													value="Student Name"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.fullName}"></p:outputLabel>
+										</p:column>
+
+										<p:columns style="width:80px;text-align:center;" value="#{printOasisPerformanceClassWise.list}"
+											var="column" columnIndexVar="colIndex">
+											<f:facet name="header">
+												<p:outputLabel
+													value="#{column.subject} (#{column.testMarks}) "></p:outputLabel>
+											</f:facet>
+
+											<p:outputLabel
+												value="#{var.studentPerformnaceMap[column.subid]}"></p:outputLabel>
+										</p:columns>
+
+										<p:column style="width:60px" headerText="Total (#{printOasisPerformanceClassWise.totalmarks})">
+											<p:outputLabel value="#{var.totalTestNo}"></p:outputLabel>
+										</p:column>
+
+										<p:column rendered="false" headerText="Rank">
+											<p:outputLabel value="#{var.rank}"></p:outputLabel>
+										</p:column>
+									</p:dataTable>
+								</p:outputPanel>
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,132 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Syllabus</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form enctype="multipart/form-data" id="form">
+							<h1>Upload Syllabus</h1>
+							<p:messages autoUpdate="true" closable="true"></p:messages>
+							<p:panel header="allowed file type are :- pdf/PNG/JPG/JPEG">
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel value="Select Class" for="@next"
+										style="color:red;font-weight:bold;"></p:outputLabel>
+									<p:selectOneMenu value="#{addSyllabus.selectedCLassSection}"
+										filter="true" required="true"
+										requiredMessage="Please Select Class">
+										<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+										<f:selectItems value="#{addSyllabus.classSection}"></f:selectItems>
+										<p:ajax update=":form" listener="#{addSyllabus.allSubjects}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Select Section" for="@next"
+										style="color:red;font-weight:bold;"></p:outputLabel>
+									<p:selectOneMenu value="#{addSyllabus.selectedSection}"
+										filter="true" required="true"
+										requiredMessage="Please Select Section">
+										<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+										<f:selectItems value="#{addSyllabus.sectionList}"></f:selectItems>
+										<p:ajax></p:ajax>
+									</p:selectOneMenu>
+
+
+									<p:outputLabel value="Syllabus Type" for="@next"
+										style="color:red;font-weight:bold;"></p:outputLabel>
+									<p:selectOneRadio value="#{addSyllabus.syllabusType}"
+										required="true" requiredMessage="Please Select Syllabus Type">
+										<f:selectItem itemLabel="Course Syllabus"
+											itemValue="Course Syllabus"></f:selectItem>
+										<f:selectItem itemLabel="Exam Syllabus"
+											itemValue="Exam Syllabus"></f:selectItem>
+										<p:ajax></p:ajax>
+									</p:selectOneRadio>
+
+									<p:outputLabel for="@next" style="color:red;font-weight:bold;"
+										value="Syllabus Name (Eg. Annual Syllabus, Term Syllabus, Unit Test Syllabus, Half Yearly Exam Syllabus)" />
+									<p:inputText value="#{addSyllabus.type}" required="true"
+										requiredMessage="Please enter syllabus name">
+										<p:ajax></p:ajax>
+									</p:inputText>
+
+									<p:outputLabel value="Select Basis" for="@next"
+										style="color:red;font-weight:bold;"></p:outputLabel>
+									<p:selectOneRadio value="#{addSyllabus.basis}" required="true"
+										requiredMessage="Please Select Basis">
+										<f:selectItem itemLabel="Subject Wise" itemValue="subject"></f:selectItem>
+										<f:selectItem itemLabel="Combined (All Subjects)"
+											itemValue="All"></f:selectItem>
+										<p:ajax update=":form" listener="#{addSyllabus.subjects}"></p:ajax>
+									</p:selectOneRadio>
+
+									<p:outputLabel style="font-weight:bold;"
+										rendered="#{addSyllabus.showSingle}" value="Upload File"></p:outputLabel>
+									<p:fileUpload rendered="#{addSyllabus.showSingle}"
+										mode="simple" value="#{addSyllabus.assignmentPhoto5}"
+										allowTypes="/(\.|\/)(jpe?g|png|pdf)$/"></p:fileUpload>
+
+									<p:outputLabel style="font-weight:bold;"
+										rendered="#{addSyllabus.showSingle}"
+										value="Description (If Any)"></p:outputLabel>
+									<p:inputTextarea rendered="#{addSyllabus.showSingle}"
+										value="#{addSyllabus.description}" rows="3" cols="5"
+										autoResize="false"></p:inputTextarea>
+
+								</p:panelGrid>
+								<br />
+								<p:dataTable reflow="true" id="table"
+									value="#{addSyllabus.subjectList}" var="var"
+									rendered="#{addSyllabus.showTable}">
+									<p:column headerText="S.No.">
+										<p:outputLabel value="#{var.serialNumber}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Subject Name">
+										<p:outputLabel value="#{var.subjectName}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Description (if any)">
+										<p:inputTextarea value="#{var.description}" autoResize="false"
+											rows="4" cols="4"></p:inputTextarea>
+									</p:column>
+
+									<p:column headerText="Upload file (Allowed file type are :- jpg,jpeg,png,pdf)">
+										<p:fileUpload mode="simple" value="#{var.assignmentPhoto5}"
+											allowTypes="/(\.|\/)(jpe?g|png|pdf)$/"></p:fileUpload>
+									</p:column>
+
+								</p:dataTable>
+								
+								<br />
+								<p:separator />
+								<center>
+									<p:commandButton value="Upload Syllabus"
+										title="Click On to Add Syllabus" styleClass="butwid" icon="fa fa-upload"
+										ajax="false" update=":form"
+										action="#{addSyllabus.uploadSyllabus}"></p:commandButton>
+								</center>
+								<p:separator />
+								<br />
+								
+
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

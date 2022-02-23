@@ -1,0 +1,436 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Student Performance</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+					<p:outputPanel id="marksForm">
+						
+							<ui:repeat  var="mainVar" value="#{stdOtherPerform.studentList}">
+						<h:form rendered="#{stdOtherPerform.forInitium}">
+						<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+								<p:outputPanel styleClass="test" style="width:100%;margin-bottom:-20px;margin-left:40px;">
+									<hr></hr>
+									<table border="1" style="width:100%;font-size:11px;border-collapse: collapse;">
+									<tr>
+									    <td>Student Name</td>
+										<td>#{mainVar.fname}</td>
+									
+										<td>Enrollment. No.</td>
+										<td>#{mainVar.addNumber}</td>
+									</tr>
+									<tr>
+									    <td>Class &amp; Sec</td>
+										<td>#{mainVar.className}</td>
+									
+										<td>Roll No.</td>
+										<td>#{mainVar.rollNo}</td>
+										
+									</tr>
+									<tr>
+									    <td>Father's Name</td>
+										<td>#{mainVar.fathersName}</td>
+									
+										<td>Date of Birth</td>
+										<td>#{mainVar.dobString}</td>
+										
+									</tr>	
+									<tr>
+									   	<td>Mother's Name</td>
+										<td>#{mainVar.motherName}</td> 
+										
+										<td>Address</td>
+										<td>#{mainVar.currentAddress}</td>
+									</tr>
+									</table>	
+									<br></br>			
+								</p:outputPanel>
+								
+								<br></br>
+								
+								<p:dataTable style="width:100%;border-collapse:collapse;font-size:9px" border="1" value="#{mainVar.englistList}" var="var">
+							        <p:column style="width:500px" headerText="English">
+						           		<p:outputLabel value="#{var.subjectName}"></p:outputLabel>
+						           	</p:column>
+						           	
+									<p:column headerText="#{stdOtherPerform.termName}">
+						            	<p:inputText rendered="#{var.subjectType ne 'main'}" value="#{var.result}" validatorMessage="Please Enter Correct value">
+						            	  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+						            	</p:inputText>
+						            </p:column>
+						       	</p:dataTable>
+						       	<br></br>
+						       	<br></br>
+								<p:dataTable style="width:100%;border-collapse:collapse;font-size:9px" border="1" value="#{mainVar.hindiList}" var="var">
+									
+							        <p:column style="width:500px" headerText="Hindi">
+						           		<p:outputLabel value="#{var.subjectName}"></p:outputLabel>
+						           	</p:column>
+						           	
+									<p:column headerText="#{stdOtherPerform.termName}">
+						            	<p:inputText value="#{var.result}" validatorMessage="Please Enter Correct value">
+						            	  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+						            	</p:inputText>
+						            </p:column>
+						       	</p:dataTable>
+						       	<br></br>
+						       	<br></br>
+								<p:dataTable style="width:100%;border-collapse:collapse;font-size:9px" border="1" value="#{mainVar.mathList}" var="var">
+							        <p:column style="width:500px" headerText="Aspects">
+						           		<p:outputLabel value="#{var.subjectName}"></p:outputLabel>
+						           	</p:column>
+						           	
+									<p:column headerText="#{stdOtherPerform.termName}">
+						            	<p:inputText value="#{var.result}" validatorMessage="Please Enter Correct value">
+						            	   <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+						            	</p:inputText>
+						            </p:column>
+						       	</p:dataTable>
+						       	<br></br>
+						       	<br></br>
+								<p:dataTable style="width:100%;border-collapse:collapse;font-size:9px" border="1" value="#{mainVar.scienceList}" var="var">
+							    	<f:facet name="header">
+							    		<p:outputLabel value="C. SCIENCE &amp; EVS"></p:outputLabel>
+							    	</f:facet>
+							        <p:column style="width:500px" headerText="Aspects">
+						           		<p:outputLabel value="#{var.subjectName}"></p:outputLabel>
+						           	</p:column>
+						           	
+						           	<p:column style="width:50px" headerText="Max Marks">
+							        	<p:outputLabel rendered="#{var.subjectType eq 'sub'}" value="#{var.marks}"></p:outputLabel>
+						           	</p:column>
+						           
+									<p:column headerText="#{stdOtherPerform.termName}">
+						            	<p:inputText  value="#{var.result}" validatorMessage="Please Enter Correct value">
+						            	  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+						            	</p:inputText>
+						            </p:column>
+						       	</p:dataTable>
+						       	
+						       	<br></br>
+						       	<br></br>
+						       	
+						       	<p:dataTable style="width:100%;border-collapse:collapse;font-size:9px" border="1" value="#{mainVar.evsList}" var="var">
+							    	<f:facet name="header">
+							    		<p:outputLabel value="MY INTEREST IN OTHER ACTIVITIES"></p:outputLabel>
+							    	</f:facet>
+							        <p:column style="width:500px" headerText="Aspects">
+						           		<p:outputLabel value="#{var.subjectName}"></p:outputLabel>
+						           	</p:column>
+						           
+									<p:column headerText="#{stdOtherPerform.termName}">
+						            	<p:inputText  value="#{var.result}" validatorMessage="Please Enter Correct value">
+						            	  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+						            	</p:inputText>
+						            </p:column>
+						       	</p:dataTable>
+						       	
+						       	<br></br>
+						       	<br></br>
+						       	
+						       	<p:dataTable style="width:100%;border-collapse:collapse;font-size:9px" border="1" value="#{mainVar.computerList}" var="var">
+							    	<f:facet name="header">
+							    		<p:outputLabel value="PARTICIPATED IN"></p:outputLabel>
+							    	</f:facet>
+							        <p:column style="width:500px" headerText="Competition">
+						           		<p:outputLabel value="#{var.subjectName}"></p:outputLabel>
+						           	</p:column>
+						           
+									<p:column headerText="#{stdOtherPerform.termName}">
+						            	<p:inputText  value="#{var.result}" validatorMessage="Please Enter Correct value">
+						            	  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+						            	</p:inputText>
+						            </p:column>
+						       	</p:dataTable>
+						       	
+						       	<br></br>
+						       	<br></br>
+						       	
+						       	<p:dataTable style="width:100%;border-collapse:collapse;font-size:9px" border="1" value="#{mainVar.artList}" var="var">
+							    	<f:facet name="header">
+							    		<p:outputLabel value="MORE ABOUT MYSELF"></p:outputLabel>
+							    	</f:facet>
+							        <p:column style="width:500px" headerText="Aspects">
+						           		<p:outputLabel value="#{var.subjectName}"></p:outputLabel>
+						           	</p:column>
+						           
+									<p:column headerText="#{stdOtherPerform.termName}">
+						            	<p:inputText  value="#{var.result}" validatorMessage="Please Enter Correct value">
+						            	  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+						            	</p:inputText>
+						            </p:column>
+						       	</p:dataTable>
+						       	
+						       	<br></br>
+						       	<br></br>
+						       	
+							</ui:repeat>
+							
+							<p:commandButton value="Submit" update=":marksForm" actionListener="#{stdOtherPerform.submitMarks}"></p:commandButton>
+						</h:form>
+						
+						<h:form rendered="#{stdOtherPerform.forEvergreen}">
+							<ui:repeat  var="mainVar" value="#{stdOtherPerform.studentList}">
+								<p:outputPanel styleClass="test" style="width:100%;margin-bottom:-20px;margin-left:40px;">
+									<hr></hr>
+									<table border="1" style="width:100%;font-size:11px;border-collapse: collapse;">
+									<tr>
+									    <td>Student Name</td>
+										<td>#{mainVar.fname}</td>
+									
+										<td>Enrollment. No.</td>
+										<td>#{mainVar.addNumber}</td>
+									</tr>
+									<tr>
+									    <td>Class &amp; Sec</td>
+										<td>#{mainVar.className}</td>
+									
+										<td>Roll No.</td>
+										<td>#{mainVar.rollNo}</td>
+										
+									</tr>
+									<tr>
+									    <td>Father's Name</td>
+										<td>#{mainVar.fathersName}</td>
+									
+										<td>Date of Birth</td>
+										<td>#{mainVar.dobString}</td>
+										
+									</tr>	
+									<tr>
+									   	<td>Mother's Name</td>
+										<td>#{mainVar.motherName}</td> 
+										
+										<td>Address</td>
+										<td>#{mainVar.currentAddress}</td>
+									</tr>
+									</table>	
+									<br></br>			
+								</p:outputPanel>
+								
+								<br></br>
+								
+								<center><h4><b>A. Languages</b></h4></center>
+								<p:dataTable style="width:100%;border-collapse:collapse;font-size:9px" border="1" value="#{mainVar.englistList}" var="var">
+									
+									<p:column style="width:90px" headerText="S.No.">
+						           		<b><p:outputLabel rendered="#{var.subjectType eq 'main'}"  style="float:left" value="#{var.serialNumber}"/></b>
+						           		<p:outputLabel rendered="#{var.subjectType ne 'main'}"  style="float:right" value="#{var.serialNumber}"/>
+						           	</p:column>
+								
+							        <p:column style="width:450px" headerText="Language I-English">
+						           		<b><p:outputLabel rendered="#{var.subjectType eq 'main'}" value="#{var.subjectName}"></p:outputLabel></b>
+						           		<p:outputLabel rendered="#{var.subjectType ne 'main'}" value="#{var.subjectName}"/>
+						           	</p:column>
+						           	
+						            <p:column headerText="#{stdOtherPerform.termName}">
+						            	<p:selectOneRadio rendered="#{var.subjectType ne 'main'}" value="#{var.result}">
+						            		<f:selectItem itemLabel="Improvement Needed" itemValue="I"></f:selectItem>
+						            		<f:selectItem itemLabel="Often" itemValue="O"></f:selectItem>
+						            		<f:selectItem itemLabel="Consistently" itemValue="C"></f:selectItem>
+						            	</p:selectOneRadio>
+						            </p:column>
+						       	</p:dataTable>
+						       	<br></br>
+						       	<br></br>
+								<p:dataTable style="width:100%;border-collapse:collapse;font-size:9px" border="1" value="#{mainVar.hindiList}" var="var">
+									
+							        <p:column style="width:90px" headerText="S.No.">
+						           		<b><p:outputLabel rendered="#{var.subjectType eq 'main'}"  style="float:left" value="#{var.serialNumber}"/></b>
+						           		<p:outputLabel rendered="#{var.subjectType ne 'main'}"  style="float:right" value="#{var.serialNumber}"/>
+						           	</p:column>
+								
+							        <p:column style="width:450px" headerText="Language II-Hindi">
+						           		<b><p:outputLabel rendered="#{var.subjectType eq 'main'}" value="#{var.subjectName}"></p:outputLabel></b>
+						           		<p:outputLabel rendered="#{var.subjectType ne 'main'}" value="#{var.subjectName}"/>
+						           	</p:column>
+						           	
+						            <p:column headerText="#{stdOtherPerform.termName}">
+						            	<p:selectOneRadio rendered="#{var.subjectType ne 'main'}" value="#{var.result}">
+						            		<f:selectItem itemLabel="Improvement Needed" itemValue="I"></f:selectItem>
+						            		<f:selectItem itemLabel="Often" itemValue="O"></f:selectItem>
+						            		<f:selectItem itemLabel="Consistently" itemValue="C"></f:selectItem>
+						            	</p:selectOneRadio>
+						            </p:column>
+						       	</p:dataTable>
+						       	
+						       	<center><h4><b>B. Mathematics</b></h4></center>
+								
+								<p:dataTable style="width:100%;border-collapse:collapse;font-size:9px" border="1" value="#{mainVar.mathList}" var="var">
+							        <p:column style="width:90px" headerText="S.No.">
+						           		<b><p:outputLabel rendered="#{var.subjectType eq 'main'}"  style="float:left" value="#{var.serialNumber}"/></b>
+						           		<p:outputLabel rendered="#{var.subjectType ne 'main'}"  style="float:right" value="#{var.serialNumber}"/>
+						           	</p:column>
+								
+							        <p:column style="width:450px" headerText="Maths">
+						           		<b><p:outputLabel rendered="#{var.subjectType eq 'main'}" value="#{var.subjectName}"></p:outputLabel></b>
+						           		<p:outputLabel rendered="#{var.subjectType ne 'main'}" value="#{var.subjectName}"/>
+						           	</p:column>
+						           	
+						            <p:column headerText="#{stdOtherPerform.termName}">
+						            	<p:selectOneRadio rendered="#{var.subjectType ne 'main'}" value="#{var.result}">
+						            		<f:selectItem itemLabel="Improvement Needed" itemValue="I"></f:selectItem>
+						            		<f:selectItem itemLabel="Often" itemValue="O"></f:selectItem>
+						            		<f:selectItem itemLabel="Consistently" itemValue="C"></f:selectItem>
+						            	</p:selectOneRadio>
+						            </p:column>
+						       	</p:dataTable>
+						       	
+								<center><h4><b>C. Interest In other activities</b></h4></center>
+								
+								<p:dataTable style="width:100%;border-collapse:collapse;font-size:9px" border="1" value="#{mainVar.drawingList}" var="var">
+							    	<p:column style="width:90px" headerText="S.No.">
+						           		<b><p:outputLabel rendered="#{var.subjectType eq 'main'}"  style="float:left" value="#{var.serialNumber}"/></b>
+						           		<p:outputLabel rendered="#{var.subjectType ne 'main'}"  style="float:right" value="#{var.serialNumber}"/>
+						           	</p:column>
+								
+							        <p:column style="width:450px" headerText="Drawing">
+						           		<b><p:outputLabel rendered="#{var.subjectType eq 'main'}" value="#{var.subjectName}"></p:outputLabel></b>
+						           		<p:outputLabel rendered="#{var.subjectType ne 'main'}" value="#{var.subjectName}"/>
+						           	</p:column>
+						           	
+						            <p:column headerText="#{stdOtherPerform.termName}">
+						            	<p:selectOneRadio rendered="#{var.subjectType ne 'main'}" value="#{var.result}">
+						            		<f:selectItem itemLabel="Improvement Needed" itemValue="I"></f:selectItem>
+						            		<f:selectItem itemLabel="Often" itemValue="O"></f:selectItem>
+						            		<f:selectItem itemLabel="Consistently" itemValue="C"></f:selectItem>
+						            	</p:selectOneRadio>
+						            </p:column>
+						       	</p:dataTable>
+						       	
+						       	<br></br>
+						       	<br></br>
+						       	
+						       	<p:dataTable style="width:100%;border-collapse:collapse;font-size:9px" border="1" value="#{mainVar.indianMusicList}" var="var">
+							    	<p:column style="width:90px" headerText="S.No.">
+						           		<b><p:outputLabel rendered="#{var.subjectType eq 'main'}"  style="float:left" value="#{var.serialNumber}"/></b>
+						           		<p:outputLabel rendered="#{var.subjectType ne 'main'}"  style="float:right" value="#{var.serialNumber}"/>
+						           	</p:column>
+								
+							        <p:column style="width:450px" headerText="Music / Dance">
+						           		<b><p:outputLabel rendered="#{var.subjectType eq 'main'}" value="#{var.subjectName}"></p:outputLabel></b>
+						           		<p:outputLabel rendered="#{var.subjectType ne 'main'}" value="#{var.subjectName}"/>
+						           	</p:column>
+						           	
+						            <p:column headerText="#{stdOtherPerform.termName}">
+						            	<p:selectOneRadio rendered="#{var.subjectType ne 'main'}" value="#{var.result}">
+						            		<f:selectItem itemLabel="Improvement Needed" itemValue="I"></f:selectItem>
+						            		<f:selectItem itemLabel="Often" itemValue="O"></f:selectItem>
+						            		<f:selectItem itemLabel="Consistently" itemValue="C"></f:selectItem>
+						            	</p:selectOneRadio>
+						            </p:column>
+						       	</p:dataTable>
+						       	
+						       	<br></br>
+						       	<br></br>
+						       	
+						       	<p:dataTable style="width:100%;border-collapse:collapse;font-size:9px" border="1" value="#{mainVar.sportsList}" var="var">
+							    	<p:column style="width:90px" headerText="S.No.">
+						           		<b><p:outputLabel rendered="#{var.subjectType eq 'main'}"  style="float:left" value="#{var.serialNumber}"/></b>
+						           		<p:outputLabel rendered="#{var.subjectType ne 'main'}"  style="float:right" value="#{var.serialNumber}"/>
+						           	</p:column>
+								
+							        <p:column style="width:450px" headerText="Sports">
+						           		<b><p:outputLabel rendered="#{var.subjectType eq 'main'}" value="#{var.subjectName}"></p:outputLabel></b>
+						           		<p:outputLabel rendered="#{var.subjectType ne 'main'}" value="#{var.subjectName}"/>
+						           	</p:column>
+						           	
+						            <p:column headerText="#{stdOtherPerform.termName}">
+						            	<p:selectOneRadio rendered="#{var.subjectType ne 'main'}" value="#{var.result}">
+						            		<f:selectItem itemLabel="Improvement Needed" itemValue="I"></f:selectItem>
+						            		<f:selectItem itemLabel="Often" itemValue="O"></f:selectItem>
+						            		<f:selectItem itemLabel="Consistently" itemValue="C"></f:selectItem>
+						            	</p:selectOneRadio>
+						            </p:column>
+						       	</p:dataTable>
+						       	
+						       	<center><h4><b>D. More about myself</b></h4></center>
+						       	
+						       	<p:dataTable style="width:100%;border-collapse:collapse;font-size:9px" border="1" value="#{mainVar.otherSubjectlist}" var="var">
+							    	<p:column style="width:90px" headerText="S.No.">
+						           		<b><p:outputLabel rendered="#{var.subjectType eq 'main'}"  style="float:left" value="#{var.serialNumber}"/></b>
+						           		<p:outputLabel rendered="#{var.subjectType ne 'main'}"  style="float:right" value="#{var.serialNumber}"/>
+						           	</p:column>
+								
+							        <p:column style="width:450px" headerText="Social Skills">
+						           		<b><p:outputLabel rendered="#{var.subjectType eq 'main'}" value="#{var.subjectName}"></p:outputLabel></b>
+						           		<p:outputLabel rendered="#{var.subjectType ne 'main'}" value="#{var.subjectName}"/>
+						           	</p:column>
+						           	
+						            <p:column headerText="#{stdOtherPerform.termName}">
+						            	<p:selectOneRadio rendered="#{var.subjectType ne 'main'}" value="#{var.result}">
+						            		<f:selectItem itemLabel="Improvement Needed" itemValue="I"></f:selectItem>
+						            		<f:selectItem itemLabel="Often" itemValue="O"></f:selectItem>
+						            		<f:selectItem itemLabel="Consistently" itemValue="C"></f:selectItem>
+						            	</p:selectOneRadio>
+						            </p:column>
+						       	</p:dataTable>
+						       	
+						       	<center><h4><b>E. Personal skills</b></h4></center>
+						       	
+						       	<p:dataTable style="width:100%;border-collapse:collapse;font-size:9px" border="1" value="#{mainVar.personalList}" var="var">
+							    	<p:column style="width:90px" headerText="S.No.">
+						           		<b><p:outputLabel rendered="#{var.subjectType eq 'main'}"  style="float:left" value="#{var.serialNumber}"/></b>
+						           		<p:outputLabel rendered="#{var.subjectType ne 'main'}"  style="float:right" value="#{var.serialNumber}"/>
+						           	</p:column>
+								
+							        <p:column style="width:450px" headerText="Personal">
+						           		<b><p:outputLabel rendered="#{var.subjectType eq 'main'}" value="#{var.subjectName}"></p:outputLabel></b>
+						           		<p:outputLabel rendered="#{var.subjectType ne 'main'}" value="#{var.subjectName}"/>
+						           	</p:column>
+						           	
+						            <p:column headerText="#{stdOtherPerform.termName}">
+						            	<p:selectOneRadio rendered="#{var.subjectType ne 'main'}" value="#{var.result}">
+						            		<f:selectItem itemLabel="Improvement Needed" itemValue="I"></f:selectItem>
+						            		<f:selectItem itemLabel="Often" itemValue="O"></f:selectItem>
+						            		<f:selectItem itemLabel="Consistently" itemValue="C"></f:selectItem>
+						            	</p:selectOneRadio>
+						            </p:column>
+						       	</p:dataTable>
+						       	
+						       	<center><h4><b>F. Working skills</b></h4></center>
+						       	
+						       	<p:dataTable style="width:100%;border-collapse:collapse;font-size:9px" border="1" value="#{mainVar.workingList}" var="var">
+							    	<p:column style="width:90px" headerText="S.No.">
+						           		<b><p:outputLabel rendered="#{var.subjectType eq 'main'}"  style="float:left" value="#{var.serialNumber}"/></b>
+						           		<p:outputLabel rendered="#{var.subjectType ne 'main'}"  style="float:right" value="#{var.serialNumber}"/>
+						           	</p:column>
+								
+							        <p:column style="width:450px" headerText="Work habits">
+						           		<b><p:outputLabel rendered="#{var.subjectType eq 'main'}" value="#{var.subjectName}"></p:outputLabel></b>
+						           		<p:outputLabel rendered="#{var.subjectType ne 'main'}" value="#{var.subjectName}"/>
+						           	</p:column>
+						           	
+						            <p:column headerText="#{stdOtherPerform.termName}">
+						            	<p:selectOneRadio rendered="#{var.subjectType ne 'main'}" value="#{var.result}">
+						            		<f:selectItem itemLabel="Improvement Needed" itemValue="I"></f:selectItem>
+						            		<f:selectItem itemLabel="Often" itemValue="O"></f:selectItem>
+						            		<f:selectItem itemLabel="Consistently" itemValue="C"></f:selectItem>
+						            	</p:selectOneRadio>
+						            </p:column>
+						       	</p:dataTable>
+						       	
+						       	<br></br>
+						       	<br></br>
+						       	
+							</ui:repeat>
+							
+							<p:commandButton value="Submit" update=":marksForm" actionListener="#{stdOtherPerform.submitMarksEvergreen}"></p:commandButton>
+						</h:form>
+						</p:outputPanel>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

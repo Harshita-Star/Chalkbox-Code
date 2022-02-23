@@ -1,0 +1,186 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Staff Anniversary List</ui:define>
+
+    <ui:define name="content">
+       
+            <div class="ui-fluid">
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <div class="card card-w-title">
+                            	<h:form id="form" style="overflow:hidden">	
+					<p:messages closable="true" autoUpdate="true"></p:messages>
+						<p:panel header="Staff Anniversary List">
+							<p:panelGrid columns="8" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;" >
+								<p:outputLabel value="Date"></p:outputLabel>
+								<p:calendar navigator="true" pattern="dd/MM/yyyy" yearRange="c-10:c+10" value="#{staffAnniversary.date}" ></p:calendar>
+						
+								<p:commandButton icon="ui-icon-search" styleClass="butwid" update=":form" actionListener="#{staffAnniversary.searchData}" value="Search"></p:commandButton>
+							</p:panelGrid>
+						
+							<br></br>
+							<p:dataTable var="var" reflow="true" value="#{staffAnniversary.staffList}">
+								
+								<f:facet name="header">
+					              	<p:commandButton value="Wish To All" update=":birthdayForm" action="#{staffAnniversary.allStudentMsz}" rendered="#{staffAnniversary.showWishAll}"></p:commandButton>
+					        	</f:facet>
+							
+								<p:column  headerText="S.No">
+								    <p:outputLabel value="#{var.sno}"></p:outputLabel>
+								</p:column>
+								
+								<p:column headerText="Name">
+								   <p:outputLabel value="#{var.fname}"></p:outputLabel>
+								</p:column>
+								
+								<p:column headerText="Category">
+								   <p:outputLabel value="#{var.category}"></p:outputLabel>
+								</p:column>
+								
+								<p:column headerText="Sub Category">
+								   <p:outputLabel value="#{var.subCateg}"></p:outputLabel>
+								</p:column>
+								
+								<p:column headerText="Image">
+								   <p:graphicImage value="#{var.empImage}" width="60px"
+										height="60px" />
+								</p:column>
+								
+								<p:column headerText="Wish">
+
+								 <p:commandButton value="Wish" icon="fa fa-gift" styleClass="butwid" update=":birthdayForm" oncomplete="PF('birthdayDialog').show()" action="#{staffAnniversary.selectStudentMsz}" style="width:70px;">
+               						<f:setPropertyActionListener target="#{staffAnniversary.selectedStaff}" value="#{var}"></f:setPropertyActionListener>
+            					</p:commandButton>
+								</p:column>
+							</p:dataTable>
+						</p:panel>
+					</h:form>
+					
+					<h:form id="birthdayForm">
+                <p:dialog style="height:1000px;" resizable="false" styleClass="ui-panelgrid" widgetVar="birthdayDialog" header="Send Message" showEffect="fade" hideEffect="explode" modal="true">
+                
+                     <p:selectOneRadio  value="#{staffAnniversary.template}" columns="1" layout="responsive">
+                      	 <f:selectItem itemLabel="#{staffAnniversary.temp1}" itemValue="#{staffAnniversary.temp1}" />
+                         <f:selectItem itemLabel="#{staffAnniversary.temp2}" itemValue="#{staffAnniversary.temp2}" />
+                         <f:selectItem itemLabel="#{staffAnniversary.temp3}" itemValue="#{staffAnniversary.temp3}" />
+                         <f:selectItem itemLabel="#{staffAnniversary.temp4}" itemValue="#{staffAnniversary.temp4}" />
+                         <p:ajax listener="#{staffAnniversary.templateMsg}" update="bta"></p:ajax>
+                    </p:selectOneRadio>
+                    
+                    <p:outputPanel id="bta">
+                    <p:panelGrid columns="2">
+                        <p:outputLabel value="Custom Message : "
+                            style="font-size:15px !important;" />
+                        <p:outputLabel />
+                        <p:outputLabel value="Dear ,"
+                            style="font-size:15px !important;" />
+                        <p:outputLabel />
+                        <p:inputTextarea value="#{staffAnniversary.birthdayWish}" rows="7" cols="30"
+                            counter="display" maxlength="765"
+                            counterTemplate="{0} characters remaining." autoResize="false"
+                            style="width:400px !important;"
+                            onkeyup="changeColor(this.value)" />
+                        <p:outputLabel id="display" style="font-size:15px !important;" />
+
+                        <p:outputLabel value="Regards, #{staffAnniversary.schoolName}"
+                            style="font-size:15px !important;" />
+                        <p:outputLabel />
+                    
+                        <p:commandButton value="Send" action="#{staffAnniversary.wishPreview}"
+                            style="font-size:15px !important;width:200px;" />
+                        <p:outputLabel />
+                    </p:panelGrid>
+                    </p:outputPanel>
+                </p:dialog>
+</h:form>
+   
+			<h:form id="bdyPrevForm" style="overflow:hidden">
+				<p:dialog header="Message Preview : " width="500" widgetVar="bdyPrevDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+					<p:outputLabel value="#{staffAnniversary.bdyPreview}" style="font-size:14px;font-weight: bold;"/>
+					<br></br>
+					<br></br>
+					<center><p:commandButton value="Send Now" actionListener="#{staffAnniversary.sendWish}"/></center>
+					<br></br>
+				</p:dialog>
+			</h:form>
+	
+			<h:form id="errorForm" style="overflow:hidden">
+				<p:dialog header="Message Status : " widgetVar="errorDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" height="50" width="400">
+					<br></br>
+					<center><p:outputLabel value="#{staffAnniversary.errorLabel}" style="font-size:12px;font-weight: bold;"/></center>
+				</p:dialog>
+			</h:form>
+			
+			<h:form id="MsgLimitForm1" style="overflow:hidden">
+				<p:dialog header="Low SMS Balance" width="500"
+					widgetVar="MsgLmtDlg1" modal="true" showEffect="fade"
+					hideEffect="fade" resizable="false">
+					<center>
+					<p:outputLabel value="#{adminMain.balMsg}"
+						style="font-size:14px;font-weight: bold;" />
+					</center>
+					<br></br>
+					<br></br> 
+					<center>
+						<p:commandButton value="Skip" action="#{staffAnniversary.allBdMsg}" update="MsgLimitForm1"/>
+						<br/>
+						<br/>
+						<p:commandButton value="Message Logs" action="messageSchoolHistory.xhtml?faces-redirect=true" update="MsgLimitForm1"/>
+						<br/>
+						<br/>
+						<p:commandButton value="Recharge Now" action="purchaseMsgPack.xhtml?faces-redirect=true" update="MsgLimitForm1"/>
+					</center>
+					<br></br>
+				</p:dialog>
+			</h:form>
+			
+			<h:form id="MsgOverForm" style="overflow:hidden">
+				<p:dialog header="SMS Limit Over" width="500"
+					widgetVar="MsgOvrDlg" modal="true" showEffect="fade"
+					hideEffect="fade" resizable="false">
+					<center>
+					<p:outputLabel value="#{staffAnniversary.balMsg}"
+						style="font-size:14px;font-weight: bold;" />
+					</center>
+					<br></br>
+					<br></br> 
+					<center>
+						<p:commandButton value="Message Logs" action="messageSchoolHistory.xhtml?faces-redirect=true" update="MsgOverForm"/>
+						<br/>
+						<br/>
+						<p:commandButton value="Recharge Now" action="purchaseMsgPack.xhtml?faces-redirect=true" update="MsgOverForm"/>
+					</center>
+					<br></br>
+				</p:dialog>
+			</h:form>
+			
+			<h:form id="MsgOtherForm" style="overflow:hidden">
+				<p:dialog header="SMS Limit Over" width="500"
+					widgetVar="MsgOthDlg" modal="true" showEffect="fade"
+					hideEffect="fade" resizable="false">
+					<center>
+					<p:outputLabel value="#{staffAnniversary.balMsg}"
+						style="font-size:14px;font-weight: bold;" />
+					</center>
+					<br></br> 
+					<br></br> 
+					<center>
+						<p:commandButton value="OK" action="staffAnniversaryList.xhtml?faces-redirect=true" update="MsgOtherForm"/>
+					</center>
+				</p:dialog>
+			</h:form>
+            
+				
+                        </div>
+                    </div>
+                </div>
+            </div>
+       
+    </ui:define>
+
+</ui:composition>

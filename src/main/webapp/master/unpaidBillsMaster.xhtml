@@ -1,0 +1,232 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/masterTemplate.xhtml">
+
+	<ui:define name="title">Unpaid Bills</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form" enctype="multipart/form-data">
+							<p:messages closable="true" autoUpdate="true"></p:messages>
+							<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+							<h1>Unpaid Bills</h1>
+
+							<p:panel header="Unpaid Bills">
+								<p:dataTable value="#{unpaidBillsMaster.list}" var="var"
+									reflow="true" rowIndexVar="index">
+
+									<p:column headerText="S.No.">
+										<p:outputLabel value="#{index+1}"></p:outputLabel>
+									</p:column>
+
+									<p:column filterBy="#{var.schid}" filterMatchMode="contains"
+										headerText="School Id">
+										<p:outputLabel value="#{var.schid}"
+											style=" word-break: break-all;"></p:outputLabel>
+									</p:column>
+
+									<p:column filterBy="#{var.schoolName}"
+										filterMatchMode="contains" headerText="School Name">
+										<p:outputLabel value="#{var.schoolName}"
+											style=" word-break: break-all;"></p:outputLabel>
+									</p:column>
+
+									<p:column filterBy="#{var.billNo}" filterMatchMode="contains"
+										headerText="Bill No.">
+										<p:outputLabel value="#{var.billNo}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Bill Date">
+										<p:outputLabel value="#{var.billDateStr}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Due Date">
+										<p:outputLabel value="#{var.dueDateStr}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Amount">
+										<p:outputLabel value="#{var.amount}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="View Bill">
+										<p:commandButton icon="fa fa-fw fa-paperclip"
+											action="#{unpaidBillsMaster.view}" value="View">
+											<f:setPropertyActionListener
+												target="#{unpaidBillsMaster.selectedBill}" value="#{var}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+
+									<p:column headerText="Extend Due Date">
+										<p:commandButton icon="fa fa-fw fa-plus" update=":form3"
+											oncomplete="PF('edit').show()" value="Extend">
+											<f:setPropertyActionListener
+												target="#{unpaidBillsMaster.selectedBill}" value="#{var}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+
+									<p:column headerText="Pay Bill">
+										<p:commandButton icon="ui-icon-check" update=":payform"
+											oncomplete="PF('pay').show()" value="Pay">
+											<f:setPropertyActionListener
+												target="#{unpaidBillsMaster.selectedBill}" value="#{var}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+
+									<p:column headerText="Delete">
+										<p:commandButton icon="fa fa-fw fa-trash" update=":form"
+											action="#{unpaidBillsMaster.delete}" value="Delete">
+											<f:setPropertyActionListener
+												target="#{unpaidBillsMaster.selectedBill}" value="#{var}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+
+								</p:dataTable>
+
+
+							</p:panel>
+						</h:form>
+
+						<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+							<p:commandButton value="Yes" styleClass="ui-confirmdialog-yes"
+								icon="ui-icon-check" />
+							<p:commandButton value="No" styleClass="ui-confirmdialog-no"
+								icon="ui-icon-close" />
+						</p:confirmDialog>
+
+
+						<h:form id="form2">
+							<p:dialog widgetVar="alrtDlg" showEffect="fade"
+								hideEffect="explode" resizable="true" closable="true"
+								closeOnEscape="true" header="Bill" modal="true" width="100%"
+								height="650px">
+								<object type="application/pdf"
+									data="#{unpaidBillsMaster.file}?pfdrid_c=true" width="100%"
+									height="100%"> </object>
+
+							</p:dialog>
+						</h:form>
+
+						<h:form id="form3">
+							<p:dialog header="Details" widgetVar="edit" modal="true"
+								showEffect="fade" hideEffect="fade" resizable="false">
+								<div class="ui-g form-group">
+									<p:outputPanel id="EditTable" style="text-align:center;">
+										<p:panelGrid columns="2" columnClasses="label,value">
+
+											<p:outputLabel  for="@next" style="color:red" value="Enter No. of Days"></p:outputLabel>
+											<p:inputText value="#{unpaidBillsMaster.days}"
+												required="true" requiredMessage="Please enter no. of days">
+												<p:keyFilter mask="pnum"></p:keyFilter>
+											</p:inputText>
+
+											<p:commandButton update=":form :form3" value="Extend"
+												action="#{unpaidBillsMaster.sendOTP}"></p:commandButton>
+										</p:panelGrid>
+									</p:outputPanel>
+								</div>
+							</p:dialog>
+						</h:form>
+
+						<h:form id="payform">
+							<p:dialog header="Payment Details" widgetVar="pay" modal="true"
+								showEffect="fade" hideEffect="fade" resizable="false">
+								<div class="ui-g form-group">
+									<p:outputPanel id="payTable" style="text-align:center;">
+
+										<p:messages autoUpdate="true" closable="true"></p:messages>
+
+										<p:panelGrid columns="2" columnClasses="label,value">
+
+											<p:outputLabel value="Paid Date" for="@next" style="color:red" ></p:outputLabel>
+											<p:calendar value="#{unpaidBillsMaster.payDate}"
+												navigator="true" pattern="dd/MM/yyyy" required="true"
+												requiredMessage="Please Enter Paid Date"
+												readonlyInput="true"></p:calendar>
+
+											<p:outputLabel value="Paid By" for="@next" style="color:red" ></p:outputLabel>
+											<p:inputText value="#{unpaidBillsMaster.paidBy}"
+												required="true" requiredMessage="Please Enter Paid By" validatorMessage="Please Enter Correct value">
+												<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+											</p:inputText>
+
+											<p:outputLabel for="@next" style="color:red"  value="Order Id/Reference No."></p:outputLabel>
+											<p:inputText value="#{unpaidBillsMaster.orderid}"
+												required="true"
+												requiredMessage="Please Enter Order Id/Reference No." validatorMessage="Please Enter Correct value">
+												<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+											</p:inputText>
+
+										</p:panelGrid>
+										<br/>
+										<center>
+										<p:commandButton update="payTable" value="Pay"
+												action="#{unpaidBillsMaster.sendPayOTP}" style="width: 120px;"></p:commandButton>
+										</center>
+									</p:outputPanel>
+								</div>
+							</p:dialog>
+						</h:form>
+
+						<h:form id="form4">
+							<p:dialog header="Extend Due Date" widgetVar="addSchool"
+								modal="true" height="100">
+								<div class="ui-g form-group">
+									<p:outputPanel id="otpPnl">
+										<p:panelGrid columns="3"
+											styleClass="ui-panelgrid-blank form-group"
+											style="border:0px none; background-color:transparent;">
+											<p:outputLabel value="Enter OTP" for="@next" style="color:red" ></p:outputLabel>
+											<p:inputText required="true"
+												requiredMessage="Please Enter OTP"
+												value="#{unpaidBillsMaster.otpInput}" validatorMessage="Please Enter Correct value">
+											  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+											</p:inputText>
+
+											<p:commandButton value="Submit"
+												actionListener="#{unpaidBillsMaster.edit}"
+												update="otpPnl"></p:commandButton>
+
+										</p:panelGrid>
+									</p:outputPanel>
+								</div>
+							</p:dialog>
+						</h:form>
+
+						<h:form id="payOtpForm">
+							<p:dialog header="Pay Bill" widgetVar="payOtp" modal="true"
+								height="100">
+								<div class="ui-g form-group">
+									<p:outputPanel id="otpPnl">
+										<p:panelGrid columns="3"
+											styleClass="ui-panelgrid-blank form-group"
+											style="border:0px none; background-color:transparent;">
+											<p:outputLabel value="Enter OTP" for="@next" style="color:red" ></p:outputLabel>
+											<p:inputText required="true"
+												requiredMessage="Please Enter OTP"
+												value="#{unpaidBillsMaster.otpInput}" validatorMessage="Please Enter Correct value">
+											  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+											</p:inputText>
+
+											<p:commandButton value="Submit"
+												actionListener="#{unpaidBillsMaster.pay}" update="otpPnl"></p:commandButton>
+
+										</p:panelGrid>
+									</p:outputPanel>
+								</div>
+							</p:dialog>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

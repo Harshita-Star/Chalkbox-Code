@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+<f:loadBundle var="addClassVar" basename="myProperties" />
+<f:view contentType="text/html">
+	<h:head>
+		<title> Certificate Printing</title>
+		<f:facet name="first">
+			<meta content='text/html; charset=UTF-8' http-equiv="Content-Type" />
+			<meta http-equiv="X-UA-Compatible" content="EmulateIE8" />
+			
+		</f:facet>
+
+  			<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css"></link>
+    		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"></link>
+    		<link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css"></link>
+   			<link rel="stylesheet" href="dist/css/AdminLTE.min.css"></link>
+    		<link rel="stylesheet" href="dist/css/skins/all-skins.min.css"></link>
+     		 <link rel="stylesheet" type="text/css" href="css/style.css"/>	
+
+	</h:head>
+
+	<h:body>
+      
+      <div class="content-wrapper">
+          
+          
+               		
+               		<h:form id="form12">
+							<p:commandButton style="width:50px;" rendered="#{bulkSCP.showPrint}" value="Print"
+								type="button">
+								<p:printer target=":forms"></p:printer>
+							</p:commandButton>
+							
+		
+						</h:form>
+<br/>
+						<h:form id="forms">
+						
+						
+						<ui:repeat var="mainVar" value="#{bulkSCP.listOfStudent}">	
+							<p:panel rendered="#{bulkSCP.showLOC}">
+							                      
+							                <table style="width: 100%; font-size: 11px">
+										<tr>
+											<td><p:graphicImage width="100%" height="120px"
+													value="#{bulkSCP.headerImage}"></p:graphicImage></td>
+										</tr>
+									</table>              
+									<table border="1" style="width:100%;font-size:15px;border-collapse: collapse;">
+										<tr>
+											<td colspan="2">&nbsp;CBSE-ONLINE LOC DATA ENTRY FORM FOR CLASS #{mainVar.classStrName} CANDIDATES</td>
+										</tr>
+										<tr>
+											<td colspan="2">&nbsp;CLASS &nbsp;<u>#{mainVar.className}</u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ROLL NO. #{mainVar.rollNo}</td>
+										</tr>
+										<tr>
+										    <td style="width:50%">&nbsp;NAME OF CANDIDATE :</td>
+											<td style="width:50%">&nbsp;#{mainVar.fname}</td>
+										</tr>
+										<tr>
+											<td>&nbsp;MOTHER'S NAME :</td>
+											<td>&nbsp;#{mainVar.motherName}</td> 
+										</tr>
+										<tr>
+										    	<td>&nbsp;FATHER'S NAME :</td>
+											    <td>&nbsp;#{mainVar.fathersName}</td>
+										</tr>
+										<tr>
+										    <td>&nbsp;Mobile No :</td>
+											<td>&nbsp;#{mainVar.fathersPhone}</td>
+										</tr>
+										<tr>
+										    	<td>&nbsp;Aadhar No :</td>
+											<td>&nbsp;#{mainVar.aadharNo}</td>
+										</tr>
+											<tr>
+										    	<td>&nbsp;BOARD REG No :</td>
+											<td>&nbsp;</td>
+										</tr>
+											<tr>
+										    	<td>&nbsp;ADMISSION SR. :</td>
+											<td>&nbsp;#{mainVar.srNo}</td>
+										</tr>
+										<tr>
+											<td>&nbsp;DATE OF BIRTH :</td>
+											<td>&nbsp;#{mainVar.dobString}</td>
+										</tr>
+										<tr>
+											<td>&nbsp;GENDER :</td>
+											<td>&nbsp;#{mainVar.gender}</td>
+										</tr>
+										<tr>
+											<td>&nbsp;CASTE/CATEGORY :</td>
+											<td>&nbsp;#{mainVar.category}</td>
+										</tr>
+										<tr>
+											<td>&nbsp;HANDICAPPED/PWD :</td>
+											<td>&nbsp;N.A. ,BLIND ,DEAF ,HANDICAPPED ,DYLEXSIC ,SPASTIC</td>
+										</tr>
+										<tr>
+											<td>&nbsp;MAIN SUBJECT :</td>
+											<td>&nbsp;</td>
+										</tr>
+												
+						<p:outputPanel rendered="#{mainVar.sy[0] ne null ? 'true' : 'false'}">
+						<tr>
+							<td>&nbsp;i. : #{mainVar.sy[0]}</td>
+							<td>&nbsp;</td>
+						</tr>
+						</p:outputPanel>
+						
+						<p:outputPanel rendered="#{mainVar.sy[1] ne null ? 'true' : 'false'}">
+						<tr>
+							<td>&nbsp;ii. : #{mainVar.sy[1]}</td>
+							<td>&nbsp;</td>
+						</tr>
+						</p:outputPanel>
+						
+						<p:outputPanel rendered="#{mainVar.sy[2] ne null ? 'true' : 'false'}">
+						<tr>
+							<td>&nbsp;iii. : #{mainVar.sy[2]}</td>
+							<td>&nbsp;</td>
+						</tr>
+						</p:outputPanel> 
+
+						<p:outputPanel rendered="#{mainVar.sy[3] ne null ? 'true' : 'false'}">
+						<tr>
+							<td>&nbsp;iv. : #{mainVar.sy[3]}</td>
+							<td>&nbsp;</td>
+						</tr>
+						</p:outputPanel>
+
+						<p:outputPanel rendered="#{mainVar.sy[4] ne null ? 'true' : 'false'}">
+						<tr>
+							<td>&nbsp;v. : #{mainVar.sy[4]}</td>
+							<td>&nbsp;</td>
+						</tr>
+						</p:outputPanel>
+						
+						<p:outputPanel rendered="#{mainVar.sy[5] ne null ? 'true' : 'false'}">
+						<tr>
+							<td>&nbsp;vi. : #{mainVar.sy[5]}</td>
+							<td>&nbsp;</td>
+						</tr>
+						</p:outputPanel>
+						
+						<p:outputPanel rendered="#{mainVar.sy[6] ne null ? 'true' : 'false'}">
+						<tr>
+							<td>&nbsp;vii. : #{mainVar.sy[6]}</td>
+							<td>&nbsp;</td>
+						</tr>
+						</p:outputPanel>
+						<p:outputPanel rendered="#{mainVar.sy[7] ne null ? 'true' : 'false'}">
+						<tr>
+							<td>&nbsp;viii. : #{mainVar.sy[7]}</td>
+							<td>&nbsp;</td>
+						</tr>
+						</p:outputPanel>
+						<p:outputPanel rendered="#{mainVar.sy[8] ne null ? 'true' : 'false'}">
+						<tr>
+							<td>&nbsp;ix. : #{mainVar.sy[8]}</td>
+							<td>&nbsp;</td>
+						</tr>
+						</p:outputPanel>
+						
+						<p:outputPanel rendered="#{mainVar.sy[9] ne null ? 'true' : 'false'}">
+						<tr>
+							<td>&nbsp;x. : #{mainVar.sy[9]}</td>
+							<td>&nbsp;</td>
+						</tr>
+						</p:outputPanel>
+										
+										  <tr>
+											<td>&nbsp;INTERNAL SUBJECT :</td>
+											<td>&nbsp;</td>
+										</tr>
+										<tr>
+											<td>&nbsp;i.     : WORK EXPERIENCE</td>
+											<td>&nbsp;</td>
+										</tr>
+										
+										<tr>
+											<td>&nbsp;ii.    : HEALTH &amp; PHY. EDUCATION   </td>
+											<td>&nbsp;</td>
+										</tr>
+										
+										<tr>
+											<td>&nbsp;iii.   : GENERAL STUDIES</td>
+											<td>&nbsp;</td>
+										</tr>
+										
+										
+										
+										
+										<tr>
+											<td>&nbsp;ANNUAL INCOME OF MOTHER AND FATHER :</td>
+											<td>&nbsp;#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'}</td>
+										</tr>
+										
+										<!-- <tr>
+											<td>&nbsp;CLASS X BOARD ROLL NO. :</td>
+											<td>&nbsp;</td>
+										</tr>
+										<tr>
+											<td>&nbsp;PASSING YEAR OF CLASS X :</td>
+											<td>&nbsp; </td>
+										</tr> -->
+										<tr>
+											<td>&nbsp;ADMITTED DIRECTLY IN CLASS IX :</td>
+											<td>&nbsp;YES &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; NO &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+										</tr>
+										<tr>
+											<td>&nbsp;ONLY CHILD OF PARENTS :</td>
+											<td>&nbsp;YES &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; NO &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+										</tr>
+										<tr>
+											<td>&nbsp; DATE OF JOINING :</td>
+											<td>&nbsp;#{mainVar.admissionDate}</td>
+										</tr>
+										<tr>
+											<td>&nbsp;DO YOU BELONG TO MINORITY SECTION :</td>
+											<td>&nbsp;YES &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; NO &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+										</tr>
+										
+										<tr>
+											<td>&nbsp;THE ABOVE GIVEN DATA ARE YOUR WARD'S DETAILS AS PER SCHOOL RECORDS AND WILL BE SENT TO CBSE FOR REGISTRATION PLEASE VERIFY</td>
+											<td></td>
+										</tr>
+										
+										<tr>
+											<td></td>
+											<td><br></br><br></br><br></br>&nbsp;PARENT'S SIGNATURE</td>
+										</tr>	
+										
+									</table>
+							</p:panel>
+							<p style="page-break-after: always;">&nbsp;</p>
+         </ui:repeat>
+				
+						</h:form>
+		</div>
+	</h:body>
+</f:view>
+</html>

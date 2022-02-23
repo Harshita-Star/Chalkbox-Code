@@ -1,0 +1,203 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Add Question</ui:define>
+
+	<ui:define name="content">
+		<style>
+body .ui-md-6 {
+	width: 84% !important;
+}
+</style>
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+
+							<h1>Add Question</h1>
+
+							<p:panel header="Add Question">
+								<p:messages closable="true" autoUpdate="true"></p:messages>
+
+								<p:commandLink
+									style="float: right;margin-left: 15px;color: blue;font-size:15px;"
+									immediate="true" value="Add Questions from excel"
+									action="addQuestionExcel.xhtml?faces-redirect=true"></p:commandLink>
+								<br />
+								<br />
+
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel for="@next" style="color:red"
+										value="Select Class"></p:outputLabel>
+									<p:selectOneMenu id="classId"
+										value="#{questionbean.selectedClass}" filter="true"
+										required="true"
+										requiredMessage="#{addExamVar.selectClassValidation}">
+										<f:selectItem itemLabel="#{addExamVar.selectHereLabel}"
+											itemValue=""></f:selectItem>
+										<f:selectItems value="#{questionbean.classList}"></f:selectItems>
+										<p:ajax event="itemSelect"
+											listener="#{questionbean.getSubjects}" update="subjectId"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel for="@next" style="color:red"
+										value="Select Subject"></p:outputLabel>
+									<p:selectOneMenu id="subjectId" required="true"
+										value="#{questionbean.selectedSubject}"
+										requiredMessage="Subject selection is required">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{questionbean.subjectList}"></f:selectItems>
+										<p:ajax event="itemSelect" listener="#{questionbean.getExams}"
+											update="examId"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel for="@next" style="color:red"
+										value="Select Exam"></p:outputLabel>
+									<p:selectOneMenu id="examId" required="true"
+										value="#{questionbean.examName}"
+										requiredMessage="Exam selection is required">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{questionbean.examList}"></f:selectItems>
+										<p:ajax event="itemSelect" listener="#{questionbean.getLanguage}" update="la,sea"></p:ajax>
+									</p:selectOneMenu>
+
+
+									<p:outputLabel   for="@next" 
+										value="Serial Number"></p:outputLabel>
+									<p:inputText rendered="#{questionbean.ren}"  id="sea" disabled="#{questionbean.seri}" 
+										value="#{questionbean.serialNumber}"
+										></p:inputText>
+										
+									<p:outputLabel  for="@next" 
+										value="Language"></p:outputLabel>
+									<p:inputText id="la"  disabled="#{questionbean.lang}" 
+										value="#{questionbean.examLang}"></p:inputText>
+
+								</p:panelGrid>
+
+								<p:panelGrid columns="2" columnClasses="ui-grid-col-2"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:outputLabel for="@next" style="color:red"
+										value="Question in English"></p:outputLabel>
+									<p:inputTextarea required="true"
+										requiredMessage="Question is required"
+										value="#{questionbean.question}" id="queexam"
+											onchange="trimFunc(this.value,'Please Section Name',this.id)"></p:inputTextarea>
+
+
+									<p:outputLabel for="@next" value="Options"></p:outputLabel>
+									<p:panelGrid columns="2" columnClasses="ui-grid-col-10"
+										layout="grid" styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+										<p:inputTextarea placeholder="Option A"
+											value="#{questionbean.optionA}" id="opaexam"
+											onchange="trimFunc(this.value,'Please Section Name',this.id)"></p:inputTextarea>
+										<p:inputTextarea placeholder="Option B"
+											value="#{questionbean.optionB}" id="opbexam"
+											onchange="trimFunc(this.value,'Please Section Name',this.id)"></p:inputTextarea>
+										<p:inputTextarea placeholder="Option C"
+											value="#{questionbean.optionC}" id="opcexam"
+											onchange="trimFunc(this.value,'Please Section Name',this.id)"></p:inputTextarea>
+										<p:inputTextarea placeholder="Option D"
+											value="#{questionbean.optionD}" id="opdexam"
+											onchange="trimFunc(this.value,'Please Section Name',this.id)"></p:inputTextarea>
+									</p:panelGrid>
+
+
+									<p:outputLabel for="@next" value="Solution in Engish"></p:outputLabel>
+									<p:inputTextarea value="#{questionbean.solution}" rows="10" id="solexam"
+											onchange="trimFunc(this.value,'Please Section Name',this.id)"></p:inputTextarea>
+
+									<p:outputLabel for="@next" value="Images"></p:outputLabel>
+									<p:panelGrid columns="3" layout="grid"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+										<p:outputLabel style="font-weight:bold;"
+											value="Question Image"></p:outputLabel>
+										<p:outputLabel style="font-weight:bold;"
+											value="Option 1 Image"></p:outputLabel>
+										<p:outputLabel style="font-weight:bold;"
+											value="Option 2 Image"></p:outputLabel>
+
+										<p:fileUpload skinSimple="true"  mode="simple" dragDropSupport="false" value="#{questionbean.que}"
+											
+											allowTypes="/(\.|\/)(gif|jpe?g|png)$/"
+											validateContentType="true" accept=".gif,.jpg,.jpeg,.png" />
+
+										<p:fileUpload skinSimple="true" mode="simple" dragDropSupport="false"
+											 value="#{questionbean.op1}"
+											allowTypes="/(\.|\/)(gif|jpe?g|png)$/"
+											validateContentType="true" accept=".gif,.jpg,.jpeg,.png" />
+
+										<p:fileUpload skinSimple="true" mode="simple" dragDropSupport="false"
+											 value="#{questionbean.op2}"
+											allowTypes="/(\.|\/)(gif|jpe?g|png)$/"
+											validateContentType="true" accept=".gif,.jpg,.jpeg,.png" />
+
+										<p:outputLabel style="font-weight:bold;"
+											value="Option 3 Image"></p:outputLabel>
+										<p:outputLabel style="font-weight:bold;"
+											value="Option 4 Image"></p:outputLabel>
+										<p:outputLabel style="font-weight:bold;"
+											value="Solution Image"></p:outputLabel>
+
+										<p:fileUpload skinSimple="true" mode="simple" dragDropSupport="false"
+											 value="#{questionbean.op3}"
+											allowTypes="/(\.|\/)(gif|jpe?g|png)$/"
+											validateContentType="true" accept=".gif,.jpg,.jpeg,.png" />
+
+										<p:fileUpload skinSimple="true" mode="simple" dragDropSupport="false"
+											value="#{questionbean.op4}"
+											allowTypes="/(\.|\/)(gif|jpe?g|png)$/"
+											validateContentType="true" accept=".gif,.jpg,.jpeg,.png" />
+
+										<p:fileUpload skinSimple="true" mode="simple" dragDropSupport="false"
+											value="#{questionbean.solu}"
+											allowTypes="/(\.|\/)(gif|jpe?g|png)$/"
+											validateContentType="true" accept=".gif,.jpg,.jpeg,.png" />
+									</p:panelGrid>
+								</p:panelGrid>
+
+								<p:panelGrid columns="2"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:outputLabel for="@next" value="Right Answer"
+										style="color:red;"></p:outputLabel>
+									<p:selectOneMenu required="true" value="#{questionbean.answer}"
+										requiredMessage="Answer selection is required.">
+										<f:selectItem itemLabel="Select Answer" itemValue=""></f:selectItem>
+										<f:selectItem itemLabel="Option 1" itemValue="1"></f:selectItem>
+										<f:selectItem itemLabel="Option 2" itemValue="2"></f:selectItem>
+										<f:selectItem itemLabel="Option 3" itemValue="3"></f:selectItem>
+										<f:selectItem itemLabel="Option 4" itemValue="4"></f:selectItem>
+									</p:selectOneMenu>
+								</p:panelGrid>
+								<br />
+								<br />
+
+								<center>
+									<p:commandButton style="width:14%" value="Submit" ajax="false"
+										action="#{questionbean.submit}" update=":form"></p:commandButton>
+								</center>
+
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <f:facet name="first">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+        <meta name="apple-mobile-web-app-capable" content="yes"/>
+    </f:facet>
+    <title>PrimeFaces Pandora</title>
+
+    <script type="text/javascript">
+        hideMenu = function () {
+            $('.landing-menu').removeClass('fadeInDown').addClass('fadeOutUp');
+
+            setTimeout(function () {
+                $('.landing-wrapper').removeClass('landing-menu-active');
+                $('.landing-menu').removeClass('fadeOutUp');
+                $(document.body).removeClass('landing-body-block-scroll');
+            }, 150);
+        }
+
+        showMenu = function () {
+            $('.landing-wrapper').addClass('landing-menu-active');
+            $('.landing-menu').addClass('fadeInDown');
+            $(document.body).addClass('landing-body-block-scroll');
+        }
+
+        $(function () {
+            $('#landing-menu-button').on('click', function (e) {
+                var wrapper = $('.landing-wrapper');
+
+                if (wrapper.hasClass('landing-menu-active'))
+                    hideMenu();
+                else
+                    showMenu();
+
+                e.preventDefault();
+            });
+
+            $('.landing-menu').find('a').on('click', function (e) {
+                hideMenu();
+            });
+        });
+    </script>
+    <script>
+        //<![CDATA[
+        var $this = this;
+
+        $(document).ready(function () {
+            $('html').animate({scrollTop: 0}, 1);
+            $('body').animate({scrollTop: 0}, 1);
+        });
+
+        /* Scroll Animate */
+        $('a[href*="#"]:not([href="#"])').click(function () {
+            var target = $(this.hash);
+            if (target.length) {
+                $('html, body').animate({
+                    scrollTop: target.offset().top - 60
+                }, 500);
+                return false;
+            }
+        });
+
+        //window and animation items
+        var animation_elements = $.find('.animation-element');
+        var web_window = $(window);
+
+        //check to see if any animation containers are currently in view
+        function check_if_in_view() {
+            //get current window information
+            var window_height = web_window.height();
+            var window_top_position = web_window.scrollTop();
+            var window_bottom_position = (window_top_position + window_height);
+
+            //iterate through elements to see if its in view
+            $.each(animation_elements, function () {
+                //get the element sinformation
+                var element = $(this);
+                var element_height = $(element).outerHeight();
+                var element_top_position = $(element).offset().top;
+                var element_bottom_position = (element_top_position + element_height);
+
+                //check to see if this current container is visible (its viewable if it exists between the viewable space of the viewport)
+
+                if ((element_top_position <= window_bottom_position)) {
+                    element.addClass('in-view');
+                }
+
+            });
+        }
+
+        //on or scroll, detect elements in view
+        $(window).on('scroll resize', function () {
+            check_if_in_view()
+        })
+        //trigger our scroll event on initial load
+        $(window).trigger('scroll');
+        //]]>
+    </script>
+</h:head>
+
+<h:body styleClass="landing-body">
+    <div class="landing-wrapper">
+        <div class="landing-topbar">
+            <h:link outcome="/dashboard">
+                <p:graphicImage name="images/logo-footer.svg" library="pandora-layout"/>
+            </h:link>
+
+            <ul class="landing-menu">
+                <li>
+                    <a href="#home">HOME</a>
+                </li>
+                <li>
+                    <a href="#meetPandora">MEET PANDORA</a>
+                </li>
+                <li>
+                    <a href="#features">FEATURES</a>
+                </li>
+                <li>
+                    <a href="#pricing">PRICING</a>
+                </li>
+                <li>
+                    <a href="#contact">CONTACT</a>
+                </li>
+            </ul>
+            <a href="" id="landing-menu-button">
+                <p:graphicImage name="images/pages/landing/icon-menu.svg" library="pandora-layout"/>
+            </a>
+        </div>
+        <div id="home" class="landing-banner">
+            <div class="landing-banner-content">
+                <h5>PrimeFaces Presents Pandora</h5>
+                <span>Modern and elegant responsive application template with a premium look for PrimeFaces
+                    components.</span>
+                <p:commandButton type="button" value="Learn More"/>
+            </div>
+            <div class="landing-banner-image">
+                <p:graphicImage name="images/pages/landing/asset-hero.png" styleClass="desktop-hero"
+                                library="pandora-layout"/>
+                <p:graphicImage name="images/pages/landing/asset-hero-mobile.png" styleClass="mobile-hero"
+                                library="pandora-layout"/>
+
+            </div>
+        </div>
+        <div id="meetPandora" class="landing-meet-pandora">
+            <h4 class="section-title">
+                Meet the mighty
+                <span></span>
+            </h4>
+            <h4>Pandora</h4>
+
+            <div class="feature-cards p-grid ">
+                <div class="p-col-12 p-md-6 p-lg-3">
+                    <div class="feature-card responsive">
+                        <div class="feature-card-icon">
+                            <p:graphicImage name="images/pages/landing/asset-responsive.svg" library="pandora-layout"/>
+                        </div>
+                        <h4>Responsive</h4>
+                        <span>Nam non ligula sed urna malesuada lacinia. Aliquam sed viverra ipsum. Quisque sodales,
+                            metus fermentum.</span>
+                        <i class="pi pi-arrow-right"/>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-3">
+                    <div class="feature-card design">
+                        <div class="feature-card-icon">
+                            <p:graphicImage name="images/pages/landing/asset-design.svg" library="pandora-layout"/>
+                        </div>
+                        <h4>Modern Design</h4>
+                        <span>Nam non ligula sed urna malesuada lacinia. Aliquam sed viverra ipsum. Quisque sodales,
+                            metus fermentum.</span>
+                        <i class="pi pi-arrow-right"/>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-3">
+                    <div class="feature-card documented">
+                        <div class="feature-card-icon">
+                            <p:graphicImage name="images/pages/landing/asset-documented.svg" library="pandora-layout"/>
+                        </div>
+                        <h4>Well Documented</h4>
+                        <span>Nam non ligula sed urna malesuada lacinia. Aliquam sed viverra ipsum. Quisque sodales,
+                            metus fermentum.</span>
+                        <i class="pi pi-arrow-right"/>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-3">
+                    <div class="feature-card unlimited">
+                        <div class="feature-card-icon">
+                            <p:graphicImage name="images/pages/landing/asset-unlimited.svg" library="pandora-layout"/>
+                        </div>
+                        <h4>Unlimited Possibilites</h4>
+                        <span>Nam non ligula sed urna malesuada lacinia. Aliquam sed viverra ipsum. Quisque sodales,
+                            metus fermentum.</span>
+                        <i class="pi pi-arrow-right"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="features" class="landing-features-promo">
+            <div class="promo-text">
+                <h4 class="section-title">
+                    An easy-to-use template
+                    <span></span>
+                </h4>
+                <span>We know your time is precious. That’s why we create premium application templates to save time for
+                    another important things.</span>
+                <ul>
+                    <li><i class="pi pi-circle-on"/> Feature subtitle sentence. Lorem ipsum dolor sit amet.</li>
+                    <li><i class="pi pi-circle-on"/> Vitae tempus quam pellentesque nec nam.</li>
+                    <li><i class="pi pi-circle-on"/> Massa tincidunt dui ut ornare lectus sit amet est placerat.</li>
+                    <li><i class="pi pi-circle-on"/> Mattis ullamcorper velit sed ullamcorper morbi.</li>
+                </ul>
+            </div>
+            <div class="promo-image">
+                <p:graphicImage name="images/pages/landing/asset-promo.png" library="pandora-layout"/>
+            </div>
+        </div>
+
+        <div id="pricing" class="landing-pricing">
+            <h4 class="section-title">
+                Choose your tier
+                <span></span>
+            </h4>
+            <span>Massa tincidunt dui ut ornare lectus sit amet est placerat.</span>
+
+            <div class="pricing-cards p-grid">
+                <div class="p-col-12 p-md-4">
+                    <div class="pricing-card">
+                        <h6>FREE</h6>
+                        <div class="card-title">
+                            <span></span>
+                            <h4>BEGINNER</h4><span></span>
+                        </div>
+                        <ul>
+                            <li>Responsive Layout</li>
+                            <li class="not-include">Unlimited Push Messages</li>
+                            <li class="not-include">50 Support Ticket</li>
+                            <li class="not-include">Free Shipping</li>
+                            <li class="not-include">Unlimited Storage</li>
+                        </ul>
+                        <p:commandButton value="BUY NOW"/>
+                    </div>
+                </div>
+
+                <div class="p-col-12 p-md-4">
+                    <div class="pricing-card premium">
+                        <h6>24.99$ PER MONTH</h6>
+                        <div class="card-title">
+                            <span></span>
+                            <h4>PREMIUM</h4><span></span>
+                        </div>
+                        <ul>
+                            <li>Responsive Layout</li>
+                            <li>Unlimited Push Messages</li>
+                            <li>50 Support Ticket</li>
+                            <li>Free Shipping</li>
+                            <li>10 GB Storage</li>
+                        </ul>
+                        <p:commandButton value="BUY NOW"/>
+                    </div>
+                </div>
+
+                <div class="p-col-12 p-md-4">
+                    <div class="pricing-card custom">
+                        <h6>GET A QUOTE</h6>
+                        <div class="card-title">
+                            <span></span>
+                            <h4>CUSTOM</h4><span></span>
+                        </div>
+                        <ul>
+                            <li>Responsive Layout</li>
+                            <li>Unlimited Push Messages</li>
+                            <li>Undlimite Support Ticket</li>
+                            <li>Free Shipping</li>
+                            <li>Unlimited Storage</li>
+                        </ul>
+                        <p:commandButton value="CONTACT US"/>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div id="multimedia" class="landing-multimedia">
+            <h4 class="section-title">
+                Multimedia 🦉
+                <span></span>
+            </h4>
+            <span>Massa tincidunt dui ut ornare lectus sit amet est placerat.</span>
+            <div class="videos">
+                <iframe class="iframes" src="https://www.youtube.com/embed/MCjGHxpWfto" width="373px" height="201px"
+                        frameborder="0" allow="fullscreen"></iframe>
+                <iframe src="https://www.youtube.com/embed/z7yqtW4Isec" width="373px" height="201px" frameborder="0"
+                        allow="fullscreen"></iframe>
+            </div>
+            <div class="videos">
+
+                <iframe src="https://www.youtube.com/embed/R_4XZuUqwoc" width="241px" height="130px" frameborder="0"
+                        allow="fullscreen"></iframe>
+                <iframe src="https://www.youtube.com/embed/eZe4Q_58UTU" width="241px" height="130px" frameborder="0"
+                        allow="fullscreen"></iframe>
+                <iframe src="https://www.youtube.com/embed/yKk3WDSFOos" width="241px" height="130px" frameborder="0"
+                        allow="fullscreen"></iframe>
+            </div>
+        </div>
+
+        <div class="landing-footer">
+            <p:graphicImage name="images/logo-footer-landing.svg" library="pandora-layout"/>
+            <div class="social-icons">
+                <a><i class="pi pi-github"/></a>
+                <a><i class="pi pi-twitter"/></a>
+            </div>
+        </div>
+    </div>
+
+    <h:outputStylesheet name="css/#{guestPreferences.layout}.css" library="pandora-layout" />
+    <h:outputStylesheet name="css/primeflex.min.css" library="pandora-layout"/>
+</h:body>
+
+</html>

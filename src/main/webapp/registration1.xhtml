@@ -1,0 +1,1041 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Registration</ui:define>
+	<ui:define name="content">
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form" enctype="multipart/form-data">
+							<h2>#{registrationVar.registrationTitleLabel}</h2>
+							<p:messages  closable="true" autoUpdate="true"></p:messages>
+							<p:panel header="Student Registration">
+
+								<p:tabView id="tabview">
+									<p:tab title="Admission Details">
+										<p:panelGrid columns="4"
+											columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+											layout="grid" styleClass="ui-panelgrid-blank form-group"
+											style="border:0px none; background-color:transparent;">
+											<p:outputLabel   value="Admission No./SR.No"></p:outputLabel>
+											<p:inputText disabled="#{registrationBean1.disableSrNo}" id="srnoNew" 
+												value="#{registrationBean1.addmissionNumber}">
+											</p:inputText>
+
+
+
+											<p:outputLabel
+												value="#{registrationVar.registrationAddmissionDateLabel}" for="@next" style="color:red" ></p:outputLabel>
+											<p:calendar value="#{registrationBean1.addmissionDate}"
+												navigator="true" required="true"
+												requiredMessage="#{registrationVar.registrationAddmissionDateValidation}"
+												pattern="dd/MM/yyyy"></p:calendar>
+
+											<p:outputLabel value="Student Name" for="@next" style="color:red" ></p:outputLabel>
+											<p:inputText value="#{registrationBean1.fname}" id="name"
+												required="true" requiredMessage="Please enter Student Name" onblur="trimName(this.value,this.id)"></p:inputText>
+
+											<p:outputLabel
+												value="#{registrationVar.registrationDateOfBirthLabel}" for="@next" style="color:red" ></p:outputLabel>
+											<p:calendar yearRange="c-50:c+0" navigator="true"
+												value="#{registrationBean1.dob}" required="true"
+												requiredMessage="#{registrationVar.registrationDateOfBirthValidation}"
+												pattern="dd/MM/yyyy"
+												style="width: 280px !important;height:30px !important;margin-bottom: 12px !important;">
+												 <p:ajax event="dateSelect" listener="#{registrationBean1.checkDob}" />
+												</p:calendar>
+
+											<p:outputLabel value="Select class " for="@next" style="color:red" ></p:outputLabel>
+											<p:selectOneMenu value="#{registrationBean1.className1}"
+												required="true" requiredMessage="Please select a class">
+												<f:selectItem itemLabel="Select" ></f:selectItem>
+												<f:selectItems value="#{registrationBean1.classList}"></f:selectItems>
+
+												<p:ajax listener="#{registrationBean1.allSections}"
+													update="sectionid,allhouses,allhouses1"></p:ajax>
+											</p:selectOneMenu>
+
+											<p:outputLabel value="Select Section" for="@next" style="color:red" ></p:outputLabel>
+											<p:selectOneMenu id="sectionid"
+												value="#{registrationBean1.selectedSection}" required="true"
+												requiredMessage="Please select a section">
+												<f:selectItems value="#{registrationBean1.sectionList}"></f:selectItems>
+
+											</p:selectOneMenu>
+
+											<p:outputLabel value="Roll No"></p:outputLabel>
+											<p:inputText value="#{registrationBean1.rollNo}"></p:inputText>
+
+											<p:outputLabel value="Student Status"></p:outputLabel>
+											<p:selectOneRadio value="#{registrationBean1.studentstatus}">
+												<f:selectItem itemLabel="New" itemValue="new"></f:selectItem>
+												<f:selectItem itemLabel="Old" itemValue="old"></f:selectItem>
+											</p:selectOneRadio>
+
+
+											<p:outputLabel value="Child's Aadhaar No"></p:outputLabel>
+											<p:inputText value="#{registrationBean1.aadharNo}"></p:inputText>
+
+											<p:outputLabel value="Father's Mobile Number" for="@next" style="color:red" ></p:outputLabel>
+											<p:inputText id="fatNumber" required="true" maxlength="10" onkeypress="return AvoidSpace(event)" onkeyup="checkNumberValid2('form:tabview:fatNumber')"
+												validatorMessage="Please Enter 10 Digit Number"
+												requiredMessage="Please enter father's mobile no"
+												value="#{registrationBean1.fathersPhone}">
+												
+												<f:validateLength minimum="10"></f:validateLength>
+											</p:inputText>
+
+											<p:outputLabel value="Student's Mobile Number*"
+												rendered="#{registrationBean1.showInstitute}"></p:outputLabel>
+											<p:inputText id="studentNumber" maxlength="10" onkeypress="return AvoidSpace(event)" onkeyup="checkNumberValid2('form:tabview:studentNumber')"
+												validatorMessage="Please Enter 10 Digit Number"
+												value="#{registrationBean1.studentPhone}"
+												rendered="#{registrationBean1.showInstitute}">
+												
+												<f:validateLength minimum="10"></f:validateLength>
+											</p:inputText>
+											
+											<p:outputLabel value="CBSE Reg. No. (IX)"></p:outputLabel>
+											<p:inputText value="#{registrationBean1.regNo_IX}"></p:inputText>
+											
+											<p:outputLabel value="CBSE Reg. No. (XI)"></p:outputLabel>
+											<p:inputText value="#{registrationBean1.regNo_XI}"></p:inputText>
+											
+											<p:outputLabel value="Admission File No."></p:outputLabel>
+											<p:inputText value="#{registrationBean1.admnFileNo}"></p:inputText>
+											
+											<p:outputLabel value="Ledger No."></p:outputLabel>
+											<p:inputText value="#{registrationBean1.ledgNo}"></p:inputText>
+											
+											<p:outputLabel value="Village" rendered="#{registrationBean1.schid eq '339'}"></p:outputLabel>
+											<p:inputText value="#{registrationBean1.village}" rendered="#{registrationBean1.schid eq '339'}" ></p:inputText>
+
+											<p:outputLabel rendered="#{registrationBean1.showInstitute}" />
+											<p:outputLabel rendered="#{registrationBean1.showInstitute}" />
+
+											<p:outputLabel
+												value="#{registrationVar.registrationCurrentAddressLabel}"></p:outputLabel>
+											<p:inputTextarea value="#{registrationBean1.currAdd}"
+												requiredMessage="#{registrationVar.registrationCurrentAddressValidation}"
+												rows="5" cols="26">
+											</p:inputTextarea>
+
+											<p:outputLabel
+												value="#{registrationVar.registrationPermanentAddressLabel}"></p:outputLabel>
+											<p:inputTextarea value="#{registrationBean1.perAdd}" rows="5"
+												cols="26"></p:inputTextarea>
+
+											<p:outputLabel value="Admission Remark"></p:outputLabel>
+											<p:inputTextarea value="#{registrationBean1.admRemark}"
+												rows="5" cols="26"></p:inputTextarea>
+											
+											<p:outputLabel value="Admit Class"></p:outputLabel>
+											<p:inputText value="#{registrationBean1.selectedSectionForAdmitClass}"></p:inputText>	
+												
+										</p:panelGrid>
+									</p:tab>
+									<p:tab id="tab2" title="Basic Details">
+										<p:panelGrid columns="4"
+											columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+											layout="grid" styleClass="ui-panelgrid-blank form-group"
+											style="border:0px none; background-color:transparent;">
+
+											<p:outputLabel
+												value="#{registrationVar.registrationGenderLabel}"></p:outputLabel>
+											<p:selectOneRadio value="#{registrationBean1.gender}">
+												<f:selectItem
+													itemValue="#{registrationVar.registrationMaleLabel}"
+													itemLabel="#{registrationVar.registrationMaleLabel}"></f:selectItem>
+												<f:selectItem
+													itemValue="#{registrationVar.registrationFemaleLabel}"
+													itemLabel="#{registrationVar.registrationFemaleLabel}"></f:selectItem>
+
+												<f:selectItem
+													itemValue="Transgender"
+													itemLabel="Transgender"></f:selectItem>
+
+											</p:selectOneRadio>
+
+											<p:outputLabel
+												value="#{registrationVar.registrationNationalityLabel}"></p:outputLabel>
+											<p:inputText value="#{registrationBean1.nationality}"
+												requiredMessage="#{registrationVar.registrationNationalityValidation}"></p:inputText>
+
+											<p:outputLabel
+												value="#{registrationVar.registrationReligionLabel}"></p:outputLabel>
+											<p:selectOneMenu value="#{registrationBean1.religion}"
+												requiredMessage="#{registrationVar.registrationReligionValidation}">
+												<f:selectItem itemLabel="Select Religion" itemValue=""></f:selectItem>
+												<f:selectItems value="#{registrationBean1.religionList}"></f:selectItems>
+											</p:selectOneMenu>
+
+
+											<p:outputLabel
+												value="#{registrationVar.registrationCategoryLabel}"></p:outputLabel>
+											<p:selectOneMenu value="#{registrationBean1.category}"
+												requiredMessage="#{registrationVar.registrationCategoryValidation}">
+												<f:selectItem
+													itemLabel="#{registrationVar.registrationselectCategoryLabel}"
+													itemValue=""></f:selectItem>
+												<f:selectItems value="#{registrationBean1.categoryList}"></f:selectItems>
+											</p:selectOneMenu>
+
+											<p:outputLabel value="Any Disability? "></p:outputLabel>
+											<p:selectOneRadio value="#{registrationBean1.disability}">
+												<f:selectItem itemValue="Yes" itemLabel="Yes"></f:selectItem>
+												<f:selectItem itemValue="No" itemLabel="No"></f:selectItem>
+												<p:ajax update=":form:tabview:Id1,:form:tabview:Id2"
+													listener="#{registrationBean1.showDisability}"></p:ajax>
+											</p:selectOneRadio>
+
+											<p:outputPanel id="Id1">
+												<p:outputLabel rendered="#{registrationBean1.showDis}"
+													value="Disability Type"></p:outputLabel>
+											</p:outputPanel>
+											<p:outputPanel id="Id2">
+												<p:selectOneMenu rendered="#{registrationBean1.showDis}"
+													value="#{registrationBean1.handicap}">
+													<f:selectItem itemValue="" itemLabel="Select Here"></f:selectItem>
+													<f:selectItems value="#{registrationBean1.handicaplist}"></f:selectItems>
+												</p:selectOneMenu>
+
+											</p:outputPanel>
+
+
+
+
+											<p:outputLabel value="Whether BPL ? "></p:outputLabel>
+											<p:selectOneRadio value="#{registrationBean1.bpl}">
+												<f:selectItem itemValue="Yes" itemLabel="Yes"></f:selectItem>
+												<f:selectItem itemValue="No" itemLabel="No"></f:selectItem>
+												<p:ajax update=":form:tabview:noId,:form:tabview:noId1"
+													listener="#{registrationBean1.showBPLNo}"></p:ajax>
+											</p:selectOneRadio>
+
+											<p:outputPanel id="noId">
+												<p:outputLabel rendered="#{registrationBean1.showBpl}"
+													value="BPL Card No"></p:outputLabel>
+											</p:outputPanel>
+											<p:outputPanel id="noId1">
+												<p:inputText rendered="#{registrationBean1.showBpl}"
+													value="#{registrationBean1.bplCardNo}"></p:inputText>
+											</p:outputPanel>
+
+
+											<p:outputLabel
+												value="#{registrationVar.registrationPincodeLabel}"></p:outputLabel>
+											<p:inputText value="#{registrationBean1.pincode}"
+												requiredMessage="#{registrationVar.registrationPincodeValidation}">
+												<p:keyFilter />
+											</p:inputText>
+
+											<p:outputLabel value="Blood Group" rendered="false"></p:outputLabel>
+											<p:inputText value="#{registrationBean1.bloodGroup}"
+												rendered="false"></p:inputText>
+
+
+											<p:outputLabel value="Single Parent "></p:outputLabel>
+											<p:selectOneRadio value="#{registrationBean1.singleParent}">
+												<f:selectItem itemValue="Yes" itemLabel="Yes"></f:selectItem>
+												<f:selectItem itemValue="No" itemLabel="No"></f:selectItem>
+											</p:selectOneRadio>
+
+											
+											<p:outputLabel value="Minority" rendered="#{registrationBean1.showminority}"></p:outputLabel>
+											<p:selectOneRadio value="#{registrationBean1.minority}" rendered="#{registrationBean1.showminority}">
+												<f:selectItem itemValue="Yes" itemLabel="Yes"></f:selectItem>
+												<f:selectItem itemValue="No" itemLabel="No"></f:selectItem>
+											</p:selectOneRadio>
+											
+											<p:outputLabel value="Caste"></p:outputLabel>
+											<p:selectOneMenu value="#{registrationBean1.caste}"
+												editable="true">
+												<f:selectItem itemLabel="Select Caste" itemValue=""></f:selectItem>
+												<f:selectItem itemLabel="Brahmin" itemValue="Brahmin"></f:selectItem>
+												<f:selectItem itemLabel="Vaishya" itemValue="Vaishya"></f:selectItem>
+												<f:selectItem itemLabel="Rajput" itemValue="Rajput"></f:selectItem>
+												<f:selectItem itemLabel="Ahir" itemValue="Ahir"></f:selectItem>
+												<f:selectItem itemLabel="Mali" itemValue="Mali"></f:selectItem>
+												<f:selectItem itemLabel="Gurjar" itemValue="Gurjar"></f:selectItem>
+												<f:selectItem itemLabel="Meghwal" itemValue="Meghwal"></f:selectItem>
+												<f:selectItem itemLabel="Dhobi" itemValue="Dhobi"></f:selectItem>
+												<f:selectItem itemLabel="Darji" itemValue="Darji"></f:selectItem>
+												<f:selectItem itemLabel="Meena" itemValue="Meena"></f:selectItem>
+												<f:selectItem itemLabel="Khati" itemValue="Khati"></f:selectItem>
+												<f:selectItem itemLabel="Sindhi" itemValue="Sindhi"></f:selectItem>
+												<f:selectItem itemLabel="Punjabi" itemValue="Punjabi"></f:selectItem>
+											</p:selectOneMenu>
+
+											<p:outputLabel value="Single Child "></p:outputLabel>
+											<p:selectOneRadio value="#{registrationBean1.singleChild}">
+												<f:selectItem itemValue="Yes" itemLabel="Yes"></f:selectItem>
+												<f:selectItem itemValue="No" itemLabel="No"></f:selectItem>
+											</p:selectOneRadio>
+
+
+
+											<p:outputLabel value="Upload Child's image"></p:outputLabel>
+											<p:fileUpload value="#{registrationBean1.studentImage}"
+												mode="simple" allowTypes="/(\.|\/)(gif|jpeg|png)$/" />
+
+
+											<p:outputLabel
+												value="#{registrationVar.registrationCountryLabel}"></p:outputLabel>
+											<p:inputText value="#{registrationBean1.country}"
+												requiredMessage="#{registrationVar.registrationCountryValidation}"></p:inputText>
+
+
+                                             <p:outputLabel value="Residence Phone Number-"></p:outputLabel>
+											<p:inputText id="resiNumber" value="#{registrationBean1.residencePhone}"  onkeypress="return AvoidSpace(event)" onkeyup="checkNumberValid2('form:tabview:resiNumber')">
+												
+											</p:inputText>
+
+											<p:outputLabel value="Child Living With Parents "></p:outputLabel>
+											<p:selectOneRadio value="#{registrationBean1.livingWith}">
+												<f:selectItem itemValue="Yes" itemLabel="yes"></f:selectItem>
+												<f:selectItem itemValue="No" itemLabel="no"></f:selectItem>
+											</p:selectOneRadio>
+
+
+										</p:panelGrid>
+									</p:tab>
+									<p:tab title="Parent Details">
+                                      <p:tabView>
+                                        	<p:tab title="Father's Details">
+												<p:panelGrid columns="4"
+													columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+													layout="grid" styleClass="ui-panelgrid-blank form-group"
+													style="border:0px none; background-color:transparent;">
+													
+													<p:outputLabel
+												      value="#{registrationVar.registrationFatherNameLabel}"></p:outputLabel>
+										        	<p:inputText value="#{registrationBean1.ffname}"></p:inputText>
+
+											        <p:outputLabel value="Father's Email"></p:outputLabel>
+											        <p:inputText value="#{registrationBean1.fatherEmail}"></p:inputText>
+
+											         <p:outputLabel value="Father's UID"></p:outputLabel>
+											         <p:inputText value="#{registrationBean1.fatherAadharNo}"></p:inputText>
+													
+													<p:outputLabel value="Qualification"></p:outputLabel>
+													<p:inputText
+														value="#{registrationBean1.fatherQualification}"></p:inputText>
+
+													<p:outputLabel value="Occupation"></p:outputLabel>
+													<p:selectOneMenu editable="true"
+														value="#{registrationBean1.fathersOccupation}">
+														<f:selectItem itemLabel="Select Occupation" itemValue=""></f:selectItem>
+														<f:selectItem itemLabel="Business" itemValue="Business"></f:selectItem>
+														<f:selectItem itemLabel="Govt.Employee"
+															itemValue="Govt.Employee"></f:selectItem>
+														<f:selectItem itemLabel="Doctor" itemValue="Doctor"></f:selectItem>
+														<f:selectItem itemLabel="Advocate" itemValue="Advocate"></f:selectItem>
+														<f:selectItem itemLabel="Engineer" itemValue="Engineer"></f:selectItem>
+														<f:selectItem itemLabel="Teacher" itemValue="Teacher"></f:selectItem>
+														<f:selectItem itemLabel="Shopkeeper"
+															itemValue="Shopkeeper"></f:selectItem>
+														<f:selectItem itemLabel="Labourer" itemValue="Labourer"></f:selectItem>
+														<f:selectItem itemLabel="Agriculture"
+															itemValue="Agriculture"></f:selectItem>
+														<f:selectItem itemLabel="Private Job"
+															itemValue="Private Job"></f:selectItem>
+													</p:selectOneMenu>
+													
+													<p:outputLabel value="Designation"></p:outputLabel>
+													<p:inputText value="#{registrationBean1.fatherDesignation}" ></p:inputText>
+													
+													<p:outputLabel value="Annual Income"></p:outputLabel>
+													<p:inputText id="fatherInc" value="#{registrationBean1.fahterAnnualIncome}" onkeypress="return AvoidSpace(event)" onkeyup="checkNumberValid2('form:tabview:j_idt659:fatherInc')">
+													</p:inputText>
+
+													<p:outputLabel value="Office Contact"></p:outputLabel>
+													<p:inputText
+														value="#{registrationBean1.fatherofficecontcatno}"></p:inputText>
+
+													<p:outputLabel value="Office Address"></p:outputLabel>
+													<p:inputText value="#{registrationBean1.fatherOfficeAdd}"></p:inputText>
+
+													<p:outputLabel value="Is School Employee ? "></p:outputLabel>
+													<p:selectOneRadio
+														value="#{registrationBean1.fatherSchoolEmp}">
+														<f:selectItem itemValue="Yes" itemLabel="Yes"></f:selectItem>
+														<f:selectItem itemValue="No" itemLabel="No"></f:selectItem>
+													</p:selectOneRadio>
+													
+													
+											
+											        <p:outputLabel value="Upload Father's image"></p:outputLabel>
+											        <p:fileUpload value="#{registrationBean1.fatherImage}"
+												       mode="simple" allowTypes="/(\.|\/)(gif|jpeg|png)$/" />
+												 </p:panelGrid>
+											</p:tab>
+											<p:tab title="Mother's Details">
+												<p:panelGrid columns="4"
+													columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+													layout="grid" styleClass="ui-panelgrid-blank form-group"
+													style="border:0px none; background-color:transparent;">
+													
+														<p:outputLabel
+												      value="#{registrationVar.registrationMotherNameLabel}"></p:outputLabel>
+											        <p:inputText value="#{registrationBean1.mname}"></p:inputText>
+											
+											
+                                                    <p:outputLabel value="Mother's Email"></p:outputLabel>
+											        <p:inputText value="#{registrationBean1.motherEmail}"></p:inputText>
+
+											        <p:outputLabel value="Mother's UID"></p:outputLabel>
+											        <p:inputText value="#{registrationBean1.motherAadhaar}"></p:inputText>
+
+											        <p:outputLabel value="Mother's Mobile Number"></p:outputLabel>
+											        <p:inputText id="motherNumber" value="#{registrationBean1.mothersPhone}" maxlength="10" onkeypress="return AvoidSpace(event)" onkeyup="checkNumberValid2('form:tabview:motherNumber')">
+											        </p:inputText>
+													
+													<p:outputLabel value="Qualification"></p:outputLabel>
+													<p:inputText
+														value="#{registrationBean1.motherOccupation}"></p:inputText>
+
+													<p:outputLabel value="Occupation"></p:outputLabel>
+													<p:selectOneMenu editable="true"
+														value="#{registrationBean1.motherOccupation}">
+														<f:selectItem itemLabel="Select Occupation" itemValue=""></f:selectItem>
+														<f:selectItem itemLabel="Business" itemValue="Business"></f:selectItem>
+														<f:selectItem itemLabel="Govt.Employee"
+															itemValue="Govt.Employee"></f:selectItem>
+														<f:selectItem itemLabel="Doctor" itemValue="Doctor"></f:selectItem>
+														<f:selectItem itemLabel="Advocate" itemValue="Advocate"></f:selectItem>
+														<f:selectItem itemLabel="Engineer" itemValue="Engineer"></f:selectItem>
+														<f:selectItem itemLabel="Teacher" itemValue="Teacher"></f:selectItem>
+														<f:selectItem itemLabel="Shopkeeper"
+															itemValue="Shopkeeper"></f:selectItem>
+														<f:selectItem itemLabel="Labourer" itemValue="Labourer"></f:selectItem>
+														<f:selectItem itemLabel="Agriculture"
+															itemValue="Agriculture"></f:selectItem>
+														<f:selectItem itemLabel="Private Job"
+															itemValue="Private Job"></f:selectItem>
+													</p:selectOneMenu>
+													
+													<p:outputLabel value="Designation"></p:outputLabel>
+													<p:inputText value="#{registrationBean1.motherDesignation}" ></p:inputText>
+													
+													<p:outputLabel value="Annual Income"></p:outputLabel>
+													<p:inputText id="motherInc" value="#{registrationBean1.motherAnnualIncome}" onkeypress="return AvoidSpace(event)" onkeyup="checkNumberValid2('form:tabview:j_idt659:motherInc')">
+													</p:inputText>
+
+													<p:outputLabel value="Office Contact"></p:outputLabel>
+													<p:inputText
+														value="#{registrationBean1.motherofficecontactno}"></p:inputText>
+
+													<p:outputLabel value="Office Address"></p:outputLabel>
+													<p:inputText value="#{registrationBean1.motherOfficeAdd}"></p:inputText>
+
+
+													<p:outputLabel value="Is School Employee ? "></p:outputLabel>
+													<p:selectOneRadio
+														value="#{registrationBean1.motherSchoolEmp}">
+														<f:selectItem itemValue="Yes" itemLabel="Yes"></f:selectItem>
+														<f:selectItem itemValue="No" itemLabel="No"></f:selectItem>
+													</p:selectOneRadio>
+													
+												
+											
+											       <p:outputLabel value="Upload Mother's image"></p:outputLabel>
+											       <p:fileUpload value="#{registrationBean1.motherImage}"
+											                    	mode="simple" allowTypes="/(\.|\/)(gif|jpeg|png)$/" />
+												</p:panelGrid>
+
+
+											</p:tab>
+                                      
+                                      </p:tabView>
+									</p:tab>
+
+									<p:tab title="Last Education Details">
+
+										<p:panelGrid columns="4"
+											columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+											layout="grid" styleClass="ui-panelgrid-blank form-group"
+											style="border:0px none; background-color:transparent;">
+
+											<p:outputLabel value="Last School Name"></p:outputLabel>
+											<p:inputText value="#{registrationBean1.lastSchoolName}"></p:inputText>
+
+											<p:outputLabel value="Last Class"></p:outputLabel>
+											<p:inputText value="#{registrationBean1.passedClass}"></p:inputText>
+
+											<p:outputLabel value="Medium"></p:outputLabel>
+											<p:selectOneRadio value="#{registrationBean1.medium}">
+												<f:selectItem itemLabel="English" itemValue="English"></f:selectItem>
+												<f:selectItem itemLabel="Hindi" itemValue="Hindi"></f:selectItem>
+											</p:selectOneRadio>
+
+											<p:outputLabel value="Result"></p:outputLabel>
+											<p:selectOneMenu value="#{registrationBean1.pResult}"
+												editable="true">
+												<f:selectItem itemLabel="Select Result" itemValue=""></f:selectItem>
+												<f:selectItem itemLabel="Pass" itemValue="Pass"></f:selectItem>
+												<f:selectItem itemLabel="Fail" itemValue="Fail"></f:selectItem>
+												<f:selectItem itemLabel="Supplementary"
+													itemValue="Supplementary"></f:selectItem>
+											</p:selectOneMenu>
+
+											<p:outputLabel value="Board"></p:outputLabel>
+											<p:inputText value="#{registrationBean1.boardName}"></p:inputText>
+
+											<p:outputLabel value="%Age"></p:outputLabel>
+											<p:inputText value="#{registrationBean1.p_percent}"></p:inputText>
+
+											<p:outputLabel value="Reason To Leave"></p:outputLabel>
+											<p:selectOneMenu value="#{registrationBean1.pReason}"
+												editable="true">
+												<f:selectItem itemLabel="Select Reason" itemValue=""></f:selectItem>
+												<f:selectItem itemLabel="Due to long absent"
+													itemValue="Due to Long Absent"></f:selectItem>
+												<f:selectItem itemLabel="To study else where"
+													itemValue="To Study Else Where"></f:selectItem>
+												<f:selectItem itemLabel="To study for higher classes"
+													itemValue="To Study For Higher Classes"></f:selectItem>
+												<f:selectItem itemLabel="Parents transfer to other city"
+													itemValue="Parents Transfer to Other City"></f:selectItem>
+											</p:selectOneMenu>
+
+											<p:outputLabel value="TC Date"></p:outputLabel>
+											<p:calendar value="#{registrationBean1.tcDate}"
+												navigator="true" pattern="dd/MM/yyyy"></p:calendar>
+										</p:panelGrid>
+									</p:tab>
+
+									<p:tab title="Health Details">
+
+										<p:panelGrid columns="4"
+											columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+											layout="grid" styleClass="ui-panelgrid-blank form-group"
+											style="border:0px none; background-color:transparent;">
+											<p:outputLabel value="Height (In cm)"></p:outputLabel>
+											<p:inputText value="#{registrationBean1.height}">
+												<p:keyFilter mask="pint" />
+											</p:inputText>
+
+											<p:outputLabel value="Weight(Kg.Gm)"></p:outputLabel>
+											<p:inputText value="#{registrationBean1.weight}">
+												<p:keyFilter mask="pnum" />
+											</p:inputText>
+
+											<p:outputLabel value="Eyes(Left/Right)"></p:outputLabel>
+											<p:inputText value="#{registrationBean1.eyes}"></p:inputText>
+
+											<p:outputLabel value="Blood Group"></p:outputLabel>
+											<p:selectOneMenu value="#{registrationBean1.bloodGroup}">
+												<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+
+												<f:selectItem itemLabel="A+" itemValue="A+"></f:selectItem>
+												<f:selectItem itemLabel="B+" itemValue="B+"></f:selectItem>
+												<f:selectItem itemLabel="O+" itemValue="O+"></f:selectItem>
+												<f:selectItem itemLabel="AB+" itemValue="AB+"></f:selectItem>
+												<f:selectItem itemLabel="A-" itemValue="A-"></f:selectItem>
+												<f:selectItem itemLabel="B-" itemValue="B-"></f:selectItem>
+												<f:selectItem itemLabel="O-" itemValue="O-"></f:selectItem>
+												<f:selectItem itemLabel="AB-" itemValue="AB-"></f:selectItem>
+
+											</p:selectOneMenu>
+
+										</p:panelGrid>
+									</p:tab>
+
+									<p:tab title="Guardian Details">
+										<p:tabView>
+											<p:tab title="Guardian Details 1">
+												<p:panelGrid columns="4"
+													columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+													layout="grid" styleClass="ui-panelgrid-blank form-group"
+													style="border:0px none; background-color:transparent;">
+													<p:outputLabel value="Name of Guardian"></p:outputLabel>
+													<p:inputText value="#{registrationBean1.fname1}"></p:inputText>
+
+													<p:outputLabel
+														value="#{registrationParentsVar.registrationParentsLastNameLabel}"
+														rendered="false"></p:outputLabel>
+													<p:inputText value="#{registrationBean1.lname1}"
+														rendered="false"></p:inputText>
+
+													<p:outputLabel
+														value="#{registrationParentsVar.registrationParentsRelationLabel}"></p:outputLabel>
+													<p:inputText value="#{registrationBean1.relation1}"></p:inputText>
+
+													<p:outputLabel
+														value="#{registrationParentsVar.registrationParentsOccupationLabel}"></p:outputLabel>
+													<p:selectOneMenu editable="true"
+														value="#{registrationBean1.occupation1}">
+														<f:selectItem itemLabel="Select Occupation" itemValue=""></f:selectItem>
+														<f:selectItem itemLabel="Business" itemValue="Business"></f:selectItem>
+														<f:selectItem itemLabel="Govt.Employee"
+															itemValue="Govt.Employee"></f:selectItem>
+														<f:selectItem itemLabel="Doctor" itemValue="Doctor"></f:selectItem>
+														<f:selectItem itemLabel="Advocate" itemValue="Advocate"></f:selectItem>
+														<f:selectItem itemLabel="Engineer" itemValue="Engineer"></f:selectItem>
+														<f:selectItem itemLabel="Teacher" itemValue="Teacher"></f:selectItem>
+														<f:selectItem itemLabel="Shopkeeper"
+															itemValue="Shopkeeper"></f:selectItem>
+														<f:selectItem itemLabel="Labourer" itemValue="Labourer"></f:selectItem>
+														<f:selectItem itemLabel="Agriculture"
+															itemValue="Agriculture"></f:selectItem>
+														<f:selectItem itemLabel="Private Job"
+															itemValue="Private Job"></f:selectItem>
+													</p:selectOneMenu>
+
+													<p:outputLabel value="Contact Number"></p:outputLabel>
+													<p:inputText value="#{registrationBean1.phone1}">
+														<p:keyFilter mask="num" />
+													</p:inputText>
+
+													<p:outputLabel value="Address"></p:outputLabel>
+													<p:inputText value="#{registrationBean1.address1}"></p:inputText>
+
+													<p:outputLabel value="Upload First Guardian's image"></p:outputLabel>
+													<p:fileUpload value="#{registrationBean1.g1Image}"
+														mode="simple" allowTypes="/(\.|\/)(gif|jpeg|png)$/" />
+
+
+
+												</p:panelGrid>
+
+											</p:tab>
+											<p:tab title="Guardian Details 2">
+												<p:panelGrid columns="4"
+													columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+													layout="grid" styleClass="ui-panelgrid-blank form-group"
+													style="border:0px none; background-color:transparent;">
+													<p:outputLabel value="Name of Guardian"></p:outputLabel>
+													<p:inputText value="#{registrationBean1.fname2}"></p:inputText>
+
+													<p:outputLabel
+														value="#{registrationParentsVar.registrationParentsLastNameLabel}"
+														rendered="false">
+													</p:outputLabel>
+													<p:inputText value="#{registrationBean1.lname2}"
+														rendered="false"></p:inputText>
+
+													<p:outputLabel
+														value="#{registrationParentsVar.registrationParentsRelationLabel}"></p:outputLabel>
+													<p:inputText value="#{registrationBean1.relation2}"></p:inputText>
+
+													<p:outputLabel
+														value="#{registrationParentsVar.registrationParentsOccupationLabel}"></p:outputLabel>
+													<p:selectOneMenu editable="true"
+														value="#{registrationBean1.occupation2}">
+														<f:selectItem itemLabel="Select Occupation" itemValue=""></f:selectItem>
+														<f:selectItem itemLabel="Business" itemValue="Business"></f:selectItem>
+														<f:selectItem itemLabel="Govt.Employee"
+															itemValue="Govt.Employee"></f:selectItem>
+														<f:selectItem itemLabel="Doctor" itemValue="Doctor"></f:selectItem>
+														<f:selectItem itemLabel="Advocate" itemValue="Advocate"></f:selectItem>
+														<f:selectItem itemLabel="Engineer" itemValue="Engineer"></f:selectItem>
+														<f:selectItem itemLabel="Teacher" itemValue="Teacher"></f:selectItem>
+														<f:selectItem itemLabel="Shopkeeper"
+															itemValue="Shopkeeper"></f:selectItem>
+														<f:selectItem itemLabel="Labourer" itemValue="Labourer"></f:selectItem>
+														<f:selectItem itemLabel="Agriculture"
+															itemValue="Agriculture"></f:selectItem>
+														<f:selectItem itemLabel="Private Job"
+															itemValue="Private Job"></f:selectItem>
+													</p:selectOneMenu>
+
+													<p:outputLabel value="Contact Number"></p:outputLabel>
+													<p:inputText value="#{registrationBean1.phone2}">
+														<p:keyFilter mask="num" />
+													</p:inputText>
+
+													<p:outputLabel value="Address"></p:outputLabel>
+													<p:inputText value="#{registrationBean1.address2}"></p:inputText>
+
+													<p:outputLabel value="Upload Second Guardian's image"></p:outputLabel>
+													<p:fileUpload value="#{registrationBean1.g2Image}"
+														mode="simple" allowTypes="/(\.|\/)(gif|jpeg|png)$/" />
+												</p:panelGrid>
+											</p:tab>
+										
+										</p:tabView>
+									</p:tab>
+
+									<p:tab title="Xth details for(XI and XII)">
+										<p:panelGrid columns="4"
+											columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+											layout="grid" styleClass="ui-panelgrid-blank form-group"
+											style="border:0px none; background-color:transparent;">
+											
+											<p:outputLabel value="Xth Class Roll No."></p:outputLabel>
+											<p:inputText value="#{registrationBean1.tenRoll}"></p:inputText>
+											
+											<p:outputLabel value="Year Of Passing"></p:outputLabel>
+											<p:inputText value="#{registrationBean1.tenYearOfPass}"></p:inputText>
+											
+											<p:outputLabel value="Board"></p:outputLabel>
+											<p:selectOneMenu value="#{registrationBean1.tenBoard}">
+											<f:selectItem itemLabel="Select board" itemValue=""></f:selectItem>
+											 <f:selectItem itemValue="CBSE" itemLabel="CBSE" ></f:selectItem>
+											 <f:selectItem itemValue="ICSE" itemLabel="ICSE"></f:selectItem>
+											 <f:selectItem itemValue="STATE" itemLabel="STATE Board"></f:selectItem>
+											
+											</p:selectOneMenu>
+										
+										</p:panelGrid>
+									</p:tab>
+
+									<p:tab title="Settings">
+
+										<p:panelGrid columns="4"
+											columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+											layout="grid" styleClass="ui-panelgrid-blank form-group"
+											style="border:0px none; background-color:transparent;">
+
+											<p:outputLabel
+												value="#{registrationVar.registrationRouteNameLabel}"></p:outputLabel>
+											<p:selectOneMenu value="#{registrationBean1.routeName1}"
+												filter="true" filterMatchMode="contains"
+												style="min-width:min-width: 289.917px;">
+												<f:selectItem itemLabel="#{registrationVar.selectHereLabel}"></f:selectItem>
+												<f:selectItems value="#{registrationBean1.routeList}"></f:selectItems>
+												<p:ajax listener="#{registrationBean1.checkRoute}"
+													update="routefee discountfee totalfee"></p:ajax>
+											</p:selectOneMenu>
+
+
+											<p:outputLabel value="Route fees (Per month)"></p:outputLabel>
+											<p:outputLabel id="routefee"
+												value="#{registrationBean1.routeFees}"></p:outputLabel>
+
+											<p:outputLabel value="Transport Discount fees (Per month)"></p:outputLabel>
+											<p:inputText id="discountfee"
+												value="#{registrationBean1.discountFee}">
+												<p:keyFilter mask="pnum"></p:keyFilter>
+												<p:ajax event="blur"
+													listener="#{registrationBean1.checkfees}" update="totalfee"></p:ajax>
+											</p:inputText>
+
+											<p:outputLabel value="Total fees (Per month)"></p:outputLabel>
+											<p:outputLabel id="totalfee"
+												value="#{registrationBean1.totalFess}"></p:outputLabel>
+
+
+
+											<p:outputLabel value="Concession"></p:outputLabel>
+											<p:selectOneRadio value="#{registrationBean1.concession}"
+												layout="responsive" columns="3" styleClass="form-group">
+												<f:selectItems value="#{registrationBean1.connsessionList}"></f:selectItems>
+
+											</p:selectOneRadio>
+
+											<p:outputLabel value="Hostel" />
+											<p:selectOneRadio value="#{registrationBean1.hostal}">
+												<f:selectItem itemLabel="Yes" itemValue="yes" />
+												<f:selectItem itemLabel="No" itemValue="no" />
+											</p:selectOneRadio>
+
+											<p:outputLabel value="Hostel Fees"></p:outputLabel>
+											<p:outputLabel id="hostelfee"
+												value="#{registrationBean1.hostelfees}"></p:outputLabel>
+
+
+											<p:outputLabel value="House"></p:outputLabel>
+
+											<p:panelGrid columns="2">
+												<p:selectOneMenu id="allhouses"
+													value="#{registrationBean1.houseName}"
+													rendered="#{registrationBean1.info.branch_id ne '22'}">
+													<f:selectItem itemLabel="Select House" itemValue="" />
+													<f:selectItems
+														value="#{registrationBean1.houseCategorylist}"></f:selectItems>
+												</p:selectOneMenu>
+
+												<p:selectOneMenu id="allhouses1"
+													value="#{registrationBean1.houseName}"
+													rendered="#{registrationBean1.info.branch_id eq '22'}" required="true" requiredMessage="Please select house (In Settings Tab)">
+													<f:selectItem itemLabel="Select House" itemValue="" />
+													<f:selectItems
+														value="#{registrationBean1.houseCategorylist}"></f:selectItems>
+														<p:ajax listener="#{registrationBean1.houseSrno}"
+											update="srnoNew" global="false"></p:ajax>
+												</p:selectOneMenu>
+
+												<p:commandButton value="Add House" immediate="true"
+													oncomplete="PF('dlg1').show();" update=":house"></p:commandButton>
+
+											</p:panelGrid>
+
+
+
+
+										</p:panelGrid>
+										<br></br>
+
+										<p:panel header="Siblings details if Any (Optional)">
+											<p:dataTable id="dtbSibling" value="#{registrationBean1.completeList}"
+												var="var">
+
+												<p:column headerText="S.No.">
+													<p:outputLabel value="#{var.sno}"></p:outputLabel>
+												</p:column>
+
+												<p:column headerText="Name">
+													<p:autoComplete id="acSimple" value="#{var.fname}"
+														completeMethod="#{registrationBean1.autoCompleteStudentInfo}">
+														<f:attribute name="Dummyy" value="#{var.sno}"></f:attribute>
+														
+														<p:ajax event="query" global="false" />
+														<p:ajax event="itemSelect" listener="#{registrationBean1.checkSiblingClass}" update=":form:tabview:dtbSibling"></p:ajax>
+													</p:autoComplete>
+												</p:column>
+												
+												<p:column headerText="Class" >
+													<center><p:outputLabel value="#{var.className}"></p:outputLabel></center>
+												</p:column>
+												
+												<p:column headerText="Section">
+													<center><p:outputLabel value="#{var.sectionName}"></p:outputLabel></center>
+												</p:column>
+											</p:dataTable>
+										</p:panel>
+
+										<br></br>
+
+										<p:panel rendered="false"
+											header="Siblings details if Any (Optional)">
+											<p:panelGrid columns="4"
+												columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+												layout="grid" styleClass="ui-panelgrid-blank form-group"
+												style="border:0px none; background-color:transparent;">
+												<p:outputLabel value="1) Name"></p:outputLabel>
+												<p:autoComplete id="acSimple"
+													value="#{registrationBean1.sname1}"
+													completeMethod="#{registrationBean1.autoCompleteStudentInfo}">
+													<p:ajax event="blur" global="false" update="sc1"
+														listener="#{registrationBean1.checkSiblingClass1}" />
+												</p:autoComplete>
+
+												<p:outputLabel value="Class"></p:outputLabel>
+												<p:selectOneMenu id="sc1" disabled="true"
+													value="#{registrationBean1.sClassName1}">
+													<f:selectItem itemLabel="Select here" itemValue=""></f:selectItem>
+													<f:selectItems value="#{registrationBean1.classList}"></f:selectItems>
+												</p:selectOneMenu>
+
+												<p:outputLabel value="2) Name"></p:outputLabel>
+												<p:autoComplete id="acSimple2"
+													value="#{registrationBean1.sname2}"
+													completeMethod="#{registrationBean1.autoCompleteStudentInfo}">
+													<p:ajax event="blur" global="false" update="sc2"
+														listener="#{registrationBean1.checkSiblingClass2}" />
+												</p:autoComplete>
+
+												<p:outputLabel value="Class"></p:outputLabel>
+												<p:selectOneMenu id="sc2" disabled="true"
+													value="#{registrationBean1.sClassName2}">
+													<f:selectItem itemLabel="Select here" itemValue=""></f:selectItem>
+													<f:selectItems value="#{registrationBean1.classList}"></f:selectItems>
+
+												</p:selectOneMenu>
+											</p:panelGrid>
+										</p:panel>
+										<br></br>
+										<p:panel header="Documents Details">
+										
+										<p:commandLink value="Add Document" style="float:right;" immediate="true"
+													oncomplete="PF('dlg2').show();" update=":docForm"></p:commandLink>
+										<br/>			
+										<p:commandLink value="Remove Document" style="float:right;" immediate="true"
+													oncomplete="PF('dlgRemove').show();" update=":docFormRemove"></p:commandLink>
+										
+											<p:panelGrid columns="3"
+												columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+												layout="grid" styleClass="ui-panelgrid-blank form-group"
+												style="border:0px none; background-color:transparent;">
+												<p:outputLabel value="Documents submitted"></p:outputLabel>
+												<p:selectManyCheckbox id="document"
+													value="#{registrationBean1.documentsSubmitted}">
+													<f:selectItems value="#{registrationBean1.doctypelist}"></f:selectItems>
+												</p:selectManyCheckbox>
+												
+
+											</p:panelGrid>
+
+										</p:panel>
+
+
+
+									</p:tab>
+								</p:tabView>
+
+								<br></br>
+								
+								
+								<p:separator />
+								<center>
+									
+								
+										<p:commandButton update="form" ajax="false"
+										action="#{registrationBean1.reg2}"  styleClass="butwid" icon="fa fa-save"
+										value="Save"></p:commandButton>
+									
+								</center>
+								<p:separator />
+								
+							</p:panel>
+							<br></br>
+							<p:panel>
+								<p:outputLabel value="Note:- * fields are mandatory"></p:outputLabel>
+							</p:panel>
+						</h:form>
+
+						<!-- </div> -->
+
+						<h:form id="house">
+							<p:dialog header="Add House" id="houseess" widgetVar="dlg1"
+								minHeight="40">
+
+								<p:panelGrid columns="2" layout="grid"
+									styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:inputText value="#{registrationBean1.newHouse}"
+										required="true" requiredMessage="Please enter house name">
+									</p:inputText>
+									<p:commandButton value="add"
+										action="#{registrationBean1.addHouse}"
+										update=":form:tabview:allhouses,:form:tabview:allhouses1"
+										oncomplete="PF('dlg1').hide();"></p:commandButton>
+								</p:panelGrid>
+
+							</p:dialog>
+						</h:form>
+
+						<h:form id="docForm">
+
+							<p:dialog header="Add Document" id="docm" widgetVar="dlg2"
+								minHeight="40">
+
+								<p:panelGrid columns="2" layout="grid"
+									styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:inputText value="#{registrationBean1.doctype}"
+										required="true" requiredMessage="Please enter doucument name">
+									</p:inputText>
+									<p:commandButton value="add"
+										action="#{registrationBean1.addDocType}"
+										update=":form:tabview:document"
+										oncomplete="PF('dlg2').hide();"></p:commandButton>
+								</p:panelGrid>
+
+							</p:dialog>
+						</h:form>
+
+						<h:form id="MsgLimitForm" style="overflow:hidden">
+							<p:dialog header="Low SMS Balance" width="500"
+								widgetVar="MsgLmtDlg" modal="true" showEffect="fade"
+								hideEffect="fade" resizable="false">
+								<center>
+									<p:outputLabel value="#{registrationBean1.balMsg}"
+										style="font-size:14px;font-weight: bold;" />
+								</center>
+								<br></br>
+								<br></br>
+								<center>
+									<p:commandButton value="Skip"
+										action="#{registrationBean1.sendMsg}"
+										update="MsgLimitForm,form" />
+									<br /> <br />
+									<p:commandButton value="Message Logs"
+										action="messageSchoolHistory.xhtml?faces-redirect=true"
+										update="MsgLimitForm" />
+									<br /> <br />
+									<p:commandButton value="Recharge Now"
+										action="purchaseMsgPack.xhtml?faces-redirect=true"
+										update="MsgLimitForm" />
+								</center>
+								<br></br>
+							</p:dialog>
+						</h:form>
+
+						<h:form id="MsgOverForm" style="overflow:hidden">
+							<p:dialog header="SMS Limit Over" width="500"
+								widgetVar="MsgOvrDlg" modal="true" showEffect="fade"
+								hideEffect="fade" resizable="false">
+								<center>
+									<p:outputLabel value="#{registrationBean1.balMsg}"
+										style="font-size:14px;font-weight: bold;" />
+								</center>
+								<br></br>
+								<br></br>
+								<center>
+									<p:commandButton value="Message Logs"
+										action="messageSchoolHistory.xhtml?faces-redirect=true"
+										update="MsgOverForm" />
+									<br /> <br />
+									<p:commandButton value="Recharge Now"
+										action="purchaseMsgPack.xhtml?faces-redirect=true"
+										update="MsgOverForm" />
+								</center>
+								<br></br>
+							</p:dialog>
+						</h:form>
+
+						<h:form id="MsgOtherForm" style="overflow:hidden">
+							<p:dialog header="SMS Limit Over" width="500"
+								widgetVar="MsgOthDlg" modal="true" showEffect="fade"
+								hideEffect="fade" resizable="false">
+								<center>
+									<p:outputLabel value="#{registrationBean1.balMsg}"
+										style="font-size:14px;font-weight: bold;" />
+								</center>
+								<br></br>
+								<br></br>
+								<center>
+									<p:commandButton value="OK"
+										action="registration1.xhtml?faces-redirect=true"
+										update="MsgOtherForm" />
+								</center>
+							</p:dialog>
+						</h:form>
+						
+						<h:form id="docFormRemove">
+
+							<p:dialog header="Remove Document" id="docmRem" widgetVar="dlgRemove"
+								minHeight="40">
+
+								<p:panelGrid columns="2" layout="grid"
+									styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:dataTable id="dtbRem" value="#{registrationBean1.doctypelist}" var="varRem" style="width:400px;">
+									
+									<p:column headerText="Document">
+									
+									<p:outputLabel value="#{varRem.label}"></p:outputLabel>
+									
+									</p:column>
+									
+									<p:column headerText="Remove">
+									  <p:commandButton icon="ui-icon-trash" action="#{registrationBean1.removeDoc}" update=":docFormRemove:dtbRem,:form:tabview:document">
+									     <f:setPropertyActionListener value="#{varRem}"
+													target="#{registrationBean1.selectedDoc}"></f:setPropertyActionListener>
+									  </p:commandButton>
+									</p:column>
+									
+									</p:dataTable>
+								</p:panelGrid>
+
+							</p:dialog>
+						</h:form>
+						
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

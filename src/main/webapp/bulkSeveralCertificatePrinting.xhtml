@@ -1,0 +1,69 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Certificates</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="initializePageDataForm">
+							<p:remoteCommand name="initializePageDataCommand" autoRun="true"
+								action="#{SCPBean.init()}" update=":form1" />
+						</h:form>
+
+						<h:form id="form1">
+							<h1>Search Student</h1>
+							<p:messages closable="true" autoUpdate="true"></p:messages>
+							<p:commandLink action="#{bulkSCP.toBulk}" immediate="true"
+								value="Back to All Certificate Printing"
+								style="font-size:18px !important;float:right;"></p:commandLink>
+							<br />
+							<br />
+							<p:panel header="Search Student">
+								<p:panelGrid columns="5"
+									styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel for="@next" style="color:red"
+										value="Select Class"></p:outputLabel>
+									<p:selectOneMenu style="width:250px"
+										value="#{bulkSCP.selectedCLassSection}" required="true"
+										requiredMessage="Please select a class">
+
+										<f:selectItem itemLabel="Select Class" itemValue=""></f:selectItem>
+										<f:selectItems value="#{bulkSCP.classSection}"></f:selectItems>
+
+										<p:ajax update="sectionid" listener="#{bulkSCP.allSections}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel for="@next" style="color:red"
+										value="Select Section"></p:outputLabel>
+									<p:selectOneMenu id="sectionid"
+										value="#{bulkSCP.selectedSection}" required="true"
+										requiredMessage="Please select a section">
+										<f:selectItem itemLabel="Select Section" itemValue=""></f:selectItem>
+										<f:selectItem itemLabel="All" itemValue="-1"></f:selectItem>
+										<f:selectItems value="#{bulkSCP.sectionList}"></f:selectItems>
+
+									</p:selectOneMenu>
+
+									<p:commandButton value="LOC" action="#{bulkSCP.locCertificate}"></p:commandButton>
+
+								</p:panelGrid>
+							</p:panel>
+						</h:form>
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,126 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pe="http://primefaces.org/ui/extensions"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Inactive Employees</ui:define>
+
+    <ui:define name="content">
+       
+            <div class="ui-fluid">
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <div class="card card-w-title">
+                       <h:form id="form" >	
+                       <p:growl showDetail="true"  autoUpdate="true"></p:growl>
+			  <p:panel header="Inactive Employees List"> 
+			 
+			    
+			    <h:commandLink>
+										<p:graphicImage name="images/excellogo.png"
+											library="avalon-layout" width="100" height="40"></p:graphicImage>
+										<pe:exporter type="xlsx" target=":form:empTbl"
+											fileName="Inactive_employees"></pe:exporter>
+									</h:commandLink>
+			 
+                   
+                   	<p:dataTable id="empTbl" reflow="true" value="#{inactiveEmployeeReport.employeeList}" var="var" >
+              
+                      <f:facet name="header">
+              		     <p:outputLabel value="INACTIVE EMPLOYEES"></p:outputLabel>
+              	      </f:facet>
+               	
+               	     <p:column sortBy="#{var.fname}" headerText="Name">
+											<f:facet name="header">
+												<p:outputLabel value="Name"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.fname}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Father's Name">
+											<f:facet name="header">
+												<p:outputLabel value="Father's Name"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.lname}"></p:outputLabel>
+										</p:column>
+										
+										<p:column headerText="Emp. Unique Id" style="width:55px">
+											<f:facet name="header">
+												<p:outputLabel value="Employee Unique Id"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.employeeUniqueId}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Category" filterBy="#{var.category}">
+											<f:facet name="header">
+												<p:outputLabel value="Category"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.category}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Sub Categ.">
+											<f:facet name="header">
+												<p:outputLabel value="Sub Categ."></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.subCateg}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Contact No." style="width:78px">
+											<f:facet name="header">
+												<p:outputLabel value="Contact No."></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.mobile}"></p:outputLabel>
+										</p:column>
+										
+										
+										<p:column headerText="Email / Zoom Email">
+											<f:facet name="header">
+												<p:outputLabel value="Email / Zoom Email"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.email}"></p:outputLabel>
+										</p:column>
+										
+										
+										
+										<p:column exportable="false" headerText="Active Emp."  style="width:55px">
+											<p:commandButton action="#{inactiveEmployeeReport.activesEmpl}"
+												icon="ui-icon-check" update=":form:empTbl">
+												<f:setPropertyActionListener
+													target="#{inactiveEmployeeReport.selectedEmployee}" value="#{var}"></f:setPropertyActionListener>
+								                <p:confirm header="Confirmation" message="Surely Want To Active Employee???" icon="ui-icon-alert" />		
+											</p:commandButton>
+										</p:column>
+										
+										<p:column exportable="false" headerText="View" rendered="false" style="width:45px">
+											<p:commandButton action="#{inactiveEmployeeReport.viewDetails}"
+												icon="ui-icon-search">
+												<f:setPropertyActionListener
+													target="#{inactiveEmployeeReport.selectedEmployee}" value="#{var}"></f:setPropertyActionListener>
+											</p:commandButton>
+										</p:column>
+               	
+               
+                    </p:dataTable>
+               		 		
+              	 
+               	<br/>	
+               
+               	
+               		
+              </p:panel>
+              <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+						<p:commandButton style="margin-left:50px" value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+						<p:commandButton style="margin-left:50px" value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+					</p:confirmDialog>
+					</h:form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+       
+    </ui:define>
+
+</ui:composition>

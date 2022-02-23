@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+<f:loadBundle var="addClassVar" basename="myProperties" />
+<f:view contentType="text/html">
+	<h:head>
+		<f:facet name="first">
+			<meta content='text/html; charset=UTF-8' http-equiv="Content-Type" />
+			<meta http-equiv="X-UA-Compatible" content="EmulateIE8" />
+
+		</f:facet>
+
+		<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css"></link>
+		<link rel="stylesheet"
+			href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"></link>
+		<link rel="stylesheet"
+			href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css"></link>
+		<link rel="stylesheet" href="dist/css/AdminLTE.min.css"></link>
+		<link rel="stylesheet" href="dist/css/skins/all-skins.min.css"></link>
+		<link rel="stylesheet" type="text/css" href="css/style.css" />
+	</h:head>
+
+	<h:body>
+		<h:form  id="form">
+			<p:commandButton value="Print" icon="ui-icon-print">
+				<p:printer target=":form:panel2"></p:printer>
+			</p:commandButton>
+			<p:outputPanel id="panel2" layout="block" style="widht:100%;border:2px solid #666666;margin-bottom:20px">
+					<div style="width: 100%;">
+							<p:graphicImage url="image/header.jpg" style="height:100px;width:100%;"></p:graphicImage>
+					</div>
+					<center>
+					<p:outputLabel style="font-size:15px!important;text-decoration:underline" value="ADMIT CARD" ></p:outputLabel>
+					<br></br>
+					<p:outputLabel style="font-size:12px!important;" value="(SHOULD BE PRESERVED BY THE CANDIDATE)"></p:outputLabel>
+					</center>
+					<br></br>
+					<div style="width: 100%">
+						<div style="width: 30%; float: right;" >
+							<p:graphicImage url="#{scholarshipPrintBeantest.image}" style="height:100px;width:100px;float:right"></p:graphicImage>
+						</div>
+										
+					<div style="width: 70%;" >
+					
+					<table style="width:100%;">
+					<tr >
+						<td style="font-size:12px!important;font-weight:bold;">Registration No.:</td>
+						<td style="font-size:12px!important;width:30%;background-color: transparent;border-style: solid; border-width: 0px 0px 1px 0px; border-color:black;">#{scholarshipPrintBeantest.regNo}</td>
+					</tr>
+					<tr >
+						<td style="font-size:12px!important;font-weight:bold;">Class Applied For:</td>
+						<td style="font-size:12px!important;width:30%;background-color: transparent;border-style: solid; border-width: 0px 0px 1px 0px; border-color:black;">#{scholarshipPrintBeantest.className}</td>
+					</tr>
+					<tr >
+						<td style="font-size:12px!important;font-weight:bold;">Student's Name:</td>
+						<td style="font-size:12px!important;width:70%;background-color: transparent;border-style: solid; border-width: 0px 0px 1px 0px; border-color:black;">#{scholarshipPrintBeantest.sName}</td>
+					</tr>	
+					<tr >
+						<td style="font-size:12px!important;font-weight:bold;">Mother's Name:</td>
+						<td style="font-size:12px!important;width:70%;background-color: transparent;border-style: solid; border-width: 0px 0px 1px 0px; border-color:black;">#{scholarshipPrintBeantest.mName}</td>
+					</tr>
+					<tr >
+						<td style="font-size:12px!important;font-weight:bold;">Father's Name:</td>
+						<td style="font-size:12px!important;width:71%;background-color: transparent;border-style: solid; border-width: 0px 0px 1px 0px; border-color:black;">#{scholarshipPrintBeantest.fName}</td>
+					</tr>
+					<tr >
+						<td style="font-size:12px!important;font-weight:bold;">Date of Birth:</td>
+						<td style="font-size:12px!important;width:70%;background-color: transparent;border-style: solid; border-width: 0px 0px 1px 0px; border-color:black;">#{scholarshipPrintBeantest.dobStr}</td>
+					</tr>
+					<tr >
+						<td style="font-size:12px!important;font-weight:bold;">Category:</td>
+						<td style="font-size:12px!important;width:70%;background-color: transparent;border-style: solid; border-width: 0px 0px 1px 0px; border-color:black;">#{scholarshipPrintBeantest.category}</td>
+					</tr>
+					<tr >
+						<td style="font-size:12px!important;font-weight:bold;">Contact No.:</td>
+						<td style="font-size:12px!important;width:70%;background-color: transparent;border-style: solid; border-width: 0px 0px 1px 0px; border-color:black;">#{scholarshipPrintBeantest.contactNo}</td>
+					</tr>
+					</table>
+					</div>
+					</div>
+					<br></br>
+					<br></br>
+					<center>
+					<p:outputLabel style="font-size:20px!important;" value="Annual Scholarship Test, March-2018" ></p:outputLabel>
+					<br></br>
+					<br></br>
+					</center>
+					<p:outputLabel style="font-size:12px!important;" value="Date of Examination:  25th March, 2018(Sunday)" ></p:outputLabel>
+					<br></br>
+					<br></br>
+					<p:outputLabel style="font-size:12px!important;" value="Reporting Time:  10:00 AM    Time of Examination:&nbsp;&nbsp;  11:00 AM-12:30PM&nbsp;(1.30Hours)" ></p:outputLabel>
+					<br></br>
+					<br></br>
+					<p:outputLabel style="font-size:12px!important;" value="Exam Center:&nbsp;&nbsp;Aravali Public School, Badiyal Khurd, Bandikui-303313, Distt. Dausa,Teh:- Baswa, Rajasthan" ></p:outputLabel>
+					<br></br>
+					<br></br>
+					<p:outputLabel style="font-size:15px!important;" value="Important Instructions:" ></p:outputLabel>
+<br></br>
+<p style="font-size:12px!important;font-weight: bold">				
+1.  Parent’s are requested to must check all particulars carefully and corrections, if any, be brought to the notice of the examination controller immediately by emailing at apsbki@gmail.com.
+<br></br>
+2.  Please bring this Admit Card in original with any one Photo Identity Proof such as Aadhar card or E-Aadhar in original or School’s Identity Card. Candidate without Admit Card shall not be allowed in the Examination under any circumstances.
+<br></br>
+3.  Candidate must report at the Examination Center 60 minutes (1 hour) prior to examination start time.Gate closing time is 15 minutes prior to start of exam. Candidate will not be allowed to enter at the Examination Centre after gate closure under any circumstances.
+<br></br>
+4.  You need to bring at least one original and One Xerox Copy of valid photo identification. The name on your photo identification must match your name as entered in the AST-2018 application. Acceptable forms of photo identification types are limited to UID card or School Identity Card. Candidates will not be permitted to take the test if photo identification is not presented or if there is a mismatch.
+<br></br>
+5.  Candidates are not allowed to carry any personal belongings to the exam centre including but not limited to wrist-watch, cell phones, calculators, etc. In case you carry any personal item, it will have to be kept outside the examination hall at your own risk. The examination center will not responsible<br></br> for any loss or damage of such items.
+<br></br>
+6.  Candidate can leave the examination hall only after completion of the test duration i.e., after 90 mins.
+<br></br>
+7.  No Mal-Practices will be tolerated. APS is fully authorized to take stern action against offenders.
+<br></br>
+8.  Candidate has to bring their examination instruments i.e. pencil, pen, eraser, sharpener, colour box as per their exam requirements.
+<br></br>
+<br></br>
+<br></br>
+Helpline(s): +91-7891030403, +91-9799906567
+</p>	
+<br></br>
+<br></br>
+<br></br>
+			<table style="width:80%">
+				<tr>
+					<td style="font-weight: bold;font-style: italic;" >Upendra Chaubey<br></br>Examination Controller</td>
+					
+					<td style="float:right;font-weight: bold;font-style: italic;" >Amrendra Kumar<br></br>Principal</td>
+				</tr>
+			</table>
+			</p:outputPanel>					
+			</h:form>
+	</h:body>
+</f:view>
+</html>

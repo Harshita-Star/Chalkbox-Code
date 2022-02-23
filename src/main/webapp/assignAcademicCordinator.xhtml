@@ -1,0 +1,122 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Assign Administrative Officer</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<h1>Assign Classes to Administrative Officer</h1>
+							<p:panel header="Search Administrative Officer">
+								<p:messages closable="true" autoUpdate="true"></p:messages>
+
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel for="@next" style="color:red"
+										value="Administrative Officer : "></p:outputLabel>
+									<p:selectOneMenu value="#{assignAcademicCordinator.staffid}"
+										filter="true" required="true"
+										requiredMessage="Select Administrative Officer">
+										<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+										<f:selectItems value="#{assignAcademicCordinator.staffList}"></f:selectItems>
+									</p:selectOneMenu>
+
+
+									<p:commandButton value="Proceed" update=":form"
+										action="#{assignAcademicCordinator.search}"></p:commandButton>
+								</p:panelGrid>
+								<br></br>
+
+								<p:panelGrid columns="2" layout="grid" style="border: 0px white;">
+
+										<p:dataTable reflow="true"
+											selection="#{assignAcademicCordinator.selectedList}"
+											rowKey="#{var.value}"
+											value="#{assignAcademicCordinator.classList}" var="var"
+											rowIndexVar="index">
+											
+											<f:facet name="header">
+												Classes Not Assigned
+											</f:facet>
+
+											<p:column style="width:100px" headerText="Select Here"
+												selectionMode="multiple"></p:column>
+
+											<p:column headerText="S.No">
+												<p:outputLabel value="#{index+1}"></p:outputLabel>
+											</p:column>
+
+											<p:column headerText="Class">
+												<p:outputLabel value="#{var.label}"></p:outputLabel>
+											</p:column>
+
+											<f:facet name="footer">
+												<center>
+													<p:commandButton style="width:150px;"
+														actionListener="#{assignAcademicCordinator.submit}"
+														value="Assign" update=":form"></p:commandButton>
+												</center>
+											</f:facet>
+										</p:dataTable>
+
+										<p:dataTable style="padding: 0px;" reflow="true"
+											value="#{assignAcademicCordinator.assignList}" var="var"
+											rowIndexVar="index">
+											
+											<f:facet name="header">
+												Classes Assigned
+											</f:facet>
+
+											<p:column headerText="S.No." style="width:60px;">
+												<p:outputLabel value="#{index+1}"></p:outputLabel>
+											</p:column>
+
+
+											<p:column headerText="Class Name">
+												<p:outputLabel value="#{var.label}"></p:outputLabel>
+											</p:column>
+
+											<p:column headerText="Remove" exportable="false">
+												<p:commandButton update=":form" value="Remove"
+													icon="ui-icon-trash" action="#{assignAcademicCordinator.delete}">
+													<p:confirm header="Confirmation"
+														message="Are You Sure To De-assign This Class ?"
+														icon="ui-icon-alert" />
+													<f:setPropertyActionListener
+														target="#{assignAcademicCordinator.selected}"
+														value="#{var}"></f:setPropertyActionListener>
+												</p:commandButton>
+											</p:column>
+
+
+										</p:dataTable>
+
+								</p:panelGrid>
+
+							</p:panel>
+						</h:form>
+
+						<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+							<p:commandButton value="Yes" styleClass="ui-confirmdialog-yes"
+								icon="ui-icon-check" />
+							<p:commandButton value="No" styleClass="ui-confirmdialog-no"
+								icon="ui-icon-close" />
+						</p:confirmDialog>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,138 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Month Wise Fee Collection</ui:define>
+
+	<ui:define name="content">
+
+		<style>
+.ui-datatable .ui-datatable-scrollable-body,
+	.ui-datatable-scrollable-header, .ui-datatable-footer,
+	.ui-datatable-header, .ui-datatable-scrollable-footer {
+	width: 100% !important;
+}
+
+.ui-datatable-scrollable .ui-datatable-scrollable-header,
+	.ui-datatable-scrollable .ui-datatable-scrollable-footer {
+	position: sticky !important;
+	top: 60px !important;
+}
+
+body .ui-datatable thead th, body .ui-datatable tbody td {
+	width: var(--w) !important;
+}
+</style>
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<h1>Month Wise Fee Collection</h1>
+							<p:messages autoUpdate="true" closable="true"></p:messages>
+							<p:panel header="Search Data">
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:outputLabel value="Select Start Month" for="@next"
+										style="color:red"></p:outputLabel>
+									<p:selectOneMenu value="#{monthFeeCollection.startMonth}"
+										required="true" requiredMessage="Please Enter Start Month">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{monthFeeCollection.monthList}"></f:selectItems>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Select End Month" for="@next"
+										style="color:red"></p:outputLabel>
+									<p:selectOneMenu value="#{monthFeeCollection.endMonth}"
+										required="true" requiredMessage="Please Enter End Month">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{monthFeeCollection.monthList}"></f:selectItems>
+									</p:selectOneMenu>
+								</p:panelGrid>
+
+								<br />
+								<p:separator />
+								<center>
+									<p:panelGrid
+										columns="#{monthFeeCollection.feeList.size() gt 0 ? '4' : '1'}"
+										layout="grid" styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+
+										<p:commandButton value="Search" styleClass="butwid" icon="fa fa-search"
+											actionListener="#{monthFeeCollection.searchData}"
+											update=":form"></p:commandButton>
+										<p:commandButton value="Print" styleClass="butwid" icon="fa fa-print"
+											rendered="#{monthFeeCollection.showPrintButton}">
+											<p:printer target="data"></p:printer>
+										</p:commandButton>
+
+										<p:commandButton value="PDF" styleClass="butwid" rendered="#{monthFeeCollection.feeList.size() gt 0}" icon="fa fa-file-pdf-o" ajax="false"
+											process="@this"
+											actionListener="#{monthFeeCollection.exportMonthFeePdf}">
+
+											<p:fileDownload value="#{monthFeeCollection.file}" />
+										</p:commandButton>
+
+										<h:commandLink rendered="#{monthFeeCollection.showPrintButton}">
+											<p:graphicImage name="images/excellogo.png"
+												library="avalon-layout" width="100" height="40"></p:graphicImage>
+											<pe:exporter type="xlsx" target="table"
+												fileName="Month_Fee_Collection.xlsx"
+												></pe:exporter>
+										</h:commandLink>
+
+									</p:panelGrid>
+								</center>
+								<p:separator />
+								<br />
+
+							</p:panel>
+							<p:panel id="data" rendered="#{monthFeeCollection.showData}">
+								<center>
+									<p
+										style="font-family: initial; font-style: oblique; font-size: 30px !important; font-weight: bold; margin: 0px;">#{headerBean.name}</p>
+								</center>
+								<p:dataTable id="table" rowIndexVar="index" reflow="true"
+									scrollable="true" scrollWidth="100%"
+									style=";border-collapse:collapse" border="1" var="var"
+									value="#{monthFeeCollection.feeList}">
+									<f:facet name="header">
+										<p:outputLabel value=" 																										Month Wise Fee Collection Report"></p:outputLabel>
+									</f:facet>
+									<p:column headerText="Month Name" style="--w:70px;">
+										<f:facet name="header">
+											<p:outputLabel value="Month Name"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.monthName}"></p:outputLabel>
+									</p:column>
+
+									<p:columns style="--w:70px;"
+										value="#{monthFeeCollection.classFeeList}" var="column"
+										columnIndexVar="colIndex">
+										<f:facet name="header">
+											<p:outputLabel
+												value="#{column.feeName} (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})"></p:outputLabel>
+										</f:facet>
+
+										<p:outputLabel
+											value="#{index+1 eq monthFeeCollection.feeList.size() ? (sideMenuBean.list.country eq 'UAE' ? 'AED ' : 'Rs.') : ''}#{var.feeMap[column.feeName]}"></p:outputLabel>
+									</p:columns>
+								</p:dataTable>
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

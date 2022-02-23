@@ -1,0 +1,215 @@
+	<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+					xmlns:ui="http://java.sun.com/jsf/facelets"
+					xmlns:h="http://java.sun.com/jsf/html"
+					xmlns:f="http://java.sun.com/jsf/core"
+					xmlns:p="http://primefaces.org/ui"
+					template="/WEB-INF/template.xhtml">
+
+		<ui:define name="title">New Time Table</ui:define>
+
+		<ui:define name="content">
+		   
+				<div class="ui-fluid">
+					<div class="ui-g">
+						<div class="ui-g-12">
+							<div class="card card-w-title">
+							  	<h:form id="form" style="overflow:hidden">
+					<p:messages autoUpdate="true" closable="true"></p:messages>
+					<p:panel header="Update Time Table">
+						<p:panelGrid columns="5" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+							<p:outputLabel value="Select Effective Date :"  for="@next" style="color:red" />
+							<p:calendar mindate="#{newTimeTableBean.minDate}" value="#{newTimeTableBean.effectiveDate}" effect="fold" pattern="dd/MM/yyyy" navigator="true" yearRange="c-30:c+30" required="true" requiredMessage="Please Enter Effective Date"></p:calendar>
+							
+							<p:outputLabel value="Select Class" for="@next" style="color:red" ></p:outputLabel>
+							<p:selectOneMenu style="width:250px" value="#{newTimeTableBean.selectedValue}" required="true" requiredMessage="Please select a class">
+								<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+								<f:selectItems value="#{newTimeTableBean.classList}"></f:selectItems>
+							</p:selectOneMenu>
+							
+							<p:commandButton update=":form" icon="ui-icon-search" value="Search" actionListener="#{newTimeTableBean.createTableList}"></p:commandButton>
+						</p:panelGrid>
+						<p:panel rendered="#{newTimeTableBean.showTable}">
+							<p:dataTable reflow="true" id="data" value="#{newTimeTableBean.changeTableListt}" var="var">
+								
+								<p:column headerText="S.No." >
+									<p:outputLabel value="#{var.sno}"></p:outputLabel>
+								</p:column>
+								
+								<p:column headerText="Class">
+									<p:outputLabel value="#{var.className}"></p:outputLabel>
+								</p:column>
+								
+								<p:column headerText="Section">
+									<p:outputLabel value="#{var.category}"></p:outputLabel>
+								</p:column>
+								
+								
+								<p:column headerText="Create">
+									<p:commandButton icon="ui-icon-pencil" title="Click here to Update Time-Table" update=":timeTableForm" actionListener="#{newTimeTableBean.createTimeTable}">
+										<f:attribute name="sno" value="#{var.sno}"></f:attribute>
+									</p:commandButton>
+								</p:column>
+								
+							</p:dataTable>
+						</p:panel>
+					</p:panel>
+				</h:form>
+				
+				<h:form id="confirmForm">
+					<p:dialog header="Confirmation" widgetVar="confirmDialog" resizable="false" closable="true" modal="true" showEffect="fade" hideEffect="fade">
+						<p:panel>
+							<p:outputLabel value="A New Time Table Already Exist.. Do You Still Want To continue"></p:outputLabel><br></br><br></br>
+							<p:commandButton value="Yes" update=":confirmForm" actionListener="#{newTimeTableBean.continueProcess}"></p:commandButton>
+							<p:commandButton  value="No" action="Dashboard.xhtml"></p:commandButton>
+						</p:panel>
+					</p:dialog>
+				</h:form>
+				
+				<h:form id="confirmFormOfBack" style="overflow:hidden">
+					<p:dialog header="Confirmation" widgetVar="confirmDialogBack" resizable="false" closable="true" modal="true" showEffect="fade" hideEffect="fade">
+						<p:panel>
+							<p:outputLabel value="Please Complete Your Changes Otherwise Changes Made By You Will Be Roll Back.. Do You Still Want To Continue With Out Completing"></p:outputLabel><br></br><br></br>
+							<p:commandButton style="margin-left:120px" value="Yes" actionListener="#{newTimeTableBean.goFromThisPage}"></p:commandButton>
+							<p:commandButton style="margin-left:50px" value="No" update=":confirmFormOfBack"></p:commandButton>
+						</p:panel>
+					</p:dialog>
+				</h:form>
+				
+				<h:form id="alertForm" style="overflow:hidden">
+					<p:dialog header="Information" widgetVar="alertDialog" resizable="false" closable="true" modal="true" showEffect="fade" hideEffect="fade">
+						<p:panel>
+							<p:outputLabel value="#{newTimeTableBean.message}"></p:outputLabel><br></br><br></br>
+						</p:panel>
+					</p:dialog>
+				</h:form>
+				
+				<h:form id="timeTableForm">
+					<p:dialog style="height:1000px" header="Update Time Table" widgetVar="timeTableDialog" resizable="false" closable="true" modal="true" showEffect="fade" hideEffect="fade">
+						<p:panel>
+							<p:dataTable reflow="true" value="#{newTimeTableBean.timeTableList}" id="timeData" var="var"  scrollable="true" scrollHeight="75%">
+								<f:facet name="header">
+									<p:panelGrid columns="1">
+										<p:outputLabel value="Class : #{newTimeTableBean.nameOfClass}"></p:outputLabel>
+									</p:panelGrid>
+								</f:facet>
+									
+								<p:column headerText="Time">
+									<p:panelGrid columns="1">
+										<p:outputLabel value="Lecture #{var.lecNo}"></p:outputLabel>
+										<p:outputLabel value="#{var.lecTime}" rendered="#{sideMenuBean.list.timeTableSchedule eq 'summer'}" />
+										<p:outputLabel value="#{var.winterLecTime}" rendered="#{sideMenuBean.list.timeTableSchedule eq 'winter'}" />
+									</p:panelGrid>
+								</p:column>
+								
+								<p:column headerText="Monday">
+									<p:panelGrid columns="1">
+										<p:selectOneMenu filter="true" filterMatchMode="contains" value="#{var.mon_tchr}" styleClass="abcd">
+											<f:selectItem itemLabel="Faculty 1" itemValue=""></f:selectItem>
+											<f:selectItems value="#{newTimeTableBean.teacherList}"></f:selectItems>
+										</p:selectOneMenu>
+										
+										
+										<p:selectOneMenu value="#{var.mon_sub}" styleClass="abcd">
+											<f:selectItem itemLabel="Subject" itemValue=""></f:selectItem>
+											<f:selectItems value="#{newTimeTableBean.subjectList}"></f:selectItems>
+										</p:selectOneMenu>
+									</p:panelGrid>
+								</p:column>
+
+								<p:column headerText="Tuesday">
+									<p:panelGrid columns="1">
+										<p:selectOneMenu filter="true" filterMatchMode="contains" value="#{var.tues_tchr}" styleClass="abcd">
+											<f:selectItem itemLabel="Faculty 1" itemValue=""></f:selectItem>
+											<f:selectItems value="#{newTimeTableBean.teacherList}"></f:selectItems>
+										</p:selectOneMenu>
+									
+	
+										<p:selectOneMenu value="#{var.tues_sub}" styleClass="abcd">
+											<f:selectItem itemLabel="Subject" itemValue=""></f:selectItem>
+											<f:selectItems value="#{newTimeTableBean.subjectList}"></f:selectItems>
+										</p:selectOneMenu>
+									</p:panelGrid>
+								</p:column>
+								
+								<p:column headerText="Wednesday">
+									<p:panelGrid columns="1">
+										<p:selectOneMenu filter="true" filterMatchMode="contains" value="#{var.wed_tchr}" styleClass="abcd">
+											<f:selectItem itemLabel="Faculty 1" itemValue=""></f:selectItem>
+											<f:selectItems value="#{newTimeTableBean.teacherList}"></f:selectItems>
+										</p:selectOneMenu>
+										
+									
+	
+										<p:selectOneMenu value="#{var.wed_sub}" styleClass="abcd">
+											<f:selectItem itemLabel="Subject" itemValue=""></f:selectItem>
+											<f:selectItems value="#{newTimeTableBean.subjectList}"></f:selectItems>
+										</p:selectOneMenu>
+									</p:panelGrid>
+								</p:column>
+								
+								<p:column headerText="Thursday">
+									<p:panelGrid columns="1">
+										<p:selectOneMenu filter="true" filterMatchMode="contains" value="#{var.thur_tchr}" styleClass="abcd">
+											<f:selectItem itemLabel="Faculty 1" itemValue=""></f:selectItem>
+											<f:selectItems value="#{newTimeTableBean.teacherList}"></f:selectItems>
+										</p:selectOneMenu>
+										
+									
+	
+										<p:selectOneMenu value="#{var.thur_sub}" styleClass="abcd">
+											<f:selectItem itemLabel="Subject" itemValue=""></f:selectItem>
+											<f:selectItems value="#{newTimeTableBean.subjectList}"></f:selectItems>
+										</p:selectOneMenu>
+									</p:panelGrid>
+								</p:column>
+								
+								<p:column headerText="Friday">
+									<p:panelGrid columns="1">
+										<p:selectOneMenu filter="true" filterMatchMode="contains"  value="#{var.fri_tchr}" styleClass="abcd">
+											<f:selectItem itemLabel="Faculty 1" itemValue=""></f:selectItem>
+											<f:selectItems value="#{newTimeTableBean.teacherList}"></f:selectItems>
+										</p:selectOneMenu>
+										
+									
+										
+	
+										<p:selectOneMenu value="#{var.fri_sub}" styleClass="abcd">
+											<f:selectItem itemLabel="Subject" itemValue=""></f:selectItem>
+											<f:selectItems value="#{newTimeTableBean.subjectList}"></f:selectItems>
+										</p:selectOneMenu>
+									</p:panelGrid>
+								</p:column>
+								
+								<p:column headerText="Saturday">
+									<p:panelGrid columns="1">
+										<p:selectOneMenu filter="true" filterMatchMode="contains" value="#{var.sat_tchr}" styleClass="abcd">
+											<f:selectItem itemLabel="Faculty 1" itemValue=""></f:selectItem>
+											<f:selectItems value="#{newTimeTableBean.teacherList}"></f:selectItems>
+										</p:selectOneMenu>
+										
+									
+	
+										<p:selectOneMenu value="#{var.sat_sub}" styleClass="abcd">
+											<f:selectItem itemLabel="Subject" itemValue=""></f:selectItem>
+											<f:selectItems value="#{newTimeTableBean.subjectList}"></f:selectItems>
+										</p:selectOneMenu>
+									</p:panelGrid>
+								</p:column>
+									
+								<f:facet name="footer">
+									<p:panelGrid columns="2">
+										<p:commandButton value="Update" action="#{newTimeTableBean.update}"/>
+									</p:panelGrid>
+								</f:facet>
+								</p:dataTable>
+							</p:panel>
+						</p:dialog>
+					</h:form>   
+							</div>
+						</div>
+					</div>
+				</div>
+		   
+		</ui:define>
+
+	</ui:composition>

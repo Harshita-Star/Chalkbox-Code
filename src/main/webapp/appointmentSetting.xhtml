@@ -1,0 +1,157 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	<f:loadBundle var="addClassVar" basename="myProperties" />
+
+	<ui:define name="title">Appointment Setting</ui:define>
+
+	<ui:define name="content">
+		
+			<div class="ui-fluid">
+				<div class="ui-g">
+					<div class="ui-g-12">
+						<div class="card card-w-title">
+
+
+							<h1>Appointment Setting</h1>
+                            <h:form id="form">
+							<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+							<p:panel header="Appointment Setting">
+								<p:panelGrid columns="2"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:outputLabel  for="@next" style="color:red" value="Select Start Time"></p:outputLabel>
+									<p:selectOneMenu value="#{appointmentSetting.startTime}" required="true" requiredMessage="Please enter start time!">
+									<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+									<f:selectItem itemLabel="7:00 AM" itemValue="7:00"></f:selectItem>
+									<f:selectItem itemLabel="8:00 AM" itemValue="8:00"></f:selectItem>
+									<f:selectItem itemLabel="9:00 AM" itemValue="9:00"></f:selectItem>
+									<f:selectItem itemLabel="10:00 AM" itemValue="10:00"></f:selectItem>
+									<f:selectItem itemLabel="11:00 AM" itemValue="11:00"></f:selectItem>
+									<f:selectItem itemLabel="12:00 PM" itemValue="12:00"></f:selectItem>
+									<f:selectItem itemLabel="13:00 PM" itemValue="13:00"></f:selectItem>
+									<f:selectItem itemLabel="14:00 PM" itemValue="14:00"></f:selectItem>
+									<f:selectItem itemLabel="15:00 PM" itemValue="15:00"></f:selectItem>
+									<f:selectItem itemLabel="16:00 PM" itemValue="16:00"></f:selectItem>
+									<f:selectItem itemLabel="17:00 PM" itemValue="17:00"></f:selectItem>
+									<f:selectItem itemLabel="18:00 PM" itemValue="18:00"></f:selectItem>
+									<f:selectItem itemLabel="19:00 PM" itemValue="19:00"></f:selectItem>
+									<p:ajax global="false"></p:ajax>
+									</p:selectOneMenu>
+									
+									<p:outputLabel value="Select End Time" for="@next" style="color:red" ></p:outputLabel>
+									<p:selectOneMenu value="#{appointmentSetting.endTime}" required="true" requiredMessage="Please enter end time!">
+									<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+									<f:selectItem itemLabel="7:00 AM" itemValue="7:00"></f:selectItem>
+									<f:selectItem itemLabel="8:00 AM" itemValue="8:00"></f:selectItem>
+									<f:selectItem itemLabel="9:00 AM " itemValue="9:00"></f:selectItem>
+									<f:selectItem itemLabel="10:00 AM" itemValue="10:00"></f:selectItem>
+									<f:selectItem itemLabel="11:00 AM" itemValue="11:00"></f:selectItem>
+									<f:selectItem itemLabel="12:00 PM" itemValue="12:00"></f:selectItem>
+									<f:selectItem itemLabel="13:00 PM" itemValue="13:00"></f:selectItem>
+									<f:selectItem itemLabel="14:00 PM" itemValue="14:00"></f:selectItem>
+									<f:selectItem itemLabel="15:00 PM" itemValue="15:00"></f:selectItem>
+									<f:selectItem itemLabel="16:00 PM" itemValue="16:00"></f:selectItem>
+									<f:selectItem itemLabel="17:00 PM" itemValue="17:00"></f:selectItem>
+									<f:selectItem itemLabel="18:00 PM" itemValue="18:00"></f:selectItem>
+									<f:selectItem itemLabel="19:00 PM" itemValue="19:00"></f:selectItem>
+									<p:ajax update=":form" listener="#{appointmentSetting.check}" ></p:ajax>
+									</p:selectOneMenu>
+									</p:panelGrid>
+									<p:dataTable value="#{appointmentSetting.appointmentList}" var="info">
+									
+									<p:column headerText="S No" style="width:70px;">
+									<p:outputLabel value="#{info.description}"></p:outputLabel>
+									</p:column>
+									
+									<p:column headerText="Name">
+									<p:inputText value="#{info.label}" id="nm#{info.description}" onchange="trimFunc(this.value,'Please Section Name',this.id)" validatorMessage="Please Enter Correct value">
+									  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:inputText>
+									</p:column>
+									
+									<p:column headerText="Designation">
+									<p:inputText value="#{info.value}" id="desg#{info.description}" onchange="trimFunc(this.value,'Please Section Name',this.id)" validatorMessage="Please Enter Correct value">
+									  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:inputText>
+									</p:column>
+									
+									</p:dataTable>
+									<br></br>
+									<center>
+								<p:commandButton value="Submit" styleClass="butwid" icon="fa fa-upload" update=":form" action="#{appointmentSetting.submit}"></p:commandButton>
+								</center>
+							</p:panel>
+							<p:panel header="Details :">
+							<p:dataTable value="#{appointmentSetting.detailLists}" var="info" rowIndexVar="index">
+									
+									<p:column headerText="S No" style="width:70px;">
+									<p:outputLabel value="#{index+1}"></p:outputLabel>
+									</p:column>
+									
+									<p:column headerText="Name">
+									<p:outputLabel value="#{info.label}"></p:outputLabel>
+									</p:column>
+									
+									<p:column headerText="Designation">
+									<p:outputLabel value="#{info.value}"></p:outputLabel>
+									</p:column>
+									
+									<p:column headerText="Delete">
+									<center>
+									<p:commandButton update=":form" icon="ui-icon-trash" action="#{appointmentSetting.delete}" styleClass="butwid redButt">
+									<f:setPropertyActionListener value="#{info}" target="#{appointmentSetting.selected}"></f:setPropertyActionListener>
+									<p:confirm header="Confirmation" message="Are You Sure To Delete...?" icon="ui-icon-alert" />
+									</p:commandButton>
+									</center>
+									
+									</p:column>
+									
+									<p:column headerText="Edit">
+									<center>
+									<p:commandButton update=":form1 :form" icon="ui-icon-pencil" action="#{appointmentSetting.edit}" styleClass="butwid" oncomplete="PF('dialog1').show()">
+									<f:setPropertyActionListener value="#{info}" target="#{appointmentSetting.selected}"></f:setPropertyActionListener>
+									</p:commandButton>
+									</center>
+									</p:column>
+									
+									</p:dataTable>
+									<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+						           <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes greenButt" icon="ui-icon-check" />
+						           <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no redButt" icon="ui-icon-close" />
+						         </p:confirmDialog>
+							</p:panel>
+							</h:form>
+							 <h:form id="form1"  >
+			      <p:dialog resizable="false" modal="true" widgetVar="dialog1" header="Appointment setting update:" closeOnEscape="true">
+					<p:panelGrid style="margin:auto" columns="2">	 	
+					<p:outputLabel value="Name"></p:outputLabel>
+					<p:inputText value="#{appointmentSetting.name}" validatorMessage="Please Enter Correct value">
+					  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+					</p:inputText>	
+					
+					<p:outputLabel value="Designation"></p:outputLabel>
+					<p:inputText value="#{appointmentSetting.designation}" validatorMessage="Please Enter Correct value">
+					  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+					</p:inputText>					
+							
+					</p:panelGrid>
+					<center>
+					<p:commandButton update=":form1 :form" styleClass="butwid" icon="fa fa-upload" action="#{appointmentSetting.update}"  value="update">
+					</p:commandButton>
+					</center>
+			</p:dialog>
+		</h:form>
+						</div>
+					</div>
+				</div>
+			</div>
+		
+
+	</ui:define>
+
+</ui:composition>

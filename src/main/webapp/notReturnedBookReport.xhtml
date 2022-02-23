@@ -1,0 +1,131 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Not Returned / Expire Books</ui:define>
+
+	<ui:define name="content">
+		<style type="text/css">
+.redColored {
+	color: red;
+}
+</style>
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<p:panel header="Not Returned / Expire Book Report">
+								<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+								<p:messages autoUpdate="true"></p:messages>
+								<p:panelGrid columns="6"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:outputLabel value="Start Date" for="@next" style="color:red"></p:outputLabel>
+									<p:calendar value="#{notReturnedBookReport.startDate}"
+										pattern="dd/MM/yyyy" navigator="true" required="true"
+										requiredMessage="Please Enter Start Date"></p:calendar>
+
+									<p:outputLabel value="End Date" for="@next" style="color:red"></p:outputLabel>
+									<p:calendar value="#{notReturnedBookReport.endDate}"
+										pattern="dd/MM/yyyy" navigator="true" required="true"
+										requiredMessage="Please Enter End Date"></p:calendar>
+								</p:panelGrid>
+
+								<br />
+								<p:separator />
+								<center>
+									<p:panelGrid
+										columns="#{notReturnedBookReport.bookList.size() gt 0 ? '3' : '1'}"
+										layout="grid" styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+
+
+										<p:commandButton value="Search" update=":form" icon="ui-icon-search" styleClass="butwid"
+											actionListener="#{notReturnedBookReport.searchData}"></p:commandButton>
+
+
+
+										<h:commandLink rendered="#{notReturnedBookReport.bookList.size() gt 0 }">
+											<p:graphicImage name="images/excellogo.png"
+												library="avalon-layout" width="100" height="40"></p:graphicImage>
+											<pe:exporter type="xlsx" target="dataTable"
+												fileName="Not_Returned_Book_Report"></pe:exporter>
+										</h:commandLink>
+
+										<p:commandButton  rendered="#{notReturnedBookReport.bookList.size() gt 0 }" value="PDF" styleClass="butwid" icon="fa fa-file-pdf-o" ajax="false"
+											process="@this"
+											actionListener="#{notReturnedBookReport.exportNRetBookPdf}">
+
+											<p:fileDownload value="#{notReturnedBookReport.file}" />
+										</p:commandButton>
+									</p:panelGrid>
+								</center>
+								<p:separator />
+								<br />
+
+
+								<br></br>
+								<p:dataTable reflow="true" id="dataTable"
+									value="#{notReturnedBookReport.bookList}" var="var"
+									rowStyleClass="#{notReturnedBookReport.endDate gt var.expiringDate ? 'redColored' : ''}">
+									<p:column headerText="S.No" style="width:50px">
+										<p:outputLabel value="#{var.sNo}"></p:outputLabel>
+									</p:column>
+
+									<p:column filterMatchMode="contains" filterBy="#{var.bookName}"
+										headerText="Book Name">
+										<p:outputLabel value="#{var.bookName}"></p:outputLabel>
+									</p:column>
+
+									<p:column filterMatchMode="contains" filterBy="#{var.bookId}"
+										headerText="Accession No">
+										<p:outputLabel value="#{var.bookId}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Author Name">
+										<p:outputLabel value="#{var.authorName}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Publication Name">
+										<p:outputLabel value="#{var.publicationName}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Subject Name">
+										<p:outputLabel value="#{var.subjectName}"></p:outputLabel>
+									</p:column>
+
+									<p:column filterMatchMode="contains" filterBy="#{var.type}"
+										headerText="Type">
+										<p:outputLabel value="#{var.type}"></p:outputLabel>
+									</p:column>
+
+									<p:column filterMatchMode="contains"
+										filterBy="#{var.studentName}" headerText="Name">
+										<p:outputLabel value="#{var.studentName}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Issue Date">
+										<p:outputLabel value="#{var.assignDateStr}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Expire Date">
+										<p:outputLabel value="#{var.expireDateStr}"></p:outputLabel>
+									</p:column>
+
+								</p:dataTable>
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

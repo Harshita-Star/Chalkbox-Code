@@ -1,0 +1,69 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/masterTemplate.xhtml"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	<f:loadBundle var="addClassVar" basename="myProperties" />
+
+	<ui:define name="title">SMS Graph</ui:define>
+
+	<ui:define name="content">
+	<h:form id="form">
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						  
+							<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+							<p:panel header="SMS Graph">
+							<p:panelGrid columns="2">
+						   
+						   <p:outputLabel value="Select School"></p:outputLabel>
+						   <p:selectOneMenu filter="true" value="#{deliveryReportMasterBarModel.schoolId}">
+							<f:selectItem itemLabel="select" itemValue=""></f:selectItem>
+							<f:selectItems value="#{deliveryReportMasterBarModel.schoolList}"></f:selectItems>
+						    </p:selectOneMenu>
+						    
+                           
+                            <p:outputLabel value="Report Type" rendered="#{deliveryReportMasterBarModel.showBarModel}"></p:outputLabel>
+							<p:selectOneMenu value="#{deliveryReportMasterBarModel.days}" rendered="#{deliveryReportMasterBarModel.showBarModel}">
+							<f:selectItem itemLabel="Custom" itemValue="custom"></f:selectItem>
+							<f:selectItem itemLabel="Last 7 days" itemValue="lastweek"></f:selectItem>
+							<f:selectItem itemLabel="Last 30 days" itemValue="lastmonth"></f:selectItem>
+							<f:selectItem itemLabel="Monthly" itemValue="month"></f:selectItem>
+							<p:ajax update=":form" listener="#{deliveryReportMasterBarModel.custom}" event="itemSelect"></p:ajax>
+						    </p:selectOneMenu>
+							
+							 <p:outputLabel value="startdate" for="@next" style="color:red"  rendered="#{deliveryReportMasterBarModel.showCustom}"></p:outputLabel>
+                             <p:calendar value="#{deliveryReportMasterBarModel.stdate}" required="true" requiredMessage="Please select date!" locale="de" navigator="true" pattern="yyyy-MM-dd" rendered="#{deliveryReportMasterBarModel.showCustom}">
+                             </p:calendar>
+                             
+                              <p:outputLabel value="Enddate" for="@next" style="color:red"  rendered="#{deleiveryReportBarModel.showCustom}"/>
+                             <p:calendar value="#{deliveryReportMasterBarModel.endate}"  required="true" requiredMessage="Please select date!" locale="de" navigator="true" pattern="yyyy-MM-dd" rendered="#{deliveryReportMasterBarModel.showCustom}">
+                             </p:calendar>
+                             
+                             <p:outputLabel value="Select Year"  for="@next" style="color:red" rendered="#{deliveryReportMasterBarModel.showmonth}" ></p:outputLabel>
+                             <p:selectOneMenu value="#{deliveryReportMasterBarModel.year}"  required="true" requiredMessage="Please select date!" rendered="#{deliveryReportMasterBarModel.showmonth}">
+							<f:selectItem itemLabel="Select Year" itemValue=""></f:selectItem>
+							<f:selectItems value="#{deliveryReportMasterBarModel.yearList}"></f:selectItems>
+							</p:selectOneMenu>
+                            
+                            
+                            <f:facet name="footer">
+                            <p:commandButton value="Show" update=":form" action="#{deliveryReportMasterBarModel.show}"></p:commandButton>
+                            </f:facet>
+                            </p:panelGrid>
+                            <br/>
+							<p:chart type="bar" style="height:300px" model="#{deliveryReportMasterBarModel.barmodel1}"></p:chart>
+							</p:panel>
+					</div>
+				</div>
+			</div>
+		</div>
+		</h:form>
+
+	</ui:define>
+
+</ui:composition>
+ 

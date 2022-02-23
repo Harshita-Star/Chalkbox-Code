@@ -1,0 +1,191 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">E-Learning</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form enctype="multipart/form-data" id="form">
+							<h1>Upload E-Learning</h1>
+							<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+							<p:panel
+								header="Allowed file types are :- jpg,jpeg,png,pdf,doc,docx">
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+                                    <p:outputLabel value="Date"></p:outputLabel>
+                                    <p:calendar navigator="true" pattern="dd/MM/yyyy" required="true" requiredMessage="Please enter Date" value="#{addEleaningDateWiseBean.pDate}"></p:calendar>
+									<p:outputLabel for="@next" style="color:red"
+										value="Select Class"></p:outputLabel>
+									<p:selectOneMenu
+										value="#{addEleaningDateWiseBean.selectedCLassSection}"
+										required="true"  requiredMessage="Please select a class"
+										filter="true">
+										<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+										<f:selectItems value="#{addEleaningDateWiseBean.classSection}"></f:selectItems>
+										<p:ajax update="sectionid"
+											listener="#{addEleaningDateWiseBean.allSections}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel for="@next" style="color:red"
+										value="Select Section"></p:outputLabel>
+									<p:selectOneMenu id="sectionid"
+										value="#{addEleaningDateWiseBean.selectedSection}" required="true"
+										requiredMessage="Please select a section" filter="true">
+										<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+										<f:selectItems value="#{addEleaningDateWiseBean.sectionList}"></f:selectItems>
+										<p:ajax update="subjectid"
+											listener="#{addEleaningDateWiseBean.allSubjects}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel for="@next" style="color:red"
+										value="Select Subject"></p:outputLabel>
+									<p:selectOneMenu id="subjectid"
+										value="#{addEleaningDateWiseBean.subject}" required="true"
+										requiredMessage="Please select a Subject" filter="true">
+										<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+										<f:selectItem itemLabel="All" itemValue="All"></f:selectItem>
+										<f:selectItems value="#{addEleaningDateWiseBean.subjectList}"></f:selectItems>
+									</p:selectOneMenu>
+
+									<p:outputLabel for="@next" style="color:red"
+										value="Title/Topic:"></p:outputLabel>
+									<p:inputText required="true"
+										requiredMessage="Please enter Title/Topic"
+										value="#{addEleaningDateWiseBean.topic}" maxlength="50"></p:inputText>
+
+									<p:outputLabel value="Description:"></p:outputLabel>
+									<p:inputTextarea value="#{addEleaningDateWiseBean.des}" rows="3"
+										maxlength="500" cols="20"></p:inputTextarea>
+
+									<p:outputLabel value="Youtube Link:"></p:outputLabel>
+									<p:inputText value="#{addEleaningDateWiseBean.youtubeLink}"></p:inputText>
+
+									<p:outputLabel for="@next" style="color:red" value="Date:"
+										rendered="false"></p:outputLabel>
+									<p:calendar rendered="false"
+										value="#{addEleaningDateWiseBean.assShowDate}" navigator="true"
+										pattern="dd/MM/yyyy" required="true"
+										requiredMessage="Please Select Date"></p:calendar>
+
+									<p:outputLabel value="Choose File1(File) :"></p:outputLabel>
+									<p:fileUpload mode="simple" skinSimple="true"
+										value="#{addEleaningDateWiseBean.assignmentPhoto1}"></p:fileUpload>
+
+									<p:outputLabel value="Choose File2(File) :"></p:outputLabel>
+									<p:fileUpload mode="simple" skinSimple="true"
+										value="#{addEleaningDateWiseBean.assignmentPhoto3}"></p:fileUpload>
+										
+										
+											<p:outputLabel value="Choose File3(File) :"></p:outputLabel>
+									<p:fileUpload mode="simple" skinSimple="true"
+										value="#{addEleaningDateWiseBean.assignmentPhoto4}"></p:fileUpload>
+										
+										
+											<p:outputLabel value="Choose File4(File) :"></p:outputLabel>
+									<p:fileUpload mode="simple" skinSimple="true"
+										value="#{addEleaningDateWiseBean.assignmentPhoto5}"></p:fileUpload>
+										
+										
+											<p:outputLabel value="Choose File5(File) :"></p:outputLabel>
+									<p:fileUpload mode="simple" skinSimple="true"
+										value="#{addEleaningDateWiseBean.assignmentPhoto6}"></p:fileUpload>
+																				
+
+
+
+									<p:outputLabel value="Choose File(Audio) :"></p:outputLabel>
+									<p:fileUpload mode="simple" skinSimple="true"
+										value="#{addEleaningDateWiseBean.assignmentPhoto2}"></p:fileUpload>
+
+
+									<p:commandButton value="Upload"
+										title="Click On to Upload Assignment" ajax="false"
+										update=":form" action="#{addEleaningDateWiseBean.upload}"></p:commandButton>
+								</p:panelGrid>
+							</p:panel>
+						</h:form>
+
+						<h:form id="MsgLimitForm" style="overflow:hidden">
+							<p:dialog header="Low SMS Balance" width="500"
+								widgetVar="MsgLmtDlg" modal="true" showEffect="fade"
+								hideEffect="fade" resizable="false">
+								<center>
+									<p:outputLabel value="#{addEleaningDateWiseBean.balMsg}"
+										style="font-size:14px;font-weight: bold;" />
+								</center>
+								<br></br>
+								<br></br>
+								<center>
+									<p:commandButton value="Skip"
+										action="#{addEleaningDateWiseBean.sendMsg}" update="MsgLimitForm" />
+									<br /> <br />
+									<p:commandButton value="Message Logs"
+										action="messageSchoolHistory.xhtml?faces-redirect=true"
+										update="MsgLimitForm" />
+									<br /> <br />
+									<p:commandButton value="Recharge Now"
+										action="purchaseMsgPack.xhtml?faces-redirect=true"
+										update="MsgLimitForm" />
+								</center>
+								<br></br>
+							</p:dialog>
+						</h:form>
+
+						<h:form id="MsgOverForm" style="overflow:hidden">
+							<p:dialog header="SMS Limit Over" width="500"
+								widgetVar="MsgOvrDlg" modal="true" showEffect="fade"
+								hideEffect="fade" resizable="false">
+								<center>
+									<p:outputLabel value="#{addEleaningDateWiseBean.balMsg}"
+										style="font-size:14px;font-weight: bold;" />
+								</center>
+								<br></br>
+								<br></br>
+								<center>
+									<p:commandButton value="Message Logs"
+										action="messageSchoolHistory.xhtml?faces-redirect=true"
+										update="MsgOverForm" />
+									<br /> <br />
+									<p:commandButton value="Recharge Now"
+										action="purchaseMsgPack.xhtml?faces-redirect=true"
+										update="MsgOverForm" />
+								</center>
+								<br></br>
+							</p:dialog>
+						</h:form>
+
+						<h:form id="MsgOtherForm" style="overflow:hidden">
+							<p:dialog header="SMS Limit Over" width="500"
+								widgetVar="MsgOthDlg" modal="true" showEffect="fade"
+								hideEffect="fade" resizable="false">
+								<center>
+									<p:outputLabel value="#{addEleaningDateWiseBean.balMsg}"
+										style="font-size:14px;font-weight: bold;" />
+								</center>
+								<br></br>
+								<br></br>
+								<center>
+									<p:commandButton value="OK"
+										action="addEleaningDateWiseBean.xhtml?faces-redirect=true"
+										update="MsgOtherForm" />
+								</center>
+							</p:dialog>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,110 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/masterTemplate.xhtml"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	<f:loadBundle var="addClassVar" basename="myProperties" />
+
+	<ui:define name="title">Edition/Deletion of Message Pack</ui:define>
+
+	<ui:define name="content">
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						 <h:form id="form1" >
+						 <p:panel header="Edition/Deletion of Message Pack">
+						 <p:growl showDetail="true"  autoUpdate="true"></p:growl>
+						 <p:dataTable value="#{editDeleteMsgPack.packList}" var="info">
+						 <p:column headerText="Pack Name">
+						 <p:outputLabel value="#{info.packName}"></p:outputLabel>
+						 </p:column>
+						 <p:column headerText="Quantity">
+						 <p:outputLabel value="#{info.quantity}"></p:outputLabel>
+						 </p:column>
+						 
+						 <p:column headerText="Rate">
+						 <p:outputLabel value="#{info.rate}"></p:outputLabel>
+						 </p:column>
+						 
+						 <p:column headerText="Amount">
+						 <p:outputLabel value="#{info.amount}"></p:outputLabel>
+						 </p:column>
+						 
+						 <p:column headerText="Tax">
+						 <p:outputLabel value="#{info.tax}"></p:outputLabel>
+						 </p:column>
+						 
+						 <p:column headerText="Total Amount">
+						 <p:outputLabel value="#{info.totalAmount}"></p:outputLabel>
+						 </p:column>
+						 
+						 <p:column headerText="Edit">
+						 <p:commandButton update=":form" value="edit" oncomplete="PF('editDialog').show()">
+						 <f:setPropertyActionListener value="#{info}" target="#{editDeleteMsgPack.selected}"></f:setPropertyActionListener>
+						 </p:commandButton>
+						 </p:column>
+						 
+						 <p:column headerText="Delete">
+						 <p:commandButton update=":form1" value="delete" action="#{editDeleteMsgPack.delete}">
+						  <p:confirm header="Confirmation" message="Are you sure to delete this pack" icon="ui-icon-alert" />
+ 
+						 <f:setPropertyActionListener value="#{info}" target="#{editDeleteMsgPack.selected}"></f:setPropertyActionListener>
+						 </p:commandButton>
+						 
+						 </p:column>
+						 </p:dataTable>
+						 
+						<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+				       <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+				       <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+				      </p:confirmDialog> 
+				      </p:panel>     
+						</h:form>
+						
+						<h:form id="form">	
+					<p:dialog header="Details" widgetVar="editDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                     <p:panel header="Edit Message Pack" id="carDetail">
+					     <p:panelGrid columns="2" id="temp1">
+					     <p:outputLabel value="Pack name" for="@next" style="color:red" ></p:outputLabel>
+					     <p:inputText required="true" requiredMessage="Please enter pack name"  value="#{editDeleteMsgPack.selected.packName}" validatorMessage="Please Enter Correct value">
+					       <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+					     </p:inputText>
+					     
+					     <p:outputLabel value="Quantity" for="@next" style="color:red" ></p:outputLabel>
+					     <p:inputText required="true" requiredMessage="Please enter quantity" id="quantity" onkeyup="calculateAmount()" value="#{editDeleteMsgPack.selected.quantity}" validatorMessage="Please Enter Correct value">
+					       <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+					     </p:inputText>
+					     
+					      <p:outputLabel value="Rate (per sms)" for="@next" style="color:red" ></p:outputLabel>
+					     <p:inputText required="true" requiredMessage="Please enter rate"  id="price"  onkeyup="calculateAmount()" value="#{editDeleteMsgPack.selected.rate}" validatorMessage="Please Enter Correct value">
+					       <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+					     </p:inputText>
+					     
+					      <p:outputLabel value="Amount"></p:outputLabel>
+					     <p:inputText id="amount" value="#{editDeleteMsgPack.selected.amount}" disabled="true"></p:inputText>
+					     
+					      <p:outputLabel value="Tax"></p:outputLabel>
+					     <p:inputText id="taxamount" value="#{editDeleteMsgPack.selected.tax}" disabled="true"></p:inputText>
+					     
+					      <p:outputLabel value="Total amount"></p:outputLabel>
+					     <p:inputText id="totalamount" value="#{editDeleteMsgPack.selected.totalAmount}" disabled="true"></p:inputText>
+					     
+					     </p:panelGrid>	
+                         </p:panel>
+                          <p:commandButton value="Update" update=":form1 :form" action="#{editDeleteMsgPack.edit}"></p:commandButton>
+                     </p:dialog>
+	                  </h:form>
+              
+						
+						
+							
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,168 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	<f:loadBundle var="addClassVar" basename="myProperties" />
+
+	<ui:define name="title">Absent Teacher Report</ui:define>
+
+	<ui:define name="content">
+		<h:form id="form">
+			<div class="ui-fluid">
+				<div class="ui-g">
+					<div class="ui-g-12">
+						<div class="card card-w-title">
+
+							<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+
+							<h1>Absent Teacher Report</h1>
+
+							<p:panel header="Absent Teachers">
+								<p:panelGrid columns="6"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:outputLabel value="Select Date"></p:outputLabel>
+									<p:calendar value="#{absentTeacherReport.date}"
+										navigator="true" pattern="dd/MM/yyyy" rendered="true"
+										requiredMessage="Please Select Date"></p:calendar>
+
+									<p:outputLabel for="@next" style="color:red"  value="Select Employee"></p:outputLabel>
+									<p:selectOneMenu filter="true"
+										value="#{absentTeacherReport.selectedEmployee}"
+										required="true" requiredMessage="Please Select Employee">
+										<f:selectItem itemLabel="All" itemValue="all"></f:selectItem>
+										<f:selectItems value="#{teacherAttendReport.employeeList}"></f:selectItems>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Select Status"></p:outputLabel>
+									<p:selectOneMenu value="#{absentTeacherReport.selectedStatus}" filter="true">
+										<f:selectItem itemLabel="All" itemValue="all"></f:selectItem>
+										<f:selectItem itemLabel="A" itemValue="A"></f:selectItem>
+										<f:selectItem itemLabel="L" itemValue="L"></f:selectItem>
+										<f:selectItem itemLabel="P_H" itemValue="P_H"></f:selectItem>
+										<p:ajax></p:ajax>
+									</p:selectOneMenu>
+								</p:panelGrid>
+								
+								
+								<br />
+								<p:separator />
+								<center>
+									<p:panelGrid
+										columns="#{absentTeacherReport.studentList.size() gt 0 ? '4' : '1'}"
+										layout="grid" styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+										
+									<p:commandButton value="Search" update=":form" icon="fa fa-search" styleClass="butwid"
+										action="#{absentTeacherReport.searchData}"></p:commandButton>
+
+									<p:commandButton value="Print" styleClass="butwid" icon="fa fa-print"
+										rendered="#{absentTeacherReport.b}" target="_blank"
+										action="#{absentTeacherReport.print}">
+									</p:commandButton>
+										
+									</p:panelGrid>
+								</center>
+								<p:separator />
+								<br />
+								
+							</p:panel>
+						</div>
+						<div class="card card-w-title">
+							<p:panel id="dataTable" rendered="#{absentTeacherReport.b}">
+								<center>
+									<p
+										style="font-size: 25px !important; font-weight: bold; margin: 0px;">#{headerBean.name}</p>
+									<p
+										style="font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.affiliationNo}</p>
+									<p
+										style="font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.finalAddress}</p>
+									<p
+										style="font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.phoneno}</p>
+
+									<p
+										style="margin: 0px; font-size: 25px !important; font-weight: bold;">Absent
+										Teacher Report #{absentTeacherReport.strDate}</p>
+								</center>
+								<p:panelGrid columns="2"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:outputLabel value="Total:-"></p:outputLabel>
+									<h:outputText value="#{absentTeacherReport.total}"></h:outputText>
+								</p:panelGrid>
+
+
+								<p:dataTable reflow="true"
+									style="width:100%;border-collapse:collapse" border="1"
+									value="#{absentTeacherReport.studentList}" var="var"
+									rowStyleClass="#{var.attendance eq 'L' ? 'blueColored':'blackColored'}">
+
+									<p:column style="width:110px" filterBy="#{var.sno}"
+										filterMatchMode="contains">
+
+										<f:facet name="header">
+											<p:outputLabel value="S.No."></p:outputLabel>
+										</f:facet>
+										<center>
+											<p:outputLabel value="#{var.sno}"></p:outputLabel>
+										</center>
+									</p:column>
+
+									<p:column style="width:80px" headerText="Name"
+										filterBy="#{var.fname}" filterMatchMode="contains">
+
+										<f:facet name="header">
+											<p:outputLabel value="Name"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.fname}"></p:outputLabel>
+									</p:column>
+
+
+									<p:column style="width:100px" filterBy="#{var.uname}"
+										filterMatchMode="contains" headerText="User Name">
+
+										<f:facet name="header">
+											<p:outputLabel value="User Name"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.uname}"></p:outputLabel>
+									</p:column>
+
+									<p:column style="width:100px" headerText="Category">
+
+										<f:facet name="header">
+											<p:outputLabel value="Category"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.category}"></p:outputLabel>
+									</p:column>
+
+									<p:column style="width:100px" headerText="Sub Category">
+
+										<f:facet name="header">
+											<p:outputLabel value="Sub Category"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.subCateg}"></p:outputLabel>
+									</p:column>
+
+									<p:column style="width:60px" filterBy="#{var.attendance}"
+										filterMatchMode="contains" headerText="Attendance Status">
+
+										<f:facet name="header">
+											<p:outputLabel value="Attendance Status"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.attendance}"></p:outputLabel>
+									</p:column>
+								</p:dataTable>
+							</p:panel>
+						</div>
+					</div>
+				</div>
+			</div>
+		</h:form>
+
+	</ui:define>
+
+</ui:composition>

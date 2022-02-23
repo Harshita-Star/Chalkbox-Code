@@ -1,0 +1,92 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Online Class Schedule</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						
+         				   
+							<h1>Online Class Schedule</h1>
+							<p:panel
+								>
+								<h:form enctype="multipart/form-data" id="form">
+							<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+						
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel for="@next" style="color:red"
+										value="Select Class"></p:outputLabel>
+									<p:selectOneMenu
+										value="#{AddClassScheduleOnlineClass.selectedCLassSection}"
+										required="true" requiredMessage="Please select a class"
+										filter="true">
+										<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+										<f:selectItems value="#{AddClassScheduleOnlineClass.classSection}"></f:selectItems>
+										<p:ajax update="sectionid"
+											listener="#{AddClassScheduleOnlineClass.allSections}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel for="@next" style="color:red"
+										value="Select Section"></p:outputLabel>
+									<p:selectOneMenu id="sectionid"
+										value="#{AddClassScheduleOnlineClass.selectedSection}" required="true"
+										requiredMessage="Please select a section" filter="true">
+										<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+										<f:selectItems value="#{AddClassScheduleOnlineClass.sectionList}"></f:selectItems>
+										<p:ajax update="subjectid"
+											listener="#{AddClassScheduleOnlineClass.allSubjects}"></p:ajax>
+									</p:selectOneMenu>
+									
+									
+									
+
+									<p:outputLabel for="@next" style="color:red"
+										value="Select Subject"></p:outputLabel>
+									<p:selectOneMenu id="subjectid"
+										value="#{AddClassScheduleOnlineClass.subject}" required="true"
+										requiredMessage="Please select a Subject" filter="true">
+										<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+										<f:selectItems value="#{AddClassScheduleOnlineClass.subjectList}"></f:selectItems>
+										<p:ajax></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel for="@next" style="color:red"
+										value="Date"></p:outputLabel>
+									<p:calendar value="#{AddClassScheduleOnlineClass.schduleDateTime}" pattern="dd/MM/yyyy hh:mm a" required="true"  requiredMessage="Please enter Date and Time"></p:calendar>
+																		
+									
+                           
+      							<p:commandButton value="Submit" actionListener="#{AddClassScheduleOnlineClass.addSchedule}"  
+										title="Click On to Schedule Online Class" 
+										update=":form " ></p:commandButton>
+						
+                                   </p:panelGrid>
+                                   </h:form>
+                                 
+							</p:panel>
+						
+                         
+						
+
+						
+
+					
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

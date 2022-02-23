@@ -1,0 +1,296 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Receive Book</ui:define>
+
+    <ui:define name="content">
+       
+            <div class="ui-fluid">
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <div class="card card-w-title">
+                               <h:form id="form" >
+                <p:panel header="Receive Book By Student / Teacher Name">
+                <p:growl showDetail="true"  autoUpdate="true"></p:growl>
+                    <p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+                    
+                    <p:outputLabel value="Student/Teacher Name" for="@next" style="color:red" ></p:outputLabel>      
+                    <p:autoComplete minQueryLength="3" value="#{receiveBook.studentName}" completeMethod="#{receiveBook.autoCompleteStudent}" forceSelection="true" required="true" requiredMessage="Please Enter Student Name" validatorMessage="Please Enter Correct value">
+                      <p:ajax event="query" global="false"/>
+                      <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+                    </p:autoComplete>  
+                    
+                    <p:outputLabel value="Receive Date" for="@next" style="color:red" ></p:outputLabel>      
+                        <p:calendar value="#{receiveBook.addDate}" navigator="true" pattern="dd/MM/yyyy" required="true" requiredMessage="Please Enter Date"></p:calendar>
+                        
+                       
+                    
+                    </p:panelGrid>
+                    
+                    <br />
+								<p:separator />
+								<center>
+									 <p:commandButton value="Search" styleClass="butwid" icon="fa fa-search" actionListener="#{receiveBook.search}" update=":form"></p:commandButton>
+								</center>
+								<p:separator />
+								<br />
+                    
+                    <br/>
+                      <p:dataTable id="data" selection="#{receiveBook.selectedBook}" reflow="true" rendered="#{receiveBook.showTable}" rowKey="#{var.id}" value="#{receiveBook.bookList}" var="var">
+                        <f:attribute name="sno" value="#{var.sNo}"></f:attribute>
+                         <p:column style="width:50px" headerText="Select" selectionMode="multiple"> 
+                         </p:column>
+                        
+                        <p:column headerText="S.No"  style="width:40px">
+                          <p:outputLabel value="#{var.sNo}"></p:outputLabel>
+                        </p:column>
+                        
+                        
+                         <p:column headerText="Book Id" style="width:50px">
+                          <p:outputLabel value="#{var.bookId}"></p:outputLabel>
+                        </p:column>
+                        
+                        <p:column headerText="Book Name">
+                          <p:outputLabel value="#{var.bookName}"></p:outputLabel>
+                        </p:column>
+                        
+                        
+                        <p:column headerText="Author Name">
+                          <p:outputLabel value="#{var.authorName}"></p:outputLabel>
+                        </p:column>
+                        
+                        <p:column headerText="Publication Name">
+                          <p:outputLabel value="#{var.publicationName}"></p:outputLabel>
+                        </p:column>
+                        
+                        <p:column headerText="Subject Name">
+                          <p:outputLabel value="#{var.subjectName}"></p:outputLabel>
+                        </p:column>
+                        
+                        <p:column headerText="Assign Date" style="width:80px">
+                          <p:outputLabel value="#{var.assignDateStr}"></p:outputLabel>
+                        </p:column>
+                        
+                        <p:column headerText="Expire Date" style="width:80px">
+                          <p:outputLabel value="#{var.expireDateStr}"></p:outputLabel>
+                        </p:column>
+                        
+                        <p:column headerText="Penalty Days" style="width:60px">
+							<p:outputLabel value="#{var.penalty}"></p:outputLabel>
+                        </p:column>
+                        <p:column headerText="Penalty Amount" style="width:60px">
+							<p:outputLabel value="#{var.penaltyAmount}"></p:outputLabel>
+                        </p:column>
+                        
+                         <p:column headerText="Discard">
+							<p:commandButton update=":form,:discardForm" styleClass="redButt" value="Discard Book" oncomplete="PF('discardDialog').show()" action="#{receiveBook.preDiscardDialog}">
+								<f:setPropertyActionListener value="#{var}" target="#{receiveBook.bookInfo}" />
+							</p:commandButton>
+                        </p:column>
+                        
+                         <p:column headerText="Damage">
+							<p:commandButton update=":form,:damageForm" styleClass="redButt" value="Damage Book" oncomplete="PF('damageDialog').show()" action="#{receiveBook.preDiscardDialog}">
+								<f:setPropertyActionListener value="#{var}" target="#{receiveBook.bookInfo}" />
+							</p:commandButton>
+                        </p:column>
+                        
+                        
+                        <f:facet name="footer">
+                        	<p:panelGrid columns="3">
+		                       	<p:commandButton update=":form" styleClass="greenButt" value="Receive Book" actionListener="#{receiveBook.preReceiveBook}"></p:commandButton> 
+                        	</p:panelGrid>
+                        </f:facet>
+                      </p:dataTable>
+            </p:panel>   
+         </h:form>
+         
+         <h:form id="form1">
+            <p:panel header="Receive Book By Book Id">
+            	<p:panelGrid columns="5" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+            		<p:outputLabel value="Book Id"></p:outputLabel>
+					<p:autoComplete minQueryLength="3" value="#{receiveBook.bookId}"
+						completeMethod="#{receiveBook.autoCompleteBookId}" validatorMessage="Please Enter Correct value">
+						<p:ajax event="query" global="false" />
+						<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+					</p:autoComplete>
+				
+					 <p:outputLabel value="Receive Date" for="@next" style="color:red" ></p:outputLabel>      
+	                 <p:calendar value="#{receiveBook.addDate}" navigator="true" pattern="dd/MM/yyyy" required="true" requiredMessage="Please Enter Date"></p:calendar>
+	                 
+	                 
+				
+            	</p:panelGrid>
+            	<br />
+								<p:separator />
+								<center>
+									<p:commandButton value="Search" styleClass="butwid" icon="fa fa-search" actionListener="#{receiveBook.checkBookIdSelected}" update=":form1"></p:commandButton>
+								</center>
+								<p:separator />
+								<br />
+            	<p:panelGrid columns="4" rendered="#{receiveBook.showPanel}" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+					<p:outputLabel value="Book Name"></p:outputLabel>
+					<p:outputLabel value="#{receiveBook.bookName}"></p:outputLabel>
+	
+					<p:outputLabel value="Student / Teacher Name"></p:outputLabel>
+					<p:outputLabel value="#{receiveBook.studentName}"></p:outputLabel>
+					
+					<p:outputLabel rendered="#{receiveBook.showPenalty}" value="Penalty Days"></p:outputLabel>
+					<p:outputLabel rendered="#{receiveBook.showPenalty}" value="#{receiveBook.totalDays}"></p:outputLabel>
+					
+					<p:outputLabel rendered="#{receiveBook.showPenalty}" value="Penalty Amount"></p:outputLabel>
+					<p:outputLabel rendered="#{receiveBook.showPenalty}" value="#{receiveBook.totalPenaltyAmount}"></p:outputLabel>
+					
+					<p:outputLabel rendered="#{receiveBook.showPenalty}" value="Receive Amount"></p:outputLabel>
+					<p:inputText rendered="#{receiveBook.showPenalty}" value="#{receiveBook.receiveAmount}">
+						<p:keyFilter mask="num"></p:keyFilter>
+					</p:inputText>
+					
+					<p:outputLabel rendered="#{receiveBook.showPenalty}" value="Discount"></p:outputLabel>
+					<p:inputText rendered="#{receiveBook.showPenalty}" value="#{receiveBook.discount}">
+						<p:keyFilter mask="num"></p:keyFilter>
+					</p:inputText>
+					
+					<p:commandButton value="Receive Book" styleClass="greenButt" actionListener="#{receiveBook.receiveSingleBook}" update=":form1"></p:commandButton>
+					<p:commandButton update=":discardForm" value="Discard Book" styleClass="redButt" oncomplete="PF('discardDialog').show();" action="#{receiveBook.preDiscardDialog}"></p:commandButton>
+                   	<p:commandButton update=":form,:damageForm" value="Damage Book" styleClass="redButt" oncomplete="PF('damageDialog').show();" action="#{receiveBook.preDiscardDialog}"></p:commandButton>
+				</p:panelGrid>            	
+            </p:panel>
+        </h:form> 
+        
+        <h:form id="discardForm">
+			<p:dialog closeOnEscape="true" header="Details" widgetVar="discardDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+				<p:outputPanel style="text-align:center;">
+					<div class="ui-g form-group">
+						<p:panelGrid columns="2" columnClasses="label,value">
+							<p:outputLabel value="Discard Amount"></p:outputLabel>
+							<p:inputText value="#{receiveBook.charges}">
+								<p:keyFilter mask="num"></p:keyFilter>
+							</p:inputText>
+							
+							<p:outputLabel value="Remark"></p:outputLabel>
+							<p:inputTextarea value="#{receiveBook.remark}" validatorMessage="Please Enter Correct value">
+							   <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+							</p:inputTextarea>
+
+							<p:outputLabel rendered="#{receiveBook.showPenalty}" value="Penalty Days"></p:outputLabel>
+							<p:outputLabel rendered="#{receiveBook.showPenalty}" value="#{receiveBook.totalDays}"></p:outputLabel>
+							
+							<p:outputLabel rendered="#{receiveBook.showPenalty}" value="Penalty Amount"></p:outputLabel>
+							<p:outputLabel rendered="#{receiveBook.showPenalty}" value="#{receiveBook.totalPenaltyAmount}"></p:outputLabel>
+							
+							<p:outputLabel rendered="#{receiveBook.showPenalty}" value="Receive Amount"></p:outputLabel>
+							<p:inputText rendered="#{receiveBook.showPenalty}" value="#{receiveBook.receiveAmount}">
+								<p:keyFilter mask="num"></p:keyFilter>
+							</p:inputText>
+							
+							<p:outputLabel rendered="#{receiveBook.showPenalty}" value="Discount"></p:outputLabel>
+							<p:inputText rendered="#{receiveBook.showPenalty}" value="#{receiveBook.discount}">
+								<p:keyFilter mask="num"></p:keyFilter>
+							</p:inputText>
+
+							
+						</p:panelGrid>
+				</div>
+				<br />
+								<p:separator />
+								<center>
+									<p:commandButton value="Submit" styleClass="butwid" icon="fa fa-upload" actionListener="#{receiveBook.discardBook}"></p:commandButton>
+								</center>
+								<p:separator />
+								<br />
+				</p:outputPanel>
+			</p:dialog>
+		</h:form>
+        
+        
+        <h:form id="damageForm">
+			<p:dialog closeOnEscape="true" header="Details" widgetVar="damageDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+				<p:outputPanel style="text-align:center;">
+					<div class="ui-g form-group">
+						<p:panelGrid columns="2" columnClasses="label,value">
+							<p:outputLabel value="Damage Amount"></p:outputLabel>
+							<p:inputText value="#{receiveBook.charges}">
+								<p:keyFilter mask="num"></p:keyFilter>
+							</p:inputText>
+							
+							<p:outputLabel value="Remark"></p:outputLabel>
+							<p:inputTextarea value="#{receiveBook.remark}" validatorMessage="Please Enter Correct value">
+							  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+							</p:inputTextarea>
+							
+							<p:outputLabel rendered="#{receiveBook.showPenalty}" value="Penalty Days"></p:outputLabel>
+							<p:outputLabel rendered="#{receiveBook.showPenalty}" value="#{receiveBook.totalDays}"></p:outputLabel>
+							
+							<p:outputLabel rendered="#{receiveBook.showPenalty}" value="Penalty Amount"></p:outputLabel>
+							<p:outputLabel rendered="#{receiveBook.showPenalty}" value="#{receiveBook.totalPenaltyAmount}"></p:outputLabel>
+							
+							<p:outputLabel rendered="#{receiveBook.showPenalty}" value="Receive Amount"></p:outputLabel>
+							<p:inputText rendered="#{receiveBook.showPenalty}" value="#{receiveBook.receiveAmount}">
+								<p:keyFilter mask="num"></p:keyFilter>
+							</p:inputText>
+							
+							<p:outputLabel rendered="#{receiveBook.showPenalty}" value="Discount"></p:outputLabel>
+							<p:inputText rendered="#{receiveBook.showPenalty}" value="#{receiveBook.discount}">
+								<p:keyFilter mask="num"></p:keyFilter>
+							</p:inputText>
+							
+							
+						</p:panelGrid>
+				</div>
+				<br />
+								<p:separator />
+								<center>
+									<p:commandButton value="Submit" icon="fa fa-upload" styleClass="butwid" actionListener="#{receiveBook.damageBook}" ></p:commandButton>
+								</center>
+								<p:separator />
+								<br />
+				</p:outputPanel>
+			</p:dialog>
+		</h:form>
+		
+		<h:form id="penaltyForm">
+			<p:dialog closeOnEscape="true" header="Details" widgetVar="penaltyDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+				<p:outputPanel style="text-align:center;">
+					<div class="ui-g form-group">
+						<p:panelGrid columns="2" columnClasses="label,value">
+							<p:outputLabel  value="Penalty Days"></p:outputLabel>
+							<p:outputLabel  value="#{receiveBook.totalDays}"></p:outputLabel>
+							
+							<p:outputLabel  value="Penalty Amount"></p:outputLabel>
+							<p:outputLabel  value="#{receiveBook.totalPenaltyAmount}"></p:outputLabel>
+							
+							<p:outputLabel  value="Receive Amount"></p:outputLabel>
+							<p:inputText  value="#{receiveBook.receiveAmount}">
+								<p:keyFilter mask="num"></p:keyFilter>
+							</p:inputText>
+							
+							<p:outputLabel value="Discount"></p:outputLabel>
+							<p:inputText  value="#{receiveBook.discount}">
+								<p:keyFilter mask="num"></p:keyFilter>
+							</p:inputText>
+							
+							
+						</p:panelGrid>
+				</div>
+				<br />
+								<p:separator />
+								<center>
+									<p:commandButton value="Submit" styleClass="butwid" icon="fa fa-upload" actionListener="#{receiveBook.receiveBook}"></p:commandButton>
+								</center>
+								<p:separator />
+								<br />
+				</p:outputPanel>
+			</p:dialog>
+		</h:form>
+                  </div>
+                   </div>
+                </div>
+            </div>
+       
+    </ui:define>
+
+</ui:composition>

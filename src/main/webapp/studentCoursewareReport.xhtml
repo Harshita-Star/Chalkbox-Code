@@ -1,0 +1,64 @@
+		<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+						xmlns:ui="http://java.sun.com/jsf/facelets"
+						xmlns:h="http://java.sun.com/jsf/html"
+						xmlns:f="http://java.sun.com/jsf/core"
+						xmlns:p="http://primefaces.org/ui"
+						template="/WEB-INF/template.xhtml">
+
+			<ui:define name="title">Student Courseware Report </ui:define>
+
+			<ui:define name="content">
+			   
+					<div class="ui-fluid">
+						<div class="ui-g">
+							<div class="ui-g-12">
+								<div class="card card-w-title">
+								   <h:form id="form" >
+                <p:panel header="Student Courseware Report">
+                <p:growl showDetail="true"  autoUpdate="true"></p:growl>
+                    <p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+                      <p:outputLabel  for="@next" style="color:red" value="Student Name"></p:outputLabel>      
+                    <p:autoComplete required="true" minQueryLength="3" requiredMessage="Please enter student name" value="#{studentCoursewareReport.studentName}" completeMethod="#{studentCoursewareReport.autoCompleteStudent}" forceSelection="true" validatorMessage="Please select student from autocomplete list">
+                      <p:ajax event="query" global="false"/>
+                    </p:autoComplete>  
+                    
+                    <p:commandButton value="Search" update=":form" actionListener="#{studentCoursewareReport.searchData}"></p:commandButton>
+                    </p:panelGrid>
+                    <br></br>
+                    <p:dataTable reflow="true" value="#{studentCoursewareReport.bookList}" var="var">
+                      
+                        <p:column headerText="S.No" style="width:40px">
+                          <p:outputLabel value="#{var.sNo}"></p:outputLabel>
+                        </p:column>
+                        
+                        <p:column headerText="Student Name">
+                          <p:outputLabel value="#{var.studentName}"></p:outputLabel>
+                        </p:column>
+                        
+                        <p:column headerText="Courseware Name">
+                          <p:outputLabel value="#{var.bookName}"></p:outputLabel>
+                        </p:column>
+                        
+                        <p:column headerText="Unique No.">
+                          <p:outputLabel value="#{var.bookId}"></p:outputLabel>
+                        </p:column>
+                        
+                        <p:column headerText="Subject Name">
+                          <p:outputLabel value="#{var.subjectName}"></p:outputLabel>
+                        </p:column>
+                        
+                        <p:column headerText="Assign Date">
+                          <p:outputLabel value="#{var.assignDateStr}"></p:outputLabel>
+                        </p:column>
+                        
+                      </p:dataTable>
+                </p:panel>
+        </h:form>   
+								</div>
+							</div>
+						</div>
+					</div>
+			   
+			</ui:define>
+
+		</ui:composition>

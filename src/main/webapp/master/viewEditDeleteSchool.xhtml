@@ -1,0 +1,668 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/masterTemplate.xhtml">
+
+	<ui:define name="title">All Schools</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<p:messages autoUpdate="true" closable="true"></p:messages>
+						<h:form id="form" style="overflow:hidden">
+
+							<p:panel header="All School">
+								<p:commandLink immediate="true"
+									style="float:right;color:blue;font-size: 15px !important;"
+									value="Add School" action="addSchool.xhtml?faces-redirect=true"></p:commandLink>
+								<br />
+								<br />
+								<p:panelGrid columns="2"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel value="Select School" for="@next" style="color: red;"/>
+									<p:selectOneMenu value="#{evdSchool.selectedSchool}"
+										required="true" requiredMessage="Please Select School"
+										filter="true" filterMatchMode="contains">
+										<f:selectItem itemLabel="Select School" itemValue="" />
+										<f:selectItem itemLabel="All Schools" itemValue="All" />
+										<f:selectItems value="#{evdSchool.selList}" var="var"
+											itemLabel="#{var.id}  - #{var.schoolName}" itemValue="#{var.id}" />
+									</p:selectOneMenu>
+								</p:panelGrid>
+								<br />
+								<p:separator />
+								<center>
+									<p:commandButton update="form"
+										actionListener="#{evdSchool.search}" style="width:150px;"
+										value="Search" icon="ui-icon-search">
+									</p:commandButton>
+								</center>
+								<p:separator />
+								<br />
+								<p:dataTable style="word-break: break-all;" reflow="true"
+									value="#{evdSchool.dataList}" var="var" rows="25"
+									paginator="true"
+									paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+									rowsPerPageTemplate="25,50,100">
+
+									<p:column headerText="S.No.">
+										<p:outputLabel value="#{var.sNo}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="School Id" filterBy="#{var.id}"
+										filterMatchMode="contains">
+										<p:outputLabel value="#{var.id}"
+											style=" word-break: break-all;"></p:outputLabel>
+									</p:column>
+
+									<p:column filterBy="#{var.schoolName}"
+										filterMatchMode="contains" headerText="School Name">
+										<p:outputLabel value="#{var.schoolName}"
+											style=" word-break: break-all;"></p:outputLabel>
+									</p:column>
+
+									<p:column filterBy="#{var.aliasName}"
+										filterMatchMode="contains" headerText="Alias Name">
+										<p:outputLabel value="#{var.aliasName}"
+											style=" word-break: break-all;"></p:outputLabel>
+									</p:column>
+
+									<p:column filterBy="#{var.contactName}" rendered="false"
+										headerText="Contact Person">
+										<p:outputLabel value="#{var.contactName}"></p:outputLabel>
+									</p:column>
+
+									<p:column filterBy="#{var.contactNo}"
+										filterMatchMode="contains" headerText="Contact No.">
+										<p:outputLabel value="#{var.contactNo}"
+											style=" word-break: break-all;"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Exp. Date">
+										<p:outputLabel value="#{var.expireDateStr}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Last Login">
+										<p:outputLabel value="#{var.lastLogin}"></p:outputLabel>
+									</p:column>
+
+
+									<p:column headerText="U.Name / Password">
+										<p:outputLabel value="U- #{var.username}"></p:outputLabel>
+										<br></br>
+										<p:outputLabel value="P- #{var.password}"></p:outputLabel>
+									</p:column>
+
+									<p:column rendered="false" headerText="Renewal Date">
+										<p:outputLabel value="#{var.renewalDateStr}"></p:outputLabel>
+									</p:column>
+
+									<p:column rendered="false" headerText="Amount">
+										<p:outputLabel value="#{var.chalkBoxAmount}"></p:outputLabel>
+									</p:column>
+
+									<p:column rendered="false" headerText="Renewal Amount">
+										<p:outputLabel value="#{var.imgRenewalAmount}"></p:outputLabel>
+									</p:column>
+
+									<p:column rendered="false" headerText="No of Students">
+										<p:outputLabel value="#{var.noOfStudents}"></p:outputLabel>
+									</p:column>
+
+									<p:column rendered="false" headerText="Message Left">
+										<p:outputLabel value="#{var.messageLeft}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Login">
+										<p:commandButton action="#{evdSchool.schoolLogin}"
+											icon="ui-icon-power">
+											<f:setPropertyActionListener value="#{var}"
+												target="#{evdSchool.selectedRow}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+									<p:column headerText="Permission">
+										<p:commandButton action="#{evdSchool.adminPermission}"
+											icon="ui-icon-key" value="ERP">
+											<f:setPropertyActionListener value="#{var}"
+												target="#{evdSchool.selectedRow}"></f:setPropertyActionListener>
+										</p:commandButton>
+										<br />
+										<br />
+										<p:commandButton action="#{evdSchool.appPermission}"
+											icon="ui-icon-key" value="App">
+											<f:setPropertyActionListener value="#{var}"
+												target="#{evdSchool.selectedRow}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+
+									<p:column headerText="Change Pwd">
+										<p:commandButton action="#{evdSchool.editSelectedRow}"
+											icon="ui-icon-key" oncomplete="PF('passwordDialog').show()"
+											update=":password">
+											<f:setPropertyActionListener value="#{var}"
+												target="#{evdSchool.selectedRow}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+
+									<p:column headerText="Allot GPS">
+										<p:commandButton action="#{evdSchool.checkGpsPermission}"
+											icon="ui-icon-plus" update=":form">
+											<f:setPropertyActionListener value="#{var}"
+												target="#{evdSchool.selectedRow}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+
+									<p:column headerText="Add Payment" rendered="false">
+										<p:commandButton action="#{evdSchool.editSelectedRow}"
+											icon="ui-icon-plus"
+											oncomplete="PF('addPaymentDialog').show()"
+											update=":addPayment">
+											<f:setPropertyActionListener value="#{var}"
+												target="#{evdSchool.selectedRow}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+
+									<p:column headerText="View">
+										<p:commandButton action="#{evdSchool.editSelectedRow}"
+											icon="ui-icon-search" oncomplete="PF('viewDialog').show()"
+											update=":viewForm">
+											<f:setPropertyActionListener value="#{var}"
+												target="#{evdSchool.selectedRow}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+
+									<p:column headerText="Edit">
+										<p:commandButton action="#{evdSchool.editSelectedRow}"
+											icon="ui-icon-pencil" oncomplete="PF('editDialog').show()"
+											update=":editForm">
+											<f:setPropertyActionListener value="#{var}"
+												target="#{evdSchool.selectedRow}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+
+									<p:column headerText="Delete">
+										<p:commandButton update=":form"
+											action="#{evdSchool.deleteSchool}" icon="ui-icon-trash">
+											<p:confirm header="Confirmation"
+												message="Are You Sure To Delete this School ?"
+												icon="ui-icon-alert" />
+											<f:setPropertyActionListener value="#{var}"
+												target="#{evdSchool.selectedRow}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+								</p:dataTable>
+							</p:panel>
+						</h:form>
+
+
+
+						<h:form id="editForm">
+							<p:dialog resizable="false" modal="true" widgetVar="editDialog"
+								header="School Details" closeOnEscape="true">
+								<div class="ui-g form-group">
+									<p:panelGrid columns="4"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+										<p:outputLabel value="School Name:-" for="@next"
+											style="color:red"></p:outputLabel>
+										<p:inputText value="#{evdSchool.schoolName}" required="true"
+											requiredMessage="Please Enter School Name"
+											validatorMessage="Please Enter Correct value">
+											<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+										</p:inputText>
+
+										<p:outputLabel value="Alias Name:-"></p:outputLabel>
+										<p:outputLabel value="#{evdSchool.aliasName}"></p:outputLabel>
+
+										<p:outputLabel value="Contact No:-"></p:outputLabel>
+										<p:inputText value="#{evdSchool.contactNo}"
+											validatorMessage="Please Enter Correct value">
+											<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+										</p:inputText>
+
+										<p:outputLabel value="Contact Name:-"></p:outputLabel>
+										<p:inputText value="#{evdSchool.contactName}"
+											validatorMessage="Please Enter Correct value">
+											<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+										</p:inputText>
+
+										<p:outputLabel value="Starting Session"></p:outputLabel>
+										<p:selectOneMenu value="#{evdSchool.session}">
+											<f:selectItems value="#{evdSchool.sessionList}"></f:selectItems>
+										</p:selectOneMenu>
+
+										<p:outputLabel value="Start Date:-" for="@next"
+											style="color:red"></p:outputLabel>
+										<p:calendar value="#{evdSchool.startDate}"
+											pattern="dd/MM/yyyy" navigator="true" required="true"
+											requiredMessage="Please Enter Start Date"></p:calendar>
+
+										<p:outputLabel value="Expire Date:-" for="@next"
+											style="color:red"></p:outputLabel>
+										<p:calendar value="#{evdSchool.expireDate}"
+											pattern="dd/MM/yyyy" navigator="true" required="true"
+											requiredMessage="Please Enter Expire Date"></p:calendar>
+
+										<p:outputLabel value="Renewal Date:-" for="@next"
+											style="color:red"></p:outputLabel>
+										<p:calendar value="#{evdSchool.renewalDate}"
+											pattern="dd/MM/yyyy" navigator="true" required="true"
+											requiredMessage="Please Enter Renewal Date"></p:calendar>
+
+										<p:outputLabel value="Amount:-" for="@next" style="color:red"></p:outputLabel>
+										<p:inputText value="#{evdSchool.chalkBoxAmount}"
+											onfocus="this.select();" required="true"
+											requiredMessage="Please Enter Chalk Box Amount">
+											<p:keyFilter mask="money" />
+										</p:inputText>
+
+										<p:outputLabel value="Sender Id:-"></p:outputLabel>
+										<p:inputText value="#{evdSchool.senderid}"
+											onfocus="this.select();"
+											validatorMessage="Please Enter Correct value">
+											<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+										</p:inputText>
+
+
+										<p:outputLabel rendered="false" value="IMG Amount:-"
+											for="@next" style="color:red"></p:outputLabel>
+										<p:inputText rendered="false" value="#{evdSchool.imgAmount}"
+											onfocus="this.select();" required="true"
+											requiredMessage="Please Enter IMG Amount">
+											<p:keyFilter mask="money" />
+										</p:inputText>
+
+										<p:outputLabel rendered="false" for="@next" style="color:red"
+											value="Chalk Box Renewal Amount:-"></p:outputLabel>
+										<p:inputText rendered="false"
+											value="#{evdSchool.chalkBoxRenewal}" onfocus="this.select();"
+											required="true"
+											requiredMessage="Please Enter Chalk Box Renewal Amount">
+											<p:keyFilter mask="money" />
+										</p:inputText>
+
+										<p:outputLabel value="Renewal Amount :-" for="@next"
+											style="color:red"></p:outputLabel>
+										<p:inputText value="#{evdSchool.imgRenewalAmount}"
+											onfocus="this.select();" required="true"
+											requiredMessage="Please Enter IMG Renewal Amount">
+											<p:keyFilter mask="money" />
+										</p:inputText>
+
+										<p:outputLabel value="Type of Project*:-"></p:outputLabel>
+										<p:selectOneRadio value="#{evdSchool.type}">
+											<f:selectItem itemLabel="Basic" itemValue="basic" />
+											<f:selectItem itemLabel="Novice" itemValue="novice" />
+											<f:selectItem itemLabel="Foster" itemValue="foster" />
+										</p:selectOneRadio>
+
+										<p:outputLabel value="GPS *:-"></p:outputLabel>
+										<p:selectOneRadio value="#{evdSchool.gps}">
+											<f:selectItem itemLabel="Yes" itemValue="yes" />
+											<f:selectItem itemLabel="No" itemValue="no" />
+										</p:selectOneRadio>
+
+										<p:outputLabel value="Time Table *:-"></p:outputLabel>
+										<p:selectOneRadio value="#{evdSchool.timetable}">
+											<f:selectItem itemLabel="Manual" itemValue="Manual" />
+											<f:selectItem itemLabel="Image" itemValue="Image" />
+										</p:selectOneRadio>
+
+										<p:outputLabel value="Client Type *:-"></p:outputLabel>
+										<p:selectOneRadio value="#{evdSchool.clientType}">
+											<f:selectItem itemLabel="School" itemValue="school" />
+											<f:selectItem itemLabel="Institute" itemValue="institute" />
+										</p:selectOneRadio>
+
+										<p:outputLabel value="School Session *:- " />
+										<p:selectOneRadio value="#{evdSchool.schoolSession}"
+											layout="grid" columns="1">
+											<f:selectItem itemLabel="April to March" itemValue="4-3"></f:selectItem>
+											<f:selectItem itemLabel="May to April" itemValue="5-4"></f:selectItem>
+										</p:selectOneRadio>
+
+										<p:outputLabel value="Fees Start From *:- " />
+										<p:selectOneRadio value="#{evdSchool.feeStart}" layout="grid"
+											columns="1">
+											<f:selectItem itemLabel="From Session Starting Date"
+												itemValue="session_date"></f:selectItem>
+											<f:selectItem itemLabel="From Admission Date"
+												itemValue="admission_date"></f:selectItem>
+										</p:selectOneRadio>
+
+										<p:outputLabel value="Agreement For (No. of Student):-"
+											for="@next" style="color:red"></p:outputLabel>
+										<p:inputText value="#{evdSchool.agreementFor}" required="true"
+											requiredMessage="Please Enter Agreement For">
+											<p:keyFilter mask="pnum"></p:keyFilter>
+										</p:inputText>
+
+										<p:outputLabel style="font-weight:bold;"
+											value="Admin App (For School Admin):-"></p:outputLabel>
+										<p:selectBooleanButton value="#{evdSchool.adminLogin}"
+											onLabel="Yes" offLabel="No" onIcon="ui-icon-check"
+											offIcon="ui-icon-close">
+										</p:selectBooleanButton>
+
+										<p:outputLabel style="font-weight:bold;"
+											value="Authority App (For School Director/Chairman/Authority)*:-"></p:outputLabel>
+										<p:selectBooleanButton value="#{evdSchool.authorityLogin}"
+											onLabel="Yes" offLabel="No" onIcon="ui-icon-check"
+											offIcon="ui-icon-close">
+										</p:selectBooleanButton>
+
+										<p:outputLabel style="font-weight:bold;"
+											value="Principal App (For School Principal/Vice Principal)*:-"></p:outputLabel>
+										<p:selectBooleanButton value="#{evdSchool.principalLogin}"
+											onLabel="Yes" offLabel="No" onIcon="ui-icon-check"
+											offIcon="ui-icon-close">
+										</p:selectBooleanButton>
+
+										<p:outputLabel style="font-weight:bold;"
+											value="Teacher App (For School Teachers)*:-"></p:outputLabel>
+										<p:selectBooleanButton value="#{evdSchool.teacherLogin}"
+											onLabel="Yes" offLabel="No" onIcon="ui-icon-check"
+											offIcon="ui-icon-close">
+										</p:selectBooleanButton>
+
+										<p:outputLabel style="font-weight:bold;"
+											value="Academic Co-ordinator App (For School Academic co-ordinator)*:-"></p:outputLabel>
+										<p:selectBooleanButton value="#{evdSchool.academicLogin}"
+											onLabel="Yes" offLabel="No" onIcon="ui-icon-check"
+											offIcon="ui-icon-close">
+										</p:selectBooleanButton>
+
+										<p:outputLabel style="font-weight:bold;"
+											value="Front Office App (For Front Office/Enquiry)*:-"></p:outputLabel>
+										<p:selectBooleanButton value="#{evdSchool.frontLogin}"
+											onLabel="Yes" offLabel="No" onIcon="ui-icon-check"
+											offIcon="ui-icon-close">
+										</p:selectBooleanButton>
+
+										<p:outputLabel style="font-weight:bold;"
+											value="Library App (For Librarian)*:-"></p:outputLabel>
+										<p:selectBooleanButton value="#{evdSchool.libraryLogin}"
+											onLabel="Yes" offLabel="No" onIcon="ui-icon-check"
+											offIcon="ui-icon-close">
+										</p:selectBooleanButton>
+
+										<p:outputLabel style="font-weight:bold;"
+											value="Attendant App (For School Bus Attendant/Driver/Conductor)*:-"></p:outputLabel>
+										<p:selectBooleanButton value="#{evdSchool.attendantLogin}"
+											onLabel="Yes" offLabel="No" onIcon="ui-icon-check"
+											offIcon="ui-icon-close">
+										</p:selectBooleanButton>
+
+										<p:outputLabel style="font-weight:bold;"
+											value="Transporter App (For School Transport Manager)*:-"></p:outputLabel>
+										<p:selectBooleanButton value="#{evdSchool.transportLogin}"
+											onLabel="Yes" offLabel="No" onIcon="ui-icon-check"
+											offIcon="ui-icon-close">
+										</p:selectBooleanButton>
+
+										<p:outputLabel style="font-weight:bold;"
+											value="Security App (For School Main Gate Security)*:-"></p:outputLabel>
+										<p:selectBooleanButton value="#{evdSchool.securityLogin}"
+											onLabel="Yes" offLabel="No" onIcon="ui-icon-check"
+											offIcon="ui-icon-close">
+										</p:selectBooleanButton>
+
+										<p:outputLabel rendered="false" style="font-weight:bold;"
+											value="Other Logins (For Office Staff/Accounts/Sports Department/Others)*:-"></p:outputLabel>
+										<p:selectBooleanButton rendered="false"
+											value="#{evdSchool.otherLogin}" onLabel="Yes" offLabel="No"
+											onIcon="ui-icon-check" offIcon="ui-icon-close">
+										</p:selectBooleanButton>
+
+										<p:outputLabel rendered="false" />
+										<p:outputLabel rendered="false" />
+
+										<p:outputLabel style="font-weight:bold;"
+											value="Student App *:-"></p:outputLabel>
+										<p:selectBooleanButton value="#{evdSchool.studentApp}"
+											onLabel="Yes" offLabel="No" onIcon="ui-icon-check"
+											offIcon="ui-icon-close">
+										</p:selectBooleanButton>
+
+										<p:outputLabel style="font-weight:bold;" value="App Type *:-"></p:outputLabel>
+										<p:selectOneButton value="#{evdSchool.appType}">
+											<f:selectItem itemLabel="Branded" itemValue="branded" />
+											<f:selectItem itemLabel="Common" itemValue="common" />
+										</p:selectOneButton>
+
+										<p:outputLabel value="Check Admission No. Duplicasy:- *"></p:outputLabel>
+										<p:selectOneRadio value="#{evdSchool.admNoDupl}"
+											required="true"
+											requiredMessage="Please Enter Check Admission No. Duplicasy">
+											<f:selectItem itemLabel="Yes" itemValue="Yes" />
+											<f:selectItem itemLabel="No" itemValue="No" />
+										</p:selectOneRadio>
+
+
+
+										<p:outputLabel value="No of Students"></p:outputLabel>
+										<p:outputLabel value="#{evdSchool.noOfStudents}"></p:outputLabel>
+
+
+										<p:outputLabel value="Message Given"></p:outputLabel>
+										<p:outputLabel value="#{evdSchool.msz}"></p:outputLabel>
+
+
+										<p:commandButton update=":form,:editForm"
+											actionListener="#{evdSchool.updateDetails}" value="Update"></p:commandButton>
+									</p:panelGrid>
+								</div>
+							</p:dialog>
+						</h:form>
+
+						<h:form id="viewForm">
+							<p:dialog resizable="false" modal="true" widgetVar="viewDialog"
+								header="School Details" closeOnEscape="true">
+								<div class="ui-g form-group">
+									<p:panelGrid columns="4"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+										<p:outputLabel value="School Name:-"></p:outputLabel>
+										<p:outputLabel value="#{evdSchool.selectedRow.schoolName}"></p:outputLabel>
+
+										<p:outputLabel value="Alias Name:-"></p:outputLabel>
+										<p:outputLabel value="#{evdSchool.selectedRow.aliasName}"></p:outputLabel>
+
+										<p:outputLabel value="User Name:-"></p:outputLabel>
+										<p:outputLabel value="#{evdSchool.selectedRow.username}"></p:outputLabel>
+
+										<p:outputLabel value="Password:-"></p:outputLabel>
+										<p:outputLabel value="#{evdSchool.selectedRow.password}"></p:outputLabel>
+
+										<p:outputLabel value="Contact No:-"></p:outputLabel>
+										<p:outputLabel value="#{evdSchool.selectedRow.contactNo}"></p:outputLabel>
+
+										<p:outputLabel value="Contact Name:-"></p:outputLabel>
+										<p:outputLabel value="#{evdSchool.selectedRow.contactName}"></p:outputLabel>
+
+										<p:outputLabel value="Starting Session:-"></p:outputLabel>
+										<p:outputLabel value="#{evdSchool.selectedRow.session}"></p:outputLabel>
+
+										<p:outputLabel value="Start Date:-"></p:outputLabel>
+										<p:outputLabel value="#{evdSchool.selectedRow.startDateStr}"></p:outputLabel>
+
+										<p:outputLabel value="Expire Date:-"></p:outputLabel>
+										<p:outputLabel value="#{evdSchool.selectedRow.expireDateStr}"></p:outputLabel>
+
+										<p:outputLabel value="Renewal Date:-"></p:outputLabel>
+										<p:outputLabel value="#{evdSchool.selectedRow.renewalDateStr}"></p:outputLabel>
+
+										<p:outputLabel value="Amount:-"></p:outputLabel>
+										<p:outputLabel value="#{evdSchool.selectedRow.chalkBoxAmount}">
+										</p:outputLabel>
+
+										<p:outputLabel value="Renewal Amount :-"></p:outputLabel>
+										<p:outputLabel
+											value="#{evdSchool.selectedRow.imgRenewalAmount}">
+										</p:outputLabel>
+
+										<p:outputLabel value="GPS :-"></p:outputLabel>
+										<p:outputLabel value="#{evdSchool.selectedRow.gps}">
+										</p:outputLabel>
+
+										<p:outputLabel value="Time Table :-"></p:outputLabel>
+										<p:outputLabel value="#{evdSchool.selectedRow.timetable}">
+										</p:outputLabel>
+
+										<p:outputLabel value="School Session :-"></p:outputLabel>
+										<p:outputLabel value="#{evdSchool.selectedRow.feeStartName}">
+										</p:outputLabel>
+
+										<p:outputLabel value="Fees Start From :-"></p:outputLabel>
+										<p:outputLabel value="#{evdSchool.selectedRow.feeStart}">
+										</p:outputLabel>
+
+										<p:outputLabel value="Admin Login :-"></p:outputLabel>
+										<p:outputLabel value="#{evdSchool.selectedRow.adminLogin}">
+										</p:outputLabel>
+										<p:outputLabel value="Teacher Login :-"></p:outputLabel>
+										<p:outputLabel value="#{evdSchool.selectedRow.teacherLogin}">
+										</p:outputLabel>
+										<p:outputLabel value="Student App :-"></p:outputLabel>
+										<p:outputLabel value="#{evdSchool.selectedRow.studentApp}">
+										</p:outputLabel>
+										<p:outputLabel value="App type :-"></p:outputLabel>
+										<p:outputLabel value="#{evdSchool.selectedRow.appType}">
+										</p:outputLabel>
+
+										<p:outputLabel value="Project Type :-"></p:outputLabel>
+										<p:outputLabel value="#{evdSchool.selectedRow.type}">
+										</p:outputLabel>
+
+										<p:outputLabel value="Client Type :-"></p:outputLabel>
+										<p:outputLabel value="#{evdSchool.selectedRow.clientType}">
+										</p:outputLabel>
+
+										<p:outputLabel value="No of Students"></p:outputLabel>
+										<p:outputLabel value="#{evdSchool.selectedRow.noOfStudents}"></p:outputLabel>
+
+										<p:outputLabel value="Agreement For"></p:outputLabel>
+										<p:outputLabel
+											value="#{evdSchool.selectedRow.agreementFor} Students"></p:outputLabel>
+
+										<p:outputLabel value="Message Left"></p:outputLabel>
+										<p:outputLabel value="#{evdSchool.selectedRow.messageLeft}"></p:outputLabel>
+
+										<p:outputLabel value="Adm. No Dupl. Check"></p:outputLabel>
+										<p:outputLabel value="#{evdSchool.selectedRow.admNoDupl}"></p:outputLabel>
+
+
+										<p:commandButton rendered="false" update=":form,:editForm"
+											actionListener="#{evdSchool.updateDetails}" value="Update"></p:commandButton>
+									</p:panelGrid>
+								</div>
+							</p:dialog>
+						</h:form>
+
+						<h:form id="addPayment">
+							<p:dialog resizable="false" modal="true"
+								widgetVar="addPaymentDialog" header="Add Payment"
+								closeOnEscape="true">
+								<div class="ui-g form-group">
+									<p:panelGrid columns="2"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+
+										<p:outputLabel value="Amount:-"></p:outputLabel>
+										<p:inputText value="#{evdSchool.payment}"
+											onfocus="this.select();" required="true"
+											requiredMessage="Please enter Amount">
+											<p:keyFilter mask="money" />
+										</p:inputText>
+
+										<p:commandButton update=":form,addPayment"
+											actionListener="#{evdSchool.updatePaymentDetails}"
+											value="Update"></p:commandButton>
+									</p:panelGrid>
+								</div>
+							</p:dialog>
+						</h:form>
+						<h:form id="password">
+							<p:dialog resizable="false" modal="true"
+								widgetVar="passwordDialog" header="Change password"
+								closeOnEscape="true">
+								<div class="ui-g form-group">
+									<p:panelGrid columns="2"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+
+										<p:outputLabel value="New password" for="@next"
+											style="color:red"></p:outputLabel>
+										<p:inputText value="#{evdSchool.password}" required="true"
+											requiredMessage="Please enter Password"
+											validatorMessage="Please Enter Correct value">
+											<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+										</p:inputText>
+
+										<p:commandButton update=":form,password"
+											actionListener="#{evdSchool.updatePassword}" value="Update"></p:commandButton>
+									</p:panelGrid>
+								</div>
+							</p:dialog>
+						</h:form>
+
+						<h:form id="gps">
+							<p:dialog resizable="false" modal="true" widgetVar="gpsDialog"
+								header="Allot GPS Device" closeOnEscape="true">
+								<div class="ui-g form-group">
+									<p:panelGrid columns="2"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+
+										<p:outputLabel value="Device Name" for="@next"
+											style="color:red"></p:outputLabel>
+										<p:inputText value="#{evdSchool.deviceName}" required="true"
+											requiredMessage="Please enter device name"
+											validatorMessage="Please Enter Correct value">
+											<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+										</p:inputText>
+
+										<p:outputLabel value="IMEI No." for="@next" style="color:red"></p:outputLabel>
+										<p:inputText value="#{evdSchool.imeiNo}" required="true"
+											requiredMessage="Please enter IMEI No."
+											validatorMessage="Please Enter Correct value">
+											<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+										</p:inputText>
+
+										<p:outputLabel value="Device Password" for="@next"
+											style="color:red"></p:outputLabel>
+										<p:inputText value="#{evdSchool.devicePwd}" required="true"
+											requiredMessage="Please enter device password"
+											validatorMessage="Please Enter Correct value">
+											<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+										</p:inputText>
+
+										<p:commandButton update=":form,gps"
+											actionListener="#{evdSchool.addGps}" value="Allot GPS Device"></p:commandButton>
+									</p:panelGrid>
+								</div>
+							</p:dialog>
+						</h:form>
+
+						<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+							<p:commandButton value="Yes" styleClass="ui-confirmdialog-yes"
+								icon="ui-icon-check" />
+							<p:commandButton value="No" styleClass="ui-confirmdialog-no"
+								icon="ui-icon-close" />
+						</p:confirmDialog>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

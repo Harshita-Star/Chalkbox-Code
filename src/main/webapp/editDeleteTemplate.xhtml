@@ -1,0 +1,84 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	<f:loadBundle var="addClassVar" basename="myProperties" />
+
+	<ui:define name="title">Edit Delete Template</ui:define>
+
+	<ui:define name="content">
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						 <h:form id="form" >
+						 <p:growl showDetail="true"  autoUpdate="true"></p:growl>
+						 <p:dataTable value="#{editDeleteTemplate.list}" var="info">
+						 
+						 <p:column headerText="Title">
+						 <p:outputLabel value="#{info.name}"></p:outputLabel>
+						 </p:column>
+						 
+						 <p:column headerText="Message">
+						 <p:outputLabel value="#{info.addNumber}"></p:outputLabel>
+						 </p:column>
+				 		 
+						 <p:column headerText="Edit">
+						 <p:commandButton update=":form :form1" oncomplete="PF('editDialog').show()" action="#{editDeleteTemplate.check}" value="Edit" icon="ui-icon-pencil" title="Edit" >
+						 <f:setPropertyActionListener value="#{info}" target="#{editDeleteTemplate.selected}"></f:setPropertyActionListener>
+						 </p:commandButton>
+						 </p:column>
+						 
+						 <p:column headerText="Delete">
+						 <p:commandButton update=":form :form1" oncomplete="" action="#{editDeleteTemplate.delete}" value="delete" icon="ui-icon-pencil" title="Delete" >
+						 <p:confirm header="Confirmation" message="Are you sure to delete this template?" icon="ui-icon-alert" />
+ 
+						 <f:setPropertyActionListener value="#{info}" target="#{editDeleteTemplate.selected}"></f:setPropertyActionListener>
+						 </p:commandButton>
+						 </p:column>
+						 
+						 </p:dataTable>
+						  <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+				       <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+				       <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+				      </p:confirmDialog>      
+						</h:form>
+						<h:form id="form1">	
+					<p:dialog header="Details" widgetVar="editDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                     <p:panel header="Add Template" id="carDetail">
+					     <p:panelGrid columns="1" id="temp1">
+					     <p:outputLabel value="Title Name"></p:outputLabel>
+					     <p:inputText value="#{editDeleteTemplate.selected.name}" validatorMessage="Please Enter Correct value">
+					       <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+					     </p:inputText>
+					     <p:outputLabel value="Message"></p:outputLabel>
+					     <p:inputTextarea value="#{editDeleteTemplate.selected.addNumber}" validatorMessage="Please Enter Correct value">
+					       <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+					     </p:inputTextarea>
+					     <f:facet name="footer">
+					     <p:panelGrid columns="3" id="temp">
+					     <p:commandButton value="#name" action="#{editDeleteTemplate.name}" update="carDetail" disabled="#{editDeleteTemplate.showName}"></p:commandButton>
+					     <p:commandButton value="#date" action="#{editDeleteTemplate.date}" update="carDetail" disabled="#{editDeleteTemplate.showDate}"></p:commandButton>
+                         <p:commandButton value="Reset" action="#{editDeleteTemplate.reset}" update="carDetail"></p:commandButton>
+
+					     </p:panelGrid>
+					     </f:facet>
+					     </p:panelGrid>	
+                         </p:panel>
+                          <p:commandButton value="Add" update=":form :form1" action="#{editDeleteTemplate.edit}"></p:commandButton>
+                     </p:dialog>
+	                  </h:form>
+              
+					
+
+					
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

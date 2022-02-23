@@ -1,0 +1,191 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Visitor</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form" enctype="multipart/form-data">
+							<h1>Add Visitor</h1>
+							<p:panel header="Add Visitor (Allowed file type are :- jpg,jpeg,png)">
+								<p:messages closable="true" autoUpdate="true"></p:messages>
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel value="Add Date" for="@next" style="color:red" ></p:outputLabel>
+									<p:calendar disabled="true" value="#{addVisitor.addDate}" navigator="true"
+										pattern="dd/MM/yyyy" required="true"
+										requiredMessage="Please Enter Date"></p:calendar>
+
+									<p:outputLabel value="Visitor No"></p:outputLabel>
+									<p:outputLabel value="#{addVisitor.visitorNo}" />
+
+									<p:outputLabel value="Mobile No" for="@next" style="color:red" ></p:outputLabel>
+									<p:inputText maxlength="10" value="#{addVisitor.mobileNo}" required="true" requiredMessage="Please Enter Mobile No">
+										<p:ajax event="blur" listener="#{addVisitor.checkVisitor}"
+											update="name,addr" />
+									</p:inputText>									
+									<p:outputLabel value="Name " for="@next" style="color:red" ></p:outputLabel>
+									<p:outputPanel id="name">
+										<p:inputText value="#{addVisitor.name}" required="true" requiredMessage="Please Enter Name">
+										</p:inputText>
+									</p:outputPanel>
+
+									<p:outputLabel value="Address"></p:outputLabel>
+									<p:inputTextarea id="addr" value="#{addVisitor.address}"></p:inputTextarea>
+
+									<p:outputLabel value="To Meet " for="@next" style="color:red" ></p:outputLabel>
+									<p:selectOneRadio value="#{addVisitor.toMeet}" required="true" requiredMessage="Please Select To Meet" layout="responsive" columns="2" styleClass="form-group">
+										<f:selectItem itemLabel="Staff" itemValue="Staff"></f:selectItem>
+										<f:selectItem itemLabel="Student" itemValue="Student"></f:selectItem>
+									</p:selectOneRadio>
+
+									<p:outputLabel value="To Meet Name " for="@next" style="color:red" ></p:outputLabel>
+									<p:inputText id="mtnm" value="#{addVisitor.toMeetName}" required="true" requiredMessage="Please Enter To Meet Name">
+									</p:inputText>
+
+									<p:outputLabel value="Purpose" for="@next" style="color:red" ></p:outputLabel>
+									<p:inputTextarea value="#{addVisitor.purpose}" required="true" requiredMessage="Please Enter Purpose"/>
+
+									<p:outputLabel value="Other Details"></p:outputLabel>
+									<p:inputText id="prps" value="#{addVisitor.otherDetails}" ></p:inputText>
+									
+									<p:outputLabel value="No Of Person"></p:outputLabel>
+									<p:selectOneMenu value="#{addVisitor.noOfPerson}">
+										<f:selectItems value="#{addVisitor.personList}"></f:selectItems>
+										<p:ajax event="itemSelect" listener="#{addVisitor.checkNoOfPerson}" update="dt"></p:ajax>
+									</p:selectOneMenu>
+									
+									<p:outputLabel value="Upload Visitor Photo"></p:outputLabel>
+									<p:fileUpload 
+										mode="simple" skinSimple="true"
+										value="#{addVisitor.photofile}" allowTypes="/(\.|\/)(jpe?g|png|)$/" validatorMessage="Please choose valid file type"></p:fileUpload>
+										
+								</p:panelGrid>	
+								<p:panelGrid columns="1">	
+									<p:dataTable id="dt" value="#{addVisitor.nameList}" var="var" rowIndexVar="index">
+										<p:column headerText="S.No." style="width:50px">
+											<p:outputLabel value="#{index+1}"></p:outputLabel>
+										</p:column>
+										
+										<p:column headerText="Name">
+											<p:inputText value="#{var.label}"></p:inputText>
+										</p:column>
+									</p:dataTable>
+									
+									<p:photoCam rendered="false" widgetVar="pc" listener="#{addVisitor.oncapture}"  update="photo"/>
+									<p:commandButton rendered="false" type="button" value="Capture"
+										onclick="PF('pc').capture()"/>
+									<p:outputPanel rendered="false" id="photo">
+										<p:graphicImage name="#{addVisitor.filename}"/>
+									</p:outputPanel>
+
+									<p:commandButton update="form,:form2,:printForm" oncomplete="PF('printDialog').show()" action="#{addVisitor.addNow}" value="Submit" ajax="false"></p:commandButton>
+								</p:panelGrid>
+							</p:panel>
+						</h:form>
+					</div>
+					<div class="card card-w-title">
+						<h:form id="form2">
+							<p:panel>
+								<p:dataTable reflow="true" value="#{addVisitor.inVisitorList}" var="var" paginator="true" rowsPerPageTemplate="10,20,50" rows="10">
+									<f:facet name="header">
+										<p:outputLabel
+											value="Total Visitor:- #{addVisitor.totalInVisitor}"></p:outputLabel>
+									</f:facet>
+
+									<p:column headerText="S.No." style="width:30px">
+										<p:outputLabel value="#{var.sNo}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Date">
+										<p:outputLabel value="#{var.addDateStr}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Name" filterBy="#{var.name}" filterMatchMode="contains">
+										<p:outputLabel value="#{var.name}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Mobile No" filterBy="#{var.mobileNo}" filterMatchMode="contains">
+										<p:outputLabel value="#{var.mobileNo}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Address" filterBy="#{var.address}" filterMatchMode="contains">
+										<p:outputLabel value="#{var.address}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="To Meet">
+										<p:outputLabel value="#{var.meetType} : "></p:outputLabel>
+										<br/>
+										<p:outputLabel value="#{var.toMeet}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Purpose">
+										<p:outputLabel value="#{var.purpose}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Other Details">
+										<p:outputLabel value="#{var.otherDetails}"></p:outputLabel>
+									</p:column>
+									
+									<p:column headerText="No Of Person">
+										<p:outputLabel value="#{var.noOfPerson}"></p:outputLabel>
+									</p:column>
+									
+									<p:column headerText="Person Name">
+										<p:outputLabel value="#{var.personName.replace(',',' ,')}"></p:outputLabel>
+									</p:column>
+									
+									<p:column headerText="In Time">
+										<p:outputLabel value="#{var.inTime}"></p:outputLabel>
+									</p:column>
+									
+									<p:column headerText="Out Time">
+										<p:outputLabel value="#{var.outTime}"></p:outputLabel>
+									</p:column>
+
+									<p:column rendered="true" headerText="Image">
+										<p:graphicImage style="height:100%;width:100%;" cache="false"
+											url="#{(var.imagepath eq '' || var.imagepath eq 'null') ? 'noimage.png' : var.imagepath}"></p:graphicImage>
+									</p:column>
+
+									<p:column headerText="Out">
+										<p:commandButton value="OUT" action="#{addVisitor.updateVisitorOutTime}" update=":form,:form2 ">
+											<f:setPropertyActionListener target="#{addVisitor.selectedVisitor}" value="#{var}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+
+								</p:dataTable>
+							</p:panel>
+						</h:form>
+
+						<h:form id="printForm">
+							<p:dialog resizable="false" modal="true" widgetVar="printDialog" header="Print Dialog" closeOnEscape="true">
+								<div class="ui-g form-group">
+									<p:panelGrid columns="1" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+										<p:outputLabel value="Do You Want To print Visitor Pass ??"></p:outputLabel>
+									</p:panelGrid>
+									<p:panelGrid columns="2" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+										<p:commandButton value="Yes" actionListener="#{addVisitor.printVisitorPass}" update=":form,:printForm,:form2 "></p:commandButton>
+										<p:commandButton value="No" actionListener="#{addVisitor.clearData}" update=":form,:printForm,:form2 "></p:commandButton>
+									</p:panelGrid>
+								</div>
+							</p:dialog>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

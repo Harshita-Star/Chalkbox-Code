@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+<f:loadBundle var="addClassVar" basename="myProperties" />
+<f:view contentType="text/html">
+	<h:head>
+		<title>#{sideMenuBean.companyName} | Welcome Letter</title>
+		<f:facet name="first">
+			<meta content='text/html; charset=UTF-8' http-equiv="Content-Type" />
+			<meta http-equiv="X-UA-Compatible" content="EmulateIE8" />
+
+		</f:facet>
+
+		<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css"></link>
+		<link rel="stylesheet"
+			href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"></link>
+		<link rel="stylesheet"
+			href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css"></link>
+		<link rel="stylesheet" href="dist/css/AdminLTE.min.css"></link>
+		<link rel="stylesheet" href="dist/css/skins/all-skins.min.css"></link>
+		<link rel="stylesheet" type="text/css" href="css/style.css" />
+
+	</h:head>
+
+	<h:body>
+
+		<div class="content-wrapper">
+
+
+
+			<h:form id="form12">
+				<p:commandButton style="width:50px;" value="Print" type="button">
+					<p:printer target=":forms"></p:printer>
+				</p:commandButton>
+			</h:form>
+			<br />
+			<h:form id="forms">
+			<p:commandButton value="PDF" style=" width:50px;" ajax="false" process="@this" actionListener="#{printNewRegInfo.exportWelcomePdf}"> 
+                    
+          <p:fileDownload value="#{printNewRegInfo.file}" />
+         </p:commandButton>
+			<p:panel>
+			
+					<table style="width: 100%; font-size: 11px; margin: -20px;">
+						<tr>
+							<td><p:graphicImage width="100%" height="120px"
+									value="#{sideMenuBean.headerImage}"></p:graphicImage></td>
+						</tr>
+					</table>
+					<br></br>
+					<br></br>
+					<center>
+						<h3 style="font-family: timesRoman;height: 25px; width: 220px; border: 2px solid #000;">
+							<b>WELCOME LETTER</b>
+						</h3>
+					</center>
+					<br></br>
+					<br></br>
+					<br></br>
+					<table style="width: 100%;margin: -20px">
+						<tr>
+							<td align="left" style="font-size: 12px;">Dear
+								Parent/Guardian (s),
+							</td>
+						</tr>
+					</table>
+
+					<br></br>
+					<br></br>
+					<br></br>
+					<br></br>
+					<table style="margin: -20px">
+						<tr>
+							<td
+								style="font-size: 12px; line-height: 18px; text-align: justify;">
+								We welcome you to be a part of our esteemed institution in the city. 
+								As the new session has started, we request you to send your ward to school from next working day. 
+								We at <h:outputText style="font-size: 12px; line-height: 18px; text-align: justify;" value="#{sideMenuBean.list.branch_id eq '22' ? 'Ever Green' : 'Immortal'}" /> are entitled to serve the best.
+								<br></br>
+								<br></br>
+								Communication is the key to success. We request our parent(s) to please co-ordinate with class teacher and subject teacher during PTM every month. 
+								Regular meetings will definitely improve the performance of your ward.
+								<br></br>
+								<br></br>
+								Please feel free to contact us during school hours for any complaints and suggestions.
+								<br></br>
+								<br></br>
+								Please check these details furnished by you to our office during the admission of your ward. 
+								Also ask if any amendments are required in these details : 
+								<br></br>
+								<br></br>
+							</td>
+						</tr>
+					</table>
+					<br></br>
+					<br></br>
+					<br></br>
+					<table style="margin: -20px;width: 104%;font-size: 12px;" border="1">
+						<tr>
+							<td style="padding: 4px;">ADM. NO.</td>
+							<td style="padding: 4px;">#{printNewRegInfo.studentInfo.srNo}</td>
+							<td style="padding: 4px;">DATE OF ADM.</td>
+							<td style="padding: 4px;">#{printNewRegInfo.studentInfo.startingDateStr}</td>
+						</tr>
+						<tr>
+							<td style="padding: 4px;">NAME OF STUDENT</td>
+							<td style="padding: 4px;">#{printNewRegInfo.studentInfo.fname}</td>
+							<td style="padding: 4px;">AADHAR NO.</td>
+							<td style="padding: 4px;">#{printNewRegInfo.studentInfo.aadharNo}</td>
+						</tr>
+						<tr>
+							<td style="padding: 4px;">FATHER'S NAME</td>
+							<td style="padding: 4px;">#{printNewRegInfo.studentInfo.fathersName}</td>
+							<td style="padding: 4px;">AADHAR NO.</td>
+							<td style="padding: 4px;">#{printNewRegInfo.studentInfo.fatherAadhaar}</td>
+						</tr>
+						<tr>
+							<td style="padding: 4px;">MOTHER'S NAME</td>
+							<td style="padding: 4px;">#{printNewRegInfo.studentInfo.motherName}</td>
+							<td style="padding: 4px;">AADHAR NO.</td>
+							<td style="padding: 4px;">#{printNewRegInfo.studentInfo.motherAadhaar}</td>
+						</tr>
+						<tr>
+							<td style="padding: 4px;">DOB</td>
+							<td style="padding: 4px;">#{printNewRegInfo.studentInfo.dobString}</td>
+							<td style="padding: 4px;">CLASS &amp; SEC.</td>
+							<td style="padding: 4px;">#{printNewRegInfo.studentInfo.className}</td>
+						</tr>
+						<tr>
+							<td style="padding: 4px;">ADDRESS</td>
+							<td style="padding: 4px;" colspan="3">#{printNewRegInfo.studentInfo.currentAddress}</td>
+						</tr>
+						<tr>
+							<td style="padding: 4px;">SOCIAL CATEGORY</td>
+							<td style="padding: 4px;">#{printNewRegInfo.studentInfo.category}</td>
+							<td style="padding: 4px;" colspan="2"></td>
+						</tr>
+						<tr>
+							<td style="padding: 4px;">FATHER'S MOB.</td>
+							<td style="padding: 4px;">#{printNewRegInfo.studentInfo.fathersPhone}</td>
+							<td style="padding: 4px;">MOTHER'S MOB.</td>
+							<td style="padding: 4px;">#{printNewRegInfo.studentInfo.mothersPhone eq '0' ? '' : printNewRegInfo.studentInfo.mothersPhone}</td>
+						</tr>
+					</table>
+					<br></br>
+					<br></br>
+					<br></br>
+					<center>
+						<h4 style="font-family: timesRoman;">
+							<u><b>DETAILS OF TRANSPORT (IF AVAILING)</b></u>
+						</h4>
+					</center>
+					<br></br>
+					<br></br>
+					<table style="margin: -20px;width: 104%;font-size: 12px;" border="1">
+						<tr>
+							<td style="width: 25%;padding: 4px;">BUS NO.</td>
+							<td style="width: 25%;padding: 4px;">#{printNewRegInfo.studentInfo.vehicleNo}</td>
+							<td style="width: 25%;padding: 4px;">STOPAGE</td>
+							<td style="width: 25%;padding: 4px;">#{printNewRegInfo.studentInfo.transportRoute eq '' ? '' : printNewRegInfo.studentInfo.transportRoute.split('School to')[1]}</td>
+						</tr>
+						<tr>
+							<td style="width: 25%;padding: 4px;">DRIVER'S NAME</td>
+							<td style="width: 25%;padding: 4px;">#{printNewRegInfo.studentInfo.driverName}</td>
+							<td style="width: 25%;padding: 4px;">DRIVER'S NO.</td>
+							<td style="width: 25%;padding: 4px;">#{printNewRegInfo.studentInfo.driverNo eq '0' ? '' : printNewRegInfo.studentInfo.driverNo}</td>
+						</tr>
+						<tr>
+							<td style="width: 25%;padding: 4px;">CLEANER'S NAME</td>
+							<td style="width: 25%;padding: 4px;"></td>
+							<td style="width: 25%;padding: 4px;">CLEANER'S NO.</td>
+							<td style="width: 25%;padding: 4px;"></td>
+						</tr>
+						<tr>
+							<td style="width: 25%;padding: 4px;">LADY ATTENDANT</td>
+							<td style="width: 25%;padding: 4px;">#{printNewRegInfo.studentInfo.attendantName}</td>
+							<td style="width: 25%;padding: 4px;">TRANSPORT FEE</td>
+							<td style="width: 25%;padding: 4px;">#{printNewRegInfo.studentInfo.transfee}</td>
+						</tr>
+						
+					</table>
+					<br></br>
+					<br></br>
+					<table style="width: 60%; margin-top: 4%;margin-right: 2%; float: right;">
+						<tr>
+							<td align="right" style="font-size: 14px;"><b>ADMIN</b></td>
+						</tr>
+					</table>
+				</p:panel>
+			</h:form>
+		</div>
+	</h:body>
+</f:view>
+</html>

@@ -1,0 +1,110 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Subject Rank</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form1">
+
+
+							<p:panel id="panel" header="Subject Rank Allotment">
+								<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+								<p:panelGrid columns="3"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:outputLabel value="Select Class" for="@next" style="color:red" ></p:outputLabel>
+									<p:selectOneMenu value="#{subjectRank.selectedClass}"
+										filter="true" required="true"
+										requiredMessage="Please select a class">
+										<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+										<f:selectItems value="#{subjectRank.classList}"></f:selectItems>
+									</p:selectOneMenu>
+
+
+								
+								</p:panelGrid>
+								
+								<br />
+								<p:separator />
+								<center>
+										<p:commandButton value="Search" update=":form1" styleClass="butwid" icon="fa fa-search"
+										action="#{subjectRank.search}"></p:commandButton>
+
+								</center>
+								<p:separator />
+								<br />
+
+								<br />
+
+								<p:outputLabel
+									value="Note : Please drag the rows up and down ⇅ to arrange the subjects in order and then click 'ALLOT RANK' to submit"
+									style="font-weigth:bold;font-size:16px;" rendered="#{subjectRank.show}"/>
+								<br />
+								<br />
+
+								<p:dataTable rendered="#{subjectRank.show}" reflow="true"
+									var="var" value="#{subjectRank.subjectList}"
+									draggableRows="true">
+
+									<f:facet name="header">
+										<center>
+											<p:commandButton styleClass="butwid" icon="fa fa-check-circle" value="Allot Rank"
+												update=":form1" action="#{subjectRank.submit}"></p:commandButton>
+										</center>
+									</f:facet>
+
+									<p:ajax global="false" event="rowReorder" />
+
+									<p:column headerText="Drag">
+										<center>
+											<p:graphicImage value="drag.png" width="40" height="40" />
+										</center>
+									</p:column>
+
+									<p:column headerText="Subject">
+										<center>
+											<p:outputLabel value="#{var.subjectName}"></p:outputLabel>
+										</center>
+									</p:column>
+
+									<p:column headerText="Type">
+										<center>
+											<p:outputLabel value="#{var.subjectType}"></p:outputLabel>
+										</center>
+									</p:column>
+
+									<p:column headerText="Order">
+										<p:inputText style="font-weight: bold;" disabled="true"
+											value="#{var.rank}">
+											<p:keyFilter mask="num"></p:keyFilter>
+										</p:inputText>
+									</p:column>
+
+									<f:facet name="footer">
+										<center>
+											<p:commandButton styleClass="butwid" icon="fa fa-check-circle" value="Allot Rank"
+												update=":form1" action="#{subjectRank.submit}"></p:commandButton>
+										</center>
+									</f:facet>
+
+								</p:dataTable>
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

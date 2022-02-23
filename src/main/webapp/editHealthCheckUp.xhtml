@@ -1,0 +1,132 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Infirmary</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+
+
+						<h:form id="form" style="overflow:hidden">
+						<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+							<p:panel header="Health Check Up">
+								<p:panelGrid columns="2" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:outputLabel value="Date"></p:outputLabel>
+									<p:outputLabel
+										value="#{editHealthCheckUp.selectedCheckUp.checkUpDate}"></p:outputLabel>
+
+									<p:outputLabel value="Select Student"></p:outputLabel>
+									<p:outputLabel
+										value="#{editHealthCheckUp.selectedCheckUp.selectedStudent}"></p:outputLabel>
+</p:panelGrid>
+							<br/>
+							
+								<p:panelGrid columns="4" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none;width:100%; background-color:transparent;">
+
+                                  <p:panel header="Any Disease">
+										<p:panelGrid columns="2" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none;width:100%; background-color:transparent;">
+											<p:outputLabel value="Time"></p:outputLabel>
+											<p:inputText
+												value="#{editHealthCheckUp.selectedCheckUp.timevalue}" validatorMessage="Please Enter Correct value">
+											  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+											</p:inputText>
+											<p:outputLabel value="Reason of Visit"></p:outputLabel>
+											
+											<p:selectOneMenu
+												value="#{editHealthCheckUp.selectedCheckUp.diseaseId}">
+												<f:selectItem itemLabel="Select Reason" itemValue=""></f:selectItem>
+												<f:selectItems value="#{editHealthCheckUp.diseaseList}"></f:selectItems>
+											</p:selectOneMenu>
+
+											<p:outputLabel value="Treatment Advice"></p:outputLabel>
+											<p:inputText
+												value="#{editHealthCheckUp.selectedCheckUp.treatment}" validatorMessage="Please Enter Correct value">
+											  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+											 </p:inputText>
+
+											<p:outputLabel value="Other Remarks"></p:outputLabel>
+											<p:inputTextarea
+												value="#{editHealthCheckUp.selectedCheckUp.remarks}" validatorMessage="Please Enter Correct value">
+											  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+											</p:inputTextarea>
+											<p:outputLabel></p:outputLabel>
+										</p:panelGrid>
+									</p:panel>
+									<p:panel header="Basic Details">
+										<p:panelGrid columns="2" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none;width:100%; background-color:transparent;">
+											<p:outputLabel value="Height"></p:outputLabel>
+											<p:inputText
+												value="#{editHealthCheckUp.selectedCheckUp.height}" validatorMessage="Please Enter Correct value">
+											  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+											</p:inputText>
+
+											<p:outputLabel value="Weight"></p:outputLabel>
+											<p:inputText
+												value="#{editHealthCheckUp.selectedCheckUp.weight}" validatorMessage="Please Enter Correct value">
+											  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+											</p:inputText>
+
+											<p:outputLabel value="Blood Pressure"></p:outputLabel>
+											<p:inputText
+												value="#{editHealthCheckUp.selectedCheckUp.bloodPressure}" validatorMessage="Please Enter Correct value">
+											  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+											</p:inputText>
+										</p:panelGrid>
+									</p:panel>
+
+									<p:panel header="Blood Details">
+										<p:panelGrid columns="2" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none;width:100%; background-color:transparent;">
+											<p:outputLabel value="RBC"></p:outputLabel>
+											<p:inputText value="#{editHealthCheckUp.selectedCheckUp.rbc}" validatorMessage="Please Enter Correct value">
+											  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+											</p:inputText>
+
+											<p:outputLabel value="WBC"></p:outputLabel>
+											<p:inputText value="#{editHealthCheckUp.selectedCheckUp.wbc}" validatorMessage="Please Enter Correct value">
+											  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+											</p:inputText>
+
+											<p:outputLabel value="Hemoglobin"></p:outputLabel>
+											<p:inputText
+												value="#{editHealthCheckUp.selectedCheckUp.hemoglobin}" validatorMessage="Please Enter Correct value">
+											  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+											</p:inputText>
+										</p:panelGrid>
+									</p:panel>
+
+									
+                                    <p:outputLabel></p:outputLabel>
+									
+
+
+									<p:commandButton value="Submit"
+										action="#{editHealthCheckUp.submit}" update=":form"></p:commandButton>
+								</p:panelGrid>
+
+
+							</p:panel>
+
+						</h:form>
+
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

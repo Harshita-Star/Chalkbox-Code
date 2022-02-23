@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	
+<f:view contentType="text/html">
+	<h:head>
+		<title>Student Registration Form</title>
+		<f:facet name="First">
+			<meta content='text/html; charset=UTF-8' http-equiv="Content-Type" />
+			<meta http-equiv="X-UA-Compatible" content="EmulateIE8" />
+		<title>MainPage</title>
+		</f:facet>
+		
+	</h:head>
+	<style>
+		input[type="checkbox"]{
+		  width: 22px; /*Desired width*/
+		  height: 20px; /*Desired height*/
+		  margin:0px;
+		  margin-left:-4px;
+		  -webkit-appearance: none;
+		  appearance: none;
+		  border: 1px solid;
+		}
+		
+		.checkbox
+		{
+			margin-left:0px !important;
+		}
+		
+		.checkbox1
+		{
+			margin-left:0px !important;
+			 width: 40px !important;
+		  height: 15px !important;
+		}
+		
+	</style>
+	
+
+	<h:body>
+	
+   <h:form id="form1234" >
+							<center>
+								<h:commandLink>
+									<p:graphicImage name="images/printLogo.png"
+										library="avalon-layout" width="100" height="80"></p:graphicImage>
+									<p:printer target=":form1"></p:printer>
+								</h:commandLink>
+							</center>
+						</h:form>
+   
+	
+	
+
+	<h:form id="form1">
+		<ui:repeat var="mainVar" value="#{printAjmaniStdFormat.listOfStudent}">
+			<p:outputPanel styleClass="test" style="width:100%;margin-bottom:-20px;marginf-left:40px;">
+			<table style="width:100%;font-size:11px">
+				<tr>
+					<td>
+			    		<p:graphicImage width="100%" height="110px" value="http://www.chalkboxerp.in/Scan_images/marksheetHeader4.png"></p:graphicImage>
+			  		</td>
+				</tr>
+			</table>
+		</p:outputPanel>
+		<center><h2>ADMISSION FORM</h2></center>
+		<div style="width:98%;height:auto;margin:auto;font-size:15px">
+			<table style="width:100%">
+				<tr>
+					<td>Admission No:- <b>#{mainVar.srNo}</b></td>
+				</tr>
+				<tr>
+					<td>Class in which admission is sought #{mainVar.className}</td>
+					<td>Session:- #{mainVar.session}</td>
+				</tr>
+			</table>
+		</div>
+		<div style="width:80%;float:left;height:auto;margin:auto;font-size:15px">
+			<h3 style="width:98%;margin-left:1.5%">A.STUDENT'S DETAILS</h3>
+			<table style="width:97%;margin:auto">
+				<tr>
+					<td>1. Name ( Block Letters) </td>
+					<td><b>#{mainVar.fullName}</b></td>
+				</tr>
+				<tr>
+					<td>2. Date of Birth (Figures)</td>
+					<td><b>#{mainVar.dobString}</b></td>
+				</tr>
+				<tr>
+					<td>3. Aadhaar No</td>
+					<td>#{mainVar.aadharNo}</td>
+				</tr>
+			</table>
+			<table style="width:97%;margin:auto">
+				<tr>
+					<td>4.Do you belong to GEN/SC/ST/OBC/EWS/Disabled(PwD),S.G. Child? Attach  Certificate.</td>
+				</tr>
+				<tr>
+					<td>
+						<input class="checkbox" type="checkbox" />  GEN
+						<input class="checkbox" type="checkbox" />  SC
+						<input class="checkbox" type="checkbox" />  ST
+						<input class="checkbox" type="checkbox" />  OBC
+						<input class="checkbox" type="checkbox" />  EWS
+						<input class="checkbox" type="checkbox" />  Disabled(PwD)
+						<input class="checkbox" type="checkbox" />  SG Child
+						<input class="checkbox" type="checkbox" />  Minority
+					</td>
+				</tr>
+			</table>	
+			</div>
+			<div style="width:20%;float:right;margin-top:1%">
+				<table style="width:100%;float:right;">
+					<tr>
+						<td><p:graphicImage   value="#{mainVar.student_image}" style="resize: none;width: 100px;"  rows="8" cols="15"></p:graphicImage></td>
+					</tr>
+				</table>
+			</div>		
+			<div style="width:98%;height:auto;margin:auto;font-size:15px">
+				<table style="width:100%">
+					<tr>
+						<td style="width:25%;">5.Any Medical history of Child :</td>
+						<td style="width:75%;">______________________________________________________________________________________</td>
+					</tr>
+					
+				</table>
+			</div>
+			<div style="width:98%;height:auto;margin:auto;font-size:15px">
+				<table style="width:100%">
+					<tr>
+						<td style="width:25%;">6. Address :</td>
+						<td style="width:25%;">#{mainVar.currentAddress}</td>
+					</tr>
+					<tr>
+						<td style="width:25%;">7. Nationality :</td>
+						<td style="width:25%;">#{mainVar.nationality}</td>
+						<td style="width:25%;">Blood Group :</td>
+						<td style="width:25%;">#{mainVar.bloodGroup}</td>
+					</tr>
+					<tr>
+						<td style="width:25%;">8. Residence Contact No:</td>
+						<td style="width:25%;"> #{mainVar.sendMessageMobileNo}</td>
+						<td style="width:25%;">Emergency Contact No:</td>
+						<td style="width:25%;">#{mainVar.fathersPhone}</td>
+					</tr>
+				</table>
+			</div>
+			<div style="width:98%;height:auto;margin:auto;font-size:15px">
+				<h3>9. Sibling Details (Brother /Sister) Studying in Northwood</h3>
+				<table style="width:100%;margin:auto">
+					<tr>
+						<td>a) Name :#{mainVar.sname1}</td>
+						<td>Class :#{mainVar.sclassid1}</td>
+					</tr>
+					<tr>
+						<td>b) Name :#{mainVar.sname2}</td>
+						<td>Class :#{mainVar.sclassid2}</td>
+					</tr>
+				</table>
+			</div>
+			<div style="width:98%;height:auto;margin:auto;font-size:15px">
+				<h3>B. PARENT’S DETAIL</h3>
+				<table style="width:100%;margin:auto">
+					<tr>
+						<td>1. Mother Name : #{mainVar.motherName}</td>
+						<td>Occupation :#{mainVar.motherOccupation}</td>
+					</tr>
+					<tr>
+						<td>2. Education : #{mainVar.motherQualification}</td>
+						<td>Contact No :#{mainVar.mothersPhone}</td>
+					</tr>
+					<tr>
+						<td>3. Father Name : #{mainVar.fathersName}</td>
+						<td>Occupation :#{mainVar.fathersOccupation}</td>
+					</tr>
+					<tr>
+						<td>4. Education : #{mainVar.fatherQualification}</td>
+						<td>Contact No :#{mainVar.fathersPhone}</td>
+					</tr>
+				</table>
+			</div>
+			<div style="width:98%;height:auto;margin:auto;font-size:15px">
+				<h3>C. OTHER  INFORMATION</h3>
+				<table style="width:100%;margin:auto">
+					<tr>
+						<td>School Transport : </td>
+						<td>
+							Yes <input class="checkbox" type="checkbox" />  / No
+							<input class="checkbox" type="checkbox" /> 
+						</td>
+						<td>|</td>
+						<td>Day Boarding upto 5 pm : </td>
+						<td>
+							Yes <input class="checkbox" type="checkbox" />  / No
+							<input class="checkbox" type="checkbox" /> 
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div style="width:98%;height:auto;margin:auto;font-size:15px">
+				<h3>D. DOCUMENT  DEPOSITED </h3>
+				<table style="width:100%;margin:auto">
+					<tr>
+						<td>
+							Birth Certificate <input class="checkbox" type="checkbox" />
+							/ T.C.<input class="checkbox" type="checkbox" /> 
+							/ PHOTO (4 NO’S)<input class="checkbox" type="checkbox" />
+							/ AADHAAR(4 NO’S)<input class="checkbox" type="checkbox" /> 
+							/ REPORT CARD<input class="checkbox" type="checkbox" />
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div style="width:98%;height:auto;margin:auto;font-size:15px">
+				<h3>E. SCHOOL DETAILS</h3>
+				<table style="width:100%;margin:auto">
+					<tr>
+						<td>1.  Last School Name : </td>
+						<td>#{mainVar.lastSchoolName}</td>
+						<td> C.B.S.E Affiliated :</td>
+						<td>
+							Yes <input class="checkbox" type="checkbox" />
+							/ No<input class="checkbox" type="checkbox" /> 
+						</td>
+					</tr>
+					<tr>
+						<td>2.  Result of Last Examination: </td>
+						<td>#{mainVar.pResult}</td>
+						<td>Percentage</td>
+						<td>#{mainVar.p_percent}</td>
+					</tr>
+					<tr>
+						<td>3.  Subjects proposed to offer   </td>
+						<td>(a)__________________</td>
+						<td></td>
+						<td>(b)__________________</td>
+					</tr>
+					<tr>
+						<td> </td>
+						<td>(c)__________________</td>
+						<td></td>
+						<td>(d)__________________</td>
+						<td></td>
+						<td>(e)__________________</td>
+					</tr>
+				</table>
+			</div>
+			
+			<p style="page-break-after: always"></p>
+		</ui:repeat>
+		
+	</h:form>
+</h:body>
+</f:view>
+</html>

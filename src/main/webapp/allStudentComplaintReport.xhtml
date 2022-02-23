@@ -1,0 +1,48 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Complaint Report</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form3" enctype="multipart/form-data">
+							<h1>Student Complaint Report</h1>
+							<p:messages closable="true" autoUpdate="true"></p:messages>
+							<p:panel header="Complaint Details">
+								<p:dataTable var="var" value="#{allStudentComplaintReport.list}"
+									rows="10" paginator="true" rowsPerPageTemplate="5,10,15">
+									<p:column headerText="Name">
+										<p:outputLabel value="#{var.studentName}"></p:outputLabel>
+									</p:column>
+									<p:column headerText="Class">
+										<p:outputLabel value="#{var.className}"></p:outputLabel>
+									</p:column>
+									<p:column headerText="Image">
+										<p:graphicImage url="#{var.imageName}" height="80px"
+											width="80px"></p:graphicImage>
+									</p:column>
+									<p:column headerText="Complaint">
+										<p:outputLabel value="#{var.description}"></p:outputLabel>
+									</p:column>
+									<p:column headerText="Complaint By">
+										<p:outputLabel value="#{var.teacherName}"></p:outputLabel>
+									</p:column>
+
+								</p:dataTable>
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

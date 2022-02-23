@@ -1,0 +1,292 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Dashboard </ui:define>
+ 
+     <ui:define name="head">
+        <script type="text/javascript">
+     
+        function skinPie() {
+            this.cfg.shadow = false;
+            this.cfg.title = '';
+            this.cfg.seriesColors = ['#337ab7', '#2ea59f', '#2d34a4', '#2ea563'];
+            this.cfg.grid = {
+                background: '#ffffff',
+                borderColor: '#ffffff',
+                gridLineColor: '#F5F5F5',
+                shadow: false
+            };
+            this.cfg.axesDefaults = {
+                rendererOptions: {
+                    textColor: '#292B2C',
+                }
+            };
+            this.cfg.seriesDefaults = {
+                renderer: $.jqplot.PieRenderer,
+                shadow: false,
+                lineWidth: 1,
+                markerOptions: {
+                    shadow: false,
+                    size: 7,
+                    style: 'circle'
+                }
+            }
+        
+
+        
+        }
+        </script>
+        <style type="text/css">
+            .jqplot-xaxis-label, .jqplot-yaxis-label, .jqplot-y2axis-label, .jqplot-x2axis-label {
+                color: #757575; 
+            }
+            
+            table.jqplot-table-legend {
+                background-color: #ffffff;
+                color: #757575;
+                border-color: #F5F5F5;
+            }
+        </style>
+    </ui:define>
+
+	<ui:define name="content">
+		
+		<div class="dashboard">
+			<h:form>
+				<div class="ui-g overview-boxes">
+
+					<div class="ui-g-12 ui-md-6 ui-lg-3">
+							<div class="ui-g overview-box overview-box-1">
+								<div class="overview-box-title">
+									<i class="fa fa-users" /> <span>Total Student</span>
+								</div>
+								<div class="overview-box-count">#{dashboardAccount.cunt}</div>
+								<div class="overview-box-stats"></div>
+							</div>
+					</div>
+
+					<div class="ui-g-12 ui-md-6 ui-lg-3">
+					<a href="dailyFeecolletionReport.xhtml">
+							<div class="ui-g overview-box overview-box-2">
+								<div class="overview-box-title">
+									<p:outputPanel rendered="#{sideMenuBean.list.country ne 'UAE'}">
+									<i class="fa fa-rupee" /> <span>Today's Collection</span>
+									</p:outputPanel>
+									
+									<p:outputPanel rendered="#{sideMenuBean.list.country eq 'UAE'}">
+									<span><em>AED</em></span> <span>Today's Collection</span>
+									</p:outputPanel>
+								</div>
+								<div class="overview-box-count">#{dashboardAccount.totalCollection}</div>
+								<div class="overview-box-stats"></div>
+							</div>
+							</a>
+					</div>
+
+					<div class="ui-g-12 ui-md-6 ui-lg-3">
+						<a href="dueFeeReport.xhtml">
+							<div class="ui-g overview-box overview-box-3">
+								<div class="overview-box-title">
+									<p:outputPanel rendered="#{sideMenuBean.list.country ne 'UAE'}">
+									<i class="fa fa-rupee" /> <span>Total Due Fees</span>
+									</p:outputPanel>
+									
+									<p:outputPanel rendered="#{sideMenuBean.list.country eq 'UAE'}">
+									<span><em>AED</em></span> <span>Total Due Fees</span>
+									</p:outputPanel>
+								</div>
+								<div class="overview-box-count">#{dashboardAccount.totalDuefees}</div>
+								<div class="overview-box-stats"></div>
+							</div>
+						</a>	
+					</div>
+
+					<div class="ui-g-12 ui-md-6 ui-lg-3">
+						<div class="ui-g overview-box overview-box-4">
+							<div class="overview-box-title">
+								<p:outputPanel rendered="#{sideMenuBean.list.country ne 'UAE'}">
+									<i class="fa fa-rupee" /> <span>Today's Expense</span>
+									</p:outputPanel>
+									
+									<p:outputPanel rendered="#{sideMenuBean.list.country eq 'UAE'}">
+									<span><em>AED</em></span> <span>Today's Expense</span>
+									</p:outputPanel>
+							</div>
+							<div class="overview-box-count">#{dashboardAccount.todaysExpense}</div>
+							<div class="overview-box-stats"></div>
+						</div>
+					</div>
+					
+					
+				</div>
+			</h:form>
+            
+            <p:outputPanel rendered="false">
+			<div class="ui-g" >
+				<div class="ui-g-12 ui-lg-12 chat">
+				<div class="card card-w-title">
+				<h1>Fee Collection</h1>
+						<h:form id="form1" rendered="false">
+					<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+
+							<p:panel header="Search Student by Name/Sr. No">
+								<p:commandLink
+									style="float: right;margin-left: 15px;color: blue;font-size:15px;"
+									immediate="true" value="Parent Wise Collection"
+									action="parentWiseFeeCollection.xhtml?faces-redirect=true"></p:commandLink>
+
+								<p:commandLink
+									style="float: right;margin-left: 15px;color: blue;font-size:15px;"
+									immediate="true" value="Old Student fee Collection"
+									action="oldStudentFeeCollection.xhtml?faces-redirect=true"></p:commandLink>
+
+
+								<p:messages closable="true" autoUpdate="true"></p:messages>
+
+								<p:panelGrid columns="3"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel  for="@next" style="color:red" value="Student Name/Sr. No/Father Name"></p:outputLabel>
+									<p:autoComplete value="#{feeCollection.name}"
+										completeMethod="#{feeCollection.autoCompleteStudentInfo}"
+										required="true" minQueryLength="3"
+										requiredMessage="#{feeCollectionVar.feeCollectionEnterStudentNameValidation}">
+										<p:ajax event="query" global="false"></p:ajax>
+									</p:autoComplete>
+
+
+									<p:commandButton value="Search" update=":form2"
+										action="#{feeCollection.searchStudentByName}"></p:commandButton>
+
+
+								</p:panelGrid>
+
+							</p:panel>
+							
+						</h:form>
+						<br/><br/>
+						<h:form  rendered="false">
+						<p:outputLabel value=""></p:outputLabel>
+							<p:panel header="Search Student by Class-Section">
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel  for="@next" style="color:red" value="Select Class"></p:outputLabel>
+									<p:selectOneMenu value="#{feeCollection.selectedClassSection}"
+										required="true"
+										requiredMessage="#{feeCollectionVar.feeCollectionSelectClassValidation}">
+										<f:selectItem itemLabel="Select Class" itemValue=""></f:selectItem>
+										<f:selectItems value="#{feeCollection.classSection}"></f:selectItems>
+
+										<p:ajax update="sectionid"
+											listener="#{feeCollection.allSections}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel  for="@next" style="color:red" value="Select Section"></p:outputLabel>
+									<p:selectOneMenu id="sectionid"
+										value="#{feeCollection.selectedSection}" required="true"
+										requiredMessage="Please select a section">
+										<f:selectItem itemLabel="Select Section" itemValue=""></f:selectItem>
+										<f:selectItems value="#{feeCollection.sectionList}"></f:selectItems>
+
+										<p:ajax update=":form2:up"
+											listener="#{feeCollection.searchStudentByClassSection}"></p:ajax>
+									</p:selectOneMenu>
+
+								</p:panelGrid>
+
+							</p:panel>
+
+						</h:form>
+						<br/><br/>
+ 						<h:form id="form2">
+
+							<p:panel header="Student Record">
+
+								<p:outputPanel id="up">
+
+									<p:dataTable reflow="true" rendered="#{feeCollection.show}"
+										var="var" value="#{feeCollection.studentList}" rows="20"
+										paginator="true" rowsPerPageTemplate="20,30,50">
+
+										<p:column
+											headerText="#{feeCollectionVar.feeCollectionHeaderAdmissionNumber}">
+											<p:outputLabel value="#{var.srNo}"></p:outputLabel>
+										</p:column>
+
+										<p:column sortBy="#{var.fname}" filterBy="#{var.fname}"
+											headerText="#{feeCollectionVar.feeCollectionHeaderFirstName}">
+											<p:outputLabel value="#{var.fname}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Father's Name">
+											<p:outputLabel value="#{var.fathersName}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Class">
+											<p:outputLabel value="#{var.className}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Section" rendered="false">
+											<p:outputLabel value="#{var.sectionName}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Pay">
+											<p:commandButton icon="ui-icon-check" update=":form2"
+												action="#{feeCollection.editNow}">
+												<f:setPropertyActionListener
+													target="#{feeCollection.selectedStudent}" value="#{var}"></f:setPropertyActionListener>
+											</p:commandButton>
+										</p:column>
+
+										<p:column rendered="false" headerText="Student Expense">
+											<p:commandButton icon="ui-icon-check" update=":form2"
+												action="#{feeCollection.studentExpen}">
+												<f:setPropertyActionListener
+													target="#{feeCollection.selectedStudent}" value="#{var}"></f:setPropertyActionListener>
+											</p:commandButton>
+										</p:column>
+
+
+									</p:dataTable>
+
+								</p:outputPanel>
+
+							</p:panel>
+
+							<p:dialog header="Previous Fee" widgetVar="previousFee"
+								modal="true" showEffect="explode" hideEffect="bounce">
+								<p:outputLabel value="#{feeCollection.dueFeesPrevious}"></p:outputLabel>
+								<div class="ui-g form-group">
+									<p:panelGrid columns="2"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+										<p:commandButton value="Clear"
+											action="#{feeCollection.clearAmount}"></p:commandButton>
+										<p:commandButton value="Not Clear" update=":form1 :form2"></p:commandButton>
+									</p:panelGrid>
+								</div>
+							</p:dialog>
+						</h:form>
+					
+				</div>
+				</div>
+
+
+			</div>
+			</p:outputPanel>
+
+		</div>
+
+
+
+	</ui:define>
+
+</ui:composition> 

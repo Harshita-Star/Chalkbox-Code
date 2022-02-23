@@ -1,0 +1,223 @@
+package Json;
+
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Serializable;
+import java.lang.reflect.Type;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.TreeMap;
+
+import javax.faces.bean.ManagedBean;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
+
+import org.json.JSONObject;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.paytm.pg.merchant.CheckSumServiceHelper;
+
+import schooldata.DataBaseConnection;
+import schooldata.DatabaseMethods1;
+import schooldata.PendingTranctionList;
+import schooldata.SchoolInfoList;
+
+@ManagedBean(name="AutoCollectionUpdateJson")
+public class AutoCollectionUpdateJson implements Serializable{
+
+	ArrayList<PendingTranctionList>list=new ArrayList<>();
+
+	String json="";
+	DataBaseMeathodJson DBJ=new DataBaseMeathodJson();
+	DatabaseMethods1 DBM=new DatabaseMethods1();
+	public AutoCollectionUpdateJson() 
+	{
+
+
+
+		
+		 // System.out.println("AUTOCOLLECTION JOB");
+
+		Connection conn=DataBaseConnection.javaConnection();
+		
+		list=new DatabaseMethods1().allPendingTranction(conn);
+		
+   
+		
+		
+		try {
+			conn.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		checkStatusForAll();
+	 	    
+   
+		
+	json="done";
+	
+	}
+	
+	
+	 public void  checkStatusForAll()
+	   {
+
+		   
+		   
+		   
+			Connection conn=DataBaseConnection.javaConnection();
+			
+			
+			
+			for(PendingTranctionList selectedTranction:list)
+			{
+				   SchoolInfoList ls=new DatabaseMethods1().fullSchoolInfo(selectedTranction.getSchoolId(), conn);
+				   
+
+					
+				   
+
+					TreeMap<String,String> paramMap = new TreeMap<>();
+					paramMap.put("ORDER_ID" ,selectedTranction.getOrderid());
+					paramMap.put("MID" , ls.getPaytm_mid());
+					
+				   /**
+				   * Generate checksum by parameters we have
+				   * You can get Checksum JAR from https://developer.paytm.com/docs/checksum/
+				   * Find your Merchant Key in your Paytm Dashboard at https://dashboard.paytm.com/next/apikeys 
+				   */
+				   String checksum = null;
+				try {
+					checksum = CheckSumServiceHelper.getCheckSumServiceHelper().genrateCheckSum(ls.getPaytm_marchent_key(), paramMap);
+				} catch (Exception e1) {
+					
+					e1.printStackTrace();
+				}
+
+				   /* put generated checksum value here */
+				   paramMap.put("CHECKSUMHASH", checksum);
+
+				   /* prepare JSON string for request */
+				   JSONObject obj = new JSONObject(paramMap);
+				   String post_data = obj.toString();
+
+				   /* for Staging */
+				   URL url = null;
+				try {
+					url = new URL("https://securegw.paytm.in/order/status");
+				} catch (MalformedURLException e) {
+					
+					e.printStackTrace();
+				}
+
+				   /* for Production */
+				   // URL url = new URL("https://securegw.paytm.in/order/status");
+
+				   try {
+				   	HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+				   	connection.setRequestMethod("POST");
+				   	connection.setRequestProperty("Content-Type", "application/json");
+				   	connection.setDoOutput(true);
+
+				   	DataOutputStream requestWriter = new DataOutputStream(connection.getOutputStream());
+				   	requestWriter.writeBytes(post_data);
+				   	requestWriter.close();
+				   	String responseData = "";
+				   	InputStream is = connection.getInputStream();
+				   	BufferedReader responseReader = new BufferedReader(new InputStreamReader(is));
+				   	if ((responseData = responseReader.readLine()) != null) {
+				   		
+				   		String json="["+responseData+"]";
+				   	 Type type = new TypeToken<java.util.List<PendingTranctionList>>(){}.getType();
+					    ArrayList<PendingTranctionList> list = new Gson().fromJson(json, type);
+					    
+					    
+					
+					    String addmissionNumber=selectedTranction.getAddNumber();
+						String schoolid=selectedTranction.getSchoolId();
+						String orderid=selectedTranction.getOrderid();
+						String num="";
+						
+						
+						
+						
+						String status="";
+						if(list.get(0).getSTATUS().equalsIgnoreCase("TXN_SUCCESS"))
+						{
+							int number = new DatabaseMethods1().feeserailno(schoolid,conn);
+							if (String.valueOf(number).length() == 1) {
+								num = "0000" + String.valueOf(number);
+							} else if (String.valueOf(number).length() == 2) {
+								num = "000" + String.valueOf(number);
+							} else if (String.valueOf(number).length() == 3) {
+								num = "00" + String.valueOf(number);
+							} else if (String.valueOf(number).length() == 4) {
+								num = "0" + String.valueOf(number);
+							} else if (String.valueOf(number).length() == 5) {
+								num = String.valueOf(number);
+							}
+							status="ACTIVE";
+						}
+						else
+						{
+							status=list.get(0).getSTATUS();
+						}
+
+						int check=new DataBaseMeathodJson().updateFeeStatus(addmissionNumber,schoolid,orderid,num,status,conn);
+						if(status.equalsIgnoreCase("ACTIVE"))
+						{
+							String modArr[]=new String[0];
+							int totalAmt = DBJ.feeAmountByOrderid(schoolid,orderid,"ACTIVE",conn);
+							DBM.blockStudentAppMods(addmissionNumber,"Fees Block",modArr,schoolid,totalAmt,"","auto",conn);
+						}
+					    
+				   	}
+				   	
+				   
+				   	responseReader.close();
+				   	} catch (Exception exception) {
+				   	exception.printStackTrace();
+				   }
+				   
+				   
+			}
+
+			
+		     list=new DatabaseMethods1().allPendingTranction(conn);
+
+				   try {
+						conn.close();
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+				   
+					
+	   }
+	
+	
+	  public void renderJson() throws IOException
+		{
+			FacesContext facesContext = FacesContext.getCurrentInstance();
+			ExternalContext externalContext = facesContext.getExternalContext();
+			externalContext.setResponseContentType("application/json");
+			externalContext.setResponseCharacterEncoding("UTF-8");
+			externalContext.getResponseOutputWriter().write(json);
+			facesContext.responseComplete();
+		}
+		public String getJson() {
+			return json;
+		}
+		public void setJson(String json) {
+			this.json = json;
+		}
+	
+}

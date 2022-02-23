@@ -1,0 +1,272 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	 template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Previous Fee</ui:define>
+
+	<ui:define name="content">
+	
+		<style>
+.ui-datatable-scrollable .ui-datatable-scrollable-header, .ui-datatable-scrollable .ui-datatable-scrollable-footer{
+	position:sticky !important;
+	top:60px !important;
+	z-index:9 !important;
+}
+body .ui-datatable thead th,
+body .ui-datatable tbody td {
+	width:var(--w) !important;
+}
+</style>
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+				<div class="card card-w-title">
+						<h:form id="form2">
+							<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+							<p:panel>
+								<f:facet name="header">
+									<span>Search Student by Name/Sr.No.</span>
+								</f:facet>
+								<p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel value="Student Name/Sr. No"></p:outputLabel>
+									<p:autoComplete id="acSimple" value="#{preFeeReport.name}"
+										minQueryLength="3"
+										completeMethod="#{preFeeReport.autoCompleteStudentInfo}" validatorMessage="Please Enter Correct value">
+										<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+										<p:ajax event="query" global="false" />
+									</p:autoComplete>
+
+									<p:commandButton value="Search" update=":form1" styleClass="butwid" icon = "fa fa-search"
+									
+										actionListener="#{preFeeReport.searchStudentByName}"></p:commandButton>
+
+								</p:panelGrid>
+
+							</p:panel>
+						</h:form>
+					</div>
+					
+					<div class="card card-w-title">
+						<h:form id="form3">
+
+							<p:panel header="Search Student by Class-Section">
+
+								<p:panelGrid columns="5" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel  for="@next" style="color:red" value="Select Class"></p:outputLabel>
+									<p:selectOneMenu style="width:250px"
+										value="#{preFeeReport.selectedCLassSection}" required="true"
+										requiredMessage="Please select a class">
+										<f:selectItem itemLabel="#{searchStudentVar.selectHereLabel}"
+											itemValue=""></f:selectItem>
+											<f:selectItem itemLabel="All"
+											itemValue="-1"></f:selectItem>
+										<f:selectItems value="#{preFeeReport.classSection}"></f:selectItems>
+
+										<p:ajax update="sectionid"
+											listener="#{preFeeReport.allSections}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel  for="@next" style="color:red" value="Select Section"></p:outputLabel>
+									<p:selectOneMenu id="sectionid"
+										value="#{preFeeReport.selectedSection}" required="true"
+										requiredMessage="Please select a section">
+										<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+										<f:selectItem itemLabel="All"
+											itemValue="-1"></f:selectItem>
+										<f:selectItems value="#{preFeeReport.sectionList}"></f:selectItems>
+										
+									</p:selectOneMenu>
+									
+									<p:commandButton styleClass="butwid" icon = "fa fa-search" value="Search" action="#{preFeeReport.searchStudentByClassSection}" update=":form1"/>
+
+								</p:panelGrid>
+
+							</p:panel>
+
+						</h:form>
+						</div>
+				
+					<div class="card card-w-title">
+						<h:form id="form1">
+							<p:outputPanel rendered="#{preFeeReport.show}">
+							<p:commandButton styleClass="butwid" icon = "fa fa-print" value="Print"
+								rendered="#{preFeeReport.b}">
+								<p:printer target="dataTable"></p:printer>
+							</p:commandButton>
+							
+							     <p:commandButton value="PDF" styleClass="butwid" icon = "fa fa-file-pdf-o" ajax="false" process="@this" actionListener="#{preFeeReport.exportPreviousPdf}"> 
+                    
+                                    <p:fileDownload value="#{preFeeReport.file}"/>
+                                </p:commandButton>
+                                
+                                   <h:commandLink >
+                                        <p:graphicImage name="images/excellogo.png"
+                                            library="avalon-layout" width="100" height="40"></p:graphicImage>
+                                        <pe:exporter type="xlsx" target="table"
+                                            fileName="Previous_Fee_Collection.xlsx" ></pe:exporter>
+                                    </h:commandLink>
+							
+							<p:outputPanel id="dataTable">
+								<center>
+									<p
+										style="font-family: initial; font-style: oblique; font-size: 25px !important; font-weight: bold; margin: 0px;">#{headerBean.name}</p>
+									<p
+										style="font-family: initial; font-style: oblique; font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.affiliationNo}</p>
+									<p
+										style="font-family: initial; font-style: oblique; font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.finalAddress}</p>
+									<p
+										style="font-family: initial; font-style: oblique; font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.phoneno}</p>
+
+								</center>
+								<p:panelGrid columns="3" style="width:100%">
+
+									<p:panelGrid columns="2">
+										<p:outputLabel value="Total:-"></p:outputLabel>
+										<h:outputText value="#{preFeeReport.total}"></h:outputText>
+									</p:panelGrid>
+								</p:panelGrid>
+
+								<p:dataTable id="table" reflow="true" scrollable="true" scrollWidth="100%"
+									style="border-collapse:collapse;text-align: center;" border="1"
+									value="#{preFeeReport.studentList}" var="var">
+									
+									<f:facet name="header">
+											<p:outputLabel value="                                                                                                                               Previous Fee Repor"></p:outputLabel>
+										</f:facet>
+
+									<p:column headerText="Add. No.">
+
+										<f:facet name="header">
+											<p:outputLabel value="Sr. No."></p:outputLabel>
+										</f:facet>
+										
+											<p:outputLabel value="#{var.sno}"></p:outputLabel>
+										
+									</p:column>
+
+									<p:column headerText="Admission Number">
+										<f:facet name="header">
+											<p:outputLabel value="Adm. No."></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.srNo}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Name" sortBy="#{var.fname}">
+										<f:facet name="header">
+											<p:outputLabel value="Name"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.fname}"></p:outputLabel>
+									</p:column>
+									
+									<p:column headerText="Class &amp; Section">
+										<f:facet name="header">
+											<p:outputLabel value="Class &amp; Section"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.className} - #{var.sectionName}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Father's Name">
+										<f:facet name="header">
+											<p:outputLabel value="Father's Name"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.fatherName}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Contact Number">
+										<f:facet name="header">
+											<p:outputLabel value="Contact Number"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.fathersPhone}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Date of promotion">
+										<f:facet name="header">
+											<p:outputLabel value="Date of promotion"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.promotedDateStr}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Total Fees">
+										<f:facet name="header">
+											<p:outputLabel value="Total Fees (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.admissionFeeDueAmount}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Paid Amount">
+										<f:facet name="header">
+											<p:outputLabel value="Paid Amount (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.percentage}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Left Amount">
+										<f:facet name="header">
+											<p:outputLabel value="Left Amount (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.annualFeeDueAmount}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Edit" exportable="false">
+										<f:facet name="header">
+											<p:outputLabel value="Edit"></p:outputLabel>
+										</f:facet>
+										<p:commandButton disabled="#{var.showActive}"
+											update=":editForm" icon="ui-icon-pencil"
+											oncomplete="PF('editDialog').show()"
+											action="#{preFeeReport.editDetails}">
+											<f:setPropertyActionListener
+												target="#{preFeeReport.selectedStudent}" value="#{var}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+
+
+
+								</p:dataTable>
+							</p:outputPanel>
+							</p:outputPanel>
+						</h:form>
+
+						<h:form id="editForm">
+							<p:dialog modal="true" widgetVar="editDialog" header="Update Fee"
+								resizable="false" closable="true">
+								<div class="ui-g form-group">
+									<p:panelGrid columns="3"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+										<p:outputLabel value="Fee"></p:outputLabel>
+										<p:inputText onfocus="this.select();"
+											value="#{preFeeReport.fees}">
+											<p:keyFilter mask="pnum"></p:keyFilter>
+										</p:inputText>
+										<p:commandButton value="Update" update=":editForm,:form1"
+											actionListener="#{preFeeReport.updateFeeDetails}"></p:commandButton>
+									</p:panelGrid>
+								</div>
+							</p:dialog>
+						</h:form>
+
+
+						<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+							<p:commandButton value="Yes" type="button"
+								styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+							<p:commandButton value="No" type="button"
+								styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+						</p:confirmDialog>
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,119 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Gender Wise Student Report</ui:define>
+
+	<ui:define name="content">
+	
+		
+	<style>
+.ui-datatable .ui-datatable-scrollable-body,
+	.ui-datatable-scrollable-header, .ui-datatable-footer, .ui-datatable-header {
+	width: 100% !important;
+}
+body .ui-datatable thead th,
+body .ui-datatable tbody td {
+	width:var(--w) !important;
+}
+body .ui-paginator.ui-paginator-top{
+position:sticky !important;
+	top:98px !important;
+	width: 100% !important;
+}
+body .ui-datatable  .ui-datatable-header{
+	position:sticky !important;
+	top:60px !important;
+	width: 100% !important;
+}
+
+.ui-datatable-scrollable .ui-datatable-scrollable-header, .ui-datatable-scrollable .ui-datatable-scrollable-footer{
+	position:sticky !important;
+	top:152px !important;
+}
+</style>
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form enctype="multipart/form-data" id="form1">
+							<h1>Gender Wise Student Report</h1>
+							<p:panel id="myPanel">
+
+								<p:panelGrid columns="3">
+								<p:commandButton value="Print" styleClass="butwid" icon="fa fa-print">
+									<p:printer target=":form1:myPanel"></p:printer>
+								</p:commandButton>
+									<h:commandLink>
+										<p:graphicImage name="images/excellogo.png"
+											library="avalon-layout" width="100" height="40"></p:graphicImage>
+										<pe:exporter type="xlsx" target=":form1:attend"
+											fileName="gender_wise_strength"></pe:exporter>
+									</h:commandLink>
+
+									<p:commandButton value="PDF"  ajax="false" styleClass="butwid" icon="fa fa-file-pdf-o"
+										process="@this"
+										actionListener="#{genderWiseStrengthReport.exportGenderPdf}">
+
+										<p:fileDownload value="#{genderWiseStrengthReport.file}" />
+									</p:commandButton>
+								</p:panelGrid>
+
+								<p:dataTable scrollable="true" scrollWidth="100%" reflow="true" id="attend"
+									var="var" value="#{genderWiseStrengthReport.studentList}"
+									paginator="true">
+
+									<f:facet name="header">
+									
+									<p:outputLabel style="margin:0px;font-size: 15px !important;font-weight:bold;" value="Gender Wise Strength"></p:outputLabel>
+
+									</f:facet>
+
+
+
+									<p:columnGroup type="header">
+
+										<p:row>
+											<p:column headerText="Class"></p:column>
+											<p:column headerText="Boys"></p:column>
+											<p:column headerText="Girls"></p:column>
+											<p:column headerText="Transgender"></p:column>
+											<p:column headerText="Grand Total"></p:column>
+										</p:row>
+
+									</p:columnGroup>
+
+									<p:column>
+										<p:outputLabel value="#{var.className}"></p:outputLabel>
+
+									</p:column>
+
+									<p:columns value="#{genderWiseStrengthReport.columnsList}"
+										var="ll">
+										<p:outputLabel value="#{var.attendanceMap[ll]}"
+											style="text-align:center" />
+									</p:columns>
+
+									<p:column headerText="grand Total">
+										<p:outputLabel value="#{var.grandTotalBoysAndGirls}"></p:outputLabel>
+
+									</p:column>
+								</p:dataTable>
+							</p:panel>
+
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,117 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+	<f:loadBundle var="addClassVar" basename="myProperties" />
+	<ui:define name="title">Fill Lesson Plan</ui:define>
+
+	<ui:define name="content">
+
+		<script>
+			function sundayDisabled(date) {
+				var day = date.getDay();
+				return [ (day != 0), '' ]
+			}
+		</script>
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form" enctype="multipart/form-data">
+							<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+							<p:panel id="pnl" header="Fill Lesson Plan">
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel value="Date" for="@next" style="color:red"></p:outputLabel>
+									<p:calendar maxdate="#{fillLecPlan.maxDate}" effect="fold"
+										value="#{fillLecPlan.startDate}" pattern="dd/MM/yyyy"
+										navigator="true" yearRange="c-30:c+30" required="true"
+										requiredMessage="Please Select Date.">
+									</p:calendar>
+
+									<p:outputLabel value="Class" for="@next" style="color:red"></p:outputLabel>
+									<p:selectOneMenu value="#{fillLecPlan.selectedClass}"
+										required="true" filter="true"
+										requiredMessage="Please Select A Class">
+										<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+										<f:selectItems value="#{fillLecPlan.classList}"></f:selectItems>
+										<p:ajax update="showSection"
+											listener="#{fillLecPlan.allSection}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Section" for="@next" style="color:red"></p:outputLabel>
+									<p:selectOneMenu id="showSection" filter="true"
+										value="#{fillLecPlan.selectedSection}" required="true"
+										requiredMessage="Please Select A Section">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{fillLecPlan.sectionList}"></f:selectItems>
+										<p:ajax listener="#{fillLecPlan.allSubjects}"
+											update="subjectId"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Subject : " for="@next" style="color:red"></p:outputLabel>
+									<p:selectOneMenu id="subjectId" filter="true"
+										value="#{fillLecPlan.subject}" required="true"
+										requiredMessage="Please select subject.">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{fillLecPlan.subjectList}"></f:selectItems>
+										<p:ajax listener="#{fillLecPlan.searchData}" update=":form"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Lecture No." for="@next"
+										style="color:red"></p:outputLabel>
+									<p:selectOneMenu id="lecNo" value="#{fillLecPlan.lectureNo}"
+										required="true" requiredMessage="Please Select Lecture No">
+										<f:selectItem itemLabel="Select Lecture No" itemValue=""></f:selectItem>
+										<f:selectItems value="#{fillLecPlan.lectureList}"></f:selectItems>
+										<p:ajax listener="#{fillLecPlan.checkSubDes}"
+											event="itemSelect" update="lecNo,uno,des,lessonName"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Lesson No." for="@next" style="color:red"></p:outputLabel>
+									<p:selectOneMenu id="uno" value="#{fillLecPlan.lessonNo}"
+										required="true" requiredMessage="Please Select Lesson No">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{fillLecPlan.lessonNoList}"></f:selectItems>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Lesson Name " for="@next"
+										style="color:red"></p:outputLabel>
+									<p:selectOneMenu id="lessonName"
+										value="#{fillLecPlan.lessonName}" required="true"
+										requiredMessage="Please Select Lesson Name">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{fillLecPlan.lessonNameList}"></f:selectItems>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Description " for="@next"
+										style="color:red"></p:outputLabel>
+									<p:column headerText="Description" style="width:230px;"
+										required="true" requiredMessage="Please Enter Description">
+										<p:inputTextarea id="des" rows="3" cols="50"
+											autoResize="false" value="#{fillLecPlan.description}"></p:inputTextarea>
+									</p:column>
+
+									<p:outputLabel value="Upload Image / Video / Document"></p:outputLabel>
+									<p:fileUpload value="#{fillLecPlan.imageFile}" mode="simple"
+										allowTypes="/(\.|\/)(gif|jpg|jpeg|png|xls|xlsx|doc|docx|txt|pdf|mp4|avi|flv)$/" />
+
+									<p:commandButton value="Submit Lesson Plan" update=":form"
+										ajax="false" action="#{fillLecPlan.submitLecturePlan}">
+									</p:commandButton>
+								</p:panelGrid>
+							</p:panel>
+						</h:form>
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

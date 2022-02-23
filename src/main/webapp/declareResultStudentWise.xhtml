@@ -1,0 +1,139 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Declare Result StudentWise</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<p:panel>
+								<f:facet name="header">
+									<span>Declare Result StudentWise</span>
+								
+								</f:facet>
+
+								<p:messages closable="true" autoUpdate="true"></p:messages>
+
+								<p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+									<p:outputLabel value="Select Class" for="@next" style="color:red" ></p:outputLabel>
+									<p:selectOneMenu required="true" filter="true" requiredMessage="Please select a class" value="#{declareResultStudentWIse.selectedClass}">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{declareResultStudentWIse.classList}"></f:selectItems>
+										<p:ajax update=":form" listener="#{declareResultStudentWIse.allTerm}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Select Section" for="@next" style="color:red" ></p:outputLabel>
+									<p:selectOneMenu id="showSection"  filter="true" value="#{declareResultStudentWIse.selectedSection}" required="true" requiredMessage="Please select a section">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										
+									
+										<f:selectItems value="#{declareResultStudentWIse.sectionList}"></f:selectItems>
+										<p:ajax></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Select Term" for="@next" style="color:red" ></p:outputLabel>
+									<p:selectOneMenu required="true"  filter="true" requiredMessage="Please select a term" id="showTerm" value="#{declareResultStudentWIse.selectedTerm}">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{declareResultStudentWIse.termList}"></f:selectItems>
+										<p:ajax></p:ajax>
+									</p:selectOneMenu>
+									
+									<p:outputLabel value="Select Subject Type" for="@next" style="color:red" ></p:outputLabel>
+									<p:selectOneMenu value="#{declareResultStudentWIse.selectedType}" filter="true"
+										required="true" requiredMessage="Please Select Type Of Area">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{declareResultStudentWIse.subjectTypeList}"></f:selectItems>
+										<p:ajax update=":form" listener="#{declareResultStudentWIse.allExamType}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel   value="Select Exam type" for="@next" style="color:red" ></p:outputLabel>
+									<p:selectOneMenu filter="true" required="true" requiredMessage="Please select exam type" value="#{declareResultStudentWIse.selectedExam}">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{declareResultStudentWIse.examList}"></f:selectItems>
+									</p:selectOneMenu>
+								</p:panelGrid>
+								
+								<br />
+								<p:separator />
+								<center>
+									<p:commandButton value="Search" styleClass="butwid" icon="fa fa-search" actionListener="#{declareResultStudentWIse.studentDetail}" update=":form,:form1" />
+								</center>
+								<p:separator />
+								<br />
+							</p:panel>
+						</h:form>
+						<br/>
+						<h:form id="form1">
+							<p:panel header="Student List">
+									<p:dataTable reflow="true" id="table" rowIndexVar="index" rendered="#{declareResultStudentWIse.showTable}" value="#{declareResultStudentWIse.studentDetails}" var="var" selection="#{declareResultStudentWIse.selectedStudent}" rowKey="#{var.addNumber}" rowSelectMode="checkbox">
+									
+										<p:column selectionMode="multiple" style="width:60px;"></p:column>
+									
+										<p:column headerText="S.No">
+											<f:facet name="header">
+											   <p:outputLabel value="S.No"></p:outputLabel>
+											 </f:facet>
+												<p:outputLabel value="#{index+1}"></p:outputLabel>
+										</p:column>
+										
+										<p:column headerText="Sr. No" sortBy="#{var.srNo}">
+										<f:facet name="header">
+										    <p:outputLabel value="Sr. No."></p:outputLabel>
+										</f:facet>
+											<p:outputLabel value="#{var.srNo}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Add. Number">
+										   <f:facet name="header">
+										    <p:outputLabel value="Add. Number"></p:outputLabel>
+										    
+										   </f:facet>
+										 
+											<p:outputLabel value="#{var.addNumber}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Student Name" sortBy="#{var.studentName}">
+										
+										<f:facet name="header">
+										    <p:outputLabel value="Student Name"></p:outputLabel>
+										    
+										   </f:facet>
+											<p:outputLabel value="#{var.studentName}"></p:outputLabel>
+										</p:column>
+
+
+										<p:column headerText="Father Name" sortBy="#{var.fatherName}">
+										
+										<f:facet name="header">
+										    <p:outputLabel value="Father Name"></p:outputLabel>
+										    
+										   </f:facet>
+											<p:outputLabel value="#{var.fatherName}"></p:outputLabel>
+										</p:column>
+
+										<f:facet name="footer">
+										<center>
+										<p:commandButton update=":form,:form1" styleClass="butwid" icon="fa fa-check-circle"  value="Declare Result" action="#{declareResultStudentWIse.declare}"></p:commandButton>
+										</center>
+										</f:facet>
+									</p:dataTable>
+								</p:panel>
+							</h:form>
+						
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

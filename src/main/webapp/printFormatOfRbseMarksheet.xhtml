@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	
+<f:view contentType="text/html">
+	<h:head>
+		<title>Achievement Record</title>
+		<f:facet name="First">
+			<meta content='text/html; charset=UTF-8' http-equiv="Content-Type" />
+			<meta http-equiv="X-UA-Compatible" content="EmulateIE8" />
+		<title>MainPage</title>
+		</f:facet>
+		<script>
+			function printwin() 
+			{
+				document.getElementById('test').style.display="none";	
+				window.print();
+				document.getElementById('test').style.display="block";
+				document.URL="";
+			}
+		</script>
+	</h:head>
+		
+		
+
+	<h:body>
+		<style>
+			.ui-panelgrid .ui-panelgrid-cell {
+			    border-width: 1px;
+			    border-style: solid;
+			    border-color: inherit;
+			    padding: 4px 12px;
+			    width: 153px;
+			    height:10px;
+			}
+			.ab tr,.ab td{
+			border-color: white;
+			}
+			.abc tr,.abc td{
+			border-color: white;
+			}
+			.pr tr,.pr td{
+			border-color: white;
+			}
+			.ps tr,.ps td{
+			border-color: white;
+			}
+			.pd tr,.pd td{
+			border-color: white;
+			}
+			
+			.test .ui-widget-content 
+			{
+				font-size:9px;
+			}
+			
+			.test2 .ui-widget-header
+			{
+				font-size:9px;
+			}
+
+		</style>
+
+		<p:panelGrid columns="2"  id="test">
+		
+			<p:commandButton value="Back"  rendered="false" action="rbscModule.xhtml" styleClass="back_button" style="float:right;margin-right:80px"></p:commandButton>
+			<p:commandButton value="Print"  onclick="printwin();"></p:commandButton>
+		</p:panelGrid>
+
+		<h:form id="form1">
+		<ui:repeat var="mainVar" value="#{printFinalMarksheet11.listOfStudent}">
+		<p:outputPanel styleClass="test" style="width:100%;marginf-left:40px;">
+			
+				<div style="width:100%;height:100%;" >
+					<table style="width: 90%;border-collapse :collapse;float: left" border="1">
+						<tr>
+							<td><center>Department Of Education,Rajasthan</center></td>
+						</tr>
+						<tr>
+							<td><center>#{headerBean.name}</center></td>
+						</tr>
+						<tr>
+							<td><center><p:outputLabel style="font-size:15px " value="#{headerBean.address1}"></p:outputLabel></center></td>
+						</tr>
+					</table>
+					<table style="width: 10%;border-collapse :collapse;" border="1">
+						<tr>
+							<td><p:graphicImage value="#{headerBean.logo}" height="47px" width="50px"></p:graphicImage></td> 
+						</tr>
+					</table>
+				</div>
+				<div style="width:100%;height:100%;" >
+					<table style="width: 70%;border-collapse :collapse; float: left;font-size: 12px" border="1">
+						<tr>
+							<td>PROGRESS REPORT</td>
+							<td> #{mainVar.session}</td>
+							<td>MAIN EXAMINATION</td>
+						</tr>
+						<tr>
+							<td>NAME OF THE STUDENT</td>
+							<td>#{mainVar.fname}</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>FATHER'S NAME</td>
+							<td>#{mainVar.fathersName}</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>MOTHER'S NAME</td>
+							<td>#{mainVar.motherName}</td>
+							<td></td>
+						</tr>
+					</table>
+					<table style="width: 30%;border-collapse :collapse;font-size:12px" border="1">
+						<tr>
+							<td>CLASS AND SEC.</td>
+							<td>#{mainVar.className}</td>
+						</tr>
+						<tr>
+							<td>ROLL NO.</td>
+							<td>#{mainVar.rollNo}</td>
+						</tr>
+						<tr>
+							<td>S.R. NO.</td>
+							<td>#{mainVar.addNumber}</td>
+						</tr>
+						<tr>
+							<td>Date Of Birth</td>
+							<td>#{mainVar.dobString}</td>
+						</tr>
+					</table>
+				</div>
+			</p:outputPanel>  
+			<p:dataTable style="width:100%;border-collapse:collapse;font-size:12px;" border="1" value="#{mainVar.markList}" var="var">
+				<p:columnGroup type="header">
+		            <p:row>
+		                 <p:column rowspan="3" headerText="SUBJECT" />
+		                 <ui:repeat value="#{mainVar.examList}" var="exam">
+	                    	<p:column colspan="#{exam.subExamList.size()*2}" headerText="#{exam.examName}" />
+	               	 	 </ui:repeat>
+		            </p:row>
+		            <p:row>
+		            
+		            	<ui:repeat value="#{mainVar.examList}" var="exam">
+			                <ui:repeat value="#{exam.subExamList}" var="subExam">
+			                    <p:column colspan="2" headerText="#{subExam.subExamUpperCase}"/>
+			                </ui:repeat>
+		                </ui:repeat>
+		            </p:row>
+		            <p:row>
+		           
+		            	<ui:repeat value="#{mainVar.examList}" var="exam">
+			            	<ui:repeat value="#{exam.subExamList}" var="subExam">
+		                   		<p:column headerText="TOTAL MARKS"/>
+		                    	<p:column headerText="MARKS OBTAINED"/>
+		                    </ui:repeat>
+	                    </ui:repeat>
+		            </p:row>
+		        </p:columnGroup>
+	        
+		        <p:column>
+	            	<p:outputLabel value="#{var.subjectName}"></p:outputLabel>
+	            </p:column>
+	            
+	            <p:columns value="#{mainVar.scholasticColumnsList}" var="ll">
+	            	<p:outputLabel value="#{var.marksMap[ll]}" />
+	            </p:columns>
+         	</p:dataTable>  
+         	<table  border="1" cellpadding="5" cellspacing="0" style="width:100%;height:100%;"   >
+				<tr>
+	
+
+<td style="width:12.5%;font-size:12px;">DIVISION :  #{mainVar.division}</td>
+<td style="width:12.5%;font-size:12px;font-weight:bold;text-align:center;" colspan="6" >STUDENT ATTENDENCE :  #{mainVar.totalAttendence} / TOTAL MEETINGS :  #{mainVar.overallAttendence}</td>
+<td style="width:12.5%;font-size:12px;">RESULT :  #{mainVar.result} </td>
+<td style="width:12.5%;font-size:12px;"  rowspan="5" >SIGN OF THE HEAD OF THE INST. </td>
+
+</tr>
+<tr>
+<td style="width:12.5%;font-size:12px;">RANK : </td>
+<td style="width:12.5%;font-size:12px;" colspan="5" ></td>
+<td style="width:12.5%;font-size:12px;">SIGNATURE OF THE CLASS TEACHER :</td>
+<td style="width:12.5%;font-size:12px;" > </td>
+</tr>
+
+<tr>
+<td style="width:12.5%;font-size:12px;">SIGNATURE OF THE CLASS TEACHER :</td>
+<td style="width:12.5%;font-size:12px;" colspan="5" > </td>
+<td style="width:12.5%;font-size:12px;">SIGNATURE OF THE CHECKER :</td>
+<td style="width:12.5%;font-size:12px;"  > </td>
+</tr>
+<tr>
+<td style="width:12.5%;font-size:12px;">SIGNATURE OF THE CHECKER :</td>
+<td style="width:12.5%;font-size:12px;" colspan="5" > </td>
+<td style="width:12.5%;font-size:12px;">SIGNATURE OF THE EXAM. INCHARGE :</td>
+<td style="width:12.5%;font-size:12px;"  > </td>
+</tr>
+
+<tr>
+<td style="width:12.5%;font-size:12px;">SIGNATURE OF THE EXAM. INCHARGE :</td>
+<td style="width:12.5%;font-size:12px;" colspan="5" > </td>
+<td style="width:12.5%;font-size:12px;">DATE OF THE RESULT DECLARTION </td>
+<td style="width:12.5%;font-size:12px;"  > #{mainVar.resultDeclarationDate}</td>
+</tr>
+
+
+</table>   
+<br></br>
+<br></br><br></br>
+</ui:repeat>
+		</h:form>
+</h:body>
+</f:view>
+</html>

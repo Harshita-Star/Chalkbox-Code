@@ -1,0 +1,205 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/studentTemplate.xhtml">
+
+	<ui:define name="title">E-Learning</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form2" enctype="multipart/form-data">
+					<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+							<p:panel header="Assignment List">
+								<p:dataTable value="#{studentElerningBean.list}" var="var"
+									reflow="true">
+
+
+									<p:column headerText="Subject Name">
+										<p:outputLabel value="#{var.ass3}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Section" filterBy="#{var.sectionName}"
+										filterMatchMode="contains">
+										<p:outputLabel value="#{var.sectionName}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Topic">
+										<p:outputLabel value="#{var.title}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Description">
+										<p:outputLabel value="#{var.description}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Date">
+										<p:outputLabel value="#{var.date}"></p:outputLabel>
+									</p:column>
+                                       
+                                       
+                                       <p:column headerText="Attachment">
+                                       <center>
+                                        <p:commandButton value="Attachment" action="#{studentElerningBean.attachment}" update=":attchmentForm"
+											oncomplete="PF('attchmentDialog').show();" styleClass="butwid" icon="fa fa-paperclip">
+                                             <f:setPropertyActionListener value="#{var}" target="#{studentElerningBean.selectedInfo}"></f:setPropertyActionListener>
+                                         </p:commandButton>
+                                       </center>
+                                       </p:column>
+                                  
+                                   
+                                   <p:column headerText="Assignment Submit">
+                                   <center>
+                                    <p:commandButton value="Assignment"  action="#{studentElerningBean.check}" update=":editForm :assigmentForm" styleClass="butwid" icon="fa fa-book">
+								             <f:setPropertyActionListener value="#{var}" target="#{studentElerningBean.selectedInfo}"></f:setPropertyActionListener>
+                                       </p:commandButton>
+                                   </center>
+									</p:column>
+
+
+		
+								</p:dataTable>
+								
+						</p:panel>
+							
+						</h:form>
+                      
+                      
+                      <h:form id="editForm" enctype="multipart/form-data">
+							<p:dialog resizable="false" widgetVar="editDialog" height="500"
+								width="500"
+								header="Edit Details (Allowed file type are :- Image,Document)" showEffect="fade" hideEffect="explode"
+								modal="true">
+								<div class="ui-g form-group">
+									<p:panelGrid columns="4"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+										
+										
+										<p:outputLabel value="Description:"></p:outputLabel>
+										<p:inputTextarea value="#{studentElerningBean.desc}"
+											rows="3" maxlength="500" cols="20"></p:inputTextarea>
+
+
+										<p:outputLabel value="Choose File1(File) :"></p:outputLabel>
+										<p:fileUpload mode="simple" skinSimple="true"
+											value="#{studentElerningBean.assignmentPhoto1}"></p:fileUpload>
+
+											<p:outputLabel value="Choose File2(File) :"></p:outputLabel>
+										<p:fileUpload mode="simple" skinSimple="true"
+											value="#{studentElerningBean.assignmentPhoto3}"></p:fileUpload>
+										
+											<p:outputLabel value="Choose File3(File) :"></p:outputLabel>
+										<p:fileUpload mode="simple" skinSimple="true"
+											value="#{studentElerningBean.assignmentPhoto4}"></p:fileUpload>
+										
+											<p:outputLabel value="Choose File4(File) :"></p:outputLabel>
+										<p:fileUpload mode="simple" skinSimple="true"
+											value="#{studentElerningBean.assignmentPhoto5}"></p:fileUpload>
+										
+											<p:outputLabel value="Choose File5(File) :"></p:outputLabel>
+										<p:fileUpload mode="simple" skinSimple="true"
+											value="#{studentElerningBean.assignmentPhoto6}"></p:fileUpload>
+											
+									</p:panelGrid>
+								</div>
+								<br />
+								<p:separator />
+								<center>
+									<p:commandButton value="Update" ajax="false" styleClass="butwid" icon="fa fa-upload"
+											update=":form2 :editForm"
+											action="#{studentElerningBean.addAssignemnt}"></p:commandButton>
+								</center>
+								<p:separator />
+								<br />
+							</p:dialog>
+						</h:form>
+                      
+                      
+                       <h:form id="attchmentForm" enctype="multipart/form-data">
+							<p:dialog resizable="false" widgetVar="attchmentDialog" 
+							height="500"
+								width="500"
+								header="Edit Details" showEffect="fade" hideEffect="explode"
+								modal="true">
+								<div class="ui-g form-group">
+									<p:dataTable value="#{studentElerningBean.attachmentList}" var="var">
+									     
+									     <p:column value="Files">
+									        <p:outputLabel value="#{var.file1}"></p:outputLabel>
+									      </p:column>
+									     
+									     
+									     <p:column value="attachment">
+									     <center>
+									     <p:commandButton value="View" action="#{studentElerningBean.view1}" styleClass="butwid" icon="fa fa-eye">
+									         <f:setPropertyActionListener value="#{var}" target="#{studentElerningBean.selectedAttachment}"></f:setPropertyActionListener>
+									       </p:commandButton>
+									     </center>
+									      </p:column>
+									     
+									     
+									
+									</p:dataTable>
+								</div>
+							</p:dialog>
+						</h:form>
+                      
+                       <h:form id="assigmentForm" enctype="multipart/form-data">
+							<p:dialog resizable="false" widgetVar="viewAssignment" height="500"
+								width="500"
+								header="Edit Details" showEffect="fade" hideEffect="explode"
+								modal="true">
+								<div class="ui-g form-group">
+									<p:outputLabel value="Descripation -:  #{studentElerningBean.assigmentDescription}"></p:outputLabel>
+									<p:dataTable value="#{studentElerningBean.assignmentList}" var="var">
+									     
+									     <p:column value="Files">
+									        <p:outputLabel value="#{var.file1}"></p:outputLabel>
+									      </p:column>
+									     
+									     
+									     <p:column value="attachment">
+									     <center>
+									       <p:commandButton value="View" action="#{studentElerningBean.view1}" styleClass="butwid" icon="fa fa-eye">
+									         <f:setPropertyActionListener value="#{var}" target="#{studentElerningBean.selectedAttachment}"></f:setPropertyActionListener>
+									       </p:commandButton>
+									     </center>
+									      </p:column>
+									     
+									     
+									
+									</p:dataTable>
+									
+									<p:commandButton value="Delete Assignment " update=":assigmentForm" action="#{studentElerningBean.deleteAssignment}"></p:commandButton>
+									
+								</div>
+							</p:dialog>
+						</h:form>
+                      
+
+ 							 <h:form id="youtube" enctype="multipart/form-data">
+							<p:dialog resizable="false" widgetVar="Youtube Video" height="500"
+								width="500"
+								header="Edit Details" showEffect="fade" hideEffect="explode"
+								modal="true">
+								<div class="ui-g form-group">
+									<p:media value = "http://www.youtube.com/watch?v=mqOo7cYCBAo" width="600"
+            							 height="400"  
+           								  player="flash"></p:media>
+								</div>
+							</p:dialog>
+						</h:form>
+
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

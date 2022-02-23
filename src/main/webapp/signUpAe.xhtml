@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<f:facet name="first">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<meta name="viewport"
+			content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+	</f:facet>
+	<title>Welcome to Chalkbox</title>
+	<h:outputScript name="js/layout.js" library="avalon-layout" />
+	<script type="text/javascript">
+		function toTitleCase(str) {
+			return str.replace(/\w\S*/g, function(txt) {
+				return txt.charAt(0).toUpperCase()
+						+ txt.substr(1).toLowerCase();
+			});
+		}
+	</script>
+
+	<style>
+.ui-inputgroup .ui-inputgroup-addon, body .ui-inputgroup .ui-inputgroup-addon-checkbox
+	{
+	padding: 6px 0px !important;
+	border-color: #cccccc;
+	background-color: #647cb5 !important;
+	color: white !important;
+	min-width: 28px;
+	font-size: 11px;
+}
+</style>
+
+</h:head>
+<h:body styleClass="login-body">
+
+	<!-- <div class="login-image"></div> -->
+	<div class="card login-panel ui-fluid">
+		<div class="login-panel-content">
+			<div class="ui-g">
+				<h:form id="form">
+	<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+					<div class="ui-g-12 ui-sm-6 ui-md-6" style="text-align: left;">
+						<p:graphicImage name="images/cblogo.png" library="avalon-layout"
+							height="50px" width="200px" />
+						<!-- <span>Where ERP Meets Simplicity
+                        </span> -->
+					</div>
+					<div class="ui-g-12 ui-sm-6 ui-md-6" style="text-align: right;">
+						<h2 class="welcome-text">Welcome User</h2>
+						<span class="guest-sign-in">Sign up for student
+							registration</span>
+					</div>
+					<!-- <div class="ui-g-12 ui-sm-6 ui-md-6" style="text-align: left;">
+						<h:panelGroup>
+							<div class="login-label">
+							<label class="login-label">School Name : </label>
+								
+							</div>
+						</h:panelGroup>
+					</div> -->
+					<div class="ui-g-12" style="text-align: right;">
+						<h:panelGroup>
+							<div class="login-label">
+								<p:outputLabel id="sname" value="AMAL IT DEMO"
+									binding="#{scName}" style="font-weight: bold;">
+								</p:outputLabel>
+								<p:outputLabel rendered="false" id="sid" value="284"
+									binding="#{scId}" style="font-weight: bold;">
+								</p:outputLabel>
+							</div>
+						</h:panelGroup>
+					</div>
+					<div class="ui-g-12" style="text-align: left;">
+						<h:panelGroup>
+							<label class="login-label">Name*</label>
+							<div class="login-input">
+								<p:inputText id="name" value="#{signUpAe.name}" required="true"
+									requiredMessage="Please Enter Name." placeholder="Name"
+									onchange="this.value=toTitleCase(this.value)"
+									onkeyup="this.value=toTitleCase(this.value)">
+									<p:keyFilter regEx="/[a-z0-9_-.]/i"></p:keyFilter>
+								</p:inputText>
+							</div>
+						</h:panelGroup>
+					</div>
+					<div class="ui-g-12 ui-sm-6 ui-md-6" style="text-align: left;">
+						<h:panelGroup>
+							<label class="login-label">Mobile No.*</label>
+							<div class="login-input">
+								<div class="ui-inputgroup">
+									<span class="ui-inputgroup-addon">+971</span>
+									<p:inputText style="width:170px !important;" id="mob"
+										value="#{signUpAe.mobile}" required="true"
+										requiredMessage="Please Enter Mobile No."
+										placeholder="Mobile No." maxlength="9"
+										validatorMessage="Please Enter 9 Digit Mobile No.">
+										<p:keyFilter mask="num" />
+										<f:validateLength minimum="9"></f:validateLength>
+									</p:inputText>
+								</div>
+
+							</div>
+						</h:panelGroup>
+					</div>
+					<div class="ui-g-12 ui-sm-6 ui-md-6" style="text-align: right;">
+						<h:panelGroup>
+							<label class="login-label">Email Id*</label>
+							<div class="login-input">
+								<p:inputText id="eml" value="#{signUpAe.email}" required="true"
+									requiredMessage="Please Enter Email ID" placeholder="Email Id">
+									<p:keyFilter mask="email"></p:keyFilter>
+								</p:inputText>
+							</div>
+						</h:panelGroup>
+					</div>
+					<div class="ui-g-12 ui-sm-6 ui-md-6">
+						<p:commandButton aria-hidden="true" value="Sign Up" update=":form"
+							action="#{signUpAe.signUp(scId.value,scName.value)}" />
+					</div>
+
+					<div class="ui-g-12 ui-sm-6 ui-md-6">
+						<p:commandLink aria-hidden="true"
+							value="Already a member? Login Now" immediate="true"
+							action="onlineAdmLogin.xhtml?faces-redirect=true" update=":form" />
+					</div>
+
+				</h:form>
+
+				<h:form id="billForm" style="overflow:hidden">
+					<p:dialog header="Hello #{signUpAe.name}," width="500"
+						widgetVar="billDlg" modal="true" showEffect="fade"
+						hideEffect="fade" resizable="false" closable="false"
+						closeOnEscape="true">
+						<center>
+							<p:outputLabel
+								value="Congrats on signing up to #{signUpAe.schnm}!"
+								style="font-size:18px;font-weight: bold;" />
+						</center>
+						<br></br>
+						<center>
+							<p:outputLabel value="Your Login Id : #{signUpAe.mobile}"
+								style="font-size:14px;" />
+						</center>
+						<br></br>
+						<center>
+							<p:outputLabel value="Password : #{signUpAe.pwd}"
+								style="font-size:14px;" />
+						</center>
+						<br></br>
+						<center>
+							<p:outputLabel value="Parent ID : #{signUpAe.unm}"
+								style="font-size:14px;" />
+						</center>
+						<br></br>
+						<center>
+							<p:outputLabel
+								value="Please Note Down Login Id and Password For Further Use. You Can Also Get Login Id and Password From Your Mail Box."
+								style="font-size:12px;" />
+						</center>
+						<br></br>
+						<center>
+							<p:outputLabel
+								value="Note : While Filling Your 2nd Application From This Account, In 'Details of Legal Guardian', Select 'Existing Parent' and Write Your 'Parent ID' Mentioned Above(If you want to use your previous details). You Can Also Get Your Parent ID From Your Mail Box."
+								style="font-size:14px;" />
+						</center>
+						<br></br>
+						<br></br>
+						<center>
+							<p:commandButton value="OK"
+								action="signUpAe.xhtml?faces-redirect=true" update="billForm" />
+						</center>
+						<br></br>
+					</p:dialog>
+				</h:form>
+
+			</div>
+		</div>
+	</div>
+
+	<p:ajaxStatus onstart="PF('statusDialog').show()"
+		onsuccess="PF('statusDialog').hide()" />
+	<p:dialog modal="true" widgetVar="statusDialog" resizable="false"
+		showHeader="false">
+		<center>
+			<i class="fa fa-circle-o-notch fa-5x fa-spin ajax-loader"></i>
+		</center>
+		<center>
+			<h3>Please Wait...</h3>
+		</center>
+	</p:dialog>
+	<h:outputStylesheet name="css/layout-#{guestPreferences.theme}.css"
+		library="avalon-layout" />
+</h:body>
+
+</html>

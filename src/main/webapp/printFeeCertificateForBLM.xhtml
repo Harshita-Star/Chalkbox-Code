@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+<f:loadBundle var="addClassVar" basename="myProperties" />
+<f:view contentType="text/html">
+	<h:head>
+		<title>Certificate Printing</title>
+		<f:facet name="first">
+			<meta content='text/html; charset=UTF-8' http-equiv="Content-Type" />
+			<meta http-equiv="X-UA-Compatible" content="EmulateIE8" />
+			
+		</f:facet>
+
+  			<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css"></link>
+    		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"></link>
+    		<link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css"></link>
+   			<link rel="stylesheet" href="dist/css/AdminLTE.min.css"></link>
+    		<link rel="stylesheet" href="dist/css/skins/all-skins.min.css"></link>
+     		 <link rel="stylesheet" type="text/css" href="css/style.css"/>	
+
+	</h:head>
+
+	<h:body>
+      
+      <div class="content-wrapper">
+          
+          
+               		
+               		<h:form id="form12">
+							<p:commandButton style="width:50px;" value="Print"
+								type="button">
+								<p:printer target=":forms"></p:printer>
+							</p:commandButton>
+						</h:form>
+<br/>
+						<h:form id="forms">
+						<p:panel >
+									<table style="width: 100%; font-size: 11px">
+										<tr>
+											<td><p:graphicImage width="100%" height="120px"
+													value="#{printFeeCertificateForBLM.headerImage}"></p:graphicImage></td>
+										</tr>
+									</table>
+									<hr style="border-top: solid 1px;" />
+									<center>
+										<h3 style="font-family: timesRoman;">
+											<b>FEE CERTIFICATE</b>
+										</h3>
+									</center>
+									<table style="width: 100%; ">
+										<tr>
+											<td align="left" style="font-size: 11px;">Ref.No. : <b></b></td>
+											<td align="right" style="font-size: 11px;">Date : <b>#{printFeeCertificateForBLM.currentDate}</b></td>
+										</tr>
+									</table>
+									<br></br>
+									<center>
+									<h3 style="font-family: timesRoman;">
+										<b><u>TO WHOMSOEVER IT MAY CONCERN</u></b>
+									</h3>	
+									</center>
+									<br></br>
+									<br></br>
+									<table style="margin: -20px">
+										<tr>
+											<td style="font-family: timesRoman; font-size: 15px;line-height: 20px;">It is certified that <i><b>#{printFeeCertificateForBLM.studentInfo.fname}</b></i> of Shri <i><b>#{printFeeCertificateForBLM.studentInfo.fathersName}</b></i> and Smt. <i><b>#{printFeeCertificateForBLM.studentInfo.motherName}</b></i>
+											a student of class <i><b>#{printFeeCertificateForBLM.studentInfo.className} (#{printFeeCertificateForBLM.studentInfo.srNo})</b></i>  is a bonafide 
+											student of <i><b>#{printFeeCertificateForBLM.schinfo.schoolName}</b></i>. #{printFeeCertificateForBLM.type} has paid Rs. <i><b>#{printFeeCertificateForBLM.totalPaidAmount}</b></i> 
+											under different heads of fee as mentioned below in financial year <i><b>#{printFeeCertificateForBLM.session}</b></i>.
+											</td>
+										</tr>
+									</table>
+									<br></br>
+									<br></br>
+									<br></br>
+									<br></br>
+									<h:dataTable style="font-size:13px;width:100%;border-collapse:collapse;text-align: center;font-family: timesRoman" border="1" value="#{printFeeCertificateForBLM.feeList}" var="var">
+									     
+									     <p:column style="text-align: center !important;">
+									        <f:facet name="header">
+									        <center><h:outputText value="S.No."></h:outputText></center>
+									     	</f:facet>
+									     	
+									     	<h:outputText value="#{var.sno}"></h:outputText>
+									     </p:column>
+									     
+									     <p:column style="text-align: center;" headerText="Particular">
+									        <f:facet name="header">
+									        <center><h:outputText value="Particular"></h:outputText></center>
+									     	</f:facet>
+									        
+									        <h:outputText value="#{var.feeName}"></h:outputText>
+									      
+									       <f:facet name="footer">
+									       <h:outputText value="Total Amount">
+									             </h:outputText>
+									       </f:facet>
+									     </p:column>
+									     
+									     <p:column style="text-align: center;" headerText="Amount Paid">
+									       
+									       <f:facet name="header">
+									        <center><h:outputText value="Amount Paid"></h:outputText></center>
+									     	</f:facet>
+									       
+									       <h:outputText value="#{var.payAmount}">
+									       </h:outputText>
+									        <f:facet name="footer">
+									             <h:outputText value="#{printFeeCertificateForBLM.totalPaidAmount}">
+									             </h:outputText>
+									      
+									        </f:facet>
+									     </p:column>
+									
+									</h:dataTable>
+									<br></br>
+									<table style="width: 100%; margin-top: 10%">
+										<tr>
+											<td align="left">Checked By : <b></b></td>
+											<td align="right"><b>Principal</b></td>
+										</tr>
+									</table>
+							</p:panel>
+						</h:form>
+		</div>
+	</h:body>
+</f:view>
+</html>

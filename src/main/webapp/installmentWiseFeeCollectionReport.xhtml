@@ -1,0 +1,98 @@
+		<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+						xmlns:ui="http://java.sun.com/jsf/facelets"
+						xmlns:h="http://java.sun.com/jsf/html"
+						xmlns:f="http://java.sun.com/jsf/core"
+						xmlns:p="http://primefaces.org/ui"
+						xmlns:pe="http://primefaces.org/ui/extensions"
+						template="/WEB-INF/template.xhtml">
+
+			<ui:define name="title">Installment Wise Fee Collection</ui:define>
+
+			<ui:define name="content">
+			
+				<style>
+				.ui-datatable .ui-datatable-scrollable-body,
+	.ui-datatable-scrollable-header, .ui-datatable-footer, .ui-datatable-header, .ui-datatable-scrollable-footer{
+	width: 100% !important;
+}
+.ui-datatable-scrollable .ui-datatable-scrollable-header, .ui-datatable-scrollable .ui-datatable-scrollable-footer{
+	position:sticky !important;
+	top:59px !important;
+}
+body .ui-datatable thead th,
+body .ui-datatable tbody td {
+	width:var(--w) !important;
+}
+</style>
+			   
+					<div class="ui-fluid">
+						<div class="ui-g">
+							<div class="ui-g-12">
+								<div class="card card-w-title">
+								     <h:form id="form">
+						
+			  		<p:messages autoUpdate="true" closable="true"></p:messages>
+						<p:panel header="Installment Wise Fee Collection">
+							<p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;"> 
+					 			
+								<p:commandButton value="Print" styleClass="butwid" icon = "fa fa-print" rendered="#{installmentWiseFeeCollectionReport.showPrintButton}">
+               	       					<p:printer target="data"></p:printer>
+           	       			  	</p:commandButton>
+           	       			  	
+           	       			  	   <p:commandButton value="PDF" styleClass="butwid" icon = "fa fa-file-pdf-o" ajax="false" process="@this" actionListener="#{installmentWiseFeeCollectionReport.exportInstallmentFeePdf}"> 
+                    
+                                      <p:fileDownload value="#{installmentWiseFeeCollectionReport.file}"/>
+                                   </p:commandButton>
+           	       			  	
+           	       			  	    <h:commandLink >
+                                        <p:graphicImage name="images/excellogo.png"
+                                            library="avalon-layout" width="100" height="40"></p:graphicImage>
+                                        <pe:exporter type="xlsx" target="table"
+                                            fileName="Installment_Fee_Collection" ></pe:exporter>
+                                    </h:commandLink>
+			    			</p:panelGrid>
+   						</p:panel>
+			 			<p:panel id="data" >
+							<center>
+								<p style="font-family: initial;font-style: oblique;font-size: 30px !important;font-weight:bold;margin:0px;">#{headerBean.name}</p>
+								<p style="margin:0px;">Installment Wise Fee Collection Report</p>
+							</center>
+							<p:dataTable  id="table" rowIndexVar="index" reflow="true" scrollable="true" scrollWidth="100%" style="border-collapse:collapse" border="1" var="var" value="#{installmentWiseFeeCollectionReport.feeList}">
+								<f:facet name="header">
+									<p:outputLabel value=""></p:outputLabel>
+								</f:facet>
+								
+								<p:column headerText="Installment Name" style="--w:80px;">
+								<f:facet name="header">
+									<p:outputLabel value="Installment Name"></p:outputLabel>
+								</f:facet>
+               		  				<p:outputLabel value="#{var.installmentName}"></p:outputLabel>
+               		  			</p:column>
+               		  			
+               		  			<p:columns style="--w:70px;" value="#{installmentWiseFeeCollectionReport.classFeeList}" var="column" columnIndexVar="colIndex" >  
+		           				    <f:facet name="header"> 
+		           			  		     <p:outputLabel value="#{column.feeName} (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})"></p:outputLabel>
+		         				    </f:facet>  	   							
+  							  							
+  									<p:outputLabel value="#{index+1 eq installmentWiseFeeCollectionReport.feeList.size() ? (sideMenuBean.list.country eq 'UAE' ? 'AED ' : 'Rs.') : ''}#{var.feeMap[column.feeName]}"></p:outputLabel>
+     					   		</p:columns>
+     					   		
+     					   		<p:column headerText="Total" style="--w:60px;">
+								<f:facet name="header">
+									<p:outputLabel value="Total"></p:outputLabel>
+								</f:facet>
+               		  				<p:outputLabel value="#{var.total}"></p:outputLabel>
+               		  			</p:column>
+     					   		
+     					   		
+							</p:dataTable>
+						</p:panel>
+					</h:form>
+								</div>
+							</div>
+						</div>
+					</div>
+			   
+			</ui:define>
+
+		</ui:composition>

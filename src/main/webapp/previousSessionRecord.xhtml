@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+<f:loadBundle var="searchStudentVar" basename="myProperties" />
+<f:view contentType="text/html">
+	<h:head>
+		<title>#{sideMenuBean.companyName} | PreSession Record</title>
+		<f:facet name="first">
+			<meta content='text/html; charset=UTF-8' http-equiv="Content-Type" />
+			<meta http-equiv="X-UA-Compatible" content="EmulateIE8" />
+			
+		</f:facet>
+
+  <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css"></link>
+    		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"></link>
+    	<link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css"></link>
+   <link rel="stylesheet" href="dist/css/AdminLTE.min.css"></link>
+    <link rel="stylesheet" href="dist/css/skins/all-skins.min.css"></link>
+
+	</h:head>
+
+	<h:body>
+      
+      <ui:include src="sideMenu.xhtml"></ui:include> 
+   
+      <div class="content-wrapper">
+          
+                <h:form id="form1" >
+				     <h1>Previous Session Records</h1>
+            		
+               		 <p:messages closable="true" autoUpdate="true"></p:messages>
+               		 		
+               		 		<p:panel header="Search Student by Name">
+	               						
+               		 		<p:panelGrid columns="5">
+               		 	 		
+               		 	 		<p:outputLabel value="Select Session" for="@next" style="color:red" ></p:outputLabel>          		
+               					<p:selectOneMenu required="true" requiredMessage="Please select a session" value="#{previousSessionRecord.selectedSession}">
+               						<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+               						<f:selectItems value="#{previousSessionRecord.sessionList}"></f:selectItems>
+               					</p:selectOneMenu>
+               		 	 		
+               		 			<p:outputLabel value="#{searchStudentVar.searchStudentByNameLabel}" for="@next" style="color:red" ></p:outputLabel>      
+               		 			<p:autoComplete forceSelection="true" required="true" requiredMessage="Please enter name of student" id="acSimple" value="#{previousSessionRecord.name}" completeMethod="#{previousSessionRecord.autoCompleteStudentInfo}"></p:autoComplete>
+               		 		
+               		 			<p:commandButton value="Search" update=":form1" actionListener="#{previousSessionRecord.searchStudentByName}" ></p:commandButton>
+
+               		 		</p:panelGrid> 
+               		 		
+               		 		<p:panel rendered="#{previousSessionRecord.show}">
+               		 			
+               		 			<p:panelGrid style="width:100%" columns="3">
+               		 		
+               		 				<p:panel header="Previous Session Fee Collection">
+               		 					<p:commandLink action="#{previousSessionRecord.previousSessionFeeCollect}" >
+               		 						<p:graphicImage url="image/feeCollection.png"></p:graphicImage>
+               		 					</p:commandLink>
+               		 				</p:panel>
+               		 			
+               		 				<p:panel header="Previous Session Attendance Record">
+               		 					<p:commandLink action="#{previousSessionRecord.previousSessionStudentAttendance}" >
+               		 						<p:graphicImage url="image/attendance.png"></p:graphicImage>
+               		 					</p:commandLink>
+               		 				</p:panel>
+               		 			
+               		 				<p:panel header="Previous Session Student Resultsheet">
+               		 					<p:commandLink action="#{previousSessionRecord.previousSessionStudentResultsheet}" >
+               		 						<p:graphicImage height="128" width="128" url="image/marksheet.jpg"></p:graphicImage>
+               		 					</p:commandLink>
+               		 				</p:panel>
+               		 		
+               		 			</p:panelGrid>
+               		 		
+               		 		</p:panel>
+               						 		
+               		 		</p:panel>
+               		 </h:form>
+          
+          
+      </div>
+   
+	
+	
+	</h:body>
+</f:view>
+</html>

@@ -1,0 +1,15 @@
+.layout-topbar-teallight {
+    $topbarBgColor: #21B5AD;
+    $topbarBoxShadow: 0 2px 10px 0 rgba(25, 26, 28, 0.12);
+    $topbarItemTextColor: #fffffe;
+    $topbarItemTextHoverBgColor:#159A92;
+    $topbarItemBgColor:#159A92;
+    $topbarItemSeparatorBorderColor:#159A92;
+    $topbarItemSubmenuBgColor: #ffffff;
+    $topbarItemSubmenuTextColor: #191a1c;
+    $topbarItemSubmenuSecondaryTextColor: #8b8e90;
+    $topbarItemSubmenuItemHoverBgColor: #EBEDEF;
+    $topbarItemSubmenuBoxShadow: 0 2px 8px 0 rgba(25, 26, 28, 0.12);
+
+    @import '../_topbar_theme';
+}

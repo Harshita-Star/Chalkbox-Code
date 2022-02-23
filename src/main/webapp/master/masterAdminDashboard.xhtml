@@ -1,0 +1,332 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/masterTemplate.xhtml">
+
+	<ui:define name="title">Dashboard</ui:define>
+
+	<ui:define name="head">
+		<script type="text/javascript">
+			function skinPie() {
+				this.cfg.shadow = false;
+				this.cfg.title = '';
+				this.cfg.seriesColors = [ '#337ab7', '#2ea59f', '#2d34a4',
+						'#2ea563' ];
+				this.cfg.grid = {
+					background : '#ffffff',
+					borderColor : '#ffffff',
+					gridLineColor : '#F5F5F5',
+					shadow : false
+				};
+				this.cfg.axesDefaults = {
+					rendererOptions : {
+						textColor : '#292B2C',
+					}
+				};
+				this.cfg.seriesDefaults = {
+					renderer : $.jqplot.PieRenderer,
+					shadow : false,
+					lineWidth : 1,
+					markerOptions : {
+						shadow : false,
+						size : 7,
+						style : 'circle'
+					}
+				}
+
+			}
+		</script>
+		<style type="text/css">
+.jqplot-xaxis-label, .jqplot-yaxis-label, .jqplot-y2axis-label,
+	.jqplot-x2axis-label {
+	color: #757575;
+}
+
+table.jqplot-table-legend {
+	background-color: #ffffff;
+	color: #757575;
+	border-color: #F5F5F5;
+}
+</style>
+	</ui:define>
+
+	<ui:define name="content">
+		<div class="dashboard-banking">
+			<div class="ui-g overview-boxes">
+
+				<div class="ui-g-12 ui-md-4 ui-lg-2">
+					<a href="thoughtOfTheDay.xhtml">
+						<div class="overview clearfix">
+							<div class="overview-icon">
+								<p:graphicImage
+									name="images/dashboard-banking/icon-cardtransfer.png"
+									library="avalon-layout" width="52"
+									styleClass="icon-cardtransfer" />
+							</div>
+
+							<div class="overview-text">
+								<span class="overview-title">Today's </span> <span
+									class="overview-subtitle">Thought</span>
+							</div>
+						</div>
+					</a>
+				</div>
+
+
+				<div class="ui-g-12 ui-md-4 ui-lg-2">
+					<a href="addSchoolBill.xhtml">
+						<div class="overview clearfix">
+							<div class="overview-icon">
+								<p:graphicImage
+									name="images/dashboard-banking/icon-transfer.png"
+									library="avalon-layout" width="52" styleClass="icon-transfer" />
+							</div>
+
+							<div class="overview-text">
+								<span class="overview-title">Add </span> <span
+									class="overview-subtitle">Bill</span>
+							</div>
+						</div>
+					</a>
+				</div>
+
+				<div class="ui-g-12 ui-md-4 ui-lg-2">
+					<a href="unpaidBillsMaster.xhtml">
+						<div class="overview clearfix">
+							<div class="overview-icon">
+								<p:graphicImage
+									name="images/dashboard-banking/icon-receivemoney.png"
+									library="avalon-layout" width="52"
+									styleClass="icon-receivemoney" />
+							</div>
+
+							<div class="overview-text">
+								<span class="overview-title">Extend </span> <span
+									class="overview-subtitle">Bill</span>
+							</div>
+						</div>
+					</a>
+				</div>
+
+				<div class="ui-g-12 ui-md-4 ui-lg-2">
+					<a href="chhotuRecharge.xhtml">
+						<div class="overview clearfix">
+							<div class="overview-icon">
+								<p:graphicImage
+									name="images/dashboard-banking/icon-creditcards.png"
+									library="avalon-layout" width="52"
+									styleClass="icon-creditcards" />
+							</div>
+
+							<div class="overview-text">
+								<span class="overview-title">Chhotu </span> <span
+									class="overview-subtitle">Recharge</span>
+							</div>
+						</div>
+					</a>
+				</div>
+
+
+				<div class="ui-g-12 ui-md-4 ui-lg-2">
+					<a href="purchaseMsgPackMaster.xhtml">
+						<div class="overview clearfix">
+							<div class="overview-icon">
+								<p:graphicImage
+									name="images/dashboard-banking/icon-transactions.png"
+									library="avalon-layout" width="52"
+									styleClass="icon-transactions" />
+							</div>
+
+							<div class="overview-text">
+								<span class="overview-title">SMS</span> <span
+									class="overview-subtitle">Top Up</span>
+							</div>
+						</div>
+					</a>
+				</div>
+
+				<div class="ui-g-12 ui-md-4 ui-lg-2">
+					<a href="addSchool.xhtml">
+						<div class="overview clearfix">
+							<div class="overview-icon">
+								<p:graphicImage name="images/dashboard-banking/icon-ticket.png"
+									library="avalon-layout" width="52" styleClass="icon-ticket" />
+							</div>
+
+							<div class="overview-text">
+								<span class="overview-title">Add</span> <span
+									class="overview-subtitle">School</span>
+							</div>
+						</div>
+					</a>
+				</div>
+
+
+
+			</div>
+		</div>
+		<div class="dashboard">
+			<h:form>
+				<div class="ui-g overview-boxes">
+
+					<div class="ui-g-12 ui-md-6 ui-lg-3">
+						<a href="schooWiseMessageDate.xhtml">
+							<div class="ui-g overview-box overview-box-1">
+								<div class="overview-box-title">
+									<i class="fa fa-users" /> <span>SMS Sent Today </span>
+								</div>
+								<div class="overview-box-count">#{masterAdminDashboard.totalMsgtoday}</div>
+								<div class="overview-box-stats"></div>
+							</div>
+						</a>
+					</div>
+
+					<div class="ui-g-12 ui-md-6 ui-lg-3">
+						<a href="viewEditDeleteSchool.xhtml">
+							<div class="ui-g overview-box overview-box-2">
+								<div class="overview-box-title">
+									<i class="fa fa-rupee" /> <span>Total School</span>
+								</div>
+								<div class="overview-box-count">#{masterAdminDashboard.totalSchool}</div>
+								<div class="overview-box-stats"></div>
+							</div>
+						</a>
+					</div>
+
+					<div class="ui-g-12 ui-md-6 ui-lg-3">
+						<a href="msgPurchageHistoryMaster.xhtml">
+							<div class="ui-g overview-box overview-box-3">
+								<div class="overview-box-title">
+									<i class="fa fa-user-times" /> <span>SMS Top Ups This
+										Month</span>
+								</div>
+								<div class="overview-box-count">#{masterAdminDashboard.smsRecharge}
+								</div>
+								<div class="overview-box-stats"></div>
+							</div>
+						</a>
+					</div>
+
+					<div class="ui-g-12 ui-md-6 ui-lg-3">
+						<a href="unpaidBillsMaster.xhtml">
+							<div class="ui-g overview-box overview-box-4">
+								<div class="overview-box-title">
+									<i class="fa fa-folder" /> <span>Unpaid Bills</span>
+								</div>
+								<div class="overview-box-count">#{masterAdminDashboard.unpaidBill}</div>
+								<div class="overview-box-stats"></div>
+							</div>
+						</a>
+					</div>
+				</div>
+			</h:form>
+		</div>
+
+
+		<h:form id="form2">
+			<div class="ui-fluid">
+				<div class="ui-g">
+					<div class="ui-g-12">
+						<div class="card card-w-title">
+
+							<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+
+							<h1>School Activity Report</h1>
+
+							<p:panel header="School Report">
+								<p:panelGrid columns="3"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:outputLabel value="Select Date"></p:outputLabel>
+									<p:calendar value="#{schoolActivityMaster.selectDate}"
+										navigator="true" pattern="dd/MM/yyyy" rendered="true"
+										requiredMessage="Please Select Date"></p:calendar>
+
+									<p:commandButton value="Search" update=":form2"
+										action="#{schoolActivityMaster.search}"></p:commandButton>
+								</p:panelGrid>
+
+								<p:dataTable id="table" reflow="true"
+									style="width:100%;border-collapse:collapse;text-align:center;"
+									border="1" value="#{schoolActivityMaster.activityList}"
+									var="var" rowKey="#{var.schId}" selection="#{schoolActivityMaster.selectedSchoolList}">
+									
+									<f:facet name="header">
+										<p:commandButton update=":form2" value="Generate Login Credentials" actionListener="#{schoolActivityMaster.generateLoginCredentials}"></p:commandButton>
+									<p:commandButton update=":form2" value="Get Schools Data" actionListener="#{schoolActivityMaster.getSchoolsData}"></p:commandButton>
+									</f:facet>
+									
+									<f:facet name="footer">
+										<p:commandButton update=":form2" value="Generate Login Credentials" actionListener="#{schoolActivityMaster.generateLoginCredentials}"></p:commandButton>
+									</f:facet>
+									
+									<p:column headerText="Select" selectionMode="multiple"></p:column>
+										
+
+									<p:column headerText="S.No">
+										<p:outputLabel value="#{var.sno}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="School Id">
+										<p:outputLabel value="#{var.schId}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="School Name">
+										<p:outputLabel value="#{var.schoolName}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Attendance">
+										<p:graphicImage value="#{var.attendance}" height='15'
+											width='15'></p:graphicImage>
+									</p:column>
+
+									<p:column headerText="Fees">
+										<p:graphicImage value="#{var.fees}" height='15' width='15'></p:graphicImage>
+									</p:column>
+
+									<p:column headerText="Communication">
+										<p:graphicImage value="#{var.communication}" height='15'
+											width='15'></p:graphicImage>
+									</p:column>
+
+									<p:column headerText="News">
+										<p:graphicImage value="#{var.news}" height='15' width='15'></p:graphicImage>
+									</p:column>
+
+									<p:column headerText="Gallery">
+										<p:graphicImage value="#{var.gallery}" height='15' width='15'></p:graphicImage>
+									</p:column>
+
+									<p:column headerText="Homework">
+										<p:graphicImage value="#{var.work}" height='15' width='15'></p:graphicImage>
+									</p:column>
+
+									<p:column headerText="Login">
+										<p:graphicImage value="#{var.login}" height='15' width='15'></p:graphicImage>
+									</p:column>
+
+									<p:column headerText="Login">
+										<p:commandButton action="#{schoolActivityMaster.schoolLogin}"
+											icon="ui-icon-power">
+											<f:setPropertyActionListener value="#{var}"
+												target="#{schoolActivityMaster.selected}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+								</p:dataTable>
+							</p:panel>
+						</div>
+					</div>
+				</div>
+			</div>
+		</h:form>
+
+
+
+
+
+	</ui:define>
+
+</ui:composition>

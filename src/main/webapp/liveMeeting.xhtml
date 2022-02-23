@@ -1,0 +1,66 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/studentTemplate.xhtml">
+
+	<ui:define name="title">Live Meeting</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title"
+						style="background-color: rgb(254, 180, 2, 0.3);">
+						<h:form id="form" enctype="multipart/form-data">
+							<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+							<p:panel header="meetings">
+								<p:dataTable filterDelay="1500" id="dt" var="var"
+									value="#{liveMeetingBean.list}" paginator="true" rows="10"
+									rowsPerPageTemplate="10,30,50">
+
+									<p:column headerText="S.No.">
+										<p:outputLabel value="#{var.sno}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Subject">
+										<p:outputLabel value="#{var.subjectName}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Date">
+										<p:outputLabel value="#{var.addDateStr}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Start Time">
+										<p:outputLabel value="#{var.startTimeStr}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="End Time">
+										<p:outputLabel value="#{var.endTimeStr}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Zoom" exportable="false">
+										<p:button href="#{var.zoomId}" target="_blank"
+											value="#{var.msg}" disabled="#{var.meetingShowStatus}"></p:button>
+									</p:column>
+
+
+
+								</p:dataTable>
+
+
+
+
+							</p:panel>
+
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

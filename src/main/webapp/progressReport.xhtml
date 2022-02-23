@@ -1,0 +1,63 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/studentTemplate.xhtml">
+
+	<ui:define name="title">Progress Report</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title"
+						style="background-color: rgb(254, 180, 2, 0.3);">
+						<h:form id="form1">
+
+							<p:messages closable="true" autoUpdate="true"></p:messages>
+							<p:panel header="Progress Report">
+
+								<p:dataTable filterDelay="1500" id="dt" var="var"
+									value="#{progressReport.newsList}" style="text-align: center;">
+
+
+									<p:column headerText="Name">
+										<p:outputLabel value="#{var.message}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Attachment">
+									<center>
+									<p:commandButton rendered="#{var.showFile}" styleClass="butwid"
+											icon="fa fa-fw fa-paperclip" value="View"
+											action="#{progressReport.view}">
+											<f:setPropertyActionListener
+												target="#{progressReport.selected}" value="#{var}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</center>
+									</p:column>
+								</p:dataTable>
+
+							</p:panel>
+						</h:form>
+
+						<h:form id="form2">
+							<p:dialog widgetVar="alrtDlg" showEffect="fade"
+								hideEffect="explode" resizable="true" closable="true"
+								closeOnEscape="true" header="Result" modal="true" width="100%"
+								height="650px">
+								<object type="application/pdf"
+									data="#{progressReport.file}?pfdrid_c=true" width="100%"
+									height="100%"> </object>
+
+							</p:dialog>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

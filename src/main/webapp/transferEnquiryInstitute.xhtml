@@ -1,0 +1,79 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">All Enquiry</ui:define>
+	    <ui:define name="content">
+            <div class="ui-fluid">
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <div class="card card-w-title">
+				<h:form id="form">
+				<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+				<p:panel header="Transfer Enquiry" >
+					<p:panelGrid columns="4">
+						<p:outputLabel value="Select Source Employee" for="@next" style="color:red" ></p:outputLabel>
+			                 <p:selectOneMenu filter="true"  value="#{transferEnquiryInst.selectedSourceEmployee}" required="true" requiredMessage="Please Select Source Employee">
+			                 <f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+			                 <f:selectItems value="#{transferEnquiryInst.sourceEmpList}" ></f:selectItems>
+			            </p:selectOneMenu>
+			            
+	 					<p:outputLabel value="Select Target Employee" for="@next" style="color:red" ></p:outputLabel>
+		                 <p:selectOneMenu filter="true"  value="#{transferEnquiryInst.selectedTargetEmployee}" required="true" requiredMessage="Please Select Target Employee">
+			                 <f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+			                 <f:selectItems value="#{transferEnquiryInst.sourceEmpList}" ></f:selectItems>
+			            </p:selectOneMenu>
+			            
+			         	<p:commandButton value="Search" update=":form" actionListener="#{transferEnquiryInst.search}"></p:commandButton>   
+			         </p:panelGrid>
+ 				</p:panel>
+ 				<p:outputPanel>
+					<p:dataTable value="#{transferEnquiryInst.list}" var="var" selection="#{transferEnquiryInst.selectedList}" rowKey="#{var.id}" emptyMessage="No Record found ">
+					
+						<p:column selectionMode="multiple" style="width:40px"></p:column>
+  
+						<p:column headerText="S.No" style="width:40px">
+							<h:outputText value="#{var.sno}"></h:outputText>
+						</p:column>
+
+						<p:column headerText="Student Name" filterBy="#{var.studentName}">
+							<h:outputText value="#{var.studentName}"></h:outputText>
+						</p:column>
+						
+						<p:column headerText="Father Name">
+							<h:outputText value="#{var.fatherName}"></h:outputText>
+						</p:column>
+						
+						<p:column headerText="Contact No" filterBy="#{var.mobno}">
+							<h:outputText value="#{var.mobno}"></h:outputText>
+						</p:column>
+
+						<p:column headerText="Enquiry Type" filterBy="#{var.enquiryStatus}">
+							<h:outputText value="#{var.enquiryStatus}"></h:outputText>
+						</p:column>
+
+						<p:column headerText="Add Date">
+							<h:outputText value="#{var.stringadmissionDate}"></h:outputText>
+						</p:column>
+
+						<p:column headerText="Added By" rendered="#{allEnquiry.showType}">
+							<h:outputText value="#{var.addedByName}"></h:outputText>
+						</p:column>
+						
+						<f:facet name="footer">
+							<p:commandButton value="Transfer" update=":form" actionListener="#{transferEnquiryInst.transferLead}"></p:commandButton>
+						</f:facet>
+					</p:dataTable>
+				</p:outputPanel>
+ 				</h:form>
+				</div>
+                    </div>
+                </div>
+            </div>
+        
+    </ui:define>
+
+</ui:composition>

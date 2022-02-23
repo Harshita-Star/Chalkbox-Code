@@ -1,0 +1,470 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Due Fee Report</ui:define>
+
+	<ui:define name="content">
+	<style>
+.ui-datatable-scrollable .ui-datatable-scrollable-header, .ui-datatable-scrollable .ui-datatable-scrollable-footer{
+	position:sticky !important;
+	top:60px !important;
+}
+body .ui-datatable thead th,
+body .ui-datatable tbody td {
+	width:var(--w) !important;
+}
+</style>
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form1">
+
+							<h1>#{dueFeeReportVar.dueFeeReportTitle}</h1>
+							<p:messages closable="true" autoUpdate="true"></p:messages>
+							<p:panel header="Search Student by Name/Sr. No">
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel  for="@next" style="color:red" value="Student Name/Sr.No"></p:outputLabel>
+									<p:autoComplete value="#{dueFeeReport.name}" minQueryLength="3"
+										completeMethod="#{dueFeeReport.autoCompleteStudentInfo}"
+										required="true"
+										requiredMessage="#{dueFeeReportVar.dueFeeReportStudentNameValidation}" validatorMessage="Please Enter Correct value">
+										<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:autoComplete>
+
+									<p:outputLabel value="Till Date" for="@next" style="color:red" ></p:outputLabel>
+									<p:calendar value="#{dueFeeReport.date}" required="true"
+										requiredMessage="Please enter date" pattern="dd/MM/yyyy"
+										navigator="true"></p:calendar>
+
+								</p:panelGrid>
+								
+								<br />
+								<p:separator />
+								<center>
+									<p:panelGrid
+										columns="#{dueFeeReport.studentList.size() gt 0 ? '4' : '1' }" 
+										layout="grid" styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+										
+										
+										<p:commandButton update=":form3:up,:form1" icon="fa fa-search"
+										actionListener="#{dueFeeReport.searchStudent}"  styleClass="butwid"
+										value="#{dueFeeReportVar.dueFeeReportSearchNowButton}"></p:commandButton>
+										
+									<p:commandButton value="Print"  styleClass="butwid" icon="fa fa-print"
+										action="printDueFeeReportClassWise.xhtml?faces-redirect=true"
+										rendered="#{dueFeeReport.show}">
+
+									</p:commandButton>
+
+									<h:commandLink rendered="#{dueFeeReport.show}">
+										<p:graphicImage name="images/excellogo.png"
+											library="avalon-layout" width="100" height="40"></p:graphicImage>
+										<pe:exporter type="xlsx" target=":form3:table"
+											fileName="Due_Fees.xlsx"
+											></pe:exporter>
+									</h:commandLink>
+
+									<p:commandButton rendered="#{dueFeeReport.show}" value="PDF" style="width:50px;" ajax="false" icon="fa fa-file-pdf-o"
+										process="@this"  styleClass="butwid"
+										actionListener="#{dueFeeReport.exportDueFeePdf}">
+
+										<p:fileDownload value="#{dueFeeReport.file}" />
+									</p:commandButton>
+										
+									</p:panelGrid>
+								</center>
+								<p:separator />
+								<br />
+								
+							</p:panel>
+
+						</h:form>
+					</div>
+					<div class="card card-w-title">
+
+						<h:form id="form2">
+
+							<p:panel header="Search Student by Class-section">
+
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel
+										value="#{dueFeeReportVar.dueFeeReportClassLabel}" for="@next" style="color:red" ></p:outputLabel>
+									<p:selectOneMenu style="width:250px"
+										value="#{dueFeeReport.selectedCLassSection}" required="true"
+										requiredMessage="Please select a class">
+										<f:selectItem itemLabel="#{dueFeeReportVar.selectHereLabel}"
+											itemValue=""></f:selectItem>
+										<f:selectItem itemLabel="All" itemValue="-1"></f:selectItem>
+										<f:selectItems value="#{dueFeeReport.classSection}"></f:selectItems>
+										<p:ajax update="sectionid"
+											listener="#{dueFeeReport.allSections}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Section" for="@next" style="color:red" ></p:outputLabel>
+									<p:selectOneMenu id="sectionid"
+										value="#{dueFeeReport.selectedSection}" required="true"
+										requiredMessage="Please select a section">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItem itemLabel="All" itemValue="-1"></f:selectItem>
+										<f:selectItems value="#{dueFeeReport.sectionList}"></f:selectItems>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Till Date" for="@next" style="color:red" ></p:outputLabel>
+									<p:calendar value="#{dueFeeReport.date}" navigator="true"
+										required="true" requiredMessage="Please enter date"
+										pattern="dd/MM/yyyy"></p:calendar>
+										
+									<p:outputLabel value="Concession" for="@next" style="color:red" ></p:outputLabel>
+									<p:selectOneMenu value="#{dueFeeReport.selectedConcession}" required="true"
+										requiredMessage="Please select a concession">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItem itemLabel="All" itemValue="ALL"></f:selectItem>
+										<f:selectItems value="#{dueFeeReport.concessionlist}"></f:selectItems>
+									</p:selectOneMenu>	
+
+									<p:outputLabel rendered="#{sideMenuBean.list.schid eq '287'}"
+										value="Select Student Type"></p:outputLabel>
+									<p:selectOneMenu rendered="#{sideMenuBean.list.schid eq '287'}"
+										value="#{dueFeeReport.studentType}">
+										<f:selectItem itemLabel="All" itemValue="All"></f:selectItem>
+										<f:selectItem itemLabel="Day Scholar" itemValue="Regular"></f:selectItem>
+										<f:selectItem itemLabel="Hosteler" itemValue="Hosteler"></f:selectItem>
+										<f:selectItem itemLabel="Day Boarding" itemValue="Day Brd"></f:selectItem>
+									</p:selectOneMenu>
+
+
+
+									
+								</p:panelGrid>
+								
+								<br />
+								<p:separator />
+								<center>
+									<p:panelGrid
+										columns="#{dueFeeReport.studentList.size() gt 0 ? '4' : '1' }" 
+										layout="grid" styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+									
+									<p:commandButton update=":form3:up,:form2" styleClass="butwid"  icon="fa fa-search"
+										actionListener="#{dueFeeReport.searchStudentByClassSection}"
+										value="#{dueFeeReportVar.dueFeeReportSearchNowButton}"></p:commandButton>
+									<p:commandButton value="Print" styleClass="butwid" icon="fa fa-print"
+										action="printDueFeeReportClassWise.xhtml?faces-redirect=true"
+										rendered="#{dueFeeReport.show}">
+
+									</p:commandButton>
+
+
+									<h:commandLink rendered="#{dueFeeReport.show}">
+										<p:graphicImage name="images/excellogo.png"
+											library="avalon-layout" width="100" height="40"></p:graphicImage>
+										<pe:exporter type="xlsx" target=":form3:table"
+											fileName="DueFees"
+											></pe:exporter>
+									</h:commandLink>
+
+									<p:commandButton rendered="#{dueFeeReport.show}" value="PDF" style="width:50px;" ajax="false" icon="fa fa-file-pdf-o"
+										process="@this" styleClass="butwid"
+										actionListener="#{dueFeeReport.exportDueFeePdf}">
+
+										<p:fileDownload value="#{dueFeeReport.file}" />
+									</p:commandButton>
+
+
+									
+										
+									</p:panelGrid>
+								</center>
+								<p:separator />
+								<br />
+
+							</p:panel>
+
+						</h:form>
+					</div>
+					<div class="card card-w-title">
+						<h:form id="form3">
+
+							<p:panel header="Due Fee Report" id="up">
+
+								<p:outputPanel rendered="#{dueFeeReport.show}">
+									<center>
+										<p
+											style="font-size: 25px !important; font-weight: bold; margin: 0px;">#{headerBean.name}</p>
+										<p
+											style="font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.affiliationNo}</p>
+										<p
+											style="font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.finalAddress}</p>
+										<p
+											style="font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.phoneno}</p>
+
+									</center>
+									<br></br>
+
+									<p:panelGrid columns="5"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent; width: 100%;">
+
+										<p:panelGrid columns="2">
+											<p:outputLabel value="Class:"></p:outputLabel>
+											<h:outputText value="#{dueFeeReport.className}"></h:outputText>
+										</p:panelGrid>
+
+										<p:panelGrid columns="2">
+											<p:outputLabel value="Section:"></p:outputLabel>
+											<h:outputText value="#{dueFeeReport.sectionName}"></h:outputText>
+										</p:panelGrid>
+
+										<p:panelGrid columns="2">
+											<p:outputLabel value="Total Student:"></p:outputLabel>
+											<h:outputText value="#{dueFeeReport.totalStudent}"></h:outputText>
+										</p:panelGrid>
+										<p:panelGrid columns="2">
+											<p:outputLabel value="Up to Month:"></p:outputLabel>
+											<h:outputText value="#{dueFeeReport.month}"></h:outputText>
+										</p:panelGrid>
+										<p:panelGrid columns="2">
+											<p:outputLabel value="Total Amount:"></p:outputLabel>
+											<h:outputText
+												value="#{sideMenuBean.list.country eq 'UAE' ? 'AED ' : 'Rs.'}#{dueFeeReport.totalDueAmount}"></h:outputText>
+										</p:panelGrid>
+
+									</p:panelGrid>
+									<p:dataTable reflow="true" id="table" rowKey="#{var.addNumber}"
+										selection="#{dueFeeReport.selectedStudentList}" var="var"
+										value="#{dueFeeReport.studentList}" scrollable="true" scrollWidth="100%" style="width:100%" rowSelectMode="add">
+
+										<f:facet name="header">
+											<p:outputLabel value="Due Fee Report For Month"></p:outputLabel>
+										</f:facet>
+
+										<p:column  style="--w:50px;" headerText="select" selectionMode="multiple"
+											exportable="false"></p:column>
+
+										<p:column headerText="SR.No." style="--w:50px;">
+											<f:facet name="header">
+												<p:outputLabel value="SR.No."></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.srNo}"></p:outputLabel>
+										</p:column>
+										<p:column sortBy="#{var.fname}"
+											headerText="#{dueFeeReportVar.dueFeeReportFirstNameLabel}" style="--w:70px;">
+
+											<f:facet name="header">
+												<p:outputLabel
+													value="#{dueFeeReportVar.dueFeeReportFirstNameLabel}"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.fname}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Father's Name" style="--w:70px;">
+
+											<f:facet name="header">
+												<p:outputLabel value="Father's Name"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.fathersName}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Contact No." style="--w:80px;">
+
+											<f:facet name="header">
+												<p:outputLabel value="Contact No."></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.fathersPhone}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Class" style="--w:50px;">
+
+											<f:facet name="header">
+												<p:outputLabel value="Class"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.className}"></p:outputLabel>
+										</p:column>
+
+
+
+										<p:columns value="#{dueFeeReport.feelist}" var="column"
+											columnIndexVar="colIndex" style="--w:50px;">
+
+											<f:facet name="header">
+												<p:outputLabel
+													value="#{column.feeName} (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})"></p:outputLabel>
+											</f:facet>
+
+											<p:outputLabel value="#{var.feesMap[column.feeName]}"></p:outputLabel>
+
+										</p:columns>
+
+										<p:column style="--w:50px;"
+											headerText="Total Left Amount (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})">
+											<f:facet name="header">
+												<p:outputLabel
+													value="Total Left Amount (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.tutionFeeDueAmount}"></p:outputLabel>
+										</p:column>
+
+										<f:facet name="footer">
+											<p:panelGrid columns="3" layout="grid"
+												styleClass="ui-panelgrid-blank form-group"
+												style="border:0px none; background-color:transparent;">
+												<p:commandButton update=":form3"
+													value="Print Notice For Selected Students" action="#{dueFeeReport.printNotice}"></p:commandButton>
+												<p:commandButton update=":form1,:form2,:form3"
+													value="Send Message to Selected Students"
+													actionListener="#{dueFeeReport.sendMessageToSelectedStudents}"></p:commandButton>
+												<p:commandButton value="Send Custom Message"
+													update=":messageForm"
+													oncomplete="PF('messageDialog').show()"></p:commandButton>
+											</p:panelGrid>
+										</f:facet>
+
+									</p:dataTable>
+
+								</p:outputPanel>
+
+							</p:panel>
+
+						</h:form>
+
+						<h:form id="messageForm">
+							<p:dialog resizable="false" widgetVar="messageDialog"
+								header="Enter your Message" showEffect="fade"
+								hideEffect="explode" modal="true">
+								<div class="ui-g form-group">
+									<p:panelGrid columns="2"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+
+										<p:outputLabel value="Message" for="@next" style="color:red" ></p:outputLabel>
+										<p:inputTextarea value="#{dueFeeReport.message}"
+											required="true" requiredMessage="Please Enter Message"
+											id="engmsg"
+											onchange="trimFunc(this.value,'Please Section Name',this.id)"></p:inputTextarea>
+
+										<p:commandButton update=":form1,:form2,:form3,:messageForm"
+											actionListener="#{dueFeeReport.sendMessageToSelectedStudentsCustome}"
+											value="Send Now" />
+
+									</p:panelGrid>
+								</div>
+							</p:dialog>
+						</h:form>
+
+						<h:form id="MsgLimitForm" style="overflow:hidden">
+							<p:dialog header="Low SMS Balance" width="500"
+								widgetVar="MsgLmtDlg" modal="true" showEffect="fade"
+								hideEffect="fade" resizable="false">
+								<center>
+									<p:outputLabel value="#{dueFeeReport.balMsg}"
+										style="font-size:14px;font-weight: bold;" />
+								</center>
+								<br></br>
+								<br></br>
+								<center>
+									<p:commandButton value="Skip" action="#{dueFeeReport.sendMsg}"
+										update="MsgLimitForm" />
+									<br /> <br />
+									<p:commandButton value="Message Logs"
+										action="messageSchoolHistory.xhtml?faces-redirect=true"
+										update="MsgLimitForm" />
+									<br /> <br />
+									<p:commandButton value="Recharge Now"
+										action="purchaseMsgPack.xhtml?faces-redirect=true"
+										update="MsgLimitForm" />
+								</center>
+								<br></br>
+							</p:dialog>
+						</h:form>
+
+						<h:form id="MsgLimitForm1" style="overflow:hidden">
+							<p:dialog header="Low SMS Balance" width="500"
+								widgetVar="MsgLmtDlg1" modal="true" showEffect="fade"
+								hideEffect="fade" resizable="false">
+								<center>
+									<p:outputLabel value="#{dueFeeReport.balMsg}"
+										style="font-size:14px;font-weight: bold;" />
+								</center>
+								<br></br>
+								<br></br>
+								<center>
+									<p:commandButton value="Skip"
+										action="#{dueFeeReport.sendMsgCustom}" update="MsgLimitForm1" />
+									<br /> <br />
+									<p:commandButton value="Message Logs"
+										action="messageSchoolHistory.xhtml?faces-redirect=true"
+										update="MsgLimitForm1" />
+									<br /> <br />
+									<p:commandButton value="Recharge Now"
+										action="purchaseMsgPack.xhtml?faces-redirect=true"
+										update="MsgLimitForm1" />
+								</center>
+								<br></br>
+							</p:dialog>
+						</h:form>
+
+						<h:form id="MsgOverForm" style="overflow:hidden">
+							<p:dialog header="SMS Limit Over" width="500"
+								widgetVar="MsgOvrDlg" modal="true" showEffect="fade"
+								hideEffect="fade" resizable="false">
+								<center>
+									<p:outputLabel value="#{dueFeeReport.balMsg}"
+										style="font-size:14px;font-weight: bold;" />
+								</center>
+								<br></br>
+								<br></br>
+								<center>
+									<p:commandButton value="Message Logs"
+										action="messageSchoolHistory.xhtml?faces-redirect=true"
+										update="MsgOverForm" />
+									<br /> <br />
+									<p:commandButton value="Recharge Now"
+										action="purchaseMsgPack.xhtml?faces-redirect=true"
+										update="MsgOverForm" />
+								</center>
+								<br></br>
+							</p:dialog>
+						</h:form>
+
+						<h:form id="MsgOtherForm" style="overflow:hidden">
+							<p:dialog header="SMS Limit Over" width="500"
+								widgetVar="MsgOthDlg" modal="true" showEffect="fade"
+								hideEffect="fade" resizable="false">
+								<center>
+									<p:outputLabel value="#{dueFeeReport.balMsg}"
+										style="font-size:14px;font-weight: bold;" />
+								</center>
+								<br></br>
+								<br></br>
+								<center>
+									<p:commandButton value="OK"
+										action="dueFeeReport.xhtml?faces-redirect=true"
+										update="MsgOtherForm" />
+								</center>
+							</p:dialog>
+						</h:form>
+
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

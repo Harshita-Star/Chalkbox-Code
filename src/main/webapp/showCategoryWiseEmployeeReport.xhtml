@@ -1,0 +1,265 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Category Wise Employee Report</ui:define>
+
+	<ui:define name="content">
+
+
+		<style>
+.ui-datatable .ui-datatable-scrollable-body,
+	.ui-datatable-scrollable-header, .ui-datatable-footer,
+	.ui-datatable-header {
+	width: 100% !important;
+}
+
+body .ui-datatable thead th, body .ui-datatable tbody td {
+	width: var(--w) !important;
+}
+
+body .ui-datatable  .ui-datatable-header {
+	position: sticky !important;
+	top: 60px !important;
+	width: 100% !important;
+}
+
+.ui-datatable-scrollable .ui-datatable-scrollable-header,
+	.ui-datatable-scrollable .ui-datatable-scrollable-footer {
+	position: sticky !important;
+	top: 108px !important;
+}
+</style>
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+
+						<h:form id="form2">
+
+							<p:panel header="Search Employee by category">
+
+								<p:panelGrid columns="5"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4,ui-grid-col-2"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<h:outputText value="Select a category"></h:outputText>
+									<p:selectOneMenu filter="true"
+										value="#{showCategoryWiseEmployeeReport.selectedCategory}">
+										<f:selectItem itemLabel="Select here" itemValue=""></f:selectItem>
+										<f:selectItem itemLabel="All" itemValue="All"></f:selectItem>
+										<f:selectItems
+											value="#{showCategoryWiseEmployeeReport.categoryList}"></f:selectItems>
+
+										<p:ajax
+											listener="#{showCategoryWiseEmployeeReport.searchByCategory}"
+											update=":form3"></p:ajax>
+									</p:selectOneMenu>
+								</p:panelGrid>
+								
+								
+								<br />
+								<p:separator />
+								<center>
+									<p:panelGrid
+										columns="3"
+										layout="grid" styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+									<p:commandButton rendered="false" value="Print" styleClass="butwid" icon="fa fa-print">
+										<p:printer target=":form3"></p:printer>
+									</p:commandButton>
+
+									<h:commandLink>
+										<p:graphicImage name="images/excellogo.png"
+											library="avalon-layout" width="100" height="40"></p:graphicImage>
+										<pe:exporter type="xlsx" target=":form3:dttable"
+											fileName="EmployeeReport"></pe:exporter>
+									</h:commandLink>
+
+									<p:commandButton value="PDF" ajax="false" process="@this" styleClass="butwid" icon="fa fa-file-pdf-o"
+										actionListener="#{showCategoryWiseEmployeeReport.exportEmpPdf}">
+
+										<p:fileDownload value="#{showCategoryWiseEmployeeReport.file}" />
+									</p:commandButton>
+										
+									</p:panelGrid>
+								</center>
+								<p:separator />
+								<br />
+
+							</p:panel>
+
+						</h:form>
+						<h:form id="form3">
+							<p:outputPanel rendered="#{showCategoryWiseEmployeeReport.show}">
+								<center>
+									<p
+										style="font-family: initial; font-style: oblique; font-size: 25px !important; font-weight: bold; margin: 0px;">#{headerBean.name}</p>
+									<p
+										style="font-family: initial; font-style: oblique; font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.affiliationNo}</p>
+									<p
+										style="font-family: initial; font-style: oblique; font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.finalAddress}</p>
+									<p
+										style="font-family: initial; font-style: oblique; font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.phoneno}</p>
+
+
+								</center>
+							</p:outputPanel>
+							<p:panelGrid rendered="false" columns="3" layout="grid"
+								styleClass="ui-panelgrid-blank form-group" style="width:100%">
+
+								<p:panelGrid columns="2">
+									<h:outputText value="Category:-"></h:outputText>
+									<h:outputText
+										value="#{showCategoryWiseEmployeeReport.category}"></h:outputText>
+								</p:panelGrid>
+
+								<p:panelGrid columns="2">
+									<h:outputText value="Session:-"></h:outputText>
+									<h:outputText value="#{showCategoryWiseEmployeeReport.session}"></h:outputText>
+								</p:panelGrid>
+
+								<p:panelGrid columns="2">
+									<h:outputText value="Total:-"></h:outputText>
+									<h:outputText value="#{showCategoryWiseEmployeeReport.total}"></h:outputText>
+								</p:panelGrid>
+
+							</p:panelGrid>
+							<p:dataTable rendered="#{showCategoryWiseEmployeeReport.show}"
+								reflow="true" var="var" scrollWidth="100%" scrollable="true"
+								value="#{showCategoryWiseEmployeeReport.employeeList}"
+								style="width:100%" id="dttable">
+
+								<f:facet name="header">
+
+									<p:outputLabel
+										style="margin: 0px; font-size: 25px !important; font-weight: bold;"
+										value="Category wise Employee Report"></p:outputLabel>
+
+								</f:facet>
+
+
+
+								<p:columnGroup type="header">
+									<p:row>
+										<p:column colspan="6"
+											headerText="Category : #{showCategoryWiseEmployeeReport.category}"></p:column>
+										<p:column colspan="5"
+											headerText="Session : #{showCategoryWiseEmployeeReport.session}"></p:column>
+										<p:column colspan="6"
+											headerText="Total : #{showCategoryWiseEmployeeReport.total}"></p:column>
+									</p:row>
+									<p:row>
+										<p:column style="width:100px;" headerText="Employee Id"></p:column>
+										<p:column style="width:100px;" headerText="Employee Name"></p:column>
+										<p:column style="width:100px;" headerText="Sub Categ."></p:column>
+										<p:column style="width:100px;" headerText="Spouse Name"></p:column>
+										<p:column style="width:100px;" headerText="Father Name"></p:column>
+										<p:column style="width:100px;" headerText="Salary"></p:column>
+										<p:column style="width:100px;" headerText="Address"></p:column>
+										<p:column style="width:100px;" headerText="Date of Joining"></p:column>
+										<p:column style="width:100px;" headerText="Date of Quit"></p:column>
+										<p:column style="width:100px;" headerText="DOB"></p:column>
+										<p:column style="width:100px;" headerText="Anniversary Date"></p:column>
+										<p:column style="width:100px;" headerText="Qualification"></p:column>
+										<p:column style="width:100px;" headerText="Contact no-1"></p:column>
+										<p:column style="width:100px;" headerText="Contact no-2"></p:column>
+										<p:column style="width:100px;" headerText="Email / Zoom Email"></p:column>
+										<p:column style="width:100px;" headerText="Pan No."></p:column>
+										<p:column style="width:100px;" headerText="Aadhar No."></p:column>
+									</p:row>
+								</p:columnGroup>
+
+
+
+
+
+
+
+								<p:column>
+								
+									<h:outputText value="#{var.id}"></h:outputText>
+								</p:column>
+
+								<p:column>
+									<h:outputText value="#{var.fname}"></h:outputText>
+								</p:column>
+
+								<p:column>
+									<h:outputText value="#{var.subCateg}"></h:outputText>
+								</p:column>
+
+								<p:column>
+									<h:outputText value="#{var.spouseName}"></h:outputText>
+								</p:column>
+
+								<p:column>
+									<h:outputText value="#{var.lname}"></h:outputText>
+								</p:column>
+
+
+
+								<p:column>
+									<h:outputText value="#{var.salary}"></h:outputText>
+								</p:column>
+
+								<p:column>
+									<h:outputText value="#{var.address}"></h:outputText>
+								</p:column>
+
+								<p:column>
+									<h:outputText value="#{var.joiningDateStr}"></h:outputText>
+								</p:column>
+
+								<p:column>
+									<h:outputText value="#{var.leavingDateStr}"></h:outputText>
+								</p:column>
+
+								<p:column>
+									<h:outputText value="#{var.dobStr}"></h:outputText>
+								</p:column>
+
+								<p:column>
+									<h:outputText value="#{var.anniDateStr}"></h:outputText>
+								</p:column>
+
+								<p:column>
+									<h:outputText value="#{var.qualification}"></h:outputText>
+								</p:column>
+
+								<p:column>
+									<h:outputText value="#{var.mobile}"></h:outputText>
+								</p:column>
+
+								<p:column>
+									<h:outputText value="#{var.mobile2}"></h:outputText>
+								</p:column>
+
+								<p:column>
+									<h:outputText value="#{var.email}"></h:outputText>
+								</p:column>
+
+								<p:column>
+									<h:outputText value="#{var.panNo}"></h:outputText>
+								</p:column>
+
+								<p:column>
+									<h:outputText value="#{var.aadhaarNo}"></h:outputText>
+								</p:column>
+							</p:dataTable>
+						</h:form>
+
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

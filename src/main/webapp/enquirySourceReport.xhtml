@@ -1,0 +1,158 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Enquiry Source Report</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<p:growl></p:growl>
+							<p:messages closable="true" autoUpdate="true"></p:messages>
+							<p:panel header="Enquiry Source Report (#{sideMenuBean.session})">
+								<p:dataTable reflow="true"
+									value="#{enquirySourceReport.categoryList}" rowIndexVar="index"
+									var="var" style="width: 60%">
+
+									<p:column style="width: 60px;text-align: center;"
+										headerText="S.No.">
+										<p:outputLabel value="#{index+1}"></p:outputLabel>
+									</p:column>
+
+									<p:column style="text-align: center;"
+										headerText="Enquiry Source">
+										<p:outputLabel value="#{var.label}"></p:outputLabel>
+									</p:column>
+
+									<p:column style="text-align: center;"
+										headerText="No. of Enquiries">
+										<p:outputLabel value="#{var.description}" style="font-weight:bold"></p:outputLabel>
+									</p:column>
+
+									<p:column style="width: 60px;" rendered="true"
+										headerText="Details">
+										<p:commandButton icon="ui-icon-search"
+											action="#{enquirySourceReport.viewDetail}">
+											<f:setPropertyActionListener
+												target="#{enquirySourceReport.selected}" value="#{var}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+
+								</p:dataTable>
+							</p:panel>
+						</h:form>
+
+						<h:form id="viewForm">
+							<p:dialog header="Enquiry Details" widgetVar="viewDlg"
+								modal="true" showEffect="explode" hideEffect="explode"
+								resizable="false" closable="true" width="100%" height="450px">
+
+								<p:dataTable id="admdt" value="#{enquirySourceReport.list}"
+									var="var" style="width:100%" rowIndexVar="index">
+
+									<f:facet name="header">
+										<p:panelGrid columns="1"
+											styleClass="ui-panelgrid-blank form-group"
+											style="width:100%;">
+											<p:outputLabel value="Enquiry Source : #{enquirySourceReport.source}"></p:outputLabel>
+										</p:panelGrid>
+									</f:facet>
+
+									<p:column headerText="S.No">
+										<f:facet name="header">
+											<p:outputLabel value="S.No"></p:outputLabel>
+										</f:facet>
+										<h:outputText value="#{index+1}"></h:outputText>
+									</p:column>
+
+									<p:column headerText="Date"
+										filterBy="#{var.stringadmissionDate}"
+										sortBy="#{var.admissionDate}">
+										<f:facet name="header">
+											<p:outputLabel value="Date"></p:outputLabel>
+										</f:facet>
+										<h:outputText value="#{var.stringadmissionDate}"></h:outputText>
+									</p:column>
+
+									<p:column headerText="Ref. No." filterBy="#{var.refNo}"
+										filterMatchMode="contains">
+										<f:facet name="header">
+											<p:outputLabel value="Ref.No."></p:outputLabel>
+										</f:facet>
+										<h:outputText value="#{var.refNo}"></h:outputText>
+									</p:column>
+
+									<p:column headerText="Student Name"
+										filterBy="#{var.studentName}" filterMatchMode="contains">
+										<f:facet name="header">
+											<p:outputLabel value="Student Name"></p:outputLabel>
+										</f:facet>
+										<h:outputText value="#{var.studentName}"></h:outputText>
+									</p:column>
+
+									<p:column headerText="Father's Name">
+										<f:facet name="header">
+											<p:outputLabel value="Father's Name"></p:outputLabel>
+										</f:facet>
+										<h:outputText value="#{var.fatherName}"></h:outputText>
+									</p:column>
+
+
+									<p:column headerText="MobNo.">
+										<f:facet name="header">
+											<p:outputLabel value="Mob.No"></p:outputLabel>
+										</f:facet>
+										<h:outputText value="#{var.mobno}">
+										</h:outputText>
+									</p:column>
+
+									<p:column headerText="Admission Sought for Class"
+										filterBy="#{var.admissionclass}"
+										sortBy="#{var.admissionclass}" filterMatchMode="contains">
+										<f:facet name="header">
+											<p:outputLabel value="Admission Sought for Class"></p:outputLabel>
+										</f:facet>
+										<h:outputText value="#{var.admissionclass}">
+										</h:outputText>
+									</p:column>
+
+									<p:column headerText="For Session" filterBy="#{var.session}"
+										sortBy="#{var.session}" filterMatchMode="contains">
+										<f:facet name="header">
+											<p:outputLabel value="Session"></p:outputLabel>
+										</f:facet>
+										<h:outputText value="#{var.session}">
+										</h:outputText>
+									</p:column>
+									
+									<p:column headerText="Status">
+										<f:facet name="header">
+											<p:outputLabel value="Status"></p:outputLabel>
+										</f:facet>
+										<h:outputText value="#{var.enquiryStatus.toUpperCase()}" style="font-weight:bold;">
+										</h:outputText>
+									</p:column>
+
+									<p:column headerText="Added By">
+										<f:facet name="header">
+											<p:outputLabel value="Added By"></p:outputLabel>
+										</f:facet>
+										<h:outputText value="#{var.addedby}"></h:outputText>
+									</p:column>
+								</p:dataTable>
+							</p:dialog>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

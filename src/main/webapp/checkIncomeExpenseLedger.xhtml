@@ -1,0 +1,139 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Income Expense Ledger</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+
+						<h:form id="form" style="overflow:hidden">
+						<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+							<p:panel id="panel1" rendered="true" header="Search Data">
+								<p:outputPanel>
+									<p:dataTable var="var"
+										value="#{CheckAmountInUnit.amountListCash}">
+										<f:facet name="header">
+											
+								      	 	Amount In Cash
+								      	 	<p:outputLabel style="float:right"
+												value="#{CheckAmountInUnit.totalCashAmount}">
+												<f:convertNumber groupingUsed="false" minFractionDigits="2"
+													maxFractionDigits="2"></f:convertNumber>
+											</p:outputLabel>
+											<p:outputLabel style="float:right"
+												value="Total Amount : #{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'} "></p:outputLabel>
+
+											<p:outputLabel style="float:right"
+												rendered="#{CheckAmountInUnit.showUnitName}"
+												value="Total Amount : #{sideMenuBean.list.country eq 'UAE' ? 'AED ' : 'Rs.'}">
+
+											</p:outputLabel>
+										</f:facet>
+
+										<p:column headerText="Type">
+											<p:outputLabel value="#{var.type}"></p:outputLabel>
+										</p:column>
+
+										<p:column
+											headerText="Amount (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})">
+											<p:commandLink style="color:blue"
+												action="#{CheckAmountInUnit.checkLedger}">
+												<p:outputLabel value="#{var.amount}">
+													<f:convertNumber groupingUsed="false" minFractionDigits="2"
+														maxFractionDigits="2"></f:convertNumber>
+												</p:outputLabel>
+
+												<f:setPropertyActionListener
+													target="#{CheckAmountInUnit.selectedList}" value="#{var}"></f:setPropertyActionListener>
+											</p:commandLink>
+										</p:column>
+									</p:dataTable>
+									<br></br>
+									<p:dataTable var="varr"
+										value="#{CheckAmountInUnit.amountListBank}">
+										<f:facet name="header">
+									       Amount In Bank
+									        <p:outputLabel style="float:right"
+												value="#{CheckAmountInUnit.totalClearAmount}">
+												<f:convertNumber groupingUsed="false" minFractionDigits="2"
+													maxFractionDigits="2"></f:convertNumber>
+											</p:outputLabel>
+											<p:outputLabel style="float:right"
+												value=" , Total Clear Amount : #{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'} "></p:outputLabel>
+
+											<p:outputLabel style="float:right"
+												value="#{CheckAmountInUnit.totalChequeAmount}">
+												<f:convertNumber groupingUsed="false" minFractionDigits="2"
+													maxFractionDigits="2"></f:convertNumber>
+											</p:outputLabel>
+											<p:outputLabel style="float:right"
+												value="Total Amount : #{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'} "></p:outputLabel>
+
+										</f:facet>
+										<p:column headerText="Bank Name">
+											<p:outputLabel value="#{varr.bank_name}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Account No">
+											<p:outputLabel value="#{varr.acc_no}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Type">
+											<p:outputLabel value="#{varr.type}"></p:outputLabel>
+										</p:column>
+
+										<p:column
+											headerText="Amount (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})">
+											<p:commandLink style="color:blue"
+												action="#{CheckAmountInUnit.checkLedger}">
+												<p:outputLabel value="#{varr.amount}">
+													<f:convertNumber groupingUsed="false" minFractionDigits="2"
+														maxFractionDigits="2"></f:convertNumber>
+												</p:outputLabel>
+												<f:setPropertyActionListener
+													target="#{CheckAmountInUnit.selectedList}" value="#{varr}"></f:setPropertyActionListener>
+											</p:commandLink>
+										</p:column>
+
+										<p:column
+											headerText="Unclear Amount (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})">
+											<p:commandLink style="color:blue"
+												value="#{varr.unclearAmount}"
+												action="#{CheckAmountInUnit.dueChequeNotification}">
+												<p:outputLabel value="#{varr.unclearAmount}">
+													<f:convertNumber groupingUsed="false" minFractionDigits="2"
+														maxFractionDigits="2"></f:convertNumber>
+												</p:outputLabel>
+												<f:setPropertyActionListener
+													target="#{CheckAmountInUnit.selectedList}" value="#{varr}"></f:setPropertyActionListener>
+											</p:commandLink>
+										</p:column>
+
+										<p:column
+											headerText="Total Amount (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})">
+											<p:outputLabel value="#{varr.totalAmount}">
+												<f:convertNumber groupingUsed="false" minFractionDigits="2"
+													maxFractionDigits="2"></f:convertNumber>
+											</p:outputLabel>
+										</p:column>
+
+									</p:dataTable>
+								</p:outputPanel>
+
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

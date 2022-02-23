@@ -1,0 +1,122 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Check Leave</ui:define>
+
+    <ui:define name="content">
+       
+            <div class="ui-fluid">
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <div class="card card-w-title">
+                              <h:form id="form"  style="overflow:hidden">
+					<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+						<p:panel id="pnl" header="Leave Requests" >
+							<p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;" >
+							
+							<p:outputLabel value="Start Date" for="@next" style="color:red" ></p:outputLabel>
+							<p:calendar effect="fold" pattern="dd/MM/yyyy" navigator="true" yearRange="c-30:c+30" value="#{checkLeave.startDate}" required="true" requiredMessage="Please Enter Start Date.">
+							</p:calendar>
+							
+							<p:outputLabel value="End Date" for="@next" style="color:red" ></p:outputLabel>
+							<p:calendar effect="fold" pattern="dd/MM/yyyy" navigator="true" yearRange="c-30:c+30" value="#{checkLeave.endDate}" required="true" requiredMessage="Please Enter End Date.">
+							</p:calendar>
+							
+							<p:commandButton value="Show" update=":form" action="#{checkLeave.showData}"></p:commandButton>
+							</p:panelGrid>
+						</p:panel>	
+						
+						<p:panel header="Requests">	
+							<p:dataTable widgetVar="assVar" reflow="true" style="font-weight:bold;" id="dtt" value="#{checkLeave.leaveList}" var="var" rowStyleClass="#{var.finalStatus eq 'cancelled' ? 'redColored' : ''} #{var.finalStatus eq 'approved' ? 'greenColored' : ''} #{var.finalStatus eq 'pending' ? 'blueColored' : ''} " >
+								<p:column headerText="S.No." style="text-align: center;">
+									<p:outputLabel value="#{var.sno}"></p:outputLabel>
+								</p:column>
+									
+								<p:column filterBy="#{var.teacherId}" filterMatchMode="contains" headerText="Faculty" style="text-align: center;">
+									<h:outputText value="#{var.teacherId} - #{var.staff_name}" />
+								</p:column>
+								
+								<p:column headerText="Apply Date" style="text-align: center;">
+									<h:outputText value="#{var.strApplyDate}" />
+								</p:column>
+								
+								<p:column headerText="From-To" style="text-align: center;">
+									<h:outputText value="#{var.strDateFrom} - #{var.strDateTo} (#{var.days})" />
+								</p:column>
+								
+								<p:column headerText="Type" style="text-align: center;">
+									<h:outputText value="#{var.leaveType}" />
+								</p:column>
+								
+								<p:column headerText="Reason" style="text-align: center;">
+									<h:outputText value="#{var.reason}" />
+								</p:column>
+								
+								<p:column rendered="false" filterBy="#{var.lectureStatus}" filterMatchMode="equals" headerText="Lecture Status" style="text-align:center;">
+									 <f:facet name="filter">
+						                <p:selectOneMenu  onchange="PF('assVar').filter()" filter="true" >
+						                    <f:selectItem itemLabel="All" itemValue="#{null}" noSelectionOption="true" />
+						                    <f:selectItem itemLabel="Pending" itemValue="pending" />
+						                    <f:selectItem itemLabel="Arranged" itemValue="arranged" />
+						                </p:selectOneMenu>
+						            </f:facet>
+									<h:outputText value="#{var.lectureStatus}" />
+								</p:column>
+									
+								<p:column rendered="false" filterBy="#{var.hodStatus}" filterMatchMode="equals" headerText="HOD Status" style=";text-align: center;">
+									<f:facet name="filter">
+						                <p:selectOneMenu  style="width: 15px !important;" onchange="PF('assVar').filter()" filter="true">
+						                    <f:selectItem itemLabel="All" itemValue="#{null}" noSelectionOption="true" />
+						                    <f:selectItem itemLabel="Pending" itemValue="pending" />
+						                    <f:selectItem itemLabel="Forwarded" itemValue="forwarded" />
+						                    <f:selectItem itemLabel="Cancelled" itemValue="cancelled" />
+						                </p:selectOneMenu>
+						            </f:facet>
+									<h:outputText value="#{var.hodStatus}" />
+								</p:column>
+								
+								<p:column filterBy="#{var.finalStatus}" filterMatchMode="equals" headerText="Final Status" style="text-align: center;">
+									<f:facet name="filter">
+						                <p:selectOneMenu   onchange="PF('assVar').filter()"  filter="true">
+						                    <f:selectItem itemLabel="All" itemValue="#{null}" noSelectionOption="true" />
+						                    <f:selectItem itemLabel="Pending" itemValue="pending" />
+						                    <f:selectItem itemLabel="Approved" itemValue="approved" />
+						                    <f:selectItem itemLabel="Cancelled" itemValue="cancelled" />
+						                </p:selectOneMenu>
+						            </f:facet>
+									<h:outputText value="#{var.finalStatus}" />
+								</p:column>
+								
+								<p:column headerText="Delete" style="text-align: center;">
+									<p:commandButton disabled="#{var.disableDelete}" immediate="true" icon="ui-icon-trash" update=":form" action="#{checkLeave.deleteLeave}">
+										<f:setPropertyActionListener target="#{checkLeave.selectedAss}" value="#{var}"></f:setPropertyActionListener> 
+									</p:commandButton>
+								</p:column>
+								
+								<p:column headerText="Approve" style="text-align: center;">
+									<p:commandButton disabled="#{var.disableApprove}" immediate="true" icon="ui-icon-check" update=":form" action="#{checkLeave.approve}">
+										<f:setPropertyActionListener target="#{checkLeave.selectedAss}" value="#{var}"></f:setPropertyActionListener> 
+									</p:commandButton>
+								</p:column>
+								
+								<p:column headerText="Deny" style="text-align: center;">
+									<p:commandButton update=":form" disabled="#{var.disableDeny}" immediate="true" icon="ui-icon-close" action="#{checkLeave.deny}">
+										<f:setPropertyActionListener target="#{checkLeave.selectedAss}" value="#{var}"></f:setPropertyActionListener> 
+									</p:commandButton>
+								</p:column>
+							</p:dataTable>
+						</p:panel>
+						
+	   			 	</h:form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+       
+    </ui:define>
+
+</ui:composition>

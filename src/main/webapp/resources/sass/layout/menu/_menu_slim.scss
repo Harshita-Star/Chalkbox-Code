@@ -1,0 +1,276 @@
+@media (min-width:993px) {
+    .layout-slim,
+    .layout-slim-plus {
+        .menu-wrapper {
+            width: 60px;
+            height: 100%;
+
+            .layout-menu-container {
+                overflow: visible;
+
+                .layout-profile {
+                    > .profile-image-icons {
+                        display: none;
+                    }
+
+                    .layout-profile-button {
+                        text-align: center;
+                        padding: 12px 0;
+
+                        img {
+                            width: 32px;
+                        }
+
+                        .profile-image-icons {
+                            padding: 0;
+                            @include flex();
+                            @include flex-justify-center();
+
+                            .icons {
+                                display: none;
+                            }
+                        }
+
+                        .profile-info-button {
+                            display: none;
+                        }
+                    }
+
+                    .layout-profile-menu {
+                        top: 0;
+                        left: 60px;
+                        width: 230px;
+                        position: absolute;
+                        padding: 8px 12px;
+                        overflow: auto;
+                        max-height: 450px;
+                        @include border-radius-bottom(2px);
+                        box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.08);
+
+                        li {
+                            &.info {
+                                display: block;
+                            }
+
+                            .profile-info {
+                                @include flex();
+                                @include flex-align-center();
+                                @include flex-justify-between();
+                                padding: 8px;
+                                width: 100%;
+
+                                .layout-profile-userinfo {
+                                    .layout-profile-name {
+                                        display: block;
+                                        font-size: 14px;
+                                        font-weight: 500;
+                                    }
+                                }
+                
+                                .icons {
+                                    @include flex();
+                                    @include flex-align-center();
+            
+                                    i {
+                                        margin-left: 8px;
+                                        cursor: pointer;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    &.layout-profile-active {
+                        .layout-profile-menu {
+                            display: block;
+                        }
+                    }
+                }
+
+                .layout-menu {
+                    margin: 0;
+
+                    .layout-menu-tooltip {
+                        display: none;
+                        padding: 0 5px;
+                        position: absolute;
+                        left: 66px;
+                        top: 12px;
+                        margin: 0;
+                        line-height: 1;
+                        border-radius: 1px;
+                        
+                        .layout-menu-tooltip-text {
+                            padding: 6px 8px;
+                            font-weight: 700;
+                            min-width: 75px;
+                            white-space: nowrap;
+                            text-align: center;
+                            @include shadow(0 2px 10px 0 rgba(0, 3, 6, 0.16));
+                        }
+                        
+                        .layout-menu-tooltip-arrow {
+                            position: absolute;
+                            width: 0;
+                            height: 0;
+                            border-color: transparent;
+                            border-style: solid;
+                            top: 50%;
+                            left: -4px;
+                            margin-top: -5px;
+                            border-width: 5px 5px 5px 0;
+                        }
+                    }
+
+                    li {
+                        &.active-menuitem {
+                            > ul {
+                                display: block;
+                            }
+                        }
+                    }
+
+                    > li {
+                        position: relative;
+                        padding: 0;
+
+                        &.layout-root-menuitem {
+                            > div {
+                                display: none;
+                            }
+                        }
+
+                        > a {
+                            padding: 12px 0;
+                            @include flex-center();
+                            @include flex-direction-column();
+                            @include transition(all $transitionDuration);
+                            position: relative;
+                            border-radius: 0px;
+                            
+                            .layout-menuitem-text {
+                                display: none;
+                                margin: 0;
+                                font-size: 12px;
+                                font-weight: normal;
+                            }
+        
+                            i {
+                                font-size: 24px;
+
+                                &.layout-submenu-toggler {
+                                    display: none;
+                                }
+                            }
+
+                            &:hover + .layout-menu-tooltip {
+                                display: block;
+                            }
+                        }
+
+                        > ul {
+                            position: absolute;
+                            overflow: auto;
+                            top: 0;
+                            left: 60px;
+                            min-width: 250px;
+                            max-height: 450px;
+                            display: none;
+                            padding: 12px;
+                            border-left: 4px solid;
+                            @include border-radius-right(2px);
+
+                            > li {
+                                border: 0 none;
+                            }
+                        }
+
+                        &.active-menuitem {
+                            > a {                                
+                                &:hover + .layout-menu-tooltip {
+                                    display: none;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        .layout-topbar {
+            width: calc(100% - 60px);
+
+            .layout-topbar-left {
+                .menu-button {
+                    display: none;
+                }
+            }
+        }
+
+        .layout-main {
+            margin-left: 60px;
+        }
+    }
+
+    .layout-slim-plus {
+        .menu-wrapper {
+            width: 80px;
+
+            .layout-menu-container {
+                .layout-profile {
+                    .profile-image-icons {
+                        img {
+                            width: 40px;
+                        }
+                    }
+
+                    .layout-profile-menu {
+                        left: 80px;
+                    }
+                }
+
+                .layout-menu {
+                    > li {
+                        &.layout-root-menuitem {
+                            div.layout-menu-tooltip {
+                                display: none;
+                            }
+                        }
+                        
+                        > a {
+                            .layout-menuitem-text {
+                                display: block;
+                            }
+                        }
+
+                        > ul {
+                            left: 80px;
+
+                            > li {
+                                > div.layout-menu-tooltip {
+                                    display: none;
+                                }
+                            }
+                        }
+
+                        &.active-menuitem {
+                            > a {                                
+                                &:hover + .layout-menu-tooltip {
+                                    display: none;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        .layout-main {
+            margin-left: 80px;
+        }
+
+        .layout-topbar {
+            width: calc(100% - 80px);
+        }
+    }
+}

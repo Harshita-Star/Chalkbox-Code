@@ -1,0 +1,403 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	 template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Parent Login Details</ui:define>
+
+	<ui:define name="content">
+	<script>
+	function checkPass(e)
+	{
+		if(e.keyCode==32){
+			return false;
+		}
+	}	
+	
+	</script>
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+				<p:messages closable="true" autoUpdate="true"></p:messages>
+				
+				<div class="card card-w-title">
+				 <h:form id="form1">
+				  <p:panel>		
+				  <f:facet name="header">
+									<span>Search Student By Name</span>
+									<span> <p:commandLink style="float: right;margin-left: 15px;;color: blue;font-size:15px;"
+											immediate="true" value="Blocked Student Details" action="blockedParentLogin.xhtml?faces-redirect=true"></p:commandLink>
+									</span>
+								</f:facet>
+										
+								<p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel value="Student Name/Sr. No"></p:outputLabel>
+									<p:autoComplete id="acSimple" value="#{parentLoginReport.name}"
+										minQueryLength="3"
+										completeMethod="#{parentLoginReport.autoCompleteStudentInfo}" validatorMessage="Please Enter Correct value">
+										<p:ajax event="query" global="false" />
+										<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:autoComplete>
+
+									<p:commandButton value="Search" update=":form" styleClass="butwid" icon="fa fa-search"
+										actionListener="#{parentLoginReport.searchStudentByName}"></p:commandButton>
+
+								</p:panelGrid>	
+								</p:panel>
+							  </h:form>
+							 </div> 	
+										
+						<div class="card card-w-title">
+						    <h:form id="form2">	
+									<p:panel header="Search Student By Class Section">
+										
+									<p:panelGrid columns="5" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel  for="@next" style="color:red" value="Select Class"></p:outputLabel>
+									<p:selectOneMenu style="width:250px"
+										value="#{parentLoginReport.selectedCLassSection}" required="true"
+										requiredMessage="Please select a class">
+											<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+											<f:selectItem itemLabel="All"
+											itemValue="-1"></f:selectItem>
+										<f:selectItems value="#{parentLoginReport.classSection}"></f:selectItems>
+
+										<p:ajax update="sectionid"
+											listener="#{parentLoginReport.allSections}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel  for="@next" style="color:red" value="Select Section"></p:outputLabel>
+									<p:selectOneMenu id="sectionid"
+										value="#{parentLoginReport.selectedSection}" required="true"
+										requiredMessage="Please select a section">
+									    <f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+										<f:selectItem itemLabel="All"
+											itemValue="-1"></f:selectItem>
+										<f:selectItems value="#{parentLoginReport.sectionList}"></f:selectItems>
+										
+									</p:selectOneMenu>
+									</p:panelGrid>	
+									<br />
+								<p:separator />
+								<center>
+									<p:commandButton value="Search" styleClass="butwid" icon="fa fa-search" action="#{parentLoginReport.searchStudentByClassSection}" update=":form"/>
+								</center>
+								<p:separator />
+								<br />
+									</p:panel>
+								</h:form>
+							</div>		
+				
+					<div class="card card-w-title">
+						<h:form id="form">
+							<p:panel id="dataTable" rendered="#{parentLoginReport.b}">
+								<p:commandButton value="Print" rendered="false">
+									<p:printer target=":form:dataTable"></p:printer>
+								</p:commandButton>
+								<center>
+									<p
+										style="font-family: initial; font-style: oblique; font-size: 25px !important; font-weight: bold; margin: 0px;">#{headerBean.name}</p>
+									<p
+										style="font-family: initial; font-style: oblique; font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.affiliationNo}</p>
+									<p
+										style="font-family: initial; font-style: oblique; font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.finalAddress}</p>
+									<p
+										style="font-family: initial; font-style: oblique; font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.phoneno}</p>
+
+									<p
+										style="margin: 0px; font-size: 25px !important; font-weight: bold;">Parent
+										Login Report</p>
+										</center>
+								<br/><br/>
+								
+									
+										
+								
+								<p:panelGrid columns="3"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									
+
+									<h:commandLink>
+										<p:graphicImage name="images/excellogo.png"
+											library="avalon-layout" width="100" height="40"></p:graphicImage>
+										<pe:exporter type="xlsx" target=":form:dt"
+											fileName="ParentLoginReport" />
+									</h:commandLink>
+									
+										<b><h:outputText style="font-size:18px;" value="TOTAL:- #{parentLoginReport.total}"></h:outputText></b>
+
+								</p:panelGrid>
+
+
+								<p:outputPanel id="up">
+								
+									
+									<p:dataTable id="dt" reflow="true"
+										rendered="#{parentLoginReport.show}" var="var"
+										value="#{parentLoginReport.teacherList}"
+										style="text-align:center;"
+										selection="#{parentLoginReport.selectedStudentList}"
+										rowKey="#{var.emplyeeuserid}">
+
+										<f:facet name="header">
+										<p:panelGrid columns="2">
+										
+										<p:commandButton update=":form"  icon="fa fa-share-alt"
+													value="Share Login Credentials With Parents"
+													actionListener="#{parentLoginReport.sendMail}"
+													rendered="#{sideMenuBean.list.country ne 'India'}"></p:commandButton>
+													
+												<p:commandButton update=":form"  icon="fa fa-share-alt"
+													value="Share Login Credentials With Parents"
+													actionListener="#{parentLoginReport.sendMessage}"
+													rendered="#{sideMenuBean.list.country eq 'India'}"></p:commandButton> 
+												<p:commandButton update=":form"
+													value="Login Block" styleClass="redButt" icon="fa fa-ban"
+													actionListener="#{parentLoginReport.multipleLoginBlock}"
+													></p:commandButton>
+										
+													</p:panelGrid>
+													
+										</f:facet>
+										
+											<f:facet name="footer">
+											<p:panelGrid columns="2">
+										
+										<p:commandButton update=":form"  icon="fa fa-share-alt"
+													value="Share Login Credentials With Parents"
+													actionListener="#{parentLoginReport.sendMail}"
+													rendered="#{sideMenuBean.list.country ne 'India'}"></p:commandButton>
+													
+												<p:commandButton update=":form"  icon="fa fa-share-alt"
+													value="Share Login Credentials With Parents"
+													actionListener="#{parentLoginReport.sendMessage}"
+													rendered="#{sideMenuBean.list.country eq 'India'}"></p:commandButton> 
+												<p:commandButton update=":form"
+													value="Login Block" styleClass="redButt" icon="fa fa-ban"
+													actionListener="#{parentLoginReport.multipleLoginBlock}"
+													></p:commandButton>
+									
+													</p:panelGrid>
+										</f:facet>
+									
+
+										<p:column exportable="false" selectionMode="multiple" style="width:50px;text-align:center"></p:column>
+
+										<p:column headerText="S.No.">
+										  <f:facet name="header">
+										    <p:outputLabel value="S.No."></p:outputLabel>
+										  </f:facet>
+											<p:outputLabel value="#{var.sno}"></p:outputLabel>
+										</p:column>
+
+										<p:column sortBy="#{var.fname}" headerText="Student Name"
+											filterBy="#{var.fname}" filterMatchMode="contains">
+											<f:facet name="header">
+										    <p:outputLabel value="Student Name"></p:outputLabel>
+										  </f:facet>
+											<p:outputLabel value="#{var.fname}"></p:outputLabel>
+										</p:column>
+										
+										<p:column sortBy="#{var.lname}" headerText="Fathers Name"
+											filterBy="#{var.lname}" filterMatchMode="contains">
+											<f:facet name="header">
+										    <p:outputLabel value="Fathers Name"></p:outputLabel>
+										  </f:facet>
+											<p:outputLabel value="#{var.lname}"></p:outputLabel>
+										</p:column>
+										
+										<p:column sortBy="#{var.mname}" headerText="Mother Name"
+											filterBy="#{var.mname}" filterMatchMode="contains">
+											<f:facet name="header">
+										    <p:outputLabel value="Mother Name"></p:outputLabel>
+										  </f:facet>
+											<p:outputLabel value="#{var.mname}"></p:outputLabel>
+										</p:column>
+										
+										
+										<p:column headerText="Class" filterBy="#{var.category}"
+											filterMatchMode="contains">
+											<f:facet name="header">
+										    <p:outputLabel value="Class"></p:outputLabel>
+										  </f:facet>
+											<p:outputLabel value="#{var.category}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Section" filterBy="#{var.subCateg}"
+											filterMatchMode="contains">
+											<f:facet name="header">
+										    <p:outputLabel value="Section"></p:outputLabel>
+										  </f:facet>
+											<p:outputLabel value="#{var.subCateg}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="User Name"
+											filterBy="#{var.emplyeeuserid}" filterMatchMode="contains">
+											<f:facet name="header">
+										    <p:outputLabel value="User Name"></p:outputLabel>
+										  </f:facet>
+											<p:outputLabel value="#{var.emplyeeuserid}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Password">
+										<f:facet name="header">
+										    <p:outputLabel value="Password"></p:outputLabel>
+										  </f:facet>
+											<p:outputLabel value="#{var.password}"></p:outputLabel>
+										</p:column>
+										<p:column headerText="Mobile">
+										<f:facet name="header">
+										    <p:outputLabel value="Mobile"></p:outputLabel>
+										  </f:facet>
+											<p:outputLabel value="#{var.mobile}"></p:outputLabel>
+										</p:column>
+										
+										<p:column headerText="Msg. Sent" filterBy="#{var.msgSent}">
+										<f:facet name="header">
+										    <p:outputLabel value="Msg. Sent"></p:outputLabel>
+										  </f:facet>
+											<p:outputLabel value="#{var.msgSent}"></p:outputLabel>
+										</p:column>
+										
+										<p:column headerText="Msg.Time" filterBy="#{var.timeMsg}">
+										<f:facet name="header">
+										    <p:outputLabel value="Msg.Time"></p:outputLabel>
+										  </f:facet>
+											<p:outputLabel value="#{var.timeMsg}"></p:outputLabel>
+										</p:column>
+
+										<p:column rendered="true" exportable="false"
+											headerText="Change Password">
+											<center>
+												<p:commandButton value="Password" update=":form"
+													oncomplete="PF('dlg').show();" icon="ui-icon-key"
+													action="#{parentLoginReport.viewDetails}">
+													<f:setPropertyActionListener
+														target="#{parentLoginReport.selectedEmployee}"
+														value="#{var}"></f:setPropertyActionListener>
+												</p:commandButton>
+											</center>
+										</p:column>
+
+										<p:column exportable="false" headerText="Block Login">
+											<center>
+												<p:commandButton value="Block" update=":form,:form2" styleClass="redButt"
+													icon="ui-icon-trash" action="#{parentLoginReport.block}">
+													<f:setPropertyActionListener
+														target="#{parentLoginReport.selectedEmployee}"
+														value="#{var}"></f:setPropertyActionListener>
+													<p:confirm header="Confirmation"
+														message="Are You Sure To Block User...???"
+														icon="ui-icon-alert" />
+												</p:commandButton>
+											</center>
+										</p:column>
+
+
+									</p:dataTable>
+									
+									
+
+								</p:outputPanel>
+							</p:panel>
+
+							<p:dialog resizable="false" widgetVar="dlg"
+								header="Change Password" showEffect="fade" hideEffect="explode"
+								modal="true">
+								<p:outputLabel value="SPACES ARE NOT ALLOWED" style="color:red;"></p:outputLabel>
+								<br/>
+								<br/>
+								<div class="ui-g form-group">
+									<p:panelGrid columns="2"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+										<p:outputLabel value="Password"></p:outputLabel>
+										<p:inputText  value="#{parentLoginReport.password}" onkeypress="if (event.keyCode == 32) return false;" validatorMessage="Please Enter Correct value" >
+										 <f:validateRegex pattern="#{regexVar.regex}" ></f:validateRegex>
+										 <p:keyFilter preventPaste="true"></p:keyFilter>
+										</p:inputText>
+										<p:commandButton update=":form"
+											actionListener="#{parentLoginReport.editPassword}"
+											value="Update"></p:commandButton>
+
+									</p:panelGrid>
+								</div>
+							</p:dialog>
+
+						</h:form>
+						<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+							<p:commandButton value="Yes" type="button"
+								styleClass="ui-confirmdialog-yes greenButt" icon="ui-icon-check" />
+							<p:commandButton value="No" style="margin-left:50px"
+								type="button" styleClass="ui-confirmdialog-no redButt"
+								icon="ui-icon-close" />
+						</p:confirmDialog>
+						
+						<h:form id="MsgLimitForm" style="overflow:hidden">
+							<p:dialog header="Low SMS Balance" width="500" widgetVar="MsgLmtDlg" modal="true" showEffect="fade" hideEffect="fade" resizable="false" >
+								<center>
+									<p:outputLabel value="#{parentLoginReport.balMsg}" style="font-size:14px;font-weight: bold;" />
+								</center>
+								<br></br>
+								<br></br> 
+								<center>
+									<p:commandButton value="Skip" action="#{parentLoginReport.sendMsg}" update="MsgLimitForm"/>
+									<br/>
+									<br/>
+									<p:commandButton value="Message Logs" action="messageSchoolHistory.xhtml?faces-redirect=true" update="MsgLimitForm"/>
+									<br/>
+									<br/>
+									<p:commandButton value="Recharge Now" action="purchaseMsgPack.xhtml?faces-redirect=true" update="MsgLimitForm"/>
+								</center>
+								<br></br>
+							</p:dialog>
+						</h:form>
+						
+						<h:form id="MsgOverForm" style="overflow:hidden">
+							<p:dialog header="SMS Limit Over" width="500" widgetVar="MsgOvrDlg" modal="true" showEffect="fade" hideEffect="fade" resizable="false" >
+								<center>
+								<p:outputLabel value="#{parentLoginReport.balMsg}" style="font-size:14px;font-weight: bold;" />
+								</center>
+								<br></br>
+								<br></br> 
+								<center>
+									<p:commandButton value="Message Logs" action="messageSchoolHistory.xhtml?faces-redirect=true" update="MsgOverForm"/>
+									<br/>
+									<br/>
+									<p:commandButton value="Recharge Now" action="purchaseMsgPack.xhtml?faces-redirect=true" update="MsgOverForm"/>
+								</center>
+								<br></br>
+							</p:dialog>
+						</h:form>
+						
+						<h:form id="MsgOtherForm" style="overflow:hidden">
+							<p:dialog header="SMS Limit Over" width="500"
+								widgetVar="MsgOthDlg" modal="true" showEffect="fade"
+								hideEffect="fade" resizable="false" >
+								<center>
+									<p:outputLabel value="#{parentLoginReport.balMsg}" style="font-size:14px;font-weight: bold;" />
+								</center>
+								<br></br> 
+								<br></br> 
+								<center>
+									<p:commandButton value="OK" action="parentLoginReport.xhtml?faces-redirect=true" update="MsgOtherForm"/>
+								</center>
+							</p:dialog>
+						</h:form>
+						
+						
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

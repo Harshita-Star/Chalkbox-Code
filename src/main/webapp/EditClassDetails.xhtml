@@ -1,0 +1,111 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Edit Class</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="editForm">
+							<p:panelGrid columns="2" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+								<p:outputLabel value="Class Name:-" for="@next" style="color:red" ></p:outputLabel>
+								<p:inputText disabled="true" value="#{editClass.name}" id="secnm" onchange="trimFunc(this.value,'Please Section Name',this.id)" required="true" requiredMessage="Please Enter Class Name" validatorMessage="Please Enter Correct value">
+								   <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+								</p:inputText>
+							</p:panelGrid>
+							<p:dataTable reflow="true" value="#{editClass.allFeesList}" var="var" id="dt">
+
+								<p:column headerText="S. No." style="width:50px;">
+									<p:outputLabel value="#{var.sno}"></p:outputLabel>
+								</p:column>
+
+								<p:column headerText="Fee Name">
+									<p:outputLabel value="#{var.feeName} (#{var.feeType})"></p:outputLabel>
+								</p:column>
+
+
+								<p:columns value="#{editClass.connList}" var="column"
+									columnIndexVar="colIndex">
+
+									<f:facet name="header">
+										<p:outputLabel value="#{column.category}  "></p:outputLabel>
+									</f:facet>
+									<p:panelGrid columns="2" style="border:0px none; background-color:transparent;">
+										<p:outputLabel style="font-size:8px!important;"
+											value="New Student Amount (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})"></p:outputLabel>
+										<p:inputText style="width:70px!important;"
+											value="#{var.newfeeAmountmap[column.id]}">
+											<p:keyFilter regEx="/[\d]/" />
+										</p:inputText>
+										<p:outputLabel style="font-size:8px!important;"
+											value="Old Student Amount (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})"></p:outputLabel>
+
+										<p:inputText style="width:70px!important;"
+											value="#{var.olfFeeAmountmap[column.id]}">
+											<p:keyFilter regEx="/[\d]/" />
+										</p:inputText>
+									</p:panelGrid>
+								</p:columns>
+
+
+
+
+							</p:dataTable>
+							
+							<br />
+								<p:separator />
+								<center>
+									<p:commandButton oncomplete="PF('dlgUpdate').show()"
+								update=":dialogForm" action="#{editClass.monthDetails}" styleClass="butwid" icon="fa fa-floppy-o"
+								value="Save Here"></p:commandButton>
+								</center>
+								<p:separator />
+								<br />
+						</h:form>
+
+						<h:form id="dialogForm">
+
+							<p:dialog resizable="false" widgetVar="dlgUpdate"
+								header="Enter Details" showEffect="fade" hideEffect="explode"
+								modal="true">
+								<div class="ui-g form-group">
+									<p:panelGrid columns="2"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel value="Update From"></p:outputLabel>
+									<p:selectOneMenu value="#{editClass.selectedMonth}">
+										<f:selectItem itemLabel="Update For Whole Session"
+											itemValue="-1"></f:selectItem>
+										<f:selectItems value="#{editClass.monthList}"></f:selectItems>
+
+									</p:selectOneMenu>
+								</p:panelGrid>
+								</div>
+								
+								<br />
+								<p:separator />
+								<center>
+										<p:commandButton update=":dialogForm,:editForm" styleClass="butwid" icon="fa fa-check-circle"
+										actionListener="#{editClass.editNow}" value="Confirm Update"></p:commandButton>
+
+								</center>
+								<p:separator />
+								<br />
+							</p:dialog>
+
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,85 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Gallery</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form" enctype="multipart/form-data">
+							<h1>Gallery</h1>
+
+
+							<p:messages autoUpdate="true" closable="true"></p:messages>
+
+
+							<p:outputPanel id="allStudentDatatable">
+
+								<p:panel
+									header="Add Gallery(Images, Allowed file type are :- jpg,jpeg,png)">
+									<h2>Note : Size limit for an image is 1MB. Please do not
+										upload image(s) of size greater than 1MB</h2>
+									<p:panelGrid columns="4"
+										columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+										layout="grid" styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+										<p:outputLabel for="@next" style="color:red"
+											value="Gallery Name"></p:outputLabel>
+										<p:inputText value="#{addGallery.gallaryName}" required="true"
+											requiredMessage="Please Enter Gallery Name"></p:inputText>
+
+										<p:outputLabel for="@next" style="color:red"
+											value="Select Class"></p:outputLabel>
+										<p:selectOneMenu style="width:250px"
+											value="#{addGallery.selectedCLassSection}" required="true"
+											requiredMessage="Please select a class">
+											<f:selectItem itemLabel="Select Class" itemValue=""></f:selectItem>
+											<f:selectItems value="#{addGallery.classList}"></f:selectItems>
+										</p:selectOneMenu>
+
+									</p:panelGrid>
+									<br></br>
+									<p:dataTable reflow="true" id="table"
+										value="#{addGallery.newsList}" var="var">
+										<p:column headerText="S.No.">
+											<p:outputLabel value="#{var.sNo}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Upload file">
+											<p:fileUpload mode="simple" value="#{var.file}"></p:fileUpload>
+										</p:column>
+
+
+										<f:facet name="footer">
+											<center>
+												<p:commandButton immediate="true" value="Add More Files"
+													styleClass="butwid" icon="fa fa-plus" update=":form:table"
+													actionListener="#{addGallery.addNewRow}"></p:commandButton>
+											</center>
+										</f:facet>
+
+									</p:dataTable>
+
+									<br></br>
+									<center>
+										<p:commandButton ajax="false" value="Submit" styleClass="butwid" icon="fa fa-upload"
+											 action="#{addGallery.sendMessage}"
+											update=":form"></p:commandButton>
+									</center>
+								</p:panel>
+							</p:outputPanel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

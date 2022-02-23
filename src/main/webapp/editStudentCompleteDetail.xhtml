@@ -1,0 +1,634 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Edit Student Details</ui:define>
+	<ui:define name="content">
+	<script>
+	function chekFUnctionSpace(e){
+		var val = document.getElementById('form:up:0:j_idt510').value;
+		val = val.trim();
+		if(val == ""){
+			if (e.keyCode == 32) {
+				document.getElementById('form:up:0:j_idt510').value="";
+			}
+		}
+		
+		
+	}
+	
+	</script>
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<p:messages closable="true" autoUpdate="true"></p:messages>
+						<h:form id="form2">
+
+							<p:panel>
+							<f:facet name="header">
+									<span>Search Student By Class Section</span>
+									<span> <p:commandLink
+											style="float: right;margin-left: 15px;;color: blue;font-size:15px;"
+											immediate="true" value="Search Student"
+											action="allStudentList.xhtml?faces-redirect=true"></p:commandLink>
+									</span>
+								</f:facet>
+							
+
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel value="Select Class" for="@next" style="color:red" ></p:outputLabel>
+									<p:selectOneMenu style="width:250px"
+										value="#{editStudentCompleteDetail.selectedCLassSection}"
+										required="true" requiredMessage="Please select a class"
+										filter="true">
+										<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+										<f:selectItems
+											value="#{editStudentCompleteDetail.classSection}"></f:selectItems>
+										<p:ajax update="sectionid"
+											listener="#{editStudentCompleteDetail.allSections}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Select Section" for="@next" style="color:red" ></p:outputLabel>
+									<p:selectOneMenu id="sectionid"
+										value="#{editStudentCompleteDetail.selectedSection}"
+										required="true" requiredMessage="Please select a section"
+										filter="true">
+										<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+										<f:selectItems
+											value="#{editStudentCompleteDetail.sectionList}"></f:selectItems>
+
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Select Option" />
+									<p:selectOneRadio value="#{editStudentCompleteDetail.option}">
+										<f:selectItem itemLabel="Basic Details" itemValue="details"></f:selectItem>
+										<f:selectItem itemLabel="Photographs Only" itemValue="photo"></f:selectItem>
+									</p:selectOneRadio>
+
+								</p:panelGrid>
+								
+								<br />
+								<p:separator />
+								<center>
+									<p:commandButton value="Search" styleClass="butwid" icon="fa fa-search"
+										actionListener="#{editStudentCompleteDetail.searchStudentByClassSection}"
+										update=":form"></p:commandButton>
+								</center>
+								<p:separator />
+								<br />
+
+							</p:panel>
+						</h:form>
+						<h:form id="form" enctype="multipart/form-data">
+							<h1>Edit Student Details</h1>
+
+							<p:dataTable reflow="true" id="up"
+								value="#{editStudentCompleteDetail.list}" var="var"
+								selection="#{editStudentCompleteDetail.selectStudentDet}"
+								rowKey="#{var.addNumber}"
+								rendered="#{editStudentCompleteDetail.b}" multiViewState="true" rowSelectMode="checkbox">
+
+								<f:facet name="header">
+									<center>
+										<p:commandButton styleClass="butwid" icon="fa fa-upload" value="Update" style="left: 50px;"
+											actionListener="#{editStudentCompleteDetail.submit}"
+											update=":form"></p:commandButton>
+										<p:commandButton id="togglerr" type="button" value="Columns" 
+											style="width: auto;float:right;" icon="ui-icon-transfer-e-w" />
+										<p:columnToggler datasource=":form:up" trigger="togglerr" />
+									</center>
+								</f:facet>
+
+								<p:column selectionMode="multiple" style="width:35px;"></p:column>
+
+								<p:column headerText="Add.No." sortBy="#{var.srNo}"
+									style="width:150px;">
+									<p:inputText value="#{var.srNo}"></p:inputText>
+								</p:column>
+
+								<p:column headerText="Student Name *" style="width:150px;" sortBy="#{var.fname}">
+									<p:inputText value="#{var.fname}" onkeyup="chekFUnctionSpace(event,value);"></p:inputText>
+								</p:column>
+
+								<p:column headerText="Father Name" style="width:150px;">
+									<p:inputText value="#{var.fathersName}"></p:inputText>
+								</p:column>
+
+								<p:column headerText="Mother Name" style="width:150px;">
+									<p:inputText value="#{var.motherName}"></p:inputText>
+								</p:column>
+
+								<p:column headerText="Gender" style="width:150px;">
+									<p:selectOneMenu value="#{var.gender}">
+										<f:selectItem itemLabel="Male" itemValue="Male"></f:selectItem>
+										<f:selectItem itemLabel="Female" itemValue="Female"></f:selectItem>
+									</p:selectOneMenu>
+								</p:column>
+
+								<p:column rendered="#{sideMenuBean.list.schid eq '287'}"
+									headerText="Student Type" style="width:150px;">
+									<p:selectOneMenu value="#{var.studentType}">
+										<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+										<f:selectItem itemLabel="Day Scholar" itemValue="Regular"></f:selectItem>
+										<f:selectItem itemLabel="Hosteler" itemValue="Hosteler"></f:selectItem>
+										<f:selectItem itemLabel="Day Boarding" itemValue="Day Brd"></f:selectItem>
+									</p:selectOneMenu>
+								</p:column>
+
+								<p:column rendered="#{sideMenuBean.list.schid eq '287'}"
+									headerText="Extra Class" style="width:150px;">
+									<p:selectOneRadio value="#{var.extraClass}">
+										<f:selectItem itemLabel="Yes" itemValue="yes"></f:selectItem>
+										<f:selectItem itemLabel="No" itemValue="no"></f:selectItem>
+									</p:selectOneRadio>
+								</p:column>
+
+								<p:column headerText="Add.Date *" style="width:150px;">
+									<p:calendar yearRange="c-50:c+20" navigator="true"
+										value="#{var.startingDate}" pattern="dd/MM/yyyy"></p:calendar>
+
+								</p:column>
+
+
+								<p:column headerText="Admit Class" style="width:150px;">
+									<p:inputText value="#{var.admitClassName}"></p:inputText>
+								</p:column>
+
+
+								<p:column headerText="Dob *" style="width:150px;">
+									<p:calendar yearRange="c-50:c+20" navigator="true"
+										value="#{var.dob}" pattern="dd/MM/yyyy"></p:calendar>
+
+								</p:column>
+
+								<p:column headerText="F. Mobile " style="width:150px;">
+									<p:inputText id="fatherNumber" value="#{var.fathersPhone}" maxlength="10" onkeyup="checkNumberFatherTwo(#{var.sno})">
+										
+									</p:inputText>
+								</p:column>
+								
+								<p:column headerText="M. Mobile" style="width:150px;">
+									<p:inputText id="motherNumber" value="#{var.mothersPhone}" maxlength="10" onkeyup="checkNumberMotherTwo(#{var.sno})">
+										
+									</p:inputText>
+								</p:column>
+
+								<p:column headerText="St. Aadhar No" style="width:150px;">
+									<p:inputText value="#{var.aadharNo}">
+									</p:inputText>
+								</p:column>
+								
+								<p:column headerText="F. Aadhar No" style="width:150px;">
+									<p:inputText value="#{var.fatherAadhaar}">
+									</p:inputText>
+								</p:column>
+								
+								<p:column headerText="M. Aadhar No" style="width:150px;">
+									<p:inputText value="#{var.motherAadhaar}">
+									</p:inputText>
+								</p:column>
+
+
+								<p:column headerText="Student Status" style="width:150px;">
+									<p:selectOneMenu value="#{var.studentStatus}">
+										<f:selectItem itemLabel="Old" itemValue="old"></f:selectItem>
+										<f:selectItem itemLabel="New" itemValue="new"></f:selectItem>
+									</p:selectOneMenu>
+								</p:column>
+								
+								<p:column headerText="Village" style="width:150px;" rendered="#{editStudentCompleteDetail.schid eq '339'}">
+									<p:inputText value="#{var.village}"></p:inputText>
+								</p:column>
+
+								<p:column headerText="Perm. Address" style="width:150px;">
+									<p:inputTextarea value="#{var.permanentAddress}">
+									</p:inputTextarea>
+								</p:column>
+								
+								<p:column headerText="Curr. Address" style="width:150px;">
+									<p:inputTextarea value="#{var.currentAddress}">
+									</p:inputTextarea>
+								</p:column>
+								
+								<p:column headerText="Admission Remark" style="width:150px;">
+									<p:inputTextarea value="#{var.admRemark}">
+									</p:inputTextarea>
+								</p:column>
+
+								<p:column headerText="Religion" style="width:150px;">
+									<p:selectOneMenu value="#{var.religion}" editable="true">
+										<f:selectItem itemLabel="Select Religion" itemValue=""></f:selectItem>
+										<f:selectItems
+											value="#{editStudentCompleteDetail.religionList}"></f:selectItems>
+									</p:selectOneMenu>
+								</p:column>
+
+								<p:column headerText="Blood Group" style="width:150px;">
+									<p:selectOneMenu value="#{var.bloodGroup}" filter="true">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+
+										<f:selectItem itemLabel="A+" itemValue="A+"></f:selectItem>
+										<f:selectItem itemLabel="B+" itemValue="B+"></f:selectItem>
+										<f:selectItem itemLabel="O+" itemValue="O+"></f:selectItem>
+										<f:selectItem itemLabel="AB+" itemValue="AB+"></f:selectItem>
+										<f:selectItem itemLabel="A-" itemValue="A-"></f:selectItem>
+										<f:selectItem itemLabel="B-" itemValue="B-"></f:selectItem>
+										<f:selectItem itemLabel="O-" itemValue="O-"></f:selectItem>
+										<f:selectItem itemLabel="AB-" itemValue="AB-"></f:selectItem>
+
+									</p:selectOneMenu>
+								</p:column>
+
+								<p:column headerText="Category" style="width:150px;">
+									<p:selectOneMenu value="#{var.categId}">
+										<f:selectItem itemLabel="Select Category" itemValue=""></f:selectItem>
+										<f:selectItems
+											value="#{editStudentCompleteDetail.categoryList}"></f:selectItems>
+									</p:selectOneMenu>
+								</p:column>
+
+								<p:column headerText="Caste" style="width:150px;">
+									<p:selectOneMenu value="#{var.caste}" editable="true"
+										filter="true">
+										<f:selectItem itemLabel="Select Caste" itemValue=""></f:selectItem>
+										<f:selectItem itemLabel="Brahmin" itemValue="Brahmin"></f:selectItem>
+										<f:selectItem itemLabel="Vaishy" itemValue="Vaishy"></f:selectItem>
+										<f:selectItem itemLabel="Rajput" itemValue="Rajput"></f:selectItem>
+										<f:selectItem itemLabel="Ahir" itemValue="Ahir"></f:selectItem>
+										<f:selectItem itemLabel="Mali" itemValue="Mali"></f:selectItem>
+										<f:selectItem itemLabel="Gurjar" itemValue="Gurjar"></f:selectItem>
+										<f:selectItem itemLabel="Meghwal" itemValue="Meghwal"></f:selectItem>
+										<f:selectItem itemLabel="Dhobi" itemValue="Dhobi"></f:selectItem>
+										<f:selectItem itemLabel="Darji" itemValue="Darji"></f:selectItem>
+										<f:selectItem itemLabel="Meena" itemValue="Meena"></f:selectItem>
+										<f:selectItem itemLabel="Khati" itemValue="Khati"></f:selectItem>
+										<f:selectItem itemLabel="Sindhi" itemValue="Sindhi"></f:selectItem>
+										<f:selectItem itemLabel="Punjabi" itemValue="Punjabi"></f:selectItem>
+									</p:selectOneMenu>
+								</p:column>
+
+								<p:column headerText="House" style="width:150px;">
+									<p:selectOneMenu value="#{var.house}" filter="true">
+										<f:selectItem itemLabel="Select House" itemValue=""></f:selectItem>
+										<f:selectItems value="#{editStudentCompleteDetail.houseList}"></f:selectItems>
+									</p:selectOneMenu>
+								</p:column>
+								
+								<p:column headerText="Ledger No" style="width:150px;">
+								  <p:inputText value="#{var.ledgerNo}">
+									</p:inputText>
+								</p:column>
+								
+								<p:column headerText="CBSE Reg. No. (IX)" style="width:150px;">
+								  <p:inputText value="#{var.regNo_IX}">
+									</p:inputText>
+								</p:column>
+								
+								<p:column headerText="CBSE Reg. No. (XI)" style="width:150px;">
+								  <p:inputText value="#{var.regNo_XI}">
+									</p:inputText>
+								</p:column>
+								
+								<p:column headerText="Admission File No." style="width:150px;">
+								  <p:inputText value="#{var.admnFileNo}">
+									</p:inputText>
+								</p:column>
+								
+								
+								
+								<p:column headerText="Geo Fence" style="width:150px;">
+								  <p:inputText value="#{var.geoFence}">
+									</p:inputText>
+								</p:column>
+								
+								<p:column headerText="Single Parent" style="width:150px;">
+									<p:selectOneRadio value="#{var.singleParent}">
+												<f:selectItem itemValue="Yes" itemLabel="Yes"></f:selectItem>
+												<f:selectItem itemValue="No" itemLabel="No"></f:selectItem>
+									</p:selectOneRadio>
+								</p:column>
+								
+								<p:column headerText="Single Child" style="width:150px;">
+									<p:selectOneRadio value="#{var.singleChild}">
+												<f:selectItem itemValue="Yes" itemLabel="Yes"></f:selectItem>
+												<f:selectItem itemValue="No" itemLabel="No"></f:selectItem>
+									</p:selectOneRadio>
+								</p:column>
+								
+								<p:column headerText="Father Annual Income" style="width:150px;">
+								  <p:inputText id="fatherInc" value="#{var.fatherAnnIncome}" onkeypress="return AvoidSpace(event)" onkeyup="checkNumberFatherIncome(#{var.sno})">
+								   </p:inputText>
+								</p:column>
+								
+								<p:column headerText="Mother Annual Income" style="width:150px;">
+								  <p:inputText id="motherInc" value="#{var.motherAnnIncome}" onkeypress="return AvoidSpace(event)" onkeyup="checkNumberMotherIncome(#{var.sno})">
+						          </p:inputText>
+								</p:column>
+								
+								<p:column headerText="Father Occupation" style="width:150px;">
+								  <p:selectOneMenu editable="true" value="#{var.fathersOccupation}">
+									 <f:selectItem itemLabel="Select Occupation" itemValue=""></f:selectItem>
+									<f:selectItem itemLabel="Business" itemValue="Business"></f:selectItem>
+									<f:selectItem itemLabel="Govt.Employee"
+										itemValue="Govt.Employee"></f:selectItem>
+									<f:selectItem itemLabel="Doctor" itemValue="Doctor"></f:selectItem>
+									<f:selectItem itemLabel="Advocate" itemValue="Advocate"></f:selectItem>
+									<f:selectItem itemLabel="Engineer" itemValue="Engineer"></f:selectItem>
+									<f:selectItem itemLabel="Teacher" itemValue="Teacher"></f:selectItem>
+									<f:selectItem itemLabel="Shopkeeper"
+										itemValue="Shopkeeper"></f:selectItem>
+									<f:selectItem itemLabel="Labourer" itemValue="Labourer"></f:selectItem>
+									<f:selectItem itemLabel="Agriculture"
+										itemValue="Agriculture"></f:selectItem>
+									<f:selectItem itemLabel="Private Job"
+										itemValue="Private Job"></f:selectItem>
+								  </p:selectOneMenu>         
+								</p:column>
+								
+								<p:column headerText="Mother Occupation" style="width:150px;">
+								  <p:selectOneMenu editable="true" value="#{var.motherOccupation}">
+									 <f:selectItem itemLabel="Select Occupation" itemValue=""></f:selectItem>
+									<f:selectItem itemLabel="Business" itemValue="Business"></f:selectItem>
+									<f:selectItem itemLabel="Govt.Employee"
+										itemValue="Govt.Employee"></f:selectItem>
+									<f:selectItem itemLabel="Doctor" itemValue="Doctor"></f:selectItem>
+									<f:selectItem itemLabel="Advocate" itemValue="Advocate"></f:selectItem>
+									<f:selectItem itemLabel="Engineer" itemValue="Engineer"></f:selectItem>
+									<f:selectItem itemLabel="Teacher" itemValue="Teacher"></f:selectItem>
+									<f:selectItem itemLabel="Shopkeeper"
+										itemValue="Shopkeeper"></f:selectItem>
+									<f:selectItem itemLabel="Labourer" itemValue="Labourer"></f:selectItem>
+									<f:selectItem itemLabel="Agriculture"
+										itemValue="Agriculture"></f:selectItem>
+									<f:selectItem itemLabel="Private Job"
+										itemValue="Private Job"></f:selectItem>
+								  </p:selectOneMenu>         
+								</p:column>
+								
+								<p:column headerText="Roll No." style="width:150px;">
+								  <p:inputText value="#{var.rollNo}">
+									</p:inputText>
+								</p:column>
+								<p:column headerText="Nationality" style="width:150px;">
+								  <p:inputText value="#{var.nationality}">
+									</p:inputText>
+								</p:column>
+								
+								<p:column headerText="Pin Code" style="width:150px;">
+								  <p:inputText value="#{var.pincode}">
+									</p:inputText>
+								</p:column>
+								<p:column headerText="Country" style="width:150px;">
+								  <p:inputText value="#{var.country}">
+									</p:inputText>
+								</p:column>
+								<p:column headerText="Residence Ph. No." style="width:150px;">
+								  <p:inputText value="#{var.residenceMobile}" onkeypress="return AvoidSpace(event)" onkeyup="checkNumberValid2('form:tabview:resiNumber')">
+									</p:inputText>
+								</p:column>
+								<p:column headerText="Child Living with Parents" style="width:150px;">
+								<p:selectOneRadio value="#{var.livingWith}">
+												<f:selectItem itemValue="Yes" itemLabel="yes"></f:selectItem>
+												<f:selectItem itemValue="No" itemLabel="no"></f:selectItem>
+											</p:selectOneRadio>
+								
+								</p:column>
+								<p:column headerText="Father's Email" style="width:150px;">
+								  <p:inputText value="#{var.fatherEmail}">
+									</p:inputText>
+								</p:column>
+								<p:column headerText="Mother' Email" style="width:150px;">
+								  <p:inputText value="#{var.motherEmail}">
+									</p:inputText>
+								</p:column>
+								<p:column headerText="F. Qualif." style="width:150px;">
+								  <p:inputText value="#{var.fatherQualification}">
+									</p:inputText>
+								</p:column>
+								<p:column headerText="M. Qualif." style="width:150px;">
+								  <p:inputText value="#{var.motherQualification}">
+									</p:inputText>
+								</p:column>
+								<p:column headerText="F. offi. contact" style="width:150px;">
+								  <p:inputText value="#{var.fatherOrganization}">
+									</p:inputText>
+								</p:column>
+								<p:column headerText="M. offi. contact" style="width:150px;">
+								  <p:inputText value="#{var.motherOrganization}">
+									</p:inputText>
+								</p:column>
+								<p:column headerText="F. offi. addr." style="width:150px;">
+								  <p:inputText value="#{var.fatherOfficeAdd}">
+									</p:inputText>
+								</p:column>
+								<p:column headerText="M. offi. addr." style="width:150px;">
+								  <p:inputText value="#{var.motherOfficeAdd}">
+									</p:inputText>
+								</p:column>
+								<p:column headerText="F. is Sch. Emp ?" style="width:150px;">
+									<p:selectOneRadio
+														 value="#{var.fatherSchoolEmp}">
+														<f:selectItem itemValue="Yes" itemLabel="Yes"></f:selectItem>
+														<f:selectItem itemValue="No" itemLabel="No"></f:selectItem>
+													</p:selectOneRadio>
+								</p:column>
+								<p:column headerText="M. is sch. Emp ?" style="width:150px;">
+									<p:selectOneRadio
+														value="#{var.motherSchoolEmp}">
+														<f:selectItem itemValue="Yes" itemLabel="Yes"></f:selectItem>
+														<f:selectItem itemValue="No" itemLabel="No"></f:selectItem>
+													</p:selectOneRadio>
+								</p:column>
+								<p:column headerText="Last Sch. Name" style="width:150px;">
+								  <p:inputText value="#{var.lastSchoolName}">
+									</p:inputText>
+								</p:column>
+								<p:column headerText="Medium" style="width:150px;">
+									<p:selectOneRadio value="#{var.medium}">
+												<f:selectItem itemLabel="English" itemValue="English"></f:selectItem>
+												<f:selectItem itemLabel="Hindi" itemValue="Hindi"></f:selectItem>
+											</p:selectOneRadio>
+								</p:column>
+								<p:column headerText="Result" style="width:150px;">
+									<p:selectOneMenu value="#{var.pResult}"
+												editable="true">
+												<f:selectItem itemLabel="Select Result" itemValue=""></f:selectItem>
+												<f:selectItem itemLabel="Pass" itemValue="Pass"></f:selectItem>
+												<f:selectItem itemLabel="Fail" itemValue="Fail"></f:selectItem>
+												<f:selectItem itemLabel="Supplementary"
+													itemValue="Supplementary"></f:selectItem>
+											</p:selectOneMenu>
+								</p:column>
+								<p:column headerText="Board" style="width:150px;">
+								  <p:inputText value="#{var.board}">
+									</p:inputText>
+								</p:column>
+								<p:column headerText="% Age" style="width:150px;">
+								  <p:inputText value="#{var.p_percent}">
+									</p:inputText>
+								</p:column>
+								
+								<p:column headerText="Leave Reason">
+								<p:selectOneMenu value="#{var.pReason}"
+												editable="true">
+												<f:selectItem itemLabel="Select Reason" itemValue=""></f:selectItem>
+												<f:selectItem itemLabel="Due to long absent"
+													itemValue="Due to Long Absent"></f:selectItem>
+												<f:selectItem itemLabel="To study else where"
+													itemValue="To Study Else Where"></f:selectItem>
+												<f:selectItem itemLabel="To study for higher classes"
+													itemValue="To Study For Higher Classes"></f:selectItem>
+												<f:selectItem itemLabel="Parents transfer to other city"
+													itemValue="Parents Transfer to Other City"></f:selectItem>
+											</p:selectOneMenu>
+								</p:column>
+								
+								
+								<p:column headerText="Tc Date" style="width:150px;">
+									<p:calendar  value="#{var.tcDate}"
+												navigator="true" pattern="dd/MM/yyyy"></p:calendar>
+								</p:column>
+								<p:column headerText="Height." style="width:150px;">
+								  <p:inputText value="#{var.height}">
+									</p:inputText>
+								</p:column>
+								<p:column headerText="Weight." style="width:150px;">
+								  <p:inputText value="#{var.weight}">
+									</p:inputText>
+								</p:column>
+								<p:column headerText="Eyes" style="width:150px;">
+								  <p:inputText value="#{var.eyes}">
+									</p:inputText>
+								</p:column>
+								<p:column headerText="G1. Name" style="width:150px;">
+								  <p:inputText value="#{var.gname}">
+									</p:inputText>
+								</p:column>
+								<p:column headerText="G2. Name" style="width:150px;">
+								  <p:inputText value="#{var.fname1}">
+									</p:inputText>
+								</p:column>
+								<p:column headerText="G1. Relation" style="width:150px;">
+								  <p:inputText value="#{var.relation}">
+									</p:inputText>
+								</p:column>
+								<p:column headerText="G2. Relation" style="width:150px;">
+								  <p:inputText value="#{var.relation1}">
+									</p:inputText>
+								</p:column>
+								<p:column headerText="G1. Occupation" style="width:150px;">
+								  <p:inputText value="#{var.occupation}">
+									</p:inputText>
+								</p:column>
+								<p:column headerText="G2. Occupation" style="width:150px;">
+								  <p:inputText value="#{var.occupation1}">
+									</p:inputText>
+								</p:column>
+								<p:column headerText="G1. cont. Num." style="width:150px;">
+								  <p:inputText value="#{var.phone}">
+									</p:inputText>
+								</p:column>
+								<p:column headerText="G2. Cont. Num." style="width:150px;">
+								  <p:inputText value="#{var.phone1}">
+									</p:inputText>
+								</p:column>
+								<p:column headerText="G1. addr." style="width:150px;">
+								  <p:inputText value="#{var.address}">
+									</p:inputText>
+								</p:column>
+								<p:column headerText="G2. addr." style="width:150px;">
+								  <p:inputText value="#{var.address1}">
+									</p:inputText>
+								</p:column>
+								
+								
+								
+								<f:facet name="footer">
+									<center>
+										<p:commandButton styleClass="butwid" icon="fa fa-upload" value="Update"
+											actionListener="#{editStudentCompleteDetail.submit}"
+											update=":form"></p:commandButton>
+									</center>
+								</f:facet>
+
+							</p:dataTable>
+
+							<p:dataTable reflow="true" id="upPic"
+								value="#{editStudentCompleteDetail.list}" var="var"
+								selection="#{editStudentCompleteDetail.selectStudent}"
+								rowKey="#{var.addNumber}" rowIndexVar="index"
+								rendered="#{editStudentCompleteDetail.showPicTable}"
+								multiViewState="true">
+
+								<f:facet name="header">
+									<center>
+										<p:commandButton styleClass="butwid"  icon="fa fa-upload" style="left: 50px;" ajax="false"
+											value="Update"
+											actionListener="#{editStudentCompleteDetail.submit}"
+											update=":form"></p:commandButton>
+										<p:commandButton id="toggler" type="button" value="Columns"
+											style="width: auto;float:right;" icon="	ui-icon-transfer-e-w" />
+										<p:columnToggler datasource=":form:upPic" trigger="toggler" />
+									</center>
+								</f:facet>
+
+								<p:column selectionMode="multiple" style="width:35px;"></p:column>
+
+								<p:column headerText="S.No." style="width:50px;">
+									<p:outputLabel value="#{index+1}"></p:outputLabel>
+								</p:column>
+
+								<p:column headerText="Add.No.">
+									<p:outputLabel value="#{var.srNo}"></p:outputLabel>
+								</p:column>
+
+								<p:column headerText="Student Name">
+									<p:outputLabel value="#{var.fname}"></p:outputLabel>
+								</p:column>
+
+								<p:column headerText="Father Name">
+									<p:outputLabel value="#{var.fathersName}"></p:outputLabel>
+								</p:column>
+
+								<p:column headerText="Student Photo">
+									<center>
+										<p:lightBox styleClass="imagebox">
+											<h:outputLink value="#{var.student_image}">
+												<p:graphicImage value="#{var.student_image}" width="100"
+													height="100" />
+											</h:outputLink>
+										</p:lightBox>
+									</center>
+								</p:column>
+
+								<p:column headerText="Upload Photo (Allowed file type are :- gif,jpg,jpeg,png)">
+									<p:fileUpload value="#{var.studentImageget}" mode="simple"
+										allowTypes="/(\.|\/)(gif|jpeg|png)$/" />
+								</p:column>
+
+								<f:facet name="footer">
+									<center>
+										<p:commandButton styleClass="butwid" icon="fa fa-upload" ajax="false"
+											value="Update"
+											actionListener="#{editStudentCompleteDetail.submit}"
+											update=":form"></p:commandButton>
+									</center>
+								</f:facet>
+							</p:dataTable>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

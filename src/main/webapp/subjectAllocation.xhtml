@@ -1,0 +1,87 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Subject Allocation</ui:define>
+
+    <ui:define name="content">
+       
+            <div class="ui-fluid">
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <div class="card card-w-title">
+                             <h:form id="form">
+					<h1>Subject Allocation</h1>
+           			<p:panel header="Subject Allocation">
+           			<p:messages closable="true" autoUpdate="true"></p:messages>
+           			<p:commandLink style="float: right;margin-left: 15px;font-size:15px;color: blue;" immediate="true" value="Subject Allocation Report" action="subjectAllocationReport.xhtml?faces-redirect=true"></p:commandLink>
+			
+               			<p:panelGrid columns="3"  columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+               			
+               				<p:outputLabel value="Select Teacher" for="@next" style="color:red" ></p:outputLabel>
+							<p:selectOneMenu value="#{subjectallocation.selectedteacher}" filter="true" required="true" requiredMessage="Select teaacher">
+							<f:selectItem itemLabel="select" itemValue=""></f:selectItem>
+							<f:selectItems value="#{subjectallocation.teacherlist}"></f:selectItems>
+							</p:selectOneMenu>	               			
+          					<p:commandButton value="Go"   styleClass="butwid" icon="fa fa-arrow-right" action="#{subjectallocation.addNew}"  update=":form"></p:commandButton>
+          					
+          					
+       						</p:panelGrid>
+       						
+       						<p:dataTable reflow="true"  rendered="#{subjectallocation.showtable}" value="#{subjectallocation.list}" var="var">
+       						
+       						<f:facet name="header">
+								<p:commandButton value="Add More Rows"  styleClass="butwid" icon="fa fa-plus" action="#{subjectallocation.addMoreRow}" update=":form"></p:commandButton>
+							</f:facet>
+       						
+       						<p:column headerText="S.no">
+       						<center><p:outputLabel value="#{var.serialNumber}"></p:outputLabel></center>
+       						</p:column>
+       						
+       						<p:column headerText="Class Name">
+	          					 <p:selectOneMenu value="#{var.classid}" id="class">
+									<f:selectItem itemLabel="Select Class" itemvalue=""></f:selectItem>
+										<f:selectItems value="#{subjectallocation.classlist}"></f:selectItems>
+				   						<f:attribute name="serialno" value="#{var.serialNumber}"></f:attribute>
+				  						<p:ajax event="change" listener="#{subjectallocation.allSections}" update=":form"></p:ajax>
+				 					</p:selectOneMenu>
+		      				 </p:column>
+		       
+		       				<p:column headerText="Section">
+			       				 <p:selectOneMenu value="#{var.sectionId}" id="section">
+									<f:selectItem itemLabel="Select Section" itemvalue=""></f:selectItem>
+									<f:selectItems value="#{var.sectionList}"></f:selectItems>
+									<f:attribute name="serialno" value="#{var.serialNumber}"></f:attribute>
+				  					<p:ajax event="change" listener="#{subjectallocation.allSubjects}" update=":form"></p:ajax>
+						 		</p:selectOneMenu>
+	            			 </p:column>
+
+							<p:column headerText="Subject">
+							<p:selectManyMenu value="#{var.subjectMultipalCode}"   id="subject" showCheckbox="true">
+								
+								<f:selectItems value="#{var.subjectList}"></f:selectItems>
+								<p:ajax></p:ajax>
+						 	</p:selectManyMenu>
+	            			</p:column>
+       						
+       						
+									
+       						<f:facet  name="footer">
+	               		  	<p:commandButton  actionListener="#{subjectallocation.allocate}"  styleClass="butwid" icon="fa fa-check" value="Allocate" update=":form"></p:commandButton>
+               		  			</f:facet>     
+       						</p:dataTable>
+       					
+       						
+              	</p:panel>
+				</h:form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+       
+    </ui:define>
+
+</ui:composition>

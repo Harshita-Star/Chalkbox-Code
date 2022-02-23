@@ -1,0 +1,224 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Promoted Student report</ui:define>
+
+	<ui:define name="content">
+		<style>
+td.selectionDisabled .ui-chkbox {
+	display: none;
+}
+
+body .ui-datatable thead th, body .ui-datatable tbody td {
+	width: var(--w) !important;
+}
+
+.ui-datatable .ui-datatable-scrollable-body,
+	.ui-datatable-scrollable-header {
+	width: 100% !important;
+}
+
+body .ui-datatable  .ui-datatable-header {
+	position: sticky !important;
+	top: 60px !important;
+	width: 100% !important;
+}
+
+.ui-datatable-scrollable .ui-datatable-scrollable-header,
+	.ui-datatable-scrollable .ui-datatable-scrollable-footer {
+	position: sticky !important;
+	top: 109px !important;
+}
+</style>
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form1">
+							<h1>Student Promotion Status Report</h1>
+
+							<p:messages closable="true" autoUpdate="true"></p:messages>
+							<p:panel header="Student Promoted/Not Promoted Report">
+
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel for="@next" style="color:red"
+										value="Select Class"></p:outputLabel>
+									<p:selectOneMenu style="width:250px"
+										value="#{stdPromoteStatus.selectedCLassSection}"
+										required="true" requiredMessage="Please select a class">
+										<f:selectItem itemLabel="Select Class" itemValue=""></f:selectItem>
+										<f:selectItems value="#{stdPromoteStatus.classSection}"></f:selectItems>
+
+										<p:ajax update="sectionid"
+											listener="#{stdPromoteStatus.allSections}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel for="@next" style="color:red"
+										value="Select Section"></p:outputLabel>
+									<p:selectOneMenu id="sectionid"
+										value="#{stdPromoteStatus.selectedSection}" required="true"
+										requiredMessage="Please select a section">
+										<f:selectItem itemLabel="Select Section" itemValue=""></f:selectItem>
+										<f:selectItems value="#{stdPromoteStatus.sectionList}"></f:selectItems>
+
+									</p:selectOneMenu>
+								</p:panelGrid>
+								<br />
+								<p:separator />
+								<center>
+									<p:panelGrid
+										columns="#{stdPromoteStatus.studentList.size() gt 0 ? '3' : '2'}"
+										layout="grid" styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+
+									<p:commandButton value="Search Promoted Student" icon="fa fa-search" style="width:250px"
+										action="#{stdPromoteStatus.showPromoted}" update=":form1" />
+
+									<p:commandButton value="Search Not Promoted Student"
+										style="width: 250px;" icon="fa fa-search"
+										action="#{stdPromoteStatus.showNotPromoted}"
+										update=":form1,excl" />
+
+									<h:commandLink id="excl">
+										<p:graphicImage rendered="#{stdPromoteStatus.shwReport}"
+											name="images/excellogo.png" library="avalon-layout"
+											width="100" height="40"></p:graphicImage>
+										<pe:exporter type="xlsx" target=":form1:dtb"
+											fileName="Student_Promotion_status_report"></pe:exporter>
+									</h:commandLink>
+									</p:panelGrid>
+								</center>
+								<p:separator />
+								<br />
+
+							</p:panel>
+							<p:panel id="dataTable" rendered="#{stdPromoteStatus.shwReport}">
+								<center>
+									<p
+										style="font-size: 25px !important; font-weight: bold; margin: 0px;">#{headerBean.name}</p>
+									<p
+										style="font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.affiliationNo}</p>
+									<p
+										style="font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.finalAddress}</p>
+									<p
+										style="font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.phoneno}</p>
+
+									<p
+										style="margin: 0px; font-size: 25px !important; font-weight: bold;">#{promotedStdReport.showSession}</p>
+
+									<p:panelGrid columns="1"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+
+										<p:outputLabel style="font-weight: bold;"
+											rendered="#{stdPromoteStatus.preClass}"
+											value="Promoted Students               : #{stdPromoteStatus.totalStudent}"></p:outputLabel>
+
+										<p:outputLabel style="font-weight: bold;"
+											rendered="#{stdPromoteStatus.postCLass}"
+											value="Not Promoted Students           : #{stdPromoteStatus.totalStudent}"></p:outputLabel>
+									</p:panelGrid>
+
+								</center>
+								<br></br>
+								<br></br>
+								<p:dataTable reflow="true" var="var" id="dtb" scrollable="true"
+									scrollWidth="100%" value="#{stdPromoteStatus.studentList}">
+
+									<f:facet name="header">
+
+										<p:outputLabel
+											style="margin: 0px; font-size: 25px !important; font-weight: bold;"
+											value="Student Promotion Status Report"></p:outputLabel>
+
+									</f:facet>
+
+									<p:column headerText="S.No." style="--w:40px">
+										<f:facet name="header">
+											<p:outputLabel value="S.No."></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.sno}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Admission Number">
+										<f:facet name="header">
+											<p:outputLabel value="Admission Number"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.srNo}"></p:outputLabel>
+									</p:column>
+
+									<p:column sortBy="#{var.fname}" headerText="Name"
+										filterBy="#{var.fname}">
+										<f:facet name="header">
+											<p:outputLabel value="Name"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.fname}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Father's Name"
+										filterBy="#{var.fathersName}">
+										<f:facet name="header">
+											<p:outputLabel value="Father's Name"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.fathersName}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Father's Phone Number">
+										<f:facet name="header">
+											<p:outputLabel value="Father's Phone Number"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.fathersPhone}"></p:outputLabel>
+									</p:column>
+
+									<p:column rendered="#{stdPromoteStatus.preClass}"
+										headerText="Previous Class" filterBy="#{var.className}">
+										<f:facet name="header">
+											<p:outputLabel value="Previous Class "></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.classFromName}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Current Class"
+										filterBy="#{var.admitClass}">
+										<f:facet name="header">
+											<p:outputLabel value="Current Class "></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.classToName}"></p:outputLabel>
+									</p:column>
+
+									<p:column rendered="#{stdPromoteStatus.preClass}"
+										headerText="Date of Promotion">
+										<f:facet name="header">
+											<p:outputLabel value="Date of Promotion"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.promotedDateStr}"></p:outputLabel>
+									</p:column>
+
+									<p:column rendered="#{stdPromoteStatus.postCLass}"
+										headerText="Date of Addmission">
+										<f:facet name="header">
+											<p:outputLabel value="Date of Addmission"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.admissionDate}"></p:outputLabel>
+									</p:column>
+
+								</p:dataTable>
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

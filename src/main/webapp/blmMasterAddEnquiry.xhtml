@@ -1,0 +1,219 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/schoolMasterTemplate.xhtml">
+
+	<ui:define name="title">Enquiry</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<p:growl></p:growl>
+							<p:messages closable="true" autoUpdate="true"></p:messages>
+							<p:panel header="Enquiry Page">
+								<p:panelGrid columns="2"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+
+									<p:outputLabel  for="@next" style="color:red" value="Visiting Date"></p:outputLabel>
+									<p:calendar navigator="true" effect="fold" pattern="dd/MM/yyyy"
+										yearRange="c-30:c+30" value="#{blmMasterAddEnquiry.admissionDate}"
+										required="true" requiredMessage="Please Enter Date"></p:calendar>
+
+									<p:outputLabel  for="@next" style="color:red" value="Select School"></p:outputLabel>
+									<p:selectOneMenu value="#{blmMasterAddEnquiry.schoolid}"
+										required="true" requiredMessage="Please select a school">
+										<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+										<f:selectItems value="#{blmMasterAddEnquiry.branchList}"></f:selectItems>
+
+										<p:ajax listener="#{blmMasterAddEnquiry.sessionMethod}"
+											update="session,class"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel  for="@next" style="color:red" value="Admission sought for session"></p:outputLabel>
+									<p:selectOneMenu id="session" value="#{blmMasterAddEnquiry.selectedSession}"
+										required="true" requiredMessage="Please select session">
+										<f:selectItems value="#{blmMasterAddEnquiry.sessionList}"></f:selectItems>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Admission  sought  for Class" for="@next" style="color:red" ></p:outputLabel>
+									<p:selectOneMenu id="class" required="true"
+										requiredMessage="Please select a class"
+										value="#{blmMasterAddEnquiry.addmissionclass}">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{blmMasterAddEnquiry.classList}"></f:selectItems>
+									</p:selectOneMenu>
+
+
+									<p:outputLabel value="Student Name " for="@next" style="color:red" ></p:outputLabel>
+									<p:inputText required="true"
+										requiredMessage="Please Enter Student Name"
+										value="#{blmMasterAddEnquiry.studentName}" validatorMessage="Please Enter Correct value">
+									  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:inputText>
+
+									<p:outputLabel value="Father's Name " for="@next" style="color:red" ></p:outputLabel>
+									<p:inputText required="true"
+										requiredMessage="Please Enter Father's Name"
+										value="#{blmMasterAddEnquiry.fatherName}" validatorMessage="Please Enter Correct value">
+									  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:inputText>
+
+									<p:outputLabel value="Mother's Name " for="@next" style="color:red" ></p:outputLabel>
+									<p:inputText required="true"
+										requiredMessage="Please Enter Mother's Name"
+										value="#{blmMasterAddEnquiry.motherName}" validatorMessage="Please Enter Correct value">
+									  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+									</p:inputText>
+
+									<p:outputLabel value="Gender " for="@next" style="color:red" ></p:outputLabel>
+									<p:selectOneRadio value="#{blmMasterAddEnquiry.gender}"
+										required="true" requiredMessage="Please Enter Gender">
+										<f:selectItem itemLabel="Male" itemValue="Male"></f:selectItem>
+										<f:selectItem itemLabel="Female" itemValue="Female"></f:selectItem>
+									</p:selectOneRadio>
+
+									<p:outputLabel value="DOB " for="@next" style="color:red" ></p:outputLabel>
+									<p:calendar navigator="true" effect="fold" pattern="dd/MM/yyyy"
+										yearRange="c-30:c+30" value="#{blmMasterAddEnquiry.dob}"
+										required="true" requiredMessage="Please Enter DOB"></p:calendar>
+
+									<p:outputLabel value="Address " for="@next" style="color:red" ></p:outputLabel>
+									<p:inputTextarea rows="3" cols="20" maxlength="70"
+										counter="display" counterTemplate="{0} characters remaining."
+										required="true" requiredMessage="Please Enter address"
+										value="#{blmMasterAddEnquiry.address}" validatorMessage="Please Enter Correct value">
+									  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:inputTextarea>
+									<h:outputText />
+									<h:outputText id="display" />
+
+									<p:outputLabel value="Father's Mob No." for="@next" style="color:red" ></p:outputLabel>
+									<p:inputText required="true"
+										requiredMessage="Please Enter Father's Mob.no" maxlength="10"
+										value="#{blmMasterAddEnquiry.mobno}" validatorMessage="Father's mobile no. must be of 10 digits">
+										<f:validateLength minimum="10"></f:validateLength>
+										<p:keyFilter mask="num"></p:keyFilter>
+									</p:inputText>
+									
+									<p:outputLabel value="Mother's Mob No."></p:outputLabel>
+									<p:inputText maxlength="10"
+										value="#{blmMasterAddEnquiry.mothmobno}" validatorMessage="Mother's mobile no. must be of 10 digits">
+										<f:validateLength minimum="10"></f:validateLength>
+										<p:keyFilter mask="num"></p:keyFilter>
+									</p:inputText>
+
+									<p:outputLabel value="E-mail"></p:outputLabel>
+									<p:inputText value="#{blmMasterAddEnquiry.email}" validatorMessage="Please Enter Correct value">
+									<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:inputText>
+
+									<p:outputLabel value="Remark"></p:outputLabel>
+									<p:inputTextarea rows="3" cols="20"
+										value="#{blmMasterAddEnquiry.description}" validatorMessage="Please Enter Correct value">
+									  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:inputTextarea>
+
+									<p:outputLabel value="Follow Up Date" for="@next" style="color:red" 
+										rendered="#{blmMasterAddEnquiry.normalShow}"></p:outputLabel>
+									<p:calendar value="#{blmMasterAddEnquiry.followDate}"
+										rendered="#{blmMasterAddEnquiry.normalShow}"
+										mindate="#{blmMasterAddEnquiry.todayDate}" navigator="true"
+										effect="fold" pattern="dd/MM/yyyy" yearRange="c-30:c+30"
+										required="true" requiredMessage="Please Enter Follow Up Date"></p:calendar>
+
+									<p:outputLabel value="Select Status" for="@next" style="color:red" 
+										rendered="#{blmMasterAddEnquiry.normalShow}"></p:outputLabel>
+									<p:selectOneMenu value="#{blmMasterAddEnquiry.status}"
+										required="true" rendered="#{blmMasterAddEnquiry.normalShow}"
+										requiredMessage="Please Select Status">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItem itemLabel="Super Hot" itemValue="superhot"></f:selectItem>
+										<f:selectItem itemLabel="Hot" itemValue="hot"></f:selectItem>
+										<f:selectItem itemLabel="Warm" itemValue="warm"></f:selectItem>
+										<f:selectItem itemLabel="Cold" itemValue="cold"></f:selectItem>
+									</p:selectOneMenu>
+
+
+									<p:commandButton value="Submit" update=":form" ajax="false"
+										action="#{blmMasterAddEnquiry.registration}"></p:commandButton>
+								</p:panelGrid>
+							</p:panel>
+						</h:form>
+
+						<h:form id="confirmForm">
+							<p:dialog header="Enquiry" widgetVar="enqDlg" resizable="false"
+								closable="true" modal="true" showEffect="fade" hideEffect="fade">
+								<p:panel>
+									<p:outputLabel
+										value="Equiry Added Successfully. Please note the enquiry reference no. : #{blmMasterAddEnquiry.eno}"></p:outputLabel>
+									<br></br>
+									<br></br>
+								</p:panel>
+							</p:dialog>
+						</h:form>
+						
+						<h:form id="MsgLimitForm" style="overflow:hidden">
+							<p:dialog header="Low SMS Balance" width="500"
+								widgetVar="MsgLmtDlg" modal="true" showEffect="fade"
+								hideEffect="fade" resizable="false">
+								<center>
+									<p:outputLabel value="#{blmMasterAddEnquiry.balMsg}"
+										style="font-size:14px;font-weight: bold;" />
+								</center>
+								<br></br>
+								<br></br>
+								<center>
+									<p:commandButton value="Skip" action="#{blmMasterAddEnquiry.sendMsg}"
+										update="MsgLimitForm" />
+									<br /> <br />
+									<p:commandButton value="Message Logs"
+										action="messageSchoolHistory.xhtml?faces-redirect=true"
+										update="MsgLimitForm" />
+									<br /> <br />
+									<p:commandButton value="Recharge Now"
+										action="purchaseMsgPack.xhtml?faces-redirect=true"
+										update="MsgLimitForm" />
+								</center>
+								<br></br>
+							</p:dialog>
+						</h:form>
+
+						<h:form id="MsgOverForm" style="overflow:hidden">
+							<p:dialog header="SMS Limit Over" width="500"
+								widgetVar="MsgOvrDlg" modal="true" showEffect="fade"
+								hideEffect="fade" resizable="false">
+								<center>
+									<p:outputLabel value="#{blmMasterAddEnquiry.balMsg}"
+										style="font-size:14px;font-weight: bold;" />
+								</center>
+								<br></br>
+								<br></br>
+								<center>
+									<p:commandButton value="Message Logs"
+										action="messageSchoolHistory.xhtml?faces-redirect=true"
+										update="MsgOverForm" />
+									<br /> <br />
+									<p:commandButton value="Recharge Now"
+										action="purchaseMsgPack.xhtml?faces-redirect=true"
+										update="MsgOverForm" />
+								</center>
+								<br></br>
+							</p:dialog>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

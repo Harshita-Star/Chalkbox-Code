@@ -1,0 +1,262 @@
+  <ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Attendance</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<h1>Mark Attendance</h1>
+
+							<p:messages closable="true" autoUpdate="true"></p:messages>
+
+							<p:panel header="Attendance">
+
+								<p:panelGrid columns="2"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:outputLabel value="Select Class"  for="@next" style="color:red" />
+									<p:selectOneRadio layout="responsive" columns="3"
+										value="#{attendanceBean.selectedCLassSection}" required="true"
+										requiredMessage="Please Select Class" styleClass="form-group">
+										<f:selectItems value="#{attendanceBean.classSection}"></f:selectItems>
+
+										<p:ajax update="sectionid"
+											listener="#{attendanceBean.allSections}"></p:ajax>
+									</p:selectOneRadio>
+
+									<p:outputLabel value="Select Section" for="@next" style="color:red" ></p:outputLabel>
+									<p:selectOneRadio layout="responsive" columns="3"
+										id="sectionid" value="#{attendanceBean.selectedSection}"
+										required="true" requiredMessage="Please Select Section"
+										styleClass="form-group">
+										<f:selectItems value="#{attendanceBean.sectionList}"></f:selectItems>
+
+									</p:selectOneRadio>
+
+									<p:outputLabel value="Select Date" for="@next" style="color:red" ></p:outputLabel>
+									<p:calendar value="#{attendanceBean.selectedDay}"
+										pattern="dd/MM/yyyy" navigator="true" required="true"
+										requiredMessage="Please Select Day" maxdate="new Date();"
+										beforeShowDay="disableSunday" mask="true" readonlyInput="true"></p:calendar>
+
+
+								</p:panelGrid>
+											<br />
+								<p:separator />
+								<center>
+								
+										
+										<p:commandButton update=":form" value="Mark Attendance Now" style="width:200px"  icon="ui-icon-check"
+										actionListener="#{attendanceBean.studentDetail}"></p:commandButton>
+									
+								</center>
+								<p:separator />
+								<br />
+							</p:panel>
+
+							<br />
+							<p:panel id="pnl" header="Attendance Section"
+								rendered="#{attendanceBean.renderShowTable}">
+
+								<p:outputPanel>
+									<p:panelGrid columns="6"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent; width: 100%">
+										<p:outputLabel value="A - Absent"
+											style="font-weigth:bold;color: #000000 !important" />
+										<p:outputLabel value="  P - Present"
+											style="font-weigth:bold;color: #000000 !important" />
+										<p:outputLabel value="  H - Holiday"
+											style="font-weigth:bold;color: #000000 !important" />
+										<p:outputLabel value="  L - Leave"
+											style="font-weigth:bold;color: #000000 !important" />
+										<p:outputLabel value="  ML - Medical Leave"
+											style="font-weigth:bold;color: #000000 !important" />
+										<p:outputLabel value="  PL - Preparation Leave"
+											style="font-weigth:bold;color: #000000 !important" />
+									</p:panelGrid>
+									<br />
+
+									<p:dataTable id="sr"
+										rendered="#{attendanceBean.showStudentRecord}" var="var"
+										value="#{attendanceBean.studentDetails}" reflow="true"
+										rowIndexVar="rowId"
+										rowStyleClass="#{var.attendance eq 'A' ? 'ABSENT' : (var.attendance eq 'P' ? '' : (var.attendance eq 'L' ? 'LEAVE' :(var.attendance eq 'ML' ? 'MEDICAL' : (var.attendance eq 'PL' ? 'PREP' : (var.attendance eq 'H' ? 'HOLIDAY' : 'NOT')))))}">
+
+                                       
+
+										<p:column headerText="Add Number" filterBy="#{var.srNo}"
+											style="width: 100px;">
+
+											<p:outputLabel value="#{var.srNo}"></p:outputLabel>
+
+										</p:column>
+
+
+										<p:column headerText="Roll No" filterBy="#{var.rollNo}"
+											style="width: 100px;">
+
+											<p:outputLabel value="#{var.rollNo}"></p:outputLabel>
+
+										</p:column>
+
+
+
+										<p:column headerText="Student Name" filterBy="#{var.fullName}"
+											style="width: 150px;">
+
+											<p:outputLabel value="#{var.fullName}"></p:outputLabel>
+
+										</p:column>
+
+
+
+										<p:column headerText="Father's Name" style="width: 150px;">
+
+											<p:outputLabel value="#{var.fname}"></p:outputLabel>
+
+										</p:column>
+
+
+
+
+										<p:column style="width: 250px;">
+											<f:facet name="header">
+												<p:panelGrid columns="1"
+													styleClass="ui-panelgrid-blank form-group"
+													style="border:0px none; background-color:transparent;">
+
+													<p:outputLabel value="Attendance"></p:outputLabel>
+
+													<p:selectOneButton value="#{attendanceBean.defaultAtt}"
+														unselectable="false">
+														<f:selectItem itemLabel="A" itemValue="A"></f:selectItem>
+														<f:selectItem itemLabel="P" itemValue="P"></f:selectItem>
+														<f:selectItem itemLabel="H" itemValue="H"></f:selectItem>
+														<f:selectItem itemLabel="L" itemValue="L"></f:selectItem>
+														<f:selectItem itemLabel="ML" itemValue="ML"></f:selectItem>
+														<f:selectItem itemLabel="PL" itemValue="PL"></f:selectItem>
+
+														<p:ajax update=":form:sr" listener="#{attendanceBean.updateDefault}"></p:ajax>
+
+													</p:selectOneButton>
+
+												</p:panelGrid>
+											</f:facet>
+
+											<p:selectOneButton value="#{var.attendance}"
+												unselectable="false">
+												<f:selectItem itemLabel="A" itemValue="A"></f:selectItem>
+												<f:selectItem itemLabel="P" itemValue="P"></f:selectItem>
+												<f:selectItem itemLabel="H" itemValue="H"></f:selectItem>
+												<f:selectItem itemLabel="L" itemValue="L"></f:selectItem>
+												<f:selectItem itemLabel="ML" itemValue="ML"></f:selectItem>
+												<f:selectItem itemLabel="PL" itemValue="PL"></f:selectItem>
+
+												<p:ajax update=":form:sr" global="false"></p:ajax>
+
+											</p:selectOneButton>
+											<br />
+											<br />
+											<center>
+												<p:outputLabel rendered="#{sideMenuBean.allotRfid}"
+													value="RFID Card Punch : #{var.rfidStatus}"
+													style="font-weight: bold;"></p:outputLabel>
+											</center>
+										</p:column>
+										<f:facet name="footer">
+											<p:commandButton
+												rendered="#{attendanceBean.showStudentRecord}"
+												value="Submit" oncomplete="PF('confirmDialog').show()"
+												update="cnfrmdi"
+												action="#{attendanceBean.chckforstudentatndnce}"></p:commandButton>
+										</f:facet>
+
+									</p:dataTable>
+								</p:outputPanel>
+
+							</p:panel>
+
+						</h:form>
+
+						<h:form id="cnfrmdi">
+							<p:panel>
+								<p:dialog resizable="false" widgetVar="confirmDialog"
+									header="Do you surely want to Continue?" showEffect="fade"
+									hideEffect="explode" modal="true">
+									<div class="ui-g form-group">
+										<p:panelGrid columns="2"
+											styleClass="ui-panelgrid-blank form-group"
+											style="border:0px none; background-color:transparent;">
+											<p:panelGrid columns="1">
+												<p:outputLabel
+													value="Total Absent Student(s) : #{attendanceBean.i}"
+													style="font-size: 15px !important;" />
+												<p:outputLabel
+													value="Total Present Student(s) : #{attendanceBean.j}"
+													style="font-size: 15px !important;" />
+												<p:outputLabel
+													value="Total Student(s) on Holiday : #{attendanceBean.hld}"
+													style="font-size: 15px !important;" />
+												<p:outputLabel
+													value="Total Student(s) on Leave : #{attendanceBean.k}"
+													style="font-size: 15px !important;" />
+												<p:outputLabel
+													value="Total Student(s) on Medical Leave : #{attendanceBean.ml}"
+													style="font-size: 15px !important;" />
+												<p:outputLabel
+													value="Total Student(s) on Preparation Leave : #{attendanceBean.pl}"
+													style="font-size: 15px !important;" />
+											</p:panelGrid>
+											<p:outputLabel />
+
+											<center>
+												<p:commandButton immediate="true" update=":cnfrmdi,form"
+													action="#{attendanceBean.saveNow}" value="Yes"></p:commandButton>
+											</center>
+											<p:commandButton value="No" update=":cnfrmdi"></p:commandButton>
+										</p:panelGrid>
+									</div>
+								</p:dialog>
+							</p:panel>
+						</h:form>
+
+
+						<h:form id="alert">
+							<p:panel>
+								<p:dialog resizable="false" widgetVar="alrtDlg"
+									header="Do you want to send message alert to absent students ?"
+									showEffect="fade" hideEffect="explode" modal="true">
+									<div class="ui-g form-group">
+										<p:panelGrid columns="2"
+											styleClass="ui-panelgrid-blank form-group"
+											style="border:0px none; background-color:transparent;">
+
+											<p:commandButton update=":form"
+												action="absentStudentReport.xhtml?faces-redirect=true"
+												value="Yes"></p:commandButton>
+											<p:commandButton value="No" update=":form"
+												oncomplete="PF('alrtDlg').hide();"></p:commandButton>
+										</p:panelGrid>
+									</div>
+								</p:dialog>
+							</p:panel>
+						</h:form>
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

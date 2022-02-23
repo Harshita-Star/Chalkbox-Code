@@ -1,0 +1,492 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Daily Fee Collection</ui:define>
+
+
+	<ui:define name="content">
+
+		<style>
+body .ui-datatable  .ui-datatable-header {
+	position: sticky !important;
+	top: 60px !important;
+	z-index: 9 !important;
+}
+
+.ui-datatable .ui-datatable-scrollable-body,
+	.ui-datatable-scrollable-header, .ui-datatable-footer,
+	.ui-datatable-header {
+	width: 100% !important;
+}
+
+.ui-datatable-scrollable .ui-datatable-scrollable-header,
+	.ui-datatable-scrollable .ui-datatable-scrollable-footer {
+	position: sticky !important;
+	top: 90px !important;
+	z-index: 9 !important;
+}
+
+body .ui-datatable thead th, body .ui-datatable tbody td {
+	width: var(--w) !important;
+}
+</style>
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+							<p:panel>
+								<p:commandLink
+									style="float: right;margin-left: 15px;color: blue;font-size:15px;"
+									immediate="true" value="Student Collection Report"
+									action="studentinstallmentWiseFeeReportBeanReport.xhtml?faces-redirect=true"></p:commandLink>
+								<p:commandLink
+									style="float: right;margin-left: 15px;color: blue;font-size:15px;"
+									immediate="true" value="Old Student Fee Collection Report"
+									action="oldStudentinstallmentWiseFeeReportBeanReport.xhtml?faces-redirect=true"></p:commandLink>
+								<br />
+								<br />
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:outputLabel value="Select a Class"></p:outputLabel>
+									<p:selectOneMenu
+										value="#{installmentWiseFeeReportBean.selectedClass}">
+										<f:selectItem itemLabel="All" itemValue="-1"></f:selectItem>
+										<f:selectItems
+											value="#{installmentWiseFeeReportBean.classList}"></f:selectItems>
+										<p:ajax update="sectionid"
+											listener="#{installmentWiseFeeReportBean.allSections}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Select Section"></p:outputLabel>
+									<p:selectOneMenu id="sectionid"
+										value="#{installmentWiseFeeReportBean.selectedSection}">
+										<f:selectItem itemLabel="All" itemValue="-1"></f:selectItem>
+										<f:selectItems
+											value="#{installmentWiseFeeReportBean.sectionList}"></f:selectItems>
+									</p:selectOneMenu>
+
+
+
+									<p:outputLabel value="Select Installment" for="@next"
+										style="color:red"></p:outputLabel>
+									<p:selectCheckboxMenu multiple="true"
+										value="#{installmentWiseFeeReportBean.checkMonthSelected}"
+										required="true" requiredMessage="Please Select Installment">
+										<f:selectItems
+											value="#{installmentWiseFeeReportBean.installmentList}"></f:selectItems>
+									</p:selectCheckboxMenu>
+
+									<p:outputLabel for="@next" style="color:red"
+										value="Starting Date"></p:outputLabel>
+									<p:calendar value="#{installmentWiseFeeReportBean.feedate}"
+										required="true" requiredMessage="Please select starting date"
+										navigator="true" pattern="dd/MM/yyyy"></p:calendar>
+
+									<p:outputLabel for="@next" style="color:red"
+										value="Ending  Date"></p:outputLabel>
+									<p:calendar value="#{installmentWiseFeeReportBean.endDate}"
+										required="true" requiredMessage="Please select ending date"
+										navigator="true" pattern="dd/MM/yyyy"></p:calendar>
+
+
+									<p:outputLabel value="Select User ID"></p:outputLabel>
+									<p:selectOneMenu id="operatorid"
+										value="#{installmentWiseFeeReportBean.selectedOperator}">
+										<f:selectItem itemLabel="All" itemValue="all"></f:selectItem>
+										<f:selectItems
+											value="#{installmentWiseFeeReportBean.operatorList}"></f:selectItems>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Concession" for="@next" style="color:red"></p:outputLabel>
+									<p:selectOneMenu
+										value="#{installmentWiseFeeReportBean.selectedConcession}"
+										required="true" requiredMessage="Please select a concession">
+										<f:selectItem itemLabel="All" itemValue="ALL"></f:selectItem>
+										<f:selectItems
+											value="#{installmentWiseFeeReportBean.concessionlist}"></f:selectItems>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Payment Mode" for="@next"
+										style="color:red"></p:outputLabel>
+									<p:selectOneMenu
+										value="#{installmentWiseFeeReportBean.paymentModeSelected}"
+										required="true" requiredMessage="Please select Payment Mode">
+										<f:selectItem itemLabel="All" itemValue="ALL"></f:selectItem>
+										<f:selectItems
+											value="#{installmentWiseFeeReportBean.paymentModeList}"></f:selectItems>
+									</p:selectOneMenu>
+
+									<p:outputLabel value=""></p:outputLabel>
+									<p:outputLabel value=""></p:outputLabel>
+								</p:panelGrid>
+
+								<br />
+								<p:separator />
+								<center>
+									<p:panelGrid
+										columns="#{installmentWiseFeeReportBean.dailyfee.size() gt 0 ? '4' : '1'}"
+										layout="grid" styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+
+										<p:commandButton value="show report" icon="fa fa-table" styleClass="butwid"
+											actionListener="#{installmentWiseFeeReportBean.showdailyfeelist}"
+											update=":form"></p:commandButton>
+										<p:commandButton value="Print" styleClass="butwid" icon="fa fa-print"
+											rendered="#{installmentWiseFeeReportBean.dailyfee.size() gt 0}">
+											<p:printer target="dailyfeereport"></p:printer>
+										</p:commandButton>
+
+										<h:commandLink rendered="#{installmentWiseFeeReportBean.dailyfee.size() gt 0}">
+											<p:graphicImage name="images/excellogo.png"
+												library="avalon-layout" width="100" height="40"></p:graphicImage>
+											<pe:exporter type="xlsx" target=":form:up"
+												fileName="FeeCollection"
+											></pe:exporter>
+										</h:commandLink>
+
+										<p:commandButton rendered="#{installmentWiseFeeReportBean.dailyfee.size() gt 0}" value="PDF" styleClass="butwid" icon="fa fa-file-pdf-o" ajax="false"
+											process="@this"
+											actionListener="#{installmentWiseFeeReportBean.exportDailyPdf}">
+
+											<p:fileDownload value="#{installmentWiseFeeReportBean.file}" />
+										</p:commandButton>
+
+									</p:panelGrid>
+								</center>
+								<p:separator />
+								<br />
+
+							</p:panel>
+							<p:panel rendered="false" header="Search Student by Name/Sr. No">
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:outputLabel value="Student Name/Sr. No"></p:outputLabel>
+									<p:autoComplete minQueryLength="3"
+										completeMethod="#{installmentWiseFeeReportBean.autoCompleteStudentInfo}"
+										forceSelection="true" id="acSimple"
+										value="#{installmentWiseFeeReportBean.name}">
+									</p:autoComplete>
+
+									<p:commandButton value="Search" update=":form"
+										actionListener="#{installmentWiseFeeReportBean.searchStudentByName}"></p:commandButton>
+								</p:panelGrid>
+
+							</p:panel>
+							<p:panel id="dailyfeereport"
+								rendered="#{installmentWiseFeeReportBean.show}">
+								<center>
+									<p
+										style="font-size: 25px !important; font-weight: bold; margin: 0px;">#{headerBean.name}</p>
+									<p
+										style="font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.affiliationNo}</p>
+									<p
+										style="font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.finalAddress}</p>
+									<p
+										style="font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.phoneno}</p>
+
+									<p
+										style="margin: 0px; font-size: 25px !important; font-weight: bold;">Daily
+										Fee Collection Report</p>
+								</center>
+								<p:panelGrid columns="6"
+									columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+										<p:outputLabel value="Date:-"></p:outputLabel>
+										<h:outputText value="#{installmentWiseFeeReportBean.date}"></h:outputText>
+										
+										<p:outputLabel value="Total Amount:-"></p:outputLabel>
+										<h:outputText value="#{installmentWiseFeeReportBean.totalamountString}"></h:outputText>
+
+										<p:outputLabel value="Total Discount:-"></p:outputLabel>
+										<h:outputText value="#{installmentWiseFeeReportBean.tdiscount}"></h:outputText>
+
+										<p:outputLabel value="Total Amount(by Cash):-"></p:outputLabel>
+										<h:outputText value="#{installmentWiseFeeReportBean.cashAmountString}"></h:outputText>
+										
+										<p:outputLabel value="Total Amount(by payment gateway):-"></p:outputLabel>
+										<h:outputText value="#{installmentWiseFeeReportBean.paymentGatewayString}"></h:outputText>
+
+										<p:outputLabel value="Total Amount(by Cheque):-"></p:outputLabel>
+										<h:outputText value="#{installmentWiseFeeReportBean.checkAmountString}"></h:outputText>
+
+								</p:panelGrid>
+
+
+								<p:dataTable id="up"
+									scrollable="true" scrollWidth="100%" var="fee"
+									value="#{installmentWiseFeeReportBean.dailyfee}"
+									sortBy="#{fee.reciptno}" rowIndexVar="index">
+
+									<f:facet name="header">
+
+										<p:outputLabel value="Fee Collection Report"></p:outputLabel>
+
+									</f:facet>
+
+									<p:column headerText="Sno"
+										style="--w:50px;font-size:10px !important">
+
+
+										<f:facet name="header">
+											<p:outputLabel value="Sno"></p:outputLabel>
+										</f:facet>
+
+										<p:outputLabel style="font-size:10px !important"
+											value="#{index+1}"></p:outputLabel>
+									</p:column>
+
+									<p:column style="--w:50px;font-size:10px !important"
+										headerText="Sr.No.">
+
+										<f:facet name="header">
+											<p:outputLabel value="SR.NO."></p:outputLabel>
+										</f:facet>
+
+										<h:outputText style="font-size:10px !important"
+											value="#{fee.srNo}" />
+									</p:column>
+									<p:column style="--w:50px;font-size:10px !important"
+										headerText="Student name">
+
+										<f:facet name="header">
+											<p:outputLabel value="Student name"></p:outputLabel>
+										</f:facet>
+
+										<h:outputText style="font-size:10px !important"
+											value="#{fee.studentname}" />
+									</p:column>
+									<p:column style="--w:50px;font-size:10px !important"
+										headerText="Father name">
+
+
+										<f:facet name="header">
+											<p:outputLabel value="Father name"></p:outputLabel>
+										</f:facet>
+										<h:outputText style="font-size:10px !important"
+											value="#{fee.fathername}" />
+									</p:column>
+
+									<p:column style="--w:50px;font-size:10px !important"
+										headerText="Class">
+
+
+										<f:facet name="header">
+											<p:outputLabel value="Class"></p:outputLabel>
+										</f:facet>
+										<h:outputText style="font-size:10px !important"
+											value="#{fee.classname}" />
+									</p:column>
+									<p:column style="--w:50px;font-size:10px !important"
+										headerText="Section">
+
+
+										<f:facet name="header">
+											<p:outputLabel value="Section"></p:outputLabel>
+										</f:facet>
+										<h:outputText style="font-size:10px !important"
+											value="#{fee.section}" />
+									</p:column>
+
+
+									<p:column style="--w:50px;font-size:10px !important"
+										headerText="Receipt no">
+
+										<f:facet name="header">
+								Receipt No.
+							</f:facet>
+										<h:outputText style="font-size:10px !important"
+											value="#{fee.reciptno}" />
+									</p:column>
+
+									<p:column style="--w:50px;font-size:10px !important"
+										headerText="Installment">
+
+										<f:facet name="header">
+						       Installment
+							</f:facet>
+										<h:outputText style="font-size:10px !important"
+											value="#{fee.installmentName}" />
+									</p:column>
+
+									<p:column style="--w:50px;font-size:10px !important"
+										headerText="Session">
+
+										<f:facet name="header">
+						       Session
+							</f:facet>
+										<h:outputText style="font-size:10px !important"
+											value="#{fee.session}" />
+									</p:column>
+
+
+									<p:columns style="--w:50px;font-size:10px !important;"
+										value="#{installmentWiseFeeReportBean.feelist}" var="column"
+										columnIndexVar="colIndex">
+
+										<f:facet name="header">
+											<p:outputLabel style="font-size:10px !important;"
+												value="#{column.feeName} (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})"></p:outputLabel>
+										</f:facet>
+
+										<p:outputLabel style="font-size:10px !important"
+											value="#{fee.allFess[column.feeId]}"></p:outputLabel>
+
+									</p:columns>
+
+									<p:column style="--w:50px;font-size:10px !important"
+										headerText="Total Amount">
+
+										<f:facet name="header">
+											<p:outputLabel style="font-size:10px !important;"
+												value="Total Amount (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})"></p:outputLabel>
+										</f:facet>
+										<h:outputText style="font-size:10px !important"
+											value="#{fee.amount}" />
+
+									</p:column>
+									<f:facet name="footer">
+										<h:outputText
+											value="Total : #{sideMenuBean.list.country eq 'UAE' ? 'AED ' : 'Rs.'}#{installmentWiseFeeReportBean.totalamountString}"></h:outputText>
+									</f:facet>
+									<p:column style="--w:50px;font-size:10px !important"
+										headerText="Total Discount">
+
+										<f:facet name="header">
+											<p:outputLabel style="font-size:10px !important;"
+												value="Total Discount (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})"></p:outputLabel>
+										</f:facet>
+										<h:outputText style="font-size:10px !important"
+											value="#{fee.discount}" />
+									</p:column>
+
+									<p:column style="--w:50px;font-size:10px !important"
+										headerText="Payment Mode">
+
+										<f:facet name="header">
+								Payment Mode 
+							</f:facet>
+										<h:outputText style="font-size:10px !important"
+											value="#{fee.paymentmode} #{fee.bankname} #{fee.chequenumber}" />
+									</p:column>
+
+									<p:column
+										style="font-size:10px !important;--w:80px !important;"
+										headerText="Date">
+
+										<f:facet name="header">
+								Date
+							</f:facet>
+										<h:outputText style="font-size:10px !important"
+											value="#{fee.feeDateStr}" />
+									</p:column>
+
+									<p:column
+										style="font-size:10px !important;--w:80px !important;"
+										headerText="Date">
+
+										<f:facet name="header">
+								User
+							</f:facet>
+										<h:outputText style="font-size:10px !important"
+											value="#{fee.user}" />
+									</p:column>
+
+									<p:column exportable="false"
+										style="font-size:9px !important;--w:50px !important;"
+										headerText="Print">
+										<f:facet name="header">
+											<p:outputLabel style="font-size:9px !important"
+												value="Duplicate"></p:outputLabel>
+										</f:facet>
+										<p:commandButton icon="ui-icon-print"
+											action="#{installmentWiseFeeReportBean.duplicateFee}">
+											<f:setPropertyActionListener
+												target="#{installmentWiseFeeReportBean.selectedstudent}"
+												value="#{fee}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+
+									<p:column exportable="false"
+										style="font-size:9px !important;--w:50px !important;"
+										headerText="Cancel">
+										<f:facet name="header">
+											<p:outputLabel style="font-size:9px !important"
+												value="Cancel"></p:outputLabel>
+										</f:facet>
+										<p:commandButton disabled="#{fee.disableCancel}"
+											icon="ui-icon-close"
+											actionListener="#{installmentWiseFeeReportBean.checkcancelOTP}"
+											>
+											<f:setPropertyActionListener
+												target="#{installmentWiseFeeReportBean.selectedstudent}"
+												value="#{fee}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+
+								</p:dataTable>
+
+							</p:panel>
+
+						</h:form>
+
+						<h:form id="form2">
+							<p:dialog header="Cancel Fee" widgetVar="cancelfee" modal="true">
+								<p:outputLabel rendered="#{installmentWiseFeeReportBean.check}"
+									style="font-weight:bold;"
+									value="OTP SEND TO #{installmentWiseFeeReportBean.discoutnNo}"></p:outputLabel>
+								<br />
+								<br />
+								<div class="ui-g form-group">
+
+
+									<p:panelGrid columns="2" layout="grid"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+										<p:outputLabel
+											rendered="#{installmentWiseFeeReportBean.check}" value="OTP"></p:outputLabel>
+										<p:inputText rendered="#{installmentWiseFeeReportBean.check}"
+											value="#{installmentWiseFeeReportBean.otpInput}"></p:inputText>
+
+										<p:outputLabel for="@next" style="color:red" value="Remark "></p:outputLabel>
+										<p:inputTextarea
+											value="#{installmentWiseFeeReportBean.remark}"
+											required="true" requiredMessage="Please enter  Remark"></p:inputTextarea>
+
+									</p:panelGrid>
+
+								</div>
+								<br />
+								<p:commandButton value="yes"
+									action="#{installmentWiseFeeReportBean.cancelReceipt}"
+									update=":form :form2"></p:commandButton>
+								<br />
+								<br />
+								<p:commandButton value="No" onclick="PF('cancelfee').hide();"
+									update=":form"></p:commandButton>
+							</p:dialog>
+						</h:form>
+
+
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

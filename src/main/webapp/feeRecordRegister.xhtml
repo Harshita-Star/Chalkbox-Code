@@ -1,0 +1,164 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Fee Record Register</ui:define>
+
+	<ui:define name="content">
+	<style>
+      	    	.ui-datatable th { writing-mode: sideways-lr; }
+    </style>
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<h1>Fee Record Register</h1>
+							<p:messages autoUpdate="true" closable="true"></p:messages>
+							<p:panel header="Search Data">
+								<p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+									<p:outputLabel value="Select Quarter:-" for="@next" style="color:red" ></p:outputLabel>
+									<p:selectOneMenu value="#{feeRecordReg.selectedQuarter}"
+										required="true" requiredMessage="Please Select Quarter">
+										<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+										<f:selectItems value="#{feeRecordReg.quarterList}"></f:selectItems>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Select Class:-" for="@next" style="color:red" ></p:outputLabel>
+									<p:selectOneMenu value="#{feeRecordReg.selectedClass}"
+										required="true" requiredMessage="Please Select Class">
+										<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+										<f:selectItems value="#{feeRecordReg.classList}"></f:selectItems>
+										<p:ajax listener="#{feeRecordReg.allSections}"
+											update="sectionId"></p:ajax>
+
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Select Section:-" for="@next" style="color:red" ></p:outputLabel>
+									<p:selectOneMenu id="sectionId"
+										value="#{feeRecordReg.selectedSection}" required="true"
+										requiredMessage="Please Select Section">
+										<f:selectItem itemLabel="All" itemValue="all"></f:selectItem>
+										<f:selectItems value="#{feeRecordReg.sectionList}"></f:selectItems>
+									</p:selectOneMenu>
+
+									<p:commandButton value="Search"
+										actionListener="#{feeRecordReg.searchData}" update=":form"></p:commandButton>
+									<p:commandButton rendered="true" id="print"
+										actionListener="#{feeRecordReg.print}" value="Print">
+									</p:commandButton>
+								</p:panelGrid>
+							</p:panel>
+							<br/>
+							<div id="myDiv">
+								<p:panel id="dataTable" rendered="#{feeRecordReg.showData}">
+									<center>
+										<p
+											style="font-family: initial; font-style: oblique; font-size: 30px !important; font-weight: bold; margin: 0px;">#{headerBean.name}</p>
+										<p style="margin: 0px;">Fee Record Register</p>
+									</center>
+									<p:dataTable id="dt"
+										style="width:100%;border-collapse:collapse" border="1"
+										var="var" value="#{feeRecordReg.studentList}">
+										<f:facet name="header">
+											<p:panelGrid columns="3">
+												<p:outputLabel
+													value="Fee Months:- #{feeRecordReg.quarterName}"></p:outputLabel>
+												<p:outputLabel value="Class:- #{feeRecordReg.className}"></p:outputLabel>
+												<h:commandLink title="Import To Excel Format">
+													<p:graphicImage style="height:30px;width:60px;"
+														value="/image/excel-logo.png" width="24" />
+													<p:dataExporter type="xls" target="dt"
+														fileName="Fee_Record_Register" />
+												</h:commandLink>
+											</p:panelGrid>
+										</f:facet>
+										<p:column style="width:30px" headerText="Admn. No.">
+											<p:outputLabel value="#{var.srNo}"></p:outputLabel>
+										</p:column>
+
+										<p:column style="width:40px" headerText="Student Name">
+											<p:outputLabel value="#{var.fullName}"></p:outputLabel>
+										</p:column>
+
+										<p:column style="width:65px" headerText="Mobile No">
+											<p:outputLabel value="#{var.fathersPhone}"></p:outputLabel>
+										</p:column>
+
+										<p:column style="width:40px" headerText="Concession Category">
+											<p:outputLabel value="#{var.concessionName}"></p:outputLabel>
+										</p:column>
+
+										<p:column style="width:40px" headerText="Prev. Dues">
+											<p:outputLabel value="#{var.tutionFeeDueAmount}"></p:outputLabel>
+										</p:column>
+
+										<p:columns style="width:50px"
+											value="#{feeRecordReg.classFeeList}" var="column"
+											columnIndexVar="colIndex">
+											<f:facet name="header">
+												<p:outputLabel value="#{column.feeName}"></p:outputLabel>
+											</f:facet>
+
+											<p:outputLabel value="#{var.feesMap[column.feeName]}"></p:outputLabel>
+										</p:columns>
+
+										<p:column headerText="Late Fee">
+											<p:outputLabel value=""></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Conc. (If Any)">
+											<p:outputLabel value=""></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Total Amount To Be Paid">
+											<p:outputLabel value=""></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Rec.No.">
+											<p:outputLabel value=""></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Date Of Payment">
+											<p:outputLabel value=""></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Amount Paid">
+											<p:outputLabel value=""></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Balance Amount">
+											<p:outputLabel value=""></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Rec. No.">
+											<p:outputLabel value=""></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Date Of Payment">
+											<p:outputLabel value=""></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Amount Paid">
+											<p:outputLabel value=""></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Balance Amount">
+											<p:outputLabel value=""></p:outputLabel>
+										</p:column>
+
+
+									</p:dataTable>
+								</p:panel>
+							</div>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

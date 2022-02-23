@@ -1,0 +1,128 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Hostel</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+
+						<h:form id="form">
+							<p:panel header="Add Room">
+								<f:facet name="header">
+									<span>Add Room(s)</span>
+									<span> <p:commandLink
+									style="float: right;margin-left: 15px;;color: blue;font-size:15px;"
+									immediate="true" value="Edit Room(s)"
+									action="editRooms.xhtml?faces-redirect=true"></p:commandLink>
+									</span>
+								</f:facet>
+								
+								<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+								<p:panelGrid columns="2"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel value="Hostel Name"></p:outputLabel>
+									<p:selectOneMenu disabled="#{addRoom.showCommon}" filter="true"
+										value="#{addRoom.hostelName}">
+										<f:selectItem itemLabel="Select Hostel Name" itemValue=""></f:selectItem>
+										<f:selectItems value="#{addRoom.hostelNameList}"></f:selectItems>
+										<p:ajax update=":form" listener="#{addRoom.roomsDetails}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel for="@next" style="color:red"  rendered="#{addRoom.showCommon}"
+										value="No. of Rooms"></p:outputLabel>
+									<p:inputText rendered="#{addRoom.showCommon}"
+										value="#{addRoom.noOfRooms}" required="true"
+										requiredMessage="Please Enter No. Of Rooms">
+										<p:keyFilter mask="pnum"></p:keyFilter>
+										<p:ajax></p:ajax>
+									</p:inputText>
+
+									<p:outputLabel  for="@next" style="color:red" rendered="#{addRoom.showCommon}"
+										value="No. of Beds(Per Room)"></p:outputLabel>
+									<p:inputText rendered="#{addRoom.showCommon}"
+										value="#{addRoom.noOfBeds}" required="true"
+										requiredMessage="Please Enter No. Of Beds">
+										<p:keyFilter mask="pnum"></p:keyFilter>
+										<p:ajax></p:ajax>
+									</p:inputText>
+
+									<p:outputLabel rendered="#{addRoom.showCommon}"
+										value="Rooms Calculation"></p:outputLabel>
+									<p:selectOneRadio rendered="#{addRoom.showCommon}"
+										value="#{addRoom.calculation}">
+										<f:selectItem itemLabel="Automatic" itemValue="automatic"></f:selectItem>
+										<f:selectItem itemLabel="Manual" itemValue="manual"></f:selectItem>
+										<p:ajax update=":form" listener="#{addRoom.updateRooms}"></p:ajax>
+									</p:selectOneRadio>
+
+									<p:outputLabel for="@next" style="color:red"  rendered="#{addRoom.showTable}"
+										value="Start Room No"></p:outputLabel>
+									<p:inputText rendered="#{addRoom.showTable}"
+										value="#{addRoom.startNo}" required="true"
+										requiredMessage="Please Enter Start Room Number">
+										<p:ajax listener="#{addRoom.calculateEndRooms}"
+											update="endroom"></p:ajax>
+										<p:keyFilter mask="pnum"></p:keyFilter>
+									</p:inputText>
+
+									<p:outputLabel for="@next" style="color:red"  rendered="#{addRoom.showTable}"
+										value="End Room No"></p:outputLabel>
+									<p:inputText id="endroom" rendered="#{addRoom.showTable}"
+										value="#{addRoom.endNo}" required="true"
+										requiredMessage="Please Enter End Room Number">
+										<p:ajax></p:ajax>
+										<p:keyFilter mask="pnum"></p:keyFilter>
+									</p:inputText>
+
+									<p:outputLabel rendered="#{addRoom.showTable}"
+										value="Exception Room No"></p:outputLabel>
+									<p:outputPanel rendered="#{addRoom.showTable}" id="id1">
+										<p:autoComplete value="#{addRoom.exceptionRooms}"
+											completeMethod="#{addRoom.autoCompleteRooms}" multiple="true"
+											forceSelection="true" validatorMessage="Please Enter Correct value">
+											<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+											<p:ajax event="query" global="false" />
+										</p:autoComplete>
+									</p:outputPanel>
+
+
+								</p:panelGrid>
+							</p:panel>
+							<p:panel>
+								<p:dataTable rendered="#{addRoom.showManual}"
+									value="#{addRoom.roomsNameList}" var="var" reflow="true">
+									<p:column headerText="S.No">
+										<p:outputLabel value="#{var.sno}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Room No.">
+										<p:inputText value="#{var.roomNo}"></p:inputText>
+									</p:column>
+
+								</p:dataTable>
+
+							</p:panel>
+							<br/>
+							<center>
+							<p:commandButton style="width:150px;" rendered="#{addRoom.showCommon}" value="Add Now"
+								actionListener="#{addRoom.addNow}" update=":form"></p:commandButton></center>
+						</h:form>
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

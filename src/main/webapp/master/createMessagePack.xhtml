@@ -1,0 +1,79 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/masterTemplate.xhtml"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+	<ui:define name="title">Create Message Pack</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<p:messages autoUpdate="true" closable="true"></p:messages>
+
+							<p:panel header="Create Message Pack">
+								<p:panelGrid columns="2" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+									
+
+									<p:outputLabel value="Pack Name" for="@next" style="color:red" ></p:outputLabel>
+									<p:inputText value="#{createMessagePackBean.messagePackName}" required="true"
+										requiredMessage="Please Enter Create Message Pack" validatorMessage="Please Enter Correct value">
+										<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:inputText>
+
+									<p:outputLabel value="Message Qautity" for="@next" style="color:red" ></p:outputLabel>
+									<p:inputText id="quantity" onkeyup="calculateAmount()" value="#{createMessagePackBean.messageQuantity}" required="true"
+										requiredMessage=" Please Enter Message Quantity">
+										<p:keyFilter mask="num"></p:keyFilter>
+									</p:inputText>
+
+										<p:outputLabel value="Per message price" for="@next" style="color:red" ></p:outputLabel>
+									<p:inputText id="price" onkeyup="calculateAmount()" value="#{createMessagePackBean.messagePerPrice}" required="true"
+										requiredMessage="Please Enter Per Message Price">
+										<p:keyFilter mask="num"></p:keyFilter>
+										</p:inputText>
+										
+									<p:outputLabel  value="Amount"></p:outputLabel>
+									<p:inputText id="amount" disabled="true"  value="#{createMessagePackBean.amount}">
+										<p:keyFilter mask="num"></p:keyFilter>
+									</p:inputText>
+
+									<p:outputLabel value="Tax Amount"></p:outputLabel>
+									<p:inputText id="taxamount" disabled="true" value="#{createMessagePackBean.taxAmount}"></p:inputText>
+
+									<p:outputLabel value="Total Amount"></p:outputLabel>
+									<p:inputText id="totalamount" disabled="true"  value="#{createMessagePackBean.totalAmount}"></p:inputText>
+
+
+									<p:outputLabel></p:outputLabel>
+									<p:commandButton update="form"
+										action="#{createMessagePackBean.addMessgaePack}" style="float:right"
+										value="Add Now">
+										<p:confirm header="Confirmation"
+											message="Are You Sure To Create Message Pack...???" icon="ui-icon-alert" />
+									</p:commandButton>
+								</p:panelGrid>
+							</p:panel>
+							<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+							<p:commandButton value="Yes" type="button"
+								styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+							<p:commandButton value="No" style="margin-left:50px"
+								type="button" styleClass="ui-confirmdialog-no"
+								icon="ui-icon-close" />
+						</p:confirmDialog>
+						</h:form>
+
+						
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,163 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Attendance Summary Report</ui:define>
+
+	<ui:define name="content">
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<p:messages closable="true" autoUpdate="true"></p:messages>
+					<div class="card card-w-title">
+						<h:form id="form2">
+							<h1>Attendance Summary Report</h1>
+							<p:panel header="Search Here">
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel value="Start Date" for="@next" style="color:red"></p:outputLabel>
+									<p:calendar value="#{attendSummaryReport.startDate}"
+										navigator="true" pattern="dd/MM/yyyy" required="true"
+										requiredMessage="PLease Select Start Date"></p:calendar>
+
+									<p:outputLabel value="End Date" for="@next" style="color:red"></p:outputLabel>
+									<p:calendar value="#{attendSummaryReport.endDate}"
+										navigator="true" pattern="dd/MM/yyyy" required="true"
+										requiredMessage="PLease Select End Date"></p:calendar>
+
+
+									<p:outputLabel value="Select Class" for="@next"
+										style="color:red"></p:outputLabel>
+									<p:selectOneMenu style="width:250px" filter="true"
+										value="#{attendSummaryReport.selectedClassSection}"
+										required="true" requiredMessage="Please Select Class">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{attendSummaryReport.classSection}"></f:selectItems>
+										<p:ajax update="sectionid"
+											listener="#{attendSummaryReport.allSections}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Select Section" for="@next"
+										style="color:red"></p:outputLabel>
+									<p:selectOneMenu id="sectionid" filter="true"
+										value="#{attendSummaryReport.selectedSection}" required="true"
+										requiredMessage="Please select a section">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{attendSummaryReport.sectionList}"></f:selectItems>
+									</p:selectOneMenu>
+								</p:panelGrid>
+
+								<br />
+								<p:separator />
+								<center>
+									<p:panelGrid
+										columns="#{attendSummaryReport.studentList.size() gt 0 ? '2' : '1'}"
+										layout="grid" styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+
+										<p:commandButton icon="fa fa-search"
+											styleClass="butwid"
+											actionListener="#{attendSummaryReport.searchReport}"
+											value="Search" update=":form2"></p:commandButton>
+
+										<h:commandLink rendered="#{attendSummaryReport.show}">
+											<p:graphicImage name="images/excellogo.png"
+												library="avalon-layout" width="100" height="40"></p:graphicImage>
+											<pe:exporter type="xlsx" target=":form2:dtb"
+												fileName="Attendance_Summary_Report"></pe:exporter>
+										</h:commandLink>
+									</p:panelGrid>
+								</center>
+								<p:separator />
+								<br />
+
+							</p:panel>
+
+
+							<p:panel id="dataTable" rendered="#{attendSummaryReport.show}">
+								<p:dataTable id="dtb" stickyHeader="true"
+									value="#{attendSummaryReport.studentList}" var="var"
+									reflow="true" style="width:100%;border-collapse:collapse"
+									border="1">
+
+									<p:column headerText="Add. No."
+										style="width:110px;text-align:center;" filterBy="#{var.srNo}"
+										filterMatchMode="contains">
+
+										<f:facet name="header">
+											<p:outputLabel value="Sr.No."></p:outputLabel>
+										</f:facet>
+
+										<p:outputLabel value="#{var.srNo}" style="text-align:center;"></p:outputLabel>
+
+									</p:column>
+
+									<p:column style="width:80px" headerText="Class"
+										filterBy="#{var.className}" filterMatchMode="contains">
+
+										<f:facet name="header">
+											<p:outputLabel value="Class"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.className}"></p:outputLabel>
+									</p:column>
+
+
+									<p:column style="width:100px" filterBy="#{var.fullName}"
+										filterMatchMode="contains" headerText="Student Name">
+
+										<f:facet name="header">
+											<p:outputLabel value="Student Name"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.fullName}"></p:outputLabel>
+									</p:column>
+
+									<p:column style="width:100px" headerText="Father's Name">
+
+										<f:facet name="header">
+											<p:outputLabel value="Father's Name"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.fathersName}"></p:outputLabel>
+									</p:column>
+
+									<p:column style="width:80px" headerText="Phone No"
+										filterBy="#{var.fathersPhone}" filterMatchMode="contains">
+
+										<f:facet name="header">
+											<p:outputLabel value="Phone No"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.fathersPhone}"></p:outputLabel>
+									</p:column>
+
+
+									<p:column style="width:60px" headerText="Total Meeting">
+										<f:facet name="header">
+											<p:outputLabel value="Total Meeting"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.totalAttendence}"></p:outputLabel>
+									</p:column>
+
+									<p:column style="width:60px" headerText="Total Present">
+										<f:facet name="header">
+											<p:outputLabel value="Total Present"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.attendance}"></p:outputLabel>
+									</p:column>
+								</p:dataTable>
+							</p:panel>
+
+						</h:form>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</ui:define>
+
+</ui:composition>

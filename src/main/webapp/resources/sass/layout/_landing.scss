@@ -1,0 +1,678 @@
+.landing-body {
+    .landing-topbar {
+        height: 72px;
+        box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.08);
+        background-color: #f8fafc;
+        @include flex();
+        @include flex-align-center();
+        @include flex-justify-between();
+        padding: 0 10%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 999;
+
+        #landing-menu-button {
+            display: none;
+            padding: 0 8px;
+            cursor: pointer;
+
+            img {
+                height: 30px;
+            }
+            
+        }
+
+        > ul {
+            list-style-type: none;
+            @include flex();
+            @include flex-align-center();
+            margin: 0;
+            padding: 0;
+
+            > li {
+                > a{
+                    font-size: 16px;
+                    font-weight: 500;
+                    letter-spacing: 0.08px;
+                    color: #191a1c;
+                    padding: 4px;
+                    margin: 0 6px;
+                    border-radius: 2px;
+                    background-color: rgba(192, 57, 149, 0.2);
+                    @include transition(background-color $transitionDuration);
+                    
+                    &:hover {
+                        background-color: rgba(192, 57, 149, 0.4); 
+                    }
+                    
+                }
+                &:nth-child(2) {
+                    a{
+                        background-color: rgba(46, 136, 255, 0.2);
+                        &:hover {
+                            background-color: rgba(46, 136, 255, 0.4);  
+                        }
+                    }
+                }
+                &:nth-child(3) {
+                    a{
+                        background-color: rgba(99, 111, 192, 0.2);
+                        &:hover {
+                            background-color: rgba(99, 111, 192, 0.4);
+                        }
+                    }
+                }
+                &:nth-child(4) {
+                    a{
+                        background-color: rgba(243, 168, 65, 0.2);
+                        &:hover {
+                            background-color: rgba(243, 168, 65, 0.4);
+                        }
+                    }
+                }
+                &:nth-child(5) {
+                    a{
+                        background-color: rgba(0, 172, 173, 0.2);
+                        &:hover {
+                            background-color: rgba(0, 172, 173, 0.4); 
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .landing-banner{
+        background-color: #f4f7f9;
+        @include flex();
+        @include flex-justify-between();
+        @include flex-align-end();
+        padding: 0;
+        
+        .landing-banner-image {
+            @include flex();
+            @include flex-justify-end();
+            width: 60%;
+            z-index: 1;
+
+            img {
+                width: 100%;
+                max-width: 800px;
+
+                &.mobile-hero {
+                    display: none;
+                }
+
+                &.desktop-hero {
+                    display: block;
+                }
+            }
+        }
+
+        .landing-banner-content {
+            z-index: 2;
+            width: 40%;
+            padding: 188px 48px 100px 10%;
+
+            > h5 {
+                font-size: 28px;
+                font-weight: 500;
+                color: #191a1c;
+                margin: 0;
+                margin-bottom: 12px;
+            }
+
+            > span {
+                font-size: 20px;
+                line-height: 1.5;
+                color: #191a1c;
+                display: block;
+            }
+
+            > button {
+                width: 118px;
+                height: 32px;
+                border-radius: 2px;
+                background-color: #f3a841;
+                margin-top: 24px;
+                border: none;
+
+                > span {
+                    font-size: 13px;
+                    font-weight: 500;
+                    color: #191a1c;
+                }
+
+                &:hover{
+                    background-color: #ff8100;
+                    @include transition(background-color $transitionDuration);
+                }
+            }
+        }
+    }
+
+    .section-title {
+        font-size: 28px;
+        font-weight: 500;
+        margin: 0;
+        color: #191a1c;
+        position: relative;
+        display: inline-block;
+        z-index: 1;
+
+        > span {
+            display: block;
+            height: 12px;
+            border-radius: 2px;
+            background-color: rgba(0, 172, 173, 0.3);
+            width: 100%;
+            position: absolute;
+            left: 9px;
+            bottom: 8px;       
+            z-index: -1; 
+        }
+        
+    }
+
+    .landing-meet-pandora {
+        background-color: #ffffff;
+        padding: 48px 10% 72px;
+
+        > h4 {
+            font-size: 28px;
+            font-weight: 500;
+            color: #191a1c;
+            margin: 0;
+        }
+
+        .feature-cards {
+            @include flex();
+            @include flex-align-center();
+            @include flex-justify-between();
+            margin-top: 32px;
+
+            .feature-card {
+                padding: 24px;
+                position: relative;
+                margin-right: 24px;
+                @include transition(all $transitionDuration);
+                cursor: pointer;
+
+                .feature-card-icon {
+                    width: 64px;
+                    height: 64px;
+                    border-radius: 6px;
+                    background-color: rgba(192, 57, 149, 0.2);
+                    @include flex();
+                    @include flex-align-center();
+                    @include flex-justify-center();
+                    margin-bottom: 12px;
+                }
+
+                > h4 {
+                    font-size: 20px;
+                    font-weight: 500;
+                    color: #191a1c;
+                    margin: 0;
+                }
+
+                > span {
+                    font-size: 14px;
+                    line-height: 1.5;
+                    color: rgba(25, 26, 28, 0.8);
+                    display: block;
+                    margin-top: 2px;
+                }
+
+                > i {
+                    position: absolute;
+                    right: 12px;
+                    bottom: 12px;
+                    color: #c03995;
+                }
+
+                &:hover {
+                    border-radius: 2px;
+                    box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.06);
+                    background-color: #ffffff;
+                }
+
+                &.design {
+                    .feature-card-icon {
+                        background-color: rgba(243, 168, 65, 0.2);
+                    }
+                    > i {
+                        color: #fa9e4a;
+                    }
+                }
+
+                &.documented {
+                    .feature-card-icon {
+                        background-color: rgba(99, 111, 192, 0.2);
+                    }
+                    > i {
+                        color: #636fc0;
+                    }
+                }
+
+                &.unlimited {
+                    margin-right: 0;
+
+                    .feature-card-icon {
+                        background-color: rgba(0, 172, 173, 0.2);
+                    }
+                    > i {
+                        color: #00acad;
+                    }
+                }
+            }
+        }
+    }
+
+    .landing-features-promo {
+        padding: 48px 0 0 10%;
+        @include flex();
+
+        .promo-text {
+            padding-bottom: 72px;
+            width: 35%;
+            z-index: 2;
+            .section-title {
+                span {
+                    background-color: #fdeed9;
+                }
+            }
+    
+            > span {
+                font-size: 14px;
+                display: block;
+                line-height: 1.5;
+                margin-top: 8px;
+                color: rgba(25, 26, 28, 0.8);
+            }
+
+            > ul {
+                padding: 0;
+                list-style: none;
+                margin-top: 32px;
+
+                > li  {
+                    font-size: 14px;
+                    font-weight: 500;
+                    line-height: 1.5;
+                    color: #191a1c;
+                    margin: 8px 0;
+
+                    > i {
+                        font-size: 14px;
+                        color: #2e88ff;
+                        margin-right: 12px;
+                    }
+
+                    &:nth-child(2) {
+                        > i {
+                            color: #636fc0;
+                        }
+                    }
+                    &:nth-child(3) {
+                        > i {
+                            color: #f3a841;
+                        }
+                    }
+                    &:nth-child(4) {
+                        > i {
+                            color: #c03995;
+                        }
+                    }
+                }
+            }
+        }
+
+        .promo-image {
+            width: 65%;
+            @include flex();
+            @include flex-justify-end();
+            z-index: 1;
+
+            > img {
+                height: 350px;
+                width: auto;
+            }
+        }
+
+        
+    }
+
+    .landing-pricing {
+        padding: 48px 10% 78px;
+        text-align: center;
+        background-color: #ffffff;
+
+        .section-title {
+            span {
+                background-color: rgba(99, 111, 192, 0.2);
+                left: 0;
+            }
+        }
+
+        > span {
+            font-size: 14px;
+            display: block;
+            margin-top: 7px;
+            line-height: 1.5;
+            color: rgba(25, 26, 28, 0.8);
+        }
+
+        .pricing-cards {
+            margin-top: 48px;
+
+            >.p-col-12 {
+                @include flex();
+                @include flex-justify-center();
+            }
+
+            .pricing-card {
+                background-image: url("\#{resource['pandora-layout:images/pages/landing/bg-tier-1.svg']}");
+                background-size: cover;
+                background-repeat: no-repeat;
+                padding: 0;
+                text-align: center;
+                border-radius: 4px;
+                max-width: 272px;
+                width: 100%;
+
+                > h6 {
+                    font-size: 14px;
+                    font-weight: 500;
+                    letter-spacing: 1px;
+                    color: #ffffff;
+                    margin: 0;
+                    padding: 25px 0 14px;
+                }
+
+                .card-title {
+                    @include flex();
+                    @include flex-align-center();
+
+                    > h4 {
+                        font-size: 20px;
+                        font-weight: 500;
+                        color: #ffffff;
+                        margin: 0 12px;
+                    }
+    
+                    > span {
+                        height: 14px;
+                        background-color: #ffffff;   
+                        display: block;          
+                        width: 100%; 
+                    }
+                }
+
+                > ul {
+                    padding: 0;
+                    list-style: none;
+                    margin-bottom: 26px;
+
+                    > li {
+                        text-align: center;
+                        font-size: 14px;
+                        font-weight: 500;
+                        line-height: 1.5;
+                        color: #ffffff;
+                        margin-bottom: 6px;
+
+                        &.not-include {
+                            opacity: 0.3;
+                        }
+                    }
+                }
+
+                > button {
+                    border-radius: 2px;
+                    background-color: #f3a841;
+                    padding: 8px 0;
+                    border: none;
+                    width: 145px;
+                    margin-bottom: 25px;
+                    @include transition(background-color $transitionDuration);
+
+                    > span {
+                        padding: 0;
+                        font-size: 13px;
+                        font-weight: 500;
+                        color: #191a1c;
+                    }
+
+                    &:hover {
+                        background-color: #f09412;
+                    }
+                }
+
+                &.premium{
+                    background-image: url("\#{resource['pandora-layout:images/pages/landing/bg-tier-2.svg']}");
+                }
+                &.custom{
+                    background-image: url("\#{resource['pandora-layout:images/pages/landing/bg-tier-3.svg']}");
+                }
+            }
+        }
+    }
+
+    .landing-multimedia {
+        padding: 48px 10% 78px;
+        text-align: center;
+
+        .section-title {
+            span {
+                background-color: rgba(99, 111, 192, 0.2);
+                left: 0;
+            }
+        }
+
+        > span {
+            font-size: 14px;
+            display: block;
+            margin-top: 7px;
+            line-height: 1.5;
+            color: rgba(25, 26, 28, 0.8);
+            margin-bottom: 30px;
+        }
+
+        .videos {
+            > iframe {
+                margin: 18px 13px;
+            }
+        }
+        
+    }
+
+    .landing-footer {
+        box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.08);
+        background-color: #191a1c;
+        padding: 32px 10%;
+        @include flex();
+        @include flex-align-center();
+        @include flex-justify-between();
+    
+        > img {
+            height: 30px;
+            width: auto;
+        }
+    
+        .social-icons {
+            @include flex();
+            @include flex-align-center();
+    
+            a {
+                color: #ffffff;
+                margin-left: 40px;
+                cursor: pointer;
+    
+                i {
+                    font-size: 32px;
+                    color: #9199a9;
+                    @include transition(color $transitionDuration);
+                }
+                
+                &:hover {
+                    i {
+                        color: #2e88ff;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 992px) {
+    .landing-body {
+        .landing-wrapper{
+            &.landing-menu-active {
+                .landing-topbar {
+                    height: 100%;
+                    > ul {
+                        opacity: 1;
+                    }
+                }
+            }
+
+            .landing-topbar {
+                padding: 0 16px;
+                box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.08), 0 2px 8px 0 rgba(0, 0, 0, 0.24);
+                flex-wrap: wrap;
+                @include transition(all $transitionDuration);
+                max-height: 290px;
+
+                > a {
+                    @include flex();
+                    @include flex-align-center();
+                    height: 72px;
+                 }
+                > ul {
+                    @include transition(all $transitionDuration);
+                    opacity: 0;
+                    flex-grow: 1;
+                    order: 3;
+                    @include flex();
+                    @include flex-align-end();
+                    flex-direction: column;
+                    width: 100%;
+                    padding: 6px 0;
+                    height: 100%;
+                    
+                    > li {
+                        display: flex;
+                        margin: 0;
+                        margin-bottom: 12px;
+                    }
+                }
+
+                #landing-menu-button {
+                    display: flex;
+                }
+            }
+
+            .landing-banner{
+                flex-direction: column;
+                @include flex-justify-center();
+                margin-top: 74px;
+                position: relative;
+
+                .landing-banner-image {
+                    width: 100%;
+                    position: absolute;
+                    bottom: 0;
+                    right: 0;
+
+                    img {
+                        width: 376px;
+                        height: 320px;
+    
+                        &.mobile-hero {
+                            display: block;
+                            width: auto;
+                            height: 300px;
+                        }
+                        &.desktop-hero {
+                            display: none;
+                        }
+                    }
+                }
+                
+
+                .landing-banner-content {
+                    width: 100%;
+                    text-align: left;
+                    margin-bottom: 64px;
+                    padding: 42px 34px 245px;
+                }
+            }
+
+            .landing-meet-pandora {
+                padding-bottom: 36px;
+
+                .feature-cards {
+                    .feature-card {
+                        margin-right: 0;
+                        margin-bottom: 36px;
+                    }
+                }
+            }
+
+            .landing-features-promo {
+                flex-direction: column;
+                @include flex-align-center();
+
+                .promo-text {
+                    width: 100%;
+                    padding-right: 10%;
+                    text-align: center;
+                    padding-bottom: 0;
+
+                    ul {
+                        text-align: left;
+                    }
+                }
+
+                .promo-image {
+                    width: 100%;
+                    > img {
+                        width: 100%;
+                        height: auto;
+                        max-height: 350px;
+                    }
+                }
+
+            }
+
+            .landing-pricing {
+                padding-bottom: 36px;
+                .pricing-card {
+                    margin-bottom: 36px;
+                }
+            }
+
+            .landing-multimedia {
+                iframe {
+                    width: 100% !important;
+                    max-width: 350px;
+                    height: auto !important;
+                    margin: 8px 0;
+                }
+            }
+
+            .landing-footer {
+                flex-direction: column;
+                img {
+                    margin-bottom: 33px;
+                }
+                a {
+                    margin: 0 20px;
+                }
+            }
+        }
+    }
+}

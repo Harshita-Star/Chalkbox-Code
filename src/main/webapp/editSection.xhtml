@@ -1,0 +1,117 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Edit Section</ui:define>
+
+    <ui:define name="content">
+        
+            <div class="ui-fluid">
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <div class="card card-w-title">
+                        <h:form id="form" >
+				 <h1>Edit/Delete Section</h1>
+				 		
+				 					 		 
+							<p:panel header="Edit Section" id="panel">
+							
+							<p:messages closable="true" autoUpdate="true"></p:messages>
+												
+					
+								<p:dataTable reflow="true" paginator="true" rowsPerPageTemplate="5,10,15" rows="5" value="#{editSection.categoryList}" var="var" >
+               		  												
+									<f:facet name="header">
+										All Sections
+									</f:facet>
+									
+									<p:column headerText="Serial Number">
+											
+											<p:outputLabel value="#{var.serialNumber}"></p:outputLabel>
+											
+									</p:column>
+									
+									<p:column sortBy="#{var.className}" filterBy="#{var.className}" headerText="Class Name">
+											
+											<p:outputLabel value="#{var.className}"></p:outputLabel>
+											
+									</p:column>
+									
+									<p:column sortBy="#{var.category}" filterBy="#{var.category}" headerText="Section Name">
+											
+											<p:outputLabel value="#{var.category}"></p:outputLabel>
+											
+									</p:column>
+									
+									<p:column headerText="Edit">
+									<center>
+									<p:commandButton update=":editForm" styleClass="butwid" oncomplete="PF('editDialog').show();" icon="ui-icon-pencil" action="#{editSection.editSectionDetails}">
+											<f:setPropertyActionListener target="#{editSection.selectedSection}" value="#{var}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</center>
+										
+									</p:column>
+									
+									<p:column headerText="Delete">
+									<center>
+										<p:commandButton update=":form" styleClass="butwid redButt" oncomplete="PF('dlg').show();" icon="ui-icon-trash" >
+											<f:setPropertyActionListener target="#{editSection.selectedSection}" value="#{var}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</center>
+									
+									</p:column>
+								</p:dataTable>
+					
+					<p:dialog resizable="false" widgetVar="dlg" header="Do you really want to delete this Section" showEffect="fade" hideEffect="explode" modal="true">
+							<div class="ui-g form-group">
+									<p:panelGrid columns="2"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+								
+								<p:commandButton update=":form" styleClass="greenButt" actionListener="#{editSection.deleteNow}" value="Yes"></p:commandButton>
+								<p:commandButton value="No" styleClass="redButt" update=":form" oncomplete="PF('dlg').hide();"></p:commandButton>
+							</p:panelGrid>
+							</div>
+					</p:dialog>
+					
+							
+					</p:panel>
+				 
+				</h:form>
+				<h:form id="editForm">
+					<p:dialog  resizable="false" widgetVar="editDialog" header="Edit Details" showEffect="fade" hideEffect="explode" modal="true">
+						<div class="ui-g form-group">
+									<p:panelGrid columns="2"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+							
+							<p:outputLabel value="Section Name" for="@next" style="color:red" ></p:outputLabel>
+							<p:inputText value="#{editSection.category}" id="secnm" onchange="trimFunc(this.value,'Please Section Name',this.id)" required="true" requiredMessage="Please enter Section Name" validatorMessage="Please Enter Correct value">
+							  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+							</p:inputText>
+							
+								
+							</p:panelGrid>
+							
+							</div>
+							<br />
+								<p:separator />
+								<center>
+									<p:commandButton update=":editForm,:form" icon="fa fa-floppy-o" styleClass="butwid" actionListener="#{editSection.editNow}" value="Save Here"></p:commandButton>
+							
+								</center>
+								<p:separator />
+								<br />
+					</p:dialog>
+				</h:form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+    </ui:define>
+
+</ui:composition>

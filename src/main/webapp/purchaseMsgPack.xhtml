@@ -1,0 +1,67 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	<f:loadBundle var="addClassVar" basename="myProperties" />
+
+	<ui:define name="title">Purchase Message Pack</ui:define>
+
+	<ui:define name="content">
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						 <h:form id="form" >
+						 <p:panel header="Purchase Message Pack">
+						 <p:growl showDetail="true"  autoUpdate="true"></p:growl>
+						 <p:dataTable value="#{purchaseMsgPack.packList}" var="info">
+						 <p:column headerText="Pack Name">
+						 <p:outputLabel value="#{info.packName}"></p:outputLabel>
+						 </p:column>
+						 <p:column headerText="Quantity">
+						 <p:outputLabel value="#{info.quantity}"></p:outputLabel>
+						 </p:column>
+						 
+						 <p:column headerText="Rate">
+						 <p:outputLabel value="#{info.rate}"></p:outputLabel>
+						 </p:column>
+						 
+						 <p:column headerText="Amount">
+						 <p:outputLabel value="#{info.amount}"></p:outputLabel>
+						 </p:column>
+						 
+						 <p:column headerText="Tax">
+						 <p:outputLabel value="#{info.tax}"></p:outputLabel>
+						 </p:column>
+						 
+						 <p:column headerText="Total Amount">
+						 <p:outputLabel value="#{info.totalAmount}"></p:outputLabel>
+						 </p:column>
+						 
+						 <p:column headerText="Purchase">
+						 <p:commandButton update=":form" value="Purchase" styleClass="butwid" icon="fa fa-shopping-cart" action="#{purchaseMsgPack.purchase}">
+						 <p:confirm header="Confirmation" message="Are you sure to Purchase this pack?" icon="ui-icon-alert" />
+						 <f:setPropertyActionListener value="#{info}" target="#{purchaseMsgPack.selected}"></f:setPropertyActionListener>
+						 </p:commandButton>
+						 </p:column>
+						 </p:dataTable>
+								<p:confirmDialog global="true" showEffect="fade"
+									hideEffect="fade">
+									<p:commandButton value="Yes" type="button"
+										styleClass="ui-confirmdialog-yes greenButt" icon="ui-icon-check" />
+									<p:commandButton value="No" type="button"
+										styleClass="ui-confirmdialog-no redButt" icon="ui-icon-close" />
+								</p:confirmDialog>
+							</p:panel>     
+					  </h:form>
+						
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

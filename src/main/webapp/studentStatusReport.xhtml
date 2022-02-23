@@ -1,0 +1,127 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Student Status Report</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form1">
+
+							<h1>Student Status Report</h1>
+
+							<p:messages closable="true" autoUpdate="true"></p:messages>
+
+							<p:panel header="Search Student by Name/Sr. No">
+
+								<p:panelGrid columns="5"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel value="Student Name/Sr. No"></p:outputLabel>
+									<p:autoComplete id="acSimple"
+										value="#{studentStatusReport.name}" minQueryLength="3"
+										completeMethod="#{studentStatusReport.autoCompleteStudentInfo}"
+										forceSelection="true"
+										validatorMessage="Please Enter Correct value">
+										<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+										<p:ajax event="query" global="false" />
+									</p:autoComplete>
+
+									<p:commandButton update=":form3" value="Search"
+										styleClass="butwid" icon="fa fa-search"
+										actionListener="#{studentStatusReport.searchStudentByName}"></p:commandButton>
+
+								</p:panelGrid>
+
+							</p:panel>
+
+						</h:form>
+
+						<br />
+
+						<h:form id="form3">
+							<p:panel header="Student Status" id="panel"
+								rendered="#{studentStatusReport.show}">
+
+								<h:commandLink rendered="false">
+									<p:graphicImage name="images/excellogo.png"
+										library="avalon-layout" width="100" height="40"></p:graphicImage>
+									<pe:exporter type="xlsx" target="dt1"
+										fileName="Student_Status_Report"></pe:exporter>
+								</h:commandLink>
+
+								<p:commandButton value="PDf" style="width:50px;" ajax="false"
+									rendered="false" process="@this"
+									actionListener="#{studentStatusReport.exportStudentStatusPdf}">
+
+									<p:fileDownload value="#{studentStatusReport.file}" />
+								</p:commandButton>
+
+								<br />
+
+								<p:dataTable value="#{studentStatusReport.studentStatusList}"
+									stickyHeader="true" var="var" id="dt1">
+
+									<p:column headerText="Sr.No.">
+										<center>
+											<p:outputLabel value="#{var.srNo}"></p:outputLabel>
+										</center>
+									</p:column>
+
+									<p:column headerText="Student Name">
+										<center>
+											<p:outputLabel value="#{var.fullName}"></p:outputLabel>
+										</center>
+									</p:column>
+
+									<p:column headerText="Father's Name">
+										<center>
+											<p:outputLabel value="#{var.fathersName}"></p:outputLabel>
+										</center>
+									</p:column>
+
+									<p:column headerText="Class">
+										<center>
+											<p:outputLabel value="#{var.className}"></p:outputLabel>
+										</center>
+									</p:column>
+
+									<p:column headerText="Section">
+										<center>
+											<p:outputLabel value="#{var.sectionName}"></p:outputLabel>
+										</center>
+									</p:column>
+
+									<p:column headerText="Session">
+										<center>
+											<p:outputLabel value="#{var.session}"></p:outputLabel>
+										</center>
+									</p:column>
+
+									<p:column headerText="Status">
+										<center>
+											<p:outputLabel value="#{var.status}"></p:outputLabel>
+										</center>
+									</p:column>
+								</p:dataTable>
+
+							</p:panel>
+
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

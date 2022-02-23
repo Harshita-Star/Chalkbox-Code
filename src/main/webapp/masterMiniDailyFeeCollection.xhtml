@@ -1,0 +1,394 @@
+	<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+					xmlns:ui="http://java.sun.com/jsf/facelets"
+					xmlns:h="http://java.sun.com/jsf/html"
+					xmlns:f="http://java.sun.com/jsf/core"
+					xmlns:p="http://primefaces.org/ui"
+					xmlns:pe="http://primefaces.org/ui/extensions"
+					template="/WEB-INF/schoolMasterTemplate.xhtml">
+
+		<ui:define name="title">Daily Fee Collection</ui:define>
+
+		<ui:define name="content">
+		   
+				<div class="ui-fluid">
+					<div class="ui-g">
+						<div class="ui-g-12">
+							<div class="card card-w-title">
+							    <h:form id="form">
+							    <p:growl showDetail="true"  autoUpdate="true"></p:growl>
+				<p:panel>
+						
+					<p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+						
+						<p:outputLabel value="Select School" for="@next" style="color:red" ></p:outputLabel>
+						<p:selectOneMenu value="#{masterMiniDailyFeeCollection.schid}"
+							required="true" requiredMessage="Please select a school">
+							<f:selectItem itemLabel="All" itemValue="-1"></f:selectItem>
+							<f:selectItems value="#{masterMiniDailyFeeCollection.branchList}"></f:selectItems>
+
+							<p:ajax listener="#{masterMiniDailyFeeCollection.branchWiseWork}"
+								update="form"></p:ajax>
+						</p:selectOneMenu>
+						
+						<p:outputLabel value="Select Installment" for="@next" style="color:red" ></p:outputLabel>
+               		 		 <p:selectCheckboxMenu  multiple="true"
+												value="#{masterMiniDailyFeeCollection.checkMonthSelected}" required="true"
+												requiredMessage="Please Select Installment">
+												<f:selectItems value="#{masterMiniDailyFeeCollection.installmentList}"></f:selectItems>
+											</p:selectCheckboxMenu>
+						
+						<p:outputLabel rendered="#{masterMiniDailyFeeCollection.showClass}" value="Select a Class"></p:outputLabel>
+						<p:selectOneMenu rendered="#{masterMiniDailyFeeCollection.showClass}" value="#{masterMiniDailyFeeCollection.selectedClass}">
+							<f:selectItem itemLabel="All" itemValue="-1"></f:selectItem>
+							<f:selectItems value="#{masterMiniDailyFeeCollection.classList}"></f:selectItems>
+							<p:ajax update="sectionid"
+								listener="#{masterMiniDailyFeeCollection.allSections}"></p:ajax>
+						</p:selectOneMenu>
+
+						<p:outputLabel rendered="#{masterMiniDailyFeeCollection.showClass}" value="Select Section"></p:outputLabel>
+						<p:selectOneMenu rendered="#{masterMiniDailyFeeCollection.showClass}" id="sectionid"
+							value="#{masterMiniDailyFeeCollection.selectedSection}">
+							<f:selectItem itemLabel="All" itemValue="-1"></f:selectItem>
+							<f:selectItems value="#{masterMiniDailyFeeCollection.sectionList}"></f:selectItems>
+						</p:selectOneMenu>
+
+
+						<p:outputLabel value="From Date" for="@next" style="color:red" ></p:outputLabel>
+						<p:calendar value="#{masterMiniDailyFeeCollection.feedate}" required="true"
+							requiredMessage="Please select starting date" navigator="true"
+							pattern="dd/MM/yyyy"></p:calendar>
+
+						<p:outputLabel value="To  Date" for="@next" style="color:red" ></p:outputLabel>
+						<p:calendar value="#{masterMiniDailyFeeCollection.endDate}" required="true"
+							requiredMessage="Please select ending date" navigator="true"
+							pattern="dd/MM/yyyy"></p:calendar>
+
+
+						<p:outputLabel value="Select User ID"></p:outputLabel>
+						<p:selectOneMenu id="operatorid"
+							value="#{masterMiniDailyFeeCollection.selectedOperator}">
+							<f:selectItem itemLabel="All" itemValue="all"></f:selectItem>
+							<f:selectItems value="#{masterMiniDailyFeeCollection.operatorList}"></f:selectItems>
+						</p:selectOneMenu>
+						
+						<p:commandButton value="show report"
+							actionListener="#{masterMiniDailyFeeCollection.showReport}"
+							update=":form"></p:commandButton>
+						<p:commandButton value="Print"
+							rendered="#{masterMiniDailyFeeCollection.show}">
+							<p:printer target="dailyfeereport"></p:printer>
+						</p:commandButton>
+			
+						       <h:commandLink rendered="#{masterMiniDailyFeeCollection.show}"
+                            >
+                            
+                            <p:graphicImage name="images/excellogo.png"
+                                            library="avalon-layout" width="100" height="40"></p:graphicImage>
+                                        
+                                      <pe:exporter type="xlsx" target="up" fileName="Daily_Fee_Collection.xlsx"  />
+              
+                        </h:commandLink>
+                        
+                          <p:commandButton value="pdf" ajax="false" process="@this" actionListener="#{masterMiniDailyFeeCollection.exportPdf}">
+                    
+          <p:fileDownload value="#{masterMiniDailyFeeCollection.file}" />
+         </p:commandButton>
+						
+						
+					
+
+					</p:panelGrid>
+				</p:panel>
+				<p:panel rendered="false" header="Search Student by Name/Sr. No">
+					<p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+						<p:outputLabel value="Student Name/Sr. No"></p:outputLabel>
+						<p:autoComplete minQueryLength="3"
+							completeMethod="#{masterMiniDailyFeeCollection.autoCompleteStudentInfo}"
+							forceSelection="true" id="acSimple"
+							value="#{masterMiniDailyFeeCollection.name}"></p:autoComplete>
+
+						<p:commandButton value="Search" update=":form"
+							actionListener="#{masterMiniDailyFeeCollection.searchStudentByName}"></p:commandButton>
+					</p:panelGrid>
+
+				</p:panel>
+				<p:panel id="dailyfeereport" rendered="#{masterMiniDailyFeeCollection.show}">
+					<center>
+						<p
+							style="font-family: initial; font-style: oblique; font-size: 25px !important; font-weight: bold; margin: 0px;">#{masterMiniDailyFeeCollection.schname}</p>
+						<p
+							style="font-family: initial; font-style: oblique; font-size: 15px !important; font-weight: bold; margin: 0px;">#{masterMiniDailyFeeCollection.affiliationNo}</p>
+						<p
+							style="font-family: initial; font-style: oblique; font-size: 15px !important; font-weight: bold; margin: 0px;">#{masterMiniDailyFeeCollection.finalAddress}</p>
+						<p
+							style="font-family: initial; font-style: oblique; font-size: 15px !important; font-weight: bold; margin: 0px;">#{masterMiniDailyFeeCollection.phoneno}</p>
+
+						<p
+							style="margin: 0px; font-size: 25px !important; font-weight: bold;">Daily
+							Fee Collection Report</p>
+					</center>
+					<p:panelGrid columns="5"  columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4,ui-grid-col-4,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+
+							<h:outputText value="Date:-#{masterMiniDailyFeeCollection.date}" style="font-weight: bold;"></h:outputText>
+					
+							<h:outputText value="Total Amount(by Cash):-#{masterMiniDailyFeeCollection.cashAmountString}" style="font-weight: bold;"></h:outputText>
+					
+							<h:outputText value="Total Amount(by Cheque + by Paytm):-#{masterMiniDailyFeeCollection.checkAmountString}" style="font-weight: bold;"></h:outputText>
+						
+
+							<h:outputText value="Total Amount:-#{masterMiniDailyFeeCollection.totalamountString}" style="font-weight: bold;"></h:outputText>
+						
+						
+							<h:outputText value="Total Discount:-#{masterMiniDailyFeeCollection.tdiscount}" style="font-weight: bold;"></h:outputText>
+						
+					</p:panelGrid>
+
+
+					<p:dataTable id="up" 
+						var="fee" value="#{masterMiniDailyFeeCollection.dailyfee}"   sortBy="#{fee.feedate}"> 
+                     
+                    <f:facet name="header">
+                              <p:outputLabel value=""></p:outputLabel>
+                
+                  
+                              </f:facet>
+                                
+                                <p:columnGroup type="header">  
+                                
+                              <p:row>
+                                <p:column headerText="" colspan="11"></p:column>
+                            </p:row>
+                  
+                              <p:row>
+                              </p:row>
+                              
+                                <p:row>
+                                
+                                  
+                                </p:row>
+                                <p:row> 
+                                    <p:column headerText="SR.NO"  />
+                                    <p:column headerText="Date"  />
+                                      <p:column headerText="Student's Name"/>
+                                        <p:column headerText="Father Name"/>
+                                          <p:column headerText="Class"/>
+                                            <p:column headerText="Recipt No."/>
+                                            
+                                               <p:column headerText="School"/>
+                                          <p:column headerText="   Amount     "/>
+                                            <p:column headerText="    Discount    "/>
+                                             <p:column headerText="Payment Mode"/>
+                                             <p:column headerText="Installment."/>
+                                            <p:column headerText="User"/></p:row> 
+                              
+                                </p:columnGroup>
+                     
+                      
+
+                     
+                   
+                     
+                     <p:column style="font-size:9px !important"
+							>
+
+							<h:outputText style="font-size:9px !important"
+								value="#{fee.srNo}" />
+								
+						</p:column>
+
+                       <p:column style="font-size:10px !important" 
+						>
+
+							
+							<h:outputText style="font-size:9px !important"
+								value="#{fee.feeDateStr}" />
+						</p:column>
+						
+						<p:column style="font-size:9px !important"
+							>
+
+							<h:outputText style="font-size:9px !important"
+								value="#{fee.studentname}" />
+						</p:column>
+						
+						<p:column style="font-size:9px !important">
+						
+
+							<h:outputText style="font-size:9px !important"
+								value="#{fee.fathername}" />
+						</p:column>
+
+						<p:column style="font-size:10px !important" >
+
+							<h:outputText style="font-size:10px !important"
+								value="#{fee.classname}" />
+						</p:column>
+						
+
+
+						<p:column style="font-size:10px !important"
+							>
+
+							
+							<h:outputText style="font-size:10px !important"
+								value="#{fee.reciptno}" />
+						</p:column>
+						
+						
+						
+						
+					
+						
+						<p:column  style="font-size:10px !important"
+							>
+
+							
+							<h:outputText style="font-size:10px !important"
+								value="#{fee.schname}" />
+						</p:column>
+
+                 
+                  	<p:column style="font-size:10px !important"
+							>
+
+							
+							<h:outputText style="font-size:10px !important"
+								value="#{fee.amount}" />
+						</p:column>
+
+						  <p:column style="font-size:10px !important"
+							>
+							<h:outputText style="font-size:10px !important"
+								value="#{fee.discount}" />
+						</p:column>
+
+						<p:column style="font-size:10px !important"
+							>
+
+							
+							<h:outputText style="font-size:10px !important"
+								value="#{fee.paymentmode} #{fee.bankname} #{fee.chequenumber}" />
+						</p:column>
+
+						<p:column style="font-size:10px !important"
+							>
+
+							
+							<h:outputText style="font-size:10px !important"
+								value="#{fee.installmentName}" />
+						</p:column>
+
+						<p:column style="font-size:10px !important"
+							>
+
+							<h:outputText style="font-size:9px !important"
+								value="#{fee.user}" />
+						</p:column>
+						
+						
+
+                          
+                   <p:summaryRow  listener="#{masterMiniDailyFeeCollection.onSummaryRow}">
+                      
+                       <p:column headerText="test" colspan="11" style="text-align:right" >
+                       	<h:outputText value="Total:" />
+                        </p:column>
+            		<p:column headerText="test">
+                	<p:outputLabel  value="#{component.parent.attributes.total}">
+                </p:outputLabel>
+            </p:column>
+                      
+                      </p:summaryRow>
+							
+
+					
+              
+
+
+					</p:dataTable>
+
+
+
+				</p:panel>
+
+			</h:form>
+
+			
+			<h:form id="form2">
+				<p:dialog header="Cancel Fee" widgetVar="cancelfee" modal="true">
+					<p:outputLabel rendered="#{masterMiniDailyFeeCollection.check}" style="font-weight:bold;" value="OTP SEND TO #{masterMiniDailyFeeCollection.discoutnNo}"></p:outputLabel>
+					<br/>
+					<br/>
+					<div class="ui-g form-group">
+	
+					
+					<p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group"
+                                        style="border:0px none; background-color:transparent;">
+                                             <p:outputLabel rendered="#{masterMiniDailyFeeCollection.check}" value="OTP"></p:outputLabel>
+                             <p:inputText rendered="#{masterMiniDailyFeeCollection.check}" value="#{masterMiniDailyFeeCollection.otpInput}"></p:inputText>
+                        
+						<p:outputLabel value="Remark " for="@next" style="color:red" ></p:outputLabel>
+						<p:inputTextarea value="#{masterMiniDailyFeeCollection.remark}"
+							required="true" requiredMessage="Please enter  Remark"></p:inputTextarea>
+
+					</p:panelGrid>
+					
+					</div>
+					<br/>
+					<p:commandButton value="yes"
+							actionListener="#{masterMiniDailyFeeCollection.cancelReceipt}"
+							update=":form :form2"></p:commandButton>
+							<br/><br/>
+						<p:commandButton value="No" onclick="PF('cancelfee').hide();"
+							update=":form"></p:commandButton>
+				</p:dialog>
+			</h:form>
+			
+			
+			
+			<h:form id="form5">
+				<p:dialog header="Edit Fee" widgetVar="editfee" modal="true">
+					
+					<div class="ui-g form-group">
+	                    
+	                    <p:dataTable value="#{masterMiniDailyFeeCollection.feesSelected}" var="var">
+	                    
+	                      <p:column headerText="FeeName">
+	                         <p:outputLabel value="#{var.feeName}"></p:outputLabel>
+	                      </p:column>
+	                     
+	                      <p:column headerText="Pay Amount">
+	                         <p:inputText value="#{var.feeamunt}"></p:inputText>
+	                      </p:column>
+	                     
+	                     
+	                      <p:column headerText="Pay Discount">
+	                         <p:inputText value="#{var.discount}"></p:inputText>
+	                      </p:column>
+	                     
+	                     
+	                     <f:facet name="footer">
+	                        <p:commandButton value="Update" actionListener="#{masterMiniDailyFeeCollection.update}" update=":form5 :form"></p:commandButton>
+	                        
+	                     </f:facet>
+	                          
+	                    </p:dataTable>
+	                    
+					
+					
+					</div>
+					
+				</p:dialog>
+			</h:form>
+
+			
+
+							     
+							</div>
+						</div>
+					</div>
+				</div>
+		   
+		</ui:define>
+
+	</ui:composition>

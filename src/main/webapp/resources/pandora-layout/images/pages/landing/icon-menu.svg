@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="6px" height="26px" viewBox="0 0 6 26" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 63.1 (92452) - https://sketch.com -->
+    <title>icon-menu</title>
+    <desc>Created with Sketch.</desc>
+    <g id="🚀-Template-Pages" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Landing-/-Mobile" transform="translate(-352.000000, -23.000000)">
+            <g id="topbar">
+                <g id="icon-menu" transform="translate(352.000000, 23.000000)">
+                    <circle id="Oval" fill="#C03995" cx="3" cy="3" r="3"></circle>
+                    <circle id="Oval" fill="#00ACAD" cx="3" cy="13" r="3"></circle>
+                    <circle id="Oval" fill="#F3A841" cx="3" cy="23" r="3"></circle>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

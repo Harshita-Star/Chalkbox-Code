@@ -1,0 +1,314 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Edit Staff Details</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<p:messages closable="true" autoUpdate="true"></p:messages>
+						<h:form id="form2">
+							<p:panel>
+							<f:facet name="header">
+									<span>Search Employee By Catgory</span>
+									<span> <p:commandLink
+											style="float: right;margin-left: 15px;;color: blue;font-size:15px;"
+											immediate="true" value="Search Employee"
+											action="searchEmployee.xhtml?faces-redirect=true"></p:commandLink>
+									</span>
+								</f:facet>
+
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel  for="@next" style="color:red" value="Select Category"></p:outputLabel>
+									<p:selectOneMenu value="#{bulkEditStaffDetails.selectedCategory}"
+										filter="true" required="true" requiredMessage="Please select employee category">
+										<f:selectItem itemLabel="Select here" itemValue=""></f:selectItem>
+										<f:selectItem itemLabel="All" itemValue="All"></f:selectItem>
+										<f:selectItems value="#{bulkEditStaffDetails.categoryList}"></f:selectItems>
+
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Select Option" />
+									<p:selectOneRadio value="#{bulkEditStaffDetails.option}">
+										<f:selectItem itemLabel="Basic Details" itemValue="details"></f:selectItem>
+										<f:selectItem itemLabel="Photographs Only" itemValue="photo"></f:selectItem>
+									</p:selectOneRadio>
+
+									<p:commandButton value="Search"
+										actionListener="#{bulkEditStaffDetails.searchByCategory}"
+										update=":form"></p:commandButton>
+
+								</p:panelGrid>
+
+							</p:panel>
+						</h:form>
+						<h:form id="form" enctype="multipart/form-data">
+							<h1>Edit Employee Details</h1>
+
+							<p:dataTable reflow="true" id="up"
+								value="#{bulkEditStaffDetails.employeeList}" var="var"
+								selection="#{bulkEditStaffDetails.selectEmpDet}"
+								rowKey="#{var.id}"
+								rendered="#{bulkEditStaffDetails.show}" multiViewState="true" rowSelectMode="checkbox">
+
+								<f:facet name="header">
+									<center>
+										<p:commandButton style="width: 150px;" value="Update"
+											actionListener="#{bulkEditStaffDetails.submit}"
+											update=":form"></p:commandButton>
+										<p:commandButton id="togglerr" type="button" value="Columns"
+											style="width: auto;float:right;" icon="ui-icon-transfer-e-w" />
+										<p:columnToggler datasource=":form:up" trigger="togglerr" />
+									</center>
+								</f:facet>
+
+								<p:column selectionMode="multiple" style="width:35px;"></p:column>
+
+								<p:column headerText="Name" style="width:150px;">
+									<p:inputText value="#{var.fname}"></p:inputText>
+								</p:column>
+
+								<p:column headerText="Father Name" style="width:150px;">
+									<p:inputText value="#{var.lname}"></p:inputText>
+								</p:column>
+								
+								<p:column headerText="Dob" style="width:150px;">
+									<p:calendar yearRange="c-50:c+20" navigator="true"
+										value="#{var.dob}" pattern="dd/MM/yyyy" ></p:calendar>
+								</p:column>
+								
+								<p:column headerText="Doj" style="width:150px;">
+									<p:calendar yearRange="c-50:c+20" navigator="true"
+										value="#{var.startingDate}" pattern="dd/MM/yyyy" ></p:calendar>
+								</p:column>
+								
+								
+								<p:column headerText="Gender" style="width:150px;">
+									<p:selectOneMenu value="#{var.gender}">
+										<f:selectItem itemLabel="Male" itemValue="Male"></f:selectItem>
+										<f:selectItem itemLabel="Female" itemValue="Female"></f:selectItem>
+									<f:selectItem itemLabel="Transgender" itemValue="Transgender"></f:selectItem>
+										
+									</p:selectOneMenu>
+								</p:column>
+								
+								<p:column headerText="Employee Unique Id" style="width:150px;">
+									<p:inputText onfocus="this.select();" value="#{var.employeeUniqueId}">
+									</p:inputText>
+								</p:column>
+								
+								<p:column headerText="Category" style="width:150px;">
+									<p:selectOneMenu value="#{var.categoryid}">
+										<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+										<f:selectItems
+											value="#{bulkEditStaffDetails.categoryList}"></f:selectItems>
+									</p:selectOneMenu>
+								</p:column>
+
+								<p:column headerText="Sub. Category" style="width:150px;">
+									<p:inputText value="#{var.subCateg}"></p:inputText>
+								</p:column>
+								
+								<p:column headerText="Address" style="width:150px;">
+									<p:inputTextarea value="#{var.address}">
+									</p:inputTextarea>
+								</p:column>
+								
+								<p:column headerText="Mobile" style="width:150px;">
+									<p:inputText id="empMob1" value="#{var.mobile}" maxlength="#{sideMenuBean.list.country eq 'UAE' ? '9' : '10'}" onkeypress="return AvoidSpace(event)" onkeyup="checkNumberEmployee1(#{var.sno})"
+										validatorMessage="Mobile no. must be of #{sideMenuBean.list.country eq 'UAE' ? '9' : '10'} digits">
+										<f:validateLength minimum="#{sideMenuBean.list.country eq 'UAE' ? '9' : '10'}"></f:validateLength>
+									</p:inputText>
+								</p:column>
+								
+								
+								<p:column headerText="Mobile2" style="width:150px;">
+									<p:inputText id="empMob2" onfocus="this.select();" value="#{var.mobile2}" onkeypress="return AvoidSpace(event)" onkeyup="checkNumberEmployee2(#{var.sno})"
+									maxlength="#{sideMenuBean.list.country eq 'UAE' ? '9' : '10'}"
+										validatorMessage="Mobile no. must be of #{sideMenuBean.list.country eq 'UAE' ? '9' : '10'} digits">
+										<f:validateLength minimum="#{sideMenuBean.list.country eq 'UAE' ? '9' : '10'}"></f:validateLength>
+									</p:inputText>
+								</p:column>
+								
+								<p:column headerText="Qualification" style="width:150px;">
+									<p:inputText onfocus="this.select();" value="#{var.qualification}">
+									</p:inputText>
+								</p:column>
+								
+								
+
+								<p:column headerText="Email ID / Zoom Email ID" style="width:150px;">
+									<p:inputText value="#{var.email}"></p:inputText>
+								</p:column>
+								
+								<p:column headerText="Salary (Monthly)" style="width:150px;">
+									<p:inputText onfocus="this.select();" value="#{var.salary}">
+									<p:keyFilter mask="pnum"></p:keyFilter>
+									</p:inputText>
+								</p:column>
+								
+								<p:column headerText="Leave Allowed (Monthly)" style="width:150px;">
+									<p:inputText onfocus="this.select();" value="#{var.leave}">
+									<p:keyFilter mask="money"></p:keyFilter>
+									</p:inputText>
+								</p:column>
+
+								<p:column headerText="DA Amount" style="width:150px;">
+									<p:inputText onfocus="this.select();" value="#{var.daamt}">
+									<p:keyFilter mask="money"></p:keyFilter>
+									</p:inputText>
+								</p:column>
+								
+								
+								<p:column headerText="HRA Amount" style="width:150px;">
+									<p:inputText onfocus="this.select();" value="#{var.hraamt}">
+									<p:keyFilter mask="money"></p:keyFilter>
+									</p:inputText>
+								</p:column>
+								
+								<p:column headerText="Marital Status" style="width:150px;">
+								<p:selectOneMenu value="#{var.marital}" >
+									<f:selectItem itemLabel="Married" itemValue="Married"></f:selectItem>
+									<f:selectItem itemLabel="Unmarried" itemValue="Unmarried"></f:selectItem>
+								</p:selectOneMenu>
+								</p:column>
+								
+								<p:column headerText="Spouse Name" style="width:150px;">
+									<p:inputText onfocus="this.select();" value="#{var.spouseName}">
+									</p:inputText>
+								</p:column>
+								
+								<p:column headerText="PAN No." style="width:150px;">
+									<p:inputText onfocus="this.select();" value="#{var.panNo}">
+									</p:inputText>
+								</p:column>
+								
+								<p:column headerText="Aadhar No." style="width:150px;">
+									<p:inputText onfocus="this.select();" value="#{var.aadhaarNo}">
+									</p:inputText>
+								</p:column>
+								
+								<p:column headerText="Bank Account No." style="width:150px;">
+									<p:inputText onfocus="this.select();" value="#{var.bankAccountNo}">
+									</p:inputText>
+								</p:column>
+								
+								<p:column headerText="Bank Name" style="width:150px;">
+									<p:inputText onfocus="this.select();" value="#{var.bankName}">
+									</p:inputText>
+								</p:column>
+								
+								<p:column headerText="Bank Branch Name" style="width:150px;">
+									<p:inputText onfocus="this.select();" value="#{var.bankBranch}">
+									</p:inputText>
+								</p:column>
+								
+								<p:column headerText="IFSC CODE" style="width:150px;">
+									<p:inputText onfocus="this.select();" value="#{var.ifscCode}">
+									</p:inputText>
+								</p:column>
+								
+								<p:column headerText="EPF UAN No." style="width:150px;">
+									<p:inputText onfocus="this.select();" value="#{var.epfUanNo}">
+									</p:inputText>
+								</p:column>
+								
+								<p:column headerText="ESI No." style="width:150px;">
+									<p:inputText onfocus="this.select();" value="#{var.esiNo}">
+									</p:inputText>
+								</p:column>
+								
+								
+								
+
+								<f:facet name="footer">
+									<center>
+										<p:commandButton style="width: 150px;" value="Update"
+											actionListener="#{bulkEditStaffDetails.submit}"
+											update=":form"></p:commandButton>
+									</center>
+								</f:facet>
+
+							</p:dataTable>
+
+							<p:dataTable reflow="true" id="upPic"
+								value="#{bulkEditStaffDetails.employeeList}" var="var"
+								selection="#{bulkEditStaffDetails.selectEmpPic}"
+								rowKey="#{var.id}" rowIndexVar="index"
+								rendered="#{bulkEditStaffDetails.showPic}"
+								multiViewState="true">
+
+								<f:facet name="header">
+									<center>
+										<p:commandButton style="width: 150px;" ajax="false"
+											value="Update"
+											actionListener="#{bulkEditStaffDetails.submit}"
+											update=":form"></p:commandButton>
+										<p:commandButton id="toggler" type="button" value="Columns"
+											style="width: auto;float:right;" icon="	ui-icon-transfer-e-w" />
+										<p:columnToggler datasource=":form:upPic" trigger="toggler" />
+									</center>
+								</f:facet>
+
+								<p:column selectionMode="multiple" style="width:35px;"></p:column>
+
+								<p:column headerText="S.No." style="width:50px;">
+									<p:outputLabel value="#{index+1}"></p:outputLabel>
+								</p:column>
+
+								<p:column headerText="Name">
+									<p:outputLabel value="#{var.fname}"></p:outputLabel>
+								</p:column>
+
+								<p:column headerText="Father Name">
+									<p:outputLabel value="#{var.lname}"></p:outputLabel>
+								</p:column>
+								
+								<p:column headerText="Sub. Category">
+									<p:outputLabel value="#{var.subCateg}"></p:outputLabel>
+								</p:column>
+
+								<p:column headerText="Photo">
+									<center>
+										<p:lightBox styleClass="imagebox">
+											<h:outputLink value="#{sideMenuBean.list.downloadpath}#{var.empImageTemp}">
+												<p:graphicImage value="#{sideMenuBean.list.downloadpath}#{var.empImageTemp}" width="100"
+													height="100" />
+											</h:outputLink>
+										</p:lightBox>
+									</center>
+								</p:column>
+
+								<p:column headerText="Upload Photo (Allowed file type are :- gif,jpg,jpeg,png)">
+									<p:fileUpload value="#{var.empImageget}" mode="simple"
+										allowTypes="/(\.|\/)(gif|jpeg|png)$/" />
+								</p:column>
+
+								<f:facet name="footer">
+									<center>
+										<p:commandButton style="width: 150px;" ajax="false"
+											value="Update"
+											actionListener="#{bulkEditStaffDetails.submit}"
+											update=":form"></p:commandButton>
+									</center>
+								</f:facet>
+							</p:dataTable>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

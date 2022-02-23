@@ -1,0 +1,199 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:pu="http://primefaces.org/avalon">
+
+    <div class="topbar clearfix">
+    <h:form>
+        <div class="topbar-left">            
+           <h:commandLink action="schoolMasterDashboard.xhtml?faces-redirect=true">
+            <p:graphicImage name="images/logo.png" library="avalon-layout" styleClass="topbar-logo"/>
+            </h:commandLink>
+        </div>
+        
+        <div class="topbar-right">
+            <a id="menu-button" href="#">
+                <i class="fa fa-angle-left"></i>
+            </a>
+            
+            <a id="topbar-menu-button" href="#">
+                <i class="fa fa-bars"></i>
+            </a>
+           
+            <ul class="topbar-items fadeInDown animated">
+                <ui:fragment rendered="#{guestPreferences.profileMode == 'overlay'||guestPreferences.menuLayout == 'menu-layout-static menu-layout-horizontal'}">
+                    <li class="profile-item">
+                        <a href="#">                            
+                            <p:graphicImage name="images/avatar.png" library="avalon-layout" styleClass="profile-image" style="border: 0 none"/>
+                            <span class="topbar-item-name">Demo Public School</span>
+                            <span class="topbar-item-role">Admin</span>
+                        </a>
+                        
+                        <ul class="layout-menu animated">
+                            <li role="menuitem">
+                                <a href="#">
+                                    <i class="fa fa-fw fa-user"></i>
+                                    <span>Profile</span>
+                                </a>
+                            </li>
+                            <li role="menuitem">
+                                <a href="#">
+                                    <i class="fa fa-fw fa-user-secret"></i>
+                                    <span>Privacy</span>
+                                </a>
+                            </li>
+                            <li role="menuitem">
+                                <a href="#">
+                                    <i class="fa fa-fw fa-cog"></i>
+                                    <span>Settings</span>
+                                </a>
+                            </li>
+                            <li role="menuitem">
+                                <a href="#">
+                                    <i class="fa fa-fw fa-sign-out"></i>
+                                    <span>Logout</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ui:fragment>
+                
+                <li>
+                    <a href="#">
+                        <i class="topbar-icon fa fa-fw fa-cog"></i>
+                        <span class="topbar-item-name">Settings</span>
+                    </a>
+                    <ul class="layout-menu animated">
+                    		<p:outputPanel>
+	                        <li role="menuitem">
+	                            <h:commandLink action="schoolMasterDashboard.xhtml?faces-redirect=true">
+	                                <i class="fa fa-fw fa-home"></i>
+	                                <span>Home</span>
+	                            </h:commandLink>
+	                        </li>
+                        </p:outputPanel>
+                        
+                    		<li role="menuitem">
+                            <a href="masterSelectSession.xhtml">
+                                <i class="fa fa-fw fa-star-o"></i>
+                                <span>Session : #{schoolMasterSideMenu.session}</span>
+                            </a>
+                        </li>
+                        
+                        <p:outputPanel>
+	                        <li role="menuitem">
+	                            <a href="madminPage.xhtml">
+	                                <i class="fa fa-fw fa-sign-out"></i>
+	                                <span>Back To Master</span>
+	                            </a>
+	                        </li>
+                        </p:outputPanel>
+                        
+                         <p:outputPanel>
+	                        <li role="menuitem">
+	                            <a href="ChalkboxLogin.xhtml">
+	                                <i class="fa fa-fw fa-sign-out"></i>
+	                                <span>Logout</span>
+	                            </a>
+	                        </li>
+                        </p:outputPanel>
+                        
+                    </ul>
+                </li>
+                <!-- <li>
+                    <a href="#">
+                        <i class="topbar-icon animated swing fa fa-fw fa-envelope-o"></i>
+                        <span class="topbar-badge animated rubberBand">5</span>
+                        <span class="topbar-item-name">Messages</span>
+                    </a>
+                    <ul class="layout-menu animated">
+                        <li role="menuitem">
+                            <a href="#" class="topbar-message">
+                                <p:graphicImage name="images/avatar1.png" library="avalon-layout" width="35"/>
+                                <span>Give me a call</span>
+                            </a>
+                        </li>
+                        <li role="menuitem">
+                            <a href="#" class="topbar-message">
+                                <p:graphicImage name="images/avatar2.png" library="avalon-layout" width="35"/>
+                                <span>Sales reports attached</span>
+                            </a>
+                        </li>
+                        <li role="menuitem">
+                            <a href="#" class="topbar-message">
+                                <p:graphicImage name="images/avatar3.png" library="avalon-layout" width="35"/>
+                                <span>About your invoice</span>
+                            </a>
+                        </li>
+                        <li role="menuitem">
+                            <a href="#" class="topbar-message">
+                                <p:graphicImage name="images/avatar2.png" library="avalon-layout" width="35"/>
+                                <span>Meeting today at 10pm</span>
+                            </a>
+                        </li>
+                        <li role="menuitem">
+                            <a href="#" class="topbar-message">
+                                <p:graphicImage name="images/avatar4.png" library="avalon-layout" width="35"/>
+                                <span>Out of office</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="topbar-icon fa fa-fw fa-bell-o"></i>
+                        <span class="topbar-badge animated rubberBand">4</span>
+                        <span class="topbar-item-name">Notifications</span>
+                    </a>
+                    <ul class="layout-menu animated">
+                        <li role="menuitem">
+                            <a href="#">
+                                <i class="fa fa-fw fa-tasks"></i>
+                                <span>Pending tasks</span>
+                            </a>
+                        </li>
+                        <li role="menuitem">
+                            <a href="#">
+                                <i class="fa fa-fw fa-calendar-check-o"></i>
+                                <span>Meeting today at 3pm</span>
+                            </a>
+                        </li>
+                        <li role="menuitem">
+                            <a href="#">
+                                <i class="fa fa-fw fa-download"></i>
+                                <span>Download documents</span>
+                            </a>
+                        </li>
+                        <li role="menuitem">
+                            <a href="#">
+                                <i class="fa fa-fw fa-plane"></i>
+                                <span>Book flight</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li> -->
+                    <li class="search-item">
+                    <div class="topbar-search">
+                        <p:outputLabel style="color: #ffffff;font-size: 20px;margin-right: 5px;font-weight: bold;" value="B.L.M. Academy, Haldwani "></p:outputLabel>
+                    </div>
+                </li>
+                <li class="search-item">
+                    <div class="topbar-search">
+                      <p:graphicImage name="images/blmsr.png" library="avalon-layout" width="35px" height="35px" style="border: 0 none;margin-right: -5px;margin-top: -5px;background: white;"/>
+                 </div>
+                </li>
+                   
+                   <li class="search-item">
+                    <div class="topbar-search">
+                        <p:outputLabel style="color: #ffffff;font-size: 20px;font-weight: bold;" value="#{schoolMasterSideMenu.session}"></p:outputLabel>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        </h:form>
+    </div>
+
+</ui:composition>

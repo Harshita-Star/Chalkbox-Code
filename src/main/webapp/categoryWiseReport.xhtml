@@ -1,0 +1,243 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Category Wise Class Report</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<h1>Category Wise Class Report</h1>
+
+							<p:panel header="Search by Class-Section">
+								<p:messages closable="true" autoUpdate="true"></p:messages>
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:outputLabel value="Select a Class" for="@next"
+										style="color:red"></p:outputLabel>
+									<p:selectOneMenu value="#{categoryWiseReport.selectedClass}"
+										filter="true" required="true"
+										requiredMessage="Please Select Class">
+										<f:selectItem itemLabel="Select Here" itemValue="select"></f:selectItem>
+										<f:selectItems value="#{categoryWiseReport.classList}"></f:selectItems>
+
+										<p:ajax update="sectionid,categoryid"
+											listener="#{categoryWiseReport.allSections}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Select Section" for="@next"
+										style="color:red"></p:outputLabel>
+									<p:selectOneMenu id="sectionid"
+										value="#{categoryWiseReport.selectedSection}" filter="true"
+										required="true" requiredMessage="Please Select Section">
+										<f:selectItem itemLabel="Select Here" itemValue="select"></f:selectItem>
+										<f:selectItems value="#{categoryWiseReport.sectionList}"></f:selectItems>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Select Category" for="@next"
+										style="color:red"></p:outputLabel>
+									<p:selectOneMenu id="categoryid"
+										value="#{categoryWiseReport.selectedCategory}" filter="true"
+										required="true" requiredMessage="Please Select Category">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{categoryWiseReport.categoryList}"></f:selectItems>
+									</p:selectOneMenu>
+								</p:panelGrid>
+								
+								
+								<br />
+								<p:separator />
+								<center>
+									<p:panelGrid
+										columns="#{categoryWiseReport.studentList.size() gt 0 ? '4' : '1'}"
+										layout="grid" styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+
+									<p:commandButton update=":form" value="Search" icon="fa fa-search" styleClass="butwid"
+										action="#{categoryWiseReport.getStudentStrength}"></p:commandButton>
+
+									<p:commandButton  value="Print" icon="fa fa-print" styleClass="butwid"
+										rendered="#{categoryWiseReport.b}">
+										<p:printer target="dataTable"></p:printer>
+									</p:commandButton>
+
+
+									<p:commandButton rendered="#{categoryWiseReport.b}" value="PDF" icon="fa fa-file-pdf-o" styleClass="butwid" ajax="false"
+										process="@this"
+										actionListener="#{categoryWiseReport.exportCatWisePdf}">
+
+										<p:fileDownload value="#{categoryWiseReport.file}" />
+									</p:commandButton>
+
+									<h:commandLink rendered="#{categoryWiseReport.b}">
+										<p:graphicImage name="images/excellogo.png"
+											library="avalon-layout" width="100" height="40"></p:graphicImage>
+										<pe:exporter type="xlsx" target=":form:up"
+											fileName="Category_Wise_Report">
+										</pe:exporter>
+									</h:commandLink>
+									
+										
+									</p:panelGrid>
+								</center>
+								<p:separator />
+								<br />
+
+								<p:panel id="dataTable" rendered="#{categoryWiseReport.b}">
+									<center>
+										<p
+											style="font-size: 25px !important; font-weight: bold; margin: 0px;">#{headerBean.name}</p>
+										<p
+											style="font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.affiliationNo}</p>
+										<p
+											style="font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.finalAddress}</p>
+										<p
+											style="font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.phoneno}</p>
+
+										<p
+											style="margin: 0px; font-size: 25px !important; font-weight: bold;">Category
+											Wise Class Report</p>
+									</center>
+									<p:panelGrid columns="4"
+										columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+										layout="grid" styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+
+										<p:panelGrid columns="2">
+											<p:outputLabel value="Class:-"></p:outputLabel>
+											<h:outputText value="#{categoryWiseReport.className}"></h:outputText>
+										</p:panelGrid>
+
+										<p:panelGrid columns="2">
+											<p:outputLabel value="Section:-"></p:outputLabel>
+											<h:outputText value="#{categoryWiseReport.sectionName}"></h:outputText>
+										</p:panelGrid>
+
+										<p:panelGrid columns="2">
+											<p:outputLabel value="Category:-"></p:outputLabel>
+											<h:outputText value="#{categoryWiseReport.category}"></h:outputText>
+										</p:panelGrid>
+
+										<p:panelGrid columns="2">
+											<p:outputLabel value="Total:-"></p:outputLabel>
+											<h:outputText value="#{categoryWiseReport.total}"></h:outputText>
+										</p:panelGrid>
+
+									</p:panelGrid>
+
+									<p:dataTable stickyHeader="true" reflow="true" id="up"
+										style="border-collapse:collapse" border="1"
+										value="#{categoryWiseReport.studentList}" var="var">
+
+
+										<f:facet name="header">
+											<p:outputLabel value="Category Wise Report"></p:outputLabel>
+										</f:facet>
+
+										<p:column headerText="Sno">
+
+											<f:facet name="header">
+												<p:outputLabel value="Sno"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.sno}"></p:outputLabel>
+										</p:column>
+
+
+
+										<p:column headerText="Add. No.">
+
+											<f:facet name="header">
+												<p:outputLabel value="SR.No."></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.srNo}"></p:outputLabel>
+										</p:column>
+
+										<p:column sortBy="#{var.fullName}" headerText="Student Name">
+
+											<f:facet name="header">
+												<p:outputLabel value="Student Name"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.fullName}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Father's Name">
+
+											<f:facet name="header">
+												<p:outputLabel value="Father's Name"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.fathersName}"></p:outputLabel>
+										</p:column>
+
+
+										<p:column headerText="Mother's Name">
+
+											<f:facet name="header">
+												<p:outputLabel value="Mother's Name"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.motherName}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Add. Date">
+
+											<f:facet name="header">
+												<p:outputLabel value="Add. Date"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.admissionDate}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="D.O.B.">
+
+											<f:facet name="header">
+												<p:outputLabel value="D.O.B"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.dobString}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Class">
+
+											<f:facet name="header">
+												<p:outputLabel value="Class"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.className}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Address">
+
+											<f:facet name="header">
+												<p:outputLabel value="Address"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.currentAddress}"></p:outputLabel>
+										</p:column>
+
+
+										<p:column headerText="Phone No">
+
+											<f:facet name="header">
+												<p:outputLabel value="Phone No"></p:outputLabel>
+											</f:facet>
+											<p:outputLabel value="#{var.fathersPhone}"></p:outputLabel>
+										</p:column>
+
+									</p:dataTable>
+								</p:panel>
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

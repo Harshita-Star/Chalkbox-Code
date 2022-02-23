@@ -1,0 +1,73 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Copy Questions From</ui:define>
+	<ui:define name="content">
+				<style>
+body .ui-widget-content {
+	background-color: transparent !important;
+	border: transparent !important;
+}
+
+/* .layout-footer {
+	position: fixed !important;
+	width: 100% !important;
+	bottom: 0 !important;
+} */
+</style>
+					<h:form id="form" style="margin-top: -35px;">
+						<p:outputPanel id="restrictPanel"
+						style="width:100%;margin-bottom:30px;margin-left: 55px;"/>
+						
+							<p:outputPanel style="width:100%">
+								<p:panelGrid columns="1" columnClasses="ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; padding-bottom: 14px;background-color:transparent;">
+									<p:outputLabel
+										style="text-align:center;font-size:10px !important;text-align: top;font-size: 14px !important;font-weight: bold;"
+										value="Select Language" />
+									<p:selectOneRadio disabled="#{questionFormat.disable}" value="#{questionFormat.examLang}" style="font-size:14px !important;">
+										<f:selectItem itemLabel="English" itemValue="english"></f:selectItem>
+										<f:selectItem itemLabel="Hindi" itemValue="hindi"></f:selectItem>
+										<p:ajax listener="#{questionFormat.getQuestions}" update ="data"></p:ajax>
+									</p:selectOneRadio>
+								</p:panelGrid>
+								<p:outputPanel style="padding-bottom: 16px;">
+									<p:outputLabel value="#{questionFormat.subjectName}"
+										style="margin: 24px 0 16px;font-size: 24px;line-height: 32px;"></p:outputLabel>
+								</p:outputPanel>
+
+								 <p:dataList id = "data" value="#{questionFormat.questionList}" var="v" type="ordered">
+
+								<p:panelGrid columns="2" style="width:100%">
+
+									<p:outputLabel style="font-size:14px !important;"
+										value="Question No.#{v.srNo}"></p:outputLabel>
+									<p:outputLabel style="font-size:14px !important;     float: right;"
+										value="Right Answer: #{v.answer}"></p:outputLabel>
+
+									<p:panelGrid columns="1"
+										style=" width: 26cm;border-bottom: solid;">
+
+										<p:outputLabel style="font-size:14px !important;"
+											value="#{v.question}?"></p:outputLabel>
+										<p:selectOneRadio layout="pageDirection" columns="4"
+											style="padding-bottom: 8px;">
+											<f:selectItem itemLabel="#{v.optionA}" itemValue="#{v.optionA}"></f:selectItem>
+											<f:selectItem  itemLabel="#{v.optionB}" itemValue="#{v.optionB}"></f:selectItem>
+											<f:selectItem  itemLabel="#{v.optionC}" itemValue="#{v.optionC}"></f:selectItem>
+											<f:selectItem  itemLabel="#{v.optionD}" itemValue="#{v.optionD}"></f:selectItem>
+										</p:selectOneRadio>
+
+									</p:panelGrid>
+								</p:panelGrid>
+								</p:dataList>
+							</p:outputPanel>
+						</h:form>
+			
+	</ui:define>
+
+</ui:composition>

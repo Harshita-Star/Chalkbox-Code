@@ -1,0 +1,193 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Add Expense</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+
+						<h:form id="form" style="overflow:hidden">
+						<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+							<p:panel id="panel1" rendered="true"
+								header="Debit : Add Expense : Other_Dr">
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:outputLabel for="@next" style="color:red"  value="Expense Date"></p:outputLabel>
+									<p:calendar value="#{expense.expenseDate}" navigator="true"
+										pattern="dd/MM/yyyy" yearRange="c-10:c+10" required="true"
+										requiredMessage="Please Enter Expense Date">
+										<p:ajax event="dateSelect"></p:ajax>
+									</p:calendar>
+
+									<p:outputLabel  for="@next" style="color:red" value="Payment Mode"></p:outputLabel>
+									<p:selectOneRadio columns="2" layout="grid"
+										value="#{expense.paymentMode}" required="true"
+										requiredMessage="Please Select PaymentMode">
+										<f:selectItems value="#{expense.modeList}"></f:selectItems>
+										<p:ajax listener="#{expense.checkPaymentMode}" update=":form"></p:ajax>
+									</p:selectOneRadio>
+
+									<p:outputLabel for="@next" style="color:red"  value="Bank Name" rendered="#{expense.showBank}"></p:outputLabel>
+									<p:selectOneMenu filter="true" value="#{expense.bankName}"
+										rendered="#{expense.showBank}" required="true"
+										requiredMessage="Please Select Bank Name">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{expense.bankList}"></f:selectItems>
+									</p:selectOneMenu>
+
+									<p:outputLabel for="@next" style="color:red"  value="Bank Name(cheque/DD)"
+										rendered="#{expense.showCheque}"></p:outputLabel>
+									<p:selectOneMenu filter="true" value="#{expense.bankName}"
+										rendered="#{expense.showCheque}" required="true"
+										requiredMessage="Please Select Bank Name">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{expense.bankList}"></f:selectItems>
+										<p:ajax listener="#{expense.checkBank}" update=":form"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel for="@next" style="color:red"  value="Bank Branch(Cheque/DD)"
+										rendered="#{expense.showCheque}"></p:outputLabel>
+									<p:inputText value="#{expense.bankBranch}" required="true"
+										rendered="#{expense.showCheque}"
+										requiredMessage="Enter The Bank Branch" validatorMessage="Please Enter Correct value">
+										<p:ajax></p:ajax>
+										<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:inputText>
+
+									<p:outputLabel for="@next" style="color:red"  value="#{expense.label} No"
+										rendered="#{expense.showCheque}"></p:outputLabel>
+									<p:inputText value="#{expense.chequeNo}"
+										rendered="#{expense.showCheque}" required="true"
+										requiredMessage="Enter The #{expense.label} No" validatorMessage="Please Enter Correct value">
+									  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>	
+									</p:inputText>
+
+									<p:outputLabel for="@next" style="color:red"  value="#{expense.label} Date"
+										rendered="#{expense.showCheque}"></p:outputLabel>
+									<p:calendar navigator="true" pattern="dd/MM/yyyy"
+										yearRange="c-10:c+10" rendered="#{expense.showCheque}"
+										required="true"
+										requiredMessage="Please Enter #{expense.label} Date"
+										value="#{expense.chequeDate}"></p:calendar>
+								</p:panelGrid>
+							</p:panel>
+							<br></br>
+							<p:panel id="pnl2" rendered="true" header="Details">
+								<p:panelGrid columns="3"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel  for="@next" style="color:red" value="Select Item Category"></p:outputLabel>
+									<p:selectOneMenu filter="true" value="#{expense.selectedCategoy}"
+										required="true" requiredMessage="Please Select Item Category">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{expense.expenseCategoryList}"></f:selectItems>
+										<p:ajax></p:ajax>
+									</p:selectOneMenu>
+
+									<p:commandButton immediate="true" icon="ui-icon-plus"
+										oncomplete="PF('editDialog').show()" update=":form3">
+									</p:commandButton>
+								</p:panelGrid>
+
+								<p:panelGrid columns="2"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									
+								<p:outputLabel for="@next" style="color:red"  value="Amount"></p:outputLabel>
+							    <p:inputText value="#{expense.amount}" required="true" requiredMessage="Please Enter Amount">
+							       <p:keyFilter regEx="/[0-9.]/i"/>
+							       <p:ajax></p:ajax>
+							    </p:inputText>
+							    
+							    <p:outputLabel value="Tax Amount"></p:outputLabel>
+							    <p:inputText value="#{expense.taxAmount}" >
+							       <p:keyFilter regEx="/[0-9.]/i"></p:keyFilter>
+							     <p:ajax></p:ajax>
+								</p:inputText>
+							    
+							    <p:outputLabel value="Tax Month"></p:outputLabel>				
+								
+								<p:selectOneMenu value="#{expense.taxMonth}" filter="true">
+								<f:selectItems value="#{expense.monthList}"></f:selectItems> 
+								<p:ajax></p:ajax>
+								</p:selectOneMenu>
+								
+								<p:outputLabel value="Tax Year"></p:outputLabel>				
+								<p:selectOneMenu value="#{expense.taxYear}" filter="true">
+									<f:selectItems value="#{expense.yearList}"></f:selectItems>
+								</p:selectOneMenu>
+								
+								<p:outputLabel value="Pay To" ></p:outputLabel>
+								<p:inputText value="#{expense.payTo}" validatorMessage="Please Enter Correct value">
+									<p:ajax></p:ajax>
+									<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+								</p:inputText>
+
+								<p:outputLabel value="Description" ></p:outputLabel>
+								<p:inputTextarea value="#{expense.description}" rows="3" cols="50" validatorMessage="Please Enter Correct value">
+									<p:ajax></p:ajax>
+									<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+								</p:inputTextarea>
+									
+									
+
+									
+								</p:panelGrid>
+								<br/>
+								<center>
+								<p:commandButton update="form" style="width:150px;" action="#{expense.addExpense}"  value="Add Now">
+										<p:confirm header="Confirmation" message="Are You Sure To Add Expense...???" icon="ui-icon-alert" />
+									</p:commandButton></center>
+							</p:panel>
+
+							
+						</h:form>
+							<p:confirmDialog global="true" showEffect="fade"
+								hideEffect="fade">
+								<p:commandButton value="Yes" type="button"
+									styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+								<p:commandButton value="No" type="button"
+									styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+							</p:confirmDialog>
+
+						<h:form id="form3" style="overflow:hidden">
+							<p:dialog header="Category" widgetVar="editDialog" modal="true"
+								showEffect="fade" hideEffect="fade" resizable="false">
+								<div class="ui-g form-group">
+									<p:panelGrid columns="2"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+										<p:outputLabel for="@next" style="color:red"  value="Category Name :"></p:outputLabel>
+										<p:inputText value="#{expense.otherExpenseCategory}"
+											required="true" requiredMessage="Please Enter Category Name." validatorMessage="Please Enter Correct value">
+                                           <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+                                         </p:inputText>  
+
+										<p:commandButton value="Update"
+											actionListener="#{expense.addOtherCategory}" />
+									</p:panelGrid>
+								</div>
+							</p:dialog>
+						</h:form>
+
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

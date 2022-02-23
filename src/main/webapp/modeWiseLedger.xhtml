@@ -1,0 +1,132 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Ledger</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+
+						<h:form id="form" style="overflow:hidden">
+						<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+							<p:panel id="panel1" rendered="true" header="Search Data">
+								<p:panelGrid columns="8">
+							       <p:outputLabel value="Start Date"></p:outputLabel>
+							       <p:calendar navigator="true" pattern="dd/MM/yyyy" yearRange="c-10:c+10;" value="#{modeWiseLedgerReport.startDate}" ></p:calendar>
+							       
+							       <p:outputLabel value="End Date"></p:outputLabel>
+							       <p:calendar navigator="true" pattern="dd/MM/yyyy" yearRange="c-10:c+10;" value="#{modeWiseLedgerReport.endDate}" ></p:calendar>
+					       
+					     			<p:commandButton value="Show Ledger" actionListener="#{modeWiseLedgerReport.createLedger}" update=":form"></p:commandButton>
+					      			<p:commandButton value="print">
+		   								<p:printer target=":form:panel"></p:printer>
+									</p:commandButton> 
+			          			</p:panelGrid>
+					 
+					 
+							     <p:outputPanel id="panel" rendered="#{modeWiseLedgerReport.show}"  styleClass="test test2" style="width:100%;float:left	">
+							    	<p:outputPanel style="width:95%;margin:auto;font-size:13px" id="tablePanel">
+									<center><p:outputLabel value="Ledger Account"></p:outputLabel></center><br></br>
+									<center><p:outputLabel value="#{modeWiseLedgerReport.mode} / #{modeWiseLedgerReport.bankName} / #{modeWiseLedgerReport.accountNumber}"></p:outputLabel></center>
+							           
+							           	<h:dataTable border="1" style="border-collapse:collapse;width:100%;font-size:13px"  value="#{modeWiseLedgerReport.finalList}" var="var">
+											<p:column>
+												<f:facet name="header">Date</f:facet>
+												#{var.strChequeDate}
+										</p:column>
+										
+										<p:column>
+											<f:facet name="header">Particulars</f:facet>
+												#{var.paymentMode}
+										</p:column>
+										
+											<p:column>
+											<f:facet name="header">Vch Type</f:facet>
+												#{var.vchType}
+										</p:column>
+										
+										
+										<p:column>
+											<f:facet name="header">Credit (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})</f:facet>
+											<h:outputText value="#{var.credit}">
+				                           		<f:convertNumber groupingUsed="false" minFractionDigits="2" maxFractionDigits="2" ></f:convertNumber>
+				                           	</h:outputText>
+										</p:column>
+										
+										<p:column>
+											<f:facet name="header">Debit (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})</f:facet>
+												<h:outputText value="#{var.debit}">
+				                           			<f:convertNumber groupingUsed="false" minFractionDigits="2" maxFractionDigits="2" ></f:convertNumber>
+				                           		</h:outputText>
+										</p:column>
+										
+										<p:column>
+											<f:facet name="header">Final Amount (#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'})</f:facet>
+											<h:outputText value="#{var.finalAmount}">
+				                           		<f:convertNumber groupingUsed="false" minFractionDigits="2" maxFractionDigits="2" ></f:convertNumber>
+				                           	</h:outputText>
+										</p:column>
+								
+								
+									</h:dataTable>
+				           
+				           		</p:outputPanel>
+				           
+						   <p:outputPanel style="width:28%;float:right;">
+								<table style="border-collapse:collapse;font-size:13px;float:left;width:80%">
+									<tr>
+										<td>
+										<p:outputLabel value="#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'} "></p:outputLabel>
+											<p:outputLabel value="#{modeWiseLedgerReport.totalCredit}">
+													<f:convertNumber groupingUsed="false" minFractionDigits="2" maxFractionDigits="2" ></f:convertNumber>
+											</p:outputLabel>
+										</td>
+										<td>
+										<p:outputLabel value="#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'} "></p:outputLabel>
+											<p:outputLabel value="#{modeWiseLedgerReport.totalDebit}">
+													<f:convertNumber groupingUsed="false" minFractionDigits="2" maxFractionDigits="2" ></f:convertNumber>
+											</p:outputLabel>
+										</td>
+									</tr>
+									<tr>
+										<td>Closing Balance</td>
+										<td>
+										<p:outputLabel value="#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'} "></p:outputLabel>
+											<p:outputLabel value="#{modeWiseLedgerReport.closeBalance}">
+													<f:convertNumber groupingUsed="false" minFractionDigits="2" maxFractionDigits="2" ></f:convertNumber>
+											</p:outputLabel>
+										</td>
+									</tr>
+									<tr>
+										<td>
+										<p:outputLabel value="#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'} "></p:outputLabel>
+											<p:outputLabel value="#{modeWiseLedgerReport.totalCredit}">
+													<f:convertNumber groupingUsed="false" minFractionDigits="2" maxFractionDigits="2" ></f:convertNumber>
+											</p:outputLabel>
+										</td>
+										<td>
+										<p:outputLabel value="#{sideMenuBean.list.country eq 'UAE' ? 'AED' : 'Rs.'} "></p:outputLabel>
+											<p:outputLabel value="#{modeWiseLedgerReport.totalCredit}">
+													<f:convertNumber groupingUsed="false" minFractionDigits="2" maxFractionDigits="2" ></f:convertNumber>
+											</p:outputLabel>
+										</td>
+									</tr>
+								</table>
+						</p:outputPanel>
+				           </p:outputPanel>
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

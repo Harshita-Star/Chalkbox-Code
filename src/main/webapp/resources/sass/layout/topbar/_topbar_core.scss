@@ -1,0 +1,273 @@
+.layout-topbar {
+    position: fixed;
+    top: 0;
+    z-index: 998;
+    width: 100%;
+    height: 56px;
+
+    .layout-topbar-wrapper {
+        @include flex();
+        @include flex-align-center();
+        @include flex-justify-between();
+        height: 100%;
+
+        .layout-topbar-left {
+            @include flex();
+            @include flex-align-center();
+            margin-left: 16px;
+            height: 100%;
+
+            .menu-button {
+                font-size: 22px;
+                @include flex-center();
+                cursor: pointer;
+                width: 36px;
+                height: 36px;
+                border-radius: 4px;
+                margin-right: 16px;
+            }
+
+            .layout-topbar-logo {
+                @include flex-center();
+            }
+        }
+
+        .layout-topbar-right {
+            @include flex();
+            @include flex-justify-end();
+            flex-grow: 1;
+            height: 100%;
+
+            .layout-topbar-actions {
+                @include flex-center();
+                list-style-type: none;
+                margin: 0;
+                padding: 0;
+                height: 100%;
+
+                > li {
+                    position: relative;
+                    @include flex-center();
+                    height: 100%;
+
+                    > a {
+                        margin: 0 1em;
+                        border-radius: 4px;
+                        
+                        > .topbar-icon {
+                            font-size: 24px;
+                            width: 36px;
+                            height: 36px;
+                            @include flex-center();
+                        }
+                    }
+                    
+                    > ul {
+                        display: none;
+                        position: absolute;
+                        top: 55px;
+                        left: 5px;
+                        list-style-type: none;
+                        margin: 0;
+                        padding:0;
+                        z-index: 1000;
+                        @include border-radius-bottom(2px);
+                        min-width: 250px;
+                        width: 100%;
+                        animation-duration: $transitionDuration;
+
+                        &.layout-submenu-pos-right {
+                            left: auto;
+                            right: 5px;
+                        }
+
+                        .layout-submenu-header {
+                            padding: 8px 12px;
+                            @include flex();
+                            @include flex-align-center();
+                            @include flex-justify-between();
+
+                            .header-text {
+                                font-size: 14px;
+                                font-weight: normal;
+                                margin: 0;
+                            }
+
+                            .header-helper-text {
+                                font-size: 12px;
+                                cursor: pointer;
+
+                                &:hover {
+                                    font-weight: 500;
+                                }
+                            }
+                        }
+
+                        &.search-item-submenu {
+                            display: block;
+                            @include shadow(none);
+                            position: static;
+                            min-width: auto;
+                            margin-right: .5em;
+                            list-style-type: none;
+                            
+                            > li {
+                                padding: 0;
+
+                                .search-input-wrapper {
+                                    position: relative;
+                                    display: block;
+                                  
+                                    input {
+                                        padding: 10px 40px 10px 10px;
+                                        width: 180px;
+                                        border: none;
+                                        @include border-radius(2px);
+                                        font-size: 13px;
+                                    }
+                                    
+                                    i {
+                                        position: absolute;
+                                        right: 12px;
+                                        top: 50%;
+                                        margin-top: -10px;
+                                        font-size: 20px;
+                                    }
+                                }
+                            }
+                        }
+
+                        > li {
+                            padding: 0 12px;
+                            @include flex();
+                            @include flex-align-center();
+                            cursor: pointer;
+
+                            .menu-text {
+                                @include flex();
+                                @include flex-align-center();
+                                border-radius: 4px;
+                                padding: 8px 0;
+                            }
+                        }
+                    }
+
+                    &.search-item {
+                        > ul {
+                            margin-right: 24px;
+                        }
+
+                        > a {
+                            display: none;
+                        }
+                    }
+
+                    &.active-topmenuitem {
+                        > ul {
+                            display: block;
+                        }
+                    }
+                }
+
+                .topbar-item-v-separator {
+                    height: 36px;
+                    width: 1px;
+                    border-right: 1px solid transparent;
+                }
+            }
+        }
+
+        .layout-rightpanel-button {
+            margin-right: 16px;
+            margin-left: 24px;
+            border-radius: 4px;
+
+            > i {
+                font-size: 24px;
+                width: 36px;
+                height: 36px;
+                @include flex-center();
+            }
+        }
+    }
+}
+
+@media (max-width: 992px) {
+    .layout-topbar {
+        height: 112px;
+
+        .layout-topbar-wrapper {
+            @include flex-direction-column();
+
+            .layout-rightpanel-button {
+                position: absolute;
+                right: 13px;
+                top: 12px;
+                margin-right: 0;
+            }
+
+            .layout-topbar-left {
+                padding: 0px 13px;
+                height: 60px;
+                margin-left: 0;
+                
+                .menu-button {
+                    position: absolute;
+                    left: 13px;
+                    top: 12px;
+                }
+            }
+
+            .layout-topbar-right {
+                height: 60px;
+                width: 100%;
+
+                .layout-topbar-actions {
+                    width: 100%;
+                    padding: 0 1em;
+                    @include flex-justify-between();
+                    
+                    > li {
+                        &.search-item {
+                            > a {
+                                display: block;
+                            }
+
+                            > .search-item-submenu {
+                                display: none;
+                                position: fixed;
+
+                                form {
+                                    width: 100%;
+                                    
+                                    > span {
+                                        > input {
+                                            width: 100%;
+                                        }
+                                    }
+                                }
+                            }
+
+                            &.active-topmenuitem {
+                                .search-item-submenu {
+                                    display: block;
+                                }
+                            }
+                        }
+
+                        > a {
+                            margin: 0;
+                        }
+
+                        > ul {
+                            top: 112px;
+                            width: 90%;
+                            left: 5%;
+                            position: fixed;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,172 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Search Student</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form1" enctype="multipart/form-data">
+							<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+							<p:panel>
+								<f:facet name="header">
+									<span>Bulk Upload Student Marksheet</span>
+									<span> <p:commandLink
+											style="float: right;margin-left: 15px;;color: blue;font-size:15px;"
+											immediate="true" value=" Check report "
+											action="bulkMarksheetPdfReport.xhtml?faces-redirect=true"></p:commandLink>
+									</span>
+								</f:facet>
+
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel  for="@next" style="color:red" value="Select a Class"></p:outputLabel>
+									<p:selectOneMenu value="#{bulkExamPdfUpload.selectedClass}"
+										required="true" requiredMessage="Please select a class"
+										filter="true">
+										<f:selectItem itemLabel="Select Class" itemValue="select"></f:selectItem>
+
+
+										<f:selectItems value="#{bulkExamPdfUpload.classList}"></f:selectItems>
+
+										<p:ajax update="sectionid"
+											listener="#{bulkExamPdfUpload.allSections}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel  for="@next" style="color:red" value="Select Section"></p:outputLabel>
+									<p:selectOneMenu id="sectionid"
+										value="#{bulkExamPdfUpload.selectedSection}" required="true"
+										requiredMessage="Please select a section" filter="true">
+										<f:selectItem itemLabel="Select Section" itemValue=""></f:selectItem>
+										<f:selectItems value="#{bulkExamPdfUpload.sectionList}"></f:selectItems>
+										<p:ajax update="exams"
+											listener="#{bulkExamPdfUpload.allExams}"></p:ajax>
+									</p:selectOneMenu>
+
+
+									<p:outputLabel value="Marksheet Name" for="@next" style="color:red" ></p:outputLabel>
+									<p:selectOneMenu id="exams"
+										value="#{bulkExamPdfUpload.examName}" required="true"
+										requiredMessage="Please select a Marksheet" filter="true"
+										editable="true"
+										placeholder="Select Marksheet / Enter New Marksheet Name">
+										<f:selectItem itemLabel="--Select--" itemValue=""></f:selectItem>
+										<f:selectItems value="#{bulkExamPdfUpload.examList}"></f:selectItems>
+
+									</p:selectOneMenu>
+								</p:panelGrid>
+								<br />
+								<p:separator />
+								<center>
+									<p:commandButton value="Search" styleClass="butwid" icon="fa fa-search"
+										action="#{bulkExamPdfUpload.studentInClass}" update=":form1"></p:commandButton>
+
+								</center>
+								<p:separator />
+								<br />
+
+							</p:panel>
+
+							<p:panel rendered="#{bulkExamPdfUpload.b}">
+
+								<p:dataTable reflow="true" id="up"
+									style="width:100%;border-collapse:collapse" border="1"
+									value="#{bulkExamPdfUpload.studentList}" var="var">
+									<f:facet name="header">
+										<p:outputLabel value=""></p:outputLabel>
+
+
+									</f:facet>
+
+									<p:column headerText="Sno" style="width:50px;text-align:center">
+
+										<f:facet name="header">
+											<p:outputLabel value="Sno"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.sno}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Add. No." sortBy="#{var.addNumber}"
+										style="width:50px;text-align:center">
+
+										<f:facet name="header">
+											<p:outputLabel value="SR. No."></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.srNo}"></p:outputLabel>
+									</p:column>
+
+									<p:column style="width:70px;text-align:center"
+										sortBy="#{var.fullName}" headerText="Student Name">
+
+										<f:facet name="header">
+											<p:outputLabel value="Student Name"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.fullName}"></p:outputLabel>
+									</p:column>
+
+									<p:column style="width:70px;text-align:center"
+										headerText="Father's Name">
+
+										<f:facet name="header">
+											<p:outputLabel value="Father's Name"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.fathersName}"></p:outputLabel>
+									</p:column>
+
+
+
+
+
+
+
+									<p:column style="width:70px;text-align:center"
+										headerText="D.O.B.">
+
+										<f:facet name="header">
+											<p:outputLabel value="D.O.B"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.dobString}"></p:outputLabel>
+									</p:column>
+
+
+									<p:column style="width:230px;text-align:center"
+										headerText="Choose File(Only Pdf allowed)">
+
+										<f:facet name="header">
+											<p:outputLabel value="Choose File(Only Pdf allowed)"></p:outputLabel>
+										</f:facet>
+										<p:fileUpload value="#{var.file}" mode="simple">
+										</p:fileUpload>
+									</p:column>
+
+
+
+								</p:dataTable>
+								
+								<center>
+								<p:commandButton ajax="false" update="form1" styleClass="butwid" icon="fa fa-upload"
+									action="#{bulkExamPdfUpload.addNow}" value="Submit"></p:commandButton>
+								</center>
+
+								
+
+
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

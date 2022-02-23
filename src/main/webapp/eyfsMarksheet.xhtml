@@ -1,0 +1,135 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Print MarkSheet</ui:define>
+
+    <ui:define name="content">
+       
+            <div class="ui-fluid">
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <div class="card card-w-title">
+                       
+                      
+                      <h:form id="form1" >
+				     <h1>Print MarkSheet</h1>
+            		
+               		 <p:messages closable="true" autoUpdate="true"></p:messages>
+               		 		
+               		 		<p:panel header="Search Student By Class Name">
+               		 		
+               		 		<p:panelGrid columns="5" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+               		 	 		
+               		 			<p:outputLabel value="Student Name"></p:outputLabel>      
+               		 			<p:autoComplete minQueryLength="3" id="acSimple" value="#{eyfsMarksheet.name}" completeMethod="#{eyfsMarksheet.autoCompleteStudentInfo}">
+               		 			<p:ajax event="blur" global="false" listener="#{eyfsMarksheet.allTerm}" update="showTerm"></p:ajax>
+               		 			</p:autoComplete>
+               		 			
+               		 			
+	               		  		<p:outputLabel value="Select Term" for="@next" style="color:red" ></p:outputLabel>      
+								<p:selectOneMenu required="true" requiredMessage="Please Select A Term" id="showTerm" value="#{eyfsMarksheet.termId}">
+									<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+									<f:selectItems value="#{eyfsMarksheet.termList}"></f:selectItems>
+								</p:selectOneMenu>
+               		 			
+               		 			
+               		 			<p:commandButton update=":form3:up" value="Search" action="#{eyfsMarksheet.searchStudentByName}"></p:commandButton>
+               		 		
+               		 		</p:panelGrid> 
+               		 		</p:panel>
+               		 </h:form>
+               	   </div>
+               	   <div class="card card-w-title">
+                     
+               		<h:form id="form2">	 	
+               			
+               		 		<p:panel header="Search Student by Class Section">
+               		 	
+               		 		<p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;" >
+               		 		
+               		 		<p:outputLabel value="Select Class" for="@next" style="color:red" ></p:outputLabel>      
+               		 		<p:selectOneMenu style="width:250px" filter="true" value="#{eyfsMarksheet.selectedClassSection}" required="true" requiredMessage="Please Select Class" >
+               		 			<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+               		 			<f:selectItems value="#{eyfsMarksheet.classSection}"></f:selectItems>
+               		 			
+               		 			<p:ajax update="sectionid,showTerm1,showAgeGroup" listener="#{eyfsMarksheet.allSections}"></p:ajax>
+               		 		</p:selectOneMenu>    
+
+               		 		<p:outputLabel value="Select Section" for="@next" style="color:red" ></p:outputLabel>
+               		 		<p:selectOneMenu id="sectionid" filter="true" value="#{eyfsMarksheet.selectedSection}" required="true" requiredMessage="Please select a section"> 
+               		 			<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+               		 			<f:selectItems value="#{eyfsMarksheet.sectionList}" ></f:selectItems>
+               		 		</p:selectOneMenu>
+               		 		
+               		 		<p:outputLabel value="Select Age Group" for="@next" style="color:red" ></p:outputLabel>
+							<p:selectOneMenu id="showAgeGroup" filter="true"
+								value="#{eyfsMarksheet.selectedAgeGroup}" required="true"
+								requiredMessage="Please select Age Group">
+								<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+								<f:selectItems value="#{eyfsMarksheet.ageGroupList}"></f:selectItems>
+							</p:selectOneMenu>
+               		 		
+               		 		
+               		  		<p:outputLabel value="Select Term" for="@next" style="color:red" ></p:outputLabel>      
+							<p:selectOneMenu required="true" requiredMessage="Please Select A Term" id="showTerm1" value="#{eyfsMarksheet.termId}">
+								<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+								<f:selectItems value="#{eyfsMarksheet.termList}"></f:selectItems>
+							</p:selectOneMenu>
+               		 			
+               		 		
+               		 		<p:commandButton actionListener="#{eyfsMarksheet.searchStudentByClassSection}" value="Search" update=":form3:up"></p:commandButton>
+               		 		</p:panelGrid>  		 
+               		 
+               		 		</p:panel>
+               		 
+               		 </h:form>
+               		 </div>
+               		    <div class="card card-w-title">
+                     
+               		<h:form id="form3">
+               		 	
+               		 	<p:panel header="Student Details">
+               		 		<p:outputPanel id="up">
+               		  		<p:dataTable rendered="#{eyfsMarksheet.show}" reflow="true" var="var" value="#{eyfsMarksheet.studentList}"> 
+               		  			
+               		  			<p:column headerText="#{searchStudentVar.searchStudentAdmissionNumberLabel}">
+               		  				<p:outputLabel value="#{var.srNo}"></p:outputLabel>
+               		  			</p:column>
+               		  			
+               		  			<p:column sortBy="#{var.fname}" headerText="#{searchStudentVar.seacrhStudentFirstNameLabel}">
+               		  				<p:outputLabel value="#{var.fname}"></p:outputLabel>
+               		  			</p:column>
+               		  			
+               		  			<p:column headerText="Father's Name">
+               		  				<p:outputLabel value="#{var.fathersName}"></p:outputLabel>
+               		  			</p:column>
+               		  			
+               		  			<f:facet  name="footer">
+               		  				<p:panelGrid columns="5"> 
+	               		  				<p:outputLabel value="Select Date" for="@next" style="color:red" ></p:outputLabel>
+			               		  		<p:calendar value="#{eyfsMarksheet.dateOfEntry}" navigator="true" pattern="dd/MM/yyyy" required="true" requiredMessage="Please Select Date">
+			               		  			<p:ajax></p:ajax>
+			               		  		</p:calendar>
+			               		  		
+		               		  			<p:commandButton action="#{eyfsMarksheet.proceed}" value="Proceed to Print" />
+	               		  			</p:panelGrid>
+               		  			</f:facet>  		  		
+               		  		
+               		  		</p:dataTable>
+               		  </p:outputPanel>
+               		  
+               		</p:panel>
+       
+			</h:form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+       
+    </ui:define>
+
+</ui:composition>

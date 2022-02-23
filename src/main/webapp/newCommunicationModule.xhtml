@@ -1,0 +1,327 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+
+	<ui:define name="title">Random Message</ui:define>
+	<ui:define name="content">
+		<script src="pramukhime.js"></script>
+		<script src="pramukhindic.js"></script>
+		<script src="pramukhime-common.js"></script>
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+
+							<p:panel header="Random Communication">
+								<p:messages closable="true" autoUpdate="true"></p:messages>
+								<p:growl showDetail="true"  autoUpdate="true" />
+
+
+
+								<p:tabView value="#{attndance.classSection}" var="var">
+									<p:tab title="#{var.className}">
+										<p:tabView value="#{var.categoryList}" var="var1"
+											style="width:60%">
+											<p:tab title="#{var1.category}">
+												<p:dataTable value="#{var1.list}" var="stu"
+													rowKey="#{stu.addNumber}">
+
+
+
+													<p:column headerText="Select Student"
+														style="width:5px !important;text-align:center;">
+														<p:selectBooleanCheckbox value="#{stu.sendmessage}">
+															<p:ajax update="form:count"
+																listener="#{attndance.checking}"></p:ajax>
+														</p:selectBooleanCheckbox>
+													</p:column>
+
+													<p:column sortBy="#{stu.fullName}"
+														headerText="Student Name" style="width:30px">
+														<p:outputLabel value="#{stu.fullName}"
+															style="font-size:12px !important;"></p:outputLabel>
+													</p:column>
+
+
+													<p:column headerText="Fathers Name" style="width:30px">
+														<p:outputLabel value="#{stu.fathersName}"
+															style="font-size:12px !important;"></p:outputLabel>
+													</p:column>
+
+
+													<p:column headerText="Father's Phone no" style="width:40px">
+														<p:outputLabel value="#{stu.fathersPhone}"
+															style="font-size:12px !important;"></p:outputLabel>
+													</p:column>
+
+													<p:column headerText="Student's Phone no"
+														rendered="#{attndance.showInstitute}" style="width:40px">
+														<p:outputLabel value="#{stu.studentPhone}"
+															style="font-size:12px !important;"></p:outputLabel>
+													</p:column>
+
+												</p:dataTable>
+											</p:tab>
+										</p:tabView>
+									</p:tab>
+								</p:tabView>
+
+								<p:panelGrid columns="3"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;"
+									rendered="#{attndance.showInstitute}">
+									<p:outputLabel value="Please Select Receivers : " />
+
+									<p:panelGrid columns="2"
+										columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+										layout="grid" styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+										<p:outputLabel value="Parents : " />
+										<p:selectBooleanCheckbox value="#{attndance.messageParents}" />
+									</p:panelGrid>
+
+									<p:panelGrid columns="2"
+										columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+										layout="grid" styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+										<p:outputLabel value="Students : " />
+										<p:selectBooleanCheckbox value="#{attndance.messageStudents}" />
+									</p:panelGrid>
+								</p:panelGrid>
+
+								<hr style="border-top: dotted 1px;" />
+								<p:outputPanel id="msg">
+									<p:outputLabel style="font-weight: bold;font-size: 12px;"
+										value="Note: Copying and pasting the special characters ( such as ,' ) might affect the format of SMS. It is adviced to kindly type the message."></p:outputLabel>
+									<h:inputHidden id="text" value="#{attndance.lang}"></h:inputHidden>
+
+									<br></br>
+
+									<br></br>
+									<p:panelGrid columns="3"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+
+										<p:selectBooleanCheckbox
+											itemLabel="#{sideMenuBean.list.country ne 'India' ? 'Send As Email' : 'Send As SMS'}"
+											value="#{attndance.sms}">
+											<p:ajax></p:ajax>
+										</p:selectBooleanCheckbox>
+										<p:selectBooleanCheckbox disabled="false"
+											itemLabel="Send As App Notification"
+											value="#{attndance.notification}">
+											<p:ajax></p:ajax>
+										</p:selectBooleanCheckbox>
+										<p:outputLabel />
+
+										<p:selectOneButton id="lang"
+											rendered="#{sideMenuBean.list.country eq 'India'}"
+											value="#{attndance.lang}">
+											<f:selectItem itemLabel="English" itemValue="english" />
+											<f:selectItem itemLabel="हिन्दी" itemValue="hindi" />
+											<p:ajax listener="#{attndance.checklang}"
+												update="selectKeyword,contentTable"></p:ajax>
+										</p:selectOneButton>
+										<p:outputLabel
+											rendered="#{sideMenuBean.list.country eq 'India'}" />
+
+
+										<p:panelGrid columns="2" style="float:right;">
+
+											<p:outputLabel style="font-size:12px !important;"
+												value="Student.-:"></p:outputLabel>
+											<p:outputLabel id="count" style="font-size:12px !important;"
+												value="#{attndance.count}"></p:outputLabel>
+
+
+										</p:panelGrid>
+										<p:outputLabel />
+										<p:outputLabel />
+										<p:outputLabel />
+
+										<p:outputLabel value="Select Keyword"></p:outputLabel>
+										<p:selectOneMenu id="selectKeyword"
+											value="#{attndance.keyWord}">
+											<f:selectItem itemLabel="ALL" itemValue="-1"></f:selectItem>
+											<f:selectItems value="#{attndance.allKeywords}"></f:selectItems>
+											<p:ajax listener="#{attndance.showData}"
+												update="contentTable" onsuccess="PF('table').filter();"></p:ajax>
+										</p:selectOneMenu>
+										<p:outputLabel />
+
+									</p:panelGrid>
+
+									<p:dataTable style="width: 70%;" id="contentTable"
+										value="#{attndance.allTemplates}" var="var" widgetVar="table">
+
+										<p:column headerText="S.No.">
+											<p:outputLabel value="#{var.srNo}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="content" filterBy="#{var.content}" filterMatchMode="contains">
+											<p:outputLabel value="#{var.content}"></p:outputLabel>
+										</p:column>
+
+										<p:column headerText="Send">
+											<center>
+												<p:commandButton value="Send" styleClass="butwid"
+													icon="fa fa-paper-plane-o"
+													action="#{attndance.checkSelection}"
+													update=":MessageDialogOpen"
+													style="font-size:15px !important;">
+													<f:setPropertyActionListener
+														target="#{attndance.selectedTemp}" value="#{var}"></f:setPropertyActionListener>
+												</p:commandButton>
+											</center>
+										</p:column>
+									</p:dataTable>
+								</p:outputPanel>
+								<hr style="border-top: dotted 1px;" />
+							</p:panel>
+						</h:form>
+
+
+
+						<h:form id="MsgLimitForm" style="overflow:hidden">
+							<p:dialog header="Low SMS Balance" width="500"
+								widgetVar="MsgLmtDlg" modal="true" showEffect="fade"
+								hideEffect="fade" resizable="false">
+								<center>
+									<p:outputLabel value="#{attndance.balMsg}"
+										style="font-size:14px;font-weight: bold;" />
+								</center>
+								<br></br>
+								<br></br>
+								<center>
+									<p:commandButton value="Skip" action="#{attndance.randomMsg}"
+										update="MsgLimitForm" />
+									<br /> <br />
+									<p:commandButton value="Message Logs"
+										action="messageSchoolHistory.xhtml?faces-redirect=true"
+										update="MsgLimitForm" />
+									<br /> <br />
+									<p:commandButton value="Recharge Now"
+										action="purchaseMsgPack.xhtml?faces-redirect=true"
+										update="MsgLimitForm" />
+								</center>
+								<br></br>
+							</p:dialog>
+						</h:form>
+
+						<h:form id="MsgOverForm" style="overflow:hidden">
+							<p:dialog header="SMS Limit Over" width="500"
+								widgetVar="MsgOvrDlg" modal="true" showEffect="fade"
+								hideEffect="fade" resizable="false">
+								<center>
+									<p:outputLabel value="#{attndance.balMsg}"
+										style="font-size:14px;font-weight: bold;" />
+								</center>
+								<br></br>
+								<br></br>
+								<center>
+									<p:commandButton value="Message Logs"
+										action="messageSchoolHistory.xhtml?faces-redirect=true"
+										update="MsgOverForm" />
+									<br /> <br />
+									<p:commandButton value="Recharge Now"
+										action="purchaseMsgPack.xhtml?faces-redirect=true"
+										update="MsgOverForm" />
+								</center>
+								<br></br>
+							</p:dialog>
+						</h:form>
+
+						<h:form id="MsgOtherForm" style="overflow:hidden">
+							<p:dialog header="SMS Limit Over" width="500"
+								widgetVar="MsgOthDlg" modal="true" showEffect="fade"
+								hideEffect="fade" resizable="false">
+								<center>
+									<p:outputLabel value="#{attndance.balMsg}"
+										style="font-size:14px;font-weight: bold;" />
+								</center>
+								<br></br>
+								<br></br>
+								<center>
+									<p:commandButton value="OK"
+										action="newCommunicationModule.xhtml?faces-redirect=true"
+										update="MsgOtherForm" />
+								</center>
+							</p:dialog>
+						</h:form>
+
+
+						<h:form id="MessageDialogOpen" style="overflow:hidden">
+							<p:dialog header="Message Confirmation" width="500"
+								widgetVar="SendMessageCheck" modal="true" showEffect="fade"
+								hideEffect="fade" resizable="false">
+
+
+
+
+								<p:panelGrid columns="1">
+
+									<p:inputTextarea rendered="#{attndance.showEnglish}" value="#{attndance.message}" rows="7"
+										cols="30" maxlength="765"
+										counterTemplate="{0} characters remaining." autoResize="false"
+										style="width:400px !important;"
+										readonly="#{attndance.editable eq 'true' ? 'false' : 'true'}">
+									</p:inputTextarea>
+
+									<p:inputTextarea rendered="#{attndance.showHindi}" value="#{attndance.message}"
+										rows="7" cols="30" maxlength="765"
+										counterTemplate="{0} characters remaining." autoResize="false"
+										style="width:400px !important;"
+										readonly="#{attndance.editable eq 'true' ? 'false' : 'true'}">
+									</p:inputTextarea>
+								</p:panelGrid>
+
+								<p:outputLabel rendered="#{attndance.lang eq 'english'}"
+									value="Regards, #{sideMenuBean.smsName}"
+									style="font-size:15px !important;" />
+								<p:outputLabel rendered="#{attndance.lang eq 'hindi'}"
+									value="सादर, #{sideMenuBean.hindiName}"
+									style="font-size:15px !important;" />
+								<p:outputLabel />
+
+
+								<br />
+								<p:separator />
+								<center>
+
+									<p:commandButton value="Send Message"
+										action="#{attndance.sendMessage}"
+										update=":form,:MessageDialogOpen"
+										style="width:120px;height:30px;" />
+
+								</center>
+								<p:separator />
+								<br />
+							</p:dialog>
+						</h:form>
+
+						<h:form id="HindiForm" style="overflow:hidden">
+							<p:dialog header="NOTIFICATION" width="500" widgetVar="hindiDi"
+								modal="true" showEffect="fade" hideEffect="fade"
+								resizable="false">
+								<center>
+									<p:outputLabel
+										value="Hindi Message Feature is Temporarily Unavailable"
+										style="font-size:14px;font-weight: bold;" />
+								</center>
+								<br></br>
+
+							</p:dialog>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

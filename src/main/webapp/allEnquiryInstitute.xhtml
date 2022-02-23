@@ -1,0 +1,249 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">All Enquiry</ui:define>
+
+    <ui:define name="content">
+        
+            <div class="ui-fluid">
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <div class="card card-w-title">
+                        <h:form id="form">
+				<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+				<p:panel header="All Enquiry">
+						<p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+
+						<p:outputLabel rendered="#{allEnquiryInst.showType}"
+							value="Select Search By"></p:outputLabel>
+						<p:selectOneMenu rendered="#{allEnquiryInst.showType}"
+							value="#{allEnquiryInst.searchType}">
+							<f:selectItem itemLabel="All" itemValue="All"></f:selectItem>
+							<f:selectItem itemLabel="By Employee Wise" itemValue="employee"></f:selectItem>
+							<p:ajax listener="#{allEnquiryInst.checkSearchType}"
+								update=":form:id1,:form:id2"></p:ajax>
+						</p:selectOneMenu>
+
+						<p:outputPanel id="id1">
+							<p:outputLabel  for="@next" style="color:red" rendered="#{allEnquiryInst.showEmp}"
+								value="Select Employee"></p:outputLabel>
+						</p:outputPanel>
+						<p:outputPanel id="id2">
+							<p:selectOneMenu rendered="#{allEnquiryInst.showEmp}" filter="true"
+								required="true" requiredMessage="Please Select A Employee"
+								value="#{allEnquiryInst.selectedEmp}">
+								<f:selectItem itemLabel="All" itemValue="All"></f:selectItem>
+								<f:selectItems value="#{allEnquiryInst.empList}"></f:selectItems>
+							</p:selectOneMenu>
+						</p:outputPanel>
+
+						<p:outputLabel  for="@next" style="color:red" value="Select Search Status"></p:outputLabel>
+						<p:selectOneMenu value="#{allEnquiryInst.searchStatus}" required="true"
+							requiredMessage="Please Select Search Status">
+							<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+							<f:selectItem itemLabel="All" itemValue="All"></f:selectItem>
+							<f:selectItem itemLabel="Super Hot" itemValue="superhot"></f:selectItem>
+							<f:selectItem itemLabel="Hot" itemValue="hot"></f:selectItem>
+							<f:selectItem itemLabel="Warm" itemValue="warm"></f:selectItem>
+							<f:selectItem itemLabel="Cold" itemValue="cold"></f:selectItem>
+							<f:selectItem itemLabel="Accepted" itemValue="FINAL"></f:selectItem>
+							<f:selectItem itemLabel="Denied" itemValue="denied"></f:selectItem>
+						</p:selectOneMenu>
+
+						<p:commandButton value="Search" update=":form"
+							actionListener="#{allEnquiryInst.search}"></p:commandButton>
+
+					</p:panelGrid>
+
+					<br></br>
+					<p:outputPanel>
+						<p:dataTable value="#{allEnquiryInst.list}" var="var"
+							emptyMessage="No Record found ">
+							<f:facet name="header">
+								<p:outputLabel value="Total Enquiry:- #{allEnquiryInst.totalLead}"></p:outputLabel>
+							</f:facet>
+							<p:column headerText="S.No" style="width:40px">
+								<h:outputText value="#{var.sno}"></h:outputText>
+							</p:column>
+
+							<p:column headerText="Student Name" filterBy="#{var.studentName}">
+								<h:outputText value="#{var.studentName}"></h:outputText>
+							</p:column>
+							
+							<p:column headerText="Father Name">
+								<h:outputText value="#{var.fatherName}"></h:outputText>
+							</p:column>
+							
+							<p:column headerText="Contact No" filterBy="#{var.mobno}">
+								<h:outputText value="#{var.mobno}"></h:outputText>
+							</p:column>
+
+							<p:column headerText="Enquiry Type" filterBy="#{var.enquiryStatus}">
+								<h:outputText value="#{var.enquiryStatus}"></h:outputText>
+							</p:column>
+
+							<p:column headerText="Add Date">
+								<h:outputText value="#{var.stringadmissionDate}"></h:outputText>
+							</p:column>
+
+							<p:column headerText="Added By" rendered="#{allEnquiryInst.showType}">
+								<h:outputText value="#{var.addedByName}"></h:outputText>
+							</p:column>
+
+							<p:column headerText="Edit" style="width:50px">
+								<p:commandButton icon="ui-icon-pencil"
+									oncomplete="PF('editDialog').show()" update=":form1"
+									action="#{allEnquiryInst.editData}">
+									<f:setPropertyActionListener target="#{allEnquiryInst.selectedEnquiry}"
+										value="#{var}"></f:setPropertyActionListener>
+								</p:commandButton>
+							</p:column>
+
+							<p:column headerText="History" style="width:50px">
+								<p:commandButton icon="ui-icon-search"
+									update=":form,:historyForm"
+									oncomplete="PF('historyDialog').show()"
+									action="#{allEnquiryInst.checkHistory}">
+									<f:setPropertyActionListener target="#{allEnquiryInst.selectedEnquiry}"
+										value="#{var}"></f:setPropertyActionListener>
+								</p:commandButton>
+							</p:column>
+						</p:dataTable>
+					</p:outputPanel>
+				</p:panel>
+			</h:form>
+
+			<h:form id="form1">
+				<p:dialog header="Enquiry Info" widgetVar="editDialog" modal="true"
+					showEffect="explode" hideEffect="explode" resizable="false"
+					closable="true">
+					<div class="ui-g form-group">
+						<p:panelGrid columns="2"
+							styleClass="ui-panelgrid-blank form-group"
+							style="border:0px none; background-color:transparent;">
+						
+							<p:outputLabel value="Visiting Date" for="@next" style="color:red" ></p:outputLabel>
+							<p:calendar navigator="true" effect="fold" pattern="dd/MM/yyyy" yearRange="c-30:c+30" value="#{allEnquiryInst.admissionDate}" required="true" requiredMessage="Please Enter Date"></p:calendar>	
+						
+						    <p:outputLabel value="Student Name " for="@next" style="color:red" ></p:outputLabel>
+							<p:inputText required="true" requiredMessage="Please Enter Student Name" value="#{allEnquiryInst.studentName}" validatorMessage="Please Enter Correct value">
+							  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+							</p:inputText>
+							
+							<p:outputLabel value="Father's Name " for="@next" style="color:red" ></p:outputLabel>
+							<p:inputText required="true" requiredMessage="Please Enter Father's Name" value="#{allEnquiryInst.fatherName}" validatorMessage="Please Enter Correct value">
+							  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+							</p:inputText>
+							
+							<p:outputLabel value="Parents MobNo." for="@next" style="color:red" ></p:outputLabel>
+							<p:inputText required="true" requiredMessage="Please Enter Mob.no" maxlength="10" value="#{allEnquiryInst.mobno}" validatorMessage="Please Enter Correct value">
+							<f:validateLength minimum="10"></f:validateLength>
+							<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+							</p:inputText>
+							
+							<p:outputLabel value="Student MobNo."></p:outputLabel>
+							<p:inputText  maxlength="10" value="#{allEnquiryInst.studentMobno}" validatorMessage="Please Enter Correct value">
+							<f:validateLength minimum="10"></f:validateLength>
+							<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+							</p:inputText>
+							
+							<p:outputLabel value="Addmission  sought  for Class " for="@next" style="color:red" ></p:outputLabel>
+							 <p:selectOneMenu required="true" requiredMessage="Please select a Class" value="#{allEnquiryInst.addmissionclass}">
+					              	<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+					              	<f:selectItems value="#{allEnquiryInst.classList}"></f:selectItems>
+					             </p:selectOneMenu>
+					             
+					           <p:outputLabel value="Medium " for="@next" style="color:red" ></p:outputLabel>
+							<p:selectOneRadio value="#{allEnquiryInst.medium}" required="true" requiredMessage="Please Enter Medium">
+								<f:selectItem itemLabel="Hindi" itemValue="Hindi"   ></f:selectItem>
+								<f:selectItem itemLabel="English" itemValue="English"  ></f:selectItem>
+							</p:selectOneRadio>
+							
+							<p:outputLabel value="Coaching Institute(If Any) "></p:outputLabel>
+							<p:inputTextarea  value="#{allEnquiryInst.instituteInfo}" validatorMessage="Please Enter Correct value">
+							  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+							</p:inputTextarea>
+							
+							
+						    <p:outputLabel value="Previous School "></p:outputLabel>
+							<p:inputText  value="#{allEnquiryInst.preSchool}" validatorMessage="Please Enter Correct value">
+							  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+							</p:inputText>
+							
+							
+						    <p:outputLabel value="Address "></p:outputLabel>
+							<p:inputTextarea   value="#{allEnquiryInst.address}" validatorMessage="Please Enter Correct value">
+							  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+							</p:inputTextarea>
+							
+							<p:outputLabel value="Marks In Previous Exam(Obtained/Expected)"></p:outputLabel>      
+								<p:selectOneRadio layout="grid" columns="9" value="#{allEnquiryInst.selectedClasses}" >
+					              		<f:selectItems value="#{allEnquiryInst.classes}"></f:selectItems>
+					          </p:selectOneRadio>
+					           
+					           <p:outputLabel value="How did you come to know about Institute"></p:outputLabel>      
+								<p:selectManyCheckbox layout="grid" columns="9" value="#{allEnquiryInst.information}"  >
+					              		<f:selectItem itemLabel="Marketing Team" itemValue="Marketing Team"></f:selectItem>
+					              		<f:selectItem itemLabel="Newspaper" itemValue="Newspaper"></f:selectItem>
+					              		<f:selectItem itemLabel="Teachers" itemValue="Teachers"></f:selectItem>
+					              		<f:selectItem itemLabel="Ex.Students" itemValue="Ex.Students"></f:selectItem>
+					              		<f:selectItem itemLabel="Friends/Relative" itemValue="Friends/Relative"></f:selectItem>
+					              		<f:selectItem itemLabel="Website" itemValue="Website"></f:selectItem>
+					              		<f:selectItem itemLabel="Other" itemValue="Other"></f:selectItem>
+					           </p:selectManyCheckbox>
+					           
+					           <p:outputLabel value="Remark"></p:outputLabel>
+							<p:inputText  value="#{allEnquiryInst.remark}" validatorMessage="Please Enter Correct value">
+							 <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+							</p:inputText>
+							
+							<p:commandButton value="Update" update=":form1,:form"
+							actionListener="#{allEnquiryInst.updateLead}"></p:commandButton>
+
+					</p:panelGrid>
+					</div>
+				</p:dialog>
+			</h:form>
+
+			<h:form id="historyForm">
+				<p:dialog header="History Of Enquiry" widgetVar="historyDialog"
+					modal="true" showEffect="explode" hideEffect="explode"
+					resizable="false" closable="true">
+					<div class="ui-g form-group">
+									<p:panelGrid columns="1"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+						<p:dataTable style="width:600px" value="#{allEnquiryInst.historyInfo}"
+							var="var">
+							<p:column headerText="S.No" style="width:40px">
+								<p:outputLabel value="#{var.sno}"></p:outputLabel>
+							</p:column>
+
+							<p:column headerText="Follow Date">
+								<p:outputLabel value="#{var.followDateStr}"></p:outputLabel>
+							</p:column>
+
+							<p:column headerText="Enquiry Type">
+								<h:outputText value="#{var.enquiryStatus}"></h:outputText>
+							</p:column>
+
+							<p:column headerText="Description">
+								<p:outputLabel value="#{var.description}"></p:outputLabel>
+							</p:column>
+						</p:dataTable>
+					</p:panelGrid>
+					</div>
+				</p:dialog>
+			</h:form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+    </ui:define>
+
+</ui:composition>

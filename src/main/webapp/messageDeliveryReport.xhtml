@@ -1,0 +1,156 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Delivery report</ui:define>
+
+	<ui:define name="content">
+	
+		
+	<style>
+.ui-datatable .ui-datatable-scrollable-body,
+	.ui-datatable-scrollable-header, .ui-datatable-footer, .ui-datatable-header {
+	width: 100% !important;
+}
+body .ui-datatable thead th,
+body .ui-datatable tbody td {
+	width:var(--w) !important;
+}
+body .ui-datatable  .ui-datatable-header{
+	position:sticky !important;
+	top:60px !important;
+	width: 100% !important;
+	    z-index: 1 !important;
+	
+}
+
+.ui-datatable-scrollable .ui-datatable-scrollable-header, .ui-datatable-scrollable .ui-datatable-scrollable-footer{
+	position:sticky !important;
+	top:105px !important;
+	   z-index: 1 !important;
+}
+</style>
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form1">
+                            <p:growl showDetail="true"  autoUpdate="true"></p:growl>
+
+							<p:panel id="panel">
+								<f:facet name="header">
+									<span>SMS Delivery Report</span>
+									<span> <p:commandLink
+											style="float: right;margin-left: 15px;;color: blue;font-size:18px;"
+											immediate="true" value="Graphical Representation"
+											action="deliveryReportBarModel.xhtml?faces-redirect=true"></p:commandLink>
+									</span>
+								</f:facet>
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:outputLabel value="Start Date"></p:outputLabel>
+									<p:calendar value="#{deliveryReportBean.searchdate}" navigator="true"
+										pattern="dd/MM/yyyy" readonlyInput="true" 
+										requiredMessage="Please Select Date"></p:calendar>
+										
+										<p:outputLabel value="End Date"></p:outputLabel>
+									<p:calendar value="#{deliveryReportBean.endSearchdate}" navigator="true"
+										pattern="dd/MM/yyyy" readonlyInput="true" 
+										requiredMessage="Please Select Date"></p:calendar>	
+								</p:panelGrid>
+								
+								<br />
+								<p:separator />
+								<center>
+									<p:panelGrid
+										columns="#{deliveryReportBean.list.size() gt 0 ? '2' : '1'}"
+										layout="grid" styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+										
+										
+										<p:commandButton value="Search" update=":form1" icon="fa fa-search" styleClass="butwid"
+										action="#{deliveryReportBean.searchData}"></p:commandButton>
+
+
+                       <p:commandButton rendered="#{deliveryReportBean.list.size() gt 0 }" value="PDF" styleClass="butwid" icon = "fa fa-file-pdf-o" ajax="false" process="@this" actionListener="#{deliveryReportBean.exportDelivPdf}"> 
+                    
+                        <p:fileDownload value="#{deliveryReportBean.file}" />
+                      </p:commandButton>
+									
+									</p:panelGrid>
+								</center>
+								<p:separator />
+								<br />
+								
+								
+								<br/>
+								<br />
+
+								<p:dataTable reflow="true" var="var" scrollWidth="100%" scrollable="true"
+									value="#{deliveryReportBean.list}">
+									
+									<f:facet name="header">
+										<p:outputLabel style="margin: 0px; font-size: 25px !important; font-weight: bold;" value="SMS Delivery Report"></p:outputLabel>
+									
+									</f:facet>
+
+									<p:column headerText="Message">
+									<f:facet name="header">
+									
+										<p:outputLabel value="Message"></p:outputLabel>
+									
+									</f:facet>
+										<p:outputLabel value="#{var.message}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Student Count">
+									<f:facet name="header">
+									
+										<p:outputLabel value="Student Count"></p:outputLabel>
+									
+									</f:facet>
+										<p:outputLabel value="#{var.count}"></p:outputLabel>
+									</p:column>
+									
+									<p:column headerText="Message Count">
+									<f:facet name="header">
+									
+										<p:outputLabel value="Message Count"></p:outputLabel>
+									
+									</f:facet>
+										<p:outputLabel value="#{var.mcount}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Date">
+									<f:facet name="header">
+									
+										<p:outputLabel value="Date"></p:outputLabel>
+									
+									</f:facet>
+										<p:outputLabel value="#{var.date}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Detail">
+										<p:commandButton value="detail" immediate="true"
+											action="#{deliveryReportBean.selelectedListMessage}">
+											<f:setPropertyActionListener
+												target="#{deliveryReportBean.selectedList}" value="#{var}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+								</p:dataTable>
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

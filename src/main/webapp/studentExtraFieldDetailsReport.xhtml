@@ -1,0 +1,124 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Student Details Report</ui:define>
+
+    <ui:define name="content">
+       
+            <div class="ui-fluid">
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <div class="card card-w-title">
+                             	<h:form id="form">
+					<h1>Student Details Report</h1>
+            			
+            			<p:panel header="Student Details Report">
+            			<p:messages closable="true" autoUpdate="true"></p:messages>
+               			<p:panelGrid columns="6" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+               			
+           					<p:outputLabel value="Select Class" for="@next" style="color:red" ></p:outputLabel>
+           					<p:selectOneMenu value="#{stdExtraFieldDetail.selectedClass}" filter="true" required="true" requiredMessage="Please Select Class">
+           						<f:selectItem itemLabel="#{addExamVar.selectHereLabel}" itemValue=""></f:selectItem>
+           						<f:selectItems value="#{stdExtraFieldDetail.classList}"></f:selectItems>
+           						
+           						<p:ajax update="sectionid,semesterId" listener="#{stdExtraFieldDetail.showSemester}"></p:ajax>
+           					</p:selectOneMenu>
+           					
+           					<p:outputLabel value="Section" for="@next" style="color:red" ></p:outputLabel>
+               		 		<p:selectOneMenu id="sectionid" value="#{stdExtraFieldDetail.selectedSection}"  filter="true" required="true" requiredMessage="Please Select Section"> 
+               		 			<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+               		 			<f:selectItem itemLabel="All" itemValue="-1"></f:selectItem>
+               		 			<f:selectItems value="#{stdExtraFieldDetail.sectionList}"></f:selectItems>
+               		 		</p:selectOneMenu>
+           					
+           					<p:outputLabel value="Select Term" for="@next" style="color:red" ></p:outputLabel>
+           					<p:selectOneMenu id="semesterId" value="#{stdExtraFieldDetail.selectedSemester}"  filter="true" required="true" requiredMessage="Please Select Term">
+           						<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+           						<f:selectItems value="#{stdExtraFieldDetail.termList}"></f:selectItems>
+           					</p:selectOneMenu>
+           					
+           					<p:outputLabel value="Select Fill Type" for="@next" style="color:red" ></p:outputLabel>
+           					<p:selectOneRadio value="#{stdExtraFieldDetail.fillType}" required="true" requiredMessage="Please Select Fill Type">
+           						<f:selectItem itemLabel="Remark" itemValue="remark"></f:selectItem>
+           						<f:selectItem itemLabel="Other Value" itemValue="otherValue"></f:selectItem>
+           						<p:ajax listener="#{stdExtraFieldDetail.checkFillType}" update=":form:pnl"></p:ajax>
+           					</p:selectOneRadio>
+           					
+           				
+           					
+           					
+           					
+           					
+           					
+           					<p:commandButton update=":form:pnl" value="Search" actionListener="#{stdExtraFieldDetail.searchStudent}"></p:commandButton>
+               					
+           				</p:panelGrid>
+           				<br></br>
+           				
+           					<p:outputPanel id="pnl">
+           					<p:dataTable id="dt" rendered="#{stdExtraFieldDetail.showTable}"   value="#{stdExtraFieldDetail.studentList}" var="var">
+           						
+           					
+           						
+           						<p:column headerText="S.No." >
+           							<p:outputLabel value="#{var.sNo}"></p:outputLabel>
+           						</p:column>
+           						
+           						<p:column headerText="Student Name" sortBy="#{var.studentName}">
+           							<p:outputLabel value="#{var.studentName}"></p:outputLabel>
+           						</p:column>
+           						
+           						<p:column headerText="Addmission Number">
+           						<center><p:outputLabel value="#{var.srNo}"></p:outputLabel></center>	
+           						</p:column>
+           						
+           						<p:column rendered="#{stdExtraFieldDetail.showOther}" headerText="Height">
+           							<p:outputLabel value="#{var.height}"></p:outputLabel>
+           						</p:column>
+           						
+           						<p:column rendered="#{stdExtraFieldDetail.showOther}" headerText="Weight">
+           							<p:outputLabel value="#{var.weight}"></p:outputLabel>           					
+           					</p:column>
+           						
+           						<p:column rendered="#{stdExtraFieldDetail.showOther}" headerText="Vision">
+           							<p:outputLabel value="#{var.vision}"></p:outputLabel>
+           						</p:column>
+           						
+           						<p:column rendered="#{stdExtraFieldDetail.showOther}" headerText="Blood Group">
+           							<p:outputLabel value="#{var.bloodGroup}"></p:outputLabel>
+           						</p:column>
+           			
+           						<p:column id="maxat" rendered="#{stdExtraFieldDetail.showOther}" headerText="Max Attendance">
+	           					
+           							<p:outputLabel value="#{var.maxAttendance}"></p:outputLabel>
+           						</p:column>
+           			
+           						
+           						<p:column rendered="#{stdExtraFieldDetail.showOther}" headerText="Attendance">
+           							<p:outputLabel value="#{var.attendance}"></p:outputLabel>
+           						</p:column>
+           						
+           						<p:column rendered="#{stdExtraFieldDetail.showRemark}" headerText="Class Teacher Remark">
+           							<p:outputLabel  value="#{var.remark}"></p:outputLabel>
+           						</p:column>
+           						
+           						
+           					</p:dataTable>
+           			</p:outputPanel>
+					</p:panel>
+				</h:form>
+				
+						
+				
+                        </div>
+                    </div>
+                </div>
+            </div>
+       
+    </ui:define>
+
+</ui:composition>

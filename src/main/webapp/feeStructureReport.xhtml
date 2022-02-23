@@ -1,0 +1,146 @@
+		<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+						xmlns:ui="http://java.sun.com/jsf/facelets"
+						xmlns:h="http://java.sun.com/jsf/html"
+						xmlns:f="http://java.sun.com/jsf/core"
+						xmlns:p="http://primefaces.org/ui"
+						template="/WEB-INF/template.xhtml">
+
+			<ui:define name="title">Fee Structure Report</ui:define>
+
+			<ui:define name="content">
+			   
+					<div class="ui-fluid">
+						<div class="ui-g">
+							<div class="ui-g-12">
+								<div class="card card-w-title">
+								    
+					<h:form id="form">
+			  		<p:messages autoUpdate="true" closable="true"></p:messages>
+			  		<h1>Fee Structure</h1>
+						<p:panel header="Search Data">
+							<p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;"> 
+					 			<p:outputLabel rendered="false" for="@next" style="color:red"  value="Start Date:-"></p:outputLabel>
+               	    	   		<p:calendar rendered="false" value="#{feeStructure.startDate}" navigator="true" pattern="dd/MM/yyyy" required="true" requiredMessage="Please Enter Start Date"/>
+		               	       	
+		               	       	<p:outputLabel value="Select Class:-" for="@next" style="color:red" ></p:outputLabel>
+               	    	   		<p:selectOneMenu value="#{feeStructure.selectedClass}" required="true" requiredMessage="Please Select Class">
+               	    	   			<f:selectItem itemLabel="All" itemValue="-1"></f:selectItem>
+               	    	   			<f:selectItems value="#{feeStructure.classList}"></f:selectItems>
+               	    	   		</p:selectOneMenu>
+               	       
+				   	 			<p:commandButton value="Search" actionListener="#{feeStructure.searchData}" update=":form"></p:commandButton>
+								<p:commandButton value="Print" rendered="#{feeStructure.showPrintButton}">
+               	       					<p:printer target="dataTable"></p:printer>
+           	       			  	</p:commandButton>
+			    			</p:panelGrid>
+   						</p:panel>
+			 			<p:panel id="dataTable" rendered="#{feeStructure.showData}">
+							<center>
+								<p style="font-family: initial;font-style: oblique;font-size: 30px !important;font-weight:bold;margin:0px;">#{headerBean.name}</p>
+								<p style="margin:0px;">Fee Structure (#{feeStructure.session})</p>
+							</center>
+							<p:dataTable reflow="true" style="width:100%;border-collapse:collapse" border="1" var="var" value="#{feeStructure.classDetailList}">
+								<p:columnGroup type="header">
+									<p:row>
+										<p:column style="width:100px" rowspan="2" headerText="Class Name"></p:column>
+										<p:column rowspan="2" headerText="Fee Type"></p:column>
+										<p:column colspan="12" headerText="Month"></p:column>
+									</p:row>
+									<p:row>
+						                <p:column headerText="APR" />
+						                <p:column headerText="MAY" />
+						                <p:column headerText="JUN" />
+						                
+						                <p:column headerText="JULY" />
+						                <p:column headerText="AUG" />
+						                <p:column headerText="SEP" />
+						                
+						                <p:column headerText="OCT" />
+						                <p:column headerText="NOV" />
+						                <p:column headerText="DEC" />
+						                
+						                <p:column headerText="JAN" />
+						                <p:column headerText="FEB" />
+						                <p:column headerText="MAR" />
+						            </p:row>
+								</p:columnGroup>
+								
+								<p:subTable var="month" value="#{var.feeList}">
+									 <f:facet name="header">
+						                <p:outputLabel value="Class: #{var.className}" />
+						            </f:facet>
+						            
+						             <p:column >
+						            	<p:outputLabel value="#{month.feeName}"></p:outputLabel>
+						            </p:column>
+						            
+						            <p:column>
+						            	<p:outputLabel value="#{month.feeFor}"></p:outputLabel>
+						            </p:column>
+						            
+						            <p:column>
+						            	<p:outputLabel value="#{month.aprFee}"></p:outputLabel>
+						            </p:column>
+						            
+						            <p:column>
+						            	<p:outputLabel value="#{month.mayFee}"></p:outputLabel>
+						            </p:column>
+						            
+						            <p:column>
+						            	<p:outputLabel value="#{month.junFee}"></p:outputLabel>
+						            </p:column>
+						            
+						            <p:column>
+						            	<p:outputLabel value="#{month.julyFee}"></p:outputLabel>
+						            </p:column>
+						            
+						            <p:column>
+						            	<p:outputLabel value="#{month.augFee}"></p:outputLabel>
+						            </p:column>
+						            
+						            <p:column>
+						            	<p:outputLabel value="#{month.sepFee}"></p:outputLabel>
+						            </p:column>
+						            
+						            <p:column>
+						            	<p:outputLabel value="#{month.octFee}"></p:outputLabel>
+						            </p:column>
+						            
+						            <p:column>
+						            	<p:outputLabel value="#{month.novFee}"></p:outputLabel>
+						            </p:column>
+						            
+						            <p:column>
+						            	<p:outputLabel value="#{month.decFee}"></p:outputLabel>
+						            </p:column>
+						            
+						            <p:column>
+						            	<p:outputLabel value="#{month.janFee}"></p:outputLabel>
+						            </p:column>
+						            
+						            <p:column>
+						            	<p:outputLabel value="#{month.febFee}"></p:outputLabel>
+						            </p:column>
+						            
+						            <p:column>
+						            	<p:outputLabel value="#{month.marFee}"></p:outputLabel>
+						            </p:column>
+						            
+						             <p:columnGroup type="footer">
+						                <p:row>
+						                    <p:column colspan="7" footerText="TRANSPORT FEE: AS PER DISTANCE, IF TRANSPORTATION FACILITY AVAILED" style="text-align:right;font-size:10px"/>
+						                    <p:column style="font-size:10px" colspan="7" footerText="TOTAL FEE : &#160;  FOR NEW STUDENT: &#160; #{var.totalNew} /- &#160;FOR OLD STUDENT: &#160;  #{var.totalOld} /-"/>
+						                </p:row>
+						            </p:columnGroup>
+								</p:subTable>
+							</p:dataTable>
+						</p:panel>
+					</h:form> 
+								</div>
+							</div>
+						</div>
+					</div>
+			   
+			</ui:define>
+
+		</ui:composition>

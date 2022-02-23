@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+<f:loadBundle var="addClassVar" basename="myProperties" />
+<f:view contentType="text/html">
+	<h:head>
+		<title>#{sideMenuBean.companyName} |Print Registration Report</title>
+		<f:facet name="first">
+			<meta content='text/html; charset=UTF-8' http-equiv="Content-Type" />
+			<meta http-equiv="X-UA-Compatible" content="EmulateIE8" />
+			
+		</f:facet>
+
+  			<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css"></link>
+    		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"></link>
+    		<link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css"></link>
+   			<link rel="stylesheet" href="dist/css/AdminLTE.min.css"></link>
+    		<link rel="stylesheet" href="dist/css/skins/all-skins.min.css"></link>
+  			<link rel="stylesheet" type="text/css" href="css/style.css"/>	
+	</h:head>
+
+	<h:body>
+      
+      <!-- <ui:include src="sideMenu.xhtml"></ui:include> 
+    -->
+      <div class="content-wrapper">
+					<p:commandButton value="Print" type="button"  >
+			 			<p:printer target=":forms"></p:printer>			
+					</p:commandButton>
+               		
+               		<h:form id="forms" style="width: 100%;" >
+               		<p:commandButton value="PDF" style=" width:50px;" ajax="false" process="@this" actionListener="#{printNewRegInfo.exportConsentPdf}"> 
+                    
+          <p:fileDownload value="#{printNewRegInfo.file}" />
+         </p:commandButton>
+	               		<div style="width:100%;background-color: white;float:left;">
+		               		<center>
+			               		<div style="border: 1px solid;width: 98%;height:auto;padding: 0px 0px 6px 0px;background-color: white;border-radius:40px;s" >
+			               			<h3 style="margin-top: 10px;"><u>Consent Letter To The Class Teacher</u></h3>
+									<h5 style="margin-left:-90%;margin-bottom: 0px;" ><b> To </b></h5>
+									<h5 style="margin-left:-65%;margin-top: 0px;"><b>The Class Teacher,</b></h5><br></br>
+									<table style="width:90%;margin-top:-15px;font-size:12px;">
+										<tr>
+											<td >Please enroll this student in your class:- </td>
+										</tr>
+										<tr>
+											<td style="width: 55%;"><b>1.  Admission No : </b>#{printNewRegInfo.studentInfo.srNo}</td>
+											<td ><b>Date Of Admission : </b>#{printNewRegInfo.studentInfo.startingDateStr}</td>
+										</tr>
+										<tr>
+											<td style="width: 55%;"><b>2.  Pupil's Name : </b>#{printNewRegInfo.studentInfo.fname}</td>
+											<td><b>Aadhar No. : </b>#{printNewRegInfo.studentInfo.aadharNo}</td>
+										</tr>
+										<tr>
+											<td style="width: 55%;"><b>3.  Father's Name : </b>#{printNewRegInfo.studentInfo.fathersName} </td>
+											<td><b>Aadhar No. : </b>#{printNewRegInfo.studentInfo.fatherAadhaar}</td>
+										</tr>
+										<tr>
+											<td style="width: 55%;"><b>4.  Mother's Name : </b>#{printNewRegInfo.studentInfo.motherName} </td>
+											<td><b>Aadhar No. : </b>#{printNewRegInfo.studentInfo.motherAadhaar}</td>
+										</tr>
+										<tr>
+											<td colspan="2"><b>5.  Address : </b>#{printNewRegInfo.studentInfo.currentAddress}</td>
+										</tr>
+										<tr>
+											<td colspan="2"><b>6.  Date of Birth as recorded in the Admission Register :</b>#{printNewRegInfo.studentInfo.dobString}</td>
+										</tr>
+										<tr>
+											<td colspan="2"><b>7.  Class   Section : </b>#{printNewRegInfo.studentInfo.className}</td>
+										</tr>
+										<tr>
+											<td colspan="2"><b>8.  Contact No. :</b><b>Father's:</b>#{printNewRegInfo.studentInfo.fathersPhone} , <b>Mother's:</b>#{printNewRegInfo.studentInfo.mothersPhone} , <b>Guardian's:</b>#{printNewRegInfo.studentInfo.residenceMobile}</td>
+										</tr>
+										<tr>
+										<p:outputPanel rendered="#{sideMenuBean.list.branch_id ne '22' &amp;&amp; sideMenuBean.list.branch_id ne '27'}">
+											<td colspan="2"><b>9.  Fee Details : </b><b>Concession Category:</b>#{printNewRegInfo.studentInfo.concessionName}</td>
+											</p:outputPanel>
+										</tr>
+										<tr>
+										<p:outputPanel rendered="#{sideMenuBean.list.branch_id eq '22' || sideMenuBean.list.branch_id eq '27'}">
+											<td colspan="2"><b>9.  Social Category : </b>#{printNewRegInfo.studentInfo.category}</td>
+										</p:outputPanel>
+										</tr>
+										<tr>
+										<p:outputPanel rendered="#{printNewRegInfo.studentInfo.transportRoute ne '' &amp;&amp; (sideMenuBean.list.branch_id eq '22' || sideMenuBean.list.branch_id eq '27')}">
+											<td colspan="2"><b>10.  Bus No : </b> #{printNewRegInfo.studentInfo.vehicleNo} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>Transport Route : </b>#{printNewRegInfo.studentInfo.transportRoute}</td>
+										</p:outputPanel>
+										</tr>
+									</table>
+									<table style="width:90%;font-size:12px">
+										<tr>
+											<td style="float:left"><b>Date Of Issue </b>#{printNewRegInfo.currentDate}</td>
+											<td style="float:right"><b>Principal</b></td>
+										</tr>
+									</table>
+								</div>
+							</center>
+							
+							
+							<hr style="border-bottom: 1px dashed !important;border: 0px;"></hr>
+							
+							<center>
+			               		<div style="border: 1px solid;width: 98%;height:auto;padding: 0px 0px 6px 0px;background-color: white;border-radius:40px;" >
+			               			<h3 style="margin-top: 10px;"><u>Consent Letter To The Clerical Department</u></h3>
+									<h5 style="margin-left:-90%;margin-bottom: 0px;"><b> To </b></h5>
+									<h5 style="margin-left:-65%;margin-top: 0px;"><b>The Clerical Department,</b></h5><br></br>
+									<table style="width:90%;margin-top:-15px;font-size:12px;">
+										<tr>
+											<td >Please enter the following details of the below mentioned student in your records:- </td>
+										</tr>
+										<tr>
+											<td ><b>1.  Date of Admission : </b>#{printNewRegInfo.studentInfo.startingDateStr}</td>
+										</tr>
+										<tr>
+											<td ><b>2.  Admission No : </b>#{printNewRegInfo.studentInfo.srNo}</td>
+										</tr>
+										<tr>
+											<td><b>3.  Pupil's Name : </b>#{printNewRegInfo.studentInfo.fname} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>4.  Class   Section : </b>#{printNewRegInfo.studentInfo.className}</td>
+										</tr>
+										<tr>
+											<td><b>5.  Father' Name : </b>#{printNewRegInfo.studentInfo.fathersName}</td>
+										</tr>
+										<tr>
+											<td><b>6.  Mother's Name : </b>#{printNewRegInfo.studentInfo.motherName}</td>
+										</tr>
+										<tr>
+											<td><b>7.  Address : </b>#{printNewRegInfo.studentInfo.currentAddress}</td>
+										</tr>
+										<tr>
+											<td><b>8.  Date of Birth as recorded in the Admission Register :</b>#{printNewRegInfo.studentInfo.dobString}</td>
+										</tr>
+										<tr>
+											<td><b>9.  Contact No. :</b><b>Father's:</b>#{printNewRegInfo.studentInfo.fathersPhone} , <b>Mother's:</b>#{printNewRegInfo.studentInfo.mothersPhone} , <b>Guardian's:</b>#{printNewRegInfo.studentInfo.residenceMobile}</td>
+										</tr>
+										<tr>
+											<td><b>10.  Fee Details - </b><b>Concession Category:</b>#{printNewRegInfo.studentInfo.concessionName}</td>
+										</tr>
+										<tr>
+										<p:outputPanel rendered="#{printNewRegInfo.studentInfo.transportRoute ne ''}">
+											<td><b>11.  Bus No : </b> #{printNewRegInfo.studentInfo.vehicleNo} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>Transport Route :</b>#{printNewRegInfo.studentInfo.transportRoute} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>Transport Fee : #{printNewRegInfo.studentInfo.transfee}</b></td>
+										</p:outputPanel>
+										</tr>
+										<tr>
+										<p:outputPanel rendered="#{sideMenuBean.list.branch_id eq '22' || sideMenuBean.list.branch_id eq '27'}">
+											<td ><b>#{printNewRegInfo.studentInfo.transportRoute ne '' ? '12.':'11.'}  Aadhar No. : </b>#{printNewRegInfo.studentInfo.aadharNo}</td>
+										</p:outputPanel>
+										</tr>
+										
+										<tr>
+										<p:outputPanel rendered="#{sideMenuBean.list.branch_id eq '22' || sideMenuBean.list.branch_id eq '27'}">
+											<td ><b>#{printNewRegInfo.studentInfo.transportRoute ne '' ? '13.':'12.'}  Social Category : </b>#{printNewRegInfo.studentInfo.category}</td>
+										</p:outputPanel>
+										</tr>
+									</table>
+									<table style="width:90%;font-size:12px">
+										<tr>
+											<td style="float:left"><b>Date Of Issue </b> #{printNewRegInfo.currentDate}</td>
+											<td style="float:right"><b>Principal</b></td>
+										</tr>
+									</table>
+								</div>
+							</center>
+							
+							<p:outputPanel rendered="#{printNewRegInfo.studentInfo.transportRoute ne ''}">
+							<hr style="border-bottom: 1px dashed !important;border: 0px;"></hr>
+							   
+							   <center>
+			               		<div style="border: 1px solid;width: 98%;height:auto;padding: 0px 0px 10px 0px;background-color: white;border-radius:40px;" >
+			               			<h3 style="margin-top: 10px;"><u>Consent Letter To The Transporter</u></h3>
+									<!-- <h4 style="margin-left:-80%">प्रिय  #{printNewRegInfo.studentInfo.driverName},</h4> -->
+									<table style="width:90%;margin-top:10px;font-size:15px;">
+										<tr>
+											<td ><b>प्रिय &nbsp;&nbsp; #{printNewRegInfo.studentInfo.driverName},</b></td>
+										</tr>
+										<tr>
+											<td >आपको निम्न विद्यार्थी को निचे दिए गए विवरण अनुसार आपके वाहन द्वारा लाने ले जाने की अनुमति प्रदान की जाती है </td>
+										</tr>
+										<tr>
+											<td><b>विद्यार्थी का नाम: </b>#{printNewRegInfo.studentInfo.fname} &nbsp;&nbsp;&nbsp; <b>पिता का नाम  : </b>#{printNewRegInfo.studentInfo.fathersName}</td>
+										<td></td>
+										</tr>
+										<tr>
+											<td><b> कक्षा : </b>#{printNewRegInfo.studentInfo.className}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b> रूट   और  स्टॉप :</b>#{printNewRegInfo.studentInfo.transportRoute} </td>
+										</tr>
+									</table>
+									<table style="width:90%;font-size:14px">
+										<tr>
+											<td style="float:left"><b>फ़ोन न. </b> #{printNewRegInfo.studentInfo.fathersPhone} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>Date Of Issue </b> #{printNewRegInfo.currentDate}</td>
+											<td style="float:right"><b>Principal</b></td>
+										</tr>
+									</table>
+								</div>
+							</center>
+							</p:outputPanel>
+							
+	               		</div>
+					</h:form>
+     	 </div>
+	</h:body>
+</f:view>
+</html>

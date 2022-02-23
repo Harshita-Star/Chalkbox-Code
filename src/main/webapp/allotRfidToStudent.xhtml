@@ -1,0 +1,192 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Allot RFID No</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<p:messages closable="true" autoUpdate="true"></p:messages>
+						<h:form id="form2">
+							<h2>Allot RFID No.</h2>
+							<p:panel id="mainPnl">
+								<f:facet name="header">
+									<span>Search Student By Class Section</span>
+								</f:facet>
+
+
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel for="@next" style="color:red"
+										value="Select Class"></p:outputLabel>
+									<p:selectOneMenu style="width:250px"
+										value="#{allotRfidToStudent.selectedCLassSection}"
+										required="true" requiredMessage="Please select a class"
+										filter="true">
+										<f:selectItem itemLabel="Select Class" itemValue=""></f:selectItem>
+										<f:selectItems value="#{allotRfidToStudent.classSection}"></f:selectItems>
+										<p:ajax update="sectionid"
+											listener="#{allotRfidToStudent.allSections}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel for="@next" style="color:red"
+										value="Select Section"></p:outputLabel>
+									<p:selectOneMenu id="sectionid"
+										value="#{allotRfidToStudent.selectedSection}" required="true"
+										requiredMessage="Please select a section" filter="true">
+										<f:selectItem itemLabel="Select Section" itemValue=""></f:selectItem>
+										<f:selectItems value="#{allotRfidToStudent.sectionList}"></f:selectItems>
+
+									</p:selectOneMenu>
+								</p:panelGrid>
+
+								<br />
+
+								<center>
+									<p:commandButton styleClass="butwid" value="Search" icon="fa fa-search"
+										actionListener="#{allotRfidToStudent.searchStudentByClassSection}"
+										update=":form,:form1"></p:commandButton>
+								</center>
+
+							</p:panel>
+						</h:form>
+						<br />
+						<h:form id="form1" enctype="multipart/form-data">
+							<p:panel id="excelPnl" header="Allot RFID No. By Excel (Allowed file type are :- xls,xlsx)" 
+								rendered="#{allotRfidToStudent.b}">
+								<p:panelGrid columns="2"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:outputLabel value="Get Excel Sheet"></p:outputLabel>
+									<h:commandLink>
+										<p:graphicImage name="images/excellogo.png"
+											library="avalon-layout" width="100" height="40"></p:graphicImage>
+										<pe:exporter type="xlsx" target=":form:upPic"
+											fileName="#{allotRfidToStudent.className}_#{allotRfidToStudent.sectionName}"></pe:exporter>
+									</h:commandLink>
+
+									<p:outputLabel value="Upload Updated Excel Sheet"></p:outputLabel>
+									<p:fileUpload allowTypes="/(\.|\/)(xls|xlsx)$/" mode="simple"
+										skinSimple="true" value="#{allotRfidToStudent.excelFile}"
+										update=":form"></p:fileUpload>
+								</p:panelGrid>
+								<br />
+								<center>
+									<p:commandButton style="width: 150px;"
+										value="Update From Excel" update=":form,:form1" ajax="false"
+										action="#{allotRfidToStudent.importFromExcel}"></p:commandButton>
+								</center>
+
+							</p:panel>
+						</h:form>
+						<br />
+						<h:form id="form">
+							<p:panel header="Allot RFID No. Manually"
+								rendered="#{allotRfidToStudent.b}" id="dtPnl">
+								<br />
+								<center>
+									<p:commandButton style="width: 150px;" value="Update Manually"
+										actionListener="#{allotRfidToStudent.submit}"
+										update=":form,:form1"></p:commandButton>
+								</center>
+								<br />
+								<p:dataTable reflow="true" id="upPic"
+									value="#{allotRfidToStudent.list}" var="var"
+									selection="#{allotRfidToStudent.selectStudent}"
+									rowKey="#{var.addNumber}" rowIndexVar="index">
+
+									<p:column exportable="false" selectionMode="multiple"
+										style="width:35px;"></p:column>
+
+									<p:column headerText="S.No." style="width:50px;">
+										<f:facet name="header">
+								S.No.
+							</f:facet>
+										<p:outputLabel value="#{index+1}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Chalkbox UID">
+										<f:facet name="header">
+								Chalkbox UID
+							</f:facet>
+										<p:outputLabel value="#{var.addNumber}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Adm.No.">
+										<f:facet name="header">
+								Adm.No.
+							</f:facet>
+										<p:outputLabel value="#{var.srNo}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Class">
+										<f:facet name="header">
+								Class
+							</f:facet>
+										<p:outputLabel value="#{var.className}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Student Name">
+										<f:facet name="header">
+								Student Name
+							</f:facet>
+										<p:outputLabel value="#{var.fname}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Father Name">
+										<f:facet name="header">
+								Father Name
+							</f:facet>
+										<p:outputLabel value="#{var.fathersName}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Mother Name">
+										<f:facet name="header">
+								Mother Name
+							</f:facet>
+										<p:outputLabel value="#{var.motherName}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="RFID No.">
+										<f:facet name="header">
+								RFID No.
+							</f:facet>
+										<p:inputText id="rfid#{var.sno}" value="#{var.rfidNo}"
+											onfocus="this.select();"
+											onchange="duplicateRfid(#{var.sno},#{allotRfidToStudent.list.size()})"
+											validatorMessage="Please Enter Correct value">
+											<f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+										</p:inputText>
+									</p:column>
+
+								</p:dataTable>
+
+								<br />
+								<br />
+								<center>
+									<p:commandButton style="width: 150px;" value="Update Manually"
+										actionListener="#{allotRfidToStudent.submit}"
+										update=":form,:form1"></p:commandButton>
+								</center>
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

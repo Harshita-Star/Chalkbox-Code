@@ -1,0 +1,179 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	<f:loadBundle var="addClassVar" basename="myProperties" />
+
+	<ui:define name="title">Present Student Report</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+
+						<h:form id="form">
+							<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+
+							<h1>Present Student Report</h1>
+
+							<p:panel header="Present Students">
+								<p:panelGrid columns="6" layout="grid"
+									styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel value="Select Date"></p:outputLabel>
+									<p:calendar value="#{presentStudents.date}" navigator="true"
+										pattern="dd/MM/yyyy" rendered="true"
+										requiredMessage="Please Select Date">
+
+										<p:ajax listener="#{presentStudents.check}" update=":form"
+											event="dateSelect"></p:ajax>
+
+									</p:calendar>
+
+									<p:outputLabel for="@next" style="color:red"
+										value="Select a Class"></p:outputLabel>
+									<p:selectOneMenu value="#{presentStudents.selectedClass}"
+										required="true" requiredMessage="Please select a class">
+										<f:selectItem itemLabel="Select Class" itemValue=""></f:selectItem>
+
+										<f:selectItems value="#{presentStudents.classList}"></f:selectItems>
+
+										<p:ajax update=":form"
+											listener="#{presentStudents.allSections}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Select Section"></p:outputLabel>
+									<p:selectOneMenu id="sectionid"
+										value="#{presentStudents.selectedSection}">
+										<f:selectItem itemLabel="Select Section" itemValue=""></f:selectItem>
+
+										<f:selectItems value="#{presentStudents.sectionList}"></f:selectItems>
+
+										<p:ajax></p:ajax>
+									</p:selectOneMenu>
+
+									<p:commandButton value="Search" update=":form"
+										action="#{presentStudents.searchData}"></p:commandButton>
+
+									<p:commandButton value="Print" rendered="#{presentStudents.b}"
+										target="_blank" action="#{presentStudents.print}">
+									</p:commandButton>
+
+									<p:commandButton value="PDF" style="width:50px;" ajax="false"
+										process="@this"
+										actionListener="#{presentStudents.exportAbsentStudentPdf}">
+
+										<p:fileDownload value="#{presentStudents.file}" />
+									</p:commandButton>
+								</p:panelGrid>
+							</p:panel>
+
+							<p:panel id="dataTable" rendered="#{presentStudents.b}">
+								<center>
+									<p
+										style="font-size: 25px !important; font-weight: bold; margin: 0px;">#{headerBean.name}</p>
+									<p
+										style="font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.affiliationNo}</p>
+									<p
+										style="font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.finalAddress}</p>
+									<p
+										style="font-size: 15px !important; font-weight: bold; margin: 0px;">#{headerBean.phoneno}</p>
+
+									<p
+										style="margin: 0px; font-size: 25px !important; font-weight: bold;">Present
+										Student Report #{absetStudentReport.strDate}</p>
+								</center>
+								<p:panelGrid columns="2"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+									<p:outputLabel value="Total:-"></p:outputLabel>
+									<h:outputText value="#{presentStudents.total}"></h:outputText>
+								</p:panelGrid>
+
+
+								<p:dataTable stickyHeader="true" reflow="true"
+									style="width:100%;border-collapse:collapse" border="1"
+									value="#{presentStudents.studentList}" var="var"
+									rowStyleClass="#{(var.attendance eq 'L' || var.attendance eq 'ML' || var.attendance eq 'PL' || var.attendance eq 'H') ? 'blueColored':'blackColored'}">
+
+									<p:column headerText="Add. No." style="width:110px"
+										filterBy="#{var.srNo}" filterMatchMode="contains">
+
+										<f:facet name="header">
+											<p:outputLabel value="Sr.No."></p:outputLabel>
+										</f:facet>
+										<center>
+											<p:outputLabel value="#{var.srNo}"></p:outputLabel>
+										</center>
+									</p:column>
+
+									<p:column style="width:80px" headerText="Class"
+										filterBy="#{var.className}" filterMatchMode="contains">
+
+										<f:facet name="header">
+											<p:outputLabel value="Class"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.className}"></p:outputLabel>
+									</p:column>
+
+
+									<p:column style="width:100px" filterBy="#{var.fullName}"
+										filterMatchMode="contains" headerText="Student Name">
+
+										<f:facet name="header">
+											<p:outputLabel value="Student Name"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.fullName}"></p:outputLabel>
+									</p:column>
+
+									<p:column style="width:100px" headerText="Father's Name">
+
+										<f:facet name="header">
+											<p:outputLabel value="Father's Name"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.fathersName}"></p:outputLabel>
+									</p:column>
+
+									<p:column style="width:60px" filterBy="#{var.attendance}"
+										filterMatchMode="contains" headerText="Attendance Status">
+
+										<f:facet name="header">
+											<p:outputLabel value="Attendance Status"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.attendance}"></p:outputLabel>
+									</p:column>
+
+
+									<p:column style="width:80px" headerText="Phone No"
+										filterBy="#{var.fathersPhone}" filterMatchMode="contains">
+
+										<f:facet name="header">
+											<p:outputLabel value="Phone No"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.fathersPhone}"></p:outputLabel>
+									</p:column>
+
+									<p:column style="width:80px" headerText="Message Sent?"
+										filterBy="#{var.messagesend}" filterMatchMode="contains">
+
+										<f:facet name="header">
+											<p:outputLabel value="Message Sent?"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.messagesend}"></p:outputLabel>
+									</p:column>
+
+								</p:dataTable>
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</ui:define>
+</ui:composition>

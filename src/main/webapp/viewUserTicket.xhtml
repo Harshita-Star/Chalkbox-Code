@@ -1,0 +1,156 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">All Tickets</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form1">
+							<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+							<p:panel header="All Tickets">
+								<p:panelGrid columns="7">
+									<p:commandButton value="Pending(#{viewUserTicketBean.pending})"
+										actionListener="#{viewUserTicketBean.reportPending}"
+										update=":form1"></p:commandButton>
+									<p:commandButton
+										value="In process(#{viewUserTicketBean.in_process})"
+										actionListener="#{viewUserTicketBean.reportInprocess}"
+										update=":form1"></p:commandButton>
+									<p:commandButton
+										value="Not Appropriate(#{viewUserTicketBean.not_app})"
+										actionListener="#{viewUserTicketBean.reportnotapp}"
+										update=":form1"></p:commandButton>
+									<p:commandButton
+										value="Resolved(#{viewUserTicketBean.resolved})" styleClass="greenButt"
+										actionListener="#{viewUserTicketBean.reportresolved}"
+										update=":form1"></p:commandButton>
+									<p:commandButton
+										value="Wrapping Up(#{viewUserTicketBean.wrapped})"
+										actionListener="#{viewUserTicketBean.reportWrapped}"
+										update=":form1"></p:commandButton>
+									<p:commandButton
+										value="Closed(#{viewUserTicketBean.closed})" styleClass="redButt"
+										actionListener="#{viewUserTicketBean.reportClosed}"
+										update=":form1"></p:commandButton>
+										
+									<p:commandButton value="All(#{viewUserTicketBean.all})"
+										actionListener="#{viewUserTicketBean.reportAll}"
+										update=":form1"></p:commandButton>
+								</p:panelGrid>
+								<p:dataTable reflow="true" var="var"
+									value="#{viewUserTicketBean.list}" widgetVar="ticketTable">
+
+									<p:column headerText="S.No" style="width:40px;">
+										<h:outputText value="#{var.sno}"></h:outputText>
+									</p:column>
+
+									<p:column headerText="Ticket Date"
+										filterBy="#{var.ticketDateStr}">
+										<h:outputText value="#{var.ticketDateStr}"></h:outputText>
+									</p:column>
+
+									<p:column headerText="Ticket No." filterBy="#{var.ticketNo}">
+										<h:outputText value="#{var.ticketNo}"></h:outputText>
+									</p:column>
+
+									<p:column headerText="Added By" filterBy="#{var.userId}">
+										<h:outputText value="#{var.userId}"></h:outputText>
+									</p:column>
+
+									<p:column headerText="Description">
+										<h:outputText value="#{var.description}">
+										</h:outputText>
+									</p:column>
+
+									<p:column headerText="Type" filterBy="#{var.type}"
+										filterMatchMode="contains">
+										<f:facet name="filter">
+											<p:selectOneMenu onchange="PF('ticketTable').filter()"
+												styleClass="custom-filter">
+												<f:selectItem itemLabel="Select One" itemValue="#{null}"
+													noSelectionOption="true" />
+												<f:selectItem itemLabel="Error" itemValue="error" />
+												<f:selectItem itemLabel="Suggestion" itemValue="Suggestion" />
+												<f:selectItem itemLabel="Training" itemValue="Training" />
+											</p:selectOneMenu>
+										</f:facet>
+										<h:outputText value="#{var.type}">
+										</h:outputText>
+									</p:column>
+
+									<p:column headerText="Status" filterBy="#{var.status}"
+										filterMatchMode="contains">
+										<f:facet name="filter">
+											<p:selectOneMenu onchange="PF('ticketTable').filter()"
+												styleClass="custom-filter">
+												<f:selectItem itemLabel="Select One" itemValue="#{null}"
+													noSelectionOption="true" />
+												<f:selectItem itemLabel="Pending" itemValue="pending" />
+												<f:selectItem itemLabel="In Process" itemValue="In Process" />
+												<f:selectItem itemLabel="Resolved" itemValue="Resolved" />
+												<f:selectItem itemLabel="Not Appropriate"
+													itemValue="Not Appropriate" />
+											</p:selectOneMenu>
+										</f:facet>
+										<h:outputText value="#{var.status}">
+										</h:outputText>
+									</p:column>
+
+									<p:column headerText="Image">
+										<p:lightBox styleClass="imagebox" id="lighbox1">
+											<h:outputLink value="#{var.screenshot}">
+												<h:graphicImage value="#{var.screenshot}"
+													style="height: 70px; width: 100px" />
+											</h:outputLink>
+										</p:lightBox>
+									</p:column>
+
+									<p:column headerText="View Comments">
+										<p:commandButton icon="ui-icon-search" value="View"
+											action="#{viewUserTicketBean.viewDetail}">
+											<f:setPropertyActionListener
+												target="#{viewUserTicketBean.selectedTicket}" value="#{var}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+
+
+									<p:column headerText="delete">
+										<p:commandButton disabled="#{var.delete}" icon="ui-icon-trash" styleClass="redButt"
+											action="#{viewUserTicketBean.deleteticket}" update=":form1">
+											<f:setPropertyActionListener
+												target="#{viewUserTicketBean.selectedTicket}" value="#{var}"></f:setPropertyActionListener>
+
+											<p:confirm header="Confirmation"
+												message="Are you sure delete this ticket?"
+												icon="ui-icon-alert" />
+
+										</p:commandButton>
+									</p:column>
+
+
+								</p:dataTable>
+							</p:panel>
+							<p:confirmDialog global="true" showEffect="fade"
+								hideEffect="fade">
+								<p:commandButton value="Yes" type="button"
+									styleClass="ui-confirmdialog-yes" icon="ui-icon-check greenButt" />
+								<p:commandButton value="No" type="button"
+									styleClass="ui-confirmdialog-no" icon="ui-icon-close redButt" />
+							</p:confirmDialog>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

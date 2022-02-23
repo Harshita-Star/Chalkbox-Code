@@ -1,0 +1,53 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+	<ui:define name="title">Class Strength</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form">
+							<p:dataTable rowKey="#{var.sectionid}" value="#{consolidatedClassStrenght.finallist}" var="info">
+							<p:column headerText="Class Name">
+							<p:outputLabel value="#{info.className}"></p:outputLabel>
+							</p:column>
+							
+							<p:column headerText="Section">
+							<p:outputLabel value="#{info.section}"></p:outputLabel>
+							</p:column>
+							
+							<p:columns value="#{consolidatedClassStrenght.categorylist}" var="column" columnIndexVar="colIndexVar">
+							
+							<f:facet name="header">
+								<p:outputLabel value="#{column.label}"></p:outputLabel>
+							</f:facet>
+							<p:outputLabel value="#{info.categMap[column.label]}"></p:outputLabel>
+							</p:columns>
+							
+							
+							<p:column headerText="Uncategorised">
+							<p:outputLabel value="#{info.uncaterised}"></p:outputLabel>
+							</p:column>
+							
+							<p:column headerText="Total Student (#{consolidatedClassStrenght.total})"> 
+							<p:outputLabel value="#{info.total}">
+							</p:outputLabel>
+							</p:column>
+							
+							</p:dataTable>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,169 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Update Student Performance</ui:define>
+
+    <ui:define name="content">
+    <div class="ui-fluid">
+        <div class="ui-g">
+            <div class="ui-g-12">
+                <div class="card card-w-title">
+					<h:form id="form1" >
+						<p:messages closable="true" autoUpdate="true"></p:messages>
+      		 			<p:panel header="Search Student By Name">
+               		 		<p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+               		 	 		
+               		 	 		<p:outputLabel value="Select Session"></p:outputLabel>
+								<p:selectOneMenu value="#{fillPreSessionMarks.session}" filter="true">
+									<f:selectItems value="#{fillPreSessionMarks.sessionList}"></f:selectItems>
+									<p:ajax></p:ajax>
+								</p:selectOneMenu>
+               		 	 		
+               		 			<p:outputLabel value="Student Name"></p:outputLabel>      
+               		 			<p:autoComplete minQueryLength="3" id="acSimple" value="#{fillPreSessionMarks.name}" completeMethod="#{fillPreSessionMarks.autoCompleteStudentInfo}">
+               		 			</p:autoComplete>
+               		 			
+               		 		
+               		 			<p:commandButton update=":form3:up" value="Search" action="#{fillPreSessionMarks.searchStudentByName}"></p:commandButton>
+               		 		
+               		 		</p:panelGrid> 
+           		 		</p:panel>
+					</h:form>
+				</div>
+				<div class="card card-w-title">
+					<h:form id="form3">
+						<p:panel header="Student Details" id="up">
+							<p:dataTable rendered="#{fillPreSessionMarks.show}" reflow="true" var="var" value="#{fillPreSessionMarks.studentList}"> 
+               		  			<p:column headerText="#{searchStudentVar.searchStudentAdmissionNumberLabel}">
+               		  				<p:outputLabel value="#{var.srNo}"></p:outputLabel>
+               		  			</p:column>
+               		  			
+               		  			<p:column sortBy="#{var.fname}" headerText="#{searchStudentVar.seacrhStudentFirstNameLabel}">
+               		  				<p:outputLabel value="#{var.fname}"></p:outputLabel>
+               		  			</p:column>
+               		  			
+               		  			<p:column headerText="Father's Name">
+               		  				<p:outputLabel value="#{var.fathersName}"></p:outputLabel>
+               		  			</p:column>
+               		  			
+               		  			<f:facet  name="footer">
+               		  				<p:panelGrid columns="5"> 
+		               		  			<p:commandButton value="Fill Scholastic Marks" update=":updateForm" actionListener="#{fillPreSessionMarks.fillScholasticMarks}"/>
+		               		  			<p:commandButton value="Fill Additional Marks" update=":updateForm" actionListener="#{fillPreSessionMarks.fillAdditionalMarks}"/>
+		               		  			<p:commandButton value="Fill Other Marks" update=":updateForm" actionListener="#{fillPreSessionMarks.fillOtherMarks}"/>
+		               		  			<p:commandButton value="Fill Co-Scholastic Marks" update=":updateForm" actionListener="#{fillPreSessionMarks.fillCoScholasticMarks}"></p:commandButton>
+		               		  			<p:commandButton value="Fill Extra Value"  update=":updateForm" actionListener="#{fillPreSessionMarks.fillExtraMarks}"></p:commandButton>
+	               		  			</p:panelGrid>
+               		  			</f:facet>  		  		
+               		  		</p:dataTable>
+               			</p:panel>
+					</h:form>
+				
+					<h:form id="updateForm" >
+               			<p:panel header="Update Marks / Grade (#{fillPreSessionMarks.type.toUpperCase()})">
+               				 <p:dataTable rendered="#{fillPreSessionMarks.showScholastic}" style="width:100%;border-collapse:collapse;font-size:9px" border="1" value="#{fillPreSessionMarks.allInfo.markList}" var="var">
+								<p:columnGroup type="header">
+									<p:row>
+						                 <p:column rowspan="4" headerText="SUBJECT" />
+						                 <ui:repeat value="#{fillPreSessionMarks.allInfo.termList}" var="term">
+					                    	<p:column colspan="#{term.examListSize}" headerText="#{term.termName}" />
+					               	 	 </ui:repeat>
+						            </p:row>
+						            <p:row>
+						            	<ui:repeat value="#{fillPreSessionMarks.allInfo.termList}" var="term">
+							                <ui:repeat value="#{term.examInfoForHeader}" var="exam">
+							                    <p:column colspan="#{exam.subExamList.size()}" headerText="#{exam.examName}" />
+							                </ui:repeat>
+					                	</ui:repeat>
+						            </p:row>
+							            
+						            <p:row>
+						            	<ui:repeat value="#{fillPreSessionMarks.allInfo.termList}" var="term">
+							                <ui:repeat value="#{term.examInfoForHeader}" var="exam">
+							                	<ui:repeat value="#{exam.subExamList}" var="subExam">
+							                    	<p:column colspan="1" headerText="#{subExam.subExamUpperCase}" />
+							                    </ui:repeat>
+							                </ui:repeat>
+					                	</ui:repeat>
+						            </p:row>
+							            
+						        </p:columnGroup>
+							        
+					            <p:column>
+				           			 <p:outputLabel style="font-size:7.5px"  value="#{var.subjectName}"></p:outputLabel>
+				           		</p:column>
+				            		
+					           <p:columns   value="#{fillPreSessionMarks.allInfo.scholasticColumnsList}" var="ll">
+					           		<p:outputPanel rendered="#{!ll.contains('-noexam')}">
+				            			<center><p:inputText onfocus="this.select()" rendered="#{!ll.contains('-noexam')}" style="width:60px;font-size:10px" value="#{var.marksMap[ll]}"/> / #{var.maxMarkMap[ll]}</center>
+					           		</p:outputPanel>
+				           			<center><p:outputLabel rendered="#{ll.contains('-noexam')}" style="font-size:10px" value="#{var.marksMap[ll]}" /></center>
+								</p:columns>
+								
+								<f:facet name="footer">
+									<p:commandButton value="Submit" update=":form1,:updateForm,:form3" action="#{fillPreSessionMarks.submitScholastic}"></p:commandButton>
+								</f:facet>
+				        		</p:dataTable>  
+				        		
+				        		<p:dataTable rendered="#{fillPreSessionMarks.showCoscholastic}" style="width:100%;border-collapse:collapse;font-size:9px" border="1" value="#{fillPreSessionMarks.allInfo.markListCoscholastic}" var="var">
+								<p:columnGroup type="header">
+						            <p:row>
+						            	 <p:column rowspan="1" headerText="SUBJECT" />
+						                 <ui:repeat value="#{fillPreSessionMarks.allInfo.termListForCoscholastic}" var="term">
+					                    	<p:column colspan="1" headerText="#{term.termName}" />
+					               	 	 </ui:repeat>
+						            </p:row>
+						        </p:columnGroup>
+							        
+					         	<p:column>
+				           			 <p:outputLabel style="font-size:7.5px"  value="#{var.subjectName}"></p:outputLabel>
+				           		</p:column>
+					            
+					            <p:columns value="#{fillPreSessionMarks.allInfo.coscholasticColumnsList}" var="ll">
+					            	<center><p:inputText maxlength="2" rendered="#{var.marksMap[ll] ne '-1'}" value="#{var.marksMap[ll]}">
+					            		<p:keyFilter regEx="/^(?:[A-E+])$/" />
+					            	</p:inputText></center>
+					            </p:columns>
+					            
+					            <f:facet name="footer">
+									<p:commandButton value="Submit" update=":form1,:updateForm,:form3" action="#{fillPreSessionMarks.submitCoScholastic}"></p:commandButton>
+								</f:facet>
+					         </p:dataTable>
+						         
+					         <p:dataTable rendered="#{fillPreSessionMarks.showExtra}" style="width:100%;border-collapse:collapse;font-size:9px" border="1" value="#{fillPreSessionMarks.allInfo.footerList}" var="var">
+								<p:columnGroup type="header">
+						            <p:row>
+						            	 <p:column rowspan="1" headerText="SUBJECT" />
+						                 <ui:repeat value="#{fillPreSessionMarks.allInfo.termListForCoscholastic}" var="term">
+					                    	<p:column colspan="1" headerText="#{term.termName}" />
+					               	 	 </ui:repeat>
+						            </p:row>
+						        </p:columnGroup>
+						        
+					         	<p:column>
+				           			 <p:outputLabel rendered="#{var.subjectId ne 'id'}" style="font-size:7.5px"  value="#{var.subjectName}"></p:outputLabel>
+				           		</p:column>
+					            
+					            <p:columns value="#{fillPreSessionMarks.allInfo.footerColumnsList}" var="ll">
+					            	<center><p:inputText rendered="#{var.subjectId ne 'id'}" value="#{var.marksMap[ll]}">
+					            	</p:inputText></center>
+					            </p:columns>
+					            
+					            <f:facet name="footer">
+									<p:commandButton value="Submit" update=":form1,:updateForm,:form3" action="#{fillPreSessionMarks.submitExtraField}"></p:commandButton>
+								</f:facet>
+					         </p:dataTable>
+						</p:panel>
+					</h:form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+       
+    </ui:define>
+
+</ui:composition>

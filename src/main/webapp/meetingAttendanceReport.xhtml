@@ -1,0 +1,161 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Online Attendance</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form2" enctype="multipart/form-data">
+							<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+							<p:panel header="Online Attendance ">
+
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel for="@next" style="color:red"
+										value="Select Class"></p:outputLabel>
+									<p:selectOneMenu style="width:250px"
+										value="#{meetingAttendanceReport.selectedCLassSection}"
+										required="true" requiredMessage="Please select a class">
+										<f:selectItem itemLabel="select here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{meetingAttendanceReport.classSection}"></f:selectItems>
+
+										<p:ajax event="itemSelect" update=":form2"
+											listener="#{meetingAttendanceReport.allSections}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel for="@next" style="color:red"
+										value="Select Section"></p:outputLabel>
+									<p:selectOneMenu id="sectionid"
+										value="#{meetingAttendanceReport.selectedSection}"
+										required="true" requiredMessage="Please select a section">
+										<f:selectItem itemLabel="select here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{meetingAttendanceReport.sectionList}"></f:selectItems>
+										<p:ajax event="itemSelect" update=":form2"
+											listener="#{meetingAttendanceReport.allSubjects}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel for="@next" style="color:red"
+										value="Select Subject"></p:outputLabel>
+									<p:selectOneMenu id="subjectid"
+										value="#{meetingAttendanceReport.subject}" required="true"
+										requiredMessage="Please select a Subject" filter="true">
+										<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+										<f:selectItems value="#{meetingAttendanceReport.subjectList}"></f:selectItems>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Search Date"></p:outputLabel>
+									<p:calendar pattern="dd/MM/yyyy"
+										value="#{meetingAttendanceReport.addDate}" required="true"
+										requiredMessage="please Select Date"
+										beforeShowDay="disableSunday" readonlyInput="true"
+										maxdate="new Date();"></p:calendar>
+								</p:panelGrid>
+								<br />
+								<p:separator />
+								<center>
+
+									<p:panelGrid
+										columns="#{meetingAttendanceReport.list.size() gt 0 ? '2' : '1'}"
+										layout="grid" styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+
+										<p:commandButton value="Search"
+											actionListener="#{meetingAttendanceReport.search}"
+											update=":form2" icon="ui-icon-search" styleClass="butwid">
+										</p:commandButton>
+
+										<p:commandButton value="PDF" styleClass="butwid"
+											icon="fa fa-file-pdf-o" ajax="false" process="@this"
+											actionListener="#{meetingAttendanceReport.exportPdf}"
+											rendered="#{meetingAttendanceReport.list.size() gt 0}">
+											<p:fileDownload value="#{meetingAttendanceReport.file}" />
+										</p:commandButton>
+									</p:panelGrid>
+								</center>
+								<p:separator />
+								<br />
+								<p:dataTable stickyHeader="true" id="table"
+									value="#{meetingAttendanceReport.list}" var="var"
+									rowIndexVar="cnt" reflow="true">
+
+									<f:facet name="header">
+										<p:outputLabel value="#{meetingAttendanceReport.header}"></p:outputLabel>
+									</f:facet>
+									<p:column headerText="S.NO.">
+										<f:facet name="header">
+											<p:outputLabel value="S.NO."></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{cnt+1}"></p:outputLabel>
+
+									</p:column>
+									<p:column headerText="Student Name">
+										<f:facet name="header">
+											<p:outputLabel value="Student Name"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.name}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Father Name">
+										<f:facet name="header">
+											<p:outputLabel value="Father Name"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.fatherName}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Contact No.">
+										<f:facet name="header">
+											<p:outputLabel value="Contact No."></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.contactNo}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Class">
+										<f:facet name="header">
+											<p:outputLabel value="Class"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.className}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Class Start Time">
+										<f:facet name="header">
+											<p:outputLabel value="Class Start time"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.classStartTimeStr}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Class End Time">
+										<f:facet name="header">
+											<p:outputLabel value="Class End time"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.classEndTimeStr}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Class Joining Time">
+										<f:facet name="header">
+											<p:outputLabel value="Class Joining time"></p:outputLabel>
+										</f:facet>
+										<p:outputLabel value="#{var.joinDateStr}"></p:outputLabel>
+									</p:column>
+								</p:dataTable>
+							</p:panel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

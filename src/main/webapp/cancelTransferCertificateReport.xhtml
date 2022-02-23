@@ -1,0 +1,63 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Cancelled TC</ui:define>
+
+    <ui:define name="content">
+       
+            <div class="ui-fluid">
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <div class="card card-w-title">
+                             	<h:form  id="form" >
+				<p:panel header="All Cancelled TC">
+					<p:dataTable var="var" value="#{cancelTc.allStudentTCList}" reflow="true">
+						<p:column headerText="S.No." style="width:40px">
+							<p:outputLabel value="#{var.sNo}"></p:outputLabel>
+						</p:column>
+						
+						<p:column headerText="Tc Number" style="width:100px">
+							<p:outputLabel value="#{var.tcNumber}"></p:outputLabel>
+						</p:column>
+						
+						<p:column headerText="Student Name">
+							<p:outputLabel value="#{var.studentName}"></p:outputLabel>
+						</p:column>
+						
+						<p:column headerText="Father Name">
+							<p:outputLabel value="#{var.fatherName}"></p:outputLabel>
+						</p:column>
+						
+						<p:column headerText="Admission Class">
+							<p:outputLabel value="#{var.addClass}"></p:outputLabel>
+						</p:column>
+						
+						<p:column headerText="Issue Date">
+							<p:outputLabel value="#{var.issueDateStr}"></p:outputLabel>
+						</p:column>
+						
+						<p:column headerText="Last Class">
+							<p:outputLabel value="#{var.lastClass}"></p:outputLabel>
+						</p:column>
+						
+							<p:column headerText="Cancelled Date">
+							<p:outputLabel value="#{var.cancelDateStr}"></p:outputLabel>
+						</p:column>
+					</p:dataTable>
+				</p:panel>
+			</h:form>
+			  
+                             
+                           
+                        </div>
+                    </div>
+                </div>
+            </div>
+       
+    </ui:define>
+
+</ui:composition>

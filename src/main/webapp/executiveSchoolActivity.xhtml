@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+<f:loadBundle var="addClassVar" basename="myProperties" />
+<f:view contentType="text/html">
+	<h:head>
+		<title>Activity Report</title>
+		<f:facet name="first">
+			<meta content='text/html; charset=UTF-8' http-equiv="Content-Type" />
+			<meta http-equiv="X-UA-Compatible" content="EmulateIE8" />
+
+		</f:facet>
+
+		<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css"></link>
+		<link rel="stylesheet"
+			href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"></link>
+		<link rel="stylesheet"
+			href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css"></link>
+		<link rel="stylesheet" href="dist/css/AdminLTE.min.css"></link>
+		<link rel="stylesheet" href="dist/css/skins/all-skins.min.css"></link>
+		<link rel="stylesheet" type="text/css" href="css/style.css" />
+	</h:head>
+
+	<h:body>
+
+		<style>
+.ui-datatable thead th {
+	background-color: #f0f8ff !important;
+}
+</style>
+
+		<h:form id="form">
+			<p:growl>
+				<p:autoUpdate />
+			</p:growl>
+			<h1>School Activity Report</h1>
+			<p:panel header="School Activity Report">
+
+				<center>
+					<p:panelGrid columns="1">
+
+						<p:selectOneMenu value="#{executiveSchoolActivity.schid}"
+							filter="true" required="true"
+							requiredMessage="Please select school!">
+
+							<f:selectItem itemLabel="Select School" itemValue=""></f:selectItem>
+							<f:selectItem itemLabel="All Schools" itemValue="all"></f:selectItem>
+							<f:selectItems value="#{executiveSchoolActivity.list}" var="var"
+								itemLabel="#{var.aliasName}" itemValue="#{var.schid}"></f:selectItems>
+							<p:ajax listener="#{executiveSchoolActivity.search}"
+								update=":form"></p:ajax>
+						</p:selectOneMenu>
+
+					</p:panelGrid>c
+				</center>
+				<p:commandLink immediate="true"
+					style="float:right;color:blue;font-size: 14px !important;"
+					value="Log Out" action="ChalkboxLogin.xhtml?faces-redirect=true"></p:commandLink>
+
+				<br></br>
+				<br></br>
+				<p:dataTable id="up" value="#{executiveSchoolActivity.activityList}"
+					var="var" rowIndexVar="index" style="font-size: 14px;">
+
+					<p:column headerText="S.No" style="font-size: 14px;">
+						<f:facet name="header">
+							<p:outputLabel value="S.No" style="font-size: 14px;"></p:outputLabel>
+						</f:facet>
+						<h:outputText value="#{index+1}"></h:outputText>
+					</p:column>
+
+					<p:column headerText="School Name" style="font-size: 14px;">
+						<f:facet name="header">
+							<p:outputLabel value="School Name" style="font-size: 14px;"></p:outputLabel>
+						</f:facet>
+						<h:outputText value="#{var.schoolName}">
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="Attendance" style="font-size: 14px;">
+						<f:facet name="header">
+							<p:outputLabel value="Attendance" style="font-size: 14px;"></p:outputLabel>
+						</f:facet>
+						<p:graphicImage value="#{var.attendance}" height='15' width='15'></p:graphicImage>
+					</p:column>
+
+					<p:column headerText="Fees" style="font-size: 14px;">
+						<f:facet name="header">
+							<p:outputLabel value="Fees" style="font-size: 14px;"></p:outputLabel>
+						</f:facet>
+						<p:graphicImage value="#{var.fees}" height='15' width='15'></p:graphicImage>
+					</p:column>
+
+					<p:column headerText="Communication" style="font-size: 14px;">
+						<f:facet name="header">
+							<p:outputLabel value="Communication" style="font-size: 14px;"></p:outputLabel>
+						</f:facet>
+						<p:graphicImage value="#{var.communication}" height='15'
+							width='15'></p:graphicImage>
+					</p:column>
+
+					<p:column headerText="News" style="font-size: 14px;">
+						<f:facet name="header">
+							<p:outputLabel value="News" style="font-size: 14px;"></p:outputLabel>
+						</f:facet>
+						<p:graphicImage value="#{var.news}" height='15' width='15'></p:graphicImage>
+					</p:column>
+
+					<p:column headerText="Gallery" style="font-size: 14px;">
+						<f:facet name="header">
+							<p:outputLabel value="Gallery" style="font-size: 14px;"></p:outputLabel>
+						</f:facet>
+						<p:graphicImage value="#{var.gallery}" height='15' width='15'></p:graphicImage>
+					</p:column>
+
+					<p:column headerText="Homework" style="font-size: 14px;">
+						<f:facet name="header">
+							<p:outputLabel value="Homework" style="font-size: 14px;"></p:outputLabel>
+						</f:facet>
+						<p:graphicImage value="#{var.work}" height='15' width='15'></p:graphicImage>
+					</p:column>
+
+					<p:column headerText="Login" style="font-size: 14px;">
+						<f:facet name="header">
+							<p:outputLabel value="Login" style="font-size: 14px;"></p:outputLabel>
+						</f:facet>
+						<p:graphicImage value="#{var.login}" height='15' width='15'></p:graphicImage>
+					</p:column>
+
+					<p:column headerText="Login" style="font-size: 14px;">
+						<p:commandButton action="#{executiveSchoolActivity.serviceGo}"
+							icon="ui-icon-power">
+							<f:setPropertyActionListener value="#{var}"
+								target="#{executiveSchoolActivity.selected}"></f:setPropertyActionListener>
+						</p:commandButton>
+					</p:column>
+
+				</p:dataTable>
+
+			</p:panel>
+
+		</h:form>
+
+		<p:ajaxStatus onstart="PF('statusDialog').show()"
+			onsuccess="PF('statusDialog').hide()" />
+		<p:dialog modal="true" widgetVar="statusDialog" resizable="false"
+			showHeader="false">
+			<center>
+				<!-- <i class="fa fa-circle-o-notch fa-5x fa-spin ajax-loader"></i> -->
+				<p:graphicImage value="loader2.gif" height="100" width="100" />
+			</center>
+			<center>
+				<h3>Please Wait...</h3>
+			</center>
+		</p:dialog>
+	</h:body>
+</f:view>
+</html>

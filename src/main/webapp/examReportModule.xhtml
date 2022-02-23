@@ -1,0 +1,187 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">All Exams Report</ui:define>
+
+	<ui:define name="content">
+
+<style>
+.ui-datatable .ui-datatable-scrollable-body,
+	.ui-datatable-scrollable-header {
+	width: 100% !important;
+}
+
+.ui-datatable-scrollable .ui-datatable-scrollable-header,
+	.ui-datatable-scrollable .ui-datatable-scrollable-footer {
+	position: sticky !important;
+	top: 59px !important;
+	z-index: 9 !important;
+}
+body .ui-datatable thead th,
+body .ui-datatable tbody td {
+	width:var(--w) !important;
+}
+
+</style>
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form" enctype="multipart/form-data">
+							<p:panel header="All Exams Report">
+								<p:growl showDetail="true"  id = "grl" autoUpdate="true"></p:growl>
+								<p:dataTable scrollable="true" scrollWidth="100%" id="dttt"
+									value="#{allexamreportbean.examList}" var="var" reflow="true">
+
+									<p:columnGroup type="header">
+
+										<p:row>
+											<p:column style="--w:50px;" headerText="S.No"></p:column>
+											<p:column style="--w:120px;" sortBy="#{var.examName}"
+										filterBy="#{var.examName}" headerText="Exam Name"></p:column>
+											<p:column style="--w:120px;" headerText="Class Name"></p:column>
+											<p:column style="--w:120px;" headerText="Time (IN MIN)"></p:column>
+											<p:column style="--w:120px;" headerText="Positive Marks"></p:column>
+											<p:column style="--w:120px;" headerText="Negative Marks"></p:column>
+											<p:column style="--w:120px;" headerText="Status"></p:column>
+											<p:column style="--w:120px;" headerText="Action"></p:column>
+										</p:row>
+
+									</p:columnGroup>
+
+									<p:column headerText="S.No">
+										<p:outputLabel value="#{var.srNo}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Exam Name">
+										<p:outputLabel value="#{var.examName}"></p:outputLabel>
+									</p:column>
+
+
+									<p:column headerText="Class Name">
+										<p:outputLabel value="#{var.className}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Time (IN MIN)">
+									<p:outputLabel value="#{var.time} Min"></p:outputLabel>
+									</p:column>
+											<p:column headerText="Positive Marks">
+											<p:outputLabel value="#{var.posiMarks}"></p:outputLabel>
+											</p:column>
+											<p:column headerText="Negative Marks">
+											<p:outputLabel value="#{var.negMarks}"></p:outputLabel>
+											</p:column>
+											<p:column headerText="Status">
+											<p:inputSwitch value="#{var.statusOn}" offLabel="Close" onLabel="Active">
+												<p:ajax listener="#{allexamreportbean.changeStatus(var)}" update=":form:grl">
+												</p:ajax>
+											</p:inputSwitch>
+											</p:column>
+											<p:column exportable="false"
+										headerText="Action"
+										style="width:100px;text-align:center">
+										<p:panelGrid columns="1"
+											styleClass="ui-panelgrid-blank form-group">
+											<p:commandButton update=":editForm" 
+												oncomplete="PF('editDialog').show();"
+												action="#{allexamreportbean.editDetails}" icon="ui-icon-pencil">
+												<f:setPropertyActionListener
+													target="#{allexamreportbean.selectedExam}" value="#{var}"></f:setPropertyActionListener>
+											</p:commandButton>
+
+											<p:commandButton update=":form" oncomplete="PF('dlg').show();"
+											icon="ui-icon-trash">
+											<f:setPropertyActionListener
+												target="#{allexamreportbean.selectedExam}" value="#{var}"></f:setPropertyActionListener>
+										</p:commandButton>
+										</p:panelGrid>
+									</p:column>
+								</p:dataTable>
+								<p:dialog resizable="false" widgetVar="dlg"
+									header="Do you really want to delete this subject"
+									showEffect="fade" hideEffect="explode" modal="true">
+									<div class="ui-g form-group">
+										<p:panelGrid columns="2"
+											styleClass="ui-panelgrid-blank form-group"
+											style="border:0px none; background-color:transparent;">
+
+											<p:commandButton 
+												action="#{allexamreportbean.deleteExam}" value="Yes" update=":form">
+												</p:commandButton>
+											<p:commandButton value="No" update=":form"
+												oncomplete="PF('dlg').hide();"></p:commandButton>
+										</p:panelGrid>
+									</div>
+								</p:dialog>
+							</p:panel>
+						</h:form>
+						<h:form id="editForm">
+							<p:dialog style="height:500px;" resizable="false"
+								widgetVar="editDialog" header="Edit Exam" showEffect="fade"
+								hideEffect="explode" modal="true">
+								<div class="ui-g form-group">
+									<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel for="@next" style="color:red"  value="Select Class"></p:outputLabel>
+									<p:selectOneMenu style="min-width: 100%;" id="classId" value="#{allexamreportbean.selectedClass}"
+										filter="true" required="true"
+										requiredMessage="#{addExamVar.selectClassValidation}">
+										<f:selectItem itemLabel="#{addExamVar.selectHereLabel}"
+											itemValue=""></f:selectItem>
+										<f:selectItems value="#{allexamreportbean.classList}"></f:selectItems>
+									</p:selectOneMenu>
+									
+									<p:outputLabel for="@next" style="color:red"  value="Select Language"></p:outputLabel>
+									<p:selectOneMenu id="languageId"
+										 required="true" value="#{allexamreportbean.selectedLanguage}"
+										requiredMessage="Select Language for adding exam.">
+										<f:selectItem itemLabel="Select Language" itemValue=""></f:selectItem>
+										<f:selectItem itemLabel="Hindi" itemValue="hindi"></f:selectItem>
+										<f:selectItem itemLabel="English" itemValue="english" ></f:selectItem>
+										<f:selectItem itemLabel="Both" itemValue="both" ></f:selectItem>
+									</p:selectOneMenu>
+									
+									
+									<p:outputLabel for="@next" style="color:red"  value="Exam Name"></p:outputLabel>
+									<p:inputText required="true" value="#{allexamreportbean.examName}" requiredMessage="Exam name needed for add exam"></p:inputText>
+									
+									<p:outputLabel for="@next" style="color:red"  value="Time (In Minutes)"></p:outputLabel>
+									<p:inputNumber  required="true" value="#{allexamreportbean.time}" requiredMessage="Time for Exam is required" minValue="0" maxValue="999"></p:inputNumber>
+									
+									<p:outputLabel for="@next" style="color:red"  value="Positive Marks(Per Question)"></p:outputLabel>
+									<p:inputNumber  required="true" value="#{allexamreportbean.posiMarks}" requiredMessage="Positive marks is required" minValue="0" maxValue="999"></p:inputNumber>
+									
+									<p:outputLabel for="@next" style="color:red"  value="Negative Marks(Per Question)"></p:outputLabel>
+									<p:inputNumber required="true" value="#{allexamreportbean.negMarks}" requiredMessage="Negative marks is required" minValue="0" maxValue="999"></p:inputNumber>
+									
+									<p:outputLabel for="@next" style="color:red"  value="Exam Date"></p:outputLabel>
+									<p:calendar  navigator="true" value="#{allexamreportbean.examDate}" mindate="new Date()"
+										pattern="dd/MM/yyyy" rendered="true" required="true"
+										requiredMessage="Please Select Date"></p:calendar>
+									
+									<p:outputLabel for="@next" style="color:red"  value="Exam Time"></p:outputLabel>
+									<p:calendar id="time" required="true" value="#{allexamreportbean.examStartingTime}" requiredMessage="Time for exam is required!" pattern="HH:mm" timeOnly="true"/>
+									
+									<p:commandButton update=":form" action="#{allexamreportbean.editExam}"
+										value="Edit exam" ></p:commandButton>
+									</p:panelGrid>
+								</div>
+							</p:dialog>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

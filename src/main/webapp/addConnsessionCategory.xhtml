@@ -1,0 +1,71 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Concession Category</ui:define>
+
+	<ui:define name="content">
+		<h:form id="form">
+			<div class="ui-fluid">
+				<div class="ui-g">
+					<div class="ui-g-12">
+						<div class="card card-w-title">
+
+							<h1>Concession Management</h1>
+
+							<p:panel header="Add Concession Category">
+
+
+								<p:messages closable="true" autoUpdate="true"></p:messages>
+
+								<p:panelGrid columns="2"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel for="@next" style="color:red"  value="Category Name"></p:outputLabel>
+									<p:inputText value="#{addconsessionCategory.category}"
+										required="true" requiredMessage="Please Enter Fees Name" id="secnm" onchange="trimFunc(this.value,'Please Section Name',this.id)" validatorMessage="Please Enter Correct value">
+									  <f:validateRegex pattern="#{regexVar.regex}"></f:validateRegex>
+									</p:inputText>
+
+
+									<p:commandButton value="Add Concession Category" styleClass="butwid-2" icon="fa fa-plus"
+										actionListener="#{addconsessionCategory.submit}"
+										update=":form"></p:commandButton>
+
+								</p:panelGrid>
+
+							</p:panel>
+						</div>
+						<div class="card card-w-title">
+							<p:panel header="View Concession Category">
+
+								<p:dataTable reflow="true" value="#{addconsessionCategory.list}"
+									var="var">
+
+
+									<p:column headerText="Concession Category Name">
+										<p:outputLabel value="#{var.category}"></p:outputLabel>
+									</p:column>
+
+
+
+								</p:dataTable>
+
+
+
+							</p:panel>
+
+
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</h:form>
+	</ui:define>
+
+</ui:composition>

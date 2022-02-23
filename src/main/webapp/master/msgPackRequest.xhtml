@@ -1,0 +1,85 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/masterTemplate.xhtml"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	<f:loadBundle var="addClassVar" basename="myProperties" />
+
+	<ui:define name="title">Message Pack Request</ui:define>
+
+	<ui:define name="content">
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						 <h:form id="form" >
+						 
+						 
+						 <p:panel header="Message Pack Request">
+						 <p:growl showDetail="true"  autoUpdate="true"></p:growl>
+						 
+						 <p:dataTable value="#{msgPackRequest.packList}" var="info">
+						 
+						 <p:column headerText="School Name">
+						 <p:outputLabel value="#{info.schoolName}"></p:outputLabel>
+						 </p:column>
+						 
+						 <p:column headerText="Pack Name">
+						 <p:outputLabel value="#{info.packName}"></p:outputLabel>
+						 </p:column>
+						 <p:column headerText="Quantity">
+						 <p:outputLabel value="#{info.quantity}"></p:outputLabel>
+						 </p:column>
+						 
+						 <p:column headerText="Rate">
+						 <p:outputLabel value="#{info.rate}"></p:outputLabel>
+						 </p:column>
+						 
+						 <p:column headerText="Amount">
+						 <p:outputLabel value="#{info.amount}"></p:outputLabel>
+						 </p:column>
+						 
+						 <p:column headerText="Tax">
+						 <p:outputLabel value="#{info.tax}"></p:outputLabel>
+						 </p:column>
+						 
+						 <p:column headerText="Total Amount">
+						 <p:outputLabel value="#{info.totalAmount}"></p:outputLabel>
+						 </p:column>
+						 
+						 
+						 <p:column headerText="Date">
+						 <p:outputLabel value="#{info.date}"></p:outputLabel>
+						 </p:column>
+						 
+						 <p:column headerText="Approve">
+						 <p:commandButton value="Approve" update=":form" action="#{msgPackRequest.approved}">
+						 <p:confirm header="Confirmation" message="Are you sure to approv?" icon="ui-icon-alert" />
+						 <f:setPropertyActionListener value="#{info}" target="#{msgPackRequest.selected}"></f:setPropertyActionListener>
+						 </p:commandButton>
+						 </p:column>
+						 
+						 <p:column headerText="Deny">
+						  <p:commandButton value="Deny" update=":form" action="#{msgPackRequest.denied}">
+						 <p:confirm header="Confirmation" message="Are you sure to deny?" icon="ui-icon-alert" />
+						 <f:setPropertyActionListener value="#{info}" target="#{msgPackRequest.selected}"></f:setPropertyActionListener>
+						 </p:commandButton>
+						 </p:column>
+						 
+						</p:dataTable>
+				      </p:panel> 
+				      <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+				       <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+				       <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+				      </p:confirmDialog>     
+					  </h:form>
+						
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

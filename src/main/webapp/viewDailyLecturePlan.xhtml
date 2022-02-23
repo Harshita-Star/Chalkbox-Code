@@ -1,0 +1,223 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+	<ui:define name="title">Daily Lesson Plan</ui:define>
+
+	<ui:define name="content">
+
+		<div class="ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<h:form id="form" enctype="multipart/form-data">
+							<p:growl showDetail="true"  autoUpdate="true"></p:growl>
+							<p:panel header="View / Edit / Delete Daily Lesson Plan">
+
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank form-group"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel value="Class :" for="@next" style="color:red"></p:outputLabel>
+									<p:selectOneMenu value="#{viewDailyLecPlan.selectedClass}"
+										required="true" filter="true"
+										requiredMessage="Please Select A Class">
+										<f:selectItem itemLabel="Select" itemValue=""></f:selectItem>
+										<f:selectItems value="#{viewDailyLecPlan.classList}"></f:selectItems>
+										<p:ajax update="showSection"
+											listener="#{viewDailyLecPlan.allSection}"></p:ajax>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Section :" for="@next" style="color:red"></p:outputLabel>
+									<p:selectOneMenu id="showSection" filter="true"
+										value="#{viewDailyLecPlan.selectedSection}" required="true"
+										requiredMessage="Please select a section">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{viewDailyLecPlan.sectionList}"></f:selectItems>
+										<p:ajax listener="#{viewDailyLecPlan.allSubjects}"
+											update="subjectId"></p:ajax>
+									</p:selectOneMenu>
+
+
+									<p:outputLabel value="Subject : " for="@next" style="color:red"></p:outputLabel>
+									<p:selectOneMenu id="subjectId" filter="true"
+										value="#{viewDailyLecPlan.subject}" required="true"
+										requiredMessage="Please select subject.">
+										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+										<f:selectItems value="#{viewDailyLecPlan.subjectList}"></f:selectItems>
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Start Date"></p:outputLabel>
+									<p:calendar effect="fold" value="#{viewDailyLecPlan.startDate}"
+										pattern="dd/MM/yyyy" navigator="true" yearRange="c-30:c+30">
+										<p:ajax></p:ajax>
+									</p:calendar>
+
+									<p:outputLabel value="End Date "></p:outputLabel>
+									<p:calendar effect="fold" value="#{viewDailyLecPlan.endDate}"
+										pattern="dd/MM/yyyy" navigator="true" yearRange="c-30:c+30">
+										<p:ajax></p:ajax>
+									</p:calendar>
+
+									<p:commandButton value="Search"
+										actionListener="#{viewDailyLecPlan.searchData}" update=":form"></p:commandButton>
+								</p:panelGrid>
+							</p:panel>
+							<p:panel rendered="#{viewDailyLecPlan.show}" header="Lesson Plan">
+
+								<p:dataTable value="#{viewDailyLecPlan.planList}" var="var"
+									selection="#{viewDailyLecPlan.selPlanList}"
+									rowKey="#{var.lectureNo}">
+
+									<p:column style="width:50px" headerText="Select"
+										selectionMode="multiple"></p:column>
+
+									<p:column headerText="Date" style="width:80px">
+										<p:outputLabel value="#{var.addDateStr}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Lecture No" style="width:80px">
+										<p:outputLabel value="#{var.lectureNo}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Lesson No" style="width:100px">
+										<p:outputLabel value="#{var.unitNo}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Lesson Name" style="width:200px">
+										<p:outputLabel value="#{var.unitName}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Description">
+										<p:outputLabel value="#{var.description}"></p:outputLabel>
+									</p:column>
+
+									<p:column headerText="Edit" style="width:80px">
+										<p:commandButton update=":editForm"
+											oncomplete="PF('editDialog').show();" icon="ui-icon-pencil"
+											action="#{viewDailyLecPlan.editDetails}">
+											<f:setPropertyActionListener
+												target="#{viewDailyLecPlan.selLecture}" value="#{var}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+
+									<p:column headerText="Attachment" style="width:80px">
+										<p:commandButton disabled="#{var.imagePath eq 'NA'}"
+											update=":editForm" action="#{viewDailyLecPlan.viewDetails}"
+											icon="fa fa-fw fa-paperclip">
+											<f:setPropertyActionListener
+												target="#{viewDailyLecPlan.selLecture}" value="#{var}"></f:setPropertyActionListener>
+										</p:commandButton>
+									</p:column>
+
+									<f:facet name="footer">
+										<p:commandButton update=":form" value="Delete"
+											action="#{viewDailyLecPlan.deleteLecturePlan}">
+											<p:confirm header="Confirmation"
+												message="Are You Sure To Delete...?" icon="ui-icon-alert" />
+										</p:commandButton>
+									</f:facet>
+								</p:dataTable>
+							</p:panel>
+						</h:form>
+
+						<h:form id="editForm" enctype="multipart/form-data">
+							<p:dialog resizable="false" widgetVar="editDialog"
+								header="Edit Details (Allowed file type are :- image,document,mp4,avi,flv)" showEffect="fade" hideEffect="explode"
+								modal="true">
+								<div class="ui-g form-group">
+									<p:panelGrid columns="2"
+										styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+
+										<p:outputLabel value="Lesson No. " for="@next"
+											style="color:red"></p:outputLabel>
+										<p:inputText value="#{viewDailyLecPlan.lessonNo}"
+											required="true" requiredMessage="Please Select Lesson No"></p:inputText>
+
+										<p:outputLabel value="Lesson Name " for="@next"
+											style="color:red"></p:outputLabel>
+										<p:inputText value="#{viewDailyLecPlan.lessonName}"
+											required="true" requiredMessage="Please Select Lesson Name"></p:inputText>
+
+										<p:outputLabel value="Description " for="@next"
+											style="color:red"></p:outputLabel>
+										<p:column headerText="Description" style="width:230px;"
+											required="true" requiredMessage="Please Enter Description">
+											<p:inputTextarea id="des" rows="3" cols="50"
+												autoResize="false" value="#{viewDailyLecPlan.description}"></p:inputTextarea>
+										</p:column>
+
+										<p:outputLabel value="Upload Attachment (If Any)"></p:outputLabel>
+										<p:fileUpload value="#{viewDailyLecPlan.imageFile}"
+											mode="simple"
+											allowTypes="/(\.|\/)(gif|jpg|jpeg|png|xls|xlsx|doc|docx|txt|pdf|mp4|avi|flv)$/" />
+
+										<p:commandButton ajax="false" update=":editForm,:form"
+											action="#{viewDailyLecPlan.updateNow}" value="Update"></p:commandButton>
+									</p:panelGrid>
+								</div>
+							</p:dialog>
+						</h:form>
+
+						<h:form id="form1" enctype="multipart/form-data">
+							<p:dialog resizable="false" modal="true" widgetVar="viewDialog"
+								header="Image / Document" closeOnEscape="true">
+								<p:panelGrid style="margin:auto" columns="3">
+									<p:lightBox styleClass="imagebox" id="lighbox1">
+										<h:outputLink value="#{viewDailyLecPlan.oldFilePath}">
+											<p:graphicImage height="150px" width="150px" id="Image1"
+												url="#{viewDailyLecPlan.oldFilePath}"></p:graphicImage>
+										</h:outputLink>
+									</p:lightBox>
+								</p:panelGrid>
+							</p:dialog>
+						</h:form>
+
+
+						<h:form id="form2" enctype="multipart/form-data">
+							<p:dialog position="top" resizable="false" modal="true"
+								widgetVar="viewDialog1" header="Image / Document"
+								closeOnEscape="true">
+								<p:panelGrid style="margin:auto" columns="1">
+									<object type="application/pdf"
+										data="#{viewDailyLecPlan.oldFilePath}?pfdrid_c=true"
+										height="500px" width="1100px"> </object>
+								</p:panelGrid>
+							</p:dialog>
+						</h:form>
+
+						<h:form id="form3" enctype="multipart/form-data">
+							<p:dialog position="center" resizable="false" modal="true"
+								widgetVar="downloadDialog1" header="Image / Document"
+								closeOnEscape="true">
+								<p:panelGrid style="margin:auto" columns="1">
+									<p:outputLabel
+										value="This file is a document file.Please download to view."></p:outputLabel>
+									<p:commandButton ajax="false"
+										actionListener="#{viewDailyLecPlan.backUpMethod}"
+										value="Download" process="@this" icon="ui-icon-arrowthick-1-s">
+										<p:fileDownload value="#{viewDailyLecPlan.file}" />
+									</p:commandButton>
+								</p:panelGrid>
+							</p:dialog>
+						</h:form>
+
+						<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+							<p:commandButton style="margin-left:30px" value="Yes"
+								type="button" styleClass="ui-confirmdialog-yes"
+								icon="ui-icon-check" />
+							<p:commandButton style="margin-left:50px" value="No"
+								type="button" styleClass="ui-confirmdialog-no"
+								icon="ui-icon-close" />
+						</p:confirmDialog>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</ui:define>
+
+</ui:composition>
