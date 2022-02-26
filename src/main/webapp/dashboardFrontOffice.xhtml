@@ -53,63 +53,69 @@
     </ui:define>
 
 	<ui:define name="content">
-		
-		<div class="dashboard">
-			<h:form>
-				<div class="ui-g overview-boxes">
-
-					<div class="ui-g-12 ui-md-6 ui-lg-3">
-					  <a href="viewEnquiryForBlm.xhtml">
-							<div class="ui-g overview-box overview-box-1">
-								<div class="overview-box-title">
-									<i class="fa fa-users" /> <span>Total Enquiry</span>
-								</div>
-								<div class="overview-box-count">#{dashboardFrontOffice.totalEnquiry}</div>
-								<div class="overview-box-stats"></div>
-							</div>
-						</a>	
+				<div class="p-grid layout-dashboard">
+			<div class="p-col-12 p-md-6 p-lg-3">
+			<a href="viewEnquiryForBlm.xhtml">
+				<div class="overview-box messages">
+					<div class="box-image">
+						<p:graphicImage name="dashboardImages/persons.png"
+							library="pandora-layout" />
+					</div>
+					<div class="box-text">
+						<h4>Total Enquiry</h4>
+						<span class="span-text">#{dashboardFrontOffice.totalEnquiry}</span>
 					</div>
 
-					<div class="ui-g-12 ui-md-6 ui-lg-3">
-					  <a href="viewEnquiryForBlm.xhtml">
-							<div class="ui-g overview-box overview-box-2">
-								<div class="overview-box-title">
-									<i class="fa fa-check-circle" /> <span>Accepted Enquiry</span>
-								</div>
-								<div class="overview-box-count">#{dashboardFrontOffice.accepted}</div>
-								<div class="overview-box-stats"></div>
-							</div>
-						</a>
-					</div>
-
-					<div class="ui-g-12 ui-md-6 ui-lg-3">
-					 <a href="viewEnquiryForBlm.xhtml">
-							<div class="ui-g overview-box overview-box-3">
-								<div class="overview-box-title">
-									<i class="fa fa-calendar" /> <span>Pending Enquiry</span>
-								</div>
-								<div class="overview-box-count">#{dashboardFrontOffice.pending}</div>
-								<div class="overview-box-stats"></div>
-							</div>
-						</a>	
-					</div>
-
-					<div class="ui-g-12 ui-md-6 ui-lg-3">
-						<a href="newRegistrationReport.xhtml">
-						<div class="ui-g overview-box overview-box-4">
-							<div class="overview-box-title">
-								<i class="fa fa-folder" /> <span>Total New Admission</span>
-							</div>
-							<div class="overview-box-count">#{dashboardFrontOffice.totalNewAdmission}</div>
-							<div class="overview-box-stats"></div>
-						</div>
-						</a>
-					</div>
-					
-					
 				</div>
-			</h:form>
+				</a>
+			</div>
+			<div class="p-col-12 p-md-6 p-lg-3">
+			<a href="viewEnquiryForBlm.xhtml">
+				<div class="overview-box logins">
+					<div class="box-image">
+						<p:graphicImage name="dashboardImages/accept.png"
+							library="pandora-layout" />
+					</div>
+					<div class="box-text">
+						<h4>Accepted Enquiry</h4>
+						<span class="span-text">#{dashboardFrontOffice.accepted}</span>
+					</div>
 
+				</div>
+				</a>
+			</div>
+			<div class="p-col-12 p-md-6 p-lg-3">
+				<a href="viewEnquiryForBlm.xhtml">
+				<div class="overview-box files">
+					<div class="box-image">
+						<p:graphicImage name="dashboardImages/calender.png"
+							library="pandora-layout" />
+					</div>
+					<div class="box-text">
+						<h4>Pending Enquiry</h4>
+						<span class="span-text">#{dashboardFrontOffice.pending}</span>
+					</div>
+
+				</div>
+				</a>
+			</div>
+
+			<div class="p-col-12 p-md-6 p-lg-3">
+				<a href="newRegistrationReport.xhtml">
+				<div class="overview-box users">
+					<div class="box-image">
+						<p:graphicImage name="dashboardImages/folder.png"
+							library="pandora-layout" />
+					</div>
+					<div class="box-text">
+						<h4>Total New Admission</h4>
+						<span class="span-text">#{dashboardFrontOffice.totalNewAdmission}</span>
+					</div>
+
+				</div>
+				</a>
+			</div>
+		</div>
 			<div class="ui-g">
 				<div class="ui-g-12 ui-lg-12 chat">
 					<p:panel header="Today's Follow Ups">
@@ -253,8 +259,6 @@
 							</p:panelGrid>
 						</p:dialog>
 					</h:form>
-					
-					
 					<h:form id="addForm">
 						<p:dialog header="Registration Details" widgetVar="addDialog" modal="true" showEffect="explode" hideEffect="explode" resizable="false" closable="true">
 							<div class="ui-g form-group">
@@ -348,11 +352,8 @@
 								</center>
 				</p:dialog>
 			</h:form>
-
-		</div>
-
-
-
 	</ui:define>
-
+	
+	
+<h:outputStylesheet name="stylenew.css" library="tempcss" />
 </ui:composition>

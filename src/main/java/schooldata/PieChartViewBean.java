@@ -54,6 +54,61 @@ public class PieChartViewBean implements Serializable{
 		//pieModel1.setSeriesColors("00A65A,DD4B39,F39C12,00C0EF");
 		pieModel1.setSeriesColors("93F2A3,F79BA3,FF512DA8,FFBF79,FFFF5722,FF0097A7,8DC8FF");
 		pieModel1.setExtender("skinPie");
+		
+		
+		String schid = new DatabaseMethods1().schoolId();
+		String session =new DatabaseMethods1().selectedSessionDetails(schid, conn);
+		String cunt=new DatabaseMethods1().allStudentcount(schid,"","",session,"",conn);
+		
+		int total = Integer.valueOf(cunt);
+		double per = (sum.get(0).getPresent()/total)*100;
+		if(per>100)
+		{
+			per=100;
+		}
+		sum.get(0).setPresentPercent(String.valueOf((int)per));
+		
+		double per1 = (sum.get(0).getAbsent()/total)*100;
+		if(per1>100)
+		{
+			per1=100;
+		}
+		sum.get(0).setAbsentPercent(String.valueOf((int)per1));
+		
+		double per2 = (sum.get(0).getHoliday()/total)*100;
+		if(per2>100)
+		{
+			per2=100;
+		}
+		sum.get(0).setHolidatPercent(String.valueOf((int)per2));
+		
+		double per3 = (sum.get(0).getLeave()/total)*100;
+		if(per3>100)
+		{
+			per3=100;
+		}
+		sum.get(0).setLeavePercent(String.valueOf((int)per3));
+		
+		double per4 = (sum.get(0).getMedical()/total)*100;
+		if(per4>100)
+		{
+			per4=100;
+		}
+		sum.get(0).setMedicalPercent(String.valueOf((int)per4));
+		
+		double per5 = (sum.get(0).getPrepLeave()/total)*100;
+		if(per5>100)
+		{
+			per5=100;
+		}
+		sum.get(0).setPrepLeavePercent(String.valueOf((int)per5));
+		
+		double per6 = (sum.get(0).getNotMarked()/total)*100;
+		if(per6>100)
+		{
+			per6=100;
+		}
+		sum.get(0).setNotMarkedPercent(String.valueOf((int)per6));
 		try {
 			conn.close();
 		} catch (SQLException e) {
@@ -95,6 +150,14 @@ public class PieChartViewBean implements Serializable{
 
 	public void setPieModel2(PieChartModel pieModel2) {
 		this.pieModel2 = pieModel2;
+	}
+
+	public ArrayList<Sum> getSum() {
+		return sum;
+	}
+
+	public void setSum(ArrayList<Sum> sum) {
+		this.sum = sum;
 	}
 
 

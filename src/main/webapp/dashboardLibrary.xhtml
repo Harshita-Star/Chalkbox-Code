@@ -5,9 +5,9 @@
 	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
 
 	<ui:define name="title">Dashboard</ui:define>
- 
-     <ui:define name="head">
-        <script type="text/javascript">
+
+	<ui:define name="head">
+		<script type="text/javascript">
      
         function skinPie() {
             this.cfg.shadow = false;
@@ -39,245 +39,266 @@
         
         }
         </script>
-        <style type="text/css">
-            .jqplot-xaxis-label, .jqplot-yaxis-label, .jqplot-y2axis-label, .jqplot-x2axis-label {
-                color: #757575; 
-            }
-            
-            table.jqplot-table-legend {
-                background-color: #ffffff;
-                color: #757575;
-                border-color: #F5F5F5;
-            }
-        </style>
-    </ui:define>
+		<style type="text/css">
+.jqplot-xaxis-label, .jqplot-yaxis-label, .jqplot-y2axis-label,
+	.jqplot-x2axis-label {
+	color: #757575;
+}
 
+table.jqplot-table-legend {
+	background-color: #ffffff;
+	color: #757575;
+	border-color: #F5F5F5;
+}
+
+
+</style>
+	</ui:define>
 	<ui:define name="content">
-		
-		<div class="dashboard">
-			<h:form>
-				<div class="ui-g overview-boxes">
-
-					<div class="ui-g-12 ui-md-6 ui-lg-3">
-						<a href="allBookReport.xhtml">
-							<div class="ui-g overview-box overview-box-1">
-								<div class="overview-box-title">
-									<i class="fa fa-book" /> <span>All Books</span>
-								</div>
-								<div class="overview-box-count">#{dashboardLibrary.allBooks}</div>
-								<div class="overview-box-stats"></div>
-							</div>
-						</a>	
+		<div class="p-grid layout-dashboard">
+			<div class="p-col-12 p-md-6 p-lg-3">
+			<a href="allBookReport.xhtml">
+				<div class="overview-box messages">
+					<div class="box-image">
+						<p:graphicImage name="dashboardImages/books.svg"
+							library="pandora-layout" />
+					</div>
+					<div class="box-text">
+						<h4>All Books</h4>
+						<span class="span-text">#{dashboardLibrary.allBooks}</span>
 					</div>
 
-					<div class="ui-g-12 ui-md-6 ui-lg-3">
-						<a href="assignBookReport.xhtml">
-							<div class="ui-g overview-box overview-box-2">
-								<div class="overview-box-title">
-									<i class="fa fa-check-circle" /> <span>Assigned Books</span>
-								</div>
-								<div class="overview-box-count">#{dashboardLibrary.allAssigned}</div>
-								<div class="overview-box-stats"></div>
-							</div>
-						</a>	
+				</div>
+				</a>
+			</div>
+			<div class="p-col-12 p-md-6 p-lg-3">
+			<a href="assignBookReport.xhtml">
+				<div class="overview-box logins">
+					<div class="box-image">
+						<p:graphicImage name="dashboardImages/book.svg"
+							library="pandora-layout" />
+					</div>
+					<div class="box-text">
+						<h4>Assigned Books</h4>
+						<span class="span-text">#{dashboardLibrary.allAssigned}</span>
 					</div>
 
-					<div class="ui-g-12 ui-md-6 ui-lg-3">
-						<a href="notReturnedBookReport.xhtml">
-							<div class="ui-g overview-box overview-box-3">
-								<div class="overview-box-title">
-									<i class="fa fa-calendar" /> <span>Overdue Books</span>
-								</div>
-								<div class="overview-box-count">#{dashboardLibrary.allOverdue}</div>
-								<div class="overview-box-stats"></div>
-							</div>
-						</a>	
+				</div>
+				</a>
+			</div>
+			<div class="p-col-12 p-md-6 p-lg-3">
+				<a href="notReturnedBookReport.xhtml">
+				<div class="overview-box files">
+					<div class="box-image">
+						<p:graphicImage name="dashboardImages/calender.png"
+							library="pandora-layout" />
 					</div>
-					<div class="ui-g-12 ui-md-6 ui-lg-3">
-					<a href="libraryFeeCollectionReport.xhtml">
-						<div class="ui-g overview-box overview-box-4">
-							<div class="overview-box-title">
-								<p:outputPanel rendered="#{sideMenuBean.list.country ne 'UAE'}">
-									<i class="fa fa-rupee" /> <span>Penalty Received (#{sideMenuBean.session})</span>
-								</p:outputPanel>
-									
-								<p:outputPanel rendered="#{sideMenuBean.list.country eq 'UAE'}">
-									<span><em>AED</em></span> <span>Penalty Received (#{sideMenuBean.session})</span>
-								</p:outputPanel>
-							</div>
-							<div class="overview-box-count">#{dashboardLibrary.penalty}</div>
-							<div class="overview-box-stats"></div>
+					<div class="box-text">
+						<h4>Overdue Books</h4>
+						<span class="span-text">#{dashboardLibrary.allOverdue}</span>
+					</div>
+
+				</div>
+				</a>
+			</div>
+
+			<div class="p-col-12 p-md-6 p-lg-3">
+				<a href="libraryFeeCollectionReport.xhtml">
+				<div class="overview-box users">
+					<div class="box-image">
+						<p:graphicImage name="dashboardImages/inr.png"
+							library="pandora-layout" />
+					</div>
+					<div class="box-text">
+						<h4>Penalty Received (#{sideMenuBean.session})</h4>
+						<span class="span-text">#{dashboardLibrary.penalty}</span>
+					</div>
+
+				</div>
+				</a>
+			</div>
+		</div>
+		<div class="ui-g">
+			<div class="ui-g-12 ui-lg-12 chat">
+				<h:form id="form" style="width:50%;float:left">
+					<p:panel header="Assign Book By Book Name">
+						<p:growl showDetail="true" autoUpdate="true"></p:growl>
+						<p:panelGrid columns="2" layout="grid"
+							styleClass="ui-panelgrid-blank form-group"
+							style="border:0px none; background-color:transparent;">
+							<p:outputLabel for="@next" style="color:red" value="Book Name"></p:outputLabel>
+							<p:autoComplete minQueryLength="3" value="#{assignBook.bookName}"
+								completeMethod="#{assignBook.autoCompleteBook}"
+								forceSelection="true" required="true"
+								requiredMessage="Please Enter Book Name">
+								<p:ajax event="itemSelect" global="false" update="oneMenu"
+									listener="#{assignBook.checkBookSelected}" />
+							</p:autoComplete>
+
+							<p:outputLabel for="@next" style="color:red" value="Select Id"></p:outputLabel>
+							<p:selectOneMenu filter="true" id="oneMenu"
+								value="#{assignBook.bookId}" required="true"
+								requiredMessage="Please Select Book Id">
+								<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
+								<f:selectItems value="#{assignBook.freeBookList}"></f:selectItems>
+								<p:ajax update="bookImage1" event="itemSelect"
+									listener="#{assignBook.checkBookIdSelected}" />
+							</p:selectOneMenu>
+
+							<p:outputLabel for="@next" style="color:red"
+								value="Student / Teacher Name"></p:outputLabel>
+							<p:autoComplete minQueryLength="3"
+								value="#{assignBook.studentName}"
+								completeMethod="#{assignBook.autoCompleteStudent}"
+								forceSelection="true" required="true"
+								requiredMessage="Please Enter Student Name">
+								<p:ajax event="itemSelect" update="type1,className1,exDate1"
+									listener="#{assignBook.checkSelectedType}" />
+							</p:autoComplete>
+
+							<p:outputLabel value="Type"></p:outputLabel>
+							<p:outputLabel id="type1" value="#{assignBook.type}"></p:outputLabel>
+
+							<p:outputLabel value="Class"></p:outputLabel>
+							<p:outputLabel id="className1" value="#{assignBook.className}"></p:outputLabel>
+
+							<p:outputLabel value="Image"></p:outputLabel>
+							<p:graphicImage id="bookImage1" width="80px" height="80px"
+								value="#{assignBook.bookImage}"></p:graphicImage>
+
+
+							<p:outputLabel value="Assign Date" for="@next" style="color:red"></p:outputLabel>
+							<p:calendar value="#{assignBook.addDate}" navigator="true"
+								pattern="dd/MM/yyyy" required="true"
+								requiredMessage="Please Enter Date"></p:calendar>
+
+							<p:outputLabel value="Return Date" for="@next" style="color:red"></p:outputLabel>
+							<p:calendar id="exDate1" value="#{assignBook.expireDate}"
+								navigator="true" pattern="dd/MM/yyyy" required="true"
+								requiredMessage="Please Enter Date"></p:calendar>
+						</p:panelGrid>
+						<br />
+						<p:separator />
+						<center>
+							<p:commandButton value="Assign Book" styleClass="butwid"
+								icon="fa fa-share-square"
+								actionListener="#{assignBook.assignBook}" update=":form"></p:commandButton>
+						</center>
+						<p:separator />
+						<br />
+					</p:panel>
+				</h:form>
+				<h:form id="form1" style="width:49%;float:right">
+					<p:panel header="Assign Book By Book Id">
+						<p:growl showDetail="true" autoUpdate="true"></p:growl>
+						<p:panelGrid columns="2" layout="grid"
+							styleClass="ui-panelgrid-blank form-group"
+							style="border:0px none; background-color:transparent;">
+							<p:outputLabel value="Book Id" for="@next" style="color:red"></p:outputLabel>
+							<p:autoComplete value="#{assignBook.bookId}" required="true"
+								requiredMessage="Please Enter Book Id"
+								completeMethod="#{assignBook.autoCompleteBookId}"
+								forceSelection="true"
+								validatorMessage="Please Select Book Id From Auto Complete List">
+								<p:ajax event="itemSelect" global="false"
+									update="oneMenu1,bookImage"
+									listener="#{assignBook.checkBookIdSelected}" />
+							</p:autoComplete>
+
+							<p:outputLabel value="Book Name"></p:outputLabel>
+							<p:outputLabel id="oneMenu1" value="#{assignBook.bookName}"></p:outputLabel>
+
+							<p:outputLabel value="Student / Teacher Name" for="@next"
+								style="color:red"></p:outputLabel>
+							<p:autoComplete minQueryLength="3"
+								value="#{assignBook.studentName}"
+								completeMethod="#{assignBook.autoCompleteStudent}"
+								forceSelection="true" required="true"
+								requiredMessage="Please Enter Student / Teacher Name">
+								<p:ajax event="itemSelect" update="type,className,exDate"
+									listener="#{assignBook.checkSelectedType}" />
+							</p:autoComplete>
+
+							<p:outputLabel value="Type"></p:outputLabel>
+							<p:outputLabel id="type" value="#{assignBook.type}"></p:outputLabel>
+
+							<p:outputLabel value="Class"></p:outputLabel>
+							<p:outputLabel id="className" value="#{assignBook.className}"></p:outputLabel>
+
+							<p:outputLabel value="Image"></p:outputLabel>
+							<p:graphicImage id="bookImage" width="80px" height="80px"
+								value="#{assignBook.bookImage}"></p:graphicImage>
+
+
+							<p:outputLabel value="Assign Date" for="@next" style="color:red"></p:outputLabel>
+							<p:calendar value="#{assignBook.addDate}" navigator="true"
+								pattern="dd/MM/yyyy" required="true"
+								requiredMessage="Please Enter Date"></p:calendar>
+
+							<p:outputLabel value="Return Date" for="@next" style="color:red"></p:outputLabel>
+							<p:calendar id="exDate" value="#{assignBook.expireDate}"
+								navigator="true" pattern="dd/MM/yyyy" required="true"
+								requiredMessage="Please Enter Date"></p:calendar>
+						</p:panelGrid>
+						<br />
+						<p:separator />
+						<center>
+							<p:commandButton value="Assign Book" styleClass="butwid"
+								icon="fa fa-share-square"
+								actionListener="#{assignBook.assignBook}" update=":form1"></p:commandButton>
+						</center>
+						<p:separator />
+						<br />
+					</p:panel>
+				</h:form>
+				<h:form id="detailForm">
+					<p:dialog closeOnEscape="true" header="Details"
+						widgetVar="detailDialog" modal="true" showEffect="fade"
+						hideEffect="fade" resizable="false">
+						<div class="ui-g form-group">
+
+							<p:dataTable value="#{assignBook.assignBookList}"
+								style="width:800px" var="var"
+								rowStyleClass="#{assignBook.addDate gt var.expiringDate ? 'redColored' : ''}">
+								<f:facet name="header">
+									<p:outputLabel value="Already Allowed Maximum Limit Of Book "></p:outputLabel>
+								</f:facet>
+								<p:column headerText="Book Name">
+									<p:outputLabel value="#{var.bookName}"></p:outputLabel>
+								</p:column>
+
+								<p:column headerText="Publisher">
+									<p:outputLabel value="#{var.publicationName}"></p:outputLabel>
+								</p:column>
+
+								<p:column headerText="Accession No.">
+									<p:outputLabel value="#{var.bookId}"></p:outputLabel>
+								</p:column>
+
+								<p:column headerText="Author">
+									<p:outputLabel value="#{var.authorName}"></p:outputLabel>
+								</p:column>
+
+								<p:column headerText="Assign Date">
+									<p:outputLabel value="#{var.assignDateStr}"></p:outputLabel>
+								</p:column>
+
+								<p:column headerText="Expire Date">
+									<p:outputLabel value="#{var.expireDateStr}"></p:outputLabel>
+								</p:column>
+
+								<p:column headerText="Price">
+									<p:outputLabel value="#{var.bookPrice}"></p:outputLabel>
+								</p:column>
+							</p:dataTable>
 						</div>
-						</a>
-					</div>
-					
-					
-				</div>
-			</h:form>
-
-			<div class="ui-g">
-				<div class="ui-g-12 ui-lg-12 chat">
-								<h:form id="form" style="width:50%;float:left">
-							<p:panel header="Assign Book By Book Name">
-								<p:growl showDetail="true"  autoUpdate="true"></p:growl>
-								<p:panelGrid columns="2"
-									layout="grid" styleClass="ui-panelgrid-blank form-group"
-									style="border:0px none; background-color:transparent;">
-									<p:outputLabel  for="@next" style="color:red" value="Book Name"></p:outputLabel>
-									<p:autoComplete minQueryLength="3" value="#{assignBook.bookName}"
-										completeMethod="#{assignBook.autoCompleteBook}" forceSelection="true" required="true"
-										requiredMessage="Please Enter Book Name">
-										<p:ajax event="itemSelect" global="false" update="oneMenu" listener="#{assignBook.checkBookSelected}"/>
-									</p:autoComplete>
-									
-									<p:outputLabel  for="@next" style="color:red" value="Select Id"></p:outputLabel>
-									<p:selectOneMenu filter="true" id="oneMenu" value="#{assignBook.bookId}" required="true" requiredMessage="Please Select Book Id">
-										<f:selectItem itemLabel="Select Here" itemValue=""></f:selectItem>
-										<f:selectItems value="#{assignBook.freeBookList}"></f:selectItems>
-										<p:ajax update="bookImage1" event="itemSelect" listener="#{assignBook.checkBookIdSelected}"/>
-									</p:selectOneMenu>
-
-									<p:outputLabel  for="@next" style="color:red" value="Student / Teacher Name"></p:outputLabel>
-									<p:autoComplete minQueryLength="3" value="#{assignBook.studentName}"
-										completeMethod="#{assignBook.autoCompleteStudent}"
-										forceSelection="true" required="true"
-										requiredMessage="Please Enter Student Name">
-										<p:ajax event="itemSelect" update="type1,className1,exDate1" listener="#{assignBook.checkSelectedType}" />
-									</p:autoComplete>
-									
-									<p:outputLabel value="Type"></p:outputLabel>
-									<p:outputLabel id="type1" value="#{assignBook.type}"></p:outputLabel>
-									
-									<p:outputLabel value="Class"></p:outputLabel>
-									<p:outputLabel id="className1" value="#{assignBook.className}"></p:outputLabel>
-									
-									<p:outputLabel value="Image"></p:outputLabel>
-									<p:graphicImage id="bookImage1" width="80px" height="80px" value="#{assignBook.bookImage}"></p:graphicImage>
-									
-									
-									<p:outputLabel value="Assign Date" for="@next" style="color:red" ></p:outputLabel>
-									<p:calendar value="#{assignBook.addDate}" navigator="true"
-										pattern="dd/MM/yyyy" required="true"
-										requiredMessage="Please Enter Date"></p:calendar>
-
-									<p:outputLabel value="Return Date" for="@next" style="color:red" ></p:outputLabel>
-									<p:calendar id="exDate1" value="#{assignBook.expireDate}" navigator="true"
-										pattern="dd/MM/yyyy" required="true"
-										requiredMessage="Please Enter Date"></p:calendar>
-								</p:panelGrid>
-								<br />
-								<p:separator />
-								<center>
-								<p:commandButton value="Assign Book" styleClass="butwid" icon="fa fa-share-square"
-										actionListener="#{assignBook.assignBook}" update=":form"></p:commandButton>
-								</center>
-								<p:separator />
-								<br />
-							</p:panel>
-						</h:form>
-						<h:form id="form1" style="width:49%;float:right">
-							<p:panel header="Assign Book By Book Id">
-								<p:growl showDetail="true"  autoUpdate="true"></p:growl>
-								<p:panelGrid columns="2"
-									layout="grid" styleClass="ui-panelgrid-blank form-group"
-									style="border:0px none; background-color:transparent;">
-									<p:outputLabel value="Book Id" for="@next" style="color:red" ></p:outputLabel>
-									<p:autoComplete  value="#{assignBook.bookId}"
-										required="true"
-										requiredMessage="Please Enter Book Id" completeMethod="#{assignBook.autoCompleteBookId}" forceSelection="true" validatorMessage="Please Select Book Id From Auto Complete List">
-										<p:ajax event="itemSelect" global="false" update="oneMenu1,bookImage" listener="#{assignBook.checkBookIdSelected}"/>
-									</p:autoComplete>
-									
-									<p:outputLabel value="Book Name"></p:outputLabel>
-									<p:outputLabel id="oneMenu1" value="#{assignBook.bookName}"></p:outputLabel>
-
-									<p:outputLabel value="Student / Teacher Name" for="@next" style="color:red" ></p:outputLabel>
-									<p:autoComplete minQueryLength="3" value="#{assignBook.studentName}"
-										completeMethod="#{assignBook.autoCompleteStudent}"
-										forceSelection="true" required="true"
-										requiredMessage="Please Enter Student / Teacher Name">
-										<p:ajax event="itemSelect" update="type,className,exDate" listener="#{assignBook.checkSelectedType}" />
-									</p:autoComplete>
-									
-									<p:outputLabel value="Type"></p:outputLabel>
-									<p:outputLabel id="type" value="#{assignBook.type}"></p:outputLabel>
-									
-									<p:outputLabel value="Class"></p:outputLabel>
-									<p:outputLabel id="className" value="#{assignBook.className}"></p:outputLabel>
-									
-									<p:outputLabel value="Image"></p:outputLabel>
-									<p:graphicImage id="bookImage" width="80px" height="80px" value="#{assignBook.bookImage}"></p:graphicImage>
-									
-
-									<p:outputLabel value="Assign Date" for="@next" style="color:red" ></p:outputLabel>
-									<p:calendar value="#{assignBook.addDate}" navigator="true"
-										pattern="dd/MM/yyyy" required="true"
-										requiredMessage="Please Enter Date"></p:calendar>
-
-									<p:outputLabel value="Return Date" for="@next" style="color:red" ></p:outputLabel>
-									<p:calendar id="exDate" value="#{assignBook.expireDate}" navigator="true"
-										pattern="dd/MM/yyyy" required="true"
-										requiredMessage="Please Enter Date"></p:calendar>
-								</p:panelGrid>
-								<br />
-								<p:separator />
-								<center>
-									<p:commandButton value="Assign Book" styleClass="butwid" icon="fa fa-share-square"
-										actionListener="#{assignBook.assignBook}" update=":form1"></p:commandButton>
-								</center>
-								<p:separator />
-								<br />
-							</p:panel>
-						</h:form>
-						<h:form id="detailForm">
-							<p:dialog closeOnEscape="true" header="Details" widgetVar="detailDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
-							<div class="ui-g form-group">
-							
-										<p:dataTable value="#{assignBook.assignBookList}" style="width:800px" var="var" rowStyleClass="#{assignBook.addDate gt var.expiringDate ? 'redColored' : ''}">
-											<f:facet name="header">
-												<p:outputLabel value="Already Allowed Maximum Limit Of Book "></p:outputLabel>
-											</f:facet>
-											<p:column headerText="Book Name">
-												<p:outputLabel value="#{var.bookName}"></p:outputLabel>
-											</p:column>
-											
-											<p:column headerText="Publisher">
-												<p:outputLabel value="#{var.publicationName}"></p:outputLabel>
-											</p:column>
-											
-											<p:column headerText="Accession No.">
-												<p:outputLabel value="#{var.bookId}"></p:outputLabel>
-											</p:column>
-											
-											<p:column headerText="Author">
-												<p:outputLabel value="#{var.authorName}"></p:outputLabel>
-											</p:column>
-											
-											<p:column headerText="Assign Date">
-												<p:outputLabel value="#{var.assignDateStr}"></p:outputLabel>
-											</p:column>
-											
-											<p:column headerText="Expire Date">
-												<p:outputLabel value="#{var.expireDateStr}"></p:outputLabel>
-											</p:column>
-											
-											<p:column headerText="Price">
-												<p:outputLabel value="#{var.bookPrice}"></p:outputLabel>
-											</p:column>
-										</p:dataTable>
-										</div>
-							</p:dialog>
-						</h:form>
-
-				</div>
-
+					</p:dialog>
+				</h:form>
 
 			</div>
 
+
 		</div>
-
-
-
 	</ui:define>
-
+	<h:outputStylesheet name="stylenew.css" library="tempcss" />
 </ui:composition>

@@ -448,8 +448,8 @@
             <div class="p-col-12 p-md-6 p-lg-3">
                 <div class="overview-box logins">
                     <div class="box-text">
-                        <h4>Logins</h4>
-                        <span class="span-text">48 new since last visit</span>
+                        <h4>Assigned Books</h4>
+                        <span class="span-text">#{dashboardLibrary.allAssigned}</span>
                     </div>
                     <div class="box-image">
                         <p:graphicImage name="images/dashboard/asset-login.svg" library="pandora-layout" />
@@ -459,8 +459,8 @@
             <div class="p-col-12 p-md-6 p-lg-3">
                 <div class="overview-box files">
                     <div class="box-text">
-                        <h4>Files Synced</h4>
-                        <span class="span-text">163,02 / 240 GB</span>
+                        <h4>Overdue Books</h4>
+                        <span class="span-text">#{dashboardLibrary.allOverdue}</span>
                     </div>
                     <div class="box-image">
                         <p:graphicImage name="images/dashboard/asset-filessynced.svg" library="pandora-layout" />
@@ -470,8 +470,15 @@
             <div class="p-col-12 p-md-6 p-lg-3">
                 <div class="overview-box users">
                     <div class="box-text">
-                        <h4>Users Online</h4>
-                        <span class="span-text">72 new user this week</span>
+                    <p:outputPanel rendered="#{sideMenuBean.list.country ne 'UAE'}">
+									<i class="fa fa-rupee" /> <span>Penalty Received (#{sideMenuBean.session})</span>
+								</p:outputPanel>
+									
+								<p:outputPanel rendered="#{sideMenuBean.list.country eq 'UAE'}">
+									<span><em>AED</em></span> <span>Penalty Received (#{sideMenuBean.session})</span>
+								</p:outputPanel>
+                        <h4>Penalty Received (#{sideMenuBean.session})</h4>
+                        <span class="span-text">#{dashboardLibrary.penalty}</span>
                     </div>
                     <div class="box-image">
                         <p:graphicImage name="images/dashboard/asset-usersonline.svg" library="pandora-layout" />

@@ -53,76 +53,70 @@
     </ui:define>
 
 	<ui:define name="content">
-		
-		<div class="dashboard">
-			<h:form>
-				<div class="ui-g overview-boxes">
-
-					<div class="ui-g-12 ui-md-6 ui-lg-3">
-							<div class="ui-g overview-box overview-box-1">
-								<div class="overview-box-title">
-									<i class="fa fa-users" /> <span>Total Student</span>
-								</div>
-								<div class="overview-box-count">#{dashboardAccount.cunt}</div>
-								<div class="overview-box-stats"></div>
-							</div>
+		<div class="p-grid layout-dashboard">
+			<div class="p-col-12 p-md-6 p-lg-3">
+			
+				<div class="overview-box messages">
+					<div class="box-image">
+						<p:graphicImage name="dashboardImages/persons.png"
+							library="pandora-layout" />
+					</div>
+					<div class="box-text">
+						<h4>Total Student</h4>
+						<span class="span-text">#{dashboardAccount.cunt}</span>
 					</div>
 
-					<div class="ui-g-12 ui-md-6 ui-lg-3">
-					<a href="dailyFeecolletionReport.xhtml">
-							<div class="ui-g overview-box overview-box-2">
-								<div class="overview-box-title">
-									<p:outputPanel rendered="#{sideMenuBean.list.country ne 'UAE'}">
-									<i class="fa fa-rupee" /> <span>Today's Collection</span>
-									</p:outputPanel>
-									
-									<p:outputPanel rendered="#{sideMenuBean.list.country eq 'UAE'}">
-									<span><em>AED</em></span> <span>Today's Collection</span>
-									</p:outputPanel>
-								</div>
-								<div class="overview-box-count">#{dashboardAccount.totalCollection}</div>
-								<div class="overview-box-stats"></div>
-							</div>
-							</a>
-					</div>
-
-					<div class="ui-g-12 ui-md-6 ui-lg-3">
-						<a href="dueFeeReport.xhtml">
-							<div class="ui-g overview-box overview-box-3">
-								<div class="overview-box-title">
-									<p:outputPanel rendered="#{sideMenuBean.list.country ne 'UAE'}">
-									<i class="fa fa-rupee" /> <span>Total Due Fees</span>
-									</p:outputPanel>
-									
-									<p:outputPanel rendered="#{sideMenuBean.list.country eq 'UAE'}">
-									<span><em>AED</em></span> <span>Total Due Fees</span>
-									</p:outputPanel>
-								</div>
-								<div class="overview-box-count">#{dashboardAccount.totalDuefees}</div>
-								<div class="overview-box-stats"></div>
-							</div>
-						</a>	
-					</div>
-
-					<div class="ui-g-12 ui-md-6 ui-lg-3">
-						<div class="ui-g overview-box overview-box-4">
-							<div class="overview-box-title">
-								<p:outputPanel rendered="#{sideMenuBean.list.country ne 'UAE'}">
-									<i class="fa fa-rupee" /> <span>Today's Expense</span>
-									</p:outputPanel>
-									
-									<p:outputPanel rendered="#{sideMenuBean.list.country eq 'UAE'}">
-									<span><em>AED</em></span> <span>Today's Expense</span>
-									</p:outputPanel>
-							</div>
-							<div class="overview-box-count">#{dashboardAccount.todaysExpense}</div>
-							<div class="overview-box-stats"></div>
-						</div>
-					</div>
-					
-					
 				</div>
-			</h:form>
+				
+			</div>
+			<div class="p-col-12 p-md-6 p-lg-3">
+			<a href="dailyFeecolletionReport.xhtml">
+				<div class="overview-box logins">
+					<div class="box-image">
+						<p:graphicImage name="dashboardImages/indian-rupee-1.png"
+							library="pandora-layout" />
+					</div>
+					<div class="box-text">
+						<h4>Today's Collection</h4>
+						<span class="span-text">#{dashboardAccount.totalCollection}</span>
+					</div>
+
+				</div>
+				</a>
+			</div>
+			<div class="p-col-12 p-md-6 p-lg-3">
+				<a  href="dueFeeReport.xhtml">
+				<div class="overview-box files">
+					<div class="box-image">
+						<p:graphicImage name="dashboardImages/indian-rupee.png"
+							library="pandora-layout" />
+					</div>
+					<div class="box-text">
+						<h4>Total Due Fees</h4>
+						<span class="span-text">#{dashboardAccount.totalDuefees}</span>
+					</div>
+
+				</div>
+				</a>
+			</div>
+
+			<div class="p-col-12 p-md-6 p-lg-3">
+				
+				<div class="overview-box users">
+					<div class="box-image">
+						<p:graphicImage name="dashboardImages/inr.png"
+							library="pandora-layout" />
+					</div>
+					<div class="box-text">
+						<h4>Today's Expense</h4>
+						<span class="span-text">#{dashboardAccount.todaysExpense}</span>
+					</div>
+
+				</div>
+			
+			</div>
+		</div>
+		
             
             <p:outputPanel rendered="false">
 			<div class="ui-g" >
@@ -282,11 +276,6 @@
 
 			</div>
 			</p:outputPanel>
-
-		</div>
-
-
-
 	</ui:define>
 
 </ui:composition> 

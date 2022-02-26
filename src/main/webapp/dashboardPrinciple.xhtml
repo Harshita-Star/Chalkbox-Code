@@ -2,723 +2,1222 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:po="http://primefaces.org/pandora"
+	template="/WEB-INF/template.xhtml">
 
 	<ui:define name="title">Dashboard</ui:define>
-
+	<ui:define name="viewname">
+		<li>Pandora</li>
+		<li><i class="pi pi-angle-right" /></li>
+		<li><p:link outcome="/dashboard">Dashboard</p:link></li>
+	</ui:define>
 	<ui:define name="head">
+		<h:outputScript name="js/chart.js" library="demo" />
 		<script type="text/javascript">
-			function skinPie() {
-				this.cfg.shadow = false;
-				this.cfg.title = '';
-				this.cfg.seriesColors = [ '#337ab7', '#2ea59f', '#2d34a4',
-						'#2ea563' ];
-				this.cfg.grid = {
-					background : '#ffffff',
-					borderColor : '#ffffff',
-					gridLineColor : '#F5F5F5',
-					shadow : false
-				};
-				this.cfg.axesDefaults = {
-					rendererOptions : {
-						textColor : '#292B2C',
-					}
-				};
-				this.cfg.seriesDefaults = {
-					renderer : $.jqplot.PieRenderer,
-					shadow : false,
-					lineWidth : 1,
-					markerOptions : {
-						shadow : false,
-						size : 7,
-						style : 'circle'
-					}
-				}
+			setInterval(function() {
+				setAnimation(PF('knob1'));
+				setAnimation(PF('knob2'));
+				setAnimation(PF('knob3'));
+			}, 2000);
 
+			function setAnimation(widget) {
+				widget.jq.animate({
+					value : generateRandomNumber()
+				}, {
+					duration : 1000,
+					easing : 'linear',
+					progress : function() {
+						widget.setValue(Math.floor(this.value));
+					}
+				});
 			}
+
+			function generateRandomNumber() {
+				return Math.floor(Math.random() * 100) + 1;
+			}
+
+			$(function() {
+				var newsrow = $('.news-row');
+				$('.point').on(
+						'click',
+						function(e) {
+							var point = $(this);
+
+							point.siblings('.active-point').removeClass(
+									'active-point');
+							point.addClass('active-point');
+
+							newsrow.removeClass('news-1-active');
+
+							if (point.hasClass('point-1')) {
+								newsrow
+										.css('transform',
+												'translate3d(0, 0, 0)');
+								newsrow.removeClass('news-2-active');
+								newsrow.removeClass('news-3-active');
+								newsrow.addClass('news-1-active');
+							} else if (point.hasClass('point-2')) {
+								newsrow.css('transform',
+										'translate3d(-100%, 0, 0)');
+								newsrow.removeClass('news-1-active');
+								newsrow.removeClass('news-3-active');
+								newsrow.addClass('news-2-active');
+							} else if (point.hasClass('point-3')) {
+								newsrow.css('transform',
+										'translate3d(-200%, 0, 0)');
+								newsrow.removeClass('news-2-active');
+								newsrow.removeClass('news-1-active');
+								newsrow.addClass('news-3-active');
+							}
+
+							e.preventDefault();
+						});
+				$('.slide-button').on(
+						'click',
+						function(e) {
+							var button = $(this);
+							var point = $('.point');
+							var point1 = $('.point-1');
+							var point2 = $('.point-2');
+							var point3 = $('.point-3');
+
+							point.siblings('.active-point').removeClass(
+									'active-point');
+
+							if (button.hasClass('right-button')) {
+								if (newsrow.hasClass('news-1-active')) {
+									newsrow.css('transform',
+											'translate3d(-100%, 0, 0)');
+									newsrow.removeClass('news-1-active');
+									newsrow.removeClass('news-3-active');
+									newsrow.addClass('news-2-active');
+									point2.addClass('active-point');
+								} else if (newsrow.hasClass('news-2-active')) {
+									newsrow.css('transform',
+											'translate3d(-200%, 0, 0)');
+									newsrow.removeClass('news-2-active');
+									newsrow.removeClass('news-1-active');
+									newsrow.addClass('news-3-active');
+									point3.addClass('active-point');
+								}
+							} else if (button.hasClass('left-button')) {
+								if (newsrow.hasClass('news-2-active')) {
+									newsrow.css('transform',
+											'translate3d(0, 0, 0)');
+									newsrow.removeClass('news-2-active');
+									newsrow.removeClass('news-3-active');
+									newsrow.addClass('news-1-active');
+									point1.addClass('active-point');
+								} else if (newsrow.hasClass('news-3-active')) {
+									newsrow.css('transform',
+											'translate3d(-100%, 0, 0)');
+									newsrow.removeClass('news-1-active');
+									newsrow.removeClass('news-3-active');
+									newsrow.addClass('news-2-active');
+									point2.addClass('active-point');
+								}
+							}
+							e.preventDefault();
+						});
+			});
+
+			$(function() {
+				var sections = $('.charts-sections'), department = $('.department'), chartContent = sections
+						.children('.chart-content');
+				activeChartContent = chartContent.eq(department.filter(
+						'.active-chart').index());
+
+				activeChartContent.addClass('active-chart-content');
+
+				department.on('click', function(e) {
+					var button = $(this);
+					button.siblings('.active-chart')
+							.removeClass('active-chart');
+					button.addClass('active-chart');
+
+					chartContent.height('');
+
+					if (button.hasClass('dept-1')) {
+						sections.css('transform', 'translate3d(0, 0, 0)');
+					} else if (button.hasClass('dept-2')) {
+						sections.css('transform', 'translate3d(-100%, 0, 0)');
+					} else if (button.hasClass('dept-3')) {
+						sections.css('transform', 'translate3d(-200%, 0, 0)');
+					} else if (button.hasClass('dept-4')) {
+						sections.css('transform', 'translate3d(-300%, 0, 0)');
+					} else if (button.hasClass('dept-5')) {
+						sections.css('transform', 'translate3d(-400%, 0, 0)');
+					}
+					e.preventDefault();
+				});
+
+			});
 		</script>
-		<style type="text/css">
-.jqplot-xaxis-label, .jqplot-yaxis-label, .jqplot-y2axis-label,
-	.jqplot-x2axis-label {
-	color: #757575;
+
+		<script type="text/javascript">
+			$(function() {
+				var ctx = document.getElementById("chart2").getContext('2d');
+				var myChart = new Chart(ctx, {
+					type : 'line',
+					data : {
+						labels : [ 'January', 'February', 'March', 'April',
+								'May', 'June', 'July' ],
+						datasets : [ {
+							label : 'Sapphire',
+							data : [ 1, 2, 5, 3, 12, 7, 15 ],
+							borderColor : [ '#F95052' ],
+							borderWidth : 3,
+							fill : true,
+							backgroundColor : [ 'rgba(253,176,175,.3)', ]
+						}, {
+							label : 'Roma',
+							data : [ 3, 7, 2, 17, 15, 13, 19 ],
+							borderColor : [ '#68DBD3' ],
+							borderWidth : 3,
+							fill : false
+						} ]
+					},
+					options : {
+						responsive : true,
+						maintainAspectRatio : true,
+						fontFamily : "IBMPlexSans",
+						hover : {
+							mode : 'index'
+						},
+						scales : {
+							xAxes : [ {
+								gridLines : {
+									display : false
+								},
+								ticks : {
+									fontColor : '#65686a'
+								}
+							} ],
+							yAxes : [ {
+								gridLines : {
+									display : false
+								},
+								ticks : {
+									fontColor : '#65686a'
+								}
+							} ]
+						},
+						legend : {
+							display : true,
+							labels : {
+								fontColor : '#191a1c'
+							}
+						}
+					}
+				});
+				var ctx2 = document.getElementById("chart1").getContext('2d');
+				var myChart2 = new Chart(
+						ctx2,
+						{
+							type : 'radar',
+							data : {
+								labels : [ 'January', 'February', 'March',
+										'April', 'May', 'June', 'July' ],
+								datasets : [ {
+									label : 'Units',
+									data : [ 0, 10, 20, 20, 30, 40, 50 ],
+									backgroundColor : [ '#F99D53', ],
+								} ]
+							},
+							options : {
+								responsive : true,
+								maintainAspectRatio : true,
+								fontFamily : "'Candara', 'Calibri', 'Courier', 'serif'",
+								hover : {
+									mode : 'index'
+								},
+								scales : {
+									xAxes : [ {
+										gridLines : {
+											display : false
+										},
+										ticks : {
+											fontColor : '#9199a9'
+										}
+									} ],
+									yAxes : [ {
+										gridLines : {
+											display : false
+										},
+										ticks : {
+											fontColor : '#9199a9'
+										}
+									} ]
+								},
+								legend : {
+									display : true,
+									labels : {
+										fontColor : '#9199a9'
+									}
+								}
+							}
+						});
+
+				var ctx3 = document.getElementById("chart3").getContext('2d');
+				var myChart3 = new Chart(
+						ctx3,
+						{
+							type : 'horizontalBar',
+							data : {
+								labels : [ 'January', 'February', 'March',
+										'April', 'May', 'June', 'July' ],
+								datasets : [ {
+									label : 'Ads',
+									barPercentage : 0.5,
+									barThickness : 6,
+									maxBarThickness : 8,
+									minBarLength : 2,
+									data : [ 0, 10, 20, 20, 30, 40, 50 ],
+									backgroundColor : [ '#7DF2EA', '#95C4EF',
+											'#FED3B0', '#FDB0B0', '#F493D4',
+											'#6492BD', '#D153A8', ],
+								} ]
+							},
+							options : {
+								responsive : true,
+								maintainAspectRatio : true,
+								fontFamily : "'Candara', 'Calibri', 'Courier', 'serif'",
+								hover : {
+									mode : 'index'
+								},
+								scales : {
+									xAxes : [ {
+										gridLines : {
+											display : false
+										},
+										ticks : {
+											fontColor : '#9199a9'
+										}
+									} ],
+									yAxes : [ {
+										gridLines : {
+											display : false
+										},
+										ticks : {
+											fontColor : '#9199a9'
+										}
+									} ]
+								},
+								legend : {
+									display : true,
+									labels : {
+										fontColor : '#9199a9'
+									}
+								}
+							}
+						});
+
+				var ctx4 = document.getElementById("chart4").getContext('2d');
+				var myChart4 = new Chart(ctx4, {
+					type : 'line',
+					data : {
+						labels : [ 'January', 'February', 'March', 'April',
+								'May', 'June', 'July' ],
+						datasets : [ {
+							label : 'Sales',
+							data : [ 12, 19, 3, 5, 2, 3, 9 ],
+							borderColor : [ '#68DBD3', ],
+							borderWidth : 3,
+							borderDash : [ 5, 5 ],
+							fill : false,
+							pointRadius : 3
+						}, {
+							label : 'Income',
+							data : [ 1, 2, 5, 3, 12, 7, 15 ],
+							backgroundColor : [ 'rgba(254,229,208,0.4)', ],
+							borderColor : [ '#FDB071', ],
+							borderWidth : 3,
+							fill : true
+						}, {
+							label : 'Expenses',
+							data : [ 7, 12, 15, 5, 3, 13, 21 ],
+							borderColor : [ '#81B1DD', ],
+							borderWidth : 3,
+							fill : false,
+							pointRadius : [ 4, 6, 4, 12, 8, 0, 4 ]
+						}, {
+							label : 'New Users',
+							data : [ 3, 7, 2, 17, 15, 13, 19 ],
+							borderColor : [ '#DE73BB', ],
+							borderWidth : 3,
+							fill : false
+						} ]
+					},
+					options : {
+						responsive : true,
+						hover : {
+							mode : 'index'
+						},
+						scales : {
+							xAxes : [ {
+								display : true,
+							} ],
+							yAxes : [ {
+								display : true,
+							} ]
+						}
+					}
+				});
+
+				var ctx5 = document.getElementById("chart5").getContext('2d');
+				var myChart5 = new Chart(
+						ctx5,
+						{
+							type : 'bar',
+							data : {
+								labels : [ 'January', 'February', 'March',
+										'April', 'May', 'June', 'July' ],
+								datasets : [ {
+									label : 'Ads',
+									barPercentage : 0.5,
+									barThickness : 6,
+									maxBarThickness : 8,
+									minBarLength : 2,
+									data : [ 0, 10, 20, 20, 30, 40, 50 ],
+									backgroundColor : [ '#BE3D94', '#7DF2EA',
+											'#95C4EF', '#FED3B0', '#FDB0B0',
+											'#F493D4', '#6492BD', '#D153A8', ],
+								} ]
+							},
+							options : {
+								responsive : true,
+								maintainAspectRatio : true,
+								fontFamily : "'Candara', 'Calibri', 'Courier', 'serif'",
+								hover : {
+									mode : 'index'
+								},
+								scales : {
+									xAxes : [ {
+										gridLines : {
+											display : false
+										},
+										ticks : {
+											fontColor : '#9199a9'
+										}
+									} ],
+									yAxes : [ {
+										gridLines : {
+											display : false
+										},
+										ticks : {
+											fontColor : '#9199a9'
+										}
+									} ]
+								},
+								legend : {
+									display : true,
+									labels : {
+										fontColor : '#9199a9'
+									}
+								}
+							}
+						});
+			});
+		</script>
+		<style>
+.pro-1:nth-child(1):nth-child(1) .ui-progressbar-value {
+	background: red !important;
 }
 
-table.jqplot-table-legend {
-	background-color: #ffffff;
-	color: #757575;
-	border-color: #F5F5F5;
+.pro-2:nth-child(1):nth-child(1) .ui-progressbar-value {
+	background: blue !important;
+}
+
+.pro-3:nth-child(1):nth-child(1) .ui-progressbar-value {
+	background: green !important;
+}
+
+.pro-4:nth-child(1):nth-child(1) .ui-progressbar-value {
+	background: yellow !important;
+}
+
+.pro-5:nth-child(1):nth-child(1) .ui-progressbar-value {
+	background: orange !important;
+}
+
+.pro-6:nth-child(1):nth-child(1) .ui-progressbar-value {
+	background: pink !important;
+}
+
+.pro-7:nth-child(1):nth-child(1) .ui-progressbar-value {
+	background: purple !important;
 }
 </style>
 	</ui:define>
 
 	<ui:define name="content">
-		<div class="dashboard-banking">
-			<div class="ui-g overview-boxes"></div>
-		</div>
-		<div class="dashboard">
-			<h:form>
-				<div class="ui-g overview-boxes">
+		<div class="p-grid layout-dashboard">
+			<div class="p-col-12 p-md-6 p-lg-3">
+				<p:commandLink action="#{dashboardPrinciple.goToAllStudent}">
+					<div class="overview-box messages">
+						<div class="box-image">
+							<p:graphicImage name="dashboardImages/persons.png"
+								library="pandora-layout" />
+						</div>
+						<div class="box-text">
+							<h4>Total Student</h4>
+							<span class="span-text">#{dashboardPrinciple.cunt}</span>
+						</div>
 
-					<div class="ui-g-12 ui-md-6 ui-lg-3">
-						<h:commandLink action="#{dashboardPrinciple.goToAllStudent}">
-							<div class="ui-g overview-box overview-box-1">
-								<div class="overview-box-title">
-									<i class="fa fa-users" /> <span>Total Students</span>
-								</div>
-								<div class="overview-box-count">#{dashboardPrinciple.cunt}</div>
-								<div class="overview-box-stats"></div>
-							</div>
-						</h:commandLink>
 					</div>
+				</p:commandLink>
+			</div>
+			<div class="p-col-12 p-md-6 p-lg-3">
+				<a href="absentStudentReport.xhtml">
+					<div class="overview-box logins">
+						<div class="box-image">
+							<p:graphicImage name="dashboardImages/leave.png"
+								library="pandora-layout" />
+						</div>
+						<div class="box-text">
+							<h4>Absent | Leave</h4>
+							<h4>Students Today</h4>
+							<span class="span-text">#{dashboardPrinciple.enquirystudent}
+								| #{dashboardPrinciple.leaveStudent}</span>
+						</div>
 
-					<div class="ui-g-12 ui-md-6 ui-lg-3">
-						<a href="absentStudentReport.xhtml">
-							<div class="ui-g overview-box overview-box-4">
-								<div class="overview-box-title">
-									<i class="fa fa-user-times" /> <span>Absent | Leave
-										Students Today</span>
-								</div>
-								<div class="overview-box-count">#{dashboardPrinciple.enquirystudent}
-									| #{dashboardPrinciple.leaveStudent}</div>
-								<div class="overview-box-stats"></div>
-							</div>
-						</a>
 					</div>
+				</a>
+			</div>
+			<div class="p-col-12 p-md-6 p-lg-3">
+				<a href="notReturnedBookReport.xhtml">
+					<div class="overview-box files">
+						<div class="box-image">
+							<p:graphicImage name="dashboardImages/calender.png"
+								library="pandora-layout" />
+						</div>
+						<div class="box-text">
+							<h4>Overdue Book</h4>
+							<span class="span-text">#{dashboardPrinciple.allOverdue}</span>
+						</div>
 
-					<div class="ui-g-12 ui-md-6 ui-lg-3">
-						<a href="notReturnedBookReport.xhtml">
-							<div class="ui-g overview-box overview-box-3">
-								<div class="overview-box-title">
-									<i class="fa fa-calendar" /> <span>Overdue Book</span>
-								</div>
-								<div class="overview-box-count">#{dashboardPrinciple.allOverdue}
-								</div>
-								<div class="overview-box-stats"></div>
-							</div>
-						</a>
 					</div>
-
-					<div class="ui-g-12 ui-md-6 ui-lg-3">
-						<a href="messageDeliveryReport.xhtml">
-							<div class="ui-g overview-box overview-box-2">
-								<div class="overview-box-title">
-									<i class="fa fa-folder" /> <span>SMS Sent Today</span>
-								</div>
-								<div class="overview-box-count">#{dashboardPrinciple.messageStduent}</div>
-								<div class="overview-box-stats"></div>
-							</div> <p:progressBar value="#{adminMain.smsSliderValue}"
-								labelTemplate="#{adminMain.smsDr} / #{adminMain.smsCr}"
-								style="height:12px !important;margin-top: -12px;font-size: smaller;" />
-						</a>
-					</div>
-
-
-				</div>
-
-
-
-			</h:form>
-			<div class="ui-g ui-fluid">
-
-				<div class="ui-g-12 ui-lg-6">
-					<p:panel>
-						<f:facet name="header">
-							<span>Attendance Chart</span>
-						</f:facet>
-						<a href="absentStudentReport.xhtml"> <p:chart type="pie"
-								id="pie" model="#{pieChartView.pieModel1}" responsive="true"
-								style="background-color: white !important;height: 324px !important" />
-						</a>
-					</p:panel>
-				</div>
-
-				<div class="ui-g-12 ui-lg-6">
-					<h:form id="ticketForm" enctype="multipart/form-data">
-						<p:panel>
-							<f:facet name="header">
-								<span>Customer Support</span>
-								<span> <h:commandLink immediate="true"
-										style="float:right" value="View All"
-										action="viewUserTicket.xhtml?faces-redirect=true" />
-								</span>
-							</f:facet>
-
-							<div class="support-top">
-								<center>
-									<p:graphicImage width="95" height="95" name="images/help.png"
-										library="avalon-layout" />
-								</center>
-							</div>
-
-							<div class="ui-g">
-								<div class="ui-g-12">
-									<p:inputText disabled="true"
-										value="USER ID - #{dashboardPrinciple.userid}" />
-								</div>
-
-
-								<div class="ui-g-12">
-									<p:selectOneRadio value="#{dashboardPrinciple.ticketType}"
-										required="true"
-										requiredMessage="Please Select Error/Suggestion">
-										<f:selectItem itemLabel="Error" itemValue="error"></f:selectItem>
-										<f:selectItem itemLabel="Query" itemValue="Query"></f:selectItem>
-										<f:selectItem itemLabel="Suggestion" itemValue="suggestion"></f:selectItem>
-										<f:selectItem itemLabel="Training" itemValue="Training"></f:selectItem>
-										<p:ajax event="change" update=":ticketForm"
-											listener="#{dashboardPrinciple.ticketCheck}"></p:ajax>
-									</p:selectOneRadio>
-								</div>
-
-								<div class="ui-g-12">
-									<p:selectOneMenu value="#{dashboardPrinciple.timing}"
-										rendered="#{dashboardPrinciple.showtiming}">
-										<f:selectItem itemLabel="09:30 AM" itemValue="09:30 AM"></f:selectItem>
-										<f:selectItem itemLabel="10:00 AM" itemValue="10:00 AM"></f:selectItem>
-										<f:selectItem itemLabel="10:30 AM" itemValue="10:30 AM"></f:selectItem>
-										<f:selectItem itemLabel="11:00 AM" itemValue="11:30 AM"></f:selectItem>
-										<f:selectItem itemLabel="11:30 AM" itemValue="11:30 AM"></f:selectItem>
-										<f:selectItem itemLabel="12:00 PM" itemValue="12:00 PM"></f:selectItem>
-										<f:selectItem itemLabel="12:30 PM" itemValue="12:30 PM"></f:selectItem>
-										<f:selectItem itemLabel="01:00 PM" itemValue="01:00 PM"></f:selectItem>
-										<f:selectItem itemLabel="01:30 PM" itemValue="01:30 PM"></f:selectItem>
-										<f:selectItem itemLabel="02:00 PM" itemValue="02:00 PM"></f:selectItem>
-										<f:selectItem itemLabel="02:30 PM" itemValue="02:30 PM"></f:selectItem>
-										<f:selectItem itemLabel="03:00 PM" itemValue="03:00 PM"></f:selectItem>
-										<f:selectItem itemLabel="03:30 PM" itemValue="03:30 PM"></f:selectItem>
-										<f:selectItem itemLabel="04:00 PM" itemValue="04:00 PM"></f:selectItem>
-										<f:selectItem itemLabel="04:30 PM" itemValue="04:30 PM"></f:selectItem>
-										<f:selectItem itemLabel="05:00 PM" itemValue="05:00 PM"></f:selectItem>
-
-									</p:selectOneMenu>
-								</div>
-
-								<div class="ui-g-12">
-									<p:inputTextarea value="#{dashboardPrinciple.description}"
-										id="tcktdesc"
-										onchange="trimFunc(this.value,'Please Section Name',this.id)"
-										required="true" requiredMessage="Please write description"
-										placeholder="Description" rows="2" autoResize="false" />
-								</div>
-
-								<div class="ui-g-12">
-									<p:outputLabel value="Upload Screenshot (If Any)" />
-									&#160;&#160;&#160;&#160;
-									<p:fileUpload mode="simple"
-										value="#{dashboardPrinciple.fileNew}"></p:fileUpload>
-								</div>
-
-								<div class="ui-g-12 btn-padding">
-								
-								<br />
-								<p:separator />
-								<center>
-								<p:commandButton ajax="false" value="Submit" styleClass="butwid" icon="fa fa-upload"
-										action="#{dashboardPrinciple.addTicket}" update=":ticketForm"></p:commandButton>
-								</center>
-								<p:separator />
-								<br />
-								</div>
-							</div>
-						</p:panel>
-					</h:form>
-				</div>
-
-				<div class="ui-g ui-fluid">
-
-					<div class="ui-g-12 ui-lg-6">
-						<p:panel>
-							<f:facet name="header">
-								<i class="fa fa-birthday-cake" />
-								<span>Staff Birthdays</span>
-								<span> <p:commandLink style="float:right"
-										rendered="#{dashboardPrinciple.showWishStaff}"
-										value="Wish To All" update=":birthdayForm"
-										action="#{dashboardPrinciple.allStaffMsz}" />
-								</span>
-
-							</f:facet>
-							<p:dataTable reflow="true" var="var"
-								value="#{dashboardPrinciple.staffList}" scrollable="true"
-								scrollHeight="150">
-								<p:column headerText="S.No">
-									<p:outputLabel value="#{var.sno}"></p:outputLabel>
-								</p:column>
-
-								<p:column headerText="Name">
-									<p:outputLabel value="#{var.fname}"></p:outputLabel>
-								</p:column>
-
-								<p:column headerText="Category">
-									<p:outputLabel value="#{var.category}"></p:outputLabel>
-								</p:column>
-
-								<p:column headerText="Wish">
-									<p:commandButton value="Wish" update=":birthdayFormStaff" icon="fa fa-gift"
-										oncomplete="PF('birthdayStaffDialog').show()"
-										action="#{dashboardPrinciple.selectStaffMsz}"
-										style="width:70px;">
-										<f:setPropertyActionListener
-											target="#{dashboardPrinciple.selectedStaff}" value="#{var}"></f:setPropertyActionListener>
-									</p:commandButton>
-								</p:column>
-
-							</p:dataTable>
-
-						</p:panel>
-					</div>
-
-					<div class="ui-g-12 ui-lg-6">
-						<p:panel>
-							<f:facet name="header">
-								<i class="fa fa-birthday-cake" />
-								<span>Student Birthdays</span>
-								<span> <p:commandLink style="float:right"
-										rendered="#{dashboardPrinciple.showWishAll}"
-										value="Wish To All" update=":birthdayForm"
-										action="#{dashboardPrinciple.allStudentMsz}" />
-								</span>
-
-							</f:facet>
-							<p:dataTable reflow="true" var="var"
-								value="#{dashboardPrinciple.birthdayStudentList}"
-								scrollable="true" scrollHeight="150">
-								<p:column headerText="Adm.No.">
-									<center>
-										<p:outputLabel value="#{var.srNo}" />
-									</center>
-								</p:column>
-
-								<p:column headerText="Name">
-									<p:outputLabel value="#{var.fname}" />
-								</p:column>
-
-								<p:column headerText="Class">
-									<p:outputLabel value="#{var.className}-#{var.sectionName}" />
-								</p:column>
-
-								<p:column headerText="Wish">
-									<p:commandButton value="Wish" update=":birthdayForm"
-										oncomplete="PF('birthdayDialog').show()"
-										action="#{dashboardPrinciple.selectStudentMsz}"
-										style="width:70px;">
-										<f:setPropertyActionListener
-											target="#{dashboardPrinciple.selectStudent}" value="#{var}"></f:setPropertyActionListener>
-									</p:commandButton>
-								</p:column>
-
-							</p:dataTable>
-
-						</p:panel>
-					</div>
-				</div>
+				</a>
 			</div>
 
+			<div class="p-col-12 p-md-6 p-lg-3">
+				<a href="messageDeliveryReport.xhtml">
+					<div class="overview-box users">
+						<div class="box-image">
+							<p:graphicImage name="dashboardImages/sms.png"
+								library="pandora-layout" />
+						</div>
+						<div class="box-text">
+							<h4>SMS Sent Today</h4>
+							<span class="span-text">#{dashboardPrinciple.messageStduent}</span>
+						</div>
+					</div>
+				</a>
+				<p:progressBar value="#{adminMain.smsSliderValue}"
+					labelTemplate="#{adminMain.smsDr} / #{adminMain.smsCr}"
+					style="height:12px !important;margin-top: -12px;font-size: smaller;" />
+			</div>
+
+			<div class="p-col-12">
+				<div class="p-grid">
+					<div class="p-col-12 p-md-6">
+						<div class="p-grid">
+							<div class="p-col-12 p-md-6">
+								<div class="card stats card-w-title">
+									<div class="card-header">
+										<h4>Attendance Graph</h4>
+
+									</div>
+									<div class="stats-content">
+										<div class="stat">
+											<div class="stat-title">
+												<h6>Present</h6>
+
+											</div>
+											<div class="progress-bar">
+												<div class="p-col-12 pro-1">
+													<p:progressBar
+														value="#{pieChartView.sum.get(0).presentPercent}"
+														class="present"
+														style="height:5px !important;font-size: smaller;" />
+												</div>
+											</div>
+											<span class="span-text">#{pieChartView.sum.get(0).present}</span>
+										</div>
+										<div class="stat">
+											<div class="stat-title">
+												<h6>Absent</h6>
+
+											</div>
+											<div class="progress-bar">
+												<div class="p-col-12 pro-2">
+													<p:progressBar
+														value="#{pieChartView.sum.get(0).absentPercent}"
+														class="present"
+														style="height:5px !important;font-size: smaller;" />
+												</div>
+											</div>
+											<span class="span-text">#{pieChartView.sum.get(0).absent}</span>
+										</div>
+										<div class="stat">
+											<div class="stat-title">
+												<h6>Holiday</h6>
+
+											</div>
+											<div class="progress-bar">
+												<div class="p-col-12 pro-3">
+													<p:progressBar
+														value="#{pieChartView.sum.get(0).holidatPercent}"
+														class="present"
+														style="height:5px !important;font-size: smaller;" />
+												</div>
+											</div>
+											<span class="span-text">#{pieChartView.sum.get(0).holiday}</span>
+										</div>
+										<div class="stat">
+											<div class="stat-title">
+												<h6>Leave</h6>
+
+											</div>
+											<div class="progress-bar">
+												<div class="p-col-12 pro-4">
+													<p:progressBar
+														value="#{pieChartView.sum.get(0).leavePercent}"
+														class="present"
+														style="height:5px !important;font-size: smaller;" />
+												</div>
+											</div>
+											<span class="span-text">#{pieChartView.sum.get(0).leave}</span>
+										</div>
+										<div class="stat">
+											<div class="stat-title">
+												<h6>Medical Leave</h6>
+
+											</div>
+											<div class="progress-bar">
+												<div class="p-col-12 pro-5">
+													<p:progressBar
+														value="#{pieChartView.sum.get(0).medicalPercent}"
+														class="present"
+														style="height:5px !important;font-size: smaller;" />
+												</div>
+											</div>
+											<span class="span-text">#{pieChartView.sum.get(0).medical}</span>
+										</div>
+										<div class="stat">
+											<div class="stat-title">
+												<h6>Preparation Leave</h6>
+
+											</div>
+											<div class="progress-bar">
+												<div class="p-col-12 pro-6">
+													<p:progressBar
+														value="#{pieChartView.sum.get(0).prepLeavePercent}"
+														class="present"
+														style="height:5px !important;font-size: smaller;" />
+												</div>
+											</div>
+											<span class="span-text">#{pieChartView.sum.get(0).prepLeave}</span>
+										</div>
+										<div class="stat">
+											<div class="stat-title">
+												<h6>Not Marked</h6>
+
+											</div>
+											<div class="progress-bar">
+												<div class="p-col-12 pro-7">
+													<p:progressBar
+														value="#{pieChartView.sum.get(0).notMarkedPercent}"
+														class="present"
+														style="height:5px !important;font-size: smaller;" />
+												</div>
+											</div>
+											<span class="span-text">#{pieChartView.sum.get(0).notMarked}</span>
+										</div>
+
+									</div>
+
+								</div>
+							</div>
+							<div class="p-col-12 p-md-6">
+								<h:form id="ticketForm" enctype="multipart/form-data">
+
+									<div class="card profile">
+										<div class="profile-header">
+											<div class="card-header"
+												style="margin-top: -23px; padding-bottom: 8px; font-size: larger; border-bottom: 1px solid #d8dadc;">
+												<h4 style="font-size: 14px;">Customer Support</h4>
+
+												<p:commandLink immediate="true" style="float:right"
+													value="View All"
+													action="viewUserTicket.xhtml?faces-redirect=true" />
+											</div>
 
 
-			<div class="ui-g">
-				<div class="ui-g-12 ui-lg-12 chat">
-					<p:panel header="Send Message">
+
+											<div class="profile-image">
+
+												<p:graphicImage styleClass="center" name="images/help.png"
+													library="pandora-layout" />
+
+											</div>
+											<div class="profile-info">
+												<h4>USER ID - #{dashboardPrinciple.userid}</h4>
+												<p:selectOneRadio value="#{dashboardPrinciple.ticketType}"
+													required="true"
+													requiredMessage="Please Select Error/Suggestion">
+													<f:selectItem itemLabel="Error" itemValue="error"></f:selectItem>
+													<f:selectItem itemLabel="Query" itemValue="Query"></f:selectItem>
+													<f:selectItem itemLabel="Suggestion" itemValue="suggestion"></f:selectItem>
+													<f:selectItem itemLabel="Training" itemValue="Training"></f:selectItem>
+													<p:ajax event="change" update=":ticketForm"
+														listener="#{dashboardPrinciple.ticketCheck}"></p:ajax>
+												</p:selectOneRadio>
+												<p:selectOneMenu value="#{dashboardPrinciple.timing}"
+													rendered="#{dashboardPrinciple.showtiming}">
+													<f:selectItem itemLabel="09:30 AM" itemValue="09:30 AM"></f:selectItem>
+													<f:selectItem itemLabel="10:00 AM" itemValue="10:00 AM"></f:selectItem>
+													<f:selectItem itemLabel="10:30 AM" itemValue="10:30 AM"></f:selectItem>
+													<f:selectItem itemLabel="11:00 AM" itemValue="11:30 AM"></f:selectItem>
+													<f:selectItem itemLabel="11:30 AM" itemValue="11:30 AM"></f:selectItem>
+													<f:selectItem itemLabel="12:00 PM" itemValue="12:00 PM"></f:selectItem>
+													<f:selectItem itemLabel="12:30 PM" itemValue="12:30 PM"></f:selectItem>
+													<f:selectItem itemLabel="01:00 PM" itemValue="01:00 PM"></f:selectItem>
+													<f:selectItem itemLabel="01:30 PM" itemValue="01:30 PM"></f:selectItem>
+													<f:selectItem itemLabel="02:00 PM" itemValue="02:00 PM"></f:selectItem>
+													<f:selectItem itemLabel="02:30 PM" itemValue="02:30 PM"></f:selectItem>
+													<f:selectItem itemLabel="03:00 PM" itemValue="03:00 PM"></f:selectItem>
+													<f:selectItem itemLabel="03:30 PM" itemValue="03:30 PM"></f:selectItem>
+													<f:selectItem itemLabel="04:00 PM" itemValue="04:00 PM"></f:selectItem>
+													<f:selectItem itemLabel="04:30 PM" itemValue="04:30 PM"></f:selectItem>
+													<f:selectItem itemLabel="05:00 PM" itemValue="05:00 PM"></f:selectItem>
+
+												</p:selectOneMenu>
+											</div>
+										</div>
+										<div class="profile-content members-content">
+											<div>
+												<p:inputTextarea value="#{dashboardPrinciple.description}"
+													id="tcktdesc" style="width: 100%;"
+													onchange="trimFunc(this.value,'Please Section Name',this.id)"
+													required="true" requiredMessage="Please write description"
+													placeholder="Description" rows="2" autoResize="false" />
+
+											</div>
+											<div style="padding: 7px 7px 7px 7px;">
+												<p:outputLabel value="Upload Screenshot (If Any)"
+													style="width:100%" />
+												&#160;&#160;&#160;&#160;
+												<p:fileUpload mode="simple"
+													value="#{dashboardPrinciple.fileNew}"></p:fileUpload>
+
+											</div>
+											<div
+												style="justify-content: center; padding: 7px 7px 7px 7px;">
+												<center>
+													<p:commandButton ajax="false" value="Submit"
+														styleClass="butwid" icon="fa fa-upload"
+														action="#{dashboardPrinciple.addTicket}"
+														update=":ticketForm"></p:commandButton>
+												</center>
+											</div>
+										</div>
+									</div>
+								</h:form>
+							</div>
+						</div>
+					</div>
+
+					<div class="p-col-12 p-md-6">
+						<div class="p-grid">
+							<div class="p-col-12 p-md-6">
+								<div class="card stats card-w-title">
+									<div class="card-header">
+										<h4>Staff Birthdays</h4>
+										<div class="tags">
+											<p:commandLink style="float:right"
+												rendered="#{dashboardPrinciple.showWishStaff}"
+												value="Wish To All" update=":birthdayForm"
+												action="#{dashboardPrinciple.allStaffMsz}" />
+										</div>
+									</div>
+									<div class="sales-content">
+											<p:dataTable id="productsTable" var="var"
+												value="#{dashboardPrinciple.staffList}"
+												reflow="true" paginatorPosition="bottom" size="small"
+												scrollable="true" scrollHeight="150" paginator="true"
+												rows="5">
+												<p:column headerText="S.No">
+												<p:outputLabel value="#{var.sno}"></p:outputLabel>
+											</p:column>
+
+											<p:column headerText="Name">
+												<p:outputLabel value="#{var.fname}"></p:outputLabel>
+											</p:column>
+
+											<p:column headerText="Category">
+												<p:outputLabel value="#{var.category}"></p:outputLabel>
+											</p:column>
+												<p:column style="text-align: center">
+													<p:commandButton value="Wish" update=":birthdayFormStaff"
+													icon="fa fa-gift"
+													oncomplete="PF('birthdayStaffDialog').show()"
+													action="#{dashboardPrinciple.selectStaffMsz}"
+													style="width:70px;">
+													<f:setPropertyActionListener
+														target="#{dashboardPrinciple.selectedStaff}"
+														value="#{var}"></f:setPropertyActionListener>
+												</p:commandButton>
+												</p:column>
+											</p:dataTable>
+										</div>
+								</div>
+							</div>
+							<div class="p-col-12 p-md-6">
+								<div class="card members card-w-title">
+									<div class="card-header">
+										<h4>Student Birthdays</h4>
+										<div class="tags">
+											<p:commandLink style="float:right"
+												rendered="#{dashboardPrinciple.showWishAll}"
+												value="Wish To All" update=":birthdayForm"
+												action="#{dashboardPrinciple.allStudentMsz}" />
+
+										</div>
+									</div>
+									
+										<div class="sales-content">
+											<p:dataTable id="products" var="var"
+												value="#{dashboardPrinciple.birthdayStudentList}"
+												reflow="true" paginatorPosition="bottom" size="small"
+												scrollable="true" scrollHeight="150" paginator="true"
+												rows="5">
+												<p:column headerText="Adm.No.">
+													<center>
+														<p:outputLabel value="#{var.srNo}" />
+													</center>
+												</p:column>
+
+												<p:column headerText="Name">
+													<p:outputLabel value="#{var.fname}" />
+												</p:column>
+
+												<p:column headerText="Class">
+													<p:outputLabel value="#{var.className}-#{var.sectionName}" />
+												</p:column>
+
+
+												<p:column style="text-align: center">
+													<p:commandButton value="Wish" update=":birthdayForm"
+														oncomplete="PF('birthdayDialog').show()"
+														action="#{dashboardPrinciple.selectStudentMsz}"
+														style="width:70px;">
+														<f:setPropertyActionListener
+															target="#{dashboardPrinciple.selectStudent}"
+															value="#{var}"></f:setPropertyActionListener>
+													</p:commandButton>
+
+												</p:column>
+											</p:dataTable>
+										</div>
+								</div>
+							</div>
+						</div>
+
+					</div>
+
+					<div class="p-col-12 p-md-12">
+						<div class="card timeline">
 						<h:form id="mainForm">
-						<p:growl showDetail="true"  autoUpdate="true"></p:growl>
-							<p:selectOneRadio value="#{dashboardPrinciple.sendTo}"
-								styleClass="form-group">
-								<f:selectItem itemLabel="All Students" itemValue="student"></f:selectItem>
-								<f:selectItem itemLabel="All Staff Members" itemValue="staff"></f:selectItem>
-								<p:ajax listener="#{dashboardPrinciple.checkCommType}"
-									update=":mainForm"></p:ajax>
-							</p:selectOneRadio>
-							<br />
+						<p:growl showDetail="true" autoUpdate="true"></p:growl>
+						<p:selectOneRadio value="#{dashboardPrinciple.sendTo}"
+							styleClass="form-group">
+							<f:selectItem itemLabel="All Students" itemValue="student"></f:selectItem>
+							<f:selectItem itemLabel="All Staff Members" itemValue="staff"></f:selectItem>
+							<p:ajax listener="#{dashboardPrinciple.checkCommType}"
+								update=":mainForm"></p:ajax>
+						</p:selectOneRadio>
+						<br />
+						<p:selectBooleanCheckbox
+							itemLabel="#{sideMenuBean.list.country ne 'India' ? 'Send As Email' : 'Send As SMS'}"
+							value="#{dashboardPrinciple.sms}">
+							<p:ajax></p:ajax>
+						</p:selectBooleanCheckbox>
+						<br />
+						<br />
+						<p:selectBooleanCheckbox
+							disabled="#{dashboardPrinciple.disableNotify}"
+							itemLabel="Send As App Notification"
+							value="#{dashboardPrinciple.notification}">
+							<p:ajax></p:ajax>
+						</p:selectBooleanCheckbox>
+						<br />
+						<br />
+						<p:outputLabel style="font-weight: bold;font-size: 12px;"
+							value="Note: Copying and pasting the special characters ( such as ,' ) might affect the format of SMS. It is adviced to kindly type the message."></p:outputLabel>
+						<br></br>
+						<br />
+
+						<p:selectOneButton
+							rendered="#{sideMenuBean.list.country eq 'India'}"
+							value="#{dashboardPrinciple.lang}">
+							<f:selectItem itemLabel="English" itemValue="english" />
+							<f:selectItem itemLabel="हिन्दी" itemValue="hindi" />
+							<p:ajax listener="#{dashboardPrinciple.checkLanguage}"
+								update=":mainForm"></p:ajax>
+						</p:selectOneButton>
+						<br />
+						<p:outputPanel rendered="#{dashboardPrinciple.showEnglish}">
+							<p:outputLabel for="@next"
+								value="Dear Parent/Student/Staff Member,"
+								style="font-size:15px !important;color:red" />
+							<br></br>
+							<br></br>
+							<p:inputTextarea required="true"
+								requiredMessage="Please Write Your Message" rows="5"
+								style="width:100%;" value="#{dashboardPrinciple.typeMessage}"
+								id="enqmsg"
+								onchange="trimFunc(this.value,'Please Section Name',this.id)">
+							</p:inputTextarea>
+							<br></br>
+							<br></br>
+							<p:outputLabel value="Regards, #{sideMenuBean.smsName}"
+								style="font-size:15px !important;" />
+							<p:commandButton value="Send" style="float:right;"
+								styleClass="butwid" icon="fa fa-paper-plane"
+								action="#{dashboardPrinciple.sendMessageToAll}"></p:commandButton>
+						</p:outputPanel>
+
+						<p:outputPanel rendered="#{dashboardPrinciple.showHindi}">
+							<p:outputLabel for="@next"
+								value="प्रिय अभिभावक/विद्यार्थी/कर्मचारी,"
+								style="font-size:15px !important;color:red" />
+							<br></br>
+							<br></br>
+							<p:inputTextarea required="true"
+								requiredMessage="Please Write Your Message" rows="5"
+								style="width:100%;" value="#{dashboardPrinciple.typeMessage}"
+								id="transliterateDiv" onkeypress="onLoad();"
+								onchange="trimFunc(this.value,'Please Section Name',this.id)">
+								<p:keyFilter preventPaste="true"></p:keyFilter>
+							</p:inputTextarea>
+							<br></br>
+							<br></br>
+							<p:outputLabel value="सादर, #{sideMenuBean.hindiName}"
+								style="font-size:15px !important;" />
+							<p:commandButton value="Send" style="float:right;margin: 15px;"
+								styleClass="butwid" icon="fa fa-paper-plane"
+								action="#{dashboardPrinciple.sendMessageToAll}"></p:commandButton>
+						</p:outputPanel>
+					</h:form>
+					<h:form id="msgForm" style="overflow:hidden">
+				<p:dialog header="Please Select Receivers : " height="80"
+					widgetVar="msgDialog" modal="true" showEffect="fade"
+					hideEffect="fade" resizable="false">
+					<br></br>
+					<br></br>
+					<center>
+						<p:panelGrid columns="5">
+							<p:outputLabel value="Parents : "
+								style="font-size:14px;font-weight: bold;" />
 							<p:selectBooleanCheckbox
-								itemLabel="#{sideMenuBean.list.country ne 'India' ? 'Send As Email' : 'Send As SMS'}"
-								value="#{dashboardPrinciple.sms}">
-								<p:ajax></p:ajax>
-							</p:selectBooleanCheckbox>
-							<br />
-							<br />
+								value="#{dashboardPrinciple.messageParents}" />
+
+							<p:outputLabel value="Students : "
+								style="font-size:14px;font-weight: bold;" />
 							<p:selectBooleanCheckbox
-								disabled="#{dashboardPrinciple.disableNotify}"
-								itemLabel="Send As App Notification"
-								value="#{dashboardPrinciple.notification}">
-								<p:ajax></p:ajax>
-							</p:selectBooleanCheckbox>
-							<br />
-							<br />
-							<p:outputLabel style="font-weight: bold;font-size: 12px;" value="Note: Copying and pasting the special characters ( such as ,' ) might affect the format of SMS. It is adviced to kindly type the message."></p:outputLabel>
-							          <br></br>
-							<br />
-							
-							<p:selectOneButton
-								rendered="#{sideMenuBean.list.country eq 'India'}"
-								value="#{dashboardPrinciple.lang}">
-								<f:selectItem itemLabel="English" itemValue="english" />
-								<f:selectItem itemLabel="हिन्दी" itemValue="hindi" />
-								<p:ajax listener="#{dashboardPrinciple.checkLanguage}"
-									update=":mainForm"></p:ajax>
-							</p:selectOneButton>
-							<br />
-							<p:outputPanel rendered="#{dashboardPrinciple.showEnglish}">
-								<p:outputLabel  for="@next" value="Dear Parent/Student/Staff Member,"
-									style="font-size:15px !important;color:red" />
-								<br></br>
-								<br></br>
-								<p:inputTextarea required="true"
-									requiredMessage="Please Write Your Message" rows="5"
-									style="width:100%;" value="#{dashboardPrinciple.typeMessage}"
-									id="enqmsg"
-									onchange="trimFunc(this.value,'Please Section Name',this.id)">
-								</p:inputTextarea>
-								<br></br>
-								<br></br>
-								<p:outputLabel value="Regards, #{sideMenuBean.smsName}"
-									style="font-size:15px !important;" />
-								<p:commandButton value="Send" style="float:right;" styleClass="butwid" icon="fa fa-paper-plane"
-									action="#{dashboardPrinciple.sendMessageToAll}"></p:commandButton>
-							</p:outputPanel>
+								value="#{dashboardPrinciple.messageStudents}" />
 
-							<p:outputPanel rendered="#{dashboardPrinciple.showHindi}">
-								<p:outputLabel  for="@next" value="प्रिय अभिभावक/विद्यार्थी/कर्मचारी,"
-									style="font-size:15px !important;color:red" />
-								<br></br>
-								<br></br>
-								<p:inputTextarea required="true"
-									requiredMessage="Please Write Your Message" rows="5"
-									style="width:100%;" value="#{dashboardPrinciple.typeMessage}"
-									id="transliterateDiv" onkeypress="onLoad();"
-									onchange="trimFunc(this.value,'Please Section Name',this.id)">
-									<p:keyFilter preventPaste="true"></p:keyFilter>
-								</p:inputTextarea>
-								<br></br>
-								<br></br>
-								<p:outputLabel value="सादर, #{sideMenuBean.hindiName}"
-									style="font-size:15px !important;" />
-								<p:commandButton value="Send" style="float:right;" styleClass="butwid" icon="fa fa-paper-plane"
-									action="#{dashboardPrinciple.sendMessageToAll}"></p:commandButton>
-							</p:outputPanel>
-						</h:form>
-						<!-- <div class="new-message">
-							<div class="message-attachment">
-								<i class="fa fa-paperclip" />
-							</div>
-							<div class="message-input">
-								<input type="text" placeholder="Write a message"
-									class="ui-inputfield" />
-							</div>
-						</div> -->
-					</p:panel>
+							<p:commandButton value="Check Preview"
+								actionListener="#{dashboardPrinciple.institutePreview}" />
+						</p:panelGrid>
+					</center>
+				</p:dialog>
+			</h:form>
+
+			<h:form id="errorForm" style="overflow:hidden">
+				<p:dialog header="Status : " widgetVar="errorDialog" modal="true"
+					showEffect="fade" hideEffect="fade" resizable="false" height="50"
+					width="400">
+					<br></br>
+					<center>
+						<p:outputLabel value="#{dashboardPrinciple.errorLabel}"
+							style="font-size:12px;font-weight: bold;" />
+					</center>
+				</p:dialog>
+			</h:form>
+
+			<h:form id="birthdayForm">
+				<p:dialog style="height:1000px;" resizable="false"
+					styleClass="ui-panelgrid" widgetVar="birthdayDialog"
+					header="Send Message" showEffect="fade" hideEffect="explode"
+					modal="true">
+
+					<p:selectOneRadio value="#{dashboardPrinciple.template}"
+						columns="1" layout="responsive" styleClass="form-group">
+						<f:selectItem itemLabel="#{dashboardPrinciple.temp1}"
+							itemValue="#{dashboardPrinciple.temp1}" />
+						<f:selectItem itemLabel="#{dashboardPrinciple.temp2}"
+							itemValue="#{dashboardPrinciple.temp2}" />
+						<f:selectItem itemLabel="#{dashboardPrinciple.temp3}"
+							itemValue="#{dashboardPrinciple.temp3}" />
+						<f:selectItem itemLabel="#{dashboardPrinciple.temp4}"
+							itemValue="#{dashboardPrinciple.temp4}" />
+					</p:selectOneRadio>
+
+					<p:panelGrid columns="2" styleClass="ui-panelgrid-blank form-group"
+						style="border:0px none; background-color:transparent;">
+						<p:outputLabel value="Custom Message : "
+							style="font-size:15px !important;" />
+						<p:outputLabel />
+						<p:outputLabel value="Dear Student,"
+							style="font-size:15px !important;" />
+						<p:outputLabel />
+						<p:inputTextarea value="#{dashboardPrinciple.birthdayWish}"
+							rows="7" cols="30" counter="display" maxlength="765"
+							counterTemplate="{0} characters remaining." autoResize="false"
+							style="width:400px !important;" onkeyup="changeColor(this.value)"
+							id="stubdymsg"
+							onchange="trimFunc(this.value,'Please Section Name',this.id)">
+							<p:keyFilter preventPaste="true"></p:keyFilter>
+						</p:inputTextarea>
+						<p:outputLabel id="display" style="font-size:15px !important;" />
 
 
+						<p:outputLabel value="Regards, #{sideMenuBean.smsName}"
+							style="font-size:15px !important;" />
+						<p:outputLabel />
 
+
+						<p:commandButton value="Send"
+							action="#{dashboardPrinciple.wishPreview}"
+							style="font-size:15px !important;width:200px;" />
+						<p:outputLabel />
+					</p:panelGrid>
+				</p:dialog>
+			</h:form>
+
+			<h:form id="prevForm" style="overflow:hidden">
+				<p:dialog header="Message Preview : " width="500"
+					widgetVar="prevDialog" modal="true" showEffect="fade"
+					hideEffect="fade" resizable="false">
+					<p:outputLabel value="#{dashboardPrinciple.preview}"
+						style="font-size:14px;font-weight: bold;" />
+					<br></br>
+					<br></br>
+					<center>
+						<p:commandButton value="Send Now"
+							actionListener="#{dashboardPrinciple.sendMessageNow}" />
+					</center>
+					<br></br>
+				</p:dialog>
+			</h:form>
+
+			<h:form id="bdyPrevForm" style="overflow:hidden">
+				<p:dialog header="Message Preview : " width="500"
+					widgetVar="bdyPrevDialog" modal="true" showEffect="fade"
+					hideEffect="fade" resizable="false">
+					<p:outputLabel value="#{dashboardPrinciple.bdyPreview}"
+						style="font-size:14px;font-weight: bold;" />
+					<br></br>
+					<br></br>
+					<center>
+						<p:commandButton value="Send Now"
+							actionListener="#{dashboardPrinciple.sendWish}" />
+					</center>
+					<br></br>
+				</p:dialog>
+			</h:form>
+
+
+			<h:form id="birthdayFormStaff">
+				<p:dialog style="height:1000px;" resizable="false"
+					styleClass="ui-panelgrid" widgetVar="birthdayStaffDialog"
+					header="Send Message" showEffect="fade" hideEffect="explode"
+					modal="true">
+
+					<p:selectOneRadio value="#{dashboardPrinciple.template}"
+						columns="1" layout="responsive" styleClass="form-group">
+						<f:selectItem itemLabel="#{dashboardPrinciple.temp1}"
+							itemValue="#{dashboardPrinciple.temp1}" />
+						<f:selectItem itemLabel="#{dashboardPrinciple.temp2}"
+							itemValue="#{dashboardPrinciple.temp2}" />
+						<f:selectItem itemLabel="#{dashboardPrinciple.temp3}"
+							itemValue="#{dashboardPrinciple.temp3}" />
+						<f:selectItem itemLabel="#{dashboardPrinciple.temp4}"
+							itemValue="#{dashboardPrinciple.temp4}" />
+					</p:selectOneRadio>
+
+					<p:panelGrid columns="2" styleClass="ui-panelgrid-blank form-group"
+						style="border:0px none; background-color:transparent;">
+						<p:outputLabel value="Custom Message : "
+							style="font-size:15px !important;" />
+						<p:outputLabel />
+						<p:outputLabel value="Dear Staff,"
+							style="font-size:15px !important;" />
+						<p:outputLabel />
+						<p:inputTextarea value="#{dashboardPrinciple.birthdayWish}"
+							rows="7" cols="30" counter="display" maxlength="765"
+							counterTemplate="{0} characters remaining." autoResize="false"
+							style="width:400px !important;" onkeyup="changeColor(this.value)"
+							id="staffbdymsg"
+							onchange="trimFunc(this.value,'Please Section Name',this.id)">
+							<p:keyFilter preventPaste="true"></p:keyFilter>
+						</p:inputTextarea>
+						<p:outputLabel id="display" style="font-size:15px !important;" />
+
+
+						<p:outputLabel value="Regards, #{sideMenuBean.smsName}"
+							style="font-size:15px !important;" />
+						<p:outputLabel />
+
+
+						<p:commandButton value="Send"
+							action="#{dashboardPrinciple.wishPreviewStaff}"
+							style="font-size:15px !important;width:200px;" />
+						<p:outputLabel />
+					</p:panelGrid>
+				</p:dialog>
+			</h:form>
+
+
+			<h:form id="bdyPrevStaffForm" style="overflow:hidden">
+				<p:dialog header="Message Preview : " width="500"
+					widgetVar="bdyPrevStaffDialog" modal="true" showEffect="fade"
+					hideEffect="fade" resizable="false">
+					<p:outputLabel value="#{dashboardPrinciple.bdyPreview}"
+						style="font-size:14px;font-weight: bold;" />
+					<br></br>
+					<br></br>
+					<center>
+						<p:commandButton value="Send Now"
+							actionListener="#{dashboardPrinciple.sendWishStaff}" />
+					</center>
+					<br></br>
+				</p:dialog>
+			</h:form>
+
+			<h:form id="MsgLimitForm" style="overflow:hidden">
+				<p:dialog header="Low SMS Balance" width="500" widgetVar="MsgLmtDlg"
+					modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+					<center>
+						<p:outputLabel value="#{dashboardPrinciple.balMsg}"
+							style="font-size:14px;font-weight: bold;" />
+					</center>
+					<br></br>
+					<br></br>
+					<center>
+						<p:commandButton value="Skip"
+							action="#{dashboardPrinciple.sendMessage}" update="MsgLimitForm" />
+						<br /> <br />
+						<p:commandButton value="Message Logs"
+							action="messageSchoolHistory.xhtml?faces-redirect=true"
+							update="MsgLimitForm" />
+						<br /> <br />
+						<p:commandButton value="Recharge Now"
+							action="purchaseMsgPack.xhtml?faces-redirect=true"
+							update="MsgLimitForm" />
+					</center>
+					<br></br>
+				</p:dialog>
+			</h:form>
+
+			<h:form id="MsgLimitForm1" style="overflow:hidden">
+				<p:dialog header="Low SMS Balance" width="500"
+					widgetVar="MsgLmtDlg1" modal="true" showEffect="fade"
+					hideEffect="fade" resizable="false">
+					<center>
+						<p:outputLabel value="#{dashboardPrinciple.balMsg}"
+							style="font-size:14px;font-weight: bold;" />
+					</center>
+					<br></br>
+					<br></br>
+					<center>
+						<p:commandButton value="Skip"
+							action="#{dashboardPrinciple.allBdMsg}" update="MsgLimitForm1" />
+						<br /> <br />
+						<p:commandButton value="Message Logs"
+							action="messageSchoolHistory.xhtml?faces-redirect=true"
+							update="MsgLimitForm1" />
+						<br /> <br />
+						<p:commandButton value="Recharge Now"
+							action="purchaseMsgPack.xhtml?faces-redirect=true"
+							update="MsgLimitForm1" />
+					</center>
+					<br></br>
+				</p:dialog>
+			</h:form>
+
+			<h:form id="MsgLimitForm2" style="overflow:hidden">
+				<p:dialog header="Low SMS Balance" width="500"
+					widgetVar="MsgLmtDlg2" modal="true" showEffect="fade"
+					hideEffect="fade" resizable="false">
+					<center>
+						<p:outputLabel value="#{dashboardPrinciple.balMsg}"
+							style="font-size:14px;font-weight: bold;" />
+					</center>
+					<br></br>
+					<br></br>
+					<center>
+						<p:commandButton value="Skip"
+							action="#{dashboardPrinciple.allBdMsgStaff}"
+							update="MsgLimitForm2" />
+						<br /> <br />
+						<p:commandButton value="Message Logs"
+							action="messageSchoolHistory.xhtml?faces-redirect=true"
+							update="MsgLimitForm2" />
+						<br /> <br />
+						<p:commandButton value="Recharge Now"
+							action="purchaseMsgPack.xhtml?faces-redirect=true"
+							update="MsgLimitForm2" />
+					</center>
+					<br></br>
+				</p:dialog>
+			</h:form>
+
+			<h:form id="MsgOverForm" style="overflow:hidden">
+				<p:dialog header="SMS Limit Over" width="500" widgetVar="MsgOvrDlg"
+					modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+					<center>
+						<p:outputLabel value="#{adminMain.balMsg}"
+							style="font-size:14px;font-weight: bold;" />
+					</center>
+					<br></br>
+					<br></br>
+					<center>
+						<p:commandButton value="Message Logs"
+							action="messageSchoolHistory.xhtml?faces-redirect=true"
+							update="MsgOverForm" />
+						<br /> <br />
+						<p:commandButton value="Recharge Now"
+							action="purchaseMsgPack.xhtml?faces-redirect=true"
+							update="MsgOverForm" />
+					</center>
+					<br></br>
+				</p:dialog>
+			</h:form>
+
+			<h:form id="MsgOtherForm" style="overflow:hidden">
+				<p:dialog header="SMS Limit Over" width="500" widgetVar="MsgOthDlg"
+					modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+					<center>
+						<p:outputLabel value="#{dashboardPrinciple.balMsg}"
+							style="font-size:14px;font-weight: bold;" />
+					</center>
+					<br></br>
+					<br></br>
+					<center>
+						<p:commandButton value="OK"
+							action="dashboardFoster.xhtml?faces-redirect=true"
+							update="MsgOtherForm" />
+					</center>
+				</p:dialog>
+			</h:form>
+						</div>
+					</div>
 				</div>
-
-				<h:form id="msgForm" style="overflow:hidden">
-					<p:dialog header="Please Select Receivers : " height="80"
-						widgetVar="msgDialog" modal="true" showEffect="fade"
-						hideEffect="fade" resizable="false">
-						<br></br>
-						<br></br>
-						<center>
-							<p:panelGrid columns="5">
-								<p:outputLabel value="Parents : "
-									style="font-size:14px;font-weight: bold;" />
-								<p:selectBooleanCheckbox
-									value="#{dashboardPrinciple.messageParents}" />
-
-								<p:outputLabel value="Students : "
-									style="font-size:14px;font-weight: bold;" />
-								<p:selectBooleanCheckbox
-									value="#{dashboardPrinciple.messageStudents}" />
-
-								<p:commandButton value="Check Preview"
-									actionListener="#{dashboardPrinciple.institutePreview}" />
-							</p:panelGrid>
-						</center>
-					</p:dialog>
-				</h:form>
-
-				<h:form id="errorForm" style="overflow:hidden">
-					<p:dialog header="Status : " widgetVar="errorDialog" modal="true"
-						showEffect="fade" hideEffect="fade" resizable="false" height="50"
-						width="400">
-						<br></br>
-						<center>
-							<p:outputLabel value="#{dashboardPrinciple.errorLabel}"
-								style="font-size:12px;font-weight: bold;" />
-						</center>
-					</p:dialog>
-				</h:form>
-
-				<h:form id="birthdayForm">
-					<p:dialog style="height:1000px;" resizable="false"
-						styleClass="ui-panelgrid" widgetVar="birthdayDialog"
-						header="Send Message" showEffect="fade" hideEffect="explode"
-						modal="true">
-
-						<p:selectOneRadio value="#{dashboardPrinciple.template}"
-							columns="1" layout="responsive" styleClass="form-group">
-							<f:selectItem itemLabel="#{dashboardPrinciple.temp1}"
-								itemValue="#{dashboardPrinciple.temp1}" />
-							<f:selectItem itemLabel="#{dashboardPrinciple.temp2}"
-								itemValue="#{dashboardPrinciple.temp2}" />
-							<f:selectItem itemLabel="#{dashboardPrinciple.temp3}"
-								itemValue="#{dashboardPrinciple.temp3}" />
-							<f:selectItem itemLabel="#{dashboardPrinciple.temp4}"
-								itemValue="#{dashboardPrinciple.temp4}" />
-						</p:selectOneRadio>
-
-						<p:panelGrid columns="2"
-							styleClass="ui-panelgrid-blank form-group"
-							style="border:0px none; background-color:transparent;">
-							<p:outputLabel value="Custom Message : "
-								style="font-size:15px !important;" />
-							<p:outputLabel />
-							<p:outputLabel value="Dear Student,"
-								style="font-size:15px !important;" />
-							<p:outputLabel />
-							<p:inputTextarea value="#{dashboardPrinciple.birthdayWish}"
-								rows="7" cols="30" counter="display" maxlength="765"
-								counterTemplate="{0} characters remaining." autoResize="false"
-								style="width:400px !important;"
-								onkeyup="changeColor(this.value)" id="stubdymsg"
-								onchange="trimFunc(this.value,'Please Section Name',this.id)">
-								<p:keyFilter preventPaste="true"></p:keyFilter>
-							</p:inputTextarea>
-							<p:outputLabel id="display" style="font-size:15px !important;" />
-
-
-							<p:outputLabel value="Regards, #{sideMenuBean.smsName}"
-								style="font-size:15px !important;" />
-							<p:outputLabel />
-
-
-							<p:commandButton value="Send"
-								action="#{dashboardPrinciple.wishPreview}"
-								style="font-size:15px !important;width:200px;" />
-							<p:outputLabel />
-						</p:panelGrid>
-					</p:dialog>
-				</h:form>
-
-				<h:form id="prevForm" style="overflow:hidden">
-					<p:dialog header="Message Preview : " width="500"
-						widgetVar="prevDialog" modal="true" showEffect="fade"
-						hideEffect="fade" resizable="false">
-						<p:outputLabel value="#{dashboardPrinciple.preview}"
-							style="font-size:14px;font-weight: bold;" />
-						<br></br>
-						<br></br>
-						<center>
-							<p:commandButton value="Send Now"
-								actionListener="#{dashboardPrinciple.sendMessageNow}" />
-						</center>
-						<br></br>
-					</p:dialog>
-				</h:form>
-
-				<h:form id="bdyPrevForm" style="overflow:hidden">
-					<p:dialog header="Message Preview : " width="500"
-						widgetVar="bdyPrevDialog" modal="true" showEffect="fade"
-						hideEffect="fade" resizable="false">
-						<p:outputLabel value="#{dashboardPrinciple.bdyPreview}"
-							style="font-size:14px;font-weight: bold;" />
-						<br></br>
-						<br></br>
-						<center>
-							<p:commandButton value="Send Now"
-								actionListener="#{dashboardPrinciple.sendWish}" />
-						</center>
-						<br></br>
-					</p:dialog>
-				</h:form>
-
-
-				<h:form id="birthdayFormStaff">
-					<p:dialog style="height:1000px;" resizable="false"
-						styleClass="ui-panelgrid" widgetVar="birthdayStaffDialog"
-						header="Send Message" showEffect="fade" hideEffect="explode"
-						modal="true">
-
-						<p:selectOneRadio value="#{dashboardPrinciple.template}"
-							columns="1" layout="responsive" styleClass="form-group">
-							<f:selectItem itemLabel="#{dashboardPrinciple.temp1}"
-								itemValue="#{dashboardPrinciple.temp1}" />
-							<f:selectItem itemLabel="#{dashboardPrinciple.temp2}"
-								itemValue="#{dashboardPrinciple.temp2}" />
-							<f:selectItem itemLabel="#{dashboardPrinciple.temp3}"
-								itemValue="#{dashboardPrinciple.temp3}" />
-							<f:selectItem itemLabel="#{dashboardPrinciple.temp4}"
-								itemValue="#{dashboardPrinciple.temp4}" />
-						</p:selectOneRadio>
-
-						<p:panelGrid columns="2"
-							styleClass="ui-panelgrid-blank form-group"
-							style="border:0px none; background-color:transparent;">
-							<p:outputLabel value="Custom Message : "
-								style="font-size:15px !important;" />
-							<p:outputLabel />
-							<p:outputLabel value="Dear Staff,"
-								style="font-size:15px !important;" />
-							<p:outputLabel />
-							<p:inputTextarea value="#{dashboardPrinciple.birthdayWish}"
-								rows="7" cols="30" counter="display" maxlength="765"
-								counterTemplate="{0} characters remaining." autoResize="false"
-								style="width:400px !important;"
-								onkeyup="changeColor(this.value)" id="staffbdymsg"
-								onchange="trimFunc(this.value,'Please Section Name',this.id)">
-								<p:keyFilter preventPaste="true"></p:keyFilter>
-							</p:inputTextarea>
-							<p:outputLabel id="display" style="font-size:15px !important;" />
-
-
-							<p:outputLabel value="Regards, #{sideMenuBean.smsName}"
-								style="font-size:15px !important;" />
-							<p:outputLabel />
-
-
-							<p:commandButton value="Send"
-								action="#{dashboardPrinciple.wishPreviewStaff}"
-								style="font-size:15px !important;width:200px;" />
-							<p:outputLabel />
-						</p:panelGrid>
-					</p:dialog>
-				</h:form>
-
-
-				<h:form id="bdyPrevStaffForm" style="overflow:hidden">
-					<p:dialog header="Message Preview : " width="500"
-						widgetVar="bdyPrevStaffDialog" modal="true" showEffect="fade"
-						hideEffect="fade" resizable="false">
-						<p:outputLabel value="#{dashboardPrinciple.bdyPreview}"
-							style="font-size:14px;font-weight: bold;" />
-						<br></br>
-						<br></br>
-						<center>
-							<p:commandButton value="Send Now"
-								actionListener="#{dashboardPrinciple.sendWishStaff}" />
-						</center>
-						<br></br>
-					</p:dialog>
-				</h:form>
-
-				<h:form id="MsgLimitForm" style="overflow:hidden">
-					<p:dialog header="Low SMS Balance" width="500"
-						widgetVar="MsgLmtDlg" modal="true" showEffect="fade"
-						hideEffect="fade" resizable="false">
-						<center>
-							<p:outputLabel value="#{dashboardPrinciple.balMsg}"
-								style="font-size:14px;font-weight: bold;" />
-						</center>
-						<br></br>
-						<br></br>
-						<center>
-							<p:commandButton value="Skip"
-								action="#{dashboardPrinciple.sendMessage}" update="MsgLimitForm" />
-							<br /> <br />
-							<p:commandButton value="Message Logs"
-								action="messageSchoolHistory.xhtml?faces-redirect=true"
-								update="MsgLimitForm" />
-							<br /> <br />
-							<p:commandButton value="Recharge Now"
-								action="purchaseMsgPack.xhtml?faces-redirect=true"
-								update="MsgLimitForm" />
-						</center>
-						<br></br>
-					</p:dialog>
-				</h:form>
-
-				<h:form id="MsgLimitForm1" style="overflow:hidden">
-					<p:dialog header="Low SMS Balance" width="500"
-						widgetVar="MsgLmtDlg1" modal="true" showEffect="fade"
-						hideEffect="fade" resizable="false">
-						<center>
-							<p:outputLabel value="#{dashboardPrinciple.balMsg}"
-								style="font-size:14px;font-weight: bold;" />
-						</center>
-						<br></br>
-						<br></br>
-						<center>
-							<p:commandButton value="Skip"
-								action="#{dashboardPrinciple.allBdMsg}" update="MsgLimitForm1" />
-							<br /> <br />
-							<p:commandButton value="Message Logs"
-								action="messageSchoolHistory.xhtml?faces-redirect=true"
-								update="MsgLimitForm1" />
-							<br /> <br />
-							<p:commandButton value="Recharge Now"
-								action="purchaseMsgPack.xhtml?faces-redirect=true"
-								update="MsgLimitForm1" />
-						</center>
-						<br></br>
-					</p:dialog>
-				</h:form>
-
-				<h:form id="MsgLimitForm2" style="overflow:hidden">
-					<p:dialog header="Low SMS Balance" width="500"
-						widgetVar="MsgLmtDlg2" modal="true" showEffect="fade"
-						hideEffect="fade" resizable="false">
-						<center>
-							<p:outputLabel value="#{dashboardPrinciple.balMsg}"
-								style="font-size:14px;font-weight: bold;" />
-						</center>
-						<br></br>
-						<br></br>
-						<center>
-							<p:commandButton value="Skip"
-								action="#{dashboardPrinciple.allBdMsgStaff}"
-								update="MsgLimitForm2" />
-							<br /> <br />
-							<p:commandButton value="Message Logs"
-								action="messageSchoolHistory.xhtml?faces-redirect=true"
-								update="MsgLimitForm2" />
-							<br /> <br />
-							<p:commandButton value="Recharge Now"
-								action="purchaseMsgPack.xhtml?faces-redirect=true"
-								update="MsgLimitForm2" />
-						</center>
-						<br></br>
-					</p:dialog>
-				</h:form>
-
-				<h:form id="MsgOverForm" style="overflow:hidden">
-					<p:dialog header="SMS Limit Over" width="500" widgetVar="MsgOvrDlg"
-						modal="true" showEffect="fade" hideEffect="fade" resizable="false">
-						<center>
-							<p:outputLabel value="#{adminMain.balMsg}"
-								style="font-size:14px;font-weight: bold;" />
-						</center>
-						<br></br>
-						<br></br>
-						<center>
-							<p:commandButton value="Message Logs"
-								action="messageSchoolHistory.xhtml?faces-redirect=true"
-								update="MsgOverForm" />
-							<br /> <br />
-							<p:commandButton value="Recharge Now"
-								action="purchaseMsgPack.xhtml?faces-redirect=true"
-								update="MsgOverForm" />
-						</center>
-						<br></br>
-					</p:dialog>
-				</h:form>
-
-				<h:form id="MsgOtherForm" style="overflow:hidden">
-					<p:dialog header="SMS Limit Over" width="500" widgetVar="MsgOthDlg"
-						modal="true" showEffect="fade" hideEffect="fade" resizable="false">
-						<center>
-							<p:outputLabel value="#{dashboardPrinciple.balMsg}"
-								style="font-size:14px;font-weight: bold;" />
-						</center>
-						<br></br>
-						<br></br>
-						<center>
-							<p:commandButton value="OK"
-								action="dashboardFoster.xhtml?faces-redirect=true"
-								update="MsgOtherForm" />
-						</center>
-					</p:dialog>
-				</h:form>
 			</div>
 		</div>
 	</ui:define>
-
 </ui:composition>
