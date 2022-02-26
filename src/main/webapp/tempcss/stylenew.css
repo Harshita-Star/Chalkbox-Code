@@ -46,3 +46,9 @@
 .layout-menu-light.layout-slim-plus .menu-wrapper .layout-menu-container .layout-menu .layout-menu-tooltip {
 	display : none;
 }
+.layout-dashboard .overview-box {
+	justify-content: flex-start !important;
+}
+.layout-dashboard .overview-box.messages .box-image {
+    align-items: center !important;
+}

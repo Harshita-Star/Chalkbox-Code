@@ -54,57 +54,69 @@
 
 	<ui:define name="content">
 		
-		<div class="dashboard">
-			<h:form>
-				<div class="ui-g overview-boxes">
-
-					<div class="ui-g-12 ui-md-6 ui-lg-3">
-							<div class="ui-g overview-box overview-box-1">
-								<div class="overview-box-title">
-									<i class="fa fa-users" /> <span>All Student</span>
-								</div>
-								<div class="overview-box-count">#{dashboardTransport.count}</div>
-								<div class="overview-box-stats"></div>
-							</div>
+		<div class="p-grid layout-dashboard">
+			<div class="p-col-12 p-md-6 p-lg-3">
+			
+				<div class="overview-box messages">
+					<div class="box-image">
+						<p:graphicImage name="dashboardImages/persons.png"
+							library="pandora-layout" />
+					</div>
+					<div class="box-text">
+						<h4>All Student</h4>
+						<span class="span-text">#{dashboardTransport.count}</span>
 					</div>
 
-					<div class="ui-g-12 ui-md-6 ui-lg-3">
-							<div class="ui-g overview-box overview-box-2">
-								<div class="overview-box-title">
-									<i class="fa fa-bus" /> <span>All Student with transport</span>
-								</div>
-								<div class="overview-box-count">#{dashboardTransport.transport}</div>
-								<div class="overview-box-stats"></div>
-							</div>
-					</div>
-
-					<div class="ui-g-12 ui-md-6 ui-lg-3">
-					<a href="allRoute.xhtml">
-							<div class="ui-g overview-box overview-box-3">
-								<div class="overview-box-title">
-									<i class="fa fa-map" /> <span>Total route</span>
-								</div>
-								<div class="overview-box-count">#{dashboardTransport.totalRoute}</div>
-								<div class="overview-box-stats"></div>
-							</div>
-							</a>
-					</div>
-
-					<div class="ui-g-12 ui-md-6 ui-lg-3">
-					<a href="allStop.xhtml">
-						<div class="ui-g overview-box overview-box-4">
-							<div class="overview-box-title">
-								<i class="fa fa-map-marker"></i> <span>Total Stoppage</span>
-							</div>
-							<div class="overview-box-count">#{dashboardTransport.totalStopage}</div>
-							<div class="overview-box-stats"></div>
-						</div>
-						</a>
-					</div>
-					
-					
 				</div>
-			</h:form>
+				
+			</div>
+			<div class="p-col-12 p-md-6 p-lg-3">
+			
+				<div class="overview-box logins">
+					<div class="box-image">
+						<p:graphicImage name="dashboardImages/bus.png"
+							library="pandora-layout" />
+					</div>
+					<div class="box-text">
+						<h4>All Student with transport</h4>
+						<span class="span-text">#{dashboardTransport.transport}</span>
+					</div>
+
+				</div>
+				
+			</div>
+			<div class="p-col-12 p-md-6 p-lg-3">
+				<a href="allRoute.xhtml">
+				<div class="overview-box files">
+					<div class="box-image">
+						<p:graphicImage name="dashboardImages/route.png"
+							library="pandora-layout" />
+					</div>
+					<div class="box-text">
+						<h4>Total route</h4>
+						<span class="span-text">#{dashboardTransport.totalRoute}</span>
+					</div>
+
+				</div>
+				</a>
+			</div>
+
+			<div class="p-col-12 p-md-6 p-lg-3">
+				<a href="allStop.xhtml">
+				<div class="overview-box users">
+					<div class="box-image">
+						<p:graphicImage name="dashboardImages/pin.png"
+							library="pandora-layout" />
+					</div>
+					<div class="box-text">
+						<h4>Total Stoppage</h4>
+						<span class="span-text">#{dashboardTransport.totalStopage}</span>
+					</div>
+
+				</div>
+				</a>
+			</div>
+		</div>
 
 			<div class="ui-g">
 				<div class="ui-g-12 ui-lg-12 chat">
@@ -144,14 +156,7 @@
 					</p:panel>
 
 				</div>
-
-
 			</div>
-
-		</div>
-
-
-
 	</ui:define>
 
 </ui:composition>
